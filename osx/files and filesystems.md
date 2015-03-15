@@ -12,3 +12,11 @@ disk image utility
 
 	osx:~ $ sudo mount -t hfs -o nosuid,-w,-m=755 /dev/disk2s9 /tmp
 	osx:~ $ sudo /sbin/mount_hfs -o nosuid -w -m 755 /dev/disk2s9 /tmp
+
+`ls`
+
+`GetFileInfo`
+
+`SetFile`
+
+`xattr`

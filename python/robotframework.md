@@ -126,7 +126,7 @@ robot 變數命名是不區分大小寫, 一個空格 兩個空格
 
 以下為一個簡單的執行範例, 主要的測試檔案為 test.robot, 但是會另外載入 RF 格式的使用者定義 Keywords `UserDefineRF.robot`, Python 格式的使用者定義 module `UserDefinePython.py` 和 RF 格式的變數檔案 Variables `RFVar.txt`. 在執行是會讀取以 Python 格式訂的變數檔案.
 
-`UserDefineRF.robot`
+[`UserDefineRF.robot`](./example/rf1/UserDefineRF.robot)
 
 	*** Keywords ***
 	RF Say
@@ -134,24 +134,24 @@ robot 變數命名是不區分大小寫, 一個空格 兩個空格
 	    Log  ${words}
 
 
-`UserDefinePython.py`
+[`UserDefinePython.py`](./example/rf1/UserDefinePython.py)
 
 	def py_say(words):
 	    print words
 
 
-`RFVar.txt`
+[`RFVar.txt`](./example/rf1/RFVar.txt)
 
 	*** Variables ***
 	${rf_words}=  Hello Robotframework
 
 
-`var.py`
+[`var.py`](./example/rf1/var.py)
 
 	py_words = 'Hello Python'
 
 
-`test.robot`
+[`test.robot`](./example/rf1/test.robot)
 
 	*** Settings ***
 	Library     OperatingSystem
@@ -172,4 +172,70 @@ run RF
 
 	linux:~ $ pybot -V var.py test.robot
 
+
 -----------------------------
+
+### Run Command ###
+
+因為 RF 並不會確認執行指令的正確於否, 所以當指令有可能執行失敗, 最好使用 Return Code 去判斷. (在 Shell 中, RC=0 為執行成功, RC!=0 為執行失敗); 同理, 在判斷 Python 程式執行時, 除了 Exception 之外, 其餘都視為正常結果.
+
+`UserDefined.py`
+
+	def intAdd(a1, a2):
+	    if type(a1) != type(a2):
+	        raise TypeError('type different')
+	    return a1 + a2
+
+`test.robot`
+
+	*** Settings ***
+	Library     OperatingSystem
+	Library     UserDefined
+	
+	
+	*** Keywords ***
+	Run Error Command Without Check Return Code
+	    [Arguments]  ${cmd}=ls /abc
+	    ${result}=  Run  ls /abc
+	    Log  result:${result}
+	
+	Run Error Command With Check Return Code
+	    [Arguments]  ${cmd}=ls /abc
+	    ${rc}  ${result}=  Run and Return RC and Output  ls /abc
+	    Log  result:${result} rc: ${rc}
+	    Should Be True  ${rc} == 0
+	
+	Run Python Without Check
+	    intAdd  4  9
+	
+	Run Python With Check
+	    ${result}=  intAdd  ${4}  ${9}
+	    Should Be Equal As Integers  ${result}  ${13}
+	
+	Run Python With Different Type
+	    intAdd  4  ${9}
+	
+	
+	*** Test Cases ***
+	Run Shell Command Example
+	    Run Error Command Without Check Return Code
+	    Run Error Command With Check Return Code
+	
+	Run Python Example
+	    Run Python Without Check
+	    Run Python With Check
+	    Run Python With Different Type
+
+
+-----------------------------
+
+### SSH ###
+
+
+-----------------------------
+
+### Reference ###
+
+[ROBOT FRAMEWORK](http://robotframework.org/)
+
+[Robot Framework Docs Manager](http://rfdocs.org/)
