@@ -179,14 +179,14 @@ run RF
 
 因為 RF 並不會確認執行指令的正確於否, 所以當指令有可能執行失敗, 最好使用 Return Code 去判斷. (在 Shell 中, RC=0 為執行成功, RC!=0 為執行失敗); 同理, 在判斷 Python 程式執行時, 除了 Exception 之外, 其餘都視為正常結果.
 
-`UserDefined.py`
+[`UserDefined.py`](./example/rf2/UserDefined.py)
 
 	def intAdd(a1, a2):
 	    if type(a1) != type(a2):
 	        raise TypeError('type different')
 	    return a1 + a2
 
-`test.robot`
+[`test.robot`](./example/rf2/test.robot)
 
 	*** Settings ***
 	Library     OperatingSystem
@@ -229,8 +229,56 @@ run RF
 
 -----------------------------
 
-### SSH ###
+### SSHLibrary ###
 
+RF 本身也提供 SSHLibary, 方便開發使用 SSH 的 test case
+
+`test.robot`
+
+	### SSH ###
+	
+	*** Settings ***
+	Library     OperatingSystem
+	Library     SSHLibrary  WITH NAME  SSH
+	
+	*** Variables ***
+	${HOST}  127.0.0.1
+	${USERNAME}  root
+	${PASSWORD}  password
+	
+	*** Keywords ***
+	SSH Login
+	    [Arguments]    ${host}=${HOST}  ${username}=${USERNAME}  ${password}=${PASSWORD}
+	    Open Connection  ${host}
+	    Login  ${username}  ${password}
+	
+	SSH Logout
+	    Close Connection
+	
+	Run ${cmd} Command
+	    Write  ${cmd}
+	    ${stdout}=  Read
+	    Log  ${stdout}
+	
+	Run ${cmd} Command With RC
+	    Start Command  ${cmd}
+	    ${stdout}  ${stderr}  ${rc}=  Read Command Output  return_stderr=True  return_rc=True
+	    Log  rc: ${rc}
+	    Log  stdout: ${stdout}
+	    Log  stderr: ${stderr}
+	
+	*** Test Cases ***
+	Show Hostname
+	    SSH Login
+	    Run hostname Command
+	    Run ls abc Command
+	    Run ls abc Command With RC
+	    Run ls abc Command With RC
+	    SSH Logout
+
+-----------------------------
+
+### Selenium ###
 
 -----------------------------
 
