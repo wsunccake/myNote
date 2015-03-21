@@ -13,6 +13,8 @@ RobotFramework 是一套基於 Python 以驗收測試及 ATDD (Acceptance Test-D
 
 ### 檔案格式 / Support Format: ###
 
+[Robot Framework User Guide](http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html) 是一份簡易使用手冊, 有介紹如何使用 Robot Framework
+
 * HTML (hypertext markup language)
 * TSV (tab-separated values)
 * TXT/ROBOT (plain text)
@@ -231,12 +233,12 @@ run RF
 
 ### SSHLibrary ###
 
-RF 本身也提供 SSHLibary, 方便開發使用 SSH 的 test case
+RF 本身也提供 SSHLibary (底層使用 paramiko module), 方便開發使用 SSH 的 test case.
+使用會載入 SSHLibrary, 需要先安裝 robotframework-sshlibrary (使用 pip 安裝即可). 注意不要安裝 2.0 之前的版本, 因為 keyword 差異.
+[SSHLibrary](http://robotframework.org/SSHLibrary/latest/SSHLibrary.html) 有簡易的說明文件可以參考, 主要是說明 Keywords.
 
-`test.robot`
+[`test.robot`](./example/rf3/test.robot)
 
-	### SSH ###
-	
 	*** Settings ***
 	Library     OperatingSystem
 	Library     SSHLibrary  WITH NAME  SSH
@@ -279,6 +281,39 @@ RF 本身也提供 SSHLibary, 方便開發使用 SSH 的 test case
 -----------------------------
 
 ### Selenium ###
+
+使用會載入 Selenium2Library, 需要先安裝 robotframework-selenium2library (使用 pip 安裝即可). 注意不要安裝 robotframework-seleniumlibrary, 因為 locator 語法有差異.
+(Selenium2Library)[http://rtomac.github.io/robotframework-selenium2library/doc/Selenium2Library.html] 有簡易的說明文件可以參考, 主要是說明 Keywords 和 Locators 使用, 而 Locators 可以參考 [Locators_table_1_0_2.pdf](http://www.cheat-sheets.org/saved-copy/Locators_groups_1_0_2.pdf) [Locators_table_1_0_2.pdf](http://www.cheat-sheets.org/saved-copy/Locators_table_1_0_2.pdf)
+
+[`test.robot`](./example/rf4/test.robot)
+
+	*** Settings ***
+	Library        Selenium2Library
+	
+	*** Variables ***
+	${delay}=  ${1}
+	${google_url}=  http://www.google.com
+	${browser}=  firefox
+	
+	*** Test Cases ***
+	Test Google
+	    Open Browser  ${google_url}  ${browser}
+	    Capture Page Screenshot
+	    Set Selenium Speed  ${delay}
+	    Maximize Browser Window
+	
+	    Input Text  id=lst-ib  robotframework\n
+	    Capture Page Screenshot
+	
+	    Click Link  css=#rso > div:nth-child(2) > li:nth-child(1) > div > h3 > a
+	    Capture Page Screenshot
+	
+	    Title Should Be  Robot Framework
+	    ${url}=  Get Location
+	    Log  ${url}
+	    Click Link  xpath=//*[@id="menu"]/div/ul/li[1]/a
+	    Click Link  css=#menu > div > ul > li:nth-child(2) > a
+	    Close Browser
 
 -----------------------------
 
