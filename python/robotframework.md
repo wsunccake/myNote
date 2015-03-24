@@ -9,6 +9,17 @@ RobotFramework 是一套基於 Python 以驗收測試及 ATDD (Acceptance Test-D
 	linux:~ $ sudo pip install robotframework # for Linux
 	osx:~ $ sudo pip install robotframework # for Mac OS X
 
+
+-----------------------------
+
+### Plugin or IDE ###
+
+`vim`
+
+`sublime text`
+
+`ride`
+
 -----------------------------
 
 ### 檔案格式 / Support Format: ###
