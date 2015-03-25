@@ -8,7 +8,7 @@ Node.js 是一個事件驅動 I/O 伺服端 JavaScript 環境, 基於Google的V8
 [Node.js wiki](http://zh.wikipedia.org/wiki/Node.js)
 
 
-### 測試 ###
+### 基本操作 ###
 
 一般執行 nodejs 可分為三種方式, Command, REPL, Script. 各有各的方便之處. Command 適合一次性執行; REPL 適合 debug; Script 適合程式開發. 使用到的環境變數 NODE\_PATH, NODE\_MODULE\_CONTEXTS 和 NODE\_DISABLE\_COLORS.
 
@@ -46,7 +46,7 @@ Node.js 是一個事件驅動 I/O 伺服端 JavaScript 環境, 基於Google的V8
 
 -----------------------------
 
-### npm ###
+#### npm ####
 
 npm 是 node.js 的套件管理工具, 在使用時可分為 global mode 和 local mode 兩種模式. global mode 是系統安裝, 安裝移除時需要 root 權限, 使用 global mode 安裝套件時, 所有使用者都可使用套件; local mode 是使用者個別安裝, 使用 local mode 安裝套件時, 只有該使用者都可使用該套件. node.js 預設為 local mode.
 
@@ -76,34 +76,56 @@ npm 是 node.js 的套件管理工具, 在使用時可分為 global mode 和 loc
 	linux:~ $ npm help install
 
 
-### n / nvm ###
+-----------------------------
 
-### 範例 ###
+### Module and Package (CommonJS) ###
 
-[`app.js`](./example/nodejs/ex2/app.js)
-
-	var http = require("http");
-
-	http.createServer(function(req, res) {
-	  res.writeHead(200, {'Content-Type': 'text/html'});
-	  res.write('<h1>Node.js</h1>');
-	  res.end('<p>Hello World</p>');
-	}).listen(3000);
-	console.log("HTTP server is listening at port 3000.");
-
-執行
-
-	linux:~ $ node app.js # 使用 node 直接執行, 在瀏覽器上輸入 localhost:3000 可看到
-
-每次改 code, 都需要重新執行 node, 建議安裝 [nodemon](http://nodemon.io/), [node-supervisor](https://github.com/isaacs/node-supervisor), [node-dev](https://github.com/fgnass/node-dev) 或 [forever](https://github.com/nodejitsu/forever) 這類型 automaticall restart 代替 node 去執行
-
-	linux:~ $ nodemon app.js # 使用 nodemon
-	linux:~ $ supervisor app.js # 使用 node-supervisor
-	linux:~ $ forever -w app.js # 使用 forever
-	linux:~ $ node-dev app.js
+### 常用模組 ###
 
 
-#### I/O ####
+#### console ####
+
+類似 C 的 printf 的格式化輸出, 測試執行時間
+
+[`run_time.js`](./example/nodejs/ex_console/run_time.js)
+
+	console.log(global);
+	console.log(__dirname);
+	console.log(__filename);
+	
+	console.time('Run loop');
+	for (var i = 10; i > 0; i--) {
+	  console.log('%d loop', i);
+	}
+	console.timeEnd('Run loop');
+
+
+#### process ####
+
+[`argv.js`](./example/nodejs/ex_process/argv.js)
+
+參數使用方式
+
+	console.log(process.argv);
+
+執行並輸入參數
+
+	linux:~ $ node argv.js 123 -v "xyz ABC"
+
+[`keyin.js`](./example/nodejs/ex_process/keyin.js)
+
+從 stdin 輸入後並輸出在 stdout
+
+	process.stdin.resume();
+	
+	process.stdin.on('data', function(data) {
+	  process.stdout.write('read from console: ' + data.toString());
+	});
+
+
+#### filesystem####
+
+non-blocking I/O 讀檔
 
 [`readfile.js`](./example/nodejs/ex3/readfile.js)
 
@@ -119,6 +141,8 @@ npm 是 node.js 的套件管理工具, 在使用時可分為 global mode 和 loc
 	});
 	console.log('end.');
 
+blocking I/O 讀檔
+
 [`readfilesync.js`](./example/nodejs/ex3/readfilesync.js)
 
 	var fs = require('fs');
@@ -127,6 +151,12 @@ npm 是 node.js 的套件管理工具, 在使用時可分為 global mode 和 loc
 	console.log(data);
 	console.log('end.');
 
+以 C 的方式讀檔案
+
+
+#### os ####
+
+#### utils ####
 
 #### Event ####
 
@@ -166,9 +196,41 @@ npm 是 node.js 的套件管理工具, 在使用時可分為 global mode 和 loc
 	}, 1000);
 
 
-#### Module and Package ####
+#### http ####
 
+[`app1.js`](./example/nodejs/ex_http/app1.js)
 
+	var http = require("http");
 
+	http.createServer(function(req, res) {
+	  res.writeHead(200, {'Content-Type': 'text/html'});
+	  res.write('<h1>Node.js</h1>');
+	  res.end('<p>Hello World</p>');
+	}).listen(3000);
+	console.log("HTTP server is listening at port 3000.");
 
+執行
+
+	linux:~ $ node app.js # 使用 node 直接執行, 在瀏覽器上輸入 localhost:3000 可看到
+
+每次改 code, 都需要重新執行 node, 建議安裝 [nodemon](http://nodemon.io/), [node-supervisor](https://github.com/isaacs/node-supervisor), [node-dev](https://github.com/fgnass/node-dev) 或 [forever](https://github.com/nodejitsu/forever) 這類型 automaticall restart 代替 node 去執行
+
+	linux:~ $ nodemon app.js # 使用 nodemon
+	linux:~ $ supervisor app.js # 使用 node-supervisor
+	linux:~ $ forever -w app.js # 使用 forever
+	linux:~ $ node-dev app.js
+
+以 Event 的方式使用 http
+
+[`app2.js`](./example/nodejs/ex_http/app2.js)
+
+	var http = require('http');
+	var server = new http.Server(); server.on('request', function(req, res) {
+	  res.writeHead(200, {'Content-Type': 'text/html'});
+	  res.write('<h1>Node.js</h1>');
+	  res.end('<p>Hello World</p>');
+	});
+	
+	server.listen(3000);
+	console.log("HTTP server is listening at port 3000.");
 [gulp入門指南](https://987.tw/2014/07/09/gulpru-men-zhi-nan/)

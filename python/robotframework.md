@@ -294,7 +294,7 @@ RF 本身也提供 SSHLibary (底層使用 paramiko module), 方便開發使用 
 ### Selenium ###
 
 使用會載入 Selenium2Library, 需要先安裝 robotframework-selenium2library (使用 pip 安裝即可). 注意不要安裝 robotframework-seleniumlibrary, 因為 locator 語法有差異.
-(Selenium2Library)[http://rtomac.github.io/robotframework-selenium2library/doc/Selenium2Library.html] 有簡易的說明文件可以參考, 主要是說明 Keywords 和 Locators 使用, 而 Locators 可以參考 [Locators_table_1_0_2.pdf](http://www.cheat-sheets.org/saved-copy/Locators_groups_1_0_2.pdf) [Locators_table_1_0_2.pdf](http://www.cheat-sheets.org/saved-copy/Locators_table_1_0_2.pdf)
+[Selenium2Library](http://rtomac.github.io/robotframework-selenium2library/doc/Selenium2Library.html) 有簡易的說明文件可以參考, 主要是說明 Keywords 和 Locators 使用, 而 Locators 可以參考 [Locators_table_1_0_2.pdf](http://www.cheat-sheets.org/saved-copy/Locators_groups_1_0_2.pdf) [Locators_table_1_0_2.pdf](http://www.cheat-sheets.org/saved-copy/Locators_table_1_0_2.pdf)
 
 [`test.robot`](./example/rf4/test.robot)
 
