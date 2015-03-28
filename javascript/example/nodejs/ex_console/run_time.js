@@ -3,7 +3,7 @@ console.log(__dirname);
 console.log(__filename);
 
 console.time('Run loop');
-for (var i = 10; i > 0; i--) {
+for (var i = 10; i--;) {
   console.log('%d loop', i);
 }
 console.timeEnd('Run loop');

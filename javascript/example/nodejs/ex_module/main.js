@@ -1,8 +1,8 @@
-var x1 = require('./module');
+var x1 = require('./my_module');
 x1.setName('X1');
 x1.sayHello();
 
-var x2 = require('./module');
+var x2 = require('./my_module');
 x2.setName('X2');
 x2.sayHello();
 

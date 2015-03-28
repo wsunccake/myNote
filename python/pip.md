@@ -47,4 +47,10 @@
 	linux:~ $ pip search pkg # 搜尋線上有的 module
 
 
+#### yolk ####
+
+使 pip 搜尋軟體時, 沒辦法知道有哪些版本可以安裝, 此時就需要另外安裝 yolk
+
+	linux:~ $ pip install yolk
+	linux:~ $ yolk -V pip # 顯示可安裝的版本
 -----------------------------
