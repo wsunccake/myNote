@@ -147,7 +147,6 @@ Kickstart
 無論是圖形介面或文字介面安裝, 要透過網路安裝, 須先設定好網路 (Networking settings), 然後選定安裝來源 (Installation source), 最後才可安裝軟體 (Software Selection)
 
 
-
 1. Date & Time
 2. Language Support
 3. Keyboard
@@ -234,7 +233,31 @@ Other SAN Devices
 	FCoE SAN
 Firmware RAID
 
+
 `iSCSI`
+
+	server:~ # yum install targetcli
+	server:~ # systemctl enable target
+	server:~ # systemctl start target
+	server:~ # dd if=/dev/zero of=/tmp/iscsi.img count=10 bs=1G
+	server:~ # targetcli ls
+	/> cd /backstores/fileio 
+	/backstores/fileio> create file1 /home/iscsi.img
+	/backstores/fileio> cd /iscsi
+	/iscsi> create
+	/iscsi> ls
+	/iscsi> cd iqn.xxx/tpg1
+	/iscsi/iqn....xxx/tpg1> set attribute authentication=0
+	/iscsi/iqn....xxx/tpg1> set attribute generate_node_acls=1
+	/iscsi/iqn....xxx/tpg1> luns/ create /backstores/fileio/file1
+	/iscsi/iqn....xxx/tpg1> cd /
+	/> saveconfig
+	/> exit
+
+	# check iSCSI
+	server:~ # iscsiadm -m discovery -p 127.0.0.1 -t st
+	server:~ # iscsiadm -m node -p 127.0.0.1 -T iqn.... -l
+	server:~ # lsblk
 
 
 ### Installation Log File ###
@@ -251,7 +274,16 @@ Firmware RAID
 `Transfer Log Files Onto a USB Drive`
 
 
+	rhel:~ # mkdir usb
+	rhel:~ # mount /dev/sdb1 /mnt/usb # 假設 usb flash 為 sdb1
+	rhel:~ # cp /tmp/*log /mnt/usb
+	rhel:~ # umount /mnt/usb
+
+
 `Transfer Log Files OVer network`
+
+	rhel:~ # cd /tmp
+	rhel:~ # scp *log john@192.168.0.122:/home/john/logs/
 
 
 | option						| description			|
@@ -260,8 +292,55 @@ Firmware RAID
 | inst.xdriver=nouveau			| video driver			|
 | inst.resolution=1024x768		| display resolution	|
 | inst.text console=boot		| serial mode			|
+| inst.graphical				| GUI					|
 | inst.vnc						| vnc					|
 | inst.vncpassword=PASSWORD		| vnc password			|
+| inst.rescue					| rescue mode			|
+
+inst.repo 指定安裝來源
+inst.stage2 指定 install image 的位置, 語法同上
+inst.dd 指定額外驅動程式
+inst.ks 指定 kickstart 檔案
+modprobe.blacklist
+
+inst.repo=cdrom
+inst.repo=http://ip/dir
+inst.repo=ftp://user@password/ip/dir
+inst.repo=nfs:ip/dir
 
 
-inst.dd
+### PXE Installation ###
+
+`tftp`
+
+`DHCP`
+
+
+BOID and UEFI 安裝差異
+
+`UEFI`
+
+	Shell> map
+	Shell> fs0:
+	fs0:\EFI\redhat\grubx64.efi
+
+
+### VNC Installation ###
+
+### Kickstart Installation ###
+
+
+
+%packages、%pre 與 %post 等三節必須以 %end
+
+yum install pykickstart
+ksvalidator /path/to/kickstart.ks
+
+
+### Forget root password ###
+init=/bin/sh
+
+sh-4.2# /usr/sbin/load_policy -i
+sh-4.2# mount -o remount,rw /
+sh-4.2# passwd root
+sh-4.2# mount -o remount,ro /
