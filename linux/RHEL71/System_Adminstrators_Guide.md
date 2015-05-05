@@ -394,7 +394,305 @@ systemctl --no-wall emergency
 
 `System Unit File`
 
-a
+
+
+### OpenSSH ###
+
+`System-wide configuration files`
+
+* /etc/ssh/ssh\_config
+* /etc/ssh/sshd\_config
+* /etc/ssh/moduli
+* /etc/ssh/ssh\_host_ecdsa_key
+* /etc/ssh/ssh\_host_ecdsa_key.pub
+* /etc/ssh/ssh\_host_key
+* /etc/ssh/ssh\_host_key.pub
+* /etc/ssh/ssh\_host_rsa_key
+* /etc/ssh/ssh\_host_rsa_key.pub
+* /etc/pam.d/sshd
+* /etc/sysconfig/sshd
+
+
+`User-specific configuration files`
+
+* ~/.ssh/known\_hosts
+* ~/.ssh/authorized\_keys
+* ~/.ssh/id\_ecdsa
+* ~/.ssh/id\_ecdsa.pub
+* ~/.ssh/id\_rsa
+* ~/.ssh/id\_rsa.pub
+* ~/.ssh/identity
+* ~/.ssh/identity.pub
+
+
+`Starting an OpenSSH Server`
+
+	rhel:~ # systemctl start sshd.service
+	rhel:~ # systemctl stop sshd.service
+	rhel:~ # systemctl enable sshd.service
+
+
+`Using Key-based Authentication`
+
+	rhel:~ # vi /etc/ssh/sshd_config
+	PasswordAuthentication no
+
+
+`Generating Key Pairs`
+
+	rhel:~ # ssh-keygen -t rsa
+	rhel:~ # ssh-copy-id [-i ~/.ssh/id_rsa.pub] user@hostname
+
+
+`Configuring ssh-agent`
+
+	rhel:~ # ssh-add
+	rhel:~ # ssh-agent
+	rhel:~ # ssh-agent -k
+
+
+`Utility`
+
+	rhel:~ # ssh [username@]hostname
+	rhel:~ # ssh [username@]hostname command
+
+	rhel:~ # ssh-keygen -l -f /etc/ssh/ssh_host_ecdsa_key.pub
+	rhel:~ # ssh-keygen -R penguin.example.com
+
+
+	rhel:~ # scp localfile [username@]hostname:remotefile
+	rhel:~ # scp [username@]hostname:remotefile localfile
+
+	rhel:~ # sftp [username@]hostname
+
+
+`X11 Forwarding`
+
+	rhel:~ # ssh -Y username@hostname
+
+
+`Port Forwarding`
+
+In\_Host(9000)   ----|--->   Out\_Host(2000)
+
+	In_Host:~ $ ssh -L 9000:localhost:2000 Out_Host
+
+
+In\_Host(9000)   <---|----   Out\_Host(2000)
+
+	In_Host:~ $ ssh -R 9000:localhost:2000 Out_Host
+
+
+
+### VNC ###
+
+
+`Starting VNC Server`
+
+	rhel:~ # yum install tigervnc-server
+	rhel:~ # cp /lib/systemd/system/vncserver@.service /etc/systemd/system/.
+	rhel:~ # vi /etc/systemd/system/vncserver@.service
+	ExecStart=/sbin/runuser -l USER -c "/usr/bin/vncserver %i -geometry 1280x1024"
+	PIDFile=/home/USER/.vnc/%H%i.pid
+
+	rhel:~ # systemctl start vncserver@:display_number.service
+	rhel:~ # systemctl enable vncserver@:display_number.service
+	rhel:~ # systemctl disable vncserver@:display_number.service
+	rhel:~ # systemctl stop vncserver@:display_number.service
+
+	rhel:~ # firewall-cmd --list-all
+	rhel:~ # firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.122.116" service name=vnc-server accept'
+	rhel:~ # firewall-cmd --zone=public --add-port=5904/tcp
+
+	rhel:~ # systemctl daemon-reload
+	rhel:~ # su - USER
+	rhel:~ # vncpasswd
+
+
+`Configuring VNC Server for Two Users`
+
+	rhel:~ # systemctl start vncserver-USER_1@:3.service
+	rhel:~ # systemctl start vncserver-USER_2@:5.service
+
+
+`Starting VNC Client`
+
+	rhel:~ # yum install tigervnc
+	rhel:~ # vncviewer address:display_number
+	rhel:~ # vncviewer -via user@host:display_number # by ssh
+
+
+### HTTP ###
+
+/etc/httpd/conf/httpd.conf
+/etc/httpd/conf.modules.d/
+/etc/httpd/conf.d/autoindex.conf	# new
+/etc/httpd/conf.d/userdir.conf		# new
+/etc/httpd/conf.d/welcome.conf		# new
+
+
+httpd 2.2								->		httpd 2.4
+
+/usr/sbin/apxs 							->		/usr/bin/apxs
+
+mod\_auth\_mysql, mod\_auth\_pgsql		->		mod\_authn\_dbd
+mod\_ldap, mod\_perl					->		mod\_proxy\_html, mod\_xml2enc
+
+/var/cache/mod_proxy/					->		/var/cache/httpd/
+/var/www/icons/							->		/usr/share/httpd/icons
+/var/www/manual/						->		/usr/share/httpd/manual/
+/var/www/error/							->		/usr/share/httpd/error/
+/var/log/httpd/suexec.log				->		/var/log/secure
+
+service httpd graceful					->		apachectl graceful
+service httpd configtest				->		apachectl configtest
+
+
+	rhel:~ # yum install httpd
+
+	rhel:~ # systemctl start httpd.service
+	rhel:~ # systemctl enable httpd.service
+	rhel:~ # systemctl stop httpd.service
+	rhel:~ # systemctl disable httpd.service
+	rhel:~ # systemctl restart httpd.service
+
+	rhel:~ # systemctl reload httpd.service
+	rhel:~ # apachectl graceful
+
+	rhel:~ # systemctl is-active httpd.service
+
+	rhel:~ # apachectl configtest
+
+	rhel:~ # firewall-cmd --add-service http
+	rhel:~ # firewall-cmd --add-service https
+
+
+`Modules`
+
+/usr/lib/httpd/modules/
+/usr/lib64/httpd/modules/
+
+
+	rhel:~ # cat /etc/httpd/conf.modules.d/xxx.conf
+	LoadModule ssl\_module modules/mod\xxx.so
+
+	rhel:~ # yum install httpd-devel
+	rhel:~ # apxs -i -a -c module_name.c
+
+
+`Virtual Hosts`
+
+	rhel:~ # cp /usr/share/doc/httpd-X.Y.Z/httpd-vhosts.conf /etc/httpd/conf.d/
+
+
+`SSL Server`
+
+SSL/TLS over HTTP, referred to as HTTPS
+
+	rhel:~ # yum install mod_ssl openssl
+
+	rhel:~ # vi /etc/httpd/conf.d/ssl.conf
+	SSLProtocol all -SSLv2 # disable SSL v2
+	SSLProtocol -all +TLSv1 +TLSv1.1 +TLSv1.2 # enable TLS
+
+	rhel:~ # systemctl restart httpd
+
+	rhel:~ # openssl s_client -connect hostname:port -protocol
+	rhel:~ # openssl s_client -connect localhost:443 -ssl3
+	rhel:~ # openssl s_client -connect localhost:443 -tls1_2
+
+
+`NSS`
+
+	rhel:~ # yum remove mod_ssl
+	rhel:~ # yum install mod_nss
+	rhel:~ # vi /etc/httpd/conf.d/nss.conf
+	Listen 443
+	VirtualHost _default_:443
+	NSSCertificateDatabase /etc/httpd/alias
+	NSSPassPhraseDialog file:/etc/httpd/password.conf
+	NSSNickname Server-Cert
+
+	rhel:~ # chmod 640 /etc/httpd/password.conf
+	rhel:~ # chown root:apache /etc/httpd/password.conf
+	rhel:~ # vi /etc/httpd/password.conf
+	internal:password
+
+	rhel:~ # certutil -L -d /etc/httpd/alias # list NSS db
+	rhel:~ # certutil -W -d /etc/httpd/alias # set password
+	rhel:~ # certutil -d /etc/httpd/nss-db-directory/ -A -n "CA_certificate" -t CT,, -a -i certificate.pem
+
+
+`NSS with/without SSL/TLS`
+
+	rhel:~ # vi /etc/httpd/conf.d/nss.conf
+	NSSProtocol TLSv1.0,TLSv1.1
+
+	rhel:~ # openssl s_client -connect localhost:443 -ssl3
+	rhel:~ # openssl s_client -connect localhost:443 -tls1
+
+
+`Generating a New Key and Certificate`
+
+
+	# method 1:
+	rhel:~ # yum install crypto-utils
+
+	rhel:~ # rm /etc/pki/tls/private/hostname.key
+	rhel:~ # genkey hostname # 會替換掉 /etc/pki/tls/private/hostname.key, 所以要先刪除
+
+	# method 2:
+	rhel:~ # openssl genrsa 1024 > hostname.key
+	rhel:~ # openssl req -new -key hostname.key -out hostname.csr
+	rhel:~ # openssl req -x509 -key hostname.key -in hostname.csr > hostname.crt
+	rhel:~ # openssl req -noout -text -in hostname.csr # verify csr
+
+	# method 3:
+	rhel:~ # openssl req -x509 -new -set_serial number -key hostname.key -out hostname.crt
+
+
+	rhel:~ # vi /etc/httpd/conf.d/ssl.conf
+	SSLCertificateFile /etc/pki/tls/certs/hostname.crt
+	SSLCertificateKeyFile /etc/pki/tls/private/hostname.key
+
+
+### MAIL ###
+
+Mail Transport Protocols: SMTP/Simple Mail Transfer Protocol
+Mail Access Protocols: POP/Post Office Protocol and IMAP/Internet Message Access Protocol
+LMTP/Local Mail Transfer Protocol
+
+`POP and IMAP`
+
+APOP — POP3 with MD5 authentication.
+KPOP — POP3 with Kerberos authentication.
+RPOP — POP3 with RPOP authentication.
+
+
+	rhel:~ # yum install dovecot
+
+	rhel:~ # vi /etc/dovecot/dovecot.conf
+	protocols = imap pop3 lmtp
+
+	rhel:~ # systemctl restart dovecot
+	rhel:~ # systemctl enable dovecot
+
+	rhel:~ # vi /etc/dovecot/conf.d/10-ssl.conf
+	ssl_protocols = !SSLv2 !SSLv3
+
+	/etc/pki/dovecot/certs/dovecot.pem
+	/etc/pki/dovecot/private/dovecot.pem
+
+
+`MTA`
+
+MTA/Mail Transport Agent (SMTP) (Postfix, Sendmail, and Fetchmail)
+MDA/Mail Delivery Agent or LDA/Local Delivery Agent (SMTP, LMTP) (Postfix, Sendmail) (mail, procmail)
+MUA/Mail User Agent (POP, IMAP)
+
+	rhel:~ # alternatives --config mta
+	rhel:~ # systemctl enable service
+	rhel:~ # systemctl disable service
 
 
 ### Subscription Manager ###

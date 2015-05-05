@@ -338,9 +338,10 @@ ksvalidator /path/to/kickstart.ks
 
 
 ### Forget root password ###
-init=/bin/sh
 
-sh-4.2# /usr/sbin/load_policy -i
-sh-4.2# mount -o remount,rw /
-sh-4.2# passwd root
-sh-4.2# mount -o remount,ro /
+在開機進入 grub2 時, 於 kernel 設定結尾處加入 init=/bin/sh, 即可進入免密碼的 single user mode
+
+	sh-4.2# /usr/sbin/load_policy -i
+	sh-4.2# mount -o remount,rw /
+	sh-4.2# passwd root
+	sh-4.2# mount -o remount,ro /
