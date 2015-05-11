@@ -526,26 +526,23 @@ In\_Host(9000)   <---|----   Out\_Host(2000)
 
 /etc/httpd/conf/httpd.conf
 /etc/httpd/conf.modules.d/
-/etc/httpd/conf.d/autoindex.conf	# new
-/etc/httpd/conf.d/userdir.conf		# new
-/etc/httpd/conf.d/welcome.conf		# new
 
-
-httpd 2.2								->		httpd 2.4
-
-/usr/sbin/apxs 							->		/usr/bin/apxs
-
-mod\_auth\_mysql, mod\_auth\_pgsql		->		mod\_authn\_dbd
-mod\_ldap, mod\_perl					->		mod\_proxy\_html, mod\_xml2enc
-
-/var/cache/mod_proxy/					->		/var/cache/httpd/
-/var/www/icons/							->		/usr/share/httpd/icons
-/var/www/manual/						->		/usr/share/httpd/manual/
-/var/www/error/							->		/usr/share/httpd/error/
-/var/log/httpd/suexec.log				->		/var/log/secure
-
-service httpd graceful					->		apachectl graceful
-service httpd configtest				->		apachectl configtest
+| RHEL 6								|	RHEL 7							|
+| ------------------------------------- | ----------------------------------|
+| httpd 2.2								| httpd 2.4							|
+| /usr/sbin/apxs 						| /usr/bin/apxs						|
+| mod\_auth\_mysql, mod\_auth\_pgsql	| mod\_authn\_dbd					|
+| mod\_ldap, mod\_perl					| mod\_proxy\_html, mod\_xml2enc	|
+| /var/cache/mod_proxy/					| /var/cache/httpd/					|
+| /var/www/icons/						| /usr/share/httpd/icons			|
+| /var/www/manual/						| /usr/share/httpd/manual/			|
+| /var/www/error/						| /usr/share/httpd/error/			|
+| /var/log/httpd/suexec.log				| /var/log/secure					|
+| service httpd graceful				| apachectl graceful				|
+| service httpd configtest				| apachectl configtest				|
+| none									| /etc/httpd/conf.d/autoindex.conf	|
+| none									| /etc/httpd/conf.d/userdir.conf	|
+| none									| /etc/httpd/conf.d/welcome.conf	|
 
 
 	rhel:~ # yum install httpd
@@ -658,16 +655,17 @@ SSL/TLS over HTTP, referred to as HTTPS
 
 ### MAIL ###
 
-Mail Transport Protocols: SMTP/Simple Mail Transfer Protocol
-Mail Access Protocols: POP/Post Office Protocol and IMAP/Internet Message Access Protocol
-LMTP/Local Mail Transfer Protocol
+	* Mail Transport Protocols: SMTP/Simple Mail Transfer Protocol
+	* Mail Access Protocols: POP/Post Office Protocol and IMAP/Internet Message Access Protocol
+	* LMTP/Local Mail Transfer Protocol
 
 `POP and IMAP`
 
-APOP — POP3 with MD5 authentication.
-KPOP — POP3 with Kerberos authentication.
-RPOP — POP3 with RPOP authentication.
+	* APOP — POP3 with MD5 authentication.
+	* KPOP — POP3 with Kerberos authentication.
+	* RPOP — POP3 with RPOP authentication.
 
+`Dovecot`
 
 	rhel:~ # yum install dovecot
 
@@ -677,23 +675,200 @@ RPOP — POP3 with RPOP authentication.
 	rhel:~ # systemctl restart dovecot
 	rhel:~ # systemctl enable dovecot
 
+
 	rhel:~ # vi /etc/dovecot/conf.d/10-ssl.conf
 	ssl_protocols = !SSLv2 !SSLv3
 
-	/etc/pki/dovecot/certs/dovecot.pem
-	/etc/pki/dovecot/private/dovecot.pem
+
+`Dovecot with SSL`
+
+	rhel:~ # rm -f certs/dovecot.pem private/dovecot.pem
+	rhel:~ # /usr/libexec/dovecot/mkcert.sh
+
+	rhel:~ # vi /etc/dovecot/conf.d/10-ssl.conf
+	ssl_cert = /etc/pki/dovecot/certs/dovecot.pem
+	ssl_key = /etc/pki/dovecot/private/dovecot.pem
 
 
 `MTA`
 
-MTA/Mail Transport Agent (SMTP) (Postfix, Sendmail, and Fetchmail)
-MDA/Mail Delivery Agent or LDA/Local Delivery Agent (SMTP, LMTP) (Postfix, Sendmail) (mail, procmail)
-MUA/Mail User Agent (POP, IMAP)
+	* MTA/Mail Transport Agent (SMTP) (Postfix, Sendmail, and Fetchmail)
+	* MDA/Mail Delivery Agent or LDA/Local Delivery Agent (SMTP, LMTP) (Postfix, Sendmail) (mail, procmail)
+	* MUA/Mail User Agent (POP, IMAP)
 
-	rhel:~ # alternatives --config mta
+	rhel:~ # alternatives --config mta # setup mta
 	rhel:~ # systemctl enable service
 	rhel:~ # systemctl disable service
 
+
+`Postfix`
+
+/etc/postfix/
+access
+main.cf
+master.cf
+transport
+
+	rhel:~ # vi /etc/postfix/main.cf
+	myhostname = virtual.domain.tld
+	mydomain = domain.tld
+	myorigin = $mydomain
+	mydestination = $myhostname, localhost.$mydomain, localhost
+	mynetworks_style = subnet
+	mynetworks = 168.100.189.0/28, 127.0.0.0/8
+	inet_interfaces = localhost
+
+	rhel:~ # grep -E '(#|^)my' /etc/postfix/main.cf
+
+	rhel:~ # systemctl start postfix.service
+	rhel:~ # systemctl enable postfix.service
+	rhel:~ # systemctl reload postfix.service
+
+	rhel:~ # postconf -n # 顯示目前設定
+	rhel:~ # postconf -h # 顯示未設定變數
+	rhel:~ # postconf -e "alias_maps = hash:/etc/aliases"
+	rhel:~ # postconf -M
+	rhel:~ # postconf -m
+	rhel:~ # postconf -l
+
+	rhel:~ # postqueue -p
+
+	rhel:~ # postalias hash:/etc/aliases 
+	rhel:~ # postmap hash:/etc/postfix/access 
+
+
+`Postfix with LDAP`
+
+	rhel:~ # vi /etc/postfix/main.cf
+	alias_maps = hash:/etc/aliases, ldap:/etc/postfix/ldap-aliases.cf
+
+	rhel:~ # vi /etc/postfix/ldap-aliases.cf
+	server_host = ldap.example.com
+	search_base = dc=example, dc=com
+
+
+`Sendmail`
+
+/etc/mail/
+sendmail.mc
+sendmail.cf
+access
+domaintable
+local-host-names
+mailertable
+virtusertable
+
+	# method 1:
+	make all -C /etc/mail/
+
+	# method 2:
+	cd /etc/mail/
+	make all
+	make name.db all
+	make name.db
+
+	# method 3:
+	m4 /etc/mail/sendmail.mc > /etc/mail/sendmail.cf
+	makemap hash /etc/mail/name < /etc/mail/name # name -> name.db
+
+	rhel:~ # systemctl start sendmail.service
+	rhel:~ # systemctl enable sendmail.service
+	rhel:~ # systemctl reload sendmail.service
+
+	rhel: ~ # vi /etc/mail/sendmail.mc
+	FEATURE(always_add_domain)dnl
+	FEATURE(`masquerade_entire_domain')dnl
+	FEATURE(`masquerade_envelope')dnl
+	FEATURE(`allmasquerade')dnl
+	MASQUERADE_AS(`example.com.')dnl
+	MASQUERADE_DOMAIN(`example.com.')dnl
+	MASQUERADE_AS(example.com)dnl
+	rhel:~ # m4 /etc/mail/sendmail.mc > /etc/sendmail.cf
+
+	rhel:~ # vi /etc/mail/access
+	Connect:localhost.localdomain           RELAY
+	Connect:localhost                       RELAY
+	127.0.0.1                               RELAY
+	av.com                                  DISCARD 
+	192.168.179.1                           REJECT 
+	rhel:~ # makemap hash /etc/mail/access < /etc/mail/access
+
+	rhel:~ # vi /etc/aliases
+	mailer-daemon:  postmaster
+	postmaster:     root
+	rhel:~ # newalias
+
+	rhel:~ # systemctl start sendmail
+	rhel:~ # systemctl enable sendmail
+	rhel:~ # mailq
+
+`Sendmail with LDAP`
+
+	rhel:~ # vi /etc/mail/sendmail.mc
+	LDAPROUTE_DOMAIN('yourdomain.com')dnl
+	FEATURE('ldap_routing')dnl
+
+
+`Fetchmail`
+
+	rhel:~ # yum install fetchmail
+
+	rhel:~ # vi ~/.fetchmailrc # 單行
+	poll example.com protocol pop3 username "joesoap" password "XXX"
+
+	rhel:~ # vi ~/.fetchmailrc # 多行
+	poll example.com proto pop3:
+	user "joesoap", with password "XXX", is "jsoap" here;
+	user "andrea", with password "XXXX";
+	poll example2.net proto imap:
+	user "john", with password "XXXXX", is "myth" here;
+
+	rhel:~ # fetchmail -d 600
+
+
+`Procmail`
+
+/etc/procmailrc
+~/.procmailrc
+
+	rhel~: # vi /etc/postfix/main.cf # for postfix
+	mailbox_command = /usr/bin/procmail
+
+	rhel:~ # vi /etc/mail/sendmail.mc # for sendmail
+	define(`PROCMAIL_MAILER_PATH',`/usr/bin/procmail')dnl
+	FEATURE(local_procmail,`',`procmail -t -Y -a $h -d $u')dnl
+	MAILER(procmail)dnl
+
+	rhel:~ # vi /etc/procmialrc
+	:0
+	* ^From: spammer@domain.com
+	/dev/null
+
+	:0:
+	* ^(From|Cc|To).*tux-lug
+	tuxlug
+
+	:0 Bh 
+	* href\=.*http:\/\/home\.kimo\.com\.tw 
+	/dev/null
+
+
+`SpamAssassin`
+
+	rhel:~ # yum install spamassassin
+
+	rhel:~ # vi /etc/procmailrc
+	INCLUDERC=/etc/mail/spamassassin/spamassassin-spamc.rc
+
+	rhel:~ # systemctl start spamassassin
+	rhel:~ # systemctl enable spamassassin.service
+
+
+### Directory Servers ###
+
+`LDAP`
+
+OpenLDAP 2.4,
 
 ### Subscription Manager ###
 
