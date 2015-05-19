@@ -870,6 +870,333 @@ virtusertable
 
 OpenLDAP 2.4,
 
+
+entry (DN, Distinguished Name)
+attribute
+LDIF (LDAP Data Interchange Format)
+
+
+`LDAP package`
+
+* openldap
+* openldap-clients
+* openldap-servers
+* compat-openldap
+* nss-pam-ldapd
+* mod_ldap
+
+
+`OpenLDAP Server Utilities`
+
+* slapacl
+* slapadd
+* slapauth
+* slapcat
+* slapdn
+* slapindex
+* slappasswd
+* slapschema
+* slaptest
+
+
+`OpenLDAP Client Utilities`
+
+* ldapadd
+* ldapcompare
+* ldapdelete
+* ldapexop
+* ldapmodify
+* ldapmodrdn
+* ldappasswd
+* ldapsearch
+* ldapurl
+* ldapwhoami
+
+
+`Global Configuration`
+
+/etc/openldap/slapd.d/cn=config.ldif
+
+* olcAllows
+* olcConnMaxPending
+* olcConnMaxPendingAuth
+* olcDisallows
+* olcIdleTimeout
+* olcLogFile
+* olcReferral
+* olcWriteTimeout
+
+
+`Database-Specific Configuration`
+
+因為 db 格式不同, 所以可能為 bdb 或 hdb
+/etc/openldap/slapd.d/cn=config/olcDatabase={1}bdb.ldif
+/etc/openldap/slapd.d/cn=config/olcDatabase={1}hdb.ldif
+
+* olcReadOnly
+* olcRootDN
+* olcRootPW
+* olcSuffix
+
+
+`Extending Schema`
+
+/etc/openldap/schema/
+
+
+`Establishing a Secure Connection`
+
+/etc/openldap/slapd.d/cn=config.ldif
+
+* olcTLSCACertificateFile
+* olcTLSCACertificatePath
+
+	server:~ # vi /etc/sysconfig/slapd
+	SLAPD_URLS=ldaps:/// 
+
+
+`olcTLSCACertificatePath with Mozilla NSS`
+
+
+`Replication`
+
+olcMirrorMode
+olcSyncrepl
+
+
+`Loading Modules and Backends`
+
+--enable-modules
+olcModuleLoad
+
+module_name.la
+back_backend_name.la
+
+
+`SELinux Policy`
+
+authlogin_nsswitch_use_ldap
+allow_ypbind
+
+	server:~ # setsebool -P allow_ypbind=1
+	server:~ # setsebool -P authlogin_nsswitch_use_ldap=1
+
+
+`OpenLDAP Server`
+
+/etc/openldap/ldap.conf
+/etc/openldap/slapd.d/
+
+
+	# 就的用法是使用 slapd.conf, 新的用法是使用 slapd.d 目錄
+	server:~ # slaptest -f /etc/openldap/slapd.conf -F /etc/openldap/slapd.d/ # convert slapd.conf -> slapd.d
+
+	server:~ # yum install openldap openldap-servers openldap-clients
+
+	server:~ # vi /etc/openldap/slapd.d/cn=config.ldif # Global configuration
+	server:~ # ls /etc/openldap/slapd.d/cn=config # Global configuration dir
+	server:~ # vi /etc/openldap/slapd.d/cn=config/olcDatabase={1}bdb.ldif # Database-Specific Configuration
+	server:~ # ls /etc/openldap/schema/
+
+	server:~ # slappasswd -s mypasswd -n -h {SSHA} > /etc/openldap/passwd
+	server:~ # openssl req -new -x509 -nodes -out /etc/openldap/certs/cert.pem -keyout /etc/openldap/certs/priv.pem -days 365
+	server:~ # chown ldap:ldap /etc/openldap/certs/*
+	server:~ # chmod 600 /etc/openldap/certs/priv.pem
+
+	server:~ # cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
+	server:~ # slaptest # test db, 還沒設定, 有錯誤正常
+	server:~ # chown ldap:ldap /var/lib/ldap/*
+
+	server:~ # systemctl enable slapd
+	server:~ # systemctl start slapd
+	server:~ # netstat -lntup | grep 389 # ldap 使用 389 port
+
+	server:~ # ldapadd -Y EXTERNAL -H ldapi:/// -D "cn=config" -f /etc/openldap/schema/cosine.ldif # 會在 /etc/openldap/slapd.d/cn=config/cn=schema
+	server:~ # ldapadd -Y EXTERNAL -H ldapi:/// -D "cn=config" -f /etc/openldap/schema/nis.ldif # 會在 /etc/openldap/slapd.d/cn=config/cn=schema
+
+	# 修改設定
+	# method 1: 直接修改設定檔, 用此方式修改完需重啟服務
+	server:~ # vi /etc/openldap/slapd.d/cn=config/olcDatabase={2}hdb.ldif # db 帳號設定
+	olcSuffix: dc=example,dc=com
+	olcRootDN: cn=Manager,dc=example,dc=com
+	...
+	olcRootPW: mypasswd
+	olcTLSCertificateFile: /etc/openldap/certs/cert.pem
+	olcTLSCertificateKeyFile: /etc/openldap/certs/priv.pem
+
+	server:~ # vi /etc/openldap/slapd.d/cn=config/olcDatabase={1}monitor.ldif # acl 設定
+	olcAccess: {0}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth" read by dn.base="cn=Manager,dc=example,dc=com" read by * none
+
+	# method 2: 寫成 ldif, 在使用指令匯入
+	server:~ # /etc/openldap/changes.ldif
+	dn: olcDatabase={2}hdb,cn=config
+	changetype: modify
+	replace: olcSuffix
+	olcSuffix: dc=example,dc=com
+	
+	dn: olcDatabase={2}hdb,cn=config
+	changetype: modify
+	replace: olcRootDN
+	olcRootDN: cn=Manager,dc=example,dc=com
+	
+	dn: olcDatabase={2}hdb,cn=config
+	changetype: modify
+	replace: olcRootPW
+	olcRootPW: mypasswd
+	
+	dn: cn=config
+	changetype: modify
+	replace: olcTLSCertificateFile
+	olcTLSCertificateFile: /etc/openldap/certs/cert.pem
+	
+	dn: cn=config
+	changetype: modify
+	replace: olcTLSCertificateKeyFile
+	olcTLSCertificateKeyFile: /etc/openldap/certs/priv.pem
+	
+	dn: cn=config
+	changetype: modify
+	replace: olcLogLevel
+	olcLogLevel: -1
+	
+	dn: olcDatabase={1}monitor,cn=config
+	changetype: modify
+	replace: olcAccess
+	olcAccess: {0}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth" read by dn.base="cn=Manager,dc=example,dc=com" read by * none
+
+	server:~ # ldapmodify -Y EXTERNAL -H ldapi:/// -f /etc/openldap/changes.ldif
+
+	# 修改其部分
+	server:~ # vi /etc/sysconfig/slapd
+	SLAPD_LDAPS=yes
+
+	# 並測試
+	server:~ # slaptest
+	server:~ # slaptest -u # 此時在測試應該無任何錯誤訊息
+
+
+	# 新增 entry
+	# method 1: 使用 ldif
+	server:~ # vi /etc/openldap/base.ldif
+	dn: dc=example,dc=com
+	dc: example
+	objectClass: top
+	objectClass: domain
+	
+	dn: ou=People,dc=example,dc=com
+	ou: People
+	objectClass: top
+	objectClass: organizationalUnit
+	
+	dn: ou=Group,dc=example,dc=com
+	ou: Group
+	objectClass: top
+	objectClass: organizationalUnit
+
+	# 匯入 ldif
+	server:~ # ldapadd -x -w mypasswd -D cn=Manager,dc=example,dc=com -f /etc/openldap/base.ldif
+	server:~ # ldapmodify -x -w mypasswd -D cn=Manager,dc=example,dc=com -a -f  /etc/openldap/base.ldif
+
+	# method 2: 使用 ldapadd
+	ldapadd -x -w mypasswd -D cn=Manager,dc=example,dc=com
+	dn: ou=Test,dc=example,dc=com
+	ou: Test
+	objectClass: top
+	objectClass: organizationalUnit # 在結束時按下 ctrl+D
+
+
+	# 刪除 entry
+	server:~ # ldapdelete -x -w mypasswd -D cn=Manager,dc=example,dc=com
+	ou=Test,dc=example,dc=com # 在結束時按下 ctrl+D
+
+	server:~ # vi  /etc/openldap/del_test.ldif
+	dn: ou=Test,dc=example,dc=com
+	changetype: delete 
+
+	server:~ # ldapdelete -x -w mypasswd -D cn=Manager,dc=example,dc=com -f /etc/openldap/del_test.ldif
+	server:~ # ldapmodify -x -w mypasswd -D cn=Manager,dc=example,dc=com -f /etc/openldap/del_test.ldif
+
+
+	# 查詢 entry
+	server:~ # ldapsearch -x -b "dc=example,dc=com"
+
+
+`User and Group with LDAP`
+
+Server
+
+	server:~ # yum install openldap openldap-clients nss-pam-ldapd
+
+
+	# method 1:
+	server:~ # vi /etc/openldap/group.ldif
+	dn: cn=user1,ou=Group,dc=example,dc=com
+	objectClass: posixGroup
+	objectClass: top
+	cn: user1
+	userPassword: {crypt}x
+	gidNumber: 1001
+
+	server:~ # vi /etc/openldap/passwd.ldif
+	dn: uid=user1,ou=People,dc=example,dc=com
+	uid: user1
+	cn: user1
+	objectClass: account
+	objectClass: posixAccount
+	objectClass: top
+	objectClass: shadowAccount
+	userPassword: {crypt}$6$eceX9YuK$gcwDMGx6.kqUMEAH4F61bZxFrDnHgj8hGr4pPqD8m3YoFg/6qPE3QVpe6lbKaVDMclJptPTuRSipJ6SHpjKGf0
+	shadowLastChange: 16571
+	shadowMin: 0
+	shadowMax: 99999
+	shadowWarning: 7
+	loginShell: /bin/bash
+	uidNumber: 1001
+	gidNumber: 1001
+	homeDirectory: /home/user1
+
+	# method 2:
+	server:~ # yum install migrationtools
+	server:~ # cd /usr/share/migrationtools
+	server:~ # vi /usr/share/migrationtools/migrate_common.ph
+	$DEFAULT_MAIL_DOMAIN = "example.com";
+	$DEFAULT_BASE = "dc=example,dc=com";
+
+	/usr/share/migrationtools/migrate_passwd.pl /etc/passwd > users.ldif
+	/usr/share/migrationtools/migrate_group.pl /etc/group > group.ldif
+
+	# method 3 :
+	server:~ # export DEFAULT_BASE="dc=example,dc=com" /usr/share/migrationtools/migrate_all_online.sh
+
+	# 匯入
+	server:~ # ldapadd -x -D 'cn=Manager,dc=example,dc=com' -w mypasswd -f group.ldif 
+	server:~ # ldapadd -x -D 'cn=Manager,dc=example,dc=com' -w mypasswd -f user.ldif 
+
+	# 防火牆
+	server:~ # firewall-cmd --permanent --add-service=ldap
+
+Client
+
+	# method 1:
+	client:~ # authconfig-tui
+
+![authconfig ldap1](./auth_ldap_1.png)
+
+![authconfig ldap2](./auth_ldap_2.png)
+
+	# method 2:
+	client:~ # authconfig --test
+	client:~ # authconfig --enableldap --enableldapauth --ldapserver=ldap://example.com:389 --ldapbasedn="dc=example,dc=com" --update
+	client:~ # authconfig --enablemkhomedir --update
+
+	
+
+
+
+
+
+
+
 ### Subscription Manager ###
 
 	# setup subscription manager
