@@ -1189,12 +1189,225 @@ Client
 	client:~ # authconfig --enableldap --enableldapauth --ldapserver=ldap://example.com:389 --ldapbasedn="dc=example,dc=com" --update
 	client:~ # authconfig --enablemkhomedir --update
 
+
+### Samba ###
+
+smbd TCP 139 and 445
+nmbd UDP 137
+winbindd
+
+smb://servername/sharename
+smbclient //hostname/sharename -U username
+
+yum install cifs-utils
+echo 0x37 > /proc/fs/cifs/SecurityFlags
+mount -t cifs //servername/sharename /mnt/point/ -o username=username,password=password
+
+
+### FTP ###
+
+`FTP server`
+
+| login port	| data transfer port	|
+| -------------	| --------------------- |
+| 21			| 20 (activce mode)		|
+| 21			| \>1024 (passive mode)	|
+
+
+`vsftpd`
+
+	server:~ # yum install yum install vsftpd
+	server:~ # vi /etc/vsftpd/vsftpd.conf # default config
+
+	server:~ # systemctl enable vsftpd.service
+	server:~ # systemctl start vsftpd.service
+	server:~ # systemctl stop vsftpd.service
+	server:~ # systemctl restart vsftpd.service
+	server:~ # systemctl try-restart vsftpd.service
+
+
+`multiple vsftpd`
+
+	server:~ # cp /etc/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd-mysite.conf
+	server:~ # vi /etc/vsftpd/vsftpd-mysite.conf
+	listen_address
+	listen_address6
+	listen_port
+	anon_root
+	local_root
+	vsftpd_log_file
+	xferlog_file
+
+	server:~ # systemctl start vsftpd@configuration-file-name.service
+	server:~ # systemctl start vsftpd@vsftpd-mysite.service
+	server:~ # systemctl enable vsftpd.target
+	server:~ # systemctl start vsftpd.target
+
+
+`vsftp with TLS/SSL`
+
+	server:~ # vi /etc/vsftpd/vsftpd-mysite.conf
+	ssl_enable=YES
+	ssl_tlsv1=YES
+	ssl_sslv2=NO
+	ssl_sslv3=NO
+
+	server:~ # systemctl restart vsftpd.service
+
+
+`vsftpd with SELinux`
+
+當開啟的port 小於 1024, 需另外設定 SELinux
+
+	server:~ # semanage port -l
+	server:~ # semanage port -a -t ftp_port_t -p tcp 121
+
+anonymous 上傳, 預設目錄為 /var/ftp, 預設帳號群組為 ftp.ftp, 上傳目錄要有對應的使用者及權限 
+
+	server:~ # mkdir /var/ftp/pub/upload
+	server:~ # chmod 777 /vat/ftp/pub/upload
+	server:~ # chcon -R -t public_content_t /var/ftp/pub/upload
+	server:~ # getsebool allow_ftpd_full_access
+	server:~ # getsebool allow_ftpd_anon_write # 若為 off, 需要設定為 on 才可上傳
+	server:~ # setsebool -P allow_ftpd_full_access=1
+	server:~ # setsebool -P allow_ftpd_anon_write=1
+
+
+### Print Server ###
+
+
+### NTP using chrony ###
+
+chronyd is configured to listen for commands only from localhost (127.0.0.1 and ::1) on port 323
+
+	rhel:~ # yum install chrony
+	rhel:~ # systemctl status chronyd
+	rhel:~ # systemctl start chronyd
+	rhel:~ # systemctl enable chronyd
+	rhel:~ # systemctl stop chronyd
+	rhel:~ # systemctl disable chronyd
+
+	rhel:~ # chronyc help
+	rhel:~ # chronyc tracking
+	rhel:~ # chronyc sources
+	rhel:~ # chronyc sourcestats
+	rhel:~ # chronyc -a makestep
+	rhel:~ # chronyc -a activity
+	rhel:~ # chronyc -a offline
+	rhel:~ # chronyc -a online
+
+
+	rhel:~ # cat chrony.keys 
+	1 SHA1 HEX:7FA49E72B9F3FD6411FDBAF7FFE62980003A582E
+	chronyc> authhash SHA1
+	chronyc> password HEX:7FA49E72B9F3FD6411FDBAF7FFE62980003A582E
+
+	rhel:~ # chronyc -a
+	chronyc> # 互動模式
+
+	rhel:~ # vi /etc/chrony.conf
+	allow
+		allow server1.example.com
+		allow 192.0.2.0/24
+		allow 2001:db8::/32
+	cmdallow
+	dumpdir
+	dumponexit
+	local
+		local stratum 10
+	log
+		measurements, statistics, tracking, rtc, refclocks, tempcomp
+		log measurements statistics tracking
+	logdir
+		logdir /var/log/chrony
+	makestep
+		makestep 1000 10
+	maxchange
+		maxchange 1000 1 2
+	maxupdateskew
+		maxupdateskew 100
+	noclientlog
+	reselectdist
+		reselectdist 100
+	stratumweight
+		stratumweight 1
+	rtcfile
+		rtcfile /var/lib/chrony/rtc
+	rtcsync
+
+	#
+	server w.x.y.z key 10
+	peer w.x.y.z key 10
+	commandkey 1
+	keyfile /etc/chrony.keys
+
+
+### NTP using ntpd ###
+
+Network Time Protocol (NTP)
+Global Position System (GPS)
+Coordinated Universal Time (UTC)
+Timezones
+DST (Daylight Saving Time)
+Greenwich Mean Time (GMT)
+
+
+`ntp`
+
+	rhel:~ # systemctl stop chronyd
+	rhel:~ # systemctl disable chronyd
+	rhel:~ # yum install ntp
+	rhel:~ # systemctl enable ntpd
+	rhel:~ # systemctl start ntpd
+	rhel:~ # ntpstat
+
+	rhel:~ # vi /etc/ntp.conf
+	driftfile /var/lib/ntp/drift
+	restrict default nomodify notrap nopeer noquery
+	restrict 127.0.0.1
+	restrict ::1
+	restrict 192.0.2.0 mask 255.255.255.0 nomodify notrap nopeer
+	restrict 192.0.2.250
+	server 0.rhel.pool.ntp.org iburst
+	server 1.rhel.pool.ntp.org iburst
+	server 2.rhel.pool.ntp.org iburst
+	server 3.rhel.pool.ntp.org iburst
+
+
+`測試`
+
+	rhel:~ # ntpq -p
+
+
+`防火牆`
+
+	rhel:~ # firewall-config
+	123 and select udp
+
+
+`其他`
+
+	# receive IP from DHCP client
+	rhel:~ # vi /etc/sysconfig/network
+	PEERNTP=no
 	
+	# ignore the offset limit of 1000s
+	rhel:~ # vi /etc/sysconfig/ntpd
+	OPTIONS="-g"
 
 
+`ntpdate`
 
+	rhel:~ # systemctl status ntpdate
+	rhel:~ # systemctl enable ntpdate
 
+	rhel:~ # vi /etc/ntp/step-tickers
+	0.rhel.pool.ntp.org
 
+	rhel:~ # vi /etc/sysconfig/ntpdate
+	SYNC_HWCLOCK=yes
+
+	rhel:~ # hwclock --systohc
 
 
 ### Subscription Manager ###
@@ -1222,6 +1435,32 @@ Client
 	# remove subscription
 	subscription-manager remove --serial=serial_number
 	subscription-manager remove --all
+
+
+### Print Server ###
+
+CUPs (Common Unix Printing System)
+http://localhost:631
+
+	server:~ # system-config-printer
+
+Local:
+Serial Port #1 or LPT #1
+URI (for example file:/dev/lp0)
+
+
+Network:
+IPP (Internet Printing Protocol) (ipp) TCP/UDP port 631
+IPP (Internet Printing Protocol) (htps)
+LPD/LPR (Line Printer Daemon) TCP port 515
+SMB Printer
+
+yum install smb-client
+lpstat -o
+
+
+### NTP ###
+
 
 
 ### Red Hat Support Tool ###

@@ -59,3 +59,22 @@ nmcli connection reload
 nmcli con load /etc/sysconfig/network-scripts/ifcfg-ifname
 nmcli dev disconnect interface-name
 nmcli con up interface-name
+
+
+vi /etc/sysconfig/network-script/ifcfg-interface
+HWADDR=11:22:33:44:55:66
+TYPE=Ethernet
+BOOTPROTO=dhcp # dhcp
+DEFROUTE=yes # 設定為 default gateway
+PEERDNS=yes
+PEERROUTES=yes
+IPV4\_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_PEERDNS=yes
+IPV6_PEERROUTES=yes
+IPV6\_FAILURE_FATAL=no
+NAME="eth0"
+ONBOOT=yes # 開機使否開啟
+NM_CONTROLLED=yes # 可否由 Network Manager
