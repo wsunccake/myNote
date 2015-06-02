@@ -43,17 +43,19 @@
 
 `static ip`
 
-	rhel:~ # nmcli connection add ifname eth0 con-name eth0 type ethernet ip4 10.0.0.11/24 gw4 10.0.0.1
+	rhel:~ # nmcli connection add ifname eth0 con-name eth0 type ethernet ip4 10.0.0.11/24 gw4 10.0.0.1 # create /etc/sysconfig/network-script/ifcfg-eth0
 	rhel:~ # nmcli connection modify eth0 ipv4.dns 8.8.8.8
 
 
 `dhcp`
 
-	rhel:~ # nmcli connection add ifname eth0 con-name eth0 type ethernet
+	rhel:~ # nmcli connection add ifname eth0 con-name eth0 type ethernet # create /etc/sysconfig/network-script/ifcfg-eth0
 	rhel:~ # nmcli connection modify eth0 ipv4.dhcp-hostname host-name
 	rhel:~ # nmcli connection modify eth0 ipv4.ignore-auto-dns yes
 
+`delete`
 
+	rhel:~ # nmcli connection delete eth0 # delete /etc/sysconfig/network-script/ifcfg-eth0
 
 nmcli connection reload
 nmcli con load /etc/sysconfig/network-scripts/ifcfg-ifname
@@ -65,7 +67,7 @@ vi /etc/sysconfig/network-script/ifcfg-interface
 HWADDR=11:22:33:44:55:66
 TYPE=Ethernet
 BOOTPROTO=dhcp # dhcp
-DEFROUTE=yes # 設定為 default gateway
+DEFROUTE=yes # 設定為 default gateway, multiple NIC 環境中很重要
 PEERDNS=yes
 PEERROUTES=yes
 IPV4\_FAILURE_FATAL=no

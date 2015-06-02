@@ -1204,6 +1204,9 @@ echo 0x37 > /proc/fs/cifs/SecurityFlags
 mount -t cifs //servername/sharename /mnt/point/ -o username=username,password=password
 
 
+### Print Server ###
+
+
 ### FTP ###
 
 `FTP server`
@@ -1271,9 +1274,6 @@ anonymous 上傳, 預設目錄為 /var/ftp, 預設帳號群組為 ftp.ftp, 上�
 	server:~ # getsebool allow_ftpd_anon_write # 若為 off, 需要設定為 on 才可上傳
 	server:~ # setsebool -P allow_ftpd_full_access=1
 	server:~ # setsebool -P allow_ftpd_anon_write=1
-
-
-### Print Server ###
 
 
 ### NTP using chrony ###
@@ -1408,6 +1408,36 @@ Greenwich Mean Time (GMT)
 	SYNC_HWCLOCK=yes
 
 	rhel:~ # hwclock --systohc
+
+
+### PTP ###
+
+PTP(Precision Time Protocol)
+
+	# check NIC support or not
+	rhel:~ # ethtool -T eth0
+
+	rhel:~ # yum install linuxptp # install ptp4l and phc2sys
+	rhel:~ # systemctl start ptp4l
+	rhel:~ # ptp4l -i eth0 -m
+	rhel:~ # cat /etc/ptp4l.conf  # default config file
+
+
+PTP management client, pmc
+
+	pmc -u -b 0 'GET CURRENT_DATA_SET'
+	pmc -u -b 0 'GET TIME_STATUS_NP'
+
+
+PTP hardware clock, phc
+
+	systemctl restart phc2sys
+	phc2sys -a -r
+	vi /etc/sysconfig/phc2sys
+	OPTIONS="-a -r"
+
+	phc2sys -s eth3 -w
+	phc2sys -s eth3 -O -35
 
 
 ### Subscription Manager ###
