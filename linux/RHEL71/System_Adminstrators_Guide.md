@@ -1206,6 +1206,25 @@ mount -t cifs //servername/sharename /mnt/point/ -o username=username,password=p
 
 ### Print Server ###
 
+CUPs (Common Unix Printing System)
+http://localhost:631
+
+	server:~ # system-config-printer
+
+Local:
+Serial Port #1 or LPT #1
+URI (for example file:/dev/lp0)
+
+
+Network:
+IPP (Internet Printing Protocol) (ipp) TCP/UDP port 631
+IPP (Internet Printing Protocol) (htps)
+LPD/LPR (Line Printer Daemon) TCP port 515
+SMB Printer
+
+yum install smb-client
+lpstat -o
+
 
 ### FTP ###
 
@@ -1467,32 +1486,236 @@ PTP hardware clock, phc
 	subscription-manager remove --all
 
 
-### Print Server ###
+### System Process ###
 
-CUPs (Common Unix Printing System)
-http://localhost:631
+	rhel:~ # ps ax
+	rhel:~ # ps aux
 
-	server:~ # system-config-printer
+	rhel:~ # top
 
-Local:
-Serial Port #1 or LPT #1
-URI (for example file:/dev/lp0)
+	rhel:~ # free
+	rhel:~ # free -m
+
+	rhel:~ # lsblk
+	rhel:~ # lsblk -l
+
+	rhel:~ # blkid
+	rhel:~ # blkid /dev/sda1
+	rhel:~ # blkid -po /dev/sda1
+	rhel:~ # ls -l /dev/disk/by-uuid/
+
+	rhel:~ # findmnt
+	rhel:~ # findmnt -l
+	rhel:~ # findmnt -t xfs
+
+	rhel:~ # df
+	rhel:~ # df -h
+
+	rhel:~ # du
+	rhel:~ # du -sh
+
+	rhel:~ # gnome-system-monitor
+
+	rhel:~ # lspci
+	rhel:~ # lspci -v
+
+	rhel:~ # lsusb
+	rhel:~ # lsusb -v
+
+	rhel:~ # lscpu
 
 
-Network:
-IPP (Internet Printing Protocol) (ipp) TCP/UDP port 631
-IPP (Internet Printing Protocol) (htps)
-LPD/LPR (Line Printer Daemon) TCP port 515
-SMB Printer
+### Net-SNMP ###
 
-yum install smb-client
-lpstat -o
+`snmp service`
+
+	rhel:~ # yum install net-snmp net-snmp-libs net-snmp-utils
+	rhel:~ # systemctl start snmpd.service
+	rhel:~ # systemctl enable snmpd.service
+	rhel:~ # systemctl stop snmpd.service
+	rhel:~ # systemctl disable snmpd.service
+	rhel:~ # systemctl restart snmpd.service
+	rhel:~ # systemctl reload snmpd.service
 
 
-### NTP ###
+`snmp v2`
+
+	# default value
+	rhel:~ # grep -vE '^#|^$' /etc/snmp/snmpd.conf 
+	com2sec notConfigUser  default       public
+	group   notConfigGroup v1           notConfigUser
+	group   notConfigGroup v2c           notConfigUser
+	view    systemview    included   .1.3.6.1.2.1.1
+	view    systemview    included   .1.3.6.1.2.1.25.1.1
+	access  notConfigGroup ""      any       noauth    exact  systemview none none
+	syslocation Unknown (edit /etc/snmp/snmpd.conf)
+	syscontact Root <root@localhost> (configure /etc/snmp/snmp.local.conf)
+	dontLogTCPWrappersConnects yes
+
+	rhel:~ # snmpwalk -v2c -c public localhost system # 查詢主機狀態 -v: 版本 2c, -c: community
+
+	# custom
+	rhel:~ # echo "rocommunity redhat 127.0.0.1 .1.3.6.1.2.1.1" >> /etc/snmp/snmpd.conf # rocommunity: read only community, rwcommunity: read write community
+	rhel:~ # snmpwalk -v2c -c redhat localhost system
+
+	# all
+	rhel:~ # grep -vE '^#|^$' /etc/snmp/snmpd.conf
+	com2sec notConfigUser  192.168.0.0/24 public
+	group   notConfigGroup v2c           notConfigUser
+	view    snmpAll            included      .1              80
+	access  notConfigGroup ""      any       noauth    exact  snmpAll none none
+	rhel:~ # snmpwalk -v2c -c redhat localhost ip
+
+
+`snmp v3`
+
+
+	rhel:~ # net-snmp-create-v3-user
+	Enter a SNMPv3 user name to create: 
+	admin
+	Enter authentication pass-phrase: 
+	admin!234
+	Enter encryption pass-phrase: 
+	  [press return to reuse the authentication pass-phrase]
+	admin!234
+	adding the following line to /var/lib/net-snmp/snmpd.conf:
+	   createUser admin MD5 "admin!234" DES admin!234
+	adding the following line to /etc/snmp/snmpd.conf:
+	   rwuser admin
+
+	rhel:~ # vi /etc/snmp/snmpd.conf
+	rwuser admin
+	createUser admin MD5 "admin!234" DES admin!234
+
+	rhel:~ # vi ~/.snmp/snmp.conf
+	defVersion 3
+	defSecurityLevel authPriv
+	defSecurityName admin
+	defPassphrase admin!234
+
+	rhel:~ # snmpwalk -v3 localhost system
+
+
+`snmp info`
+
+	rehle:~ # snmptable -Cb localhost HOST-RESOURCES-MIB::hrFSTable
+	rehle:~ # snmptable -Cb localhost HOST-RESOURCES-MIB::hrStorageTable
+	rehle:~ # snmptable -Cb localhost UCD-DISKIO-MIB::diskIOTable
+	rehle:~ # snmptable localhost UCD-SNMP-MIB::laTable
+
+	rehle:~ # snmpwalk localhost UCD-SNMP-MIB::systemStats
+	rehle:~ # snmpwalk localhost UCD-SNMP-MIB::memory
+
+	rehle:~ # snmptable -Cb localhost IF-MIB::ifTable
+	rehle:~ # snmpwalk localhost IF-MIB::ifDescr
+	rehle:~ # snmpwalk localhost IF-MIB::ifInOctets
+
+
+### OpenpLMI ###
+
+OpenLMI/Open Linux Management Infrastructure
+CIM/Common Information Model
+
+
+`OpenLMI on a Managed System`
+
+	yum install tog-pegasus
+	yum install openlmi-{storage,networking,service,account,powermanagement}
+	vi /etc/Pegasus/access.conf
+	passwd pegasus
+
+	systemctl start tog-pegasus.service
+	systemctl enable tog-pegasus.service
+
+
+	firewall-cmd --add-port 5989/tcp
+	firewall-cmd --permanent --add-port 5989/tcp
+
+
+`OpenLMI on a Client System`
+
+	yum install openlmi-tools
+
+
+### Log File ###
+
+
+`Filters`
+
+* Facility/Priority-based filters
+
+FACILITY: kern (0), user (1), mail (2), daemon (3), auth (4), syslog (5), lpr (6), news (7), uucp (8), cron (9), authpriv (10), ftp (11), and local0 through local7 (16 - 23)
+
+PRIORITY: debug (7), info (6), notice (5), warning (4), err (3), crit (2), alert (1), and emerg (0)
+
+FACILITY.PRIORITY
+
+	kern.*
+	mail.crit
+	cron.!info,!debug
+
+* Property-based filters
+
+Compare-operation: contains, isequal, startswith, regex, ereregex, isempty
+
+:PROPERTY, [!]COMPARE_OPERATION, "STRING"
+
+	:msg, contains, "error"
+	:hostname, isequal, "host1"
+	:msg, !regex, "fatal .* error"
+
+* Expression-based Filters
+
+if EXPRESSION then ACTION else ACTION
+
+	if $programname == 'prog1' then {
+		action(type="omfile" file="/var/log/prog1.log")
+		if $msg contains 'test' then
+			action(type="omfile" file="/var/log/prog1test.log")
+		else
+			action(type="omfile" file="/var/log/prog1notest.log")
+	}
+
+`Actions`
+
+* Saving syslog messages to log files
+
+FILTER PATH: PATH is static file
+
+FILTER -PATH: - (dsah) is omit syncing
+
+FILTER ?DynamicFile: ? (question) is dynamic file (using template); DynamicFile is predefined template
+
+	cron.* /var/log/cron.log
+
+* Sending syslog messages over the network
+
+@[(zNUMBER)]HOST:[PORT]: zNUMBER is compression (from 1 – lowest to 9 – maximum)
+
+	*.* @192.168.0.1
+	*.* @@example.com:18
+	*.* @(z9)[2001:db8::1]
+
+* Output channels
+
+$outchannel NAME, FILE\_NAME, MAX\_SIZE, ACTION
+
+FILTER :omfile:$NAME
+
+	$outchannel log_rotation, /var/log/test_log.log, 104857600, /home/joe/log_rotation_script
+	*.* :omfile:$log_rotation
+
+
+rsyslogd
+/etc/rsyslog.conf
+/etc/rsyslog.d
+
+/var/log
 
 
 
+/etc/logrotate.conf
+/etc/logrotate.d/
 ### Red Hat Support Tool ###
 
 	yum install redhat-support-tool
