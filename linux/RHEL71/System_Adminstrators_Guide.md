@@ -362,17 +362,18 @@ mask/umask link to /dev/null
 | 5			| runlevel5.target, graphical.target	|
 | 6			| runlevel6.target, reboot.target		|
 
-SysV	LSB
-runlevel			systemctl list-units --type target
-telinit runlevel	systemctl isolate name.target
+| SysV				| LSB									|
+| ----------------- | ------------------------------------- |
+| runlevel			| 	systemctl list-units --type target	|
+| telinit runlevel	| 	systemctl isolate name.target		|
 
-systemctl get-default
-systemctl set-default graphical.target
-systemctl isolate multi-user.target
-systemctl rescue
-systemctl --no-wall rescue
-systemctl emergency
-systemctl --no-wall emergency
+	rhel:~ # systemctl get-default
+	rhel:~ # systemctl set-default graphical.target
+	rhel:~ # systemctl isolate multi-user.target
+	rhel:~ # systemctl rescue
+	rhel:~ # systemctl --no-wall rescue
+	rhel:~ # systemctl emergency
+	rhel:~ # systemctl --no-wall emergency
 
 
 `Power Management`
@@ -1459,33 +1460,6 @@ PTP hardware clock, phc
 	phc2sys -s eth3 -O -35
 
 
-### Subscription Manager ###
-
-	# setup subscription manager
-	subscription-manager register
-	subscription-manager list --available
-	subscription-manager attach --pool=pool_id
-	subscription-manager list --consumed
-	subscription-manager register --auto-attach
-
-	# software repository
-	subscription-manager repos --list
-	rhel-variant-rhscl-version-rpms
-	rhel-variant-rhscl-version-debug-rpms
-	rhel-variant-rhscl-version-source-rpms
-
-	rhel-server-rhscl-7-eus-rpms
-	rhel-server-rhscl-7-eus-source-rpms
-	rhel-server-rhscl-7-eus-debug-rpms
-
-	subscription-manager repos --enable repository
-	subscription-manager repos --disable repository
-
-	# remove subscription
-	subscription-manager remove --serial=serial_number
-	subscription-manager remove --all
-
-
 ### System Process ###
 
 	rhel:~ # ps ax
@@ -1501,7 +1475,7 @@ PTP hardware clock, phc
 
 	rhel:~ # blkid
 	rhel:~ # blkid /dev/sda1
-	rhel:~ # blkid -po /dev/sda1
+	rhel:~ # blkid -po full /dev/sda1
 	rhel:~ # ls -l /dev/disk/by-uuid/
 
 	rhel:~ # findmnt
@@ -1564,11 +1538,10 @@ PTP hardware clock, phc
 	group   notConfigGroup v2c           notConfigUser
 	view    snmpAll            included      .1              80
 	access  notConfigGroup ""      any       noauth    exact  snmpAll none none
-	rhel:~ # snmpwalk -v2c -c redhat localhost ip
+	rhel:~ # snmpwalk -v2c -c public localhost ip
 
 
 `snmp v3`
-
 
 	rhel:~ # net-snmp-create-v3-user
 	Enter a SNMPv3 user name to create: 
@@ -1637,8 +1610,12 @@ CIM/Common Information Model
 	yum install openlmi-tools
 
 
-### Log File ###
+### Rsyslogd ###
 
+`Configuration File`
+
+	rhel:~ # cat /etc/rsyslog.conf
+	rhel:~ # ls /etc/rsyslog.d
 
 `Filters`
 
@@ -1705,17 +1682,726 @@ FILTER :omfile:$NAME
 	$outchannel log_rotation, /var/log/test_log.log, 104857600, /home/joe/log_rotation_script
 	*.* :omfile:$log_rotation
 
+* Sending syslog messages to specific users
 
-rsyslogd
-/etc/rsyslog.conf
-/etc/rsyslog.d
+* Executing a program
 
-/var/log
+FILTER ^EXECUTABLE; TEMPLATE
+
+	*.* ^test-program;template
+
+* Storing syslog messages in a database
+
+:PLUGIN:DB\_HOST,DB\_NAME,DB\_USER,DB\_PASSWORD;[TEMPLATE]
+
+* Discarding syslog messages
+
+FILTER ~
+
+	cron.* ~
+
+`Multiple Actions`
+
+FILTER ACTION
+& ACTION
+& ACTION
+
+	kern.=crit user1
+	& ^test-program;temp
+	& @192.168.0.1
+
+`Templates`
+
+$template TEMPLATE_NAME,"text %PROPERTY% more text", [OPTION]
+
+`TEMPLATE_NAME`
+
+	$template DynamicFile,"/var/log/test_logs/%timegenerated%-test.log"
+	*.* ?DynamicFile
+
+`Properties`
+
+%PROPERTY\_NAME[:FROM_CHAR:TO\_CHAR:OPTION]%
+
+	%msg%
+	%msg:1:2%
+	%msg:::drop-last-lf%
+	%timegenerated:1:10:date-rfc3339%
+
+`Template Examples`
+
+	$template verbose, "%syslogseverity%, %syslogfacility%, %timegenerated%, %HOSTNAME%, %syslogtag%, %msg%\n"
+	$template wallmsg,"\r\n\7Message from syslogd@%HOSTNAME% at %timegenerated% ...\r\n %syslogtag% %msg%\n\r"
+	$template dbFormat,"insert into SystemEvents (Message, Facility, FromHost, Priority, DeviceReportedTime, ReceivedAt, InfoUnitID, SysLogTag) values ('%msg%', %syslogfacility%, '%HOSTNAME%', %syslogpriority%, '%timereported:::date-mysql%', '%timegenerated:::date-mysql%', %iut%, '%syslogtag%')", sql
+
+RSYSLOG_DebugFormat
+
+	"Debug line with all properties:\nFROMHOST: '%FROMHOST%', fromhost-ip: '%fromhost-ip%', HOSTNAME: '%HOSTNAME%', PRI: %PRI%,\nsyslogtag '%syslogtag%', programname: '%programname%', APP-NAME: '%APP-NAME%', PROCID: '%PROCID%', MSGID: '%MSGID%',\nTIMESTAMP: '%TIMESTAMP%', STRUCTURED-DATA: '%STRUCTURED-DATA%',\nmsg: '%msg%'\nescaped msg: '%msg:::drop-cc%'\nrawmsg: '%rawmsg%'\n\n\"
+
+RSYSLOG_SyslogProtocol23Format
+
+	"%PRI%1 %TIMESTAMP:::date-rfc3339% %HOSTNAME% %APP-NAME% %PROCID% %MSGID% %STRUCTURED-DATA% %msg%\n\"
+
+RSYSLOG_FileFormat
+
+	"%TIMESTAMP:::date-rfc3339% %HOSTNAME% %syslogtag%%msg:::sp-if-no-1st-sp%%msg:::drop-last-lf%\n\"
+
+RSYSLOG_TraditionalFileFormat
+
+	"%TIMESTAMP% %HOSTNAME% %syslogtag%%msg:::sp-if-no-1st-sp%%msg:::drop-last-lf%\n\"
+
+RSYSLOG_ForwardFormat
+
+	"%PRI%%TIMESTAMP:::date-rfc3339% %HOSTNAME% %syslogtag:1:32%%msg:::sp-if-no-1st-sp%%msg%\"
+
+RSYSLOG_TraditionalForwardFormat
+
+	"%PRI%%TIMESTAMP% %HOSTNAME% %syslogtag:1:32%%msg:::sp-if-no-1st-sp%%msg%\"
 
 
+`New Configuration Format`
+
+	$InputFileName /tmp/inputfile
+	$InputFileTag tag1:
+	$InputFileStateFile inputfile-state
+	$InputRunFileMonitor
+
+same
+
+	input(type="imfile" file="/tmp/inputfile" tag="tag1:" statefile="inputfile-state")
+
+`Ruleset`
+
+	ruleset(name="rulesetname") { 
+	      rule 
+	      rule2
+	      call rulesetname2
+	      ...
+	}
+
+same
+
+	input(type="input_type" port="port_num" ruleset="rulesetname");
+
+	ruleset(name="remote-10514") {
+	    action(type="omfile" file="/var/log/remote-10514")
+	}
+	
+	ruleset(name="remote-10515") {
+	    cron.* action(type="omfile" file="/var/log/remote-10515-cron")
+	    mail.* action(type="omfile" file="/var/log/remote-10515-mail")
+	}
+	
+	input(type="imtcp" port="10514" ruleset="remote-10514");
+	input(type="imtcp" port="10515" ruleset="remote-10515");
+
+`Queues`
+
+	$objectQueueType queue_type
+
+* Direct Queues
+
+	$objectQueueType Direct
+
+* Disk Queues
+
+	$objectQueueType Disk
+	$objectQueueMaxFileSize size
+	$objectQueueFilename name
+
+* In-memory Queues
+
+	$objectQueueType LinkedList
+	$objectQueueType FixedArray
+
+* Disk-Assisted In-memory Queues
+
+	$objectQueueHighWatermark number
+	$objectQueueLowWatermark number
+
+* Limiting Queue Size
+
+	$objectQueueHighWatermark number
+	$objectQueueMaxDiscSpace number
+
+* Discarding Messages
+
+	$objectQueueDiscardMark number
+	$objectQueueDiscardSeverity priority
+
+priority with debug (7), info (6), notice (5), warning (4), err (3), crit (2), alert (1), and emerg (0)
+
+* Using Timeframes
+
+	$objectQueueDequeueTimeBegin hour
+	$objectQueueDequeueTimeEnd hour
+
+* Configuring Worker Threads
+
+	$objectQueueWorkerThreadMinimumMessages number
+	$objectQueueWorkerThreads number
+	$objectQueueWorkerTimeoutThreadShutdown time
+
+* Batch Dequeuing
+
+	$objectQueueDequeueBatchSize number
+
+* Terminating Queues
+
+	$objectQueueTimeoutShutdown time
+	$objectQueueTimeoutActionCompletion time
+	$objectQueueTimeoutSaveOnShutdown time
+
+
+`enable rsyslog`
+
+	rhel:~ # yum install rsyslog
+	rhel:~ # systemctl start rsyslog
+	rhel:~ # systemctl enable rsyslog
+
+	rhel:~ # firewall-cmd --permanent --add-port=514/tcp
+	rhel:~ # firewall-cmd --permanent --add-port=514/udp
+	rhel:~ # firewall-cmd --reload
+	rhel:~ # firewall-cmd --list-ports
+
+`remote rsyslog example`
+
+	client:~ # echo "*.* @server_ip" >> /etc/rsyslog.conf
+	client:~ # systemctl restart rsyslog
+
+	server:~ # vi /etc/rsyslog.conf
+	$ModLoad imudp
+	$UDPServerRun 514
+	...
+	server:~ # vi /etc/rsyslog.d/remote.conf
+	$template Remote,"/var/log/syslog/%fromhost-ip%/%fromhost-ip%_%$YEAR%-%$MONTH%-%$DAY%.log"
+	:fromhost-ip, !isequal, "127.0.0.1" ?Remote
+	& ~
+	server:~ # systemctl restart rsyslog
+
+`module`
+
+	$ModLoad MODULE
+	$ModLoad imfile
+
+* Input Modules
+
+	imfile, imjournal
+
+* Output Modules
+
+	omsnmp, omrelp
+
+* Parser Modules
+
+	pmrfc5424, pmrfc3164
+
+* Message Modification Modules
+
+	mmanon, mmnormalize, mmjsonparse
+
+* String Generator Modules
+
+	smfile smtradfile
+
+* Library Modules
+
+`Importing Text Files`
+
+	$ModLoad imfile
+
+	$InputFileName /var/log/httpd/error_log
+	$InputFileTag apache-error:
+	$InputFileStateFile state-apache-error
+	$InputRunFileMonitor
+
+`Exporting Messages to a Database`
+
+MySQL
+
+	$ModLoad ommysql
+
+	$ActionOmmysqlServerPort 1234
+	*.* :ommysql:database-server,database-name,database-userid,database-password
+
+MongoDB
+
+	$ModLoad ommongodb
+
+	*.* action(type="ommongodb" server="DB_server" serverport="port" db="DB_name" collection="collection_name" uid="UID" pwd="password")
+
+`Parsing JSON`
+
+Oct 25 10:20:37 localhost anacron[1395]: Jobs will be executed sequentially
+->
+{"timestamp":"2013-10-25T10:20:37", "host":"localhost", "program":"anacron", "pid":"1395", "msg":"Jobs will be executed sequentially"}
+
+	$ModLoad mmjsonparse
+
+	*.* :mmjsonparse:
+
+
+`Interaction of rsyslog and journal`
+
+import Journal data trough the socket
+
+	rhel:~ # vi /etc/rsysconf.conf
+	$ModLoad imuxsock
+	$OmitLocalLogging off # enable socket
+
+	rhel:~ # vi /etc/rsysconf.d/listen.conf
+	$SystemLogSocketName /run/systemd/journal/syslog
+
+output messages from Rsyslog to Journal
+
+	rhel:~ # vi /etc/rsyslog.conf
+	$ModLoad omjournal
+	...
+	*.* :omjournal:
+
+import data from journal to rsyslog
+
+	$ModLoad imuxsock
+	$ModLoad imjournal
+	
+	$OmitLocalLogging on
+	$AddUnixListenSocket /run/systemd/journal/syslog
+
+	$imjournalPersistStateInterval number_of_messages
+	$imjournalStateFile path
+	$imjournalRatelimitInterval seconds
+	$imjournalRatelimitBurst burst_number
+	$ImjournalIgnorePreviousMessages off/on
+
+`debug`
+
+	rhel:~ # rsyslogd -dn # debugging mode
+	rhel:~ # rsyslogd -N 1 # check /etc/rsyslog.conf syntax
+
+
+### Journal ###
+
+	rhel:~ # journalctl
+	rhel:~ # journalctl -o verbose
+	rhel:~ # journalctl -f
+
+	rhel:~ # systemctl restart systemd-journald
+
+	# add user join adm group to get journalctl premission
+	rhel:~ # usermod -a -G adm username
+
+
+### System log ###
+
+	rhel:~ # yum install gnome-system-log
+	rhel:~ # gnome-system-log
+
+
+### Log Rotation ###
 
 /etc/logrotate.conf
 /etc/logrotate.d/
+
+	rhel:~ # cat /etc/logrotate.conf
+	# rotate log files weekly
+	weekly
+	# keep 4 weeks worth of backlogs
+	rotate 4
+	# uncomment this if you want your log files compressed
+	compress
+
+	rhel:~ # cat /etc/logrotatae.d/message
+	/var/log/messages {
+	    rotate 5
+	    weekly
+	    postrotate
+	    /usr/bin/killall -HUP syslogd
+	    endscript
+	}
+
+weekly, daily, monthly, yearly
+compress, nocompress
+compresscmd, uncompresscmd
+compressext, compressoptions, delaycompress
+rotate INTEGER
+mail ADDRESS, nomail, mailfirst, maillast
+
+
+### Cron ###
+
+	rhel:~ # yum install cronie cronie-anacron
+
+	rhel:~ # systemctl status crond.service
+	rhel:~ # systemctl start crond.service
+	rhel:~ # systemctl enable crond.service
+	rhel:~ # systemctl stop crond.service
+	rhel:~ # systemctl disable crond.service
+	rhel:~ # systemctl restart crond.service
+
+	rhel:~ # cat /etc/crontab
+	SHELL=/bin/bash
+	PATH=/sbin:/bin:/usr/sbin:/usr/bin
+	MAILTO=root
+	HOME=/
+	# For details see man 4 crontabs
+	# Example of job definition:
+	# .---------------- minute (0 - 59)
+	# | .------------- hour (0 - 23)
+	# | | .---------- day of month (1 - 31)
+	# | | | .------- month (1 - 12) OR jan,feb,mar,apr ...
+	# | | | | .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+	# | | | | |
+	# * * * * * user-name command to be executed
+
+	rhel:~ # cat /etc/anacrontab
+	SHELL=/bin/sh
+	PATH=/sbin:/bin:/usr/sbin:/usr/bin
+	MAILTO=root
+	# the maximal random delay added to the base delay of the jobs
+	RANDOM_DELAY=45
+	# the jobs will be started during the following hours only
+	START_HOURS_RANGE=3-22
+	#period in days   delay in minutes   job-identifier   command
+	1         5     cron.daily    nice run-parts /etc/cron.daily
+	7         25    cron.weekly   nice run-parts /etc/cron.weekly
+	@monthly  45    cron.monthly  nice run-parts /etc/cron.monthly
+
+
+	rhel:~ # crontab -e
+	rhel:~ # crontab -l
+	rhel:~ # crontab -r
+	rhel:~ # crontab -u
+
+	rhel:~ # cat /etc/security/access.conf
+	-:ALL EXCEPT root :cron
+
+	# white and black list for user
+	rhel:~ # cat /etc/cron.allow
+	rhel:~ # cat /etc/cron.deny
+
+	# white and black list for job
+	rhel:~ # cat /etc/cron.daily/jobs.allow
+	rhel:~ # cat /etc/cron.daily/jobs.deny
+
+/etc/cron.d, /etc/cron.daily, /etc/cron.hourly, /etc/cron.monthly, /etc/cron.weekly
+
+/var/spool/cron/username
+
+
+### At ###
+
+	rhel:~ # yum install at
+
+	rhel:~ # systemctl status atd.service
+	rhel:~ # systemctl start atd.service
+	rhel:~ # systemctl enable atd.service
+	rhel:~ # systemctl stop atd.service
+	rhel:~ # systemctl disable atd.service
+	rhel:~ # systemctl restart atd.service
+
+	rhel:~ # at now + 5days
+	at> date
+	at> # 輸入 Ctrl^D 離開
+
+	rhel:~ # at 13:25 -f halt.sh
+	rhel:~ # cat halt.sh
+	/sbin/shutdown -h 0
+
+
+	rhel:~ # at -l
+	rhel:~ # atq
+	rhel:~ # at -c at_id
+	rhel:~ # at -r at_id
+
+	# white and black list for user
+	rhel:~ # cat /etc/at.allow
+	rhel:~ # cat /etc/at.deny
+
+* [[CC]YY]MMDDhhmm[.SS]
+* HH:MM [YYYY-MM-DD]
+* HH:MM [MM/DD/YY]
+* HH:MM [DD.MM.YY
+* midnight: 12:00 a.m.
+* noon: 12:00 p.m.
+* teatime: 4:00 p.m.
+
+
+### ABRT ###
+
+ABRT(AUTOMATIC BUG REPORTING TOOL)
+
+	rhel:~ # yum install abrt-desktop
+	rhel:~ # ps -el | grep abrt-applet
+	rhel:~ # abrt-applet &
+
+	rhel:~ # yum install abrt-cli
+	rhel:~ # yum install libreport-plugin-mailx
+	rhel:~ # yum install abrt-java-connector
+
+	rhel:~ # systemctl is-active abrtd.service
+	rhel:~ # systemctl start abrtd.service
+
+`GUI`
+
+Applications -> Sundry -> Automatic Bug Reporting Tool
+
+	rhel:~ # gnome-abrt &
+
+`CLI`
+
+	rhel:~ # abrt-cli list
+	rhel:~ # abrt-cli list -d
+	rhel:~ # abrt-cli list -f directory_id
+	rhel:~ # abrt-cli info -d directory_id
+	rhel:~ # abrt-cli rm directory_id
+
+`event`
+
+/etc/libreport/report_event.conf
+
+$HOME/.abrt/
+
+/etc/libreport/events.d
+
+* uReport - report_uReport
+
+* Mailx - report_Mailx - mailx_event.conf
+
+* Bugzilla - report_Bugzilla - bugzilla_event.conf
+
+* Red Hat Customer Support - report_RHTSupport -rhtsupport_event.conf
+
+* Emergency analysis - report_EmergencyAnalysis - emergencyanalysis_event.conf
+
+* Analyze C or C++ Crash - analyze_CCpp - ccpp_event.conf
+
+* Report uploader - report_Uploader - uploader_event.conf
+
+* Analyze VM core - analyze_VMcore - vmcore_event.conf
+
+* Local GNU Debugger - analyze_LocalGDB - ccpp_event.conf
+
+* Collect .xsession-errors - analyze_xsession_error -ccpp_event.conf
+
+* Logger - report_Logger - print_event.conf
+
+* Kerneloops.org - report_Kerneloops -koops_event.conf
+
+enable abrt 
+
+	rhel:~ # abrt-auto-reporting enabled
+
+`configuaration`
+
+	rhel:~ # cat /etc/abrt/abrt.conf
+
+	# make crash event
+	rhel:~ # sleep 100 &
+	[1] 2823
+	rhel:~ # kill -s SEGV 2823
+
+	# SELinux
+	rhel:~ # setsebool -P abrt_anon_write 1 
+
+
+| Langauge/Project 			 | Package 					 |
+| -------------------------- | ------------------------- |
+| C or C++					 | abrt-addon-ccpp			 |
+| Python					 | abrt-addon-python		 |
+| Ruby						 | rubygem-abrt				 |
+| Java						 | abrt-java-connector		 |
+| X.Org						 | abrt-addon-xorg			 |
+| Linux (kernel oops)		 | abrt-addon-kerneloops	 |
+| Linux (kernel panic)		 | abrt-addon-vmcore		 |
+| Linux (persistent storage) | abrt-addon-pstoreoops	 |
+
+
+cat /proc/sys/kernel/core_pattern
+|/usr/libexec/abrt-hook-ccpp %s %c %p %u %g %t e
+
+
+
+/usr/lib64/python2.7/site-packages/abrt_exception_handler.py
+import abrt_exception_handler.py
+python -S file.py
+
+java -agentlib:abrt-java-connector[=abrt=on] $MyClass -platform.jvmtiSupported true
+
+
+### OProfile ###
+
+ophelp
+opimport
+opannotate
+opcontrol
+operf
+opreport
+oprofiled
+
+	rhel:~ # yum install oprofile
+
+`ophelp`
+
+顯示所有 event
+
+event-name:sample-rate[:unit-mask[:kernel[:user]]]
+
+`operf`
+
+	rhel:~ # operf [ options ] [ --system-wide | --pid <pid> | [ command [ args ] ] ] # ./oprofile_data
+
+	# command example
+	rhel:~ # operf sleep 100
+
+	# pid example
+	rhel:~ # sleep 100 &
+	[1] 585
+	rhel:~ # operf --pid 585
+
+	# system-wide example
+	# operf --events event-name:sample-rate[:unit-mask[:kernel[:user]]]  --system-wide
+	rhel:~ # operf -e CPU_CLK_UNHALTED:10000  -s
+
+`opcontrol`
+
+	rhel:~ # yum install kernel-debuginfo
+
+	# setup opcontrol and load module
+	rhel:~ # opcontrol --setup --vmlinux=/usr/lib/debug/lib/modules/`uname -r`/vmlinux # create /dev/oprofile
+	rhel:~ # opcontrol --setup --no-vmlinux
+
+	# remove opcontrol module
+	rhel:~ # opcontrol --deinit # remove /dev/oprofile
+
+	# start opcontrol
+	rhel:~ # modprobe oprofile timer=1
+	rhel:~ # echo 0 > /proc/sys/kernel/nmi_watchdog
+	rhel:~ # opcontrol --start # -> /var/lib/oprofile
+
+	# status
+	rhel:~ # opcontrol --status
+
+	# shutdown opcontrol
+	rhel:~ # echo 1 > /proc/sys/kernel/nmi_watchdog
+	rhel:~ # opcontrol --shutdown
+
+	rhel:~ # opcontrol --dump
+	rhel:~ # opreport
+
+	rhel:~ # cat /dev/oprofile/cpu_type
+
+	ls /root/.oprofile/daemonrc
+
+`oprofile-gui`
+
+	rhel:~ # yum install oprofile-gui
+	rhel:~ # oprof_start &
+
+
+### Grub2 ###
+
+`/etc/default/grub`
+
+	rhel:~ # grub2-mkconfig -o /boot/grub2/grub.cfg # for BIOS
+	rhel:~ # grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg # for UEFI
+
+	rhel:~ # grub2-editenv list # 顯示開機 menu entry
+	rhel:~ # grub2-set-default 2 # 從第二個 menu entry 開機
+	rhel:~ # cat /boot/grub2/grubenv # saved_entry
+
+`/etc/grub.d/`
+
+* 00_header
+
+* 01_users
+
+* 10_linux
+
+* 30_os-prober
+
+* 40_custom
+
+`Kernel Parameters`
+
+	rhel:~ # vi /etc/default/grub
+
+	# for emergency mode
+	GRUB_CMDLINE_LINUX="emergency"
+
+	# for virtual terminal
+	GRUB_CMDLINE_LINUX="console=tty0 console=ttyS0,9600n8"
+
+`Adding a new Entry`
+
+	rhel:~ # vi /etc/grub.d/40_custom
+	...
+	menuentry "<Title>"{
+	<Data>
+	}
+
+`Password Protection`
+
+	rhel:~ # grub2-mkpasswd-pbkdf2
+
+edit /etc/grub.d/01_user or /etc/grub.d/40_custom 
+
+	$ for 01_user
+	cat <<EOF
+	set superusers="john"
+	password_pbkdf2 john grub.pbkdf2.sha512.10000.19074739ED80F115963D984BDCB35AA671C24325755377C3E9B014D862DA6ACC77BC110EED41822800A87FD3700C037320E51E9326188D53247EC0722DDF15FC.C56EC0738911AD86CEA55546139FEBC366A393DF9785A8F44D3E51BF09DB980BAFEF85281CBBC56778D8B19DC94833EA8342F7D73E3A1AA30B205091F1015A85
+	password jane janespassword
+	EOF
+
+	# for 40_custom
+	set superusers="john"
+	password_pbkdf2 john grub.pbkdf2.sha512.10000.19074739ED80F115963D984BDCB35AA671C24325755377C3E9B014D862DA6ACC77BC110EED41822800A87FD3700C037320E51E9326188D53247EC0722DDF15FC.C56EC0738911AD86CEA55546139FEBC366A393DF9785A8F44D3E51BF09DB980BAFEF85281CBBC56778D8B19DC94833EA8342F7D73E3A1AA30B205091F1015A85
+	password jane janespassword
+
+edit /etc/grub.d/40_custom
+
+	menuentry 'Red Hat Enterprise Linux Server' --unrestricted {
+	set root=(hd0,msdos1)
+	linux   /vmlinuz
+	}
+	
+	menuentry 'Fedora' --users jane {
+	set root=(hd0,msdos2)
+	linux   /vmlinuz
+	}
+	
+	menuentry 'Red Hat Enterprise Linux Workstation' {
+	set root=(hd0,msdos3)
+	linux   /vmlinuz
+	}
+
+
+### Subscription Manager ###
+
+	# setup subscription manager
+	subscription-manager register
+	subscription-manager list --available
+	subscription-manager attach --pool=pool_id
+	subscription-manager list --consumed
+	subscription-manager register --auto-attach
+
+	# software repository
+	subscription-manager repos --list
+	rhel-variant-rhscl-version-rpms
+	rhel-variant-rhscl-version-debug-rpms
+	rhel-variant-rhscl-version-source-rpms
+
+	rhel-server-rhscl-7-eus-rpms
+	rhel-server-rhscl-7-eus-source-rpms
+	rhel-server-rhscl-7-eus-debug-rpms
+
+	subscription-manager repos --enable repository
+	subscription-manager repos --disable repository
+
+	# remove subscription
+	subscription-manager remove --serial=serial_number
+	subscription-manager remove --all
+
+
 ### Red Hat Support Tool ###
 
 	yum install redhat-support-tool

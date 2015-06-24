@@ -20,6 +20,8 @@ RobotFramework 是一套基於 Python 以驗收測試及 ATDD (Acceptance Test-D
 
 `ride`
 
+`PyCharm` / `IntelliJ IDEA`
+
 -----------------------------
 
 ### 檔案格式 / Support Format: ###
@@ -132,6 +134,36 @@ robot 變數命名是不區分大小寫, 一個空格 兩個空格
 	@{list1}=  Create List  A  B  C # 設定 array
 	${dic1}=  Create Dictionary  Jun=1  Feb=2 # 設定 dictionary
 
+-----------------------------
+
+### 迴圈 ###
+
+	*** Settings ***
+	Library     Collections
+
+	*** Variables ***
+	${var1}=  ${False}
+	${var2}=  ${True}
+
+	*** Keywords ***
+	String Join
+	    ${exclude_tags}=  Create List
+	    Run Keyword IF  ${var1} == ${True}  Append To List  ${exclude_tags}  string1
+	    Run Keyword IF  ${var2} == ${True}  Append To List  ${exclude_tags}  string2
+	    ${tag}=  Set Variable  ${None}
+	    :FOR  ${var}  IN  @{exclude_tags}
+	    \  ${tag}=  Run Keyword IF  '${tag}' == '${None}'  Set Variable  ${var}
+	       ...  ELSE  Set Variable  ${tag} OR ${var}
+	    ${tag}=  Run Keyword IF  '${tag}' != '${None}'  Set Variable  -e '${tag}'
+	    ...  ELSE  Set Variable  \ \
+	    [Return]  ${tag}
+
+	*** Test Cases ***
+	Test1
+	   ${arg}=  String Join
+	   Log  run cmd ${arg}
+
+單一 \ 且在行首, 表示, \ \ 表示 white space (空白字元), ... 表示連接前面 statement 的換行
 
 -----------------------------
 
