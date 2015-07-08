@@ -345,3 +345,4 @@ ksvalidator /path/to/kickstart.ks
 	sh-4.2# mount -o remount,rw /
 	sh-4.2# passwd root
 	sh-4.2# mount -o remount,ro /
+	sh-4.2# /sbin/reboot -f

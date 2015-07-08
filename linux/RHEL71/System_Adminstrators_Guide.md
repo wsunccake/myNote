@@ -2374,6 +2374,110 @@ edit /etc/grub.d/40_custom
 	linux   /vmlinuz
 	}
 
+`Reinstall GRUB2 on MBR`
+
+	rhel:~ # grub2-install /dev/sda
+
+
+`Reinstall GRUB2 package`
+
+	rhel:~ # rm /etc/grub.d/*
+	rhel:~ # rm /etc/sysconfig/grub
+
+	rhel:~ # yum reinstall grub2-efi shim # for EFI
+	rhel:~ # grub2-mkconfig -o /boot/grub2/grub.cfg
+	rhel:~ # grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg
+
+`Console`
+
+	rhel:~ # vi /etc/default/grub
+	GRUB_TERMINAL="serial"
+	GRUB_SERIAL_COMMAND="serial --speed=9600 --unit=0 --word=8 --parity=no --stop=1"
+
+	rhel:~ # grub2-mkconfig -o /boot/grub2/grub.cfg # for BOIS
+	rhel:~ # grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg # for UEFI
+
+` Connect to the Serial Console`
+
+	rhel:~ # yum install screen
+	rhel:~ # screen /dev/<console_port>
+	rhel:~ # screen /dev/<console_port> 115200
+
+`Boot to rescue mode`
+
+when grub2, at kernel line append (linux16 ...)
+
+systemd.unit=rescue.target
+
+`Boot to emergency mode`
+
+when grub2, at kernel line append (linux16 ...)
+
+systemd.unit=emergency.target
+
+`Reset password by using installation disk`
+
+sh-4.2# chroot /mnt/sysimage
+sh-4.2# rm -f /.autorelabel
+
+`Reset password rd.break`
+
+when grub2, at kernel line append (linux16 ...)
+
+rd.break
+
+	switch_root:/# mount -o remount,rw /sysroot
+	switch_root:/# chroot /sysroot
+	sh-4.2# passwd
+	sh-4.2# touch /.autorelabel
+	sh-4.2# mount -o remount,ro /
+	sh-4.2# /sbin/reboot -f
+
+
+### Kernel ###
+
+`USB boot`
+
+syslinux /dev/sdX1
+mkdir /mnt/isoboot /mnt/diskboot
+mount -o loop boot.iso /mnt/isoboot
+mount /dev/sdX1 /mnt/diskboot
+cp /mnt/isoboot/isolinux/* /mnt/diskboot
+grep -v local /mnt/isoboot/isolinux/isolinux.cfg > /mnt/diskboot/syslinux.cfg
+umount /mnt/isoboot /mnt/diskboot
+yum list installed "kernel-*"
+
+
+`initrd`
+
+	# list system boot kernel
+	rhel:~ # ls /boot/
+
+kernel is vmlinuz-3.10.0-78.el7.x86_64
+initramfs file is initramfs-3.10.0-78.el7.x86_64kdump.img
+
+	# create initrd
+	rhel:~ # dracut # /boot/initramfs-3.10.0-229.el7.x86_64.img
+	rhel:~ # dracut "initramfs-$(uname -r).img" $(uname -r)
+
+	# list initrd info
+	rhel:~ # lsinitrd /boot/initramfs-3.10.0-78.el7.x86_64.img
+
+
+### Kernel Module ###
+
+	rhel:~ # yum install kmod
+	rhel:~ # lsmod # list currentlt loaded modules
+	rhel:~ # modinfo e1000e # display information about module
+	rhel:~ # modprobe wacom # load module
+	rhel:~ # modprobe -v fcoe # shows module dependencies as load module
+	rhel:~ # modprobe -r wacom # unload module
+	rhel:~ # modprobe -r -v fcoe # shows module dependencies as unload module
+
+	 vi /etc/modules-load.d/virtio-net.conf # persistent module loading
+	 virtio-net
+
+
 
 ### Subscription Manager ###
 
