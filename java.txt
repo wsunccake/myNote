@@ -1,0 +1,163 @@
+設定環境變數
+sh:
+JAVA_HOME=/usr/lib/java
+CLASSPATH=$JAVA_HOME/lib
+PATH=$PATH:$JAVA_HOME/bin
+
+csh:
+setenv JAVA_HOME /usr/lib/java
+setenv CLASSPATH ${JAVA_HOME}/lib
+set path = ( $path ${JAVA_HOME}/bin )
+
+windows:
+JAVA_HOME="C:\Program File\Java\jdk"
+CLASSPATH=%JAVA_HOME%\lib
+path=%path;%JAVA_HOME%\bin
+
+
+source         vm             run
+      javac            java
+.java  --->   .class   --->
+
+javac [-cp classpath] src.java #compile, 將.java編譯成.class
+java  [-cp classpath] src      #run, 執行.class
+
+javac -cp classpath -d out_dir src.java
+jar cf src.jar -C out_dir
+jar tf src.jar
+jar xf src.jar
+
+
+Application
+Applet
+Servlet
+
+
+declare:
+[final] primitive variable = constant;
+        reference instance = new object();
+
+wrapping/autoboxing
+primitive: boolean, byte, short, int,     long, float, double, char
+reference: Boolean, Btye, Short, Integer, Long, Float, Double, Character
+
+boolean:
+byte   : 1 byte  / -2^7 ~ 2^7 - 1
+char   : 2 bytes
+short  : 2 bytes / -2^15 ~ 2^15 - 1
+int    : 4 bytes / -2^31 ~ 2^31 - 1
+long   : 8 bytes / -2^63 ~ 2^63 - 1
+float  : 4 bytes / 32 bits
+double : 8 bytes / 64 bits
+
+naming habit:
+variable by lower camel case:
+int camelCase;
+
+class, interface by upper camel case:
+class CamelCase;
+interface CamelCase;
+
+constant by snake case:
+static int SNAKE_CASE = 1;
+
+if/else, switch, for, while, do/while
+  if (condition) {
+    statement
+  }
+  else {
+    statement;
+  }
+
+  switch (key) {
+    case condition:
+      statement;
+      break;
+    ...
+    default:
+      statement;
+  }
+
+  for (initial; condition; iteration) {
+    statement;
+  }
+  for (: list) {
+    statement;
+  }
+
+  while (condition) {
+    statement;
+  }
+
+  do {
+    statement;
+  }while (condition)
+
+array
+type[] variable, type []variable, type variable[],
+type[][] variable, type[] variable[], type variable[][],
+
+object oriented:
+encapsulation/封裝
+interface    /介面
+polymorphism /多型
+inheritance  /繼承
+
+class/類別:
+<修飾字> class ClassType {
+  <修飾字> type attrName;    #attribute
+  <修飾字> type methName(<參數>) { #method
+  }
+}
+ClassType ClassName = new ClassType();
+ClassName.methName();
+ClassName.attrName;
+
+<修飾字> class SubClassType extends SuperClassType {
+}
+SuperClassType ClassName = new SubClass();
+
+anonymous class/匿名類別
+ClassType ClassName = new ClassType() { public type NewMethod(){}};
+ClassName.NewMethod();
+
+
+修飾字,    public,  protected,  default(無修飾字),  private,  static,  final,  abstract
+class,     x,       ,           x,                  ,         x,       x,      x
+attribute, x,       x,          x,                  x,        ,        ,
+method,    x,       x,          x,                  x,        x,       ,
+public:    所有類別皆可使用/存取
+protected: 只有套件內類別和子類別可使用/存取
+default:   只有套件內類別可使用/存取
+private:   只有所屬類別可使用/存取
+static:
+final:     類別不可再被繼承
+abstract:  類別不可建立物件
+
+super(): superclass constructor
+this() : class self constructor
+
+overloading:
+overrideing:
+
+interface/介面
+修飾字 interface InterfaceName {
+  attr // public, final, static
+  type meth(); // public, abstract
+}
+修飾字 class ClassName implements InterfaceName ()
+
+
+package:
+com\oracle\foo.java
+
+in foo.java
+package com.oracle
+...
+
+compile:
+javac com\oracle\foo.java
+
+run:
+java com.orcale.foo
+java com\orcale\foo
