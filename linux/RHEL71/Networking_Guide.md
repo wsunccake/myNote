@@ -224,8 +224,8 @@ VLAN
 	nmcli> save
 	nmcli> quit
 
-	rhel:~ # nmcli connection add type bond ifname eth0 con-name eth0 master bond0
-	rhel:~ # nmcli connection add type bond ifname eth1 con-name eth1 master bond0
+	rhel:~ # nmcli connection add type bond-slave ifname eth0 con-name eth0 master bond0
+	rhel:~ # nmcli connection add type bond-slave ifname eth1 con-name eth1 master bond0
 
 	# method 3:
 	rhel:~ # modprobe bonding
@@ -284,3 +284,153 @@ VLAN
 
 
 ### Networking Team ###
+
+`package`
+
+teamd, ethtool, arp_ping, nsna_ping, lacp
+
+	rhel:~ # yum install teamd
+
+
+`bond to team`
+
+	rhel:~ # bond2team --master bond0
+	rhel:~ # bond2team --master bond0 --rename team0
+	rhel:~ # bond2team --master bond0 --configdir /path/to/ifcfg-file
+	rhel:~ # bond2team --bonding_opts "mode=1 miimon=500"
+	rhel:~ # bond2team --bonding_opts "mode=1 miimon=500 primary=eth1 primary_reselect-0" --port eth1 --port eth2 --port eth3 --port eth4
+
+
+`team`
+
+	# method 1:
+	rhel:~ # nmtui
+
+	# method 2:
+	rhel:~ # nmcli connection add type team ifname team0 cos-name team0
+	rhel:~ # nmcli connection edit team0
+	nmcli> describe team.config
+	nmcli> set team.config {"runner": {"name": "activebackup"}}
+	nmcli> save
+	nmcli> quit
+
+	rhel:~ # nmcli connection add type team-slave ifname eth0 con-name eth0 master team0
+	rhel:~ # nmcli connection add type team-slave ifname eth1 con-name eth1 master team0
+
+	# method 3:
+	rhel:~ # ls /usr/share/doc/teamd-*/example_configs
+	rhel:~ # cp /usr/share/doc/teamd-*/example_configs/activebackup_ethtool_1.conf ~
+	rhel:~ # vi activebackup_ethtool_1.conf
+	rhel:~ # ip link set dev eth0 down
+	rhel:~ # ip link set dev eth1 down
+	rhel:~ # teamd -g -f activebackup_ethtool_1.conf -d
+
+	# 同上, 使用指令方式
+	rhel:~ # teamd -t team0 -d
+	rhel:~ # ip link set dev eth0 master team0
+	rhel:~ # ip link set dev team0 down
+
+	# 查看
+	rhel:~ # teamnl team0 ports
+	rhel:~ # teamnl team0 getoption activeport
+	rhel:~ # teamnl team0 setoption activeport 5
+	rhel:~ # teamnl team0 setoption mode activebackup
+
+	rhel:~ # teamdctl team0 state
+	rhel:~ # teamdctl team0 state view -vv
+	rhel:~ # teamdctl team0 config dump
+	rhel:~ # teamdctl team0 port add eth2
+	rhel:~ # teamdctl team0 port remove eth2
+	rhel:~ # cat eth2-cfg.json
+	{
+	  "prio": -10,
+	  "sticky": true
+	}
+	rhel:~ # teamdctl team0 port config update eth2 eth2-cfg.json
+
+	# remove team
+	rhel:~ # teamd -t team0 -k
+
+
+`config file`
+
+	rhel:~ # cat /etc/syscofnig/network-script/ifcfg-team0
+	DEVICE=team0
+	DEVICETYPE=Team
+	NAME=team0
+	BOOTPROTO=dhcp
+	UUID=c9b24f8d-69e8-4b0f-9656-c7ed8e7c0b2e
+	ONBOOT=yes
+	TEAM_CONFIG="{\"runner\":{\"name\": \"activebackup\"}}"
+
+	rhel:~ # cat /etc/syscofnig/network-script/ifcfg-eth0
+	NAME=eth0
+	DEVICE=eth0
+	ONBOOT=yes
+	TEAM_MASTER=c9b24f8d-69e8-4b0f-9656-c7ed8e7c0b2e
+	DEVICETYPE=TeamPort
+
+	rhel:~ # cat /etc/syscofnig/network-script/ifcfg-eth1
+	NAME=eth1
+	DEVICE=eth1
+	ONBOOT=yes
+	TEAM_MASTER=c9b24f8d-69e8-4b0f-9656-c7ed8e7c0b2e
+	DEVICETYPE=TeamPort
+
+
+`GUI`
+
+	rhel:~ # gnome-control-center network
+
+
+### Networking Bridge ###
+
+`bridge`
+
+	# method 1:
+	rhel:~ # nmtui
+
+	# method 2:
+	rhel:~ # nmcli connection add type bridge ifname br0 cos-name br0
+	rhel:~ # nmcli connection edit bond0
+	nmcli> print
+	nmcli> set bridge.stp yes
+	nmcli> save
+	nmcli> quit
+
+	rhel:~ # nmcli connection add type bridge-slave ifname eth0 cons-name eth0 master br0
+
+	# method 3:
+	rhel:~ # modprobe bridge
+	rhel:~ # modinfo bridge
+
+	rhel:~ # brctl addbr br0
+	rhel:~ # brctl addif br0 eth0
+
+	rhel:~ # brctl show
+
+	# remove bridge
+	rhel:~ # brctl delif br0 eth0
+	rhel:~ # brctl delbr br0
+
+
+`config file`
+
+	rhel:~ # cat /etc/syscofnig/network-script/ifcfg-br0
+	DEVICE=br0
+	STP=yes
+	TYPE=Bridge
+	BOOTPROTO=dhcp
+	NAME=br0
+	ONBOOT=yes
+	BRIDGING_OPTS=priority=4096
+
+	rhel:~ # cat /etc/syscofnig/network-script/ifcfg-eth0
+	TYPE=Ethernet
+	NAME=eth0
+	DEVICE=eth0
+	ONBOOT=yes
+	BRIDGE=br0
+
+
+### 802.1q VLAN ###
