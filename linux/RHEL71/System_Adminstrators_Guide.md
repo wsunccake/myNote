@@ -1,5 +1,5 @@
 
-### localectl ###
+# localectl #
 
 	rhel:~ # localectl status
 	rhel:~ # localectl help
@@ -8,7 +8,7 @@
 	rhel:~ # system start systemd-localed
 
 
-`System Locale`
+## System Locale ##
 
 	# setup
 	rhel:~ # localectl list-locales
@@ -24,7 +24,7 @@
 	rhel:~ # locale --all
 
 
-`Keyboard Layout`
+## Keyboard Layout ##
 
 	# setup
 	rhel:~ # localectl list-keymaps
@@ -41,9 +41,9 @@
 
 
 
-### timedatectl ###
+# timedatectl #
 
-`Date And Time`
+## Date And Time ##
 
 	rhel:~ # timedatectl status
 	rhel:~ # timedatectl help
@@ -62,28 +62,29 @@
 	rhel:~ # export TZ=Asia/Taipei
 
 
-`date`
+## date ##
 
 	rhel:~ # date -s HH:MM:SS
 	rhel:~ # date -s YYYY-MM-DD
 	rhel:~ # date -s YYYY-MM-DD HH:MM:SS
 
 
-`hwclock`
+## hwclock ##
 
 	rhel:~ # hwclock -w
 	rhel:~ # hwclock -s
 
 
-### User And Group ###
+# User And Group #
+
+- uid (user ID), gid (group ID) 系統預設起始值在 /etc/login.defs
+
+- shell 系統預設可使用值 /etc/shells
+
+- 至於 useradd 設定值在 /etc/default/useradd
 
 
-uid (user ID), gid (group ID) 系統預設起始值在 /etc/login.defs
-shell 系統預設可使用值 /etc/shells
-至於 useradd 設定值在 /etc/default/useradd
-
-
-`User`
+## User ##
 
 	rhel:~ # useradd user # 新增使用者
 	rhel:~ # useradd -u uid -g gid user # 新增使用者, 且指定 uid, gid
@@ -103,7 +104,7 @@ shell 系統預設可使用值 /etc/shells
 	rhel:~ # chage -l user # 看帳號狀態
 
 
-`Group`
+## Group ##
 
 	rhel:~ # groupadd group
 
@@ -113,7 +114,7 @@ shell 系統預設可使用值 /etc/shells
 	rhel:~ # rhel:~ # groupdel group
 
 
-`設定群組`
+## 設定群組 ##
 
 	rhel:~ # mkdir /opt/myproject
 	rhel:~ # groupadd myproject
@@ -123,33 +124,32 @@ shell 系統預設可使用值 /etc/shells
 	rhel:~ # usermod -aG myproject username
 
 
-`加入系統管理群組`
+## 加入系統管理群組 ##
 
 	rhel:~ # usermod -G wheel user
 	rhel:~ # vi /etc/pam.d/su
 	#auth           required        pam_wheel.so use_uid
 
 
-`sudo`
+## sudo ##
 
-/etc/sudoers
-Defaults    timestamp_timeout=value
-%users localhost=/sbin/shutdown -h now
-juan ALL=(ALL) ALL
+	rhel:~ # vi /etc/sudoers
+	Defaults    timestamp_timeout=value
+	%users localhost=/sbin/shutdown -h now
+	juan ALL=(ALL) ALL
 
-
-/etc/pam.d/system-auth
-session required pam_tty_audit.so disable=pattern enable=pattern
-session required pam_tty_audit.so disable=* enable=root
+	rhel~: # vi /etc/pam.d/system-auth
+	session required pam_tty_audit.so disable=pattern enable=pattern
+	session required pam_tty_audit.so disable=* enable=root
 
 /var/log/messages
 /var/log/secure
 
 
-### YUM ###
+# YUM #
 
 
-`Repository`
+## Repository ##
 
 	rhel:~ # yum repolist
 	rhel:~ # yum repolist all
@@ -157,7 +157,7 @@ session required pam_tty_audit.so disable=* enable=root
 	rhel:~ # yum repoinfo
 
 
-`Package`
+## Package ##
 
 	# search
 	rhel:~ # yum search term
@@ -197,7 +197,7 @@ session required pam_tty_audit.so disable=* enable=root
 下載的 package 放在 /var/cache/yum/$basearch/$releasever/packages 目錄下
 
 
-`Package Group`
+## Package Group ##
 
 	rhel:~ # yum group list glob_expression
 	rhel:~ # yum group info glob_expression
@@ -216,7 +216,7 @@ session required pam_tty_audit.so disable=* enable=root
 	rhel:~ # yum remove @kde-desktop
 
 
-`History`
+## History ##
 
 	rhel:~ # yum history list
 	rhel:~ # yum history list all
@@ -239,8 +239,7 @@ session required pam_tty_audit.so disable=* enable=root
 YUM 使用 SQLite 存放在 /var/lib/yum/history/ 目錄下
 
 
-
-`[main]`
+## main config ##
 
 	rhel:~ # cat /etc/yum.conf
 	[main]
@@ -256,7 +255,7 @@ YUM 使用 SQLite 存放在 /var/lib/yum/history/ 目錄下
 
 
 
-`[repository]`
+## repository config ##
 
 	rhel:~ # cat /etc/yum.repo.d/example.repo
 	[InstallMedia]
@@ -269,7 +268,7 @@ YUM 使用 SQLite 存放在 /var/lib/yum/history/ 目錄下
 
 
 
-`Config`
+## Config ##
 
 	rhel:~ # yum-config-manager
 	rhel:~ # yum-config-manager section
@@ -285,14 +284,13 @@ YUM 使用 SQLite 存放在 /var/lib/yum/history/ 目錄下
 	rhel:~ # yum-config-manager --disable glob_expression
 
 
-`Create Yum Repository`
+## Create Yum Repository ##
 
 	rhel:~ # yum install createrepo
 	rhel:~ # createrepo --database /mnt/local_repo
 
 
-
-### Systemd ###
+# Systemd #
 
 | Unit Type			| File Extension	| Description															|
 | ----------------- | ----------------- | --------------------------------------------------------------------- |
@@ -315,7 +313,8 @@ Directory					Description
 /run/systemd/system/		Systemd units created at run time. This directory takes precedence over the directory with installed service units.
 /etc/systemd/system/		Systemd units created and managed by the system administrator. This directory takes precedence over the directory with runtime units.
 
-`service `
+
+## service ##
 
 | service					| systemctl									|
 | ------------------------- | ----------------------------------------- |
@@ -328,7 +327,7 @@ Directory					Description
 | service --status-all		| systemctl list-units --type service --all	|
 
 
-`chkconfig`
+## chkconfig ##
 
 | chkconfig					| systemctl									|
 | ------------------------- | ----------------------------------------- |
@@ -350,7 +349,7 @@ enable/disable create/remove soft link
 mask/umask link to /dev/null
 
 
-`Runlevel`
+## Runlevel ##
 
 | Runlevel	| Target Units							|
 | --------- | ------------------------------------- |
@@ -376,7 +375,7 @@ mask/umask link to /dev/null
 	rhel:~ # systemctl --no-wall emergency
 
 
-`Power Management`
+## Power Management ##
 
 | Old Command		| New Command			|
 | ----------------- | --------------------- |
@@ -388,18 +387,18 @@ mask/umask link to /dev/null
 | pm-suspend-hybrid	| systemctl hybrid-sleep|
 
 
-`Remote Machine`
+## Remote Machine ##
 
 	rhel:~ # systemctl -H root@server-01.example.com status httpd.service
 
 
-`System Unit File`
+## System Unit File ##
 
 
+# OpenSSH #
 
-### OpenSSH ###
 
-`System-wide configuration files`
+## System-wide configuration files ##
 
 * /etc/ssh/ssh\_config
 * /etc/ssh/sshd\_config
@@ -414,7 +413,7 @@ mask/umask link to /dev/null
 * /etc/sysconfig/sshd
 
 
-`User-specific configuration files`
+## User-specific configuration files ##
 
 * ~/.ssh/known\_hosts
 * ~/.ssh/authorized\_keys
@@ -426,33 +425,33 @@ mask/umask link to /dev/null
 * ~/.ssh/identity.pub
 
 
-`Starting an OpenSSH Server`
+## Starting an OpenSSH Server ##
 
 	rhel:~ # systemctl start sshd.service
 	rhel:~ # systemctl stop sshd.service
 	rhel:~ # systemctl enable sshd.service
 
 
-`Using Key-based Authentication`
+## Using Key-based Authentication ##
 
 	rhel:~ # vi /etc/ssh/sshd_config
 	PasswordAuthentication no
 
 
-`Generating Key Pairs`
+## Generating Key Pairs ##
 
 	rhel:~ # ssh-keygen -t rsa
 	rhel:~ # ssh-copy-id [-i ~/.ssh/id_rsa.pub] user@hostname
 
 
-`Configuring ssh-agent`
+## Configuring ssh-agent ##
 
 	rhel:~ # ssh-add
 	rhel:~ # ssh-agent
 	rhel:~ # ssh-agent -k
 
 
-`Utility`
+## Utility ##
 
 	rhel:~ # ssh [username@]hostname
 	rhel:~ # ssh [username@]hostname command
@@ -467,12 +466,12 @@ mask/umask link to /dev/null
 	rhel:~ # sftp [username@]hostname
 
 
-`X11 Forwarding`
+## X11 Forwarding ##
 
 	rhel:~ # ssh -Y username@hostname
 
 
-`Port Forwarding`
+## Port Forwarding ##
 
 In\_Host(9000)   ----|--->   Out\_Host(2000)
 
@@ -484,11 +483,10 @@ In\_Host(9000)   <---|----   Out\_Host(2000)
 	In_Host:~ $ ssh -R 9000:localhost:2000 Out_Host
 
 
+# VNC #
 
-### VNC ###
 
-
-`Starting VNC Server`
+## Starting VNC Server ##
 
 	rhel:~ # yum install tigervnc-server
 	rhel:~ # cp /lib/systemd/system/vncserver@.service /etc/systemd/system/.
@@ -510,20 +508,20 @@ In\_Host(9000)   <---|----   Out\_Host(2000)
 	rhel:~ # vncpasswd
 
 
-`Configuring VNC Server for Two Users`
+## Configuring VNC Server for Two Users ##
 
 	rhel:~ # systemctl start vncserver-USER_1@:3.service
 	rhel:~ # systemctl start vncserver-USER_2@:5.service
 
 
-`Starting VNC Client`
+## Starting VNC Client ##
 
 	rhel:~ # yum install tigervnc
 	rhel:~ # vncviewer address:display_number
 	rhel:~ # vncviewer -via user@host:display_number # by ssh
 
 
-### HTTP ###
+# HTTP #
 
 /etc/httpd/conf/httpd.conf
 /etc/httpd/conf.modules.d/
@@ -565,7 +563,7 @@ In\_Host(9000)   <---|----   Out\_Host(2000)
 	rhel:~ # firewall-cmd --add-service https
 
 
-`Modules`
+## Modules ##
 
 /usr/lib/httpd/modules/
 /usr/lib64/httpd/modules/
@@ -578,12 +576,12 @@ In\_Host(9000)   <---|----   Out\_Host(2000)
 	rhel:~ # apxs -i -a -c module_name.c
 
 
-`Virtual Hosts`
+## Virtual Hosts ##
 
 	rhel:~ # cp /usr/share/doc/httpd-X.Y.Z/httpd-vhosts.conf /etc/httpd/conf.d/
 
 
-`SSL Server`
+## SSL Server ##
 
 SSL/TLS over HTTP, referred to as HTTPS
 
@@ -600,7 +598,7 @@ SSL/TLS over HTTP, referred to as HTTPS
 	rhel:~ # openssl s_client -connect localhost:443 -tls1_2
 
 
-`NSS`
+## NSS ##
 
 	rhel:~ # yum remove mod_ssl
 	rhel:~ # yum install mod_nss
@@ -621,7 +619,7 @@ SSL/TLS over HTTP, referred to as HTTPS
 	rhel:~ # certutil -d /etc/httpd/nss-db-directory/ -A -n "CA_certificate" -t CT,, -a -i certificate.pem
 
 
-`NSS with/without SSL/TLS`
+## NSS with/without SSL/TLS ##
 
 	rhel:~ # vi /etc/httpd/conf.d/nss.conf
 	NSSProtocol TLSv1.0,TLSv1.1
@@ -630,8 +628,7 @@ SSL/TLS over HTTP, referred to as HTTPS
 	rhel:~ # openssl s_client -connect localhost:443 -tls1
 
 
-`Generating a New Key and Certificate`
-
+## Generating a New Key and Certificate ##
 
 	# method 1:
 	rhel:~ # yum install crypto-utils
@@ -654,19 +651,26 @@ SSL/TLS over HTTP, referred to as HTTPS
 	SSLCertificateKeyFile /etc/pki/tls/private/hostname.key
 
 
-### MAIL ###
+# MAIL #
 
-	* Mail Transport Protocols: SMTP/Simple Mail Transfer Protocol
-	* Mail Access Protocols: POP/Post Office Protocol and IMAP/Internet Message Access Protocol
-	* LMTP/Local Mail Transfer Protocol
 
-`POP and IMAP`
+- Mail Transport Protocols: SMTP/Simple Mail Transfer Protocol
 
-	* APOP — POP3 with MD5 authentication.
-	* KPOP — POP3 with Kerberos authentication.
-	* RPOP — POP3 with RPOP authentication.
+- Mail Access Protocols: POP/Post Office Protocol and IMAP/Internet Message Access Protocol
 
-`Dovecot`
+- LMTP/Local Mail Transfer Protocol
+
+
+## POP and IMAP ##
+
+- APOP — POP3 with MD5 authentication.
+
+- KPOP — POP3 with Kerberos authentication.
+
+- RPOP — POP3 with RPOP authentication.
+
+
+##Dovecot ##
 
 	rhel:~ # yum install dovecot
 
@@ -681,7 +685,7 @@ SSL/TLS over HTTP, referred to as HTTPS
 	ssl_protocols = !SSLv2 !SSLv3
 
 
-`Dovecot with SSL`
+## Dovecot with SSL ##
 
 	rhel:~ # rm -f certs/dovecot.pem private/dovecot.pem
 	rhel:~ # /usr/libexec/dovecot/mkcert.sh
@@ -691,7 +695,7 @@ SSL/TLS over HTTP, referred to as HTTPS
 	ssl_key = /etc/pki/dovecot/private/dovecot.pem
 
 
-`MTA`
+## MTA ##
 
 	* MTA/Mail Transport Agent (SMTP) (Postfix, Sendmail, and Fetchmail)
 	* MDA/Mail Delivery Agent or LDA/Local Delivery Agent (SMTP, LMTP) (Postfix, Sendmail) (mail, procmail)
@@ -702,7 +706,7 @@ SSL/TLS over HTTP, referred to as HTTPS
 	rhel:~ # systemctl disable service
 
 
-`Postfix`
+## Postfix ##
 
 /etc/postfix/
 access
@@ -738,7 +742,7 @@ transport
 	rhel:~ # postmap hash:/etc/postfix/access 
 
 
-`Postfix with LDAP`
+## Postfix with LDAP ##
 
 	rhel:~ # vi /etc/postfix/main.cf
 	alias_maps = hash:/etc/aliases, ldap:/etc/postfix/ldap-aliases.cf
@@ -748,7 +752,7 @@ transport
 	search_base = dc=example, dc=com
 
 
-`Sendmail`
+## Sendmail ##
 
 /etc/mail/
 sendmail.mc
@@ -803,14 +807,14 @@ virtusertable
 	rhel:~ # systemctl enable sendmail
 	rhel:~ # mailq
 
-`Sendmail with LDAP`
+## Sendmail with LDAP ##
 
 	rhel:~ # vi /etc/mail/sendmail.mc
 	LDAPROUTE_DOMAIN('yourdomain.com')dnl
 	FEATURE('ldap_routing')dnl
 
 
-`Fetchmail`
+## Fetchmail ##
 
 	rhel:~ # yum install fetchmail
 
@@ -827,7 +831,7 @@ virtusertable
 	rhel:~ # fetchmail -d 600
 
 
-`Procmail`
+## Procmail ##
 
 /etc/procmailrc
 ~/.procmailrc
@@ -854,7 +858,7 @@ virtusertable
 	/dev/null
 
 
-`SpamAssassin`
+## SpamAssassin ##
 
 	rhel:~ # yum install spamassassin
 
@@ -865,9 +869,10 @@ virtusertable
 	rhel:~ # systemctl enable spamassassin.service
 
 
-### Directory Servers ###
+# Directory Servers #
 
-`LDAP`
+
+## LDAP ##
 
 OpenLDAP 2.4,
 
@@ -877,95 +882,128 @@ attribute
 LDIF (LDAP Data Interchange Format)
 
 
-`LDAP package`
+## LDAP package ##
 
-* openldap
-* openldap-clients
-* openldap-servers
-* compat-openldap
-* nss-pam-ldapd
-* mod_ldap
+- openldap
 
+- openldap-clients
 
-`OpenLDAP Server Utilities`
+- openldap-servers
 
-* slapacl
-* slapadd
-* slapauth
-* slapcat
-* slapdn
-* slapindex
-* slappasswd
-* slapschema
-* slaptest
+- compat-openldap
+
+- nss-pam-ldapd
+
+- mod_ldap
 
 
-`OpenLDAP Client Utilities`
+## OpenLDAP Server Utilities ##
 
-* ldapadd
-* ldapcompare
-* ldapdelete
-* ldapexop
-* ldapmodify
-* ldapmodrdn
-* ldappasswd
-* ldapsearch
-* ldapurl
-* ldapwhoami
+- slapacl
+
+- slapadd
+
+- slapauth
+
+- slapcat
+
+- slapdn
+
+- slapindex
+
+- slappasswd
+
+- slapschema
+
+- slaptest
 
 
-`Global Configuration`
+## OpenLDAP Client Utilities ##
+
+- ldapadd
+
+- ldapcompare
+
+- ldapdelete
+
+- ldapexop
+
+- ldapmodify
+
+- ldapmodrdn
+
+- ldappasswd
+
+- ldapsearch
+
+- ldapurl
+
+- ldapwhoami
+
+
+## Global Configuration ##
 
 /etc/openldap/slapd.d/cn=config.ldif
 
-* olcAllows
-* olcConnMaxPending
-* olcConnMaxPendingAuth
-* olcDisallows
-* olcIdleTimeout
-* olcLogFile
-* olcReferral
-* olcWriteTimeout
+- olcAllows
+
+- olcConnMaxPending
+
+- olcConnMaxPendingAuth
+
+- olcDisallows
+
+- olcIdleTimeout
+
+- olcLogFile
+
+- olcReferral
+
+- olcWriteTimeout
 
 
-`Database-Specific Configuration`
+## Database-Specific Configuration ##
 
 因為 db 格式不同, 所以可能為 bdb 或 hdb
 /etc/openldap/slapd.d/cn=config/olcDatabase={1}bdb.ldif
 /etc/openldap/slapd.d/cn=config/olcDatabase={1}hdb.ldif
 
-* olcReadOnly
-* olcRootDN
-* olcRootPW
-* olcSuffix
+- olcReadOnly
+
+- olcRootDN
+
+- olcRootPW
+
+- olcSuffix
 
 
-`Extending Schema`
+## Extending Schema ##
 
 /etc/openldap/schema/
 
 
-`Establishing a Secure Connection`
+## Establishing a Secure Connection ##
 
 /etc/openldap/slapd.d/cn=config.ldif
 
-* olcTLSCACertificateFile
-* olcTLSCACertificatePath
+- olcTLSCACertificateFile
+
+- olcTLSCACertificatePath
 
 	server:~ # vi /etc/sysconfig/slapd
 	SLAPD_URLS=ldaps:/// 
 
 
-`olcTLSCACertificatePath with Mozilla NSS`
+## olcTLSCACertificatePath with Mozilla NSS ##
 
 
-`Replication`
+## Replication ##
 
 olcMirrorMode
 olcSyncrepl
 
 
-`Loading Modules and Backends`
+## Loading Modules and Backends ##
 
 --enable-modules
 olcModuleLoad
@@ -974,7 +1012,7 @@ module_name.la
 back_backend_name.la
 
 
-`SELinux Policy`
+## SELinux Policy ##
 
 authlogin_nsswitch_use_ldap
 allow_ypbind
@@ -983,7 +1021,7 @@ allow_ypbind
 	server:~ # setsebool -P authlogin_nsswitch_use_ldap=1
 
 
-`OpenLDAP Server`
+## OpenLDAP Server ##
 
 /etc/openldap/ldap.conf
 /etc/openldap/slapd.d/
@@ -1122,12 +1160,11 @@ allow_ypbind
 	server:~ # ldapsearch -x -b "dc=example,dc=com"
 
 
-`User and Group with LDAP`
+## User and Group with LDAP ##
 
-Server
+`Server`
 
 	server:~ # yum install openldap openldap-clients nss-pam-ldapd
-
 
 	# method 1:
 	server:~ # vi /etc/openldap/group.ldif
@@ -1176,7 +1213,8 @@ Server
 	# 防火牆
 	server:~ # firewall-cmd --permanent --add-service=ldap
 
-Client
+
+`Client`
 
 	# method 1:
 	client:~ # authconfig-tui
@@ -1191,7 +1229,7 @@ Client
 	client:~ # authconfig --enablemkhomedir --update
 
 
-### Samba ###
+# Samba #
 
 smbd TCP 139 and 445
 nmbd UDP 137
@@ -1205,7 +1243,7 @@ echo 0x37 > /proc/fs/cifs/SecurityFlags
 mount -t cifs //servername/sharename /mnt/point/ -o username=username,password=password
 
 
-### Print Server ###
+# Print Server #
 
 CUPs (Common Unix Printing System)
 http://localhost:631
@@ -1227,9 +1265,10 @@ yum install smb-client
 lpstat -o
 
 
-### FTP ###
+# FTP #
 
-`FTP server`
+
+## FTP server ##
 
 | login port	| data transfer port	|
 | -------------	| --------------------- |
@@ -1237,7 +1276,7 @@ lpstat -o
 | 21			| \>1024 (passive mode)	|
 
 
-`vsftpd`
+## vsftpd ##
 
 	server:~ # yum install yum install vsftpd
 	server:~ # vi /etc/vsftpd/vsftpd.conf # default config
@@ -1249,7 +1288,7 @@ lpstat -o
 	server:~ # systemctl try-restart vsftpd.service
 
 
-`multiple vsftpd`
+## multiple vsftpd ##
 
 	server:~ # cp /etc/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd-mysite.conf
 	server:~ # vi /etc/vsftpd/vsftpd-mysite.conf
@@ -1267,7 +1306,7 @@ lpstat -o
 	server:~ # systemctl start vsftpd.target
 
 
-`vsftp with TLS/SSL`
+## vsftp with TLS/SSL ##
 
 	server:~ # vi /etc/vsftpd/vsftpd-mysite.conf
 	ssl_enable=YES
@@ -1278,7 +1317,7 @@ lpstat -o
 	server:~ # systemctl restart vsftpd.service
 
 
-`vsftpd with SELinux`
+## vsftpd with SELinux ##
 
 當開啟的port 小於 1024, 需另外設定 SELinux
 
@@ -1296,7 +1335,7 @@ anonymous 上傳, 預設目錄為 /var/ftp, 預設帳號群組為 ftp.ftp, 上�
 	server:~ # setsebool -P allow_ftpd_anon_write=1
 
 
-### NTP using chrony ###
+# NTP using chrony #
 
 chronyd is configured to listen for commands only from localhost (127.0.0.1 and ::1) on port 323
 
@@ -1362,7 +1401,7 @@ chronyd is configured to listen for commands only from localhost (127.0.0.1 and 
 	keyfile /etc/chrony.keys
 
 
-### NTP using ntpd ###
+# NTP using ntpd #
 
 Network Time Protocol (NTP)
 Global Position System (GPS)
@@ -1372,7 +1411,7 @@ DST (Daylight Saving Time)
 Greenwich Mean Time (GMT)
 
 
-`ntp`
+## ntp ##
 
 	rhel:~ # systemctl stop chronyd
 	rhel:~ # systemctl disable chronyd
@@ -1394,18 +1433,18 @@ Greenwich Mean Time (GMT)
 	server 3.rhel.pool.ntp.org iburst
 
 
-`測試`
+## 測試 ##
 
 	rhel:~ # ntpq -p
 
 
-`防火牆`
+## 防火牆 ##
 
 	rhel:~ # firewall-config
 	123 and select udp
 
 
-`其他`
+## 其他 ##
 
 	# receive IP from DHCP client
 	rhel:~ # vi /etc/sysconfig/network
@@ -1416,7 +1455,7 @@ Greenwich Mean Time (GMT)
 	OPTIONS="-g"
 
 
-`ntpdate`
+## ntpdate ##
 
 	rhel:~ # systemctl status ntpdate
 	rhel:~ # systemctl enable ntpdate
@@ -1430,7 +1469,7 @@ Greenwich Mean Time (GMT)
 	rhel:~ # hwclock --systohc
 
 
-### PTP ###
+# PTP #
 
 PTP(Precision Time Protocol)
 
@@ -1460,7 +1499,7 @@ PTP hardware clock, phc
 	phc2sys -s eth3 -O -35
 
 
-### System Process ###
+# System Process #
 
 	rhel:~ # ps ax
 	rhel:~ # ps aux
@@ -1499,9 +1538,10 @@ PTP hardware clock, phc
 	rhel:~ # lscpu
 
 
-### Net-SNMP ###
+# Net-SNMP #
 
-`snmp service`
+
+## snmp service ##
 
 	rhel:~ # yum install net-snmp net-snmp-libs net-snmp-utils
 	rhel:~ # systemctl start snmpd.service
@@ -1512,7 +1552,7 @@ PTP hardware clock, phc
 	rhel:~ # systemctl reload snmpd.service
 
 
-`snmp v2`
+## snmp v2 ##
 
 	# default value
 	rhel:~ # grep -vE '^#|^$' /etc/snmp/snmpd.conf 
@@ -1541,7 +1581,7 @@ PTP hardware clock, phc
 	rhel:~ # snmpwalk -v2c -c public localhost ip
 
 
-`snmp v3`
+## snmp v3 ##
 
 	rhel:~ # net-snmp-create-v3-user
 	Enter a SNMPv3 user name to create: 
@@ -1569,7 +1609,7 @@ PTP hardware clock, phc
 	rhel:~ # snmpwalk -v3 localhost system
 
 
-`snmp info`
+## snmp info ##
 
 	rehle:~ # snmptable -Cb localhost HOST-RESOURCES-MIB::hrFSTable
 	rehle:~ # snmptable -Cb localhost HOST-RESOURCES-MIB::hrStorageTable
@@ -1584,7 +1624,7 @@ PTP hardware clock, phc
 	rehle:~ # snmpwalk localhost IF-MIB::ifInOctets
 
 
-### OpenpLMI ###
+# OpenpLMI #
 
 OpenLMI/Open Linux Management Infrastructure
 CIM/Common Information Model
@@ -1610,14 +1650,15 @@ CIM/Common Information Model
 	yum install openlmi-tools
 
 
-### Rsyslogd ###
+# Rsyslogd #
 
-`Configuration File`
+## Configuration File ##
 
 	rhel:~ # cat /etc/rsyslog.conf
 	rhel:~ # ls /etc/rsyslog.d
 
-`Filters`
+
+## Filters ##
 
 * Facility/Priority-based filters
 
@@ -1653,7 +1694,8 @@ if EXPRESSION then ACTION else ACTION
 			action(type="omfile" file="/var/log/prog1notest.log")
 	}
 
-`Actions`
+
+## Actions ##
 
 * Saving syslog messages to log files
 
@@ -1700,7 +1742,8 @@ FILTER ~
 
 	cron.* ~
 
-`Multiple Actions`
+
+## Multiple Actions ##
 
 FILTER ACTION
 & ACTION
@@ -1710,7 +1753,8 @@ FILTER ACTION
 	& ^test-program;temp
 	& @192.168.0.1
 
-`Templates`
+
+## Templates ##
 
 $template TEMPLATE_NAME,"text %PROPERTY% more text", [OPTION]
 
@@ -1719,7 +1763,8 @@ $template TEMPLATE_NAME,"text %PROPERTY% more text", [OPTION]
 	$template DynamicFile,"/var/log/test_logs/%timegenerated%-test.log"
 	*.* ?DynamicFile
 
-`Properties`
+
+## Properties ##
 
 %PROPERTY\_NAME[:FROM_CHAR:TO\_CHAR:OPTION]%
 
@@ -1728,7 +1773,7 @@ $template TEMPLATE_NAME,"text %PROPERTY% more text", [OPTION]
 	%msg:::drop-last-lf%
 	%timegenerated:1:10:date-rfc3339%
 
-`Template Examples`
+## Template Examples ##
 
 	$template verbose, "%syslogseverity%, %syslogfacility%, %timegenerated%, %HOSTNAME%, %syslogtag%, %msg%\n"
 	$template wallmsg,"\r\n\7Message from syslogd@%HOSTNAME% at %timegenerated% ...\r\n %syslogtag% %msg%\n\r"
@@ -1759,7 +1804,7 @@ RSYSLOG_TraditionalForwardFormat
 	"%PRI%%TIMESTAMP% %HOSTNAME% %syslogtag:1:32%%msg:::sp-if-no-1st-sp%%msg%\"
 
 
-`New Configuration Format`
+## New Configuration Format ##
 
 	$InputFileName /tmp/inputfile
 	$InputFileTag tag1:
@@ -1770,7 +1815,7 @@ same
 
 	input(type="imfile" file="/tmp/inputfile" tag="tag1:" statefile="inputfile-state")
 
-`Ruleset`
+## Ruleset ##
 
 	ruleset(name="rulesetname") { 
 	      rule 
@@ -1795,7 +1840,8 @@ same
 	input(type="imtcp" port="10514" ruleset="remote-10514");
 	input(type="imtcp" port="10515" ruleset="remote-10515");
 
-`Queues`
+
+## Queues ##
 
 	$objectQueueType queue_type
 
@@ -1853,7 +1899,7 @@ priority with debug (7), info (6), notice (5), warning (4), err (3), crit (2), a
 	$objectQueueTimeoutSaveOnShutdown time
 
 
-`enable rsyslog`
+## enable rsyslog ##
 
 	rhel:~ # yum install rsyslog
 	rhel:~ # systemctl start rsyslog
@@ -1864,7 +1910,7 @@ priority with debug (7), info (6), notice (5), warning (4), err (3), crit (2), a
 	rhel:~ # firewall-cmd --reload
 	rhel:~ # firewall-cmd --list-ports
 
-`remote rsyslog example`
+## remote rsyslog example ##
 
 	client:~ # echo "*.* @server_ip" >> /etc/rsyslog.conf
 	client:~ # systemctl restart rsyslog
@@ -1879,7 +1925,7 @@ priority with debug (7), info (6), notice (5), warning (4), err (3), crit (2), a
 	& ~
 	server:~ # systemctl restart rsyslog
 
-`module`
+## module ##
 
 	$ModLoad MODULE
 	$ModLoad imfile
@@ -1906,7 +1952,8 @@ priority with debug (7), info (6), notice (5), warning (4), err (3), crit (2), a
 
 * Library Modules
 
-`Importing Text Files`
+
+## Importing Text Files ##
 
 	$ModLoad imfile
 
@@ -1915,7 +1962,8 @@ priority with debug (7), info (6), notice (5), warning (4), err (3), crit (2), a
 	$InputFileStateFile state-apache-error
 	$InputRunFileMonitor
 
-`Exporting Messages to a Database`
+
+## Exporting Messages to a Database ##
 
 MySQL
 
@@ -1930,7 +1978,8 @@ MongoDB
 
 	*.* action(type="ommongodb" server="DB_server" serverport="port" db="DB_name" collection="collection_name" uid="UID" pwd="password")
 
-`Parsing JSON`
+
+## Parsing JSON ##
 
 Oct 25 10:20:37 localhost anacron[1395]: Jobs will be executed sequentially
 ->
@@ -1941,7 +1990,7 @@ Oct 25 10:20:37 localhost anacron[1395]: Jobs will be executed sequentially
 	*.* :mmjsonparse:
 
 
-`Interaction of rsyslog and journal`
+## Interaction of rsyslog and journal ##
 
 import Journal data trough the socket
 
@@ -1973,13 +2022,13 @@ import data from journal to rsyslog
 	$imjournalRatelimitBurst burst_number
 	$ImjournalIgnorePreviousMessages off/on
 
-`debug`
+## debug ##
 
 	rhel:~ # rsyslogd -dn # debugging mode
 	rhel:~ # rsyslogd -N 1 # check /etc/rsyslog.conf syntax
 
 
-### Journal ###
+# Journal #
 
 	rhel:~ # journalctl
 	rhel:~ # journalctl -o verbose
@@ -1991,13 +2040,13 @@ import data from journal to rsyslog
 	rhel:~ # usermod -a -G adm username
 
 
-### System log ###
+# System log #
 
 	rhel:~ # yum install gnome-system-log
 	rhel:~ # gnome-system-log
 
 
-### Log Rotation ###
+# Log Rotation #
 
 /etc/logrotate.conf
 /etc/logrotate.d/
@@ -2027,7 +2076,7 @@ rotate INTEGER
 mail ADDRESS, nomail, mailfirst, maillast
 
 
-### Cron ###
+# Cron #
 
 	rhel:~ # yum install cronie cronie-anacron
 
@@ -2088,7 +2137,7 @@ mail ADDRESS, nomail, mailfirst, maillast
 /var/spool/cron/username
 
 
-### At ###
+# At #
 
 	rhel:~ # yum install at
 
@@ -2126,7 +2175,7 @@ mail ADDRESS, nomail, mailfirst, maillast
 * teatime: 4:00 p.m.
 
 
-### ABRT ###
+# ABRT #
 
 ABRT(AUTOMATIC BUG REPORTING TOOL)
 
@@ -2141,13 +2190,15 @@ ABRT(AUTOMATIC BUG REPORTING TOOL)
 	rhel:~ # systemctl is-active abrtd.service
 	rhel:~ # systemctl start abrtd.service
 
-`GUI`
+
+## GUI ##
 
 Applications -> Sundry -> Automatic Bug Reporting Tool
 
 	rhel:~ # gnome-abrt &
 
-`CLI`
+
+## CLI ##
 
 	rhel:~ # abrt-cli list
 	rhel:~ # abrt-cli list -d
@@ -2155,7 +2206,7 @@ Applications -> Sundry -> Automatic Bug Reporting Tool
 	rhel:~ # abrt-cli info -d directory_id
 	rhel:~ # abrt-cli rm directory_id
 
-`event`
+## event ##
 
 /etc/libreport/report_event.conf
 
@@ -2191,7 +2242,8 @@ enable abrt
 
 	rhel:~ # abrt-auto-reporting enabled
 
-`configuaration`
+
+## configuaration ##
 
 	rhel:~ # cat /etc/abrt/abrt.conf
 
@@ -2228,7 +2280,7 @@ python -S file.py
 java -agentlib:abrt-java-connector[=abrt=on] $MyClass -platform.jvmtiSupported true
 
 
-### OProfile ###
+# OProfile #
 
 ophelp
 opimport
@@ -2240,13 +2292,14 @@ oprofiled
 
 	rhel:~ # yum install oprofile
 
-`ophelp`
+
+## ophelp ##
 
 顯示所有 event
 
 event-name:sample-rate[:unit-mask[:kernel[:user]]]
 
-`operf`
+## operf ##
 
 	rhel:~ # operf [ options ] [ --system-wide | --pid <pid> | [ command [ args ] ] ] # ./oprofile_data
 
@@ -2262,7 +2315,8 @@ event-name:sample-rate[:unit-mask[:kernel[:user]]]
 	# operf --events event-name:sample-rate[:unit-mask[:kernel[:user]]]  --system-wide
 	rhel:~ # operf -e CPU_CLK_UNHALTED:10000  -s
 
-`opcontrol`
+
+## opcontrol ##
 
 	rhel:~ # yum install kernel-debuginfo
 
@@ -2292,15 +2346,17 @@ event-name:sample-rate[:unit-mask[:kernel[:user]]]
 
 	ls /root/.oprofile/daemonrc
 
-`oprofile-gui`
+
+## oprofile-gui ##
 
 	rhel:~ # yum install oprofile-gui
 	rhel:~ # oprof_start &
 
 
-### Grub2 ###
+# Grub2 #
 
-`/etc/default/grub`
+
+## /etc/default/grub ##
 
 	rhel:~ # grub2-mkconfig -o /boot/grub2/grub.cfg # for BIOS
 	rhel:~ # grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg # for UEFI
@@ -2309,7 +2365,7 @@ event-name:sample-rate[:unit-mask[:kernel[:user]]]
 	rhel:~ # grub2-set-default 2 # 從第二個 menu entry 開機
 	rhel:~ # cat /boot/grub2/grubenv # saved_entry
 
-`/etc/grub.d/`
+## /etc/grub.d/ ##
 
 * 00_header
 
@@ -2321,7 +2377,8 @@ event-name:sample-rate[:unit-mask[:kernel[:user]]]
 
 * 40_custom
 
-`Kernel Parameters`
+
+## Kernel Parameters ##
 
 	rhel:~ # vi /etc/default/grub
 
@@ -2331,7 +2388,7 @@ event-name:sample-rate[:unit-mask[:kernel[:user]]]
 	# for virtual terminal
 	GRUB_CMDLINE_LINUX="console=tty0 console=ttyS0,9600n8"
 
-`Adding a new Entry`
+## Adding a new Entry ##
 
 	rhel:~ # vi /etc/grub.d/40_custom
 	...
@@ -2339,7 +2396,8 @@ event-name:sample-rate[:unit-mask[:kernel[:user]]]
 	<Data>
 	}
 
-`Password Protection`
+
+## Password Protection ##
 
 	rhel:~ # grub2-mkpasswd-pbkdf2
 
@@ -2374,12 +2432,12 @@ edit /etc/grub.d/40_custom
 	linux   /vmlinuz
 	}
 
-`Reinstall GRUB2 on MBR`
+## Reinstall GRUB2 on MBR ##
 
 	rhel:~ # grub2-install /dev/sda
 
 
-`Reinstall GRUB2 package`
+## Reinstall GRUB2 package ##
 
 	rhel:~ # rm /etc/grub.d/*
 	rhel:~ # rm /etc/sysconfig/grub
@@ -2388,7 +2446,8 @@ edit /etc/grub.d/40_custom
 	rhel:~ # grub2-mkconfig -o /boot/grub2/grub.cfg
 	rhel:~ # grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg
 
-`Console`
+
+## Console ##
 
 	rhel:~ # vi /etc/default/grub
 	GRUB_TERMINAL="serial"
@@ -2397,30 +2456,35 @@ edit /etc/grub.d/40_custom
 	rhel:~ # grub2-mkconfig -o /boot/grub2/grub.cfg # for BOIS
 	rhel:~ # grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg # for UEFI
 
-` Connect to the Serial Console`
+
+## Connect to the Serial Console ##
 
 	rhel:~ # yum install screen
 	rhel:~ # screen /dev/<console_port>
 	rhel:~ # screen /dev/<console_port> 115200
 
-`Boot to rescue mode`
+
+## Boot to rescue mode ##
 
 when grub2, at kernel line append (linux16 ...)
 
 systemd.unit=rescue.target
 
-`Boot to emergency mode`
+
+## Boot to emergency mode ##
 
 when grub2, at kernel line append (linux16 ...)
 
 systemd.unit=emergency.target
 
-`Reset password by using installation disk`
+
+## Reset password by using installation disk ##
 
 sh-4.2# chroot /mnt/sysimage
 sh-4.2# rm -f /.autorelabel
 
-`Reset password rd.break`
+
+## Reset password rd.break ## 
 
 when grub2, at kernel line append (linux16 ...)
 
@@ -2434,21 +2498,22 @@ rd.break
 	sh-4.2# /sbin/reboot -f
 
 
-### Kernel ###
-
-`USB boot`
-
-syslinux /dev/sdX1
-mkdir /mnt/isoboot /mnt/diskboot
-mount -o loop boot.iso /mnt/isoboot
-mount /dev/sdX1 /mnt/diskboot
-cp /mnt/isoboot/isolinux/* /mnt/diskboot
-grep -v local /mnt/isoboot/isolinux/isolinux.cfg > /mnt/diskboot/syslinux.cfg
-umount /mnt/isoboot /mnt/diskboot
-yum list installed "kernel-*"
+# Kernel #
 
 
-`initrd`
+## USB boot ##
+
+	rhel:~ # syslinux /dev/sdX1
+	rhel:~ # mkdir /mnt/isoboot /mnt/diskboot
+	rhel:~ # mount -o loop boot.iso /mnt/isoboot
+	rhel:~ # mount /dev/sdX1 /mnt/diskboot
+	rhel:~ # cp /mnt/isoboot/isolinux/* /mnt/diskboot
+	rhel:~ # grep -v local /mnt/isoboot/isolinux/isolinux.cfg > /mnt/diskboot/syslinux.cfg
+	rhel:~ # umount /mnt/isoboot /mnt/diskboot
+	rhel:~ # yum list installed "kernel-*"
+
+
+## initrd ##
 
 	# list system boot kernel
 	rhel:~ # ls /boot/
@@ -2464,7 +2529,7 @@ initramfs file is initramfs-3.10.0-78.el7.x86_64kdump.img
 	rhel:~ # lsinitrd /boot/initramfs-3.10.0-78.el7.x86_64.img
 
 
-### Kernel Module ###
+# Kernel Module #
 
 	rhel:~ # yum install kmod
 	rhel:~ # lsmod # list currentlt loaded modules
@@ -2478,8 +2543,7 @@ initramfs file is initramfs-3.10.0-78.el7.x86_64kdump.img
 	 virtio-net
 
 
-
-### Subscription Manager ###
+# Subscription Manager #
 
 	# setup subscription manager
 	subscription-manager register
@@ -2506,7 +2570,7 @@ initramfs file is initramfs-3.10.0-78.el7.x86_64kdump.img
 	subscription-manager remove --all
 
 
-### Red Hat Support Tool ###
+# Red Hat Support Tool #
 
 	yum install redhat-support-tool
 	redhat-support-tool config user username

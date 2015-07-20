@@ -1,5 +1,6 @@
 # Hostname #
 
+
 ## config file ##
 
 /etc/hostname
@@ -24,6 +25,7 @@
 
 
 # RedHat Networking  #
+
 
 ## nm vs networking ##
 
@@ -231,8 +233,6 @@ IPv6 方式跟 IPv4 一樣, 將 ipv4 改成 ipv6 即可
 
 ## VPN ##
 
-	rhel:~ # yum install NetworkManager-libreswan
-	rhel:~ # yum install NetworkManager-libreswan-gnome
 
 Bond
 Bridge
@@ -532,13 +532,32 @@ teamd, ethtool, arp_ping, nsna_ping, lacp
 
 ## pptp ##
 
-	rhel:~ # nmcli connection add type vpn ifname eth0 cos-name vpn0 vpn-type pptp
+	rhel:~ # yum install NetworkManager-pptp NetworkManager-pptp-gnome
+
+	# method 1:
+	rhel:~ # nmcli connection add type vpn con-name vpn0 ifname vpn0 vpn-type pptp
 	rhel:~ # nmcli connection edit vpn0
-	nmcli> set ipv4.gateway 10.1.0.254
-	nmcli> set vpn.user-name vpnuser
-	nmcli> set vpn.secrets password=vpnpasswd
+	nmcli> set vpn.data password-flags = 0, user = vpn_user, require-mppe = yes, gateway = vpn_server_ip
+	nmcli> set vpn.secrets password = vpn_password
 	nmcli> save
 	nmcli> quit
+
+	# firewall
+	rhel:~ # firewall-cmd --direct --add-rule ipv4 filter INPUT 0 -p gre -j ACCEPT
+	rhel:~ # firewall-cmd --permanent --direct --add-rule ipv6 filter INPUT 0 -p gre -j ACCEPT
+	rhel:~ # firewall-cmd --reload
+
+	# method 2:
+	rhel:~ # gnome-control-center network
+
+## l2tp ##
+
+	rhel:~ # yum install NetworkManager-l2tp NetworkManager-l2tp-gnome
+
+
+## ipsec ##
+
+	rhel:~ # yum install NetworkManager-libreswan NetworkManager-libreswan-gnome
 
 
 # Networking Device Naming #
@@ -591,8 +610,8 @@ Scheme 5: The traditional unpredictable kernel naming scheme, is used if all oth
 
 ## Trouble shooting ##
 
-	udevadm info /sys/class/net/ifname | grep ID_NET_NAME
-	ls /sys/class/net/
+	rhel:~ # udevadm info /sys/class/net/ifname | grep ID_NET_NAME
+	rhel:~ # ls /sys/class/net/
 
 
 # InfiniBand & Remote Direct Memory Access #
@@ -627,3 +646,180 @@ RoCE/IBoE: Mellanox hardware — libmlx4 or libmlx5
 - dapl, dapl-devel, dapl-utils
 
 - openmpi, mvapich2, mvapich2-psm
+
+## RDMA ##
+
+	rhel:~ # yum install rdma
+	rhel:~ # dracut -f # rebuild initrd
+	rhel:~ # systemctl enable rdma
+
+- /etc/rdma/rdma.conf
+
+- /etc/udev.d/rules.d/70-persistent-ipoib.rules
+
+- /etc/security/limits.d/rdma.conf
+
+- /etc/rdma/mlx4.conf or  /etc/rdma/mlx5.conf
+
+
+## opensm ##
+
+opensm is IB subnet manager. all InfiniBand networks must have a subnet manager running for the network to function.
+
+	/etc/sysconfig/opensm
+
+	/etc/rdma/opensm.conf
+
+	/etc/rdma/partitions.conf
+
+	systemctl enable opensm
+
+
+## testing ##
+
+	rhel:~ # yum install libibverbs-utils
+	rhel:~ # ibv_devices
+	rhel:~ # ibv_devinfo
+	rhel:~ # ibv_devinfo -d mlx4_1
+	rhel:~ # ibstat mlx4_1
+
+	rhel:~ # yum install infiniband-diags
+	rhel:~ # ibping -S -C mlx4_1 -P 1
+	rhel:~ # ibping -c 10000 -f -C mlx4_0 -P 1 -L 2
+	rhel:~ # ibping -c 10000 -f -C mlx4_0 -P 1 -G 0xf4521403007bcba1
+
+## IPoIB ##
+
+	# method 1:
+	rhel:~ # nmtui
+
+	# method 2:
+	rhel:~ # rmmod ib_ipoib
+	rhel:~ # modprobe ib_ipoib
+
+	rhel:~ # nmcli connection add type infiniband con-name mlx4_ib0 ifname mlx4_ib0 transport-mode connected mtu 65520
+	rhel:~ # nmcli connection edit mlx4_ib0
+	nmcli> set infiniband.mac-address 80:00:02:00:fe:80:00:00:00:00:00:00:f4:52:14:03:00:7b:cb:a3
+	nmcli> set ipv4.ignore-auto-dns yes
+	nmcli> set ipv4.ignore-auto-routes yes
+	nmcli> set ipv4.never-default true
+	nmcli> set ipv6.ignore-auto-dns yes
+	nmcli> set ipv6.ignore-auto-routes yes
+	nmcli> set ipv6.never-default true
+	nmcli> save
+	nmcli> quit
+
+	rhel:~ # nmcli con add type infiniband con-name mlx4_ib0.8002 ifname mlx4_ib0.8002 parent mlx4_ib0 p-key 0x8002 # create with P key
+
+
+## config file ##
+
+	rhel:~ # cat /etc/sysconfig/network-script/ifcfg-ib0
+	DEVICE=mlx4_ib0
+	TYPE=InfiniBand
+	ONBOOT=yes
+	HWADDR=80:00:00:4c:fe:80:00:00:00:00:00:00:f4:52:14:03:00:7b:cb:a1
+	BOOTPROTO=none
+	IPADDR=172.31.0.254
+	PREFIX=24
+	NETWORK=172.31.0.0
+	BROADCAST=172.31.0.255
+	MTU=65520
+	CONNECTED_MODE=yes
+	NAME=mlx4_ib0
+
+	rhel:~ # cat /etc/sysconfig/network-script/ifcfg-ib0.8002
+	DEVICE=mlx4_ib0.8002
+	PHYSDEV=mlx4_ib0
+	PKEY=yes
+	PKEY_ID=2
+	TYPE=InfiniBand
+	ONBOOT=yes
+	HWADDR=80:00:00:4c:fe:80:00:00:00:00:00:00:f4:52:14:03:00:7b:cb:a1
+	BOOTPROTO=none
+	IPADDR=172.31.2.254
+	PREFIX=24
+	NETWORK=172.31.2.0
+	BROADCAST=172.31.2.255
+	MTU=65520
+	CONNECTED_MODE=yes
+	NAME=mlx4_ib0.8002
+
+
+## GUI ##
+
+	rhel:~ # gnome-control-center network
+
+
+# DHCP #
+
+
+## dhcp ##
+
+
+### package ###
+
+	rhel:~ # yum install dhcp
+
+	rhel:~ # systecmctl enable dhcpd.service # or copy /usr/lib/systemd/system/dhcpd.service to /etc/systemd/system/
+	rhel:~ # vi /etc/systemd/system/dhcpd.service
+	...
+	ExecStart=/usr/sbin/dhcpd -f -cf /etc/dhcp/dhcpd.conf -user dhcpd -group dhcpd --no-pid eth0
+	...
+	rhel:~ # systemctl --system daemon-reload
+	rhel:~ # systemctl restart dhcpd
+
+	rhel:~ # systemctl start dhcpd.service
+	rhel:~ # systemctl stop dhcpd.service
+
+
+### config file ###
+
+	cp /usr/share/doc/dhcp-version_number/dhcpd.conf.example /etc/dhcp/dhcpd.conf # example
+
+	cat /etc/dhcp/dhcpd.conf
+	default-lease-time 600;
+	max-lease-time 7200;
+	option subnet-mask 255.255.255.0;
+	option broadcast-address 192.168.1.255;
+	option routers 192.168.1.254;
+	option domain-name-servers 192.168.1.1, 192.168.1.2;
+	option domain-search "example.com";
+	subnet 192.168.1.0 netmask 255.255.255.0 {
+	   range 192.168.1.10 192.168.1.100;
+	   host apex {
+	      option host-name "apex.example.com";
+	      hardware ethernet 00:A0:78:8E:9E:AA;
+	      fixed-address 192.168.1.4;
+	   }
+	}
+
+	/var/lib/dhcpd/dhcpd.leases
+
+
+## dhcrelay ##
+
+DHCP Relay Agent (dhcrelay) enables the relay of DHCP and BOOTP requests from a subnet with no DHCP server on it to one or more DHCP servers on other subnets.
+
+`IPv4`
+
+	rhel:~ # systecmctl enable dhcpd.service # or copy /lib/systemd/system/dhcrelay.service to /etc/systemd/system/
+	rhel:~ # vi /etc/systemd/system/dhcrelay.service
+	...
+	ExecStart=/usr/sbin/dhcrelay -d --no-pid 192.168.1.1 [-i eth1] # 192.168.1.1 is dhcp server ip, eth1 is specfic listen nic
+	...
+	rhel:~ # systemctl --system daemon-reload
+	rhel:~ # systemctl restart dhcrelay
+
+`IPv6`
+
+	rhel:~ # cp /lib/systemd/system/dhcrelay.service /etc/systemd/system/dhcrelay6.service
+	rhel:~ # vi /etc/systemd/system/dhcrelay6.service
+	...
+	ExecStart=/usr/sbin/dhcrelay -d --no-pid -6 -l em1 -u em2
+	...
+	rhel:~ # systemctl --system daemon-reload
+	rhel:~ # systemctl restart dhcrelay6
+
+
+# DNS #
