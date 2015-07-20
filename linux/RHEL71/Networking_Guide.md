@@ -231,14 +231,6 @@ IPv6 方式跟 IPv4 一樣, 將 ipv4 改成 ipv6 即可
 	rhel:~ # gnome-control-center network
 
 
-## VPN ##
-
-
-Bond
-Bridge
-VLAN
-
-
 # Networking Bond #
 
 
