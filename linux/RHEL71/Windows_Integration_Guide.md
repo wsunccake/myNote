@@ -1,0 +1,3 @@
+# SSSD #
+
+SSSD (System Security Services Daemon) provides access to different identity and authentication providers. This service ties a local system to a larger back-end system. That can be a simple LDAP directory, domains for AD (Active Directory) or IdM (Identity Management) in Red Hat Enterprise Linux, or Kerberos realms. Authorization information is gathered by SSSD by using HBAC (Host-Based Access Control) in IdM and GPO (Group Policy Object) in AD.

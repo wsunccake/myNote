@@ -815,3 +815,199 @@ DHCP Relay Agent (dhcrelay) enables the relay of DHCP and BOOTP requests from a 
 
 
 # DNS #
+
+`authoritative`
+Authoritative nameservers answer to resource records that are part of their zones only. This category includes both primary (master) and secondary (slave) nameservers.
+`recursive`
+Recursive nameservers offer resolution services, but they are not authoritative for any zone. Answers for all resolutions are cached in a memory for a fixed period of time, which is specified by the retrieved resource record.
+
+
+/etc/named.conf
+/etc/named.d
+
+
+bind-chroot
+/var/named/chroot/
+vim -c "set backupcopy=yes" /etc/named.conf
+
+## bind-chroot ##
+
+	rhel:~ # yum install bind-chroot
+	rhel:~ # systemctl status named
+	rhel:~ # systemctl stop named
+	rhel:~ # systemctl disable named
+	rhel:~ # stemctl enable named-chroot
+	rhel:~ # systemctl start named-chroot
+	rhel:~ # systemctl status named-chroot
+
+
+### config file ###
+
+	rhel:~ # vi /etc/named.conf
+	acl black-hats {
+	  10.0.2.0/24;
+	  192.168.0.0/24;
+	  1234:5678::9abc/24;
+	};
+
+	acl red-hats {
+	  10.0.1.0/24;
+	};
+
+	options {
+	  blackhole { black-hats; };
+	  allow-query { red-hats; localhost; };
+	  allow-query-cache { red-hats; };
+	
+	  listen-on port    53 { 127.0.0.1; };
+	  listen-on-v6 port 53 { ::1; };
+	  max-cache-size    256M;
+	  directory         "/var/named";
+	  statistics-file   "/var/named/data/named_stats.txt";
+	
+	  recursion         yes;
+	  dnssec-enable     yes;
+	  dnssec-validation yes;
+	
+	  pid-file          "/run/named/named.pid";
+	  session-keyfile   "/run/named/session.key";
+	};
+
+	logging {
+	  channel default_debug {
+	    file "data/named.run";
+	    severity dynamic;
+	  };
+	};
+	
+	zone "example.com" IN { // file in /var/named dir, primary 
+	  type master;
+	  file "example.com.zone";
+	  allow-transfer { 192.168.0.2; };
+	};
+
+	zone "example.com" { # slave
+	  type slave;
+	  file "slaves/example.com.zone";
+	  masters { 192.168.0.1; };
+	};
+
+	zone "1.0.10.in-addr.arpa" IN {
+	  type master;
+	  file "example.com.rr.zone";
+	  allow-update { none; };
+	};
+
+	include "/etc/named.rfc1912.zones";
+	include "/etc/named.root.key";
+
+
+### zone file ###
+
+	rhel:~ # vi /var/named/example.com.zone
+	$ORIGIN example.com.
+	$TTL 86400
+	@         IN  SOA  dns1.example.com.  hostmaster.example.com. (
+	              2001062501  ; serial
+	              21600       ; refresh after 6 hours
+	              3600        ; retry after 1 hour
+	              604800      ; expire after 1 week
+	              86400 )     ; minimum TTL of 1 day
+	;
+	;
+	          IN  NS     dns1.example.com.
+	          IN  NS     dns2.example.com.
+	dns1      IN  A      10.0.1.1
+	          IN  AAAA   aaaa:bbbb::1
+	dns2      IN  A      10.0.1.2
+	          IN  AAAA   aaaa:bbbb::2
+	;
+	;
+	@         IN  MX     10  mail.example.com.
+	          IN  MX     20  mail2.example.com.
+	mail      IN  A      10.0.1.5
+	          IN  AAAA   aaaa:bbbb::5
+	mail2     IN  A      10.0.1.6
+	          IN  AAAA   aaaa:bbbb::6
+	;
+	;
+	; This sample zone file illustrates sharing the same IP addresses
+	; for multiple services:
+	;
+	services  IN  A      10.0.1.10
+	          IN  AAAA   aaaa:bbbb::10
+	          IN  A      10.0.1.11
+	          IN  AAAA   aaaa:bbbb::11
+	
+	ftp       IN  CNAME  services.example.com.
+	www       IN  CNAME  services.example.com.
+	;
+	;
+
+	rhel:~ # vi /var/named/example.com.rr.zone
+	$ORIGIN 1.0.10.in-addr.arpa.
+	$TTL 86400
+	@  IN  SOA  dns1.example.com.  hostmaster.example.com. (
+	       2001062501  ; serial
+	       21600       ; refresh after 6 hours
+	       3600        ; retry after 1 hour
+	       604800      ; expire after 1 week
+	       86400 )     ; minimum TTL of 1 day
+	;
+	@  IN  NS   dns1.example.com.
+	;
+	1  IN  PTR  dns1.example.com.
+	2  IN  PTR  dns2.example.com.
+	;
+	5  IN  PTR  server1.example.com.
+	6  IN  PTR  server2.example.com.
+	;
+	3  IN  PTR  ftp.example.com.
+	4  IN  PTR  ftp.example.com.
+
+
+## rndc ##
+
+/etc/rndc.conf
+
+/etc/rndc.key
+
+
+	rhel:~ # chmod o-rwx /etc/rndc.key
+	rhel:~ # rndc status
+
+
+### reload configuration and zone ###
+
+	rhel:~ # rndc reload # reload configuration and zones
+	rhel:~ # rndc reload localhost # reload single zone (zone name: localhost)
+	rhel:~ # rndc reconfig # reload configuration and newly added zones
+
+	rhel:~ # rndc freeze localhost
+	rhel:~ # rndc thaw localhost
+
+
+### update zone key ###
+
+	rhel:~ # vi /etc/named.conf
+	...
+	zone "localhost" IN {
+	  type master;
+	  file "named.localhost";
+	  allow-update { none; };
+	  auto-dnssec maintain; # add auto-dnssec keyword
+	};
+	...
+
+	rhel:~ # rndc sign localhost # udpate zone key
+
+	rhel:~ # rndc validation on
+	rhel:~ # rndc validation off
+	rhel:~ # rndc querylog
+
+
+## dig ##
+
+	rhel:~ # dig example.com NS
+	rhel:~ # dig example.com A
+	rhel:~ # dig -x 192.0.32.10

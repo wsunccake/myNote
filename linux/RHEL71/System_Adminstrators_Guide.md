@@ -1157,7 +1157,21 @@ allow_ypbind
 
 
 	# 查詢 entry
-	server:~ # ldapsearch -x -b "dc=example,dc=com"
+	server:~ # ldapsearch -x # 查詢全部
+	server:~ # ldapsearch -x -h ldap_server -p 381 -b 'dc=example,dc=com' # 只查詢 dn 底下
+	server:~ # ldapsearch -x -w mypasswd -D cn=Manager,dc=example,dc=com  # 使用 cn=Manager,dc=example,dc=com 進行查詢
+
+	server:~ # ldapsearch -x '(cn=Sean)' # 準確搜尋 cn 為 Sean 
+	server:~ # ldapsearch -x '(cn=*Sean*)' # 模糊搜尋 cn 為 Sean 
+	server:~ # ldapsearch '(cn~=Shaun)' # 拼音搜尋 cn 為 Shaun, 可搜尋 Shawn, Shaun 
+	server:~ # ldapsearch -b'ou=it,dc=example,dc=com' '(cn=Sean*)' 
+
+	server:~ # ldapserach -x mail # 搜尋 mail 屬性
+	server:~ # ldapsearch -x '(cn=sean*)' mail
+
+	server:~ # ldapsearch -x '(&(mobile=0932*)(mail=*com*))' # AND
+	server:~ # ldapsearch -x '(|(mobile=0932*)(mail=*com*))' # OR
+	server:~ # ldapsearch -x '(!(mobile=0932*))' # NOT
 
 
 ## User and Group with LDAP ##
