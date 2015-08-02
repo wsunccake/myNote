@@ -490,6 +490,7 @@ teamd, ethtool, arp_ping, nsna_ping, lacp
 	rhel:~ # modinfo 8021q
 
 	rhel:~ # ip link add link eth0 name eth0.10 type vlan id 10
+	rhel:~ # ip -d link show
 
 	# remove vlan
 	rhel:~ # ip link del eth0.10

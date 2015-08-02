@@ -194,6 +194,10 @@
 	rhel:~ # yum group update group_name
 	rhel:~ # yum update # update all package
 
+	# download package
+	rhel:~ # yum install yum-utils
+	rhel:~ # yumdownloader pkackage_name
+
 下載的 package 放在 /var/cache/yum/$basearch/$releasever/packages 目錄下
 
 

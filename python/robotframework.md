@@ -1,8 +1,8 @@
-# RobotFramework #
+# Introduction #
 
 RobotFramework 是一套基於 Python 以驗收測試及 ATDD (Acceptance Test-Driven Development) 功能為主而開發的自動化測試框架 (以下簡稱 RF). 
 
-### 安裝 ###
+## 安裝 / Installtion ##
 
 安裝前需先安裝 Python 及 pip
 
@@ -10,9 +10,7 @@ RobotFramework 是一套基於 Python 以驗收測試及 ATDD (Acceptance Test-D
 	osx:~ $ sudo pip install robotframework # for Mac OS X
 
 
------------------------------
-
-### Plugin or IDE ###
+## Plugin or IDE ##
 
 `vim`
 
@@ -24,7 +22,7 @@ RobotFramework 是一套基於 Python 以驗收測試及 ATDD (Acceptance Test-D
 
 -----------------------------
 
-### 檔案格式 / Support Format: ###
+## 檔案格式 / Support Format ##
 
 [Robot Framework User Guide](http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html) 是一份簡易使用手冊, 有介紹如何使用 Robot Framework
 
@@ -60,14 +58,24 @@ RobotFramework 是一套基於 Python 以驗收測試及 ATDD (Acceptance Test-D
 
 RF 檔案分四個部分 Settings, Variables, Keywords 和 Test Cases.
 
-* Setttings 載入使用的 RF 或 Python 檔案.
-* Variables 設定參數
-* Keywords 使用者自訂關鍵字
-* Test Cases 要執行的測試
+`Setttings`
 
------------------------------
+載入使用的 RF 或 Python 檔案.
 
-### 執行 ###
+`Variables`
+
+設定參數
+
+`Keywords`
+
+使用者自訂關鍵字
+
+`Test Cases`
+
+要執行的測試
+
+
+## 執行 / Run ##
 
 `Python`
 
@@ -120,9 +128,12 @@ RF 檔案分四個部分 Settings, Variables, Keywords 和 Test Cases.
 
 -----------------------------
 
-### 變數 ###
+# Syntax #
 
-robot 變數命名是不區分大小寫, 一個空格 兩個空格
+
+## 變數 / Variable ##
+
+RF 變數命名是不區分大小寫, 一個空格 兩個空格
 
 	${1}, ${2}, ${3}, ... # 整數
 	${Null}, ${None}, ${False}, ${True}
@@ -132,18 +143,59 @@ robot 變數命名是不區分大小寫, 一個空格 兩個空格
 	${int1}=  Set Variable  ${1}    # 設定 int1 為 整數 1
 	${int1}=  Set Variable  1       # 設定 int1 為 字串 1
 	@{list1}=  Create List  A  B  C # 設定 array
+	Log  ${list1[0]}   # 顯示第一個 element
+	Log  ${list1[-1]}  # 顯示最後一個 element
 	${dic1}=  Create Dictionary  Jun=1  Feb=2 # 設定 dictionary
+	Log  ${dic1['Jun']}
 
------------------------------
 
-### 迴圈 ###
+## 迴圈 / Loop ##
+
+RF 迴圈使用 :FOR 開頭作為迴圈迭代變數設定, 下一行以 \ 開頭作為重複執行內容 (相當是 block)
+
+	# loop for list
+	${list}=  Create List  A  B  C
+	:FOR  ${element}  IN  @{lists}
+	\  Log  ${element}
+
+	# loop for dictionary
+	${dic}=  Create Dictionary  Jun=1  Feb=2
+	${items}=  Get Dictionary Items  ${dic}
+	:FOR  ${key}  ${value}  IN  @{items}
+	\  Log  ${key}->${value}
+
+
+## 函數 / Function ##
+
+RF 基本上沒有函數只有關鍵字(Keyword), 所有 Keyword 都定義在 Keyword section
+
+	*** Keywords ***
+	My Keyword1
+	    Log  Hi RF
+
+	My Keyword2
+	[Arugment]  ${arg}
+	    Log  Hi, ${arg}
+
+	My Keyword3 ${who}
+	    Log  Hi ${who}
+
+	My Keyword4
+	    Log  Hi RF
+	    [Return]  Hi RF
+
+Keyword 帶參數 (argument) 有兩種方式, 一種是在 keyword 內使用 [Arugment] 宣告變數 (範例 My Keyword2); 另一種在宣告 keyword 名稱時就將參數當名稱 (範例 My Keyword3), 但是該參數名稱不能在 keyword name 開頭.
+
+Keyword 回傳值 (return) 只需要在結尾處使用 [Return] 即可 (範例 My keyword4).
+
+`Loop and keyword example`
 
 	*** Settings ***
 	Library     Collections
 
 	*** Variables ***
 	${var1}=  ${False}
-	${var2}=  ${True}
+	${var2}  ${True}
 
 	*** Keywords ***
 	String Join
@@ -163,11 +215,10 @@ robot 變數命名是不區分大小寫, 一個空格 兩個空格
 	   ${arg}=  String Join
 	   Log  run cmd ${arg}
 
-單一 \ 且在行首, 表示, \ \ 表示 white space (空白字元), ... 表示連接前面 statement 的換行
+\ \ 表示 white space (空白字元), ... 表示連接前面 statement 的換行
 
------------------------------
 
-### 範例 ###
+## 範例 / Example ##
 
 以下為一個簡單的執行範例, 主要的測試檔案為 test.robot, 但是會另外載入 RF 格式的使用者定義 Keywords `UserDefineRF.robot`, Python 格式的使用者定義 module `UserDefinePython.py` 和 RF 格式的變數檔案 Variables `RFVar.txt`. 在執行是會讀取以 Python 格式訂的變數檔案.
 
@@ -220,7 +271,10 @@ run RF
 
 -----------------------------
 
-### Run Command ###
+# Library #
+
+
+## Run Command ##
 
 因為 RF 並不會確認執行指令的正確於否, 所以當指令有可能執行失敗, 最好使用 Return Code 去判斷. (在 Shell 中, RC=0 為執行成功, RC!=0 為執行失敗); 同理, 在判斷 Python 程式執行時, 除了 Exception 之外, 其餘都視為正常結果.
 
@@ -272,9 +326,7 @@ run RF
 	    Run Python With Different Type
 
 
------------------------------
-
-### SSHLibrary ###
+## SSHLibrary ##
 
 RF 本身也提供 SSHLibary (底層使用 paramiko module), 方便開發使用 SSH 的 test case.
 使用會載入 SSHLibrary, 需要先安裝 robotframework-sshlibrary (使用 pip 安裝即可). 注意不要安裝 2.0 之前的版本, 因為 keyword 差異.
@@ -321,9 +373,8 @@ RF 本身也提供 SSHLibary (底層使用 paramiko module), 方便開發使用 
 	    Run ls abc Command With RC
 	    SSH Logout
 
------------------------------
 
-### Selenium ###
+## Selenium ##
 
 使用會載入 Selenium2Library, 需要先安裝 robotframework-selenium2library (使用 pip 安裝即可). 注意不要安裝 robotframework-seleniumlibrary, 因為 locator 語法有差異.
 [Selenium2Library](http://rtomac.github.io/robotframework-selenium2library/doc/Selenium2Library.html) 有簡易的說明文件可以參考, 主要是說明 Keywords 和 Locators 使用, 而 Locators 可以參考 [Locators_table_1_0_2.pdf](http://www.cheat-sheets.org/saved-copy/Locators_groups_1_0_2.pdf) [Locators_table_1_0_2.pdf](http://www.cheat-sheets.org/saved-copy/Locators_table_1_0_2.pdf)
@@ -360,7 +411,7 @@ RF 本身也提供 SSHLibary (底層使用 paramiko module), 方便開發使用 
 
 -----------------------------
 
-### Reference ###
+# Reference #
 
 [ROBOT FRAMEWORK](http://robotframework.org/)
 
