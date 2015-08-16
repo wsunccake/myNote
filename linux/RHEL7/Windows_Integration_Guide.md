@@ -1,3 +1,111 @@
+# Single Linux machine join Windows workgroup #
+
+
+## window net command ##
+
+| option 			 | description 											 |
+| ------------------ | ----------------------------------------------------- |
+| net view 			 | 顯示域列表, 電腦列表或指定電腦的共享資源列表 					 |
+| net config 		 | 顯示當前執行的可配置服務或顯示並更改某項服務的設定 			 |
+| net localgroup 	 | 增加, 顯示或更改本機組 									 |
+| net group 		 | 在 Windows NT Server 域中增加、顯示或更改全局組 			 |
+| net user 			 | 增加或更改用戶帳號或顯示用戶帳號信息 						 |
+| net accounts 		 | 更新用戶帳號資料庫, 更改密碼及所有帳號的登入要求 				 |
+| net use 			 | 連接電腦或中斷連線電腦與共享資源的連接, 或顯示電腦的連接信息 	 |
+| net share 		 | 新增, 刪除或顯示共享資源 									 |
+| net print 		 | 顯示或控制列印作業及列印貯列 								 |
+| net time 			 | 使電腦的時間與另一台電腦或域的時間同步 						 |
+| net start 		 | 啟動服務, 或顯示已啟動服務 								 |
+| net stop 			 | 停止服務 												 |
+| net continue 		 | 重新啟動掛起的服務 										 |
+| net pause 		 | 暫停正在執行的服務 										 |
+| net statistics 	 | 顯示本機服務統計記錄 									 |
+| net session 		 | 列出或中斷連線本機電腦和與之連接的客戶端的 					 |
+| net send 			 | 向網路的其他用戶, 電腦或通信名傳送消息 						 |
+| net name 			 | 增加或刪除消息名( 有時也稱別名), 或顯示電腦接收消息的名稱列表 	 |
+| net computer 		 | 從域資料庫中增加或刪除電腦 								 |
+
+
+### net view ##
+
+	C:\windows> net view /all
+	C:\windows> net view # 顯示 workgroup 中的 member
+	C:\windows> net view \\machaine # 顯示 machine
+	C:\windows> net view //domain:workgroup # 顯示 machine
+
+
+### net config ###
+
+	C:\windows> net config workstation # 顯示工作站配置
+	C:\windows> net config server # 顯示伺服器配置
+
+
+### net localgroup ###
+### net group ###
+
+### net user ###
+
+	C:\windows> net user # 顯示本機所有使用者
+	C:\windows> net user newuser * /add # 新增使用者
+	C:\windows> net user newuser /delete # 刪除使用者
+	C:\windows> net user newuser * # 改密碼
+	C:\windows> net user guest /active:no # 禁用帳號
+	C:\windows> net user guest /active:yes # 啟用帳號
+
+
+### net accounts ###
+### net use ###
+
+	C:\windows> net use # 顯示已掛載 shared folder
+	C:\windows> net use Z: \\machaine\sharename # 掛載 shared folder
+	C:\windows> net use /delelte # 卸載 shared folder
+
+
+### net share ###
+
+	C:\windows> net share # 顯示所有 shared folder
+	C:\windows> net share sharename # 顯示 shared folder 設定
+	C:\windows> net share sharename=Z:\shared_folder /grant:user,read|change|full # 新增 shared folder
+	C:\windows> net share sharename /delete # 刪除 shared folder
+
+### net print ###
+### net time ###
+
+	C:\windows> net time \\ntp_server
+
+
+### net start ###
+
+	C:\windows> net start
+	C:\windows> net start "Theme"
+
+
+### net stop ###
+
+	C:\windows> net stop "Theme"
+
+`sc`
+
+sc 比 net start / stop 更
+
+	C:\windows> sc query
+	C:\windows> sc query Theme
+
+	C:\windows> sc start Theme
+	C:\windows> sc stop Theme
+
+### net continue ###
+
+
+## 免帳密 / 匿名 / guest 分享資料 ##
+
+	C:\w1> net user guset /active:yes
+	C:\w1> net share sharename=Z:\shared_folder /grant:everyone,read
+
+	C:\w2> net view \\w1
+	C:\w2> net use \\w1\sharename
+
+
 # Single Linux machaine join Windows AD domain #
 
 

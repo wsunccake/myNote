@@ -114,3 +114,23 @@ Change advanced sharing settings
 
 Mac 連接 Windows SMB
 smbutil view [connection options] //[domain;][user[:password]@]server
+
+
+# Creating and Managing User Accounts #
+
+## Local User Account ##
+
+`GUI`
+
+	mmc -> Computer Management
+	\Local Users and Groups\Users
+
+`CLI`
+	# local user
+	net user new_user /add # 新增使用者
+	net user new_user * # 設定密碼
+	net user new_user /del # 刪除使用者
+	net user SRed Skyisblue2013 /fullname: “Steve Red” /comment: “Manager of the server team” /logonpasswordchg:yes /add
+
+	# ad user
+	dsadd user “CN=Steve Red,OU=Users,OU=BigFirm,DC=bigfirm,DC=com” -samid SRed -upn SRed@bigfirm.com -fn Steve -ln Red -display “Steve Red” -pwd Mydogisblu3 -mustchpwd yes
