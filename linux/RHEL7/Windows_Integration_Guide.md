@@ -1,7 +1,13 @@
 # Single Linux machine join Windows workgroup #
 
 
-## window net command ##
+## Environment ##
+
+RHEL (rhel)	 --------- 	 Widows Server (ws)
+192.168.0.10 			 192.168.0.20
+
+
+## Windows net command ##
 
 | option 			 | description 											 |
 | ------------------ | ----------------------------------------------------- |
@@ -84,15 +90,6 @@
 
 	C:\windows> net stop "Theme"
 
-`sc`
-
-sc 比 net start / stop 更
-
-	C:\windows> sc query
-	C:\windows> sc query Theme
-
-	C:\windows> sc start Theme
-	C:\windows> sc stop Theme
 
 ### net continue ###
 
@@ -104,6 +101,90 @@ sc 比 net start / stop 更
 
 	C:\w2> net view \\w1
 	C:\w2> net use \\w1\sharename
+
+
+## Samba Server ##
+
+
+### package ###
+
+	rhel:~ # yum install samba
+
+
+### configuration ###
+
+	rhel:~ # cat /etc/samba/smb.conf 
+	[global] 
+	        netbios name = workgroup
+	        workgroup = Workgroup
+	        security = share # user, server, domain, share 四選一
+	        server string = Samba %v
+	        wins support = Yes
+	[netlogon] 
+	        path = /tmp/share
+	        comment = temp dir
+	        browseable = Yes
+	        read only = Yes
+	        public = Yes
+
+	rhel:~ # cat /etc/samba/lmhosts
+	192.168.0.20       ws
+	192.168.0.10       rhel
+
+
+	rhel:~ # systemctl enable smb.service
+	rhel:~ # systemctl start smb.service
+
+### test ###
+
+	net -l share -S samba_server
+	net -l user -S samba_server
+
+	nmblookup hostname
+
+	pdbedit -a new_user
+	pdbedit -v -L new_user
+
+	rpcclient
+
+	smbcacls //server/share filename
+	smbcontrol -i
+	smbpasswd
+	smbspool
+	smbstatus
+	smbtar
+
+	testparm
+
+	wbinfo
+
+## Samba Client ##
+
+
+### package ###
+
+	rhel:~ # yum install smbclient cifs-utils
+
+
+### cli & confiugration ###
+
+	# view shared folder
+	rhel:~ # smbclient [-U Aministrator[%password]] -L samba_server
+
+	# method 1: use smbclient cmd for user
+	rhel:~ # smbclient [-U Administrator[%password]] //samba_server/Users
+
+	# method 2: use mount utils for root
+	rhel:~ # mount -t cifs -o user=Administrator,pass='password' //samba_server/Users /mnt/smb
+
+	# method 3: use mount fstab for root
+	rhel:~ # cat /etc/smb_info
+	username=Administrator
+	password=password
+	rhel:~ # cat /etc/fstab
+	\\\\samba_server\\Users    /mnt/smb    cifs    credentials=/etc/smb_info,uid=5000,gid=6000    0    0
+	rhel:~ # mount -a
+
 
 
 # Single Linux machaine join Windows AD domain #

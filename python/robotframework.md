@@ -154,7 +154,7 @@ RF 變數命名是不區分大小寫, 一個空格 兩個空格
 RF 迴圈使用 :FOR 開頭作為迴圈迭代變數設定, 下一行以 \ 開頭作為重複執行內容 (相當是 block)
 
 	# loop for list
-	${list}=  Create List  A  B  C
+	${lists}=  Create List  A  B  C
 	:FOR  ${element}  IN  @{lists}
 	\  Log  ${element}
 
@@ -196,6 +196,7 @@ Keyword 回傳值 (return) 只需要在結尾處使用 [Return] 即可 (範例 M
 	*** Variables ***
 	${var1}=  ${False}
 	${var2}  ${True}
+	@{lists}   A  B  C  D
 
 	*** Keywords ***
 	String Join

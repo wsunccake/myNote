@@ -12,12 +12,12 @@
 	client / server
 
 
-## 啟動 ##
+## 啟動 / boot ##
 
 開機時, 按 F8 將進入 "進階開機選單" (或是使用 bcdedit.exe)
 
 
-## 關機 ##
+## 關機 / shutdown ##
 
 	PS C:\Users\Administrator> logon.exe # 登出
 	PS C:\Users\Administrator> shutdown.exe /s # 關機
@@ -26,7 +26,7 @@
 	PS C:\Users\Administrator> Stop-Computer # 關機
 
 
-## 電腦名稱 ##
+## 電腦名稱 / hostname ##
 
 	PS C:\Users\Administrator> HOSTNAME.EXE # 顯示當前主機名稱
 
@@ -34,29 +34,29 @@
 	PS C:\Users\Administrator> netdom.exe renamecomputer old_hostname /newname:new_hostname # 改變主機名稱
 
 
-## 使用者 ##
+## 使用者 / user ##
 
 	PS C:\Users\Administrator> whoami.exe # 顯示當前使用者
 	PS C:\Users\Administrator> whoami.exe /all # 顯示當前使用者所有資訊
 	PS C:\Users\Administrator> runas.exe /user:Administrator powershell # 以 Administrator 權限執行
 
 
-## 改密碼 ##
+## 改密碼 / password ##
 
 	PS C:\Users\Administrator> net.exe user user * # 改密碼
 
 
-## 序號 ##
+## 序號 / serial number ##
 
 	PS C:\Users\Administrator> Dism.exe /Online /Get-CurrentEdition # 顯示當前版本
 	PS C:\Users\Administrator> Dism.exe /Online /Get-TargetEditions # 可設定之版本
 	PS C:\Users\Administrator> Dism.exe /online /Set-Edition:ServerStandard /ProductKey:M98WF-NY2PP-73243-PC8R6-V6B4Y /AcceptEula # 改序號
 
 
-# 網路設定 #
+# 網路設定 / network #
 
 
-## 網卡設定 ##
+## 網卡設定 / nic ##
 
 APIPA(Automatic Private IP Addressing) 169.254.0.0/16
 
@@ -85,19 +85,19 @@ APIPA(Automatic Private IP Addressing) 169.254.0.0/16
 	Set-NetIPInterface
 
 
-## 防火牆 ##
+## 防火牆 / firewall ##
 
 	PS C:\Users\Administrator> netsh.exe firewall show # 顯示防火牆設定
 	PS C:\Users\Administrator> netsh.exe advfirewall show currentprofile
 
 
-## 網路位置 ##
+## 網路位置 / network location ##
 
 	PS C:\Users\Administrator> Get-NetConnectionProfile # 顯示當前網路位置
 	PS C:\Users\Administrator> Set-NetConnectionProfile -NetworkCategory Public|Private
 
 
-## 網域 ##
+## 網域 / domain ##
 
 	PS C:\Users\Administrator> netdom.exe join machine /Domain: contoso.com /UserD:contoso\administrator /PasswordD:* # 加入網域
 	PS C:\Users\Administrator> netdom.exe join machine /Domain: contoso.com /UserD:contoso\administrator /PasswordD:* /REBoot # 加入網域後自動重開機
@@ -140,10 +140,10 @@ APIPA(Automatic Private IP Addressing) 169.254.0.0/16
 	PS C:\Users\Administrator> net.exe share myshare=C:\Users\shared_folder
 
 
-# 使用者 / 群組 #
+# 使用者 / 群組 / user / group #
 
 
-## Guest 帳號 ##
+## Guest 帳號 / guest account ##
 
 	PS C:\Users\Administrator> net.exe user guest # 顯示帳號狀態
 	PS C:\Users\Administrator> net.exe user guest /ACTIVIE:YES # 啟用 Guest 帳號
@@ -152,7 +152,7 @@ APIPA(Automatic Private IP Addressing) 169.254.0.0/16
 	PS C:\Users\Administrator> net.exe user guest "" # 移除密碼
 
 
-## 帳號管理 ##
+## 帳號管理 / user account management ##
 
 windows 的帳號主要是以 SID 作為區別
 
@@ -163,7 +163,7 @@ windows 的帳號主要是以 SID 作為區別
 	PS C:\Users\Administrator> WMIC.exe useraccount where "Name='new_user'" get SID
 
 
-## 群組 ##
+## 群組 / group ##
 
 localgroup 和 group 不一樣, localgroup 指的是本機上的 (localhost) group, group 指的是網域上的 (domain/realm) group
 
@@ -174,15 +174,37 @@ localgroup 和 group 不一樣, localgroup 指的是本機上的 (localhost) gro
 	PS C:\Users\Administrator> net.exe localgroup new_group new_user /delete # 將使用者從群組中移除
 
 
+## 群組原則 / GPO (Group Policy Objects) ##
+
+	gpresutl.exe /V
+	gpresutl.exe /R
+	gpresutl.exe /Z	
+
+
+	gpupdate.exe
+
+
+	PS C:\Users\Administrator> gpedit.msc
+
+
 # 檔案管理 #
 
-	PS C:\Users\Administrator> cacls
-	PS C:\Users\Administrator> icacls
+	PS C:\Users\Administrator> cacls.exe
+	PS C:\Users\Administrator> icacls.exe
 
 
 # 安裝 #
 
-# 磁碟 #
+## Feature ##
+
+	PS C:\Users\Administrator> import-module Servermanager
+	PS C:\Users\Administrator> Get-WindowsFeature | more # 顯示已安裝 service
+	PS C:\Users\Administrator> Install-WindowsFeature –Name Web-Ftp-Server -Restart # 安裝 service
+	PS C:\Users\Administrator> Get-WindowsFeature | findstr \I ftp
+	PS C:\Users\Administrator> Remove-WindowsFeature Web-Ftp-Server -Restart # 移除 service
+
+
+# 磁碟 / Disk #
 
 	PS C:\Users\Administrator> diskpart.exe
 	DISKPART> list disk
