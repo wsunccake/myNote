@@ -22,7 +22,7 @@
 	rhel:~ # docker info
 	rhel:~ # docker run -it ubuntu /bin/bash # 啟用 ubuntu image 的 container, i: inter active mode, t: terminal
 	rhel:~ # docker run -it --name my_ubuntu ubuntu /bin/bash # 指令 container name
-	rhel:~ # docker run -itdP ubuntu /bin/bash # d: background mode, P: 開放 port forwading
+	rhel:~ # docker run -itdP ubuntu /bin/bash # d: background mode, P: 開放 container port forwading (當 image 有先定義 EXPOSE 才會有效)
 
 	rhel:~ # docker exec container_id /bin/sh # 在 host 端送 command 到 container 端執行
 
@@ -81,6 +81,41 @@
 
 從 dockerfile 產生
 
+	rhel:~ # mkdir test_img
+	rhel:~ # cd test_img/
+	rhel:~/test_img # cat Dockerfile
+	# FROM  image  指定 image
+	# FROM  image:tag
+	FROM  busybox
+
+	# MAINTAINER  指定維護者資訊
+	MAINTAINER  user@com
+
+	# RUN  cmd  指定建構 image 時執行動作
+	# RUN  ["cmd1", "cmd2", ...]
+	RUN  echo "Hello World"
+	RUN  date
+
+	# CMD  cmd param1 param2 ...  指定啟動 container 時的動作, param 可以省略.只能出現一次, 若多次, 以最後一次為主
+	# CMD  ["cmd", "param1", ...]
+	CMD /bin/sh
+
+	# ENTRYPOINT  cmd param1 param2 ...
+	# ENTRYPOINT  ["cmd", "param1", ...]
+
+	# EXPOSE 22 53/udp 80/tcp  指定 container 對外開放的 port
+	EXPOSE  22 80 9000
+
+	# ENV
+	# ADD
+	# COPY
+	# VOLUME
+	# USER
+	# WORKDIR
+	# ONBUILD
+
+	rhel:~/test_img # docker build -t test_image .
+	rhel:~/test_img # docker images test_image
 
 `import / export, save / load`
 
@@ -128,6 +163,7 @@
 
 ## Dokcer Network ##
 
+docker 在設定 port forwarding 時使用 iptables, 但 RHEL 7 預設的防火牆 firewalld 可能會有問題, 目前建議換成 iptables 或是關掉 firewalld. 在 docker run -P 的使用上, 會隨機將 container 上的 EXPOSE port 對應到 host 上的 49000 ~ 49900 port
 
 `port`
 
@@ -154,7 +190,12 @@
 
 `link`
 
-container 和 container 之間可以透過 link 方式互相
+同一台 host 之間的 container 可透過 link 方式互相
+
+	rhel:~ # docker run -d --name db training/postgres
+	rhel:~ # docker run -d -P --name web --link db:db training/webapp python app.py
+	rhel:~ # docker inspect -f "{{ .HostConfig.Links }}" web
+
 
 ## Docker Hub / Registry ##
 
