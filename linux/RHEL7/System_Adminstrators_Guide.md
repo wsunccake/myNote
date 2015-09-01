@@ -1,4 +1,3 @@
-
 # localectl #
 
 	rhel:~ # localectl status
@@ -261,7 +260,8 @@ YUM 使用 SQLite 存放在 /var/lib/yum/history/ 目錄下
 
 ## repository config ##
 
-	rhel:~ # cat /etc/yum.repo.d/example.repo
+	rhel:~ # cp /media/media.repo /etc/yum.repo.d/.
+	rhel:~ # cat /etc/yum.repo.d/media.repo
 	[InstallMedia]
 	baseurl=file:///mnt/rhel-server
 	name=Red Hat Enterprise Linux 7.1
@@ -270,7 +270,13 @@ YUM 使用 SQLite 存放在 /var/lib/yum/history/ 目錄下
 	gpgcheck=0
 	cost=500
 
-
+	centos:~ # cat /etc/yum.repo.d/dvd.repo
+	[DVDMedia]
+	name=Local Repository
+	baseurl=file:///cdrom
+	enabled=1
+	gpgcheck=1
+	gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 
 ## Config ##
 
