@@ -1,6 +1,7 @@
 # Groovy #
 
-## install ##
+
+## Install ##
 
 Groovy 可以使用 RPM, DPKG 等系統內建套件直接安裝, 但建議使用 GVM (Groovy enVironment Manager) 安裝管理. 因為 Groovy 會使用到 Java, 須先安裝 JDK (Java Development Kit)
 
@@ -91,4 +92,28 @@ GVM 是 groovy 環境管理工具, 用來安裝設定 groovy 或其他工具
 
 	println "groovy -v".execute().text
 
-gradle build distZip
+
+# Gradle #
+
+
+## Install ##
+
+	# 使用 gvm 安裝
+	Linux:~ # gvm install gradle
+
+	# 確認環境變數
+	Linux:~ $ echo $JAVA_HOME
+	Linux:~ $ echo $GRADLE_HOME
+
+	# 測試
+	Linux:~ $ cat build.gradle
+	task hello {
+		println "Hello"
+	}
+	Linux:~ $ gradle -q hello
+
+## Command ##
+
+	Linux:~ $ gradle tasks
+	Linux:~ $ gradle build
+	Linux:~ $ gradle distZip

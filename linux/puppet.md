@@ -168,7 +168,7 @@ Puppet master 和 agent 間的通訊使用 SSL, 所以要設定 certificate. 預
 
 	# 建立測試檔案
 	master:~ # cat /etc/puppet/manifests/site.pp
-	node default { file { "/tmp/$hostname.txt": content => "Hello Puppet";} }
+	node default { file { "/tmp/$hostname.txt": content => "Hello Puppet"; } }
 
 	master:~ # puppet cert list # list uncert agent
 	master:~ # puppet cert sign agent.test.com # sign agent
@@ -273,6 +273,78 @@ Puppet master 和 agent 間的通訊使用 SSL, 所以要設定 certificate. 預
 ## configuration ##
 
 
+### command ###
+
+常用指令
+
+`help`
+
+	puppet:~ # puppet help
+	puppet:~ # puppet help master
+
+
+`master`
+
+	master:~ # puppet master --getconfig
+	master:~ # puppet master --no--daemonize --debug
+
+
+`agent`
+
+	agent:~ # puppet agent --server=master.test.com --test
+	agent:~ # puppet agent --noop # dry-run, no-op
+
+
+`apply`
+
+apply 功能上跟 agent 一樣, 只是使用 apply 僅在 puppet agent 上執行, 而 agent 是 puppet agent 向 puppet master
+
+	master:~ # cat /etc/puppet/modules/foo/manifests/init.pp
+	class test { file { "/tmp/$hostname.txt": content => "Hello Puppet"; } }
+
+	master:~ # puppet apply /etc/puppet/modules/foo/manifests/init.pp
+
+
+	master:~ # puppet master --compile agent.test.com > agent.test.com.json
+	master:~ # scp agent.test.com.json agent.test.com:~/
+
+	agent:~ # puppet apply --catalog agent.auto.com.json
+
+
+`cert`
+
+	master:~ # puppet cert list
+	master:~ # puppet cert list --all
+	master:~ # puppet cert sign agent.test.com
+	master:~ # puppet cert clean agent.test.com
+
+
+`kick`
+
+	mater:~ # puppet kick
+
+
+`parser`
+
+確認設定檔
+
+	master:~ # cat /etc/puppet/manifests/site.pp 
+	node default { file { "/tmp/$hostname.txt": content => "Hello Puppet\n"; } }
+	master:~ # puppet parser validate /etc/puppet/manifests/site.pp
+
+
+`resource`
+
+	master:~ # puppet resource --type
+	master:~ # puppet resource package mlocate # 顯示目前系統 package 設定
+	master:~ # puppet resource user root # 顯示目前系統 user 設定
+
+
+`describe`
+
+	master:~ # puppet describe --list
+
+
 ### module ###
 
 	master:~ # mkdir -p /etc/puppet/modules/foo/{files,manifests,templates}
@@ -292,6 +364,10 @@ Puppet master 和 agent 間的通訊使用 SSL, 所以要設定 certificate. 預
 	├── params.pp
 	└── service.pp
 
+
+### node ###
+
+	msater:~ # tree /etc/puppet/manifests/site.pp
 
 
 ## update mode ##
@@ -316,3 +392,5 @@ Puppet master 和 agent 間的通訊使用 SSL, 所以要設定 certificate. 預
 * [Puppet 運維實戰](http://kisspuppet.gitbooks.io/puppet/content)
 
 * [Puppet 實戰](http://www.m.sanmin.com.tw/Product/index/99M155F6c102e39c109H72T108R127CAIuHGm513IbM)
+
+* [Puppet Tutorial](http://www.example42.com/tutorials/PuppetTutorial/)
