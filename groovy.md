@@ -61,36 +61,137 @@ GVM 是 groovy 環境管理工具, 用來安裝設定 groovy 或其他工具
 
 ## Groovy for Java ##
 
-`Hello1.groovy`
+
+### print, for, foreach ###
+
+`Hello.java`
 
 	public class Hello1 {
-		public static void main(String[] args) {
-			for(int i =0; i < 3; i++) {
-				System.out.println("i = " + i);
-			}
-		}
+	    public static void main(String[] args) {
+	        for(int i =0; i < 3; i++) {
+	            System.out.println("i = " + i);
+	        }
+	        for(int i: j) {
+	            System.out.println("i = " + i);
+	        }
+	    }
 	}
 
-`Hello2.groovy`
+
+`Hello.groovy`
 
 	for(int i = 0; i < 3; i++) {
-		System.out.println("i = " + i);
+	    System.out.println("i = " + i);
 	}
-
-`Hello3.groovy`
 
 	for(i in 0..2) {
-		println("i = " + i)
+	    println("i = " + i)
 	}
-
-`Hello4.groovy`
 
 	0.upto(2) { println "i = ${it}" }
 	3.times { println "i = $it" }
 
-`Execute.groovy`
 
-	println "groovy -v".execute().text
+### execution ###
+
+`RunShell.java`
+
+	import java.io.BufferedReader;
+	import java.io.IOException;
+	import java.io.InputStreamReader;
+
+	public class RunShell {
+	    public static void main(String[] args) {
+	        try {
+	            Process proc = Runtime.getRuntime().exec("ls");
+	            BufferedReader result = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+	            String line;
+	            while ((line = result.readLine()) != null) {
+	            System.out.println(line);
+	            }
+	        }
+	        catch(IOException ex) {
+	            ex.printStackTrace();
+	        }
+	    }
+	}
+
+
+`RunShell.groovy`
+
+	println "ls".execute().text
+
+
+### self-navigation ###
+
+	def foo1(String str) {
+	    if (str != null) { str.reverse() }
+	}
+	println(foo1("abc"))
+	println(foo1())
+
+	def foo2(str) {
+	    str?.reverse() # 同上
+	}
+	println(foo2("abc"))
+	println(foo2())
+
+
+### getter, setter ###
+
+`JavaCar.java`
+
+	public class JavaCar {
+	    private int miles = 0;
+	    private final int year;
+
+	    public JavaCar(int initYear) { this.year = initYear; }
+	    public int getMiles() { return this.miles; }
+	    private void setMiles(int miles) { this.miles = miles; }
+	    public int getYear() { return this.year; }
+	    private void drive(dist) { if (dist > 0) this.miles += dist;}
+
+	    public static void main(String[] args) {
+	        JavaCar car = new JavaCar(2000);
+	        System.out.println("Year: " + car.getYear());
+	        System.out.println("Miles: " + car.getMiles());
+	        car.drive(10);
+	        System.out.println("Miles: " + car.getMiles());
+	    }
+	}
+
+`GroovyCar`
+
+	class GroovyCar {
+	    final year
+	    private miles = 0
+
+	    GroovyCar(initYear) { year = initYear}
+	    def getMiles() { return miles}
+	    private void setMiles(miles) {
+	        throw new IllegalAccessException("you're not allow to be change miles")
+	    }
+	    def drive(dist) { if (dist > 0) miles += dist }
+
+	    public static void main(String[] args) {
+	        def car = new GroovyCar(2000)
+	        println "Year: $car.year"
+	        println "Miles: $car.miles"
+	        car.drive(10)
+	        println "Miles: $car.miles"
+	    }
+	}
+
+
+| keyword 	 | get 	 | set 	 | 
+| ---------- | ----- | ----- |
+| final 	 | o 	 | 		 |
+| public 	 | o 	 | o 	 |
+| private 	 |  	 | 		 |
+
+
+### named parameter ###
+### optional parameter ###
 
 
 # Gradle #
@@ -108,7 +209,7 @@ GVM 是 groovy 環境管理工具, 用來安裝設定 groovy 或其他工具
 	# 測試
 	Linux:~ $ cat build.gradle
 	task hello {
-		println "Hello"
+	    println "Hello"
 	}
 	Linux:~ $ gradle -q hello
 
