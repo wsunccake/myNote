@@ -66,12 +66,13 @@ GVM 是 groovy 環境管理工具, 用來安裝設定 groovy 或其他工具
 
 `Hello.java`
 
-	public class Hello1 {
+	public class Hello {
 	    public static void main(String[] args) {
-	        for(int i =0; i < 3; i++) {
+	        for (int i =0; i < 3; i++) {
 	            System.out.println("i = " + i);
 	        }
-	        for(int i: j) {
+	        int[] j = {1, 2, 3}
+	        for (int i : j) {
 	            System.out.println("i = " + i);
 	        }
 	    }
@@ -80,11 +81,16 @@ GVM 是 groovy 環境管理工具, 用來安裝設定 groovy 或其他工具
 
 `Hello.groovy`
 
-	for(int i = 0; i < 3; i++) {
+	for (int i = 0; i < 3; i++) {
 	    System.out.println("i = " + i);
 	}
 
-	for(i in 0..2) {
+	int[] j = [1, 2, 3]
+	for (int i : j) {
+	    println "i: $i"
+	}
+
+	for (i in 0..2) {
 	    println("i = " + i)
 	}
 
@@ -191,8 +197,53 @@ GVM 是 groovy 環境管理工具, 用來安裝設定 groovy 或其他工具
 
 
 ### named parameter ###
-### optional parameter ###
 
+`Robot.groovy`
+
+	class Robot {
+	    def type, height, width, price
+	    def info() {
+	        println "robot type: $type, H: $height, W: $width, P: $price"
+	    }
+
+	    def access(location, weight, fragile) {
+	        println "fragile: $fragile, weight: $weight, location: $location"
+	    }
+	    def mAccess(Map location, weight, fragile) {
+	        println "fragile: $fragile, weight: $weight, location: $location"
+	    }
+	    def dAccess(x=1, y=2, z=3) {
+	        println "x: $x, y: $y, z: $z"
+	    }
+
+	    def task(job, String[] items) {
+	        println "$job item(s):"
+	        items.each {
+	            println "$it"
+	        }
+	    }
+
+	    public static void main(String[] args) {
+	        def robot = new Robot(type: "ms", height: 10, width: 40) # constructor vairable
+	        robot.info()
+
+	        robot.access([x: 10, y: 20, z: 30], 50, true) # 為宣告型別的第一個 argument 會自動為 hash/dict/map
+	        robot.access(x: 10, y: 20, z: 30, 50, true) # 同上
+	        robot.access(50, true, [x: 10, y: 20, z: 30]) # 當 argument 中只有一個 map, 會自動變成第一個 argument
+	        robot.access(50, true, x: 10, y: 20, z: 30) 
+
+	        robot.mAccess([x: 10, y: 20, z: 30], 50, true)
+	        robot.mAccess(50, true, [x: 10, y: 20, z: 30])
+
+	        robot.dAccess() # default value argument
+	        robot.dAccess(3, 2, 1)
+
+	        robot.task("wash", "1: disk", "2: bowl", "3: stick") # 無限定 argument
+	    }
+	}
+
+
+### enum ###
 
 # Gradle #
 
