@@ -33,28 +33,30 @@ RobotFramework 是一套基於 Python 以驗收測試及 ATDD (Acceptance Test-D
 
 以下為 plain text 的範例
 
-	*** Settings ***
-	Library     OperatingSystem
-	Library     SSHLibrary  WITH NAME  SSH
+```
+*** Settings ***
+Library     OperatingSystem
+Library     SSHLibrary  WITH NAME  SSH
 
-	*** Variables ***
-	${HOST}  127.0.0.1
-	${USERNAME}  test
-	${PASSWORD}  test
+*** Variables ***
+${HOST}  127.0.0.1
+${USERNAME}  test
+${PASSWORD}  test
+*** Keywords ***
 
-	*** Keywords ***
-	SSH Login
-	    [Arguments]    ${host}=${HOST}  ${username}=${USERNAME}  ${password}=${PASSWORD}
-	    Open Connection  ${host}
-	    Login  ${username}  ${password}
+SSH Login
+    [Arguments]    ${host}=${HOST}  ${username}=${USERNAME}  ${password}=${PASSWORD}
+    Open Connection  ${host}
+    Login  ${username}  ${password}
 
-	*** Test Cases ***
-	Show Hostname
-	    SSH Login
-	    Write  hostname
-	    ${stdout}=  Read
-	    Log  ${stdout}
-	    Close Connection
+*** Test Cases ***
+Show Hostname
+    SSH Login
+    Write  hostname
+    ${stdout}=  Read
+    Log  ${stdout}
+    Close Connection
+```
 
 RF 檔案分四個部分 Settings, Variables, Keywords 和 Test Cases.
 
@@ -135,54 +137,68 @@ RF 檔案分四個部分 Settings, Variables, Keywords 和 Test Cases.
 
 RF 變數命名是不區分大小寫, 一個空格 兩個空格
 
-	${1}, ${2}, ${3}, ... # 整數
-	${Null}, ${None}, ${False}, ${True}
-	${null}, ${none}, ${false}, ${true}
-	${SPACE}, ${SPACE * 4} # 空格
-	${EMPTY}
-	${int1}=  Set Variable  ${1}    # 設定 int1 為 整數 1
-	${int1}=  Set Variable  1       # 設定 int1 為 字串 1
-	@{list1}=  Create List  A  B  C # 設定 array
-	Log  ${list1[0]}   # 顯示第一個 element
-	Log  ${list1[-1]}  # 顯示最後一個 element
-	${dic1}=  Create Dictionary  Jun=1  Feb=2 # 設定 dictionary
-	Log  ${dic1['Jun']}
+```
+${1}, ${2}, ${3}, ... # 整數
+${Null}, ${None}, ${False}, ${True}
+${null}, ${none}, ${false}, ${true}
+${SPACE}, ${SPACE * 4} # 空格
+${EMPTY}
 
+${int1}=  Set Variable  ${1}    # 設定 int1 為 整數 1
+${int1}=  Set Variable  1       # 設定 int1 為 字串 1
+
+@{list1}=  Create List  A  B  C # 設定 array
+Log  ${list1[0]}                # 顯示第一個 element
+Log  ${list1[-1]}               # 顯示最後一個 element
+Append To List  ${list1}  D     # 新增 element
+Remove From List  ${list1}  0   # 移除 element
+Log  ${list1}
+
+${dic1}=  Create Dictionary  Jun=1  Feb=2  # 設定 dictionary
+Log  ${dic1['Jun']}
+Set to Dictionary  ${dic1}  Mar  3         # 新增 key / value
+Remove From Dictionary  ${dic1}  Jun       # 移除 key / value
+Log  ${dic1}
+```
 
 ## 迴圈 / Loop ##
 
 RF 迴圈使用 :FOR 開頭作為迴圈迭代變數設定, 下一行以 \ 開頭作為重複執行內容 (相當是 block)
 
-	# loop for list
-	${lists}=  Create List  A  B  C
-	:FOR  ${element}  IN  @{lists}
-	\  Log  ${element}
+```
+# loop for list
+${lists}=  Create List  A  B  C
+:FOR  ${element}  IN  @{lists}
+\  Log  ${element}
 
-	# loop for dictionary
-	${dic}=  Create Dictionary  Jun=1  Feb=2
-	${items}=  Get Dictionary Items  ${dic}
-	:FOR  ${key}  ${value}  IN  @{items}
-	\  Log  ${key}->${value}
-
+# loop for dictionary
+${dic}=  Create Dictionary  Jun=1  Feb=2
+${items}=  Get Dictionary Items  ${dic}
+:FOR  ${key}  ${value}  IN  @{items}
+\  Log  ${key}->${value}
+```
 
 ## 函數 / Function ##
 
 RF 基本上沒有函數只有關鍵字(Keyword), 所有 Keyword 都定義在 Keyword section
 
-	*** Keywords ***
-	My Keyword1
-	    Log  Hi RF
 
-	My Keyword2
-	[Arugment]  ${arg}
-	    Log  Hi, ${arg}
+```
+*** Keywords ***
+My Keyword1
+    Log  Hi RF
 
-	My Keyword3 ${who}
-	    Log  Hi ${who}
+My Keyword2
+[Arugment]  ${arg}
+    Log  Hi, ${arg}
 
-	My Keyword4
-	    Log  Hi RF
-	    [Return]  Hi RF
+My Keyword3 ${who}
+    Log  Hi ${who}
+
+My Keyword4
+    Log  Hi RF
+    [Return]  Hi RF
+```
 
 Keyword 帶參數 (argument) 有兩種方式, 一種是在 keyword 內使用 [Arugment] 宣告變數 (範例 My Keyword2); 另一種在宣告 keyword 名稱時就將參數當名稱 (範例 My Keyword3), 但是該參數名稱不能在 keyword name 開頭.
 
@@ -190,31 +206,34 @@ Keyword 回傳值 (return) 只需要在結尾處使用 [Return] 即可 (範例 M
 
 `Loop and keyword example`
 
-	*** Settings ***
-	Library     Collections
 
-	*** Variables ***
-	${var1}=  ${False}
-	${var2}  ${True}
-	@{lists}   A  B  C  D
+```
+*** Settings ***
+Library     Collections
 
-	*** Keywords ***
-	String Join
-	    ${exclude_tags}=  Create List
-	    Run Keyword IF  ${var1} == ${True}  Append To List  ${exclude_tags}  string1
-	    Run Keyword IF  ${var2} == ${True}  Append To List  ${exclude_tags}  string2
-	    ${tag}=  Set Variable  ${None}
-	    :FOR  ${var}  IN  @{exclude_tags}
-	    \  ${tag}=  Run Keyword IF  '${tag}' == '${None}'  Set Variable  ${var}
-	       ...  ELSE  Set Variable  ${tag} OR ${var}
-	    ${tag}=  Run Keyword IF  '${tag}' != '${None}'  Set Variable  -e '${tag}'
-	    ...  ELSE  Set Variable  \ \
-	    [Return]  ${tag}
+*** Variables ***
+${var1}=  ${False}
+${var2}  ${True}
+@{lists}   A  B  C  D
 
-	*** Test Cases ***
-	Test1
-	   ${arg}=  String Join
-	   Log  run cmd ${arg}
+*** Keywords ***
+String Join
+    ${exclude_tags}=  Create List
+    Run Keyword IF  ${var1} == ${True}  Append To List  ${exclude_tags}  string1
+    Run Keyword IF  ${var2} == ${True}  Append To List  ${exclude_tags}  string2
+    ${tag}=  Set Variable  ${None}
+    :FOR  ${var}  IN  @{exclude_tags}
+    \  ${tag}=  Run Keyword IF  '${tag}' == '${None}'  Set Variable  ${var}
+       ...  ELSE  Set Variable  ${tag} OR ${var}
+    ${tag}=  Run Keyword IF  '${tag}' != '${None}'  Set Variable  -e '${tag}'
+    ...  ELSE  Set Variable  \ \
+    [Return]  ${tag}
+
+*** Test Cases ***
+Test1
+   ${arg}=  String Join
+   Log  run cmd ${arg}
+```
 
 \ \ 表示 white space (空白字元), ... 表示連接前面 statement 的換行
 
@@ -225,45 +244,50 @@ Keyword 回傳值 (return) 只需要在結尾處使用 [Return] 即可 (範例 M
 
 [`UserDefineRF.robot`](./example/rf1/UserDefineRF.robot)
 
-	*** Keywords ***
-	RF Say
-	    [Arguments]  ${words}
-	    Log  ${words}
-
+```
+*** Keywords ***
+RF Say
+    [Arguments]  ${words}
+    Log  ${words}
+```
 
 [`UserDefinePython.py`](./example/rf1/UserDefinePython.py)
 
-	def py_say(words):
-	    print words
-
+```
+def py_say(words):
+    print words
+```
 
 [`RFVar.txt`](./example/rf1/RFVar.txt)
 
-	*** Variables ***
-	${rf_words}=  Hello Robotframework
-
+```
+*** Variables ***
+${rf_words}=  Hello Robotframework
+```
 
 [`var.py`](./example/rf1/var.py)
 
-	py_words = 'Hello Python'
-
+```
+py_words = 'Hello Python'
+```
 
 [`test.robot`](./example/rf1/test.robot)
 
-	*** Settings ***
-	Library     OperatingSystem
-	Library     UserDefinePython
-	Resource    UserDefineRF.robot
-	Resource    RFVar.txt
+```
+*** Settings ***
+Library     OperatingSystem
+Library     UserDefinePython
+Resource    UserDefineRF.robot
+Resource    RFVar.txt
 
-	*** Test Cases ***
-	Say Somethings
-	    Log  Hi
-	    RF Say  Hi Robotframe
-	    RF Say  ${rf_words}
-	    Py Say  Hi Python
-	    Py Say  ${py_words}
-
+*** Test Cases ***
+Say Somethings
+    Log  Hi
+    RF Say  Hi Robotframe
+    RF Say  ${rf_words}
+    Py Say  Hi Python
+    Py Say  ${py_words}
+```
 
 run RF
 
@@ -281,50 +305,54 @@ run RF
 
 [`UserDefined.py`](./example/rf2/UserDefined.py)
 
-	def intAdd(a1, a2):
-	    if type(a1) != type(a2):
-	        raise TypeError('type different')
-	    return a1 + a2
+```
+def intAdd(a1, a2):
+    if type(a1) != type(a2):
+        raise TypeError('type different')
+    return a1 + a2
+```
 
 [`test.robot`](./example/rf2/test.robot)
 
-	*** Settings ***
-	Library     OperatingSystem
-	Library     UserDefined
-	
-	
-	*** Keywords ***
-	Run Error Command Without Check Return Code
-	    [Arguments]  ${cmd}=ls /abc
-	    ${result}=  Run  ls /abc
-	    Log  result:${result}
-	
-	Run Error Command With Check Return Code
-	    [Arguments]  ${cmd}=ls /abc
-	    ${rc}  ${result}=  Run and Return RC and Output  ls /abc
-	    Log  result:${result} rc: ${rc}
-	    Should Be True  ${rc} == 0
-	
-	Run Python Without Check
-	    intAdd  4  9
-	
-	Run Python With Check
-	    ${result}=  intAdd  ${4}  ${9}
-	    Should Be Equal As Integers  ${result}  ${13}
-	
-	Run Python With Different Type
-	    intAdd  4  ${9}
-	
-	
-	*** Test Cases ***
-	Run Shell Command Example
-	    Run Error Command Without Check Return Code
-	    Run Error Command With Check Return Code
-	
-	Run Python Example
-	    Run Python Without Check
-	    Run Python With Check
-	    Run Python With Different Type
+```
+*** Settings ***
+Library     OperatingSystem
+Library     UserDefined
+
+
+*** Keywords ***
+Run Error Command Without Check Return Code
+    [Arguments]  ${cmd}=ls /abc
+    ${result}=  Run  ls /abc
+    Log  result:${result}
+
+Run Error Command With Check Return Code
+    [Arguments]  ${cmd}=ls /abc
+    ${rc}  ${result}=  Run and Return RC and Output  ls /abc
+    Log  result:${result} rc: ${rc}
+    Should Be True  ${rc} == 0
+
+Run Python Without Check
+    intAdd  4  9
+
+Run Python With Check
+    ${result}=  intAdd  ${4}  ${9}
+    Should Be Equal As Integers  ${result}  ${13}
+
+Run Python With Different Type
+    intAdd  4  ${9}
+
+
+*** Test Cases ***
+Run Shell Command Example
+    Run Error Command Without Check Return Code
+    Run Error Command With Check Return Code
+
+Run Python Example
+    Run Python Without Check
+    Run Python With Check
+    Run Python With Different Type
+```
 
 
 ## SSHLibrary ##
@@ -335,45 +363,46 @@ RF 本身也提供 SSHLibary (底層使用 paramiko module), 方便開發使用 
 
 [`test.robot`](./example/rf3/test.robot)
 
-	*** Settings ***
-	Library     OperatingSystem
-	Library     SSHLibrary  WITH NAME  SSH
-	
-	*** Variables ***
-	${HOST}  127.0.0.1
-	${USERNAME}  root
-	${PASSWORD}  password
-	
-	*** Keywords ***
-	SSH Login
-	    [Arguments]    ${host}=${HOST}  ${username}=${USERNAME}  ${password}=${PASSWORD}
-	    Open Connection  ${host}
-	    Login  ${username}  ${password}
-	
-	SSH Logout
-	    Close Connection
-	
-	Run ${cmd} Command
-	    Write  ${cmd}
-	    ${stdout}=  Read
-	    Log  ${stdout}
-	
-	Run ${cmd} Command With RC
-	    Start Command  ${cmd}
-	    ${stdout}  ${stderr}  ${rc}=  Read Command Output  return_stderr=True  return_rc=True
-	    Log  rc: ${rc}
-	    Log  stdout: ${stdout}
-	    Log  stderr: ${stderr}
-	
-	*** Test Cases ***
-	Show Hostname
-	    SSH Login
-	    Run hostname Command
-	    Run ls abc Command
-	    Run ls abc Command With RC
-	    Run ls abc Command With RC
-	    SSH Logout
+```
+*** Settings ***
+Library     OperatingSystem
+Library     SSHLibrary  WITH NAME  SSH
 
+*** Variables ***
+${HOST}  127.0.0.1
+${USERNAME}  root
+${PASSWORD}  password
+
+*** Keywords ***
+SSH Login
+    [Arguments]    ${host}=${HOST}  ${username}=${USERNAME}  ${password}=${PASSWORD}
+    Open Connection  ${host}
+    Login  ${username}  ${password}
+
+SSH Logout
+    Close Connection
+
+Run ${cmd} Command
+    Write  ${cmd}
+    ${stdout}=  Read
+    Log  ${stdout}
+
+Run ${cmd} Command With RC
+    Start Command  ${cmd}
+    ${stdout}  ${stderr}  ${rc}=  Read Command Output  return_stderr=True  return_rc=True
+    Log  rc: ${rc}
+    Log  stdout: ${stdout}
+    Log  stderr: ${stderr}
+
+*** Test Cases ***
+Show Hostname
+    SSH Login
+    Run hostname Command
+    Run ls abc Command
+    Run ls abc Command With RC
+    Run ls abc Command With RC
+    SSH Logout
+```
 
 ## Selenium ##
 
@@ -382,33 +411,36 @@ RF 本身也提供 SSHLibary (底層使用 paramiko module), 方便開發使用 
 
 [`test.robot`](./example/rf4/test.robot)
 
-	*** Settings ***
-	Library        Selenium2Library
-	
-	*** Variables ***
-	${delay}=  ${1}
-	${google_url}=  http://www.google.com
-	${browser}=  firefox
-	
-	*** Test Cases ***
-	Test Google
-	    Open Browser  ${google_url}  ${browser}
-	    Capture Page Screenshot
-	    Set Selenium Speed  ${delay}
-	    Maximize Browser Window
-	
-	    Input Text  id=lst-ib  robotframework\n
-	    Capture Page Screenshot
-	
-	    Click Link  css=#rso > div:nth-child(2) > li:nth-child(1) > div > h3 > a
-	    Capture Page Screenshot
-	
-	    Title Should Be  Robot Framework
-	    ${url}=  Get Location
-	    Log  ${url}
-	    Click Link  xpath=//*[@id="menu"]/div/ul/li[1]/a
-	    Click Link  css=#menu > div > ul > li:nth-child(2) > a
-	    Close Browser
+```
+*** Settings ***
+Library        Selenium2Library
+
+*** Variables ***
+${delay}=  ${1}
+${google_url}=  http://www.google.com
+${browser}=  firefox
+
+*** Test Cases ***
+Test Google
+    Open Browser  ${google_url}  ${browser}
+    Capture Page Screenshot
+    Set Selenium Speed  ${delay}
+    Maximize Browser Window
+
+    Input Text  id=lst-ib  robotframework\n
+    Capture Page Screenshot
+
+    Click Link  css=#rso > div:nth-child(2) > li:nth-child(1) > div > h3 > a
+    Capture Page Screenshot
+
+    Title Should Be  Robot Framework
+    ${url}=  Get Location
+    Log  ${url}
+    Click Link  xpath=//*[@id="menu"]/div/ul/li[1]/a
+    Click Link  css=#menu > div > ul > li:nth-child(2) > a
+    Close Browser
+```
+
 
 -----------------------------
 

@@ -74,38 +74,48 @@ source         vm             run
 
 `Hi.class`
 
-	public class Hi {
-	    String name;
+```
+public class Hi {
+    String name;
 
-	    public Hi(String name) {
-	        this.name = name;
-	    }
-	    public Hi() {
-	        this("guy");
-	    }
+    public Hi(String name) {
+        this.name = name;
+    }
 
-	    @Override
-	    public String toString() {
-	        return "Hi, " + name ;
-	    }
-	}
+    public Hi() {
+        this("guy");
+    }
+
+    @Override
+    public String toString() {
+        return "Hi, " + name ;
+    }
+}
+```
 
 
 `Main.class`
 
-	public class Main {
-	    public static void main(String[] args){
-	      Hi h = new Hi();
-	      System.out.println(h);
-	    }
-	}
-
+```
+public class Main {
+    public static void main(String[] args){
+      Hi h = new Hi();
+      System.out.println(h);
+    }
+}
+```
 
 `compile & run`
 
 	Linux:~ $ jar cf Hi.jar Hi.java
 	Linux:~ $ javac -cp ./Hi.jar Main.java
 	Linux:~ $ java Main
+
+
+--------
+
+
+## Data Type ##
 
 
 ### premitive type ###
@@ -121,6 +131,22 @@ source         vm             run
 | float   	 | 0.0f 	 | 4 bytes / 32 bits 			 |
 | double  	 | 0.0.d 	 | 8 bytes / 64 bits 			 |
 
+
+### autobox ###
+
+`Test.java`
+
+```
+public class Test {
+    public static void main(String[] args) {
+        int i = 1;
+        int j = 2;
+        System.out.println("i = " + i);
+        System.out.println("i + j = " + i + j); # 出現結果非 i + j = 3, 而是 i + j = 12
+        System.out.println("i + j = " + (i + j)); # 出現結果非 i + j = 3
+    }
+}
+```
 
 ## Operator ##
 
@@ -167,11 +193,65 @@ e
 
 ?:
 
-	i < 10 ? 10 * i : 0.1 * i
+```
+i < 10 ? 10 * i : 0.1 * i
+```
 
 ### casting operator ###
 
 ()
 
-	4 / 5
-	(float) 4 / 5
+```
+4 / 5
+(float) 4 / 5
+```
+
+## Condition ##
+
+### if else ###
+
+### switch case ###
+
+## Loop ##
+
+### for ###
+
+### foreach ###
+
+### while ###
+
+## Method ##
+
+## Class ##
+
+## Inheritance ##
+
+## Generics ##
+
+## Interface ##
+
+## Container ##
+
+
+--------
+
+
+## String ##
+
+## File I/O ##
+
+## Command ##
+
+## thread / process ##
+
+## reflection ##
+
+## anatation ##
+
+
+--------
+
+
+## JavaFX / Swing ##
+
+## Serverlet ##

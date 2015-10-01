@@ -250,6 +250,43 @@ TFTP - any UNIX based tftp server
 	systemctl start dhcpd
 
 
+### Provisioning ###
+
+1. Smart Proxies
+
+Infrastructure -> Smart Proxies
+
+2. Operating systems
+
+Hosts -> Operating systems
+
+設定為CentOS 6
+
+3. Provisioning Templates
+
+Hosts -> Provisioning Templates
+
+設定 provision 和 PXELinux, 並 associate 剛剛設定的 CentOS
+
+  kind: provision   Kickstart default
+  kind: PXELinux    Kickstart default PXELinux
+                    epel
+
+4. Partition Tables
+
+Hosts -> Partition Tables
+  Kickstart default
+
+5. Installation Media
+
+Host -> Installation Media
+  CentOS mirror
+
+6. Subnets
+
+Infrastructure -> Subnets
+
+
 
 ## Ref ##
 
