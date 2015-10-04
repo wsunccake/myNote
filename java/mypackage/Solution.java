@@ -1,6 +1,5 @@
-/**
- * Created by kam on 2015/9/29.
- */
+package mypackage;
+
 public class Solution {
     public int addDigits(int num) {
         int sum = 0;
