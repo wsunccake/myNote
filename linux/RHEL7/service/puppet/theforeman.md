@@ -154,8 +154,11 @@ puppet master + foreman at same machine, 確認 foreman 以安裝好 puppet mast
 
 
 Host -> Provisioning Templates
+
   kind: provision   Kickstart default
+
   kind: PXELinux    Kickstart default PXELinux
+
 Host -> Partition Tables
 
 Host -> Installation Media
@@ -254,19 +257,19 @@ TFTP - any UNIX based tftp server
 
 1. Smart Proxies
 
-Infrastructure -> Smart Proxies
+	Infrastructure -> Smart Proxies
 
 2. Operating systems
 
-Hosts -> Operating systems
+	Hosts -> Operating systems
 
-設定為CentOS 6
+	設定為CentOS 6
 
 3. Provisioning Templates
 
-Hosts -> Provisioning Templates
+	Hosts -> Provisioning Templates
 
-設定 provision 和 PXELinux, 並 associate 剛剛設定的 CentOS
+	設定 provision 和 PXELinux, 並 associate 剛剛設定的 CentOS
 
   kind: provision   Kickstart default
   kind: PXELinux    Kickstart default PXELinux
@@ -274,18 +277,44 @@ Hosts -> Provisioning Templates
 
 4. Partition Tables
 
-Hosts -> Partition Tables
-  Kickstart default
+	Hosts -> Partition Tables
+	  Kickstart default
 
 5. Installation Media
 
-Host -> Installation Media
-  CentOS mirror
+	Host -> Installation Media
+	  CentOS mirror
 
 6. Subnets
 
-Infrastructure -> Subnets
+	Infrastructure -> Subnets
 
+
+
+subnet:
+foreman-installer \
+  --enable-foreman-proxy \
+  --foreman-proxy-tftp=true \
+  --foreman-proxy-tftp-servername=10.10.10.11 \
+  --foreman-proxy-dhcp=true \
+  --foreman-proxy-dhcp-interface=ens9 \
+  --foreman-proxy-dhcp-gateway= \
+  --foreman-proxy-dhcp-range="10.10.10.100 10.10.10.150" \
+  --foreman-proxy-dhcp-nameservers="" \
+  --foreman-proxy-dns=true \
+  --foreman-proxy-dns-interface=ens9 \
+  --foreman-proxy-dns-zone=test.com \
+  --foreman-proxy-dns-reverse=10.10.10.in-addr.arpa \
+  --foreman-proxy-dns-forwarders=172.17.17.16 \
+  --foreman-proxy-foreman-base-url=https://master.test.com \
+  --foreman-proxy-oauth-consumer-key=Dp9wKif3FwUhgwKA66kwvSb9kWduX8Vm \
+  --foreman-proxy-oauth-consumer-secret=U6d5xdmVuqNztrrJyCTyGjMtESbtd8WL
+https://www.youtube.com/watch?v=eHjpZr3GB6s
+
+
+更新 image
+/var/lib/tftpboot/boot/CentOS-7.0-x86_64-initrd.img
+/var/lib/tftpboot/boot/CentOS-7.0-x86_64-vmlinuz
 
 
 ## Ref ##

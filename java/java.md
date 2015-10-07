@@ -74,7 +74,7 @@ source         vm             run
 
 `Hi.class`
 
-```
+```java
 public class Hi {
     String name;
 
@@ -96,7 +96,7 @@ public class Hi {
 
 `Main.class`
 
-```
+```java
 public class Main {
     public static void main(String[] args){
       Hi h = new Hi();
@@ -136,7 +136,7 @@ public class Main {
 
 `Test.java`
 
-```
+```Java
 public class Test {
     public static void main(String[] args) {
         int i = 1;
@@ -211,6 +211,54 @@ i < 10 ? 10 * i : 0.1 * i
 ### if else ###
 
 ### switch case ###
+
+
+`SwitchDemo.java`
+
+```Java
+public class SwitchDemo {
+    public enum PowerStatus {
+        POWER_ON, POWER_OFF;
+
+        private int flag;
+
+        PowerStatus(int flag) {
+            this.flag = flag;
+        }
+
+        public int getFlag() {
+            return flag;
+        }
+    }
+
+    public static void main(String[] args) {
+        int value = 1;
+        switch (value) {
+            case 1:
+                System.out.println("Power on");
+                break;
+            case 0:
+                System.out.println("Power off");
+                break;
+            default:
+                System.out.println("Unknown action");
+        }
+
+        PowerStatus status = PowerStatus.POWER_OFF;
+        switch (status) {
+            case POWER_ON:
+                System.out.println("Power on");
+                break;
+            case POWER_OFF:
+                System.out.println("Power off");
+                break;
+            default:
+                System.out.println("Unknown action");
+        }
+        System.out.println("The flag: " + status.getFlag());
+    }
+}
+```
 
 ## Loop ##
 
