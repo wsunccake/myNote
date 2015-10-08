@@ -1,4 +1,4 @@
-package mypackage.IntroductionToJavaProgramming;
+package listing;
 
 public class ShowCurrentTime {
     long currentSecond;
