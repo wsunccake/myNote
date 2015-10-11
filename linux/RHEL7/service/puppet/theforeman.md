@@ -312,6 +312,15 @@ foreman-installer \
 https://www.youtube.com/watch?v=eHjpZr3GB6s
 
 
+### Template ###
+
+web folder: /usr/share/foreman
+config folder: /usr/share/foreman/config
+template folder: /usr/share/foreman/app/views/unattended
+
+
+
+
 更新 image
 /var/lib/tftpboot/boot/CentOS-7.0-x86_64-initrd.img
 /var/lib/tftpboot/boot/CentOS-7.0-x86_64-vmlinuz

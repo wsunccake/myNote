@@ -37,10 +37,55 @@ HTTP, NFS, FTP: 三種選一種
 
 ### DHCP ###
 
+	rhel:~ # systemctl enable dhcpd.service
+	rhel:~ # systemctl start dhcpd.service
+	rhel:~ # systemctl status dhcpd.service
+
 	RHEL:~ # vi /etc/dhcp/dhcpd.conf
 
 
+### DNS ###
+
+	rhel:~ # vi /var/named/dynamic/db.test.com
+	$TTL 10800
+	@ IN SOA master.test.com. root.test.com. (
+	        1       ;Serial
+	        86400   ;Refresh
+	        3600    ;Retry
+	        604800  ;Expire
+	        3600    ;Negative caching TTL
+	)
+	
+	@ IN NS master.test.com.
+	
+	master.test.com. IN A 192.168.10.11
+
+	rhel:~ # vi db.100.168.192.in-addr.arpa
+	$TTL 10800
+	@ IN SOA master.test.com. root.100.168.192.in-addr.arpa. (
+	        1       ;Serial
+	        86400   ;Refresh
+	        3600    ;Retry
+	        604800  ;Expire
+	        3600    ;Negative caching TTL
+	)
+	
+	@ IN NS master.test.com.
+
+	11   PTR   master.test.com
+
+
 ### HTTP ###
+
+	# setup httpd (apache):
+	rhel:~ # systemctl enable httpd.service
+	rhel:~ # systemctl start httpd.service
+	rhel:~ # systemctl status httpd.service
+
+	# copy centos 7 install package
+	rhel:~ # mkdir -p /var/www/html/centos7/x86_64
+	rhel:~ # mount -oloop CentOS-7-x86_64-DVD-1503-01.iso /mnt/
+	rhel:~ # cp -r /mnt /var/www/html/centos7/x86_64/
 
 
 ### DNSMASQ ###

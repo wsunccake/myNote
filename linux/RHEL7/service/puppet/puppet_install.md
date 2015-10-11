@@ -319,6 +319,8 @@ apply 功能上跟 agent 一樣, 只是使用 apply 僅在 puppet agent 上執�
 
 從 puppet forge 安裝 module
 
+	master:~ # puppet module search ntp
+	master:~ # puppet module list --modulepath /usr/share/foreman-installer/modules
 	master:~ # puppet module install -i /etc/puppet/environments/production/modules puppetlabs/ntp
 
 
