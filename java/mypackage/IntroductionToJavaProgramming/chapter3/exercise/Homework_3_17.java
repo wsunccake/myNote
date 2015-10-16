@@ -1,4 +1,4 @@
-package exercise;
+package chapter3.exercise;
 
 import java.util.Random;
 import java.util.Scanner;

@@ -1,4 +1,4 @@
-package exercise;
+package chapter1.exercise;
 
 public class Homework_1_3 {
     public static void main() {

@@ -1,4 +1,4 @@
-package exercise;
+package chpater2.exercise;
 import java.util.Scanner;
 
 public class Homework_2_15 {
