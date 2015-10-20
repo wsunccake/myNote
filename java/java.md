@@ -209,8 +209,8 @@ compile source code
 
 改用 環境變數 CLASSPATH 方式編譯
 
-    Linux:~ $ CLASSPATH=../lib/HelloWithPackage.jar java
-    Linux:~ $ CLASSPATH=../lib/HelloWithPackage.jar java mypackage.mycls.HelloWithPackage Main.java 
+    Linux:~ $ CLASSPATH=../lib/HelloWithPackage.jar javac Main.java
+    Linux:~ $ CLASSPATH=../lib/HelloWithPackage.jar java mypackage.mycls.HelloWithPackage Main
 
 
 un jar file
@@ -251,10 +251,10 @@ un jar file
 
 ### autobox ###
 
-`Test.java`
+`AutoBoxDemo.java`
 
 ```Java
-public class Test {
+public class AutoBoxDemo {
     public static void main(String[] args) {
         int i = 1;
         int j = 2;
@@ -475,7 +475,179 @@ public class TestDoWhile {
 
 ### Abstract ###
 
+`GeometricObject.java`
+
+```Java
+public abstract class GeometricObject {
+    private String color = "white";
+    private boolean filled;
+    private java.util.Date dateCreated;
+
+    public GeometricObject() {
+        dateCreated = new java.util.Date();
+    }
+
+    protected GeometricObject(String color, boolean filled) {
+        dateCreated = new java.util.Date();
+        this.color = color;
+        this.filled = filled;
+    }
+
+    public String getColor() { return color; }
+    public void setColor(String color) { this.color = color; }
+    public boolean isFilled() { return filled; }
+    public void setFilled(boolean filled) { this.filled = filled; }
+    public java.util.Date getDateCreated() { return dateCreated; }
+
+    @Override
+    public String toString() { return "created on " + dateCreated + "\ncolor: " + color + " and filled: " + filled; }
+
+    public abstract double getArea();
+    public abstract double getPerimeter();
+}
+```
+
+`Circle.java`
+
+```Java
+public class Circle extends GeometricObject {
+    private double radius;
+
+    public Circle(double radius) { this.radius = radius; }
+    public Circle(double radius, String color, boolean filled) {
+        this.radius = radius;
+        setColor(color);
+        setFilled(filled);
+    }
+
+    public double getRadius() { return radius; }
+    public void setRadius(double radius) { this.radius = radius; }
+    public double getDiameter() { return 2 * radius; }
+    public void printCircle() { System.out.println("The circle is created " + getDateCreated() + " and the radius is " + radius); }
+    public double getPerimeter() { return 2 * radius * Math.PI; }
+    public double getArea() { return radius * radius * Math.PI; }
+}
+```
+
+`Rectangle.java`
+
+```Java
+public class Rectangle extends GeometricObject{
+    private double width;
+    private double height;
+
+    public Rectangle(double width, double height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    public Rectangle(double width, double height, String color, boolean filled) {
+        this.width = width;
+        this.height = height;
+        setColor(color);
+        setFilled(filled);
+    }
+
+    public double getWidth() { return  width; }
+    public void setWidth(double width) { this.width = width; }
+    public double getHeight() { return  height; }
+    public void setHeight() { this.height = height; }
+
+    public double getArea() { return width * height; }
+    public double getPerimeter() { return 2 * (width + height); }
+}
+```
+
+`TestGeometricObject.java`
+
+```Java
+public abstract class TestGeometricObject {
+    public static void main(String[] args) {
+        GeometricObject geoObject1 = new Circle(5);
+        GeometricObject geoObject2 = new Rectangle(5, 3);
+
+        System.out.println("The two objects have the same area? " + equalArea(geoObject1, geoObject2));
+
+        displayGeometricObject(geoObject1);
+        displayGeometricObject(geoObject2);
+    }
+
+    public static boolean equalArea(GeometricObject object1, GeometricObject object2) {
+        return object1.getArea() == object2.getArea();
+    }
+
+    public static void displayGeometricObject(GeometricObject object) {
+        System.out.println();
+        System.out.println("The area is " + object.getArea());
+        System.out.println("The perimeter is " + object.getPerimeter());
+    }
+}
+```
+
 ### Interface ###
+
+`TestEdible`
+
+```Java
+public class TestEdible {
+    public static void main(String[] args) {
+        Object[] objects = {new Tiger(2), new Chicken(1), new Apple()};
+
+        for (int i = 0; i < objects.length; i++) {
+            if (objects[i] instanceof Edible)
+                System.out.println(((Edible) objects[i]).howToEat());
+            if (objects[i] instanceof Animal) {
+                System.out.println(((Animal) objects[i]).sound());
+            }
+        }
+    }
+}
+
+
+interface Edible {
+    String howToEat();
+}
+
+abstract class Animal {
+    public abstract String sound();
+}
+
+class Chicken extends Animal implements Edible {
+    @Override
+    public String sound() {
+        return "Chicken: cock-a-doodle-doo";
+    }
+
+    @Override
+    public String howToEat() {
+        return "Chicken: Fry it";
+    }
+}
+
+class Tiger extends Animal {
+    @Override
+    public String sound() {
+        return "Tiger: RROOAARR";
+    }
+}
+
+abstract class Fruit implements Edible {
+}
+
+class Apple extends Fruit {
+    @Override
+    public String howToEat() {
+        return "Apple: Make apple cider";
+    }
+}
+
+class Orange extends Fruit {
+    @Override
+    public String howToEat() {
+        return "Orange: Make orange juice";
+    }
+}
+```
 
 ## Exception ##
 
@@ -483,6 +655,13 @@ public class TestDoWhile {
 
 ## Container ##
 
+### Array ###
+
+### List ###
+
+### Set ###
+
+### Map ###
 
 --------
 
@@ -503,6 +682,44 @@ public class TestDoWhile {
 --------
 
 
-## JavaFX / Swing ##
+## JavaFX ##
+
+`ShowFlowPane.java`
+
+```Java
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.FlowPane;
+import javafx.stage.Stage;
+
+public class ShowFlowPane extends Application{
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        FlowPane pane = new FlowPane();
+        pane.setPadding(new Insets(11, 12, 13, 14));
+        pane.setHgap(5);
+        pane.setVgap(5);
+
+        pane.getChildren().addAll(new Label("First Name:"), new TextField(), new Label("MI:"));
+        TextField tfMi = new TextField();
+        tfMi.setPrefColumnCount(1);
+        pane.getChildren().addAll(tfMi, new Label("Last Name:"), new TextField());
+
+        Scene scene = new Scene(pane, 200, 250);
+        primaryStage.setTitle("ShowFlowPane");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+}
+```
+
+![  Pane](./mypackage/IntroductionToJavaProgramming/chapter14/Pane.png)
+
+Insets method 的 border sizes 分別為 top (11), right (12), bottom (13), 和 left (14) (單位: pixels)
+
+![ShowFlowPane](./mypackage/IntroductionToJavaProgramming/chapter14/ShowFlowPane.png)
 
 ## Serverlet ##
