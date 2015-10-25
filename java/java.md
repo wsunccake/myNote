@@ -327,6 +327,10 @@ i < 10 ? 10 * i : 0.1 * i
 
 ### if else ###
 
+![if statement](./img/ifStatement.png)
+
+![if else statement](./img/ifelseStatement.png)
+
 ### switch case ###
 
 `SwitchDemo.java`
@@ -651,6 +655,34 @@ class Orange extends Fruit {
 
 ## Exception ##
 
+### Assert ###
+
+`DemoAssert.java`
+
+```Java
+import java.util.Scanner;
+
+public class DemoAssert {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Input your choise [y/n]: ");
+        switch (input.next()) {
+            case "Y":
+            case "y":
+                System.out.println("Your choose is Yes");
+                break;
+            case "n":
+            case "N":
+                System.out.println("Your choose is No");
+                break;
+            default:
+                assert false: "Unknown value";
+                System.out.println("no default value");
+        }
+    }
+}
+```
+
 ## Generics ##
 
 ## Container ##
@@ -684,6 +716,35 @@ class Orange extends Fruit {
 
 ## JavaFX ##
 
+
+### Basic ###
+
+![JavaFX Class](./img/JavaFXClass.png)
+
+`HelloJavaFX.java`
+
+```Java
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
+public class HelloJavaFX extends Application{
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        StackPane pane = new StackPane();
+        Text text = new Text("Hello JavaFX!");
+        pane.getChildren().add(text);
+        pane.setPrefSize(210, 80);
+
+        Scene scene = new Scene(pane);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+}
+```
+
 `ShowFlowPane.java`
 
 ```Java
@@ -716,10 +777,54 @@ public class ShowFlowPane extends Application{
 }
 ```
 
-![  Pane](./mypackage/IntroductionToJavaProgramming/chapter14/Pane.png)
+![Pane](./img/Pane.png)
 
 Insets method 的 border sizes 分別為 top (11), right (12), bottom (13), 和 left (14) (單位: pixels)
 
-![ShowFlowPane](./mypackage/IntroductionToJavaProgramming/chapter14/ShowFlowPane.png)
+![ShowFlowPane](./img/ShowFlowPane.png)
+
+
+### Event ###
+
+![Java FX Event](./img/JavaFXEvent.png)
+
+`HelloJavaFXWithEvent.java`
+
+```Java
+import javafx.application.Application;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
+public class HelloJavaFXWithEvent extends Application{
+    Text text = new Text("Hello JavaFX!");
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        StackPane pane = new StackPane();
+        pane.getChildren().add(text);
+        pane.setPrefSize(210, 80);
+
+        Scene scene = new Scene(pane);
+        scene.setOnMouseMoved(new MouseHandler());
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    class MouseHandler implements EventHandler<MouseEvent> {
+        @Override
+        public void handle(MouseEvent event) {
+            String mouseCoordinate = String.format("X: %.1f, Y: %.1f", event.getX(), event.getY());
+            System.out.println(event.getEventType() + "\n");
+            System.out.format(mouseCoordinate + "\n");
+            text.setText(mouseCoordinate);
+        }
+    }
+}
+```
+
 
 ## Serverlet ##
