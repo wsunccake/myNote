@@ -1,6 +1,17 @@
 # Ruckus AP #
 
 
+## vAP on KVM ##
+
+* Processor: 1+
+
+* Memory: 1+ GB
+
+* NIC: 1, virtio
+
+* Disk: 1GB+, virtio
+
+
 ## list info ##
 
 	rkscli: get version
@@ -32,7 +43,7 @@
 	# by scg http
 	rkscli: fw set proto http
 	rkscli: fw set port 91
-	rkscli: fw set host scg_ip
+	rkscli: fw set host scg_control_ip
 	rkscli: fw set control wsg/firmware/R300_3.4.0.0.139.rcks
 	rkscli: fw update
 
