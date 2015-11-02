@@ -9,7 +9,7 @@ HTTP, NFS, FTP: 三種選一種
 
 	rhel:~ # yum install syslinux
 	rhel:~ # yum install tftp-server dhcp bind # install TFTP, DHCP, DNS
-	rhel:~ # yum install httpd  # install HTTP
+	rhel:~ # yum install httpd                 # install HTTP
 
 
 ## Configuration ##

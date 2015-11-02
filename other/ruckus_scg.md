@@ -75,15 +75,15 @@
 
 	vSZ# show data-plane
 
-	vSZ(config)# data-plane dp_name@dp_mac approve
-	vSZ(config)# no data-plane dp_name@dp_mac
+	vSZ(config)# data-plane <dp_name>@<dp_mac> approve
+	vSZ(config)# no data-plane <dp_name>@<dp_mac>
 
 
 ## AP join vSZ with vDP (tunnel mode) ##
 
 	rkscli: get tunnelmgr
 
-	rkscli: set scg ip scg_control_ip
+	rkscli: set scg ip <scg_control_ip>
 	rkscli: set scg config interval 30
 	rkscli: set scg status interval 30
 	rkscli: set scg getconf

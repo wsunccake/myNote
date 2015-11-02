@@ -1,9 +1,12 @@
 # DHCP #
 
 
-## configuration ##
+## Package ##
 
 	rhel:~ # yum install dhcp
+
+
+## Configuration ##
 
 	rhel:~ # cp /usr/share/doc/dhcp-4.2.5/dhcpd.conf.example /etc/dhcp/dhcpd.conf
 	rhel:~ # cat /etc/dhcp/dhcpd.conf
@@ -20,6 +23,26 @@
 	  }
 	}
 
+	rhel~: # cat /usr/lib/systemd/system/dhcpd.service 
+	[Unit]
+	Description=DHCPv4 Server Daemon
+	Documentation=man:dhcpd(8) man:dhcpd.conf(5)
+	Wants=network-online.target
+	After=network-online.target
+	After=time-sync.target
+
+	[Service]
+	Type=notify
+	ExecStart=/usr/sbin/dhcpd -f -cf /etc/dhcp/dhcpd.conf -user dhcpd -group dhcpd --no-pid eth1   # 指定派 IP 的 NIC
+
+	[Install]
+	WantedBy=multi-user.target
+
+
+## Service ##
+
 	rhel:~ # systemctl enable dhcpd.service
 	rhel:~ # systemctl start dhcpd.service
+	rhel:~ # systemctl status dhcpd.service
 
+	rhel:~ # netstat -lnutp | grep -E "67|68"   # dhcpd 使用 67 port, dhclient 使用 68 port
