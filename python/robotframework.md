@@ -156,9 +156,24 @@ Log  ${list1}
 
 ${dic1}=  Create Dictionary  Jun=1  Feb=2  # 設定 dictionary
 Log  ${dic1['Jun']}
-Set to Dictionary  ${dic1}  Mar  3         # 新增 key / value
+Set To Dictionary  ${dic1}  Mar  3         # 新增 key / value
 Remove From Dictionary  ${dic1}  Jun       # 移除 key / value
 Log  ${dic1}
+```
+
+## 判斷 / Condition ##
+
+RF 判斷
+
+```
+Run Keyword If  '${status}' == '${True}'  Log  status is true
+
+Run Keyword If  ${i < 2}
+...    Log  i < 2
+...  ELSE
+...    Log  i >= 2
+
+Run Keyword If  ${has_android} or ${has_ios}  Log  Wireless Device
 ```
 
 ## 迴圈 / Loop ##

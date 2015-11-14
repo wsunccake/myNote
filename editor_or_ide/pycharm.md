@@ -26,5 +26,11 @@
 | Column 					 | ⇧ ⌘ 8 		 | 					 |
 | Terminal 					 | ⌥ F12 		 | 					 |
 
-⇪
-⇧
+
+[PyCharm shortcut for Windows/Linux](https://www.jetbrains.com/pycharm/docs/PyCharm_ReferenceCard.pdf)
+
+[PyCharm shotcut for Mac](https://www.jetbrains.com/pycharm/docs/PyCharm_ReferenceCard_Mac.pdf)
+
+[Intelli J shortcut for Windows/Linux](https://www.jetbrains.com/idea/docs/IntelliJIDEA_ReferenceCard.pdf)
+
+[Intelli J shortcut for Mac](https://www.jetbrains.com/idea/docs/IntelliJIDEA_ReferenceCard_Mac.pdf)

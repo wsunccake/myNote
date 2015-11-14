@@ -24,27 +24,28 @@
 	rhel:~ # docker run -it --name my_ubuntu ubuntu /bin/bash # 指令 container name
 	rhel:~ # docker run -itdP ubuntu /bin/bash # d: background mode, P: 開放 container port forwading (當 image 有先定義 EXPOSE 才會有效)
 
-	rhel:~ # docker exec container_id /bin/sh # 在 host 端送 command 到 container 端執行
+	rhel:~ # docker exec <container_id> /bin/sh # 在 host 端送 command 到 container 端執行
 
-	rhel:~ # nsenter --target container_id_pid  --mount --uts --ipc --net --pid /bin/sh
+	rhel:~ # nsenter --target <container_id_pid>  --mount --uts --ipc --net --pid /bin/sh
 
 	rhel:~ # dock ps # 顯示執行中的 container
 	rhel:~ # dock ps -l # 顯示最後一個 container
 	rhel:~ # dock ps -a # 顯示所有的 container (包括未執行的)
 
-	rhel:~ # docker rm container_id # 刪除 container
+	rhel:~ # docker rm <container_id> # 刪除 container
 
-	rhel:~ # docker start container_id # 啟動 container
-	rhel:~ # docker stop container_id # 停止 container
-	rhel:~ # docker restart container_id # 重啟 container
-	rhel:~ # docker kill container_id # 強制停止 container
+	rhel:~ # docker start <container_id> # 啟動 container
+	rhel:~ # docker stop <container_id> # 停止 container
+	rhel:~ # docker restart <container_id> # 重啟 container
+	rhel:~ # docker kill <container_id> # 強制停止 container
 
-	rhel:~ # docker attch dick_id # 進入 container, deattch 使用 ctrl^p ctrl^q
+	rhel:~ # docker attch <container_id> # 進入 container, deattch 使用 ctrl^p ctrl^q
+	rhel:~ # docker exec -it <container_id> /bin/exec # 進入 container
 
-	rhel:~ # docker top container_id
-	rhel:~ # docker logs -ft container_id
-	rhel:~ # docker stats container_id
-	rhel:~ # docker inspect container_id
+	rhel:~ # docker top <container_id>
+	rhel:~ # docker logs -ft <container_id>
+	rhel:~ # docker stats <container_id>
+	rhel:~ # docker inspect <container_id>
 
 
 ## Docker Image ##
@@ -64,17 +65,17 @@
 
 已有的 image 上 create image
 
-	rhel:~ # docker commit -m -a container_id image_name [tag]
+	rhel:~ # docker commit -m -a <container_id> <image_name> [tag]
 
 
 `method 2`
 
 匯入 LXC template, 可到 [OpenVZ 下載](https://openvz.org/Download/template/precreated)
 
-	rhel:~ # docker import http://download.openvz.org/template/precreated/suse-13.1-x86_64-minimal.tar.gz image_name[:tag]
+	rhel:~ # docker import http://download.openvz.org/template/precreated/suse-13.1-x86_64-minimal.tar.gz <image_name[:tag]>
 
 	rhel:~ # wget http://download.openvz.org/template/precreated/suse-13.1-x86_64-minimal.tar.gz
-	rhel:~ # cat suse-13.1-x86_64-minimal.tar.gz | docker import - image_name[:tag]
+	rhel:~ # cat suse-13.1-x86_64-minimal.tar.gz | docker import - <image_name[:tag]>
 
 
 `method 3`
@@ -119,11 +120,11 @@
 
 `import / export, save / load`
 
-	rhel:~ # docker save image_name[:tag] > image.tar
-	rhel:~ # docker load image_name[:tag] < image.tar
+	rhel:~ # docker save <image_name[:tag]> > <image>.tar
+	rhel:~ # docker load <image_name[:tag]> < <image>.tar
 
-	rhel:~ # docker export container_id > image.tar
-	rhel:~ # docker import image.tar image_name
+	rhel:~ # docker export <container_id> > image.tar
+	rhel:~ # docker import image.tar <image_name>
 
 
 ## Docker Volume ##
