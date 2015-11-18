@@ -1,5 +1,6 @@
 # tmpfiles #
 
+
 ## Configuration ##
 
 	rhel:~ # cat /usr/lib/systemd/system/systemd-tmpfiles-clean.timer
@@ -29,7 +30,7 @@
 ## Service ##
 
 	rhel:~ # systemctl start systemd-tmpfiles-clean.timer
-	rhel:~ # systemctl status systemd-tmpfiles-clean.timer
+	rhel:~ # systemctl enable systemd-tmpfiles-clean.timer
 
 
 # tmpwatch #
@@ -60,3 +61,27 @@
 	        /usr/sbin/tmpwatch "$flags" -f 720 "$d"
 	    fi
 	done
+
+
+# tmp.mount #
+
+使用記憶體當 /tmp
+
+## Service ##
+
+	rhel:~ # systemctl enable tmp.mount
+	rhel:~ # systemctl start tmp.mount
+	rhel:~ # df -h
+	Filesystem               Size  Used Avail Use% Mounted on
+	tmpfs                     24G     0   24G    0% /tmp
+
+## Command ##
+
+	# method 1:
+	rhel:~ # mkdir -m 1777 /mnt/ramfs
+	rhel:~ # mount [--bind] -t tmpfs -o size=4G tmpfs /mnt/ramfs  # --bind: 某些目錄 (/tmp), 系統不可刪除
+
+	# method 2:
+	rhel:~ # cat /etc/fstab
+	tmpfs   /mnt/ramfs   tmpfs   size=4G,mode=1777   0  0  # 新增此行
+	rhel:~ # mount -a

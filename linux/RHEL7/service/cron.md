@@ -30,7 +30,7 @@
 	# | | | | .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
 	# | | | | |
 	# * * * * * user-name command to be executed
-	0 * * * * root ps axo etime,pid,cmd | awk '/tcpdump/ && $1 !~ /^[0-9][0-9]:[0-9][0-9]$/{print $2}' | xargs -i kill -9 {}
+	*/5 * * * * root ps axo etime,pid,cmd | awk '/tcpdump/ && $1 !~ /^[0-9][0-9]:[0-9][0-9]$/{print $2}' | xargs -i kill -9 {}
 	0 * * * * root find /pcap_dir -name "*.pcap" -amin +60 -exec rm {} \;
 	0 0 * * * root find /img_dir -type f -not -name '*.img' -ctime +14 -exec rm {} \;
 	

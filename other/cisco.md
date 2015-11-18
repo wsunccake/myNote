@@ -3,6 +3,7 @@
 
 ## Basic ##
 
+baud rate: 9600
 
 ### enable privilege ###
 
@@ -89,6 +90,8 @@
 	CISCO# show interfaces
 	CISCO# show configuration
 	CISCO# show spanning-tree interface TenGigabitEthernet 1/1
+
+	CISCO# show loggin | include
 
 
 ## Vlan ##

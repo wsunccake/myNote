@@ -54,8 +54,11 @@
 	[root@vSZ-D ~]#
 
 
-
 ## setup and initial ##
+
+	SCG# rbd SCG200 SCG200 00001 11:22:33:44:55:66 32 ruckus
+	#       <board>  <model> <sn> <mac> <mac-count> <customer>
+	# board/model: SZ104, SZ124, SCG200
 
 	vSZ-D# setup
 	vSZ-D# set-factory

@@ -14,7 +14,7 @@
 	rhel:~ # systemctl enable docker.service # 常駐服務
 	rhel:~ # docker run hello-world # 測試
 
-	rhel:~ # usermod -aG docker user # 將使用者加入 docker 群組
+	rhel:~ # usermod -aG docker user # 將使用者加入 docker 群組, 確定 docker daemon -G docker
 
 
 ## Docker Run ##
