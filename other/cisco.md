@@ -98,12 +98,12 @@ baud rate: 9600
 
 	# enable vlan for interface
 	CISCO# configure terminal
-	CISCO(config)# interface TenGigabitEthernet 1/1
-	CISCO(config-if)# switchport access vlan 10
+	CISCO(config)# interface <interface>
+	CISCO(config-if)# switchport access vlan <vlan_id>
 	CISCO(config-if)# no shutdown
 
 	# disable vlan for interface
-	CISCO# no switchport access vlan 10
+	CISCO# no switchport access vlan <vlan_id>
 	CISCO# no shutdown
 
 	# check vlan for interface

@@ -28,6 +28,21 @@ HTTP, NFS, FTP: 三種選一種
 	rhel:~ # cp /usr/share/syslinux/{pxelinux.0,menu.c32,memdisk,mboot.c32,chain.c32} /var/lib/tftpboot
 	rhel:~ # mkdir -p /var/lib/tftpboot/pxelinux.cfg
 	rhel:~ # vi /var/lib/tftpboot/pxelinux.cfg/default
+	DEFAULT local disk
+
+	LABEL local disk
+	localboot 0x80
+
+	LABLE rhel 7.1
+	kernel vmlinuz
+	append initrd=initrd.img
+
+	rhel:~ # vi 01-11-22-33-aa-bb-cc           # 指定 11:22:33:aa:bb:cc 網卡使用該設定
+	DEFAULT SZ
+
+	LABEL SZ
+	kernel http://<ip>/vmlinuz
+	append initrd=http://<ip>/sz-installer.img stage2=initrd:
 
 	# setup centos image boot loader
 	rhel:~ # mount -o loop CentOS-6.7-x86_64-minimal.iso /mnt
