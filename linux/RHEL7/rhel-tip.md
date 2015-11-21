@@ -97,11 +97,9 @@ windows 使用 Fedora LiveUSB Creator 程式
 	echo "baseurl=ftp://ip/" >> /etc/yum.repos.d/media.repo # for ftp
 	yum repolist
 
-
 	yum update
 	yum grouplist
 	yum group install "Server with GUI"
-
 
 
 	hwinfo --disk
@@ -109,6 +107,7 @@ windows 使用 Fedora LiveUSB Creator 程式
 	lshw -class disk
 
 create repository server
+
 	mkdir -p /var/ftp/pub/rhel-server
 	cp -rf /mnt/rhel-server/* /var/ftp/pub/rhel-server
 	mount -oloop rhel-server-7.1-x86_64-dvd.iso /var/ftp/pub/rhel-server

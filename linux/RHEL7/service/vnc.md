@@ -24,5 +24,6 @@
 
 ## Service ##
 
+	rhel:~ # vi /etc/systemd/system/vncserver@.service /etc/systemd/system/vncserver@:1.service
 	rhel:~ # systemctl enable vncserver@:1.service   # 建立 5901 port 的 VNC Service
 	rhel:~ # systemctl start vncserver@:1.service
