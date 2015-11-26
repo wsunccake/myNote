@@ -2618,3 +2618,10 @@ useradd/usermod command with the -e, --expiredate or -f, --inactive
 
 
 
+## Ref
+
+http://www.tamabc.com/article/3281.html
+
+http://m.oschina.net/blog/470527
+
+http://felix-lin.com/linux/init%E6%BC%94%E5%8C%96%E6%AD%B7%E7%A8%8B-%E8%BD%89%E8%B2%BC-%E6%B7%BA%E6%9E%90-linux-%E5%88%9D%E5%A7%8B%E5%8C%96-init-%E7%B3%BB%E7%B5%B1%EF%BC%8C%E7%AC%AC-3-%E9%83%A8%E5%88%86-systemd/

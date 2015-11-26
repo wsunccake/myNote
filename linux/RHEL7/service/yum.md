@@ -57,6 +57,10 @@ repositoory 以下簡稱 repo
 	rhel:~ # yum remove <pkg>
 	rhel:~ # yum autoremove <pkg>
 
+	# upgrade
+	rhel~: # yum update -y --nogpgcheck
+	rhel~: # yum upgrade -y --nogpgcheck
+
 	# download package
 	rhel:~ # yumdownloader pkackage_name
 
