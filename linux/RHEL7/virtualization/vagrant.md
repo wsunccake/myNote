@@ -27,6 +27,20 @@
 	rhel:~ # vagrant detroy [-f] [vm]          # delete vm
 	rhel:~ $ vagrant global-status
 
+vagrant up on Virtualbox 流程:
+
+1. 使用 vagrant 帳號登入 (~/.ssh/authorized_keys)
+
+	config.ssh.private_key_path, config.ssh.username, config.ssh.password
+
+2. 設定 port forwarding
+
+3. 在 guest os 產生 /vagrant (sudo mkdir -p /varant)
+
+4. 掛載 host os <shared_foler> 到 guest os 的 /vagrant (sudo mount vboxfs <shared_foler> /vagrant)
+
+以上 guest os 系統指令皆透過 sudo 執行
+
 
 ## Vagrantfile ##
 
@@ -101,20 +115,70 @@ public_network, private_network
 
 ## Box ##
 
+
+### Build Linux Box On VirtualBox ###
+
+In Guest
+
+step 1, 設定 root passwd 為 vagrant
+
+	guest:~ # passwd
+
+step 2, 新增使用者名稱 vagrant, 密碼為 vagrant
+
+	guest:~ # useradd vagrant
+	guest:~ # passwd vagrant
+
+step 3, 設定 sudo 免密碼
+
+	guest:~ # visudo
+	...
+	# Add the following line to the end of the file.
+	vagrant ALL=(ALL) NOPASSWD:ALL  # 新增此行, 使用 sudo 免密碼
+	...
+	#Defaults    requiretty         # 註解此行, 可在 inactive mode 使用 sudo
+	...
+
+step 4, 設定 NIC
+
+	guest:~ # vi /etc/sysconfig/network-srcipts/ifcfg-<interface>
+	...
+	ONBOOT=yes   # 設定開機後自動啟動
+	...
+
+step 5, 啟動 sshd
+
+	guest:~ # systemctl enable sshd.service
+
+step 6, 安裝 VBoxGuestAdditions
+
+掛載 /usr/share/virtualbox/VBoxGuestAdditions.iso
+
+	guest:~ # yum install gcc kernel-headers kernel-devel
+	guest:~ # mount /dev/cdrom /mnt
+	guest:~ # /mnt/VBoxLinuxAdditions.run
+
+step 7, 安裝 insecure public key
+
+	guest:~ # mkdir -p ~vagrant/.ssh
+	guest:~ # curl https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub > ~vagrant/.ssh/authorized_keys
+	guest:~ # chown -R vagrant:vagrant ~vagrant/.ssh
+
+In Host
+
+	rhel:~ # vagrant pacakge --output <vagrant_vm>.box --base <vbox_vm>  # 產生 <vagrant_vm>.box 檔案
+	rhel:~ # vagrant box add <vagrant_vm>.box --name <vm_name>           # 將 <vagrant_vm>.box 匯入
+
+
+### Build Windows Box On VirtualBox ###
+
+
+### Other ###
+
 	rhel:~ # ls ~/.vagrant.d/boxes   # box 會存到此目錄下
 
 
-
-
-VBox
-VBoxAutostart
-VBoxBalloonCtrl
-VBoxHeadless
-VBoxManage
-VBoxSDL
-VBoxTunctl
-VBoxVRDP
-
+https://dennypc.wordpress.com/2014/06/09/creating-a-windows-box-with-vagrant-1-6/
 
 http://www.vagrantbox.es/
 vagrant box add {title} {url}
