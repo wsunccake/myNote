@@ -18,8 +18,8 @@ HTTP, NFS, FTP: 三種選一種
 ### TFTP ###
 
 	rhel:~ # vi /etc/xinetd.d/tftp
-	        disable         = no
-	        disable         = yes
+	#        disable         = no
+	        disable         = yes           # 啟用 tftp
 	rhel:~ # systemctl restart xinetd
 	rhel:~ # systemctl enable tftp.service
 	rhel:~ # systemctl start tftp.service
@@ -27,6 +27,8 @@ HTTP, NFS, FTP: 三種選一種
 	# setup pxe boot loader
 	rhel:~ # cp /usr/share/syslinux/{pxelinux.0,menu.c32,memdisk,mboot.c32,chain.c32} /var/lib/tftpboot
 	rhel:~ # mkdir -p /var/lib/tftpboot/pxelinux.cfg
+
+	# default pxe config
 	rhel:~ # vi /var/lib/tftpboot/pxelinux.cfg/default
 	DEFAULT local disk
 
@@ -37,7 +39,8 @@ HTTP, NFS, FTP: 三種選一種
 	kernel vmlinuz
 	append initrd=initrd.img
 
-	rhel:~ # vi 01-11-22-33-aa-bb-cc           # 指定 11:22:33:aa:bb:cc 網卡使用該設定
+	# specific mac pxe config
+	rhel:~ # vi /var/lib/tftpboot/pxelinux.cfg/01-11-22-33-aa-bb-cc           # 指定 11:22:33:aa:bb:cc 網卡使用該設定
 	DEFAULT SZ
 
 	LABEL SZ

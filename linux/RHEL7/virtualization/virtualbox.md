@@ -1,6 +1,31 @@
 # VirtualBox #
 
 
+## Package ##
+
+安裝 VirtualBox 會另外編譯 vboxdrv, vboxnetadp, vboxnetflt, vboxpci module, 需要先安裝其他必須套件
+
+	# Install Requirement
+	rhel:~ # yum install kernel-headers kernel-devel dkms
+	rhel:~ # yum groups install "Development tools"
+
+	# DKSM service
+	rhel:~ # systemctl start dkms.service
+	rhel:~ # systemctl enable dkms.service
+
+	# Install VirtualBox
+	rhel:~ # wget http://download.virtualbox.org/virtualbox/rpm/rhel/virtualbox.repo -O /etc/yum.repo.d/virtualbox.repo
+	rhel:~ # yum install VirtualBox-5.0
+
+	# Check Virtualbox module
+	rhel:~ # ls /lib/modules/`uname -r`/misc
+	rhel:~ # /usr/lib/virtualbox/vboxdrv.sh setup   # module 安裝失敗, 可使用該 script re-compile
+
+	# VirtualBox service
+	rhel:~ # systemctl start vboxdrv.service
+	rhel:~ # systemctl enable vboxdrv.service
+
+
 ## VM ##
 
 	# list

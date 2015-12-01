@@ -3,6 +3,10 @@
 
 ## Package ##
 
+	# Install Requirement
+	rhel:~ # yum install kernel-headers kernel-devel dkms
+	rhel:~ # yum groups install "Development tools"
+
 	# Install Virtualbox
 	rhel:~ # wget http://download.virtualbox.org/virtualbox/rpm/rhel/virtualbox.repo -O /etc/yum.repo.d/virtualbox.repo
 	rhel:~ # yum install VirtualBox-5.0
