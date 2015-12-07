@@ -1,5 +1,35 @@
 ### shortcut key ###
 
+
+## 檔案操作
+
+
+### New File (開啟新檔)
+
+Linux/Windows:	`alt` - `insert`
+
+Mac:			`cmd` - `N`
+
+
+### Open File (開啟檔案)
+
+Linux/Windows:	`alt` - `insert`
+
+Mac:			`cmd` - `o`
+
+
+## 編輯
+
+### Column Selection Mode ()
+
+Linux/Windows:	`alt` - `shift` - `insert`
+
+Mac:			`cmd` - `shift` - `*`
+
+Menu:			`Edit` \ `Column Selection Mode`
+
+
+
 | action 					 | MacOSX 		 | Linux 			 |
 | -------------------------- | ------------- | ----------------- |
 | New file 					 | ⌘ N 			 | Atl Insert 		 |
@@ -25,6 +55,7 @@
 | Structure 				 | ⌘ 7 			 | 					 |
 | Column 					 | ⇧ ⌘ 8 		 | 					 |
 | Terminal 					 | ⌥ F12 		 | 					 |
+
 
 
 [PyCharm shortcut for Windows/Linux](https://www.jetbrains.com/pycharm/docs/PyCharm_ReferenceCard.pdf)

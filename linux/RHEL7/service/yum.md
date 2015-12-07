@@ -3,7 +3,7 @@
 
 ## Package ##
 
-YUM 在系統安裝時就已安裝, yum-utils 可協助設定 package 和 repository
+YUM 在系統安裝時就已安裝, yum-utils 可協助設定 package 和 repository, createrepo 可建立 repositiry 需要的 db
 
 	rhel:~ # yum install yum-utils
 	rhel:~ # yum install createrepo
@@ -15,6 +15,7 @@ YUM 在系統安裝時就已安裝, yum-utils 可協助設定 package 和 reposi
 	rhel:~ # mount -oloop,ro rhel-server-7.2-x86_64-dvd.iso /mnt/rhel-server-7.2
 	rhel:~ # yum-config-manager --add-repo file:///mnt/rhel-server-7.2
 	rhel:~ # yum clean
+	rhel:~ # yum makecache
 
 
 ## Command ##
