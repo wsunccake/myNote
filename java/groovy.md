@@ -245,6 +245,19 @@ GVM 是 groovy 環境管理工具, 用來安裝設定 groovy 或其他工具
 
 ### enum ###
 
+### @Singleton ###
+
+`Hi.groovy`
+
+	@Singleton
+	class Say {
+	    def hi () {println "Hi"}
+	}
+
+	Say.instance.hi()
+	Say.instance.hi()
+
+
 # Gradle #
 
 

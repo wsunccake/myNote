@@ -14,7 +14,8 @@ default password: 512900
 ### enable privilege ###
 
 	<HP> _cmdline-mode on
-	[HP] 
+	<HP> system-view
+	[HP]
 
 
 ### common ###

@@ -110,7 +110,7 @@ firewalld 使用 zone 去管理 rule
 
 ### Offline ###
 
-	# firewall-offline-cmd --direct --add-rule ipv4 filter INPUT 0 -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
+	rhel:~ # firewall-offline-cmd --direct --add-rule ipv4 filter INPUT 0 -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
 
 
 ### Backupt ###

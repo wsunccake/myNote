@@ -44,6 +44,7 @@ repositoory 以下簡稱 repo
 	rhel:~ # yum serach <pkg>       # 搜尋 pkg, 包括 package name 及 summary
 	rhel:~ # yum list *<pkg>*       # 搜尋 pkg, 只搜 package name, 可使用 regex
 	rhel:~ # yum provides /path/cmd # 搜尋 pkg, 內有 command, 可配合 regex
+	rhel:~ # yum --showduplicates list <pkg>  # 顯示 pkg 可安裝版本
 
 	# info
 	rhel:~ # yum info <pkg>
@@ -63,7 +64,7 @@ repositoory 以下簡稱 repo
 	rhel~: # yum upgrade -y --nogpgcheck
 
 	# download package
-	rhel:~ # yumdownloader pkackage_name
+	rhel:~ # yumdownloader <pkg>
 
 下載的 package 放在 /var/cache/yum/$basearch/$releasever/packages 目錄下
 
