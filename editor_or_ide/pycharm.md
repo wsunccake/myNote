@@ -1,4 +1,4 @@
-### shortcut key ###
+# IntelliJ IDEA #
 
 
 ## 檔案操作
@@ -30,6 +30,14 @@ Menu:			`Edit` \ `Column Selection Mode`
 
 
 
+
+## Library 
+
+$JAVA_HOME
+
+$GROOVY_HOME/lib
+
+
 | action 					 | MacOSX 		 | Linux 			 |
 | -------------------------- | ------------- | ----------------- |
 | New file 					 | ⌘ N 			 | Atl Insert 		 |
@@ -57,11 +65,11 @@ Menu:			`Edit` \ `Column Selection Mode`
 | Terminal 					 | ⌥ F12 		 | 					 |
 
 
+[Intelli J shortcut for Windows/Linux](https://www.jetbrains.com/idea/docs/IntelliJIDEA_ReferenceCard.pdf)
+
+[Intelli J shortcut for Mac](https://www.jetbrains.com/idea/docs/IntelliJIDEA_ReferenceCard_Mac.pdf)
 
 [PyCharm shortcut for Windows/Linux](https://www.jetbrains.com/pycharm/docs/PyCharm_ReferenceCard.pdf)
 
 [PyCharm shotcut for Mac](https://www.jetbrains.com/pycharm/docs/PyCharm_ReferenceCard_Mac.pdf)
 
-[Intelli J shortcut for Windows/Linux](https://www.jetbrains.com/idea/docs/IntelliJIDEA_ReferenceCard.pdf)
-
-[Intelli J shortcut for Mac](https://www.jetbrains.com/idea/docs/IntelliJIDEA_ReferenceCard_Mac.pdf)
