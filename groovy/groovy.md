@@ -128,9 +128,9 @@ Groovy 可以使用 RPM, DPKG 等系統內建套件直接安裝, 但 Linux, MacO
 
 # 資料型態
 
-Groovy 像一般 script language 一樣是 dynamic type, 使用時不需要先定義形別. 也可像 Java 一樣, 使用前先定義資料型態 (支援 Java 所定義的資料型態). def 
+groovy 像一般 script language 一樣是 dynamic type, 使用時不需要先定義形別. 也可像 Java 一樣, 使用前先定義資料型態 (支援 Java 所定義的資料型態). def 
 
-## Numeric / 數值
+## Number / 數值
 
 	i = 10
 	int j = 20
@@ -394,22 +394,288 @@ for file
 
 # 函式參數
 
-groovy 會把一個檔案當成一個 class 來處理 (跟 Java 一樣)
+groovy 把 {} 當 anonymous method 和 closure 使用
+
+## method
+
+groovy 會把檔案當成 class 來處理 (跟 Java 一樣)
 
 	Linux:~ $ tree
-	MyFun.groovy
-	Main.groovy
+	.
+	├── Main.groovy
+	└── MyFun.groovy
 
 	Linux:~ $ cat MyFun.groovy
-	static def show_ps() {
+	// define method
+	static def show_ps1() {
 	    println "ps aux".execute().text
 	}
 
+	// anonymous method
+	def show_ps2 = {
+	    println "ps aux".execute().text
+	}
+
+	show_ps1()
+	show_ps2
+
 	Linux:~ $ cat Main.groovy
-	MyFun.show_ps()
+	MyFun.show_ps1()
+	// anonymous method 無法跨檔案使用
+	//m = new MyFun()
+	//m.show_ps2
+
+
+## argument / parameter
+
+
+for normal parameter
+
+	def sum1(a, b) {
+	    return a + b
+	}
+
+	def sum2 = { a, b ->
+	    a + b
+	}
+
+	println sum1(1, 2)
+	println sum2(1, 2)
+
+
+for varargs (unspecified number of arguments)
+
+當多個 args 時, 只有最後一個可以為 varargs
+
+	// 使用 []
+	def run_cmd1(String[] cmds) {
+	    println cmds.join(" ").execute().text
+	}
+
+	// 使用 ...
+	def run_cmd2(String... cmds) {
+	    println cmds.join(" ").execute().text
+	}
+
+	// 因為 groovy 是動態語言, 可不需要
+	def run_cmd3(... cmds) {
+	    println cmds.join(" ").execute().text
+	}
+
+	def run_cmd4 = { ... cmds ->
+	    println cmds.join(" ").execute().text
+	}
+
+	run_cmd1("ls", "-l")
+	run_cmd2("ls", "-l")
+	run_cmd3("ls", "-l")
+	run_cmd4("ls", "-l")
+
+
+for hashmap argument
+
+	def location1(coordinate, temperature, pressue) {
+	    println "coordinate: $coordinate.x, $coordinate.y $coordinate.z"
+	    println "temperature: $temperature, pressue: $pressue"
+	}
+
+	def location2 = { coordinate, temperature, pressue ->
+	    println "coordinate: $coordinate.x, $coordinate.y $coordinate.z"
+	    println "temperature: $temperature, pressue: $pressue"
+	}
+
+	// 依照位置傳 argument
+	location1(['x': 1, 'y': 1, 'z': 1], 35, 1)
+
+	// hastmap 預設當一個 argument
+	location1('x': 1, 'y': 1, 'z': 1, 35, 1)
+
+	// hastmap 預設當一個 argument, 其餘會依序
+	location1(35, 1, 'x': 1, 'y': 1, 'z': 1)
 
 
 # 物件導向
+
+## class
+
+## enum
+
+## extends
+
+	class Animal {
+	    public void voice () { System.out.println("Animal voice"); }
+
+	    public void run () { System.out.println("Animal run"); }
+	}
+
+	class Dog extends Animal {
+	    public void run () { System.out.println("Dog run"); }
+
+	    public void voice () { System.out.println("Dog voice"); }
+	}
+
+	class Cat extends Animal {
+	    public void run () { System.out.println("Cat run"); }
+
+	    public void jump () { System.out.println("Cat jump"); }
+	}
+
+	Animal a1 = new Animal();
+	a1.voice();
+	a1.run();
+
+	Dog d1 = new Dog();
+	d1.voice();
+	d1.run();
+
+	Cat c1 = new Cat();
+	c1.voice();
+	c1.run();
+	c1.jump();
+
+	// up casting
+	Animal a2 = new Dog();
+	a2.voice();
+	a2.run();
+
+	Animal a3 = new Cat();
+	a3.voice();
+	a3.run();
+	// a3.jump(); // parent class no child class method
+	((Cat) a3).jump();
+
+	// down casting
+	// Dog d2 = new Animal(); // Compile
+	// Dog d3 = (Dog) new Animal(); // RRTI
+
+	// first up casting, last down casting
+	Animal a4 = new Cat();
+	Cat c4 = (Cat) a4;
+	c4.voice();
+	c4.run();
+	c4.jump();
+
+
+## abstact
+
+	abstract class Vehicle {
+	    public void voice () { System.out.println("Vehicle voice"); }
+
+	    public abstract void run ();
+	}
+
+	class Car extends Vehicle {
+	    @Override
+	    public void run() { System.out.println("Car run"); }
+	}
+
+	class Sport extends Car {
+	    @Override
+	    public void run() { System.out.println("Sport run"); }
+
+	    @Override
+	    public void voice() { System.out.println("Sport voice"); }
+	}
+	
+	class Truck extends Car {
+	    public void concatenate () { System.out.println("Truck concatenate"); }
+	}
+
+	Vehicle v1 = new Vehicle() {
+	    @Override
+	    public void run() { System.out.println("anonymous Vehicle run"); }
+	};
+	v1.voice();
+	v1.run();
+
+	Car c1 = new Car();
+	c1.voice();
+	c1.run();
+
+	Sport s1 = new Sport();
+	s1.voice();
+	s1.run();
+
+	Truck t1 = new Truck();
+	t1.voice();
+	t1.run();
+
+	// abstract class up casting
+	Vehicle v2 = new Car();
+	v2.voice();
+	v2.run();
+
+	Vehicle v3 = new Sport();
+	v3.voice();
+	v3.run();
+
+	Vehicle v4 = new Truck();
+	v4.voice();
+	v4.run();
+
+	// class up casting
+	Car c2 = new Sport();
+	c2.voice();
+	c2.run();
+
+	Car c3 = new Truck();
+	c3.voice();
+	c3.run();
+	// c3.concatenate(); // Car without concatenate method
+	((Truck) c3).concatenate();
+
+
+## interface
+
+	interface IFly {
+	    void fly();
+	}
+
+	interface ITurbo {
+	    void turbo();
+	}
+
+	class Plane extends Vehicle implements IFly, ITurbo{
+	    @Override
+	    public void fly() { System.out.println("Plane fly"); }
+
+	    @Override
+	    public void run() { System.out.println("Plane run"); }
+
+	    @Override
+	    public void turbo() { System.out.println("Plane turbo"); }
+	}
+
+	class Bird extends Animal implements IFly {
+	    @Override
+	    public void fly() { System.out.println("Bird fly"); }
+
+	    public void run() { System.out.println("Bird run");}
+	}
+
+	Plane p1 = new Plane();
+	p1.fly();
+
+	Bird b1 = new Bird();
+	b1.fly();
+	b1.voice();
+
+	IFly i1 = new Plane();
+	i1.fly();
+	((ITurbo) i1).turbo();
+	((Plane) i1).turbo();
+
+	IFly i2 = new Bird();
+	i2.fly();
+	// i2.voice();
+	((Animal) i2).run();
+	((Bird) i2).run();
+
+	IFly i3 = new IFly() {
+	    @Override
+	    public void fly() { System.out.println("IFly fly"); }
+	};
+	i3.fly();
 
 # 輸入輸出 
 
