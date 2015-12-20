@@ -140,7 +140,7 @@ groovy 像一般 script language 一樣是 dynamic type, 使用時不需要先�
 
 ## String / 字串
 
-' (單引號), "(雙引號)
+一般字串放在 ' (單引號) 或 "(雙引號), 中間. ' 內的所有字元, 皆無特殊意義; " 內的字元, 有些會有特需意義, 例如 \n 是換行, ...
 
 	// single line string
 	println "don't say \"no\""
@@ -163,6 +163,8 @@ groovy 像一般 script language 一樣是 dynamic type, 使用時不需要先�
 	// string concatenation
 	println "Hi, " + "Groovy"
 
+
+Regular Expression / 正規表示
 
 ## ArrayList /
 
@@ -496,27 +498,54 @@ for hashmap argument
 
 # 物件導向
 
+## enum
+
+	enum Sex {
+	    MALE, FEMALE;
+	}
+
+
 ## class
 
-## enum
+	class Person {
+	    final String name
+	    int age = 0
+	    public Sex sex
+
+	    Person(name, sex) {
+	        this.name = name
+	        this.sex = sex
+	    }
+
+	    void increaseAge(age) {
+	        this.age += age
+	    }
+	}
+
+	Person p1 = new Person('John', Sex.MALE)
+
+	// non-static data field 會自動產生對應的 set, get
+	println p1.age        // p1.getAge()
+	println p1.age = 10   // p1.setAge(10)
+
+	// static data field 只會自動產生對應的 get
+	println p1.name       // p1.getName()
+
 
 ## extends
 
 	class Animal {
 	    public void voice () { System.out.println("Animal voice"); }
-
 	    public void run () { System.out.println("Animal run"); }
 	}
 
 	class Dog extends Animal {
 	    public void run () { System.out.println("Dog run"); }
-
 	    public void voice () { System.out.println("Dog voice"); }
 	}
 
 	class Cat extends Animal {
 	    public void run () { System.out.println("Cat run"); }
-
 	    public void jump () { System.out.println("Cat jump"); }
 	}
 
@@ -556,11 +585,10 @@ for hashmap argument
 	c4.jump();
 
 
-## abstact
+## abstract
 
 	abstract class Vehicle {
 	    public void voice () { System.out.println("Vehicle voice"); }
-
 	    public abstract void run ();
 	}
 
@@ -572,7 +600,6 @@ for hashmap argument
 	class Sport extends Car {
 	    @Override
 	    public void run() { System.out.println("Sport run"); }
-
 	    @Override
 	    public void voice() { System.out.println("Sport voice"); }
 	}
@@ -585,6 +612,7 @@ for hashmap argument
 	    @Override
 	    public void run() { System.out.println("anonymous Vehicle run"); }
 	};
+
 	v1.voice();
 	v1.run();
 
@@ -638,10 +666,8 @@ for hashmap argument
 	class Plane extends Vehicle implements IFly, ITurbo{
 	    @Override
 	    public void fly() { System.out.println("Plane fly"); }
-
 	    @Override
 	    public void run() { System.out.println("Plane run"); }
-
 	    @Override
 	    public void turbo() { System.out.println("Plane turbo"); }
 	}
@@ -649,7 +675,6 @@ for hashmap argument
 	class Bird extends Animal implements IFly {
 	    @Override
 	    public void fly() { System.out.println("Bird fly"); }
-
 	    public void run() { System.out.println("Bird run");}
 	}
 
@@ -676,6 +701,139 @@ for hashmap argument
 	    public void fly() { System.out.println("IFly fly"); }
 	};
 	i3.fly();
+
+
+# 閉包
+
+closure 是
+
+
+## Iterator
+
+for arraylist
+
+	weeks = ['Sunday', 'Monday', 'Tuesday', 'Wednesday',
+	         'Thursday', 'Friday', 'Saturday']
+
+	println weeks.each { println "$it" }      // 每個 element 都執行
+
+	println weeks.collect { it[0..2] }        // 每個 element 都執行, 並回傳 arraylist
+
+	println weeks.find { it.size() > 6 }      // 回傳第一個符合條件 element
+
+	println weeks.findAll { it.size() > 6  }  // 所有符合條件的 element, 回傳 arraylist
+
+	println weeks.collect { it.size() }.sum() // 回傳總和
+
+	println weeks.join(' ')                   // 將 arraylist 合併成 string
+
+	println weeks.any { it.size() > 6 }       // 判斷 element 至少有一個符合, 回傳 true/false
+
+	println weeks.every { it.size() > 6 }     // 判斷所有 element 符合, 回傳 true/false
+
+	weeks << ['Holiday', 'Birthday']
+	println weeks
+	weeks = weeks.flatten()
+	println weeks
+
+	weeks -= ['Holiday', 'Birthday']
+	println weeks
+
+	println weeks.size()
+	println weeks*.size()
+
+	def words(a, b, c, d, e) {
+	    println "$a, $b, $c, $d, $e"
+	}
+	words(*weeks[1..5])
+
+
+for hashmap
+
+	langs = ['C++': 'Bjarne Stroustrup', 'Java': 'James Gosling ', 'Groovy': 'James Strachan',
+	         'Perl': 'Larry Wall', 'Python': 'Guido van Rossum', 'Ruby': 'Yukihiro Matsumoto']
+
+	println "Language Java was authored by $langs.Java/${langs['Java']}"
+	println "Language C++ was authored by ${langs.'C++'}/${langs['C++']}"
+	lang = 'Groovy'
+	println "Language $lang was authored by ${langs."$lang"}/${langs["$lang"]}"
+
+	println langs.each { println "${it.key}: ${it.value}" }
+
+	println langs.collect { k, v -> "$k: $v"}
+
+	println langs.find { it.key.size() > 3 }
+
+	println langs.findAll { it.key.size() > 3}
+
+	println langs.groupBy { it.value.split(' ')[0] }
+
+
+## Method
+
+	def pickEven(n, closure) {
+	    for (i = 2; i <= n; i += 2)
+	        closure(i)
+	}
+
+	def myPrint = {
+	    println "$it"
+	}
+
+	pickEven(10, myPrint)             // 使用 anonymous method
+	pickEven(10, { println "$it"})    // 使用 anonymous method
+	pickEven(10) { println "$it"}     // 當 method 最後一個 parameter 為 closure, 可放在 () 後面
+
+
+## Argument
+
+	def ps_cmd(closure) {
+	    closure "ps", "aux"
+	}
+
+	ps_cmd() { a1, a2 ->
+	    println "$a1 $a2".execute().text
+	}
+
+
+## Class
+
+	class Resource {
+	    def open()  { println "open ..."  }
+	    def close() { println "close ..." }
+	    def read()  { println "read ..."  }
+	    def write() { println "write ..." }
+
+	    def static use(closure) {
+	        def r = new Resource()
+	        try {
+	            r.open()
+	            closure(r)
+	        }
+	        finally { r.close() }
+	    }
+	}
+
+	// 一般使用方式
+	Resource r1 = new Resource()
+	r1.open()
+	r1.read()
+	// do something
+	r1.close() // easy to forget close or fail due to not close
+
+	// 使用 closure 方式, 會自動 open 跟 close
+	Resource.use { res ->
+	    res.read()
+	    // do something
+	}
+
+
+## Coroutine
+
+## Curried
+
+## Delegation
+
 
 # 輸入輸出 
 

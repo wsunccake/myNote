@@ -20,5 +20,5 @@
 	        root         /usr/share/nginx/html;
 	...
 	location / {
-          autoindex on; # 新增此行, 可以瀏覽目錄
-        }
+	          autoindex on; # 新增此行, 可以瀏覽目錄
+	        }
