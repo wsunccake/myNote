@@ -92,7 +92,7 @@ In Host OS
 In Guest OS
 
 	guest:~ # yum install gcc kernel-headers kernel-devel    # 安裝 kernel lib 及 compiler
-	guest:~ # guest:~ # mount /dev/cdrom /mnt
+	guest:~ # mount /dev/cdrom /mnt
 	guest:~ # /mnt/VBoxLinuxAdditions.run
 	guest:~ # lsmod | grep vboxfs                            # 確認產生 vboxfs module
 	guest:~ # mount -t vboxsf  <folder_nane> <mount_point>   # 掛載 shared folder
