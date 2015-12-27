@@ -37,7 +37,7 @@ maven 預設個人目錄為 $basedir/.m2 (預設 $basedir 為使用者家目錄�
 ## Basic
 
 
-### compile and run java
+### Compile & Run Java
 
 在指令模式下編譯執行 java 範例
 
@@ -61,7 +61,7 @@ maven 預設個人目錄為 $basedir/.m2 (預設 $basedir 為使用者家目錄�
 	rhel:~ # jar cf mypackage.jar mypackage
 
 
-### junit test case
+### JUnit Test Case
 
 使用 JUnit 寫測試, 並編譯測試
 
@@ -111,7 +111,7 @@ maven 預設個人目錄為 $basedir/.m2 (預設 $basedir 為使用者家目錄�
 	rhel:~ # java -cp ~/junit-4.10.jar:mypackage.jar org.junit.runner.JUnitCore mypackage/HelloTest
 
 
-### maven build
+### Maven Build Project
 
 pom.xml 是 Maven 的配置檔, 相當是 Make 裡的 Makefile, ANT 裡的 build.xml
 
@@ -192,7 +192,23 @@ scope 在哪層目錄下, 不指定會被包含在 main, (因為 junit 只做 un
 ## IDE
 
 
-### IntelliJ IDEA 設定
+### IntelliJ IDEA
+
+
+`新建 Maven Project`
+
+![IDEA_open](img/IDEA_open.png)
+
+![IDEA_create_maven_01](img/IDEA_create_maven_01.png)
+
+![IDEA_create_maven_02](img/IDEA_create_maven_02.png)
+
+![IDEA_create_maven_03](img/IDEA_create_maven_03.png)
+
+![IDEA_create_maven_04](img/IDEA_create_maven_04.png)
+
+
+`IntelliJ IDEA 設定`
 
 開啟 project 後, 到 Menu | View | Tools Windows
 
@@ -204,9 +220,7 @@ scope 在哪層目錄下, 不指定會被包含在 main, (因為 junit 只做 un
 
 可見到下圖, 右側部分就是跟 Maven 相關操作, 可在上面直接點選操作
 
-![IDEA_Maven_01](img/IDEA_Maven_01.png)
-
-![IDEA_Maven_02](img/IDEA_Maven_02.png)
+![IDEA_create_maven_05](img/IDEA_create_maven_05.png)
 
 
 ## Quick Start
@@ -214,16 +228,23 @@ scope 在哪層目錄下, 不指定會被包含在 main, (因為 junit 只做 un
 
 ### Create Project
 
+batch mode 方式 create project
+
 	rhel:~ # mvn archetype:generate \
 	> -DgroupId=com.mycompany.app \
-	> -DartifactId=my-app \
-	> -DarchetypeArtifactId=maven-archetype-quickstart \
+	> -DartifactId=myproject \
 	> -DinteractiveMode=false
 
-groupId 和 artifactId 套件資訊 
-archetypeArtifactId 套件使用模版 (專案種類) 
+groupId 和 artifactId 套件資訊會寫入到 pom.xml 
 
-	rhel:~ # tree my-app/
+interactive mode 方式 create project
+
+	rhel:~ # mvn archetype:generate
+
+
+### Folder Structure
+
+	rhel:~ # tree myproject/
 	my-app/
 	|-- pom.xml
 	`-- src
@@ -242,103 +263,135 @@ archetypeArtifactId 套件使用模版 (專案種類)
 	rhel:~ # cat my-app/src/main/java/com/mycompany/app/App.java
 
 src/main/java        放置專案原始碼
+
 src/test/java        放置單元測試用原始碼
+
 src/main/resources   放置設定檔, 例如 log4j.properties
+
 src/test/resources   放置測試用設定檔, 如同測試程式本身不會被打包進 jar
+
 target               distributable JAR
+
 target/classes       complied byte code
 
 
 ### Build Project
 
-	rhel:~/my-app $ mvn compile    # compile 就會產生對應的 class file
-	rhel:~/my-app $ mvn package    # package 就是 build 
-	rhel:~/my-app $ java -cp target/my-app-1.0-SNAPSHOT.jar com.mycompany.app.App
-
-	rhel:~/my-app $ tree
-	.
-	|-- pom.xml
-	|-- src
-	|   |-- main
-	|   |   `-- java
-	|   |       `-- com
-	|   |           `-- mycompany
-	|   |               `-- app
-	|   |                   `-- App.java
-	|   `-- test
-	|       `-- java
-	|           `-- com
-	|               `-- mycompany
-	|                   `-- app
-	|                       `-- AppTest.java
-	`-- target
-	    |-- classes
-	    |   `-- com
-	    |       `-- mycompany
-	    |           `-- app
-	    |               `-- App.class
-	    |-- maven-archiver
-	    |   `-- pom.properties
-	    |-- maven-status
-	    |   `-- maven-compiler-plugin
-	    |       |-- compile
-	    |       |   `-- default-compile
-	    |       |       |-- createdFiles.lst
-	    |       |       `-- inputFiles.lst
-	    |       `-- testCompile
-	    |           `-- default-testCompile
-	    |               |-- createdFiles.lst
-	    |               `-- inputFiles.lst
-	    |-- my-app-1.0-SNAPSHOT.jar
-	    |-- surefire-reports
-	    |   |-- com.mycompany.app.AppTest.txt
-	    |   `-- TEST-com.mycompany.app.AppTest.xml
-	    `-- test-classes
-	        `-- com
-	            `-- mycompany
-	                `-- app
-	                    `-- AppTest.class
+	rhel:~/myproject $ mvn compile
+	rhel:~/myproject $ mvn package
+	rhel:~/myproject $ java -cp target/my-app-1.0-SNAPSHOT.jar com.mycompany.app.App
 
 
-### Project Object Model / POM
 
-	rhel:~/my-app # cat pom.xml 
+
+## Add Source Code
+
+以下以新增 Log4J 為例子
+
+### 下載 jar
+
+	rhel:~ # mvn dependency:get -DgroupId=commons-logging -DartifactId=commons-logging -Dversion=1.2
+	rhel:~ # mvn dependency:get -DgroupId=org.apache.logging.log4j -DartifactId=log4j-api -Dversion=2.5
+
+
+###  範例
+
+	rhel:~ # cat mypackage/DemoLog4J.java
+	package mypackage;
+	
+	import org.apache.log4j.Logger;
+	
+	public class DemoLog4J {
+	    final static Logger logger = Logger.getLogger(DemoLog4J.class);
+	    public static void main(String[] args) {
+	        DemoLog4J obj = new DemoLog4J();
+	        obj.runMe("Hell LOG4J");
+	    }
+	    private void runMe(String parameter){
+	        if (logger.isDebugEnabled())
+	            logger.debug("This is debug : " + parameter);
+	        if (logger.isInfoEnabled())
+	            logger.info("This is info : " + parameter);
+	        logger.warn("This is warn : " + parameter);
+	        logger.error("This is error : " + parameter);
+	        logger.fatal("This is fatal : " + parameter);
+	    }
+	}
+
+
+### Log4J 設定檔
+
+	rhel:~ # cat log4j.proerties
+	# Define the root logger with appender file
+	log = /root/log4j
+	log4j.rootLogger = DEBUG, FILE
+	
+	# Define the file appender
+	log4j.appender.FILE=org.apache.log4j.FileAppender
+	log4j.appender.FILE.File=${log}/log.out
+	
+	# Define the layout for file appender
+	log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
+	log4j.appender.FILE.layout.conversionPattern=%m%n
+
+
+### 編譯及執行
+
+	rhel:~ # jar cf mypackage.jar mypackage
+	rhel:~ # javac -cp /root/.m2/repository/log4j/log4j/1.2.12/log4j-1.2.12.jar mypackage/DemoLog4J.java
+	rhel:~ # java -cp /root/.m2/repository/log4j/log4j/1.2.12/log4j-1.2.12.jar:mypackage.jar -Dlog4j.configuration=file:///root/log4j.properties mypackage/DemoLog4J
+
+	rhel:~ # ls log4j/log.out
+
+
+### 使用 Maven
+
+	rhel:~ # cp mypackage/DemoLog4J.java project/src/main/java/mypackage
+	rhel:~ # cp log4j.proerties project/src/main/resources
+
+
+### 更新 POM
+
+	rhel:~ # cat project/pom.xml
 	<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	  <modelVersion>4.0.0</modelVersion>
-	  <groupId>com.mycompany.app</groupId>
-	  <artifactId>my-app</artifactId>
+	  <groupId>mypackage</groupId>
+	  <artifactId>project</artifactId>
 	  <packaging>jar</packaging>
 	  <version>1.0-SNAPSHOT</version>
-	  <name>my-app</name>
-	  <url>http://maven.apache.org</url>
+	  <name>Hello Project</name>
+
 	  <dependencies>
+	    <dependency>
+	      <groupId>log4j</groupId>
+	      <artifactId>log4j</artifactId>
+	      <version>1.2.12</version>
+	    </dependency>
+
 	    <dependency>
 	      <groupId>junit</groupId>
 	      <artifactId>junit</artifactId>
-	      <version>3.8.1</version>
+	      <version>4.10</version>
 	      <scope>test</scope>
 	    </dependency>
 	  </dependencies>
 	</project>
 
-groupId: Id of project's group
 
-artifactId: Id of the project
+### 顯示目前 POM 設定
 
-version: version of the project
+	rhel:~ # mvn help:effective-pom
 
 
-這樣是一組 dependency
+### 執行
 
-	<dependency>
-	  <groupId>junit</groupId>
-	  <artifactId>junit</artifactId>
-	  <version>3.8.1</version>
-	</dependency>
+	rhel:~ # mvn exec:java -Dexec.mainClass=mypackage.DemoLog4J
+	rhel:~ # ls log4j/log.out
 
 ## Command
 
+	mvn help:effective-pom
 	rhel:~ # mvn -h
 	rhel:~ # mvn help system
 	rhel:~ # mvn complie
