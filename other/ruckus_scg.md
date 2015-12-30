@@ -1,7 +1,10 @@
 # SCG #
 
 
-## SCG on KVM ##
+## on KVM
+
+
+### SCG on KVM
 
 * Processor: 4+
 
@@ -12,7 +15,7 @@
 * Disk: 50+ GB, IDE
 
 
-## SZ/vSZ on KVM ##
+### SZ/vSZ on KVM
 
 * Processor: 4+
 
@@ -23,10 +26,7 @@
 * Disk: 50+ GB, IDE
 
 
-# vDP #
-
-
-## vDP on KVM ##
+## vDP on KVM
 
 * Processor: 4+
 
@@ -38,7 +38,7 @@
 * Disk: 50GB+, IDE
 
 
-## prividge mode ##
+## prividge mode
 
 	# prividge mode
 	vSZ-D> enable 
@@ -54,7 +54,25 @@
 	[root@vSZ-D ~]#
 
 
-## setup and initial ##
+## SCG Cassandra Web
+
+	# method 1.
+	SCG# debug
+	SCG(debug)# web-debug
+
+	# method 2.
+	-bash-4.1$ sudo /opt/ruckuswireless/wsg/cli/bin/tomcat.py -D start
+
+https://<scg_manamgement_ip>:8443/CassandraWeb/
+
+	# CLI
+	-bash-4.1$ sudo /opt/ruckuswireless/wsg/cli/bin/cassandra.py --cli
+
+	# CQL
+	-bash-4.1$ sudo /opt/ruckuswireless/3rdparty/cassandra/bin/cqlsh
+
+
+## setup and initial
 
 	SCG# rbd SCG200 SCG200 00001 11:22:33:44:55:66 32 ruckus
 	#       <board>  <model> <sn> <mac> <mac-count> <customer>
@@ -94,3 +112,11 @@
 	# vDP shell mode
 	[root@vSZ-D ~]# tunnelmgr_cli -s all
 	[root@vSZ-D ~]# datacore arp
+
+
+## public api
+
+	check public api version in control package
+	rpm -ql control-3.4.0.0-196.x86_64 | grep json-schema | grep json
+
+https://<scg_manamgement_ip>:7443/api
