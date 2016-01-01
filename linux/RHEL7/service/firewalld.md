@@ -1,4 +1,4 @@
-#  firewalld #
+# Firewalld #
 
 
 ## Package ##
@@ -17,6 +17,7 @@ RHEL 7 的防火牆有兩種可以選擇, 一個是 iptables (相容之前 RHEL 
 
 ## Command ##
 
+	rhel:~ # firewall-cmd --permanent --zone=public --add-rich-rule="rule family=ipv4 accept source address=192.168.68.0/24"
 
 ### Zone ###
 
@@ -43,7 +44,7 @@ firewalld 使用 zone 去管理 rule
 	rhel:~ # firewall-cmd --reload                           # 重載設定
 
 
-### interface ###
+### Interface ###
 
 	rhel:~ # firewall-cmd [--permanent] [--zone=internal] --change-interface=eth0
 

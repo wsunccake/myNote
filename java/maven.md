@@ -424,4 +424,3 @@ help:effective-settings displays the calculated settings as an XML for the proje
 help:evaluate evaluates Maven expressions given by the user in an interactive mode.
 help:expressions displays the supported Plugin expressions used by Maven.
 help:system displays a list of the platform details like system properties and environment variables.
-
