@@ -276,6 +276,8 @@ scope 在哪層目錄下, 不指定會被包含在 main, (因為 junit 只做 un
 	rhel:~/project # mvn package          # src/{main,test}/java 底下的 java file 打包成 jar, 並產生在 target 目錄
 
 	rhel:~/project # mvn install          # package 被打包成 jar 安裝在  $basedir/.m2/repository
+	rhel:~/project # mvn install -DskipTests
+	rhel:~/project # mvn install -DskipITs
 	rhel:~/project # mvn install -Dmaven.test.skip=true
 
 	rhel:~/project # mvn exec:java -Dexec.mainClass=mypackage.DemoLog4J

@@ -1,6 +1,6 @@
 # Nexus Repository Management
 
-![nexus logo](https://m2.neo4j.org/images/nexus.png)
+![nexus logo](http://www.sonatype.com/people/wp-content/uploads/2010/01/nexus-small.png)
 
 Nexus 是 Sonatype 的提供的管理 jar 的 Repository Manager.
 
