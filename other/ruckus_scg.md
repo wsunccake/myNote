@@ -54,6 +54,11 @@
 	[root@vSZ-D ~]#
 
 
+## save passphrase
+
+	SCG(debug)# save passphrase
+
+
 ## SCG Cassandra Web
 
 	# method 1.
@@ -63,7 +68,7 @@
 	# method 2.
 	-bash-4.1$ sudo /opt/ruckuswireless/wsg/cli/bin/tomcat.py -D start
 
-https://<scg_manamgement_ip>:8443/CassandraWeb/
+https://scg_manamgement_ip:8443/CassandraWeb/
 
 	# CLI
 	-bash-4.1$ sudo /opt/ruckuswireless/wsg/cli/bin/cassandra.py --cli
@@ -116,7 +121,19 @@ https://<scg_manamgement_ip>:8443/CassandraWeb/
 
 ## public api
 
-	check public api version in control package
-	rpm -ql control-3.4.0.0-196.x86_64 | grep json-schema | grep json
+check public api version in control package
 
-https://<scg_manamgement_ip>:7443/api
+	-bash-4.1$ rpm -ql control-3.4.0.0-196.x86_64 | grep json-schema | grep json
+
+https://scg_manamgement_ip:7443/api
+
+
+## snapshot
+
+SCG/vSZ
+
+
+
+vDP
+
+	vSZ-D(debug)# save-log ftp <ftp_ip> <path> <user> <password>

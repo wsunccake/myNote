@@ -38,7 +38,7 @@ $basedir/.m2/settings.xml 是設定檔;
 $basedir/.m2/repository 是存放 jar
 
 
-## Basic
+## Basic - jar
 
 
 ### Compile & Run Java
@@ -198,7 +198,8 @@ pom.xml 是 Maven 的配置檔, 相當是 Make 裡的 Makefile, ANT 裡的 build
 設定 pom.xml
 
 	rhel:~/project # cat pom.xml
-	<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	<project xmlns="http://maven.apache.org/POM/4.0.0"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	  <modelVersion>4.0.0</modelVersion>
 	  <groupId>mypackage</groupId>
@@ -281,6 +282,154 @@ scope 在哪層目錄下, 不指定會被包含在 main, (因為 junit 只做 un
 	rhel:~/project # mvn install -Dmaven.test.skip=true
 
 	rhel:~/project # mvn exec:java -Dexec.mainClass=mypackage.DemoLog4J
+
+
+## Example - war
+
+
+### Compile & Run Servlet
+
+	rhel~: # tree myapp
+	myapp
+	├── images
+	└── WEB-INF
+	    ├── classes
+	    │   └── mypackage
+	    │       └── HelloServlet.java
+	    ├── lib
+	    └── web.xml
+
+
+java code
+
+	rhel:~ # cat myapp/WEB-INF/classes/mypackage/HelloServlet.java
+	package mypackage;
+
+	import java.io.*;
+	import javax.servlet.*;
+	import javax.servlet.http.*;
+	
+	public class HelloServlet extends HttpServlet {
+	    public void doGet(HttpServletRequest request, HttpServletResponse response)
+	                    throws ServletException, IOException {
+	        PrintWriter out = response.getWriter();
+	        out.println("<HTML>");
+	        out.println("<BODY>");
+	        out.println("<p>Hello Servlet</p>");
+	        out.println("</BODY>");
+	        out.println("</HTML>");
+	  }
+	}
+
+
+設定 web.xml 
+
+	rhel:~ # cat myapp/WEB-INF/web.xml
+	<?xml version="1.0" encoding="ISO-8859-1"?>
+
+	<!DOCTYPE web-app
+	    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+	    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+	<web-app>
+	    <servlet>
+	      <servlet-name>
+	          HelloServlet
+	      </servlet-name>
+	      <servlet-class>
+	          mypackage.HelloServlet
+	      </servlet-class>
+	    </servlet>
+
+	    <servlet-mapping>
+	        <servlet-name>HelloServlet</servlet-name>
+	        <url-pattern>/HelloServlet</url-pattern>
+	    </servlet-mapping>
+	</web-app>
+
+
+create war
+
+	rhel:~ # javac -cp /usr/share/java/tomcat-servlet-api.jar myapp/WEB-INF/classes/mypackage/HelloServlet.java
+	rhel:~/myapp # cd myapp
+	rhel:~/myapp # jar cfM myapp.war *
+	rhel:~/myapp # cp myapp.war /var/lib/tomcat/webapps
+
+
+run tomcat
+
+	rhel:~ # systemctl restart tomcat.service
+
+http://localhost:8080/myapp/HelloServlet
+
+
+### Maven Build Project
+
+	rhel:~ # mkdir -p project/src/{main,test}
+	rhel:~ # mkdir -p project/src/main/{java,resources,webapp}
+	rhel:~ # mkdir -p project/src/main/java/mypackage
+	rhel:~ # mkdir -p project/src/main/resources/images
+	rhel:~ # mkdir -p project/src/main/webapp/{WEB-INF,jsp}
+
+	rhel:~ # cp myapp/WEB-INF/classes/mypackage/HelloServlet.java project/src/main/java/mypackage/
+	rhel:~ # cp myapp/WEB-INF/web.xml project/src/main/webapp/WEB-INF/
+
+
+設定 pom.xml
+
+	rhel:~ # cat pom.xml
+	<project xmlns="http://maven.apache.org/POM/4.0.0"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	  <modelVersion>4.0.0</modelVersion>
+	  <groupId>mypackage</groupId>
+	  <artifactId>project</artifactId>
+	  <packaging>war</packaging>
+	  <version>1.0-SNAPSHOT</version>
+	
+	  <name>Hello Project</name>
+	  <url>http://hello.com</url>
+	
+	  <dependencies>
+	    <dependency>
+	      <groupId>javax.servlet</groupId>
+	      <artifactId>servlet-api</artifactId>
+	      <version>2.5</version>
+	    </dependency>
+	  </dependencies>
+	</project>
+
+
+folder structure
+
+	rhel:~ # tree project
+	project
+	├── pom.xml
+	└── src
+	    ├── main
+	    │   ├── java
+	    │   │   └── mypackage
+	    │   │       └── HelloServlet.java
+	    │   ├── resources
+	    │   │   └── images
+	    │   └── webapp
+	    │       ├── jsp
+	    │       └── WEB-INF
+	    │           └── web.xml
+	    └── test
+
+
+create war
+
+	rhel:~/project # mvn clean package
+	rhel:~ # cp target/project-1.0-SNAPSHOT.war /var/lib/tomcat/webapps
+
+
+run tomcat
+
+	rhel:~ # systemctl restart tomcat.service
+
+http://localhost:8080/project-1.0-SNAPSHOT/HelloServlet
 
 
 ## IDE
