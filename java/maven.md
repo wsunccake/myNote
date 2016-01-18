@@ -554,24 +554,3 @@ site: generates site documentation for this project
 	rhel:~ # mvn package
 	rhel:~ # mvn clean
 	rhel~: # mvn site
-
-
-
-validate: validate the project is correct and all necessary information is available
-compile: compile the source code of the project
-test: test the compiled source code using a suitable unit testing framework. These tests should not require the code be packaged or deployed
-package: take the compiled code and package it in its distributable format, such as a JAR.
-integration-test: process and deploy the package if necessary into an environment where integration tests can be run
-verify: run any checks to verify the package is valid and meets quality criteria
-install: install the package into the local repository, for use as a dependency in other projects locally
-deploy: done in an integration or release environment, copies the final package to the remote repository for sharing with other developers and projects.
-
-
-help:active-profiles lists the profiles which are currently active for the build.
-help:all-profiles lists the available profiles under the current project.
-help:describe describes the attributes of a Plugin and/or a Mojo (Maven plain Old Java Object).
-help:effective-pom displays the effective POM as an XML for the current build, with the active profiles factored in.
-help:effective-settings displays the calculated settings as an XML for the project, given any profile enhancement and the inheritance of the global settings into the user-level settings.
-help:evaluate evaluates Maven expressions given by the user in an interactive mode.
-help:expressions displays the supported Plugin expressions used by Maven.
-help:system displays a list of the platform details like system properties and environment variables.

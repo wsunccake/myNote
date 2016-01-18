@@ -188,7 +188,9 @@ Step 1. 直接使用預設 repository
 
 Maven 設定/操作
 
-Step 1. 設定 settings.xml
+之後使用 mvn 有下載任何 jar, central repository 就會下載一份
+
+Method 1. 設定 settings.xml
 
 	rhel:~ # cat .m2/setting.xml
 	<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
@@ -207,4 +209,31 @@ Step 1. 設定 settings.xml
 
 	</settings>
 
-之後使用 mvn 有下載任何 jar, central repository 就會下載一份
+
+Method 2. 設定 settings.xml
+
+	rhel:~ # cat .m2/setting.xml
+	<?xml version="1.0" encoding="UTF-8"?>
+	<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+	                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+	<profiles>
+	<profile>
+	<id>myprofile</id>
+	<repositories>
+	    <repository>
+	      <id>central</id>
+	      <name>Central</name>
+	      <url>http://localhost:8081/nexus/content/repositories/central</url>
+	    </repository>
+	</repositories>
+	</profile>
+	</profiles>
+
+	<activeProfiles>
+	   <activeProfile>myprofile</activeProfile>
+	</activeProfiles>
+
+	</settings>
