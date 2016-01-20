@@ -1,7 +1,9 @@
 # Perforce
 
 
-## Configure
+![perforce](https://www.perforce.com/perforce/doc.current/manuals/p4v-gs/images/01_p4v-gs.2.1.1.jpg)
+
+## Client Configure
 
 	rhel:~ # cat ~/.bashrc
 	...
@@ -14,7 +16,7 @@
 	P4CLIENT=user_host
 
 
-## Command
+## Client Command
 
 
 ### syntax
@@ -27,6 +29,8 @@
 	rhel:~ # p4 help simple
 	rhel:~ # p4 help commands
 
+	rhel:~ # p4 info
+
 
 ### login / logout
 
@@ -37,21 +41,41 @@
 ### workspace / client
 
 	rhel:~ # p4 clients                             # list work space
-	rhel:~ # p4 client <workspace>                  # create work space
-	rhel:~ # p4 client -d <workspace>               # delete work space
+	rhel:~ # p4 client [-o] <WS>                    # create work space
+	rhel:~ # p4 client -d <WS>                      # delete work space
+
+	rhel:~ # p4 client -i                           # change work space config
+	Client: <WS>
+	Root:  /var
+	View:  //depot/release  /var/release
+	按 Ctrl D 結束
+
+	rhel:~ # echo -e "Client: <WS>\nRoot:  /var\nView:  //depot/release  /var/release" | p4 client -i  
+
+
+### change list
+
+	rhle:~ # p4 changes[-u user]                    # show change list
+	rhel:~ # p4 changes -s shelved                  # show shevled in change list
+
+	rhel:~ # p4 change [-o <CL>]                    # create change list
+	rhel:~ # p4 change -d <CL>                      # delte change list
 
 
 ### file/dir
 
-	rhel:~ # p4 files //depot/*                     # list file
-	rhel:~ # p4 dirs //depot/*                      # list dir
+	rhel:~ # p4 files //depot/*                     # show file on server
+	rhel:~ # p4 have //depot/*                      # show file on client
+
+	rhel:~ # p4 dirs //depot/*                      # show dir
 
 
 ### sync code
 
-	rhel:~ # p4 sync //depot/release/...#head       # sync code
-	rhel:~ # p4 sync -f //depot/release/...#head    # force sync
+	rhel:~ # p4 sync //depot/release/...#head          # sync code
+	rhel:~ # p4 sync -f //depot/release/...#head       # force sync
+
+	rhel:~ # p4 unshelve -s <old CL> [-c <new CL>]     # sync code from shevle
 
 
-p4 info
 

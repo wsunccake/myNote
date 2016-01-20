@@ -237,3 +237,18 @@ Method 2. 設定 settings.xml
 	</activeProfiles>
 
 	</settings>
+
+## Group Jar (Group Reository)
+
+Nexus 設定/操作
+
+Step 1. 直接使用預設 repository
+
+![nexus group repository](img/nexus_repository_default_group.png)
+
+
+Maven 設定/操作
+
+設定同 Cache Jar, mvn 可以下載 group repository 內所有的 jar
+
+
