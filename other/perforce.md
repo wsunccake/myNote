@@ -57,6 +57,7 @@
 
 	rhle:~ # p4 changes[-u user]                    # show change list
 	rhel:~ # p4 changes -s shelved                  # show shevled in change list
+	rhel:~ # p4 describe -s <CL>                    # show shevled file in change list
 
 	rhel:~ # p4 change [-o <CL>]                    # create change list
 	rhel:~ # p4 change -d <CL>                      # delte change list
@@ -75,7 +76,13 @@
 	rhel:~ # p4 sync //depot/release/...#head          # sync code
 	rhel:~ # p4 sync -f //depot/release/...#head       # force sync
 
-	rhel:~ # p4 unshelve -s <old CL> [-c <new CL>]     # sync code from shevle
+	rhel:~ # p4 edit [-c <CL>] //depot/file            # add/edit code
+	rhel:~ # p4 shelve -f -c <CL> //depot/file         # shevle code
+
+	# sync code from shevle
+	rhel:~ # p4 unshelve -s <old CL> [-c <new CL>] [//depot/file]
+
+	rhel:~ # p4 revet //depot/file                     # revert/rollback code
 
 
 
