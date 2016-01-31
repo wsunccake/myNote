@@ -3,8 +3,7 @@
 
 ## Install ##
 
-先到 [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/index.html) 下載 JDK (Java Development Kit) 不是 JRE (Java Runtime Environment). 有 ME (Micro Edition), SE (Standard Edition) 和 EE (Enterprise Edition) 版本, 選擇 SE 就
-可以
+先到 [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/index.html) 下載 JDK (Java Development Kit) 不是 JRE (Java Runtime Environment). 有 ME (Micro Edition), SE (Standard Edition) 和 EE (Enterprise Edition) 版本, 選擇 SE 就可
 
 
 ### Environmnet ###
@@ -28,6 +27,17 @@
 	CLASSPATH=%JAVA_HOME%\lib
 	path=%path;%JAVA_HOME%\bin
 
+
+多版本 Java 設定
+
+```
+# Mac OS X
+osx: /usr/libexec/java_home -V
+osx: export JAVA_HOME=`/usr/libexec/java_home -v x.y.z_a-b-c`
+
+# Linux
+linux: 
+```
 
 ### Test ###
 
@@ -917,3 +927,63 @@ public class HelloJavaFXWithEvent extends Application{
 
 
 ## Serverlet ##
+
+
+## JSP
+
+
+JSP Comment <%-- comments -->
+JSP Expression <%= Java Expression %>
+JSP Scriptlet <% Java Statement(s) %>
+JSP Directive <%@ page|include ... %>
+
+[Java Server-side Programming
+Getting started with JSP by Examples](https://www3.ntu.edu.sg/home/ehchua/programming/java/JSPByExample.html)
+
+```
+Linux:~ # tree -L 1 -d ~/apache-tomcat
+~/apache-tomcat
+├── bin
+├── conf
+├── lib
+├── logs
+├── temp
+├── webapps
+└── work
+
+Linux:~ # tree -L 1 -d ~/apache-tomcat/webapps
+~/apache-tomcat/webapps
+├── docs
+├── examples
+├── host-manager
+├── manager
+└── ROOT
+
+Linux:~ # mkdir -p ~/apache-tomcat/webapps/demo/WEB-INF
+
+Linux:~ # mkdir -p ~/apache-tomcat/webapps/demo/demo.jsp
+<%@ page language="java"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+        <title>JSP Demo</title>
+</head>
+<body>
+        <%-- comment --%>
+        <% for (int i = 1; i <= 3; i++) { %>
+                <%= "Hello, JSP<br/>" %>
+        <% } %>
+</body>
+</html>
+
+Linux:~ # mkdir -p ~/apache-tomcat/webapps/demo/WEB-INF/web.xml
+<?xml version="1.0" encoding="GBK"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+    http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+    version="3.1">
+</web-app>
+```
+
+http://localhost:8080/demo/demo.jsp

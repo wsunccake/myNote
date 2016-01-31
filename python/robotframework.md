@@ -153,6 +153,7 @@ Log  ${list1[-1]}               # 顯示最後一個 element
 Append To List  ${list1}  D     # 新增 element
 Remove From List  ${list1}  0   # 移除 element
 Log  ${list1}
+${content}=  Catenate  SEPARATOR=\n  @{list1}  # 轉成字串
 
 ${dic1}=  Create Dictionary  Jun=1  Feb=2  # 設定 dictionary
 Log  ${dic1['Jun']}

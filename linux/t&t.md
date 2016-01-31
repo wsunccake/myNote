@@ -56,3 +56,30 @@ genisoimage -> mkisofs (symbol  link)
 
 
 ## Service ##
+
+
+## Regex
+
+### grep
+
+#### 不顯示 空行 跟 \# 開頭
+
+```
+	Linux:~ # grep -Ev '^$|^#'
+```
+
+### sed
+
+
+#### 跨行搜尋
+
+顯示特定內容
+
+```
+	Linux:~ # sed -n "/<\!--/,/-->/p" index.html
+```
+
+不顯示特定內容
+```
+	Linux:~ # sed  "/<\!--/,/-->/d" index.html
+```

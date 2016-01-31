@@ -19,17 +19,38 @@ Easy Searching and Filtering of Project Artifacts
 
 ## Install
 
-	rhel:~ # wget http://ftp.tc.edu.tw/pub/Apache/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
-	rhel:~ # tar zxf apache-maven-3.3.9-bin.tar.gz -C /opt
-	rhel:~ # ln -s /opt/apache-maven-3.3.9 /opt/apache-maven
+到 [Apache Maven](https://maven.apache.org/) 下載解壓縮版的 (zip, tar.gz) maven
 
-	rhel:~ # export MAVEN_HOME=/opt/apache-maven
-	rhel:~ # export PATH=$PATH:$MAVEN_HOME/bin
+```
+rhel:~ # wget http://ftp.tc.edu.tw/pub/Apache/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+rhel:~ # tar zxf apache-maven-3.3.9-bin.tar.gz -C /opt
+rhel:~ # ln -s /opt/apache-maven-3.3.9 /opt/apache-maven
 
-	rhel:~ # echo $JAVA_HOME
-	rhel:~ # mvn -v
+rhel:~ # export MAVEN_HOME=/opt/apache-maven
+rhel:~ # export PATH=$PATH:$MAVEN_HOME/bin
 
-	rhel:~ # export MAVEN_OPTS="-Xms512m"
+rhel:~ # echo $JAVA_HOME
+rhel:~ # mvn -v
+
+rhel:~ # export MAVEN_OPTS="-Xms512m"
+```
+
+## Configration
+
+```
+linux:~ # tree -d -L 1 ~/apache-maven
+apache-maven
+├── bin
+├── boot
+├── conf
+└── lib
+
+# global config file
+linux:~ # cat  ~/apache-maven/conf/settings.xml
+
+# user config file
+linux:~ # cat ~/.m2/settings.xml
+```
 
 maven 預設個人目錄為 $basedir/.m2 (預設 $basedir 為使用者家目錄下)
 
@@ -47,66 +68,72 @@ $basedir/.m2/repository 是存放 jar
 
 主程式
 
-	rhel:~ # cat mypackage/Hello.java
-	package mypackage;
+```
+rhel:~ # cat mypackage/Hello.java
+package mypackage;
 
-	import org.apache.log4j.Logger;
+import org.apache.log4j.Logger;
 
-	public class Hello {
-	    static Logger logger = Logger.getLogger(Hello.class);
+public class Hello {
+    static Logger logger = Logger.getLogger(Hello.class);
 
-	    public static void main(String[] args) {
-	        String h = new Hello().say();
-	        if (logger.isDebugEnabled())
-	            logger.debug("This is debug : " + h);
-	        if (logger.isInfoEnabled())
-	            logger.info("This is info : " + h);
-	        logger.warn("This is warn : " + h);
-	        logger.error("This is error : " + h);
-	        logger.fatal("This is fatal : " + h);
-	    }
+    public static void main(String[] args) {
+        String h = new Hello().say();
+        if (logger.isDebugEnabled())
+            logger.debug("This is debug : " + h);
+        if (logger.isInfoEnabled())
+            logger.info("This is info : " + h);
+        logger.warn("This is warn : " + h);
+        logger.error("This is error : " + h);
+        logger.fatal("This is fatal : " + h);
+    }
 
-	    String say() {
-	        return "Hello Maven";
-	    }
-	}
-
+    String say() {
+        return "Hello Maven";
+    }
+}
+```
 
 Log4J 設定檔
 
-	rhel:~ # cat log4j.properties
-	# Define the root logger with appender file
-	log = /root/log4j
-	log4j.rootLogger = DEBUG, FILE
+```
+rhel:~ # cat log4j.properties
+# Define the root logger with appender file
+log = /root/log4j
+log4j.rootLogger = DEBUG, FILE
 
-	# Define the file appender
-	log4j.appender.FILE=org.apache.log4j.FileAppender
-	log4j.appender.FILE.File=${log}/log.out
+# Define the file appender
+log4j.appender.FILE=org.apache.log4j.FileAppender
+log4j.appender.FILE.File=${log}/log.out
 
-	# Define the layout for file appender
-	log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
-	log4j.appender.FILE.layout.conversionPattern=%m%n
-
+# Define the layout for file appender
+log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
+log4j.appender.FILE.layout.conversionPattern=%m%n
+```
 
 編譯 java
 
-	rhel:~ # javac -cp log4j-1.2.12.jar mypackage/Hello.java
-
+```
+rhel:~ # javac -cp log4j-1.2.12.jar mypackage/Hello.java
+```
 
 建立 jar
 
-	rhel:~ # jar cf mypackage.jar mypackage/mypackage
-
+```
+rhel:~ # jar cf mypackage.jar mypackage/mypackage
+```
 
 執行程式
 
-	rhel:~ # java -cp log4j-1.2.12.jar:mypackage.jar -Dlog4j.configuration=file:///root/log4j.properties
-
+```
+rhel:~ # java -cp log4j-1.2.12.jar:mypackage.jar -Dlog4j.configuration=file:///root/log4j.properties
+```
 
 查看結果
 
-	rhel:~ # cat /root/log4j/log.out
-
+```
+rhel:~ # cat /root/log4j/log.out
+```
 
 ### JUnit Test Case
 
@@ -115,116 +142,138 @@ Log4J 設定檔
 
 測試碼
 
-	rhel:~ # cat TestHello.java
-	import mypackage.Hello;
+```
+rhel:~ # cat TestHello.java
+import mypackage.Hello;
 
-	import org.junit.Test;
-	import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
-	public class TestHello {
-	    @Test
-	    public void test_hello() {
-	        assertEquals("Hello Maven", new Hello().say());
-	    }
-	}
-
+public class TestHello {
+    @Test
+    public void test_hello() {
+        assertEquals("Hello Maven", new Hello().say());
+    }
+}
+```
 
 編譯 java
 
-	rhel:~ # javac -cp ~/junit-4.10.jar:mypackage.jar TestHello.java
-
+```
+rhel:~ # javac -cp ~/junit-4.10.jar:mypackage.jar TestHello.java
+```
 
 執行測試
 
-	rhel:~ # java -cp ~/junit-4.10.jar:mypackage.jar:. org.junit.runner.JUnitCore TestHello
+```
+rhel:~ # java -cp ~/junit-4.10.jar:mypackage.jar:. org.junit.runner.JUnitCore TestHello
+```
 
 另一種方式, 將 test case 放在同一層 package 裡
 
 
 測試碼
 
-	rhel:~ # cat mypackage/HelloTest.java
-	package mypackage;
+```
+rhel:~ # cat mypackage/HelloTest.java
+package mypackage;
 
-	import org.junit.Test;
-	import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
-	public class HelloTest {
-	    @Test
-	    public void test_hello() {
-	        assertEquals("Hello Maven", new Hello().say());
-	    }
-	}
+public class HelloTest {
+    @Test
+    public void test_hello() {
+        assertEquals("Hello Maven", new Hello().say());
+    }
+}
+```
 
 
 編譯 java
 
-	rhel:~ # jar cf mypackage.jar mypackage
+```
+rhel:~ # jar cf mypackage.jar mypackage
+```
 
 
 建立 jar
 
-	rhel:~ # javac -cp ~/junit-4.10.jar:mypackage.jar mypackage/HelloTest.java
+```
+rhel:~ # javac -cp ~/junit-4.10.jar:mypackage.jar mypackage/HelloTest.java
+```
 
 
 執行測試
 
-	rhel:~ # java -cp ~/junit-4.10.jar:mypackage.jar org.junit.runner.JUnitCore mypackage/HelloTest
+```
+rhel:~ # java -cp ~/junit-4.10.jar:mypackage.jar org.junit.runner.JUnitCore mypackage/HelloTest
+```
 
 
 ### Maven Build Project
 
 pom.xml 是 Maven 的配置檔, 相當是 Make 裡的 Makefile, ANT 裡的 build.xml
 
-	rhel:~ # mkdir -p project/src/{main,test}/java/mypackage
-	rhel:~ # mkdir -p project/src/main/java/resources
+```
+rhel:~ # mkdir -p project/src/{main,test}/java/mypackage
+rhel:~ # mkdir -p project/src/main/java/resources
+```
 
 
 加入 java code
 
-	rhel:~ # cp mypackage/Hello.java project/src/main/java/mypackage
+```
+rhel:~ # cp mypackage/Hello.java project/src/main/java/mypackage
+```
 
 
 加入 unit test case
 
-	rhel:~/project # cp mypackage/HelloTest.java project/src/test/java/mypackage
+```
+rhel:~/project # cp mypackage/HelloTest.java project/src/test/java/mypackage
+```
 
 
 加入 config file
 
-	rhel:~/project # cp log4j.properties project/src/test/java/resources
+```
+rhel:~/project # cp log4j.properties project/src/test/java/resources
+```
 
 
 設定 pom.xml
 
-	rhel:~/project # cat pom.xml
-	<project xmlns="http://maven.apache.org/POM/4.0.0"
-	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	  <modelVersion>4.0.0</modelVersion>
-	  <groupId>mypackage</groupId>
-	  <artifactId>project</artifactId>
-	  <packaging>jar</packaging>
-	  <version>1.0-SNAPSHOT</version>
+```
+rhel:~/project # cat pom.xml
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>mypackage</groupId>
+  <artifactId>project</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
 
-	  <name>Hello Project</name>
-	  <url>http://hello.com</url>
+  <name>Hello Project</name>
+  <url>http://hello.com</url>
 
-	  <dependencies>
-	    <dependency>
-	      <groupId>log4j</groupId>
-	      <artifactId>log4j</artifactId>
-	      <version>1.2.12</version>
-	    </dependency>
+  <dependencies>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.12</version>
+    </dependency>
 
-	    <dependency>
-	      <groupId>junit</groupId>
-	      <artifactId>junit</artifactId>
-	      <version>4.10</version>
-	      <scope>test</scope>
-	    </dependency>
-	  </dependencies>
-	</project>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.10</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>
+```
 
 modleVersion: 指定 pom.xml 適用的版本; maven 2.x, 3 以上需用 4.0
 
@@ -251,37 +300,39 @@ groupId, artifactId, version 同之前
 scope 在哪層目錄下, 不指定會被包含在 main, (因為 junit 只做 unit test, 不需要被包含在主程式中)
 
 
-	rhel~: # tree project
-	project
-	├── pom.xml
-	└── src
-	    ├── main
-	    │   └── java
-	    │       ├── mypackage
-	    │       │   └── Hello.java
-	    │       └── resources
-	    │           └── log4j.properties
-	    └── test
-	        └── java
-	            └── mypackage
-	                └── HelloTest.java
+```
+rhel~: # tree project
+project
+├── pom.xml
+└── src
+    ├── main
+    │   └── java
+    │       ├── mypackage
+    │       │   └── Hello.java
+    │       └── resources
+    │           └── log4j.properties
+    └── test
+        └── java
+            └── mypackage
+                └── HelloTest.java
 
 
-	rhel:~/project # mvn compile          # 編譯 src/main/java 底下的 java file, 並將 class 產生在 target 目錄 (不考慮 test)
+rhel:~/project # mvn compile          # 編譯 src/main/java 底下的 java file, 並將 class 產生在 target 目錄 (不考慮 test)
 
-	rhel:~/project # mvn clean            # 清除
+rhel:~/project # mvn clean            # 清除
 
-	rhel:~/project # mvn test             # 編譯 src/{main,test}/java 底下的 java file, 並作測試
-	rhel:~/project # mvn test -Dmaven.test.failure.ignore=true
+rhel:~/project # mvn test             # 編譯 src/{main,test}/java 底下的 java file, 並作測試
+rhel:~/project # mvn test -Dmaven.test.failure.ignore=true
 
-	rhel:~/project # mvn package          # src/{main,test}/java 底下的 java file 打包成 jar, 並產生在 target 目錄
+rhel:~/project # mvn package          # src/{main,test}/java 底下的 java file 打包成 jar, 並產生在 target 目錄
 
-	rhel:~/project # mvn install          # package 被打包成 jar 安裝在  $basedir/.m2/repository
-	rhel:~/project # mvn install -DskipTests
-	rhel:~/project # mvn install -DskipITs
-	rhel:~/project # mvn install -Dmaven.test.skip=true
+rhel:~/project # mvn install          # package 被打包成 jar 安裝在  $basedir/.m2/repository
+rhel:~/project # mvn install -DskipTests
+rhel:~/project # mvn install -DskipITs
+rhel:~/project # mvn install -Dmaven.test.skip=true
 
-	rhel:~/project # mvn exec:java -Dexec.mainClass=mypackage.DemoLog4J
+rhel:~/project # mvn exec:java -Dexec.mainClass=mypackage.DemoLog4J
+```
 
 
 ## Example - war
@@ -289,145 +340,160 @@ scope 在哪層目錄下, 不指定會被包含在 main, (因為 junit 只做 un
 
 ### Compile & Run Servlet
 
-	rhel~: # tree myapp
-	myapp
-	├── images
-	└── WEB-INF
-	    ├── classes
-	    │   └── mypackage
-	    │       └── HelloServlet.java
-	    ├── lib
-	    └── web.xml
+```
+rhel~: # tree myapp
+myapp
+├── images
+└── WEB-INF
+    ├── classes
+    │   └── mypackage
+    │       └── HelloServlet.java
+    ├── lib
+    └── web.xml
+```
 
 
 java code
 
-	rhel:~ # cat myapp/WEB-INF/classes/mypackage/HelloServlet.java
-	package mypackage;
+```
+rhel:~ # cat myapp/WEB-INF/classes/mypackage/HelloServlet.java
+package mypackage;
 
-	import java.io.*;
-	import javax.servlet.*;
-	import javax.servlet.http.*;
-	
-	public class HelloServlet extends HttpServlet {
-	    public void doGet(HttpServletRequest request, HttpServletResponse response)
-	                    throws ServletException, IOException {
-	        PrintWriter out = response.getWriter();
-	        out.println("<HTML>");
-	        out.println("<BODY>");
-	        out.println("<p>Hello Servlet</p>");
-	        out.println("</BODY>");
-	        out.println("</HTML>");
-	  }
-	}
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+public class HelloServlet extends HttpServlet {
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+                    throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        out.println("<HTML>");
+        out.println("<BODY>");
+        out.println("<p>Hello Servlet</p>");
+        out.println("</BODY>");
+        out.println("</HTML>");
+  }
+}
+```
 
 
 設定 web.xml 
 
-	rhel:~ # cat myapp/WEB-INF/web.xml
-	<?xml version="1.0" encoding="ISO-8859-1"?>
+```
+rhel:~ # cat myapp/WEB-INF/web.xml
+<?xml version="1.0" encoding="ISO-8859-1"?>
 
-	<!DOCTYPE web-app
-	    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-	    "http://java.sun.com/dtd/web-app_2_3.dtd">
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
 
-	<web-app>
-	    <servlet>
-	      <servlet-name>
-	          HelloServlet
-	      </servlet-name>
-	      <servlet-class>
-	          mypackage.HelloServlet
-	      </servlet-class>
-	    </servlet>
+<web-app>
+    <servlet>
+      <servlet-name>
+          HelloServlet
+      </servlet-name>
+      <servlet-class>
+          mypackage.HelloServlet
+      </servlet-class>
+    </servlet>
 
-	    <servlet-mapping>
-	        <servlet-name>HelloServlet</servlet-name>
-	        <url-pattern>/HelloServlet</url-pattern>
-	    </servlet-mapping>
-	</web-app>
-
+    <servlet-mapping>
+        <servlet-name>HelloServlet</servlet-name>
+        <url-pattern>/HelloServlet</url-pattern>
+    </servlet-mapping>
+</web-app>
+```
 
 create war
 
-	rhel:~ # javac -cp /usr/share/java/tomcat-servlet-api.jar myapp/WEB-INF/classes/mypackage/HelloServlet.java
-	rhel:~/myapp # cd myapp
-	rhel:~/myapp # jar cfM myapp.war *
-	rhel:~/myapp # cp myapp.war /var/lib/tomcat/webapps
-
+```
+rhel:~ # javac -cp /usr/share/java/tomcat-servlet-api.jar myapp/WEB-INF/classes/mypackage/HelloServlet.java
+rhel:~/myapp # cd myapp
+rhel:~/myapp # jar cfM myapp.war *
+rhel:~/myapp # cp myapp.war /var/lib/tomcat/webapps
+```
 
 run tomcat
 
-	rhel:~ # systemctl restart tomcat.service
+```
+rhel:~ # systemctl restart tomcat.service
+```
 
 http://localhost:8080/myapp/HelloServlet
 
 
 ### Maven Build Project
 
-	rhel:~ # mkdir -p project/src/{main,test}
-	rhel:~ # mkdir -p project/src/main/{java,resources,webapp}
-	rhel:~ # mkdir -p project/src/main/java/mypackage
-	rhel:~ # mkdir -p project/src/main/resources/images
-	rhel:~ # mkdir -p project/src/main/webapp/{WEB-INF,jsp}
+```
+rhel:~ # mkdir -p project/src/{main,test}
+rhel:~ # mkdir -p project/src/main/{java,resources,webapp}
+rhel:~ # mkdir -p project/src/main/java/mypackage
+rhel:~ # mkdir -p project/src/main/resources/images
+rhel:~ # mkdir -p project/src/main/webapp/{WEB-INF,jsp}
 
-	rhel:~ # cp myapp/WEB-INF/classes/mypackage/HelloServlet.java project/src/main/java/mypackage/
-	rhel:~ # cp myapp/WEB-INF/web.xml project/src/main/webapp/WEB-INF/
+rhel:~ # cp myapp/WEB-INF/classes/mypackage/HelloServlet.java project/src/main/java/mypackage/
+rhel:~ # cp myapp/WEB-INF/web.xml project/src/main/webapp/WEB-INF/
+```
 
 
 設定 pom.xml
 
-	rhel:~ # cat pom.xml
-	<project xmlns="http://maven.apache.org/POM/4.0.0"
-	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	  <modelVersion>4.0.0</modelVersion>
-	  <groupId>mypackage</groupId>
-	  <artifactId>project</artifactId>
-	  <packaging>war</packaging>
-	  <version>1.0-SNAPSHOT</version>
-	
-	  <name>Hello Project</name>
-	  <url>http://hello.com</url>
-	
-	  <dependencies>
-	    <dependency>
-	      <groupId>javax.servlet</groupId>
-	      <artifactId>servlet-api</artifactId>
-	      <version>2.5</version>
-	    </dependency>
-	  </dependencies>
-	</project>
+```
+rhel:~ # cat pom.xml
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>mypackage</groupId>
+  <artifactId>project</artifactId>
+  <packaging>war</packaging>
+  <version>1.0-SNAPSHOT</version>
 
+  <name>Hello Project</name>
+  <url>http://hello.com</url>
+
+  <dependencies>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+    </dependency>
+  </dependencies>
+</project>
+```
 
 folder structure
 
-	rhel:~ # tree project
-	project
-	├── pom.xml
-	└── src
-	    ├── main
-	    │   ├── java
-	    │   │   └── mypackage
-	    │   │       └── HelloServlet.java
-	    │   ├── resources
-	    │   │   └── images
-	    │   └── webapp
-	    │       ├── jsp
-	    │       └── WEB-INF
-	    │           └── web.xml
-	    └── test
-
+```
+rhel:~ # tree project
+project
+├── pom.xml
+└── src
+    ├── main
+    │   ├── java
+    │   │   └── mypackage
+    │   │       └── HelloServlet.java
+    │   ├── resources
+    │   │   └── images
+    │   └── webapp
+    │       ├── jsp
+    │       └── WEB-INF
+    │           └── web.xml
+    └── test
+```
 
 create war
 
-	rhel:~/project # mvn clean package
-	rhel:~ # cp target/project-1.0-SNAPSHOT.war /var/lib/tomcat/webapps
-
+```
+rhel:~/project # mvn clean package
+rhel:~ # cp target/project-1.0-SNAPSHOT.war /var/lib/tomcat/webapps
+```
 
 run tomcat
 
-	rhel:~ # systemctl restart tomcat.service
+```
+rhel:~ # systemctl restart tomcat.service
+```
 
 http://localhost:8080/project-1.0-SNAPSHOT/HelloServlet
 
@@ -473,43 +539,49 @@ http://localhost:8080/project-1.0-SNAPSHOT/HelloServlet
 
 batch mode 方式 create project
 
-	rhel:~ # mvn archetype:generate \
-	> -DgroupId=com.mycompany.app \
-	> -DartifactId=myproject \
-	> -DinteractiveMode=false
+```
+rhel:~ # mvn archetype:generate \
+> -DgroupId=com.mycompany.app \
+> -DartifactId=myproject \
+> -DinteractiveMode=false
+```
 
 groupId 和 artifactId 套件資訊會寫入到 pom.xml 
 
 interactive mode 方式 create project
 
-	rhel:~ # mvn archetype:generate                       # create project
-	rhel:~ # mvn help:describe -Dplugin=archetype -Dfull  # help document
-	rhel:~ # mvn help:effective-pom                       # current pom setting
-	rhel:~ # mvn dependency:resolve                       # project dependency
-	rhel:~ # mvn dependency:tree -Dscope=compile          # project dependency
+```
+rhel:~ # mvn archetype:generate                       # create project
+rhel:~ # mvn help:describe -Dplugin=archetype -Dfull  # help document
+rhel:~ # mvn help:effective-pom                       # current pom setting
+rhel:~ # mvn dependency:resolve                       # project dependency
+rhel:~ # mvn dependency:tree -Dscope=compile          # project dependency
+```
 
 maven 執行上 plugin 和 goal. 以 `mvn archetype:generate` 指令來說, archetype 就是 plugin, 而 generate 就是 goal. 語法就可表示為 `mvn <pluginId>:<goalId>`. -D 則是傳入參數
 
 
 ### Folder Structure
 
-	rhel:~ # tree myproject/
-	my-app/
-	|-- pom.xml
-	`-- src
-	    |-- main
-	    |   `-- java
-	    |       `-- com
-	    |           `-- mycompany
-	    |               `-- app
-	    |                   `-- App.java
-	    `-- test
-	        `-- java
-	            `-- com
-	                `-- mycompany
-	                    `-- app
-	                        `-- AppTest.java
-	rhel:~ # cat my-app/src/main/java/com/mycompany/app/App.java
+```
+rhel:~ # tree myproject/
+my-app/
+|-- pom.xml
+`-- src
+    |-- main
+    |   `-- java
+    |       `-- com
+    |           `-- mycompany
+    |               `-- app
+    |                   `-- App.java
+    `-- test
+        `-- java
+            `-- com
+                `-- mycompany
+                    `-- app
+                        `-- AppTest.java
+rhel:~ # cat my-app/src/main/java/com/mycompany/app/App.java
+```
 
 src/main/java        放置專案原始碼
 
@@ -526,9 +598,11 @@ target/classes       complied byte code
 
 ### Build Project
 
-	rhel:~/myproject $ mvn compile
-	rhel:~/myproject $ mvn package
-	rhel:~/myproject $ java -cp target/my-app-1.0-SNAPSHOT.jar com.mycompany.app.App
+```
+rhel:~/myproject $ mvn compile
+rhel:~/myproject $ mvn package
+rhel:~/myproject $ java -cp target/my-app-1.0-SNAPSHOT.jar com.mycompany.app.App
+```
 
 maven lifecycle 常用的三種, 分別是 default, clean, site. META-INF/plexus/components.xml
 
@@ -542,15 +616,20 @@ site: generates site documentation for this project
 
 ## Plugin
 
-	mvn help:describe -Dplugin=help [-Dfull]   # 顯示 plugin-help 訊息
-	mvn help:describe -Dplugin=compiler -Dmojo=compile -Dfull
+```
+rhel:~ # mvn help:describe -Dplugin=help [-Dfull]   # 顯示 plugin-help 訊息
+rhel:~ # mvn help:describe -Dplugin=compiler -Dmojo=compile -Dfull
+```
+
 
 ## Command
 
-	mvn help:effective-pom
-	rhel:~ # mvn -h
-	rhel:~ # mvn help system
-	rhel:~ # mvn complie
-	rhel:~ # mvn package
-	rhel:~ # mvn clean
-	rhel~: # mvn site
+```
+rhel:~ # mvn help:effective-pom
+rhel:~ # mvn -h
+rhel:~ # mvn help system
+rhel:~ # mvn complie
+rhel:~ # mvn package
+rhel:~ # mvn clean
+rhel~: # mvn site
+```
