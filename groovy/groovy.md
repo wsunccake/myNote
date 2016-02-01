@@ -11,22 +11,25 @@
 
 Groovy 可以使用 RPM, DPKG 等系統內建套件直接安裝, 但 Linux, MacOSX, FreeBSD 建議使用 SDKMAN (Software Development Kit MANager), 前身為 GVM (Groovy enVironment Manager) 安裝管理. 因為 Groovy 會使用到 Java, 須先安裝 JDK 6+ (Java Development Kit), 建議 JDK 8+. 使用 SDKMAN 安裝 end user 即可, 不需要 admin.
 
+```
 	# install jdk, 這裏使用安裝 openjdk 
 	Linux:~ # yum install -y java-1.8.0-openjdk-devel
 	Linux:~ # echo $JAVA_HOME            # 確認 Java 環境變數
+```
 
 在安裝 sdk 之後, 會在寫入 $HOME/.bashrc $HOME/.bash_profile, $HOME/.zshrc 加入環境設定. 而 sdkman 套件安裝在 $HOME/.sdkman 底下
 
-	# install sdk
-	Linux:~ $ curl -s get.sdkman.io | bash
-	Linux:~ $ cat ~/.bashrc
-	source "$HOME/.sdkman/bin/sdkman-init.sh"
+```
+# install sdk
+Linux:~ $ curl -s get.sdkman.io | bash
+Linux:~ $ cat ~/.bashrc
+source "$HOME/.sdkman/bin/sdkman-init.sh"
 
-	# install groovy
-	Linux:~ $ sdk list
-	Linux:~ $ sdk install groovy
-	Linux:~ $ echo $GROOVY_HOME         # 確認 Groovy 環境變數
-
+# install groovy
+Linux:~ $ sdk list
+Linux:~ $ sdk install groovy
+Linux:~ $ echo $GROOVY_HOME         # 確認 Groovy 環境變數
+```
 
 # 使用環境
 

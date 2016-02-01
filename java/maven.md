@@ -2,7 +2,7 @@
 
 ![Maven](https://maven.apache.org/images/maven-logo-black-on-white.png)
 
-Maven 的是 project management tool, 包含 POM (Project Object Model), set of standards, project lifecycle, dependency management system
+Maven 是 project management tool, 包含 POM (Project Object Model), set of standards, project lifecycle, dependency management system
 
 Convention Over Configuration
 
@@ -99,7 +99,7 @@ Log4J 設定檔
 ```
 rhel:~ # cat log4j.properties
 # Define the root logger with appender file
-log = /root/log4j
+log = /tmp/log4j
 log4j.rootLogger = DEBUG, FILE
 
 # Define the file appender
@@ -132,7 +132,7 @@ rhel:~ # java -cp log4j-1.2.12.jar:mypackage.jar -Dlog4j.configuration=file:///r
 查看結果
 
 ```
-rhel:~ # cat /root/log4j/log.out
+rhel:~ # cat /tmp/log4j/log.out
 ```
 
 ### JUnit Test Case
@@ -193,14 +193,14 @@ public class HelloTest {
 編譯 java
 
 ```
-rhel:~ # jar cf mypackage.jar mypackage
+rhel:~ # javac -cp ~/junit-4.10.jar:mypackage.jar mypackage/
 ```
 
 
 建立 jar
 
 ```
-rhel:~ # javac -cp ~/junit-4.10.jar:mypackage.jar mypackage/HelloTest.java
+rhel:~ # jar cf mypackage.jar mypackageHelloTest.java
 ```
 
 
