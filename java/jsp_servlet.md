@@ -12,7 +12,7 @@ JSP被JSP編譯器編譯成Java Servlets。一個JSP編譯器可以把JSP編譯�
 ## Basic
 
 
-### Syntax
+### JSP Syntax
 
 | synatx 		 | example 						 |
 | -------------- | ----------------------------- |
@@ -80,7 +80,7 @@ Linux:~ # ls ~/apache-tomcat/work/Catalina/localhost/demo/org/apache/jsp
 使用 Browser 連 http://localhost:8080/demo 或 http://localhost:8080/demo/demo.jsp
 
 
-### Action
+### JSP Action
 
 | action 			 | description 											 |
 | ------------------ | ----------------------------------------------------- |
@@ -93,7 +93,7 @@ Linux:~ # ls ~/apache-tomcat/work/Catalina/localhost/demo/org/apache/jsp
 | jsp:setProperty 	 | 設定 JavaBean 屬性 									 |
 | jsp:useBean 		 | 建立/複製 JavaBean 到JSP 								 |
 
-jsp:forward 範例
+jsp:forward, jsp:param 範例
 
 ```
 Linux:~ # cat ~/apache-tomcat/webapps/demo/demo-form.jsp
@@ -180,10 +180,9 @@ Linux:~ # cat ~/apache-tomcat/webapps/demo/demo-bean.jsp
     </p>
 </body>
 </html>
-```
 
-Linux:~ # mkdir -p ~/apache-tomcat/webapps/demo/src/mypacakge/
-Linux:~ # cat ~/apache-tomcat/webapps/demo/src/mypacakge/Person.java
+Linux:~ # mkdir -p ~/apache-tomcat/webapps/demo/src/mypackage/
+Linux:~ # cat ~/apache-tomcat/webapps/demo/src/mypackage/Person.java
 package mypackage;
 public class Person {
     private String name;
@@ -199,13 +198,39 @@ public class Person {
     public int getAge() { return this.age; }
 }
 
-Linux:~ # mkdir -p ~/apache-tomcat/webapps/demo/lib
-Linux:~ # mkdir -p ~/apache-tomcat/webapps/demo/classes
-Linux:~ # mkdir -p ~/apache-tomcat/webapps/demo/classes/mypackage
+Linux:~ # mkdir -p ~/apache-tomcat/webapps/demo/WEB-INF/lib
+Linux:~ # mkdir -p ~/apache-tomcat/webapps/demo/WEB-INF/classes
+Linux:~ # tree -L 2 -d ~/apache-tomcat/webapps/demo
+~/apache-tomcat/webapps/demo
+├── src
+│   └── mypackage
+└── WEB-INF
+    ├── classes
+    └── lib
 
-Linux:~ # cd ~/apache-tomcat/webapps/demo
-Linux:~/apache-tomcat/webapps/demo # javac -cp servlet-api.jar -d ./classes src/mypacakge/Person.java
+Linux:~ # javac -cp servlet-api.jar -d ~/apache-tomcat/webapps/demo/WEB-INF/classes  ~/apache-tomcat/webapps/demo/src/mypackage/Person.java
+```
+
+
+### JSP Implicit Objects
+
+| object      | description         |
+| ----------- | ------------------- |
+| request     | HttpServletRequest  |
+| response    | HttpServletResponse |
+| out         | PrintWriter         |
+| session     | HttpSession         |
+| application | ServletContext      |
+| config      | ServletConfig       |
+| pageContext | JspWriters          |
+| page        | this                |
+| Exception   | Exception           |
+
+範例
+
+```
 Linux:~/apache-tomcat/webapps/demo # jar cf ../demo.war *
+```
 
 ----
 
