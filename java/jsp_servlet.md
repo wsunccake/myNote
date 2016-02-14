@@ -9,18 +9,19 @@ JSP使Java代碼和特定的預定義動作可以嵌入到靜態頁面中。 JSP
 
 JSP被JSP編譯器編譯成Java Servlets。一個JSP編譯器可以把JSP編譯成JAVA代碼寫的servlet然後再由JAVA編譯器來編譯成機器碼，也可以直接編譯成二進位碼。
 
+
 ## Basic
 
 
 ### JSP Syntax
 
-| synatx 		 | example 						 |
+| synatx         | example                       |
 | -------------- | ----------------------------- |
-| Comment 		 | <%-- comments --> 			 |
-| Declaration 	 | <%! Java Declaration %> 		 |
-| Directive 	 | <%@ page, include ... %> 	 |
-| Expression 	 | <%= Java Expression %> 		 |
-| Scriptlet 	 | <% Java Statement(s) %> 		 |
+| Comment        | <%-- comments -->             |
+| Declaration    | <%! Java Declaration %>       |
+| Directive      | <%@ page, include ... %>      |
+| Expression     | <%= Java Expression %>        |
+| Scriptlet      | <% Java Statement(s) %>       |
 
 [Java Server-side Programming
 Getting started with JSP by Examples](https://www3.ntu.edu.sg/home/ehchua/programming/java/JSPByExample.html)
@@ -46,7 +47,7 @@ Linux:~ # tree -L 1 -d ~/apache-tomcat/webapps
 
 Linux:~ # mkdir -p ~/apache-tomcat/webapps/demo/WEB-INF
 
-Linux:~ # mkdir -p ~/apache-tomcat/webapps/demo/demo.jsp
+Linux:~ # cat ~/apache-tomcat/webapps/demo/demo.jsp
 <%@ page language="java"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -62,7 +63,7 @@ Linux:~ # mkdir -p ~/apache-tomcat/webapps/demo/demo.jsp
 </html>
 
 Linux:~ # cat ~/apache-tomcat/webapps/demo/WEB-INF/web.xml
-<?xml version="1.0" encoding="GBK"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
@@ -82,18 +83,19 @@ Linux:~ # ls ~/apache-tomcat/work/Catalina/localhost/demo/org/apache/jsp
 
 ### JSP Action
 
-| action 			 | description 											 |
+| action             | description                                           |
 | ------------------ | ----------------------------------------------------- |
-| jsp:include 		 | 處理 JSP 或 Servlet 後, 控制權交還給當前 JSP 				 |
-| jsp:param 		 | 在 jsp:include, jsp:forward或jsp:params 間傳遞參數使用 	 |
-| jsp:forward 		 | 處理 JSP 或 Servlet 後, 控制權不會交還給當前 JSP 			 |
-| jsp:plugin 		 | 針對 Browser 產生 Applet 								 |
-| jsp:fallback 		 | 瀏覽器不支援 Applets 會顯示內容 							 |
-| jsp:getProperty 	 | 從 JavaBean 取得屬性 									 |
-| jsp:setProperty 	 | 設定 JavaBean 屬性 									 |
-| jsp:useBean 		 | 建立/複製 JavaBean 到JSP 								 |
+| jsp:include        | 處理 JSP 或 Servlet 後, 控制權交還給當前 JSP                  |
+| jsp:param          | 在 jsp:include, jsp:forward或jsp:params 間傳遞參數使用     |
+| jsp:forward        | 處理 JSP 或 Servlet 後, 控制權不會交還給當前 JSP            |
+| jsp:plugin         | 針對 Browser 產生 Applet                                  |
+| jsp:fallback       | 瀏覽器不支援 Applets 會顯示內容                              |
+| jsp:getProperty    | 從 JavaBean 取得屬性                                   |
+| jsp:setProperty    | 設定 JavaBean 屬性                                    |
+| jsp:useBean        | 建立/複製 JavaBean 到JSP                               |
 
 jsp:forward, jsp:param 範例
+
 
 ```
 Linux:~ # cat ~/apache-tomcat/webapps/demo/demo-form.jsp
@@ -226,7 +228,99 @@ Linux:~ # javac -cp servlet-api.jar -d ~/apache-tomcat/webapps/demo/WEB-INF/clas
 | page        | this                |
 | Exception   | Exception           |
 
-範例
+
+out 範例
+
+```
+Linux:~ # cat ~/apache-tomcat/webapps/demo/index.jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+    <head>
+        <title>Title</title>
+    </head>
+    <body>
+      <p>Hello JSP</p>
+      <% out.println("Hello JSP"); %>
+    </body>
+</html>
+```
+
+
+request 範例
+
+```
+Linux:~ # cat ~/apache-tomcat/webapps/demo/req-form.jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>form</title>
+</head>
+<body>
+    <form id="login" method="post" action="req.jsp">
+        Username: <input type="text" name="user">
+        <input type="submit">
+    </form>
+</body>
+</html>
+
+Linux:~ # cat ~/apache-tomcat/webapps/demo/req.jsp
+<%@ page import="java.util.Enumeration" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>req</title>
+</head>
+<body>
+<%
+    String user = request.getParameter("user");
+    Enumeration<String> headerNmaes = request.getHeaderNames();
+    while (headerNmaes.hasMoreElements()) {
+        String headerName = headerNmaes.nextElement();
+        out.println(headerName + " => " + request.getHeader(headerName) + "<br />");
+    }
+%>
+<%= user %>
+</body>
+</html>
+```
+
+
+response 範例
+
+```
+Linux:~ # cat ~/apache-tomcat/webapps/demo/resp.jsp
+<%@ page import="java.util.Calendar" %>
+<%@ page import="java.util.GregorianCalendar" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>resp</title>
+</head>
+<body>
+<%
+    response.setIntHeader("Refresh", 5);
+    // Get current time
+    Calendar calendar = new GregorianCalendar();
+    String am_pm;
+    int hour = calendar.get(Calendar.HOUR);
+    int minute = calendar.get(Calendar.MINUTE);
+    int second = calendar.get(Calendar.SECOND);
+    if(calendar.get(Calendar.AM_PM) == 0)
+        am_pm = "AM";
+    else
+        am_pm = "PM";
+    String CT = hour+":"+ minute +":"+ second +" "+ am_pm;
+    out.println("Current Time is: " + CT + "\n");
+%>
+</body>
+</html>
+
+```
+
+
+cookie 範例
+
+session 範例
 
 ```
 Linux:~/apache-tomcat/webapps/demo # jar cf ../demo.war *
@@ -235,3 +329,62 @@ Linux:~/apache-tomcat/webapps/demo # jar cf ../demo.war *
 ----
 
 # Servlet
+
+## Basic
+
+```
+Linux:~ # cat ~/apache-tomcat/webapps/demo/src/mypackage/HelloServlet.java
+package mypackage;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public class HelloServlet extends HttpServlet {
+    String name;
+    String content = "<html>" +
+            "<head>" +
+            "<body>" +
+            "<p>Hello," +
+            "%s" +
+            "</p>" +
+            "</body>" +
+            "</html>";
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        name = req.getParameter("name");
+        resp.setContentType("text/html;charset=UTF=8");
+        PrintWriter out = resp.getWriter();
+        out.print(String.format(content, name));
+        out.close();
+    }
+}
+
+Linux:~ # javac -cp servlet-api.jar -d ~/apache-tomcat/webapps/demo/WEB-INF/classes  ~/apache-tomcat/webapps/demo/src/mypackage/HelloServlet.java
+
+Linux:~ # cat ~/apache-tomcat/webapps/demo/WEB-INF/web.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    <servlet>
+        <!-- class name -->
+        <servlet-name>HelloServlet</servlet-name>
+        <!-- module -->
+        <servlet-class>mypackage.HelloServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <!--  class name -->
+        <servlet-name>HelloServlet</servlet-name>
+        <!-- url -->
+        <url-pattern>/hello</url-pattern>
+    </servlet-mapping>
+</web-app>
+```
+
+使用 Browser 連 http://localhost:8080/demo 或 http://localhost:8080/demo/hello
