@@ -633,3 +633,100 @@ rhel:~ # mvn package
 rhel:~ # mvn clean
 rhel~: # mvn site
 ```
+
+
+## Plugin
+
+### assembly
+
+```
+rhel:~ # tree project
+project
+├── pom.xml
+└── src
+    ├── main
+    │   └── java
+    │       ├── mypackage
+    │       │   └── Hello.java
+    │       └── resources
+    │           └── log4j.properties
+    └── test
+        └── java
+            └── mypackage
+                └── HelloTest.java
+
+rhel:~ # cat project/pom.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>mypackage</groupId>
+    <artifactId>project</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <descriptor>assembly.xml</descriptor>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+    </dependencies>
+
+rhel:~ # cat project/assembly.xml
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+    <id>test</id>
+
+    <formats>
+        <format>dir</format>
+    </formats>
+
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/lib</outputDirectory>
+            <scope>runtime</scope>
+            <useProjectArtifact>false</useProjectArtifact>
+        </dependencySet>
+    </dependencySets>
+
+    <fileSets>
+        <fileSet>
+            <directory>${project.build.directory}</directory>
+            <outputDirectory></outputDirectory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+        </fileSet>
+
+        <fileSet>
+            <directory>src/main/resources</directory>
+            <outputDirectory>/config</outputDirectory>
+            <includes>
+                <include>*</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</assembly>
+
+```
+
+mvn package
+-> 會將 src/main/java/resources 底下所有檔案, 目錄封裝到 jar (全部都在 jar 的 root dir)
+
+mvn assembly:single
+-> 會將 src/main/java/resources 底下所有檔案, 目錄封裝到 targets/${project}/${project}/config, dependcy 用到的 jar 存放在 targets/${project}/${project}/lib
