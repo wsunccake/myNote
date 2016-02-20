@@ -580,6 +580,7 @@ my-app/
                 `-- mycompany
                     `-- app
                         `-- AppTest.java
+
 rhel:~ # cat my-app/src/main/java/com/mycompany/app/App.java
 ```
 
@@ -606,7 +607,7 @@ rhel:~/myproject $ java -cp target/my-app-1.0-SNAPSHOT.jar com.mycompany.app.App
 
 maven lifecycle 常用的三種, 分別是 default, clean, site. META-INF/plexus/components.xml
 
-![maven_lifecyclebinding](http://allan.keithics.com/ebooks/maven/MavenTheDefinitive%20Guide/images/simple-project/lifecyclebinding.png)
+![maven_lifecyclebinding](https://books.sonatype.com/mvnex-book/reference/figs/web/simple-project_lifecyclebinding.png)
 
 default:
 
@@ -642,6 +643,7 @@ rhel~: # mvn site
 ```
 rhel:~ # tree project
 project
+├── assembly.xml
 ├── pom.xml
 └── src
     ├── main
@@ -725,8 +727,6 @@ rhel:~ # cat project/assembly.xml
 
 ```
 
-mvn package
--> 會將 src/main/java/resources 底下所有檔案, 目錄封裝到 jar (全部都在 jar 的 root dir)
+mvn package, 會將 src/main/java/resources 底下所有檔案, 目錄封裝到 jar (全部都在 jar 的 root dir)
 
-mvn assembly:single
--> 會將 src/main/java/resources 底下所有檔案, 目錄封裝到 targets/${project}/${project}/config, dependcy 用到的 jar 存放在 targets/${project}/${project}/lib
+mvn assembly:single, 會將 src/main/java/resources 底下所有檔案, 目錄封裝到 targets/${project}/${project}/config, dependcy 用到的 jar 存放在 targets/${project}/${project}/lib
