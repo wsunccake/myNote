@@ -11,6 +11,8 @@ baseurl=http://cbs.centos.org/repos/virt7-docker-common-testing/x86_64/os/
 enabled=1
 gpgcheck=0
 
+rhel:~ # yum install docker
+
 rhel:~ # systemctl start docker.service                     # 啟動服務
 rhel:~ # systemctl enable docker.service                    # 常駐服務
 rhel:~ # docker run hello-world                             # 測試
@@ -273,6 +275,43 @@ rhel:~ # docker run -itd -v /data:/robot_log --name robot robot
 rhel:~ # docker run -itd -p 80:80 --name nginx nginx
 ```
 
+## Run GUI Apps on Docker
+
+
+### UNIX X11 Socket
+
+```
+rhel:~ # cat Dockerfile
+FROM ubuntu:14.04
+
+RUN apt-get update && apt-get install -y firefox
+
+# Replace 1000 with your user / group id
+RUN export uid=1000 gid=1000 && \
+    mkdir -p /home/developer && \
+    echo "developer:x:${uid}:${gid}:Developer,,,:/home/developer:/bin/bash" >> /etc/passwd && \
+    echo "developer:x:${uid}:" >> /etc/group && \
+    echo "developer ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/developer && \
+    chmod 0440 /etc/sudoers.d/developer && \
+    chown ${uid}:${gid} -R /home/developer
+
+USER developer
+ENV HOME /home/developer
+CMD /usr/bin/firefox
+
+rhel:~ # docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:rw firefox
+
+rhel:~ # docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:rw -e XAUTHORITY=/tmp/.Xauthority -v /home/kam/.Xauthority:/tmp/.Xauthority firefox
+```
+
+`Note`
+
+check /tmp/.X11-unix permission (chmod 1777 /tmp/.X11-unix)
+
+
+### VNC
+
+
 ----
 
 
@@ -328,3 +367,7 @@ rhel:~ # cat docker-compose.yml
 [Docker —— 從入門到實踐­](https://www.gitbook.com/book/philipzheng/docker_practice/details)
 
 [docker-book](https://www.gitbook.com/book/smlsunxie/docker-book)
+
+[Using GUI's with Docker](http://wiki.ros.org/docker/Tutorials/GUI)
+
+[Running GUI apps with Docker](http://fabiorehm.com/blog/2014/09/11/running-gui-apps-with-docker/)

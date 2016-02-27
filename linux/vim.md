@@ -189,3 +189,40 @@
   `[(`, 直至到 區塊 (
 
   `])`, 直至到 區塊 )
+
+  `gd`, local declaration
+
+  `gD`, global declaration
+
+## Level 5
+
+
+vimdiff file1 file2 ...
+
+vim -d file1 file2 ...
+
+### Move / 移動
+
+在 normal mode
+
+  `]c`, 下一個差異處
+
+  `[c`, 上一個差異處
+
+  `Ctrl` ^ `w` `l`
+
+  `Ctrl` ^ `w` `h`
+
+### Edit / 編輯
+
+在 normal mode
+
+  `dp`, diff put
+
+  `dp`, diff get
+
+  `,u`, 還原
+
+在 cmdline mode
+
+  :`diffu`[pdate], 更新 diff
