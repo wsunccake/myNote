@@ -41,12 +41,13 @@ arch:~ # pacman -S vim emacs
 arch:~ # pacman -S bash-completion
 ```
 
-					yum 			pacman
-install 		| install pkg 	| -S pkg
-search remote 	| search pkg 	| -Ss pkg
-group list 		| grouplist 	| -Sg
-uninstall 		| remove 		| -R pkg
-installed 		| 				| -Qs
+|function 		| 	yum 		| 	pacman 	|
+|---------------| --------------| ----------|
+|install 		| install pkg 	| -S pkg 	|
+|search remote 	| search pkg 	| -Ss pkg 	|
+|group list 	| grouplist 	| -Sg 		|
+|uninstall 		| remove 		| -R pkg 	|
+|installed 		| 				| -Qs 		|
 
 
 # Service
@@ -119,6 +120,51 @@ arch:~ # pacman -S cairo-dock cairo-dock-plug-ins
 ```
 arch:~ # pacman -S guake
 ```
+
+
+# Package
+
+
+## ABS (Arch Build System)
+
+```
+# install
+arch:~ # pacman -S abs
+arch:~ # abs   # /var/abs
+arch:~ # vi /etc/abs.conf
+
+# usage
+arch:~ # cp -r /var/abs/core/pkg .
+arch:~ # cd pkg
+arch:~ # sudo -u nobody makepkg -s
+arch:~ # makepkg -sri --skippgpcheck
+arch:~ # pacman -U pkg.tar.xz
+```
+
+## AUR (Arch User Repository)
+
+https://aur.archlinux.org
+
+
+## Yaourt
+
+```
+# install
+arch:~ # git clone https://aur.archlinux.org/package-query.git
+arch:~ # cd package-query
+arch:~ # makepkg -si
+
+arch:~ # git clone https://aur.archlinux.org/yaourt.git
+arch:~ # cd yaourt
+arch:~ # makepkg -si
+
+# usage
+arch:~ # yaourt pkg     # search
+arch:~ # yaourt -G pkg  # download PKGBUILD
+arch:~ # yaourt -Sb pkg # download and compile
+```
+
+# VM
 
 virtualbox-guest-utils:
 pacman -S virtualbox-guest-utils virtualbox-guest-modules virtualbox-guest-modules-lts virtualbox-guest-dkms

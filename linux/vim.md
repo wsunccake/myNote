@@ -118,17 +118,16 @@
 
   `dgg`, 刪除至檔首
 
-  `d`</>n</i>`G`, 刪除至第 n 行
+  `d`<i>n</i>`G`, 刪除至第 n 行
 
   <i>n</i>`dd`, , 刪除 n 行
 
-  `y`</>n</i>`y`, 複製 n 行文字
+  `y`<i>n</i>`y`, 複製 n 行文字
 
 
 在 cmdline mode
 
-
-* :`d`[elete], 刪除; :[<i>range</i>]`d`
+  :`d`[elete], 刪除; :[<i>range</i>]`d`
 
   :<i>n</i>`d`, 刪除第 n 行
 
@@ -142,13 +141,13 @@
 
   :%`d`, 刪除全部
 
-* :`p`[`rint`], 顯示, :[<i>range</i>]`p`, 使用方式 `delete`
+  :`p`[`rint`], 顯示, :[<i>range</i>]`p`, 使用方式 `delete`
 
-* :`m`[`ove`], 移動, :[<i>range</i>]`m`<i>address</i>, <i>range</i> 表示方式同 `delete`
+  :`m`[`ove`], 移動, :[<i>range</i>]`m`<i>address</i>, <i>range</i> 表示方式同 `delete`
 
   :<i>n</i>`m`<i>m</i>, 第 n 行移動到第 m 行
 
-* :`co`[py], :[<i>range</i>]`m`<i>address</i>, 使用方式同 `move`
+  :`co`[py], :[<i>range</i>]`m`<i>address</i>, 使用方式同 `move`
 
 
 ----

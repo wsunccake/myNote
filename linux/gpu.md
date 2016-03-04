@@ -136,6 +136,38 @@ Linux:~ # nvcc hello.cu -o hello.exe
 Linux:~ # ./hello.exe
 ```
 
+# MPS
+
+
+```
+Linux:~ # nvidia-smi -c 3
+```
+
+set compute mode:
+
+0: DEFAULT / SHARED_PROCESS
+
+1: EXCLUSIVE_THREAD
+
+2: PROHIBITED
+
+3: EXCLUSIVE_PROCESS
+
+```
+# start MPS
+Linux:~ # nvidia-smi -c EXCLUSIVE_PROCESS
+Linux:~ # export CUDA_VISIBLE_DEVICES=0
+Linux:~ # nvidia-cuda-mps-control -d
+
+# stop MPS
+Linux:~ # nvidia-smi -c 0
+Linux:~ # echo quit | nvidia-cuda-mps-control
+
+# show gpu info
+Linux:~ # nvidia-smi -q -d CLOCK
+Linux:~ # nvidia-smi -q -d SUPPORTED_CLOCKS
+```
+
 # Reference
 
 [driver](http://www.nvidia.com/Download/index.aspx)
