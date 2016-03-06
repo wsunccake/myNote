@@ -31,6 +31,9 @@ sh-4.3 # exit
 root@arhciso:~ # reboot
 ```
 
+----
+
+
 # Pakcage
 
 ## essential packages
@@ -49,80 +52,9 @@ arch:~ # pacman -S bash-completion
 |uninstall 		| remove 		| -R pkg 	|
 |installed 		| 				| -Qs 		|
 
+rpm -ivh pkg = pacman -U pkg
 
-# Service
-
-## SSH
-
-```
-arch:~ # pacman -S openssh
-arch:~ # systemctl enable sshd.service
-```
-
-# GUI
-
-## X window
-
-```
-arch:~ # pacman -S xorg-server xorg-xinit xorg-utils xorg-server-utils mesa
-arch:~ # pacman -S xorg-twm xterm xorg-xclock
-arch:~ # pacman -S ttf-dejavu  ttf-droid  ttf-inconsolata
-arch:~ # X -configure
-arch:~ # cp xorg.conf.new /etc/X11/xorg.conf.d/xorg.conf
-
-arch:~ # xdpyinfo
-arch:~ # xrandr --output VGA-0 --mode 1024x768 --rate 60
-```
-
-## Xfce
-
-```
-arch:~ # pacman -S xfce4 xfce4-goodies
-arch:~ # startxfce4
-```
-
-
-## KDE
-
-```
-arch:~ # pacman -S plasma  (DE)
-arch:~ # pacman -R plasma-mediacenter
-arch:~ # pacman -S kde-applications
-arch:~ # pacman -S sddm    (DM)
-arch:~ # systemctl enable sddm.service
-arch:~ # systemctl start sddm.service
-
-arch:~ # sddm --example-config > /etc/sddm.conf
-# Maximum user id for displayed users
-#MaximumUid=60000
-MaximumUid=0
-
-# Minimum user id for displayed users
-#MinimumUid=1000
-MinimumUid=0
-
-arch:~ # echo "startkde" >> .xinitrc
-```
-
-
-# GUI Application
-
-
-## Cairo-Dock
-
-```
-arch:~ # pacman -S cairo-dock cairo-dock-plug-ins
-```
-
-
-## Guake
-
-```
-arch:~ # pacman -S guake
-```
-
-
-# Package
+rpm -ql pkg = pacman -Ql pkg
 
 
 ## ABS (Arch Build System)
@@ -163,6 +95,121 @@ arch:~ # yaourt pkg     # search
 arch:~ # yaourt -G pkg  # download PKGBUILD
 arch:~ # yaourt -Sb pkg # download and compile
 ```
+
+----
+
+
+# Network
+
+## netctl
+
+```
+arch:~ # cp /etc/netctl/examples/connect_profile /etc/netctl/my_interface_profile
+
+arch:~ # netctl list
+arch:~ # netctl start my_interface_profile
+arch:~ # netctl enable my_interface_profile
+
+arch:~ # netctl stop my_interface_profile
+arch:~ # netctl disable my_interface_profile
+```
+
+# Sound
+
+## ALSA
+
+```
+arch:~ # pacman -S alsa-utils 
+arch:~ # alsamixer
+```
+
+## PulseAudio
+
+```
+arch:~ # pacman -S pulseaudio
+arch:~ # pacman -S pulseaudio-alsa
+```
+
+----
+
+
+# Service
+
+## SSH
+
+```
+arch:~ # pacman -S openssh
+arch:~ # systemctl enable sshd.service
+```
+
+----
+
+
+# GUI
+
+## X window
+
+```
+arch:~ # pacman -S xorg-server xorg-xinit xorg-utils xorg-server-utils mesa
+arch:~ # pacman -S xorg-twm xterm xorg-xclock
+arch:~ # pacman -S ttf-dejavu  ttf-droid  ttf-inconsolata
+arch:~ # X -configure
+arch:~ # cp xorg.conf.new /etc/X11/xorg.conf.d/xorg.conf
+
+arch:~ # xdpyinfo
+arch:~ # xrandr --output VGA-0 --mode 1024x768 --rate 60
+```
+
+## Xfce
+
+```
+arch:~ # pacman -S xfce4 xfce4-goodies
+arch:~ # startxfce4
+```
+
+## KDE
+
+```
+arch:~ # pacman -S plasma  (DE)
+arch:~ # pacman -R plasma-mediacenter
+arch:~ # pacman -S kde-applications
+arch:~ # pacman -S sddm    (DM)
+arch:~ # systemctl enable sddm.service
+arch:~ # systemctl start sddm.service
+
+arch:~ # sddm --example-config > /etc/sddm.conf
+# Maximum user id for displayed users
+#MaximumUid=60000
+MaximumUid=0
+
+# Minimum user id for displayed users
+#MinimumUid=1000
+MinimumUid=0
+
+arch:~ # echo "startkde" >> .xinitrc
+```
+
+----
+
+
+# GUI Application
+
+
+## Cairo-Dock
+
+```
+arch:~ # pacman -S cairo-dock cairo-dock-plug-ins
+```
+
+
+## Guake
+
+```
+arch:~ # pacman -S guake
+```
+
+----
+
 
 # VM
 
