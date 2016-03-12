@@ -18,6 +18,7 @@ root@arhciso:~ # genfstab -U /mnt >> /mnt/etc/fstab
 ```
 root@arhciso:~ # arch-chroot /mnt /bin/bash
 sh-4.3 # echo "LANG=en_US.UTF-8" > /etc/locale.conf
+sh-4.3 # locale-gen
 sh-4.3 # tzselect
 sh-4.3 # ln -s /usr/share/zoneinfo/Asia/Taipei /etc/localtime
 sh-4.3 # hwclock -w
@@ -187,6 +188,21 @@ MaximumUid=0
 MinimumUid=0
 
 arch:~ # echo "startkde" >> .xinitrc
+```
+
+## Chinese Font
+
+```
+arch:~ # locale-gen zh_TW
+arch:~ # yaourt ttf-tw
+```
+
+
+## Chinese Input Method
+
+```
+arch:~ # pacman -S ibus
+arhc:~ # pacman -S ibus-chewing
 ```
 
 ----
