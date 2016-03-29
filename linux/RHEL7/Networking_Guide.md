@@ -8,20 +8,23 @@
 
 ## daemon ##
 
-	rhel:~ # systemctl restart systemd-hostnamed
-
+```
+rhel:~ # systemctl restart systemd-hostnamed
+```
 
 ## command ##
 
-	# method 1: using hostnamectl setup hostname
-	rhel:~ # hostnamectl status
-	rhel:~ # hostnamectl set-hostname name # setup hostname
-	rhel:~ # hostnamectl set-hostname "" # empty hostname
-	rhel:~ # hostnamectl set-hostname -H [username]@hostname # setup remote hostname
+```
+# method 1: using hostnamectl setup hostname
+rhel:~ # hostnamectl status
+rhel:~ # hostnamectl set-hostname name # setup hostname
+rhel:~ # hostnamectl set-hostname "" # empty hostname
+rhel:~ # hostnamectl set-hostname -H [username]@hostname # setup remote hostname
 
-	# method 2: using nmcli setyo hostname
-	rhel:~ # nmcli general hostname
-	rhel:~ # nmcli general hostname my-server
+# method 2: using nmcli setyo hostname
+rhel:~ # nmcli general hostname
+rhel:~ # nmcli general hostname my-server
+```
 
 
 # RedHat Networking  #
@@ -41,10 +44,14 @@
 /etc/NetworkManager
 
 
-	rhel:~ # yum install NetworkManager
-	rhel:~ # systemctl status NetworkManager
-	rhel:~ # systemctl start NetworkManager
-	rhel:~ # systemctl enable NetworkManager
+```
+rhel:~ # yum install NetworkManager
+rhel:~ # systemctl status NetworkManager.service
+rhel:~ # systemctl start NetworkManager.service
+rhel:~ # systemctl enable NetworkManager.service
+
+rhel:~ # systemctl restart network.service
+```
 
 
 ## ifcfg vs nmcli ##
@@ -60,47 +67,51 @@
 
 ## nmtui ##
 
-	rhel:~ # yum install NetworkManager-tui
-	rhel:~ # nmtui
-	rhel:~ # nmtui edit con-name
-	rhel:~ # nmtui connect con-name
+```
+rhel:~ # yum install NetworkManager-tui
+rhel:~ # nmtui
+rhel:~ # nmtui edit con-name
+rhel:~ # nmtui connect con-name
+```
 
 
 ## nmcli ##
 
-	rhel:~ # ip -V
-	rhel:~ # nmcli help
-	rhel:~ # nmcli general help
-	rhel:~ # nmcli device status
-	rhel:~ # nmcli device show
-	rhel:~ # nmcli device show ifname
-	rhel:~ # nmcli device connect ifname
-	rhel:~ # nmcli device disconnect ifname
+```
+rhel:~ # ip -V
+rhel:~ # nmcli help
+rhel:~ # nmcli general help
+rhel:~ # nmcli device status
+rhel:~ # nmcli device show
+rhel:~ # nmcli device show ifname
+rhel:~ # nmcli device connect ifname
+rhel:~ # nmcli device disconnect ifname
 
-	rhel:~ # nmcli connection reload
-	rhel:~ # nncli connection load /etc/sysconfig/network-script/ifcfg-ifname
-	rhel:~ # nmcli connection up con-name
-	rhel:~ # nmcli connection down con-name
-	rhel:~ # nmcli connection show
-	rhel:~ # nmcli connection show con-name
-	rhel:~ # nmcli connection show --active
-	rhel:~ # nmcli connection modify con-name 802-11-wireless.mtu 1350 # 不會改變 ifcfg-ifname 的設定, 但是實際設定會變
+rhel:~ # nmcli connection reload
+rhel:~ # nncli connection load /etc/sysconfig/network-script/ifcfg-ifname
+rhel:~ # nmcli connection up con-name
+rhel:~ # nmcli connection down con-name
+rhel:~ # nmcli connection show
+rhel:~ # nmcli connection show con-name
+rhel:~ # nmcli connection show --active
+rhel:~ # nmcli connection modify con-name 802-11-wireless.mtu 1350 # 不會改變 ifcfg-ifname 的設定, 但是實際設定會變
 
-	rhel:~ # nmcli connection type ethernet add ifname eth0 con-name eth0 # create /etc/sysconfig/network-script/ifcfg-ifname
-	rhel:~ # nmcli connection delete eth0 # remove ifcfg-ifname
+rhel:~ # nmcli connection type ethernet add ifname eth0 con-name eth0 # create /etc/sysconfig/network-script/ifcfg-ifname
+rhel:~ # nmcli connection delete eth0 # remove ifcfg-ifname
 
-	rhel:~ # nmcli connection edit
-	rhel:~ # nmcli connection edit [con-name]
-	nmcli> print
-	nmcli> describe ipv4.method
-	nmcli> set ipv4.method auto
-	nmcli> set connection.id eth0 # con-name
-	nmcli> set connection.interface-name eth0 # ifname
-	nmcli> set 802-11-wireless.mtu auto # 只有目前設定會改變, 但未套用
-	nmcli> save # 將設定寫入 ifcfg-ifname, 並套用
-	nmcli> quit
+rhel:~ # nmcli connection edit
+rhel:~ # nmcli connection edit [con-name]
+nmcli> print
+nmcli> describe ipv4.method
+nmcli> set ipv4.method auto
+nmcli> set connection.id eth0 # con-name
+nmcli> set connection.interface-name eth0 # ifname
+nmcli> set 802-11-wireless.mtu auto # 只有目前設定會改變, 但未套用
+nmcli> save # 將設定寫入 ifcfg-ifname, 並套用
+nmcli> quit
 
-	rhel:~ # nmcli general status
+rhel:~ # nmcli general status
+```
 
 
 # Networking IP #
@@ -111,124 +122,142 @@
 
 ### setting ###
 
-	# method 1:
-	rhel:~ # nmtui
+```
+# method 1:
+rhel:~ # nmtui
 
-	# method 2:
-	rhel:~ # nmcli connection add type ethernet ifname eth0 con-name eth0 ip4 10.0.0.11/24 gw4 10.0.0.1
-	rhel:~ # nmcli connection add type ethernet ifname eth0 con-name eth0 ip4 10.0.0.11/24 gw4 10.0.0.1 ip6 abbe::cafe gw6 2001:db8::1 # 可同時設定 IPv4, IPv6
-	rhel:~ # nmcli connection modify eth0 ipv4.dns 8.8.8.8
-	rhel:~ # nmcli connection modify eth0 "8.8.8.8 8.8.4.4" # 可同時設定多組 DNS
-	rhel:~ # nmcli connection modify eth0 +ipv4.dns "8.8.8.8 8.8.4.4"
+# method 2:
+rhel:~ # nmcli connection add type ethernet ifname eth0 con-name eth0 ip4 10.0.0.11/24 gw4 10.0.0.1
+rhel:~ # nmcli connection add type ethernet ifname eth0 con-name eth0 ip4 10.0.0.11/24 gw4 10.0.0.1 ip6 abbe::cafe gw6 2001:db8::1 # 可同時設定 IPv4, IPv6
+rhel:~ # nmcli connection modify eth0 ipv4.dns 8.8.8.8
+rhel:~ # nmcli connection modify eth0 "8.8.8.8 8.8.4.4" # 可同時設定多組 DNS
+rhel:~ # nmcli connection modify eth0 +ipv4.dns "8.8.8.8 8.8.4.4"
 
-	# method 3:
-	rhel:~ # ip link show  # 顯示網卡狀態
-	rhel:~ # ip link set dev eth0 up # 開啟網卡
-	rhel:~ # ip link set dev eth0 down # 關閉網卡
+# method 3:
+rhel:~ # ip link show  # 顯示網卡狀態
+rhel:~ # ip link set dev eth0 up # 開啟網卡
+rhel:~ # ip link set dev eth0 down # 關閉網卡
 
-	rhel:~ # ip addr show # 顯示網卡 IP
-	rhel:~ # ip addr add 10.0.0.3/24 dev eth0 # 新增網卡 IP
-	rhel:~ # ip addr del 10.0.0.3/24 dev eth0 # 刪除網卡 IP
+rhel:~ # ip addr show # 顯示網卡 IP
+rhel:~ # ip addr add 10.0.0.3/24 dev eth0 # 新增網卡 IP
+rhel:~ # ip addr del 10.0.0.3/24 dev eth0 # 刪除網卡 IP
 
-	rhel:~ # ip route # 顯示路由
-	rhel:~ # ip route add default via 10.0.3.254 dev eth0 # 新增預設路由
-	rhel:~ # ip route del default via 10.0.3.254 dev eth0 # 刪除預設路由
-	rhel:~ # ip route add via 192.168.0.254 dev eth1 # 新增路由
-	rhel:~ # ip route del via 192.168.0.254 dev eth1 # 刪除路由
+rhel:~ # ip route # 顯示路由
+rhel:~ # ip route add default via 10.0.3.254 dev eth0 # 新增預設路由
+rhel:~ # ip route del default via 10.0.3.254 dev eth0 # 刪除預設路由
+rhel:~ # ip route add via 192.168.0.254 dev eth1 # 新增路由
+rhel:~ # ip route del via 192.168.0.254 dev eth1 # 刪除路由
 
-	# method 4:
-	rhel:~ # ifconfig -a # 顯示網卡狀態
-	rhel:~ # ifconfig eth0 up # 開啟網卡
-	rhel:~ # ifconfig eth0 down # 關閉網卡
+# method 4:
+rhel:~ # ifconfig -a # 顯示網卡狀態
+rhel:~ # ifconfig eth0 up # 開啟網卡
+rhel:~ # ifconfig eth0 down # 關閉網卡
 
-	rhel:~ # ifconfig eth0 10.0.0.3 netmask 255.255.255.0 # 新增網卡 IP
-	rhel:~ # ifconfig eth0 0.0.0.0 netmask 255.255.255.0 # 刪除網卡 IP
+rhel:~ # ifconfig eth0 10.0.0.3 netmask 255.255.255.0 # 新增網卡 IP
+rhel:~ # ifconfig eth0 0.0.0.0 netmask 255.255.255.0 # 刪除網卡 IP
 
-	rhel:~ # route add default gw 10.0.3.253 dev eth0 # 新增預設路由
-	rhel:~ # route del default gw 10.0.3.253 dev eth0 # 刪除預設路由
-	rhel:~ # route add gw 192.168.0.254 dev eth1 # 新增路由
-	rhel:~ # route del gw 192.168.0.254 dev eth1 # 刪除路由
+rhel:~ # route add default gw 10.0.3.253 dev eth0 # 新增預設路由
+rhel:~ # route del default gw 10.0.3.253 dev eth0 # 刪除預設路由
+rhel:~ # route add gw 192.168.0.254 dev eth1 # 新增路由
+rhel:~ # route del gw 192.168.0.254 dev eth1 # 刪除路由
+```
 
 IPv6 方式跟 IPv4 一樣, 將 ipv4 改成 ipv6 即可
 
 
 ### config file ###
 
-	rhel:~ # cat /etc/sysconfig/network-script/ifcfg-ifname
-	DEVICE=eth0
-	BOOTPROTO=none
-	ONBOOT=yes
-	PREFIX=24
-	IPADDR=10.0.1.27
+```
+# 設定 IP
+rhel:~ # cat /etc/sysconfig/network-script/ifcfg-ifname
+DEVICE=eth0
+BOOTPROTO=none
+ONBOOT=yes
+PREFIX=24
+IPADDR=10.0.1.27
 
+# 指定路由
+rhel:~ # cat /etc/sysconfig/network-script/route-ifname
+192.168.1.0/24 via 10.0.3.1
+```
 
 ## dhcp ##
 
 
 ### setting ###
 
-	# method 1:
-	rhel:~ # nmtui
+```
+# method 1:
+rhel:~ # nmtui
 
-	# method 2:
-	rhel:~ # nmcli connection add type ethernet ifname eth0 con-name eth0
-	rhel:~ # nmcli connection modify eth0 ipv4.dhcp-hostname host-name
-	rhel:~ # nmcli connection modify eth0 ipv4.ignore-auto-dns yes
+# method 2:
+rhel:~ # nmcli connection add type ethernet ifname eth0 con-name eth0
+rhel:~ # nmcli connection modify eth0 ipv4.dhcp-hostname host-name
+rhel:~ # nmcli connection modify eth0 ipv4.ignore-auto-dns yes
 
-	# method 3:
-	rhel:~ # dhclient eth0
+# method 3:
+rhel:~ # dhclient eth0
 
-	# remove dhcp client
-	rhel:~ # dhclient -x
+# remove dhcp client
+rhel:~ # dhclient -x
+```
 
 
 ### config file ##
 
-	rhel:~ # cat /etc/sysconfig/network-script/ifcfg-ifname
-	DEVICE=em1
-	BOOTPROTO=dhcp
-	ONBOOT=yes
+```
+rhel:~ # cat /etc/sysconfig/network-script/ifcfg-ifname
+DEVICE=em1
+BOOTPROTO=dhcp
+ONBOOT=yes
 
-	DHCP_HOSTNAME=hostname # 不使用 DHCP 所派的 hostname
-	PEERDNS=no # 不使用 DHCP 預設的 DNS
-	DNS1=ip-address # 當 PEERDNS=no, 才能另外指定 DNS1
-	DNS2=ip-address
+DHCP_HOSTNAME=hostname # 不使用 DHCP 所派的 hostname
+PEERDNS=no # 不使用 DHCP 預設的 DNS
+DNS1=ip-address # 當 PEERDNS=no, 才能另外指定 DNS1
+DNS2=ip-address
+```
 
 
 ## wifi ##
 
-	rhel:~ # nmcli dev wifi list
-	rhel:~ # nmcli connection type wifi add con-name MyCafe ifname wlan0 ssid MyCafe ip4 192.168.100.101/24 gw4 192.168.100.1
-	rhel:~ # nmcli connection modify MyCafe wifi-sec.key-mgmt wpa-psk # 設定連線加密方式
-	rhel:~ # nmcli connection modify MyCafe wifi-sec.psk caffeine # 設定 WPA2 password 為 caffeine
-	rhel:~ # nmcli radio wifi on
-	rhel:~ # nmcli radio wifi off
+```
+rhel:~ # nmcli dev wifi list
+rhel:~ # nmcli connection type wifi add con-name MyCafe ifname wlan0 ssid MyCafe ip4 192.168.100.101/24 gw4 192.168.100.1
+rhel:~ # nmcli connection modify MyCafe wifi-sec.key-mgmt wpa-psk # 設定連線加密方式
+rhel:~ # nmcli connection modify MyCafe wifi-sec.psk caffeine # 設定 WPA2 password 為 caffeine
+rhel:~ # nmcli radio wifi on
+rhel:~ # nmcli radio wifi off
+```
 
 
 ## multiple nic config file ##
 
-	rhel:~ # cat /etc/sysconfig/network-script/ifcfg-ifname
-	HWADDR=11:22:33:44:55:66
-	TYPE=Ethernet
-	BOOTPROTO=dhcp # dhcp
-	DEFROUTE=yes # 設定為 default gateway, multiple NIC 環境中很重要
-	PEERDNS=yes
-	PEERROUTES=yes
-	IPV4\_FAILURE_FATAL=no
-	IPV6INIT=yes
-	IPV6_AUTOCONF=yes
-	IPV6_DEFROUTE=yes
-	IPV6_PEERDNS=yes
-	IPV6_PEERROUTES=yes
-	IPV6\_FAILURE_FATAL=no
-	NAME="eth0"
-	ONBOOT=yes # 開機使否開啟
-	NM_CONTROLLED=yes # 可否由 Network Manager
+```
+rhel:~ # cat /etc/sysconfig/network-script/ifcfg-ifname
+HWADDR=11:22:33:44:55:66
+TYPE=Ethernet
+BOOTPROTO=dhcp # dhcp
+DEFROUTE=yes # 設定為 default gateway, multiple NIC 環境中很重要
+PEERDNS=yes
+PEERROUTES=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_PEERDNS=yes
+IPV6_PEERROUTES=yes
+IPV6_FAILURE_FATAL=no
+NAME="eth0"
+ONBOOT=yes # 開機使否開啟
+NM_CONTROLLED=yes # 可否由 Network Manager
+```
 
 
 ## GUI ##
 
-	rhel:~ # gnome-control-center network
+```
+rhel:~ # gnome-control-center network
+```
 
 
 # Networking Bond #
@@ -236,74 +265,80 @@ IPv6 方式跟 IPv4 一樣, 將 ipv4 改成 ipv6 即可
 
 ## setting ##
 
-	# method 1:
-	rhel:~ # nmtui
+```
+# method 1:
+rhel:~ # nmtui
 
-	# method 2:
-	rhel:~ # nmcli connection add type bond ifname bond0 cos-name bond0
-	rhel:~ # nmcli connection edit bond0
-	nmcli> describe bond.options
-	nmcli> set bond.options mode=active-backup
-	nmcli> save
-	nmcli> quit
+# method 2:
+rhel:~ # nmcli connection add type bond ifname bond0 cos-name bond0
+rhel:~ # nmcli connection edit bond0
+nmcli> describe bond.options
+nmcli> set bond.options mode=active-backup
+nmcli> save
+nmcli> quit
 
-	rhel:~ # nmcli connection add type bond-slave ifname eth0 con-name eth0 master bond0
-	rhel:~ # nmcli connection add type bond-slave ifname eth1 con-name eth1 master bond0
+rhel:~ # nmcli connection add type bond-slave ifname eth0 con-name eth0 master bond0
+rhel:~ # nmcli connection add type bond-slave ifname eth1 con-name eth1 master bond0
 
-	# method 3:
-	rhel:~ # modprobe bonding
-	rhel:~ # modinfo bonding
-	rhel:~ # echo +bond0 >> /sys/class/net/bond_masters
-	rhel:~ # ip link set dev bond0 up
-	rhel:~ # ifenslave bond0 eth0 eth1
+# method 3:
+rhel:~ # modprobe bonding
+rhel:~ # modinfo bonding
+rhel:~ # echo +bond0 >> /sys/class/net/bond_masters
+rhel:~ # ip link set dev bond0 up
+rhel:~ # ifenslave bond0 eth0 eth1
 
-	# remove bond
-	rhel:~ # ifenslave -d bond0 eth0 eth1
-	rhel:~ # ip link set dev bond0 down
-	rhel:~ # echo -bond0 >> /sys/class/net/bond_masters
+# remove bond
+rhel:~ # ifenslave -d bond0 eth0 eth1
+rhel:~ # ip link set dev bond0 down
+rhel:~ # echo -bond0 >> /sys/class/net/bond_masters
 
-	# bond option
-	rhel:~ # echo 1000 > /sys/class/net/bond0/bonding/miimon
-	rhel:~ # echo 6 > /sys/class/net/bond0/bonding/mode
-	rhel:~ # echo balance-alb > /sys/class/net/bond0/bonding/mode
+# bond option
+rhel:~ # echo 1000 > /sys/class/net/bond0/bonding/miimon
+rhel:~ # echo 6 > /sys/class/net/bond0/bonding/mode
+rhel:~ # echo balance-alb > /sys/class/net/bond0/bonding/mode
 
-	# check miimon
-	rhel:~ # ethtool interface_name | grep "Link detected:"
+# check miimon
+rhel:~ # ethtool interface_name | grep "Link detected:"
+```
 
 
 ## config file ##
 
-	rhel~: # cat /etc/syscofnig/network-script/ifcfg-bond0
-	DEVICE=bond0
-	TYPE=Bond
-	NAME=bond0
-	BONDING_MASTER=yes
-	BOOTPROTO=dhcp
-	BONDING_OPTS="bonding parameters separated by spaces"
-	ONBOOT=yes
+```
+rhel~: # cat /etc/syscofnig/network-script/ifcfg-bond0
+DEVICE=bond0
+TYPE=Bond
+NAME=bond0
+BONDING_MASTER=yes
+BOOTPROTO=dhcp
+BONDING_OPTS="bonding parameters separated by spaces"
+ONBOOT=yes
 
-	rhel~: # cat /etc/syscofnig/network-script/ifcfg-eth0
-	MACADDR=00:11:22:33:44:55
-	TYPE=Ethernet
-	NAME=eth0
-	DEVICE=eth0
-	ONBOOT=yes
-	MASTER=bond0
-	SLAVE=yes
+rhel~: # cat /etc/syscofnig/network-script/ifcfg-eth0
+MACADDR=00:11:22:33:44:55
+TYPE=Ethernet
+NAME=eth0
+DEVICE=eth0
+ONBOOT=yes
+MASTER=bond0
+SLAVE=yes
 
-	rhel~: # cat /etc/syscofnig/network-script/ifcfg-eth1
-	MACADDR=00:11:22:33:44:56
-	TYPE=Ethernet
-	NAME=eth1
-	DEVICE=eth1
-	ONBOOT=yes
-	MASTER=bond0
-	SLAVE=yes
+rhel~: # cat /etc/syscofnig/network-script/ifcfg-eth1
+MACADDR=00:11:22:33:44:56
+TYPE=Ethernet
+NAME=eth1
+DEVICE=eth1
+ONBOOT=yes
+MASTER=bond0
+SLAVE=yes
+```
 
 
 ## GUI ##
 
-	rhel:~ # gnome-control-center network
+```
+rhel:~ # gnome-control-center network
+```
 
 
 # Networking Team #
@@ -313,98 +348,108 @@ IPv6 方式跟 IPv4 一樣, 將 ipv4 改成 ipv6 即可
 
 teamd, ethtool, arp_ping, nsna_ping, lacp
 
-	rhel:~ # yum install teamd
+```
+rhel:~ # yum install teamd
+```
 
 
 ## bond to team ##
 
-	rhel:~ # bond2team --master bond0
-	rhel:~ # bond2team --master bond0 --rename team0
-	rhel:~ # bond2team --master bond0 --configdir /path/to/ifcfg-file
-	rhel:~ # bond2team --bonding_opts "mode=1 miimon=500"
-	rhel:~ # bond2team --bonding_opts "mode=1 miimon=500 primary=eth1 primary_reselect-0" --port eth1 --port eth2 --port eth3 --port eth4
+```
+rhel:~ # bond2team --master bond0
+rhel:~ # bond2team --master bond0 --rename team0
+rhel:~ # bond2team --master bond0 --configdir /path/to/ifcfg-file
+rhel:~ # bond2team --bonding_opts "mode=1 miimon=500"
+rhel:~ # bond2team --bonding_opts "mode=1 miimon=500 primary=eth1 primary_reselect-0" --port eth1 --port eth2 --port eth3 --port eth4
+```
 
 
 ## setting ##
 
-	# method 1:
-	rhel:~ # nmtui
+```
+# method 1:
+rhel:~ # nmtui
 
-	# method 2:
-	rhel:~ # nmcli connection add type team ifname team0 cos-name team0
-	rhel:~ # nmcli connection edit team0
-	nmcli> describe team.config
-	nmcli> set team.config {"runner": {"name": "activebackup"}}
-	nmcli> save
-	nmcli> quit
+# method 2:
+rhel:~ # nmcli connection add type team ifname team0 cos-name team0
+rhel:~ # nmcli connection edit team0
+nmcli> describe team.config
+nmcli> set team.config {"runner": {"name": "activebackup"}}
+nmcli> save
+nmcli> quit
 
-	rhel:~ # nmcli connection add type team-slave ifname eth0 con-name eth0 master team0
-	rhel:~ # nmcli connection add type team-slave ifname eth1 con-name eth1 master team0
+rhel:~ # nmcli connection add type team-slave ifname eth0 con-name eth0 master team0
+rhel:~ # nmcli connection add type team-slave ifname eth1 con-name eth1 master team0
 
-	# method 3:
-	rhel:~ # ls /usr/share/doc/teamd-*/example_configs
-	rhel:~ # cp /usr/share/doc/teamd-*/example_configs/activebackup_ethtool_1.conf ~
-	rhel:~ # vi activebackup_ethtool_1.conf
-	rhel:~ # ip link set dev eth0 down
-	rhel:~ # ip link set dev eth1 down
-	rhel:~ # teamd -g -f activebackup_ethtool_1.conf -d
+# method 3:
+rhel:~ # ls /usr/share/doc/teamd-*/example_configs
+rhel:~ # cp /usr/share/doc/teamd-*/example_configs/activebackup_ethtool_1.conf ~
+rhel:~ # vi activebackup_ethtool_1.conf
+rhel:~ # ip link set dev eth0 down
+rhel:~ # ip link set dev eth1 down
+rhel:~ # teamd -g -f activebackup_ethtool_1.conf -d
 
-	# 同上, 使用指令方式
-	rhel:~ # teamd -t team0 -d
-	rhel:~ # ip link set dev eth0 master team0
-	rhel:~ # ip link set dev team0 down
+# 同上, 使用指令方式
+rhel:~ # teamd -t team0 -d
+rhel:~ # ip link set dev eth0 master team0
+rhel:~ # ip link set dev team0 down
 
-	# 查看
-	rhel:~ # teamnl team0 ports
-	rhel:~ # teamnl team0 getoption activeport
-	rhel:~ # teamnl team0 setoption activeport 5
-	rhel:~ # teamnl team0 setoption mode activebackup
+# 查看
+rhel:~ # teamnl team0 ports
+rhel:~ # teamnl team0 getoption activeport
+rhel:~ # teamnl team0 setoption activeport 5
+rhel:~ # teamnl team0 setoption mode activebackup
 
-	rhel:~ # teamdctl team0 state
-	rhel:~ # teamdctl team0 state view -vv
-	rhel:~ # teamdctl team0 config dump
-	rhel:~ # teamdctl team0 port add eth2
-	rhel:~ # teamdctl team0 port remove eth2
-	rhel:~ # cat eth2-cfg.json
-	{
-	  "prio": -10,
-	  "sticky": true
-	}
-	rhel:~ # teamdctl team0 port config update eth2 eth2-cfg.json
+rhel:~ # teamdctl team0 state
+rhel:~ # teamdctl team0 state view -vv
+rhel:~ # teamdctl team0 config dump
+rhel:~ # teamdctl team0 port add eth2
+rhel:~ # teamdctl team0 port remove eth2
+rhel:~ # cat eth2-cfg.json
+{
+  "prio": -10,
+  "sticky": true
+}
+rhel:~ # teamdctl team0 port config update eth2 eth2-cfg.json
 
-	# remove team
-	rhel:~ # teamd -t team0 -k
+# remove team
+rhel:~ # teamd -t team0 -k
+```
 
 
 ## config file ##
 
-	rhel:~ # cat /etc/syscofnig/network-script/ifcfg-team0
-	DEVICE=team0
-	DEVICETYPE=Team
-	NAME=team0
-	BOOTPROTO=dhcp
-	UUID=c9b24f8d-69e8-4b0f-9656-c7ed8e7c0b2e
-	ONBOOT=yes
-	TEAM_CONFIG="{\"runner\":{\"name\": \"activebackup\"}}"
+```
+rhel:~ # cat /etc/syscofnig/network-script/ifcfg-team0
+DEVICE=team0
+DEVICETYPE=Team
+NAME=team0
+BOOTPROTO=dhcp
+UUID=c9b24f8d-69e8-4b0f-9656-c7ed8e7c0b2e
+ONBOOT=yes
+TEAM_CONFIG="{\"runner\":{\"name\": \"activebackup\"}}"
 
-	rhel:~ # cat /etc/syscofnig/network-script/ifcfg-eth0
-	NAME=eth0
-	DEVICE=eth0
-	ONBOOT=yes
-	TEAM_MASTER=c9b24f8d-69e8-4b0f-9656-c7ed8e7c0b2e
-	DEVICETYPE=TeamPort
+rhel:~ # cat /etc/syscofnig/network-script/ifcfg-eth0
+NAME=eth0
+DEVICE=eth0
+ONBOOT=yes
+TEAM_MASTER=c9b24f8d-69e8-4b0f-9656-c7ed8e7c0b2e
+DEVICETYPE=TeamPort
 
-	rhel:~ # cat /etc/syscofnig/network-script/ifcfg-eth1
-	NAME=eth1
-	DEVICE=eth1
-	ONBOOT=yes
-	TEAM_MASTER=c9b24f8d-69e8-4b0f-9656-c7ed8e7c0b2e
-	DEVICETYPE=TeamPort
+rhel:~ # cat /etc/syscofnig/network-script/ifcfg-eth1
+NAME=eth1
+DEVICE=eth1
+ONBOOT=yes
+TEAM_MASTER=c9b24f8d-69e8-4b0f-9656-c7ed8e7c0b2e
+DEVICETYPE=TeamPort
+```
 
 
 ## GUI ##
 
-	rhel:~ # gnome-control-center network
+```
+rhel:~ # gnome-control-center network
+```
 
 
 # Networking Bridge #
@@ -412,61 +457,68 @@ teamd, ethtool, arp_ping, nsna_ping, lacp
 
 ## package ##
 
-	rhel:~ # yum install bridge-utils
-
+```
+rhel:~ # yum install bridge-utils
+```
 
 ## bridge ##
 
-	# method 1:
-	rhel:~ # nmtui
+```
+# method 1:
+rhel:~ # nmtui
 
-	# method 2:
-	rhel:~ # nmcli connection add type bridge ifname br0 cos-name br0
-	rhel:~ # nmcli connection edit bond0
-	nmcli> print
-	nmcli> set bridge.stp yes
-	nmcli> save
-	nmcli> quit
+# method 2:
+rhel:~ # nmcli connection add type bridge ifname br0 cos-name br0
+rhel:~ # nmcli connection edit bond0
+nmcli> print
+nmcli> set bridge.stp yes
+nmcli> save
+nmcli> quit
 
-	rhel:~ # nmcli connection add type bridge-slave ifname eth0 cons-name eth0 master br0
+rhel:~ # nmcli connection add type bridge-slave ifname eth0 cons-name eth0 master br0
 
-	# method 3:
+# method 3:
 
-	rhel:~ # modprobe bridge
-	rhel:~ # modinfo bridge
+rhel:~ # modprobe bridge
+rhel:~ # modinfo bridge
 
-	rhel:~ # brctl addbr br0
-	rhel:~ # brctl addif br0 eth0
+rhel:~ # brctl addbr br0
+rhel:~ # brctl addif br0 eth0
 
-	rhel:~ # brctl show
+rhel:~ # brctl show
 
-	# remove bridge
-	rhel:~ # brctl delif br0 eth0
-	rhel:~ # brctl delbr br0
+# remove bridge
+rhel:~ # brctl delif br0 eth0
+rhel:~ # brctl delbr br0
+```
 
 
 ## config file ##
 
-	rhel:~ # cat /etc/syscofnig/network-script/ifcfg-br0
-	DEVICE=br0
-	STP=yes
-	TYPE=Bridge
-	BOOTPROTO=dhcp
-	NAME=br0
-	ONBOOT=yes
-	BRIDGING_OPTS=priority=4096
+```
+rhel:~ # cat /etc/syscofnig/network-script/ifcfg-br0
+DEVICE=br0
+STP=yes
+TYPE=Bridge
+BOOTPROTO=dhcp
+NAME=br0
+ONBOOT=yes
+BRIDGING_OPTS=priority=4096
 
-	rhel:~ # cat /etc/syscofnig/network-script/ifcfg-eth0
-	TYPE=Ethernet
-	NAME=eth0
-	DEVICE=eth0
-	ONBOOT=yes
-	BRIDGE=br0
+rhel:~ # cat /etc/syscofnig/network-script/ifcfg-eth0
+TYPE=Ethernet
+NAME=eth0
+DEVICE=eth0
+ONBOOT=yes
+BRIDGE=br0
+```
 
 
 ## GUI ##
 
-	rhel:~ # gnome-control-center network
+```
+rhel:~ # gnome-control-center network
+```
 
 
 # Networking 802.1q VLAN #
@@ -474,50 +526,56 @@ teamd, ethtool, arp_ping, nsna_ping, lacp
 
 ## package ##
 
-	rhel:~ # yum install vconfig
+```
+rhel:~ # yum install vconfig
+```
 
 
 ## settting ##
 
-	# method 1:
-	rhel:~ # nmtui
+```
+# method 1:
+rhel:~ # nmtui
 
-	# method 2:
-	rhel:~ # nmcli connection add type vlan ifname eth0.10 con-name eth0.10 id 10 dev eth0 # create  eth0.10
-	
-	# method 3:
-	rhel:~ # modprobe 8021q
-	rhel:~ # modinfo 8021q
+# method 2:
+rhel:~ # nmcli connection add type vlan ifname eth0.10 con-name eth0.10 id 10 dev eth0 # create  eth0.10
 
-	rhel:~ # ip link add link eth0 name eth0.10 type vlan id 10
-	rhel:~ # ip -d link show
+# method 3:
+rhel:~ # modprobe 8021q
+rhel:~ # modinfo 8021q
 
-	# remove vlan
-	rhel:~ # ip link del eth0.10
+rhel:~ # ip link add link eth0 name eth0.10 type vlan id 10
+rhel:~ # ip -d link show
 
-	# method 4:
+# remove vlan
+rhel:~ # ip link del eth0.10
 
-	rhel:~ # vconfig add eth0 10
+# method 4:
+rhel:~ # vconfig add eth0 10
 
-	# remove vlan
-	rhel:~ # vconfig rem eth0.10
+# remove vlan
+rhel:~ # vconfig rem eth0.10
+```
 
 
 ## config file ##
 
-	rhel:~ # cat ifcfg-eth0.10 
-	VLAN=yes
-	TYPE=Vlan
-	DEVICE=eth0.10
-	PHYSDEV=eth0
-	VLAN_ID=10
-	BOOTPROTO=dhcp
-	ONBOOT=yes
-
+```
+rhel:~ # cat ifcfg-eth0.10 
+VLAN=yes
+TYPE=Vlan
+DEVICE=eth0.10
+PHYSDEV=eth0
+VLAN_ID=10
+BOOTPROTO=dhcp
+ONBOOT=yes
+```
 
 ## GUI ##
 
-	rhel:~ # gnome-control-center network
+```
+rhel:~ # gnome-control-center network
+```
 
 
 # Networking VPN #
@@ -525,32 +583,38 @@ teamd, ethtool, arp_ping, nsna_ping, lacp
 
 ## pptp ##
 
-	rhel:~ # yum install NetworkManager-pptp NetworkManager-pptp-gnome
+```
+rhel:~ # yum install NetworkManager-pptp NetworkManager-pptp-gnome
 
-	# method 1:
-	rhel:~ # nmcli connection add type vpn con-name vpn0 ifname vpn0 vpn-type pptp
-	rhel:~ # nmcli connection edit vpn0
-	nmcli> set vpn.data password-flags = 0, user = vpn_user, require-mppe = yes, gateway = vpn_server_ip
-	nmcli> set vpn.secrets password = vpn_password
-	nmcli> save
-	nmcli> quit
+# method 1:
+rhel:~ # nmcli connection add type vpn con-name vpn0 ifname vpn0 vpn-type pptp
+rhel:~ # nmcli connection edit vpn0
+nmcli> set vpn.data password-flags = 0, user = vpn_user, require-mppe = yes, gateway = vpn_server_ip
+nmcli> set vpn.secrets password = vpn_password
+nmcli> save
+nmcli> quit
 
-	# firewall
-	rhel:~ # firewall-cmd --direct --add-rule ipv4 filter INPUT 0 -p gre -j ACCEPT
-	rhel:~ # firewall-cmd --permanent --direct --add-rule ipv6 filter INPUT 0 -p gre -j ACCEPT
-	rhel:~ # firewall-cmd --reload
+# firewall
+rhel:~ # firewall-cmd --direct --add-rule ipv4 filter INPUT 0 -p gre -j ACCEPT
+rhel:~ # firewall-cmd --permanent --direct --add-rule ipv6 filter INPUT 0 -p gre -j ACCEPT
+rhel:~ # firewall-cmd --reload
 
-	# method 2:
-	rhel:~ # gnome-control-center network
+# method 2:
+rhel:~ # gnome-control-center network
+```
 
 ## l2tp ##
 
-	rhel:~ # yum install NetworkManager-l2tp NetworkManager-l2tp-gnome
+```
+rhel:~ # yum install NetworkManager-l2tp NetworkManager-l2tp-gnome
+```
 
 
 ## ipsec ##
 
-	rhel:~ # yum install NetworkManager-libreswan NetworkManager-libreswan-gnome
+```
+rhel:~ # yum install NetworkManager-libreswan NetworkManager-libreswan-gnome
+```
 
 
 # Networking Device Naming #
@@ -974,41 +1038,49 @@ vim -c "set backupcopy=yes" /etc/named.conf
 /etc/rndc.key
 
 
-	rhel:~ # chmod o-rwx /etc/rndc.key
-	rhel:~ # rndc status
+```
+rhel:~ # chmod o-rwx /etc/rndc.key
+rhel:~ # rndc status
+```
 
 
 ### reload configuration and zone ###
 
-	rhel:~ # rndc reload # reload configuration and zones
-	rhel:~ # rndc reload localhost # reload single zone (zone name: localhost)
-	rhel:~ # rndc reconfig # reload configuration and newly added zones
+```
+rhel:~ # rndc reload # reload configuration and zones
+rhel:~ # rndc reload localhost # reload single zone (zone name: localhost)
+rhel:~ # rndc reconfig # reload configuration and newly added zones
 
-	rhel:~ # rndc freeze localhost
-	rhel:~ # rndc thaw localhost
+rhel:~ # rndc freeze localhost
+rhel:~ # rndc thaw localhost
+```
 
 
 ### update zone key ###
 
-	rhel:~ # vi /etc/named.conf
-	...
-	zone "localhost" IN {
-	  type master;
-	  file "named.localhost";
-	  allow-update { none; };
-	  auto-dnssec maintain; # add auto-dnssec keyword
-	};
-	...
+```
+rhel:~ # vi /etc/named.conf
+...
+zone "localhost" IN {
+  type master;
+  file "named.localhost";
+  allow-update { none; };
+  auto-dnssec maintain; # add auto-dnssec keyword
+};
+...
 
-	rhel:~ # rndc sign localhost # udpate zone key
+rhel:~ # rndc sign localhost # udpate zone key
 
-	rhel:~ # rndc validation on
-	rhel:~ # rndc validation off
-	rhel:~ # rndc querylog
+rhel:~ # rndc validation on
+rhel:~ # rndc validation off
+rhel:~ # rndc querylog
+```
 
 
 ## dig ##
 
-	rhel:~ # dig example.com NS
-	rhel:~ # dig example.com A
-	rhel:~ # dig -x 192.0.32.10
+```
+rhel:~ # dig example.com NS
+rhel:~ # dig example.com A
+rhel:~ # dig -x 192.0.32.10
+```

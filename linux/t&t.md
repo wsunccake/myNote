@@ -44,6 +44,10 @@ wodim -> cdrecord (symbol link)
 
 ```
 Linux:~ # wodim -v -dao dev=/dev/cdrw image.iso
+
+Linux:~ # wodim --devices dev=/dev/sr0
+Linux:~ # wodim -scanbus dev=/dev/sr0
+Linux:~ # wodim -prcap
 ```
 
 #### 建立 image/iso

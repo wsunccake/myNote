@@ -1,4 +1,4 @@
-# Install
+l# Install
 
 ## partition
 
@@ -146,6 +146,35 @@ arch:~ # systemctl enable sshd.service
 ----
 
 
+# CLI
+
+## gpm
+
+```
+arch:~ # pacman -S gpm
+arch:~ # systemctl enable gpm.service
+arch:~ # systemctl start gpm.service
+```
+
+
+## ScreenFetch
+
+```
+arch:~ # pacman -S screenfetch
+arch:~ # echo /usr/bin/screenfetch >> ~/.bashrc
+```
+
+
+## zsh
+
+```
+arhc:~ # pacman -S zsh zsh-completions oh-my-zsh-git
+arhc:~ # cp /usr/share/oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+```
+
+----
+
+
 # GUI
 
 ## X window
@@ -154,12 +183,32 @@ arch:~ # systemctl enable sshd.service
 arch:~ # pacman -S xorg-server xorg-xinit xorg-utils xorg-server-utils mesa
 arch:~ # pacman -S xorg-twm xterm xorg-xclock
 arch:~ # pacman -S ttf-dejavu  ttf-droid  ttf-inconsolata
+arch:~ # pacman -Ss xf86-video
+arch:~ # pacman -S xf86-video-vesa
 arch:~ # X -configure
 arch:~ # cp xorg.conf.new /etc/X11/xorg.conf.d/xorg.conf
 
 arch:~ # xdpyinfo
 arch:~ # xrandr --output VGA-0 --mode 1024x768 --rate 60
 ```
+
+
+## SDDM
+
+```
+arch:~ # pacman -S sddm
+arch:~ # sddm --example-config > /etc/sddm.conf
+
+arch:~ # pacman -S archlinux-themes-sddm
+arch:~ # sddm --example-config > /etc/sddm.conf
+arch:~ # vi /etc/sddm.conf
+...
+[Theme]
+# Current theme name
+#Current=maui
+Current=archlinux-soft-grey
+```
+
 
 ## Xfce
 
@@ -202,7 +251,11 @@ arch:~ # yaourt ttf-tw
 
 ```
 arch:~ # pacman -S ibus
-arhc:~ # pacman -S ibus-chewing
+arch:~ # pacman -S ibus-chewing
+
+arch:~ # ibus-daemon
+arch:~ # ibus engine
+arch:~ # ibus restart
 ```
 
 ----
