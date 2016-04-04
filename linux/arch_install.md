@@ -37,7 +37,14 @@ root@arhciso:~ # reboot
 
 # Pakcage
 
-## essential packages
+## Upgrade
+
+```
+arch:~ # pacman -Syy
+arch:~ # pacman -Su
+```
+
+## Essential Packages
 
 ```
 arch:~ # pacman -S net-tools pkgfile base-devel
@@ -157,20 +164,24 @@ arch:~ # systemctl start gpm.service
 ```
 
 
-## ScreenFetch
-
-```
-arch:~ # pacman -S screenfetch
-arch:~ # echo /usr/bin/screenfetch >> ~/.bashrc
-```
-
-
 ## zsh
 
 ```
 arhc:~ # pacman -S zsh zsh-completions oh-my-zsh-git
 arhc:~ # cp /usr/share/oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
 ```
+
+----
+
+# CLI Application
+
+## ScreenFetch
+
+```
+arch:~ # pacman -S screenfetch
+arch:~ # echo /usr/bin/screenfetch >> /etc/bash.bashrc
+```
+
 
 ----
 
@@ -200,7 +211,6 @@ arch:~ # pacman -S sddm
 arch:~ # sddm --example-config > /etc/sddm.conf
 
 arch:~ # pacman -S archlinux-themes-sddm
-arch:~ # sddm --example-config > /etc/sddm.conf
 arch:~ # vi /etc/sddm.conf
 ...
 [Theme]
@@ -275,6 +285,26 @@ arch:~ # pacman -S cairo-dock cairo-dock-plug-ins
 
 ```
 arch:~ # pacman -S guake
+```
+
+
+## Sublime Text
+
+```
+arch:~ # yaourt sublime-text-dev
+```
+
+## IntelliJ
+
+```
+arch:~ # yaourt intellij-idea-ultimate-edition
+```
+
+
+## VNC
+
+```
+arch:~ # yaourt tigervnc
 ```
 
 ----
