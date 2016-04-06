@@ -167,8 +167,10 @@ arch:~ # systemctl start gpm.service
 ## zsh
 
 ```
-arhc:~ # pacman -S zsh zsh-completions oh-my-zsh-git
-arhc:~ # cp /usr/share/oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+arhc:~ # pacman -S zsh zsh-completions
+
+arhc:~ # yaourt oh-my-zsh-git
+arhc:~ # cp /usr/share/oh-my-zsh/zshrc ~/.zshrc
 ```
 
 ----
@@ -305,6 +307,14 @@ arch:~ # yaourt intellij-idea-ultimate-edition
 
 ```
 arch:~ # yaourt tigervnc
+
+arch:~ # vncserver   # start server
+arch:~ # vncserver   # stop server
+
+arch:~ # cat ~/.vnc/xstartup
+#!/bin/sh
+
+exec startxfce4
 ```
 
 ----
