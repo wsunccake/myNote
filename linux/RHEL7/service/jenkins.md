@@ -71,6 +71,9 @@ rhel:~ # java -jar jenkins-cli.jar -s http://localhost:8080 delete-job <job>
 
 [Job Configuration History Plugin](https://wiki.jenkins-ci.org/display/JENKINS/JobConfigHistory+Plugin)
 
+[Naginator Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Naginator+Plugin)
+
+[Build Environment Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Build+Environment+Plugin)
 
 ### Other
 

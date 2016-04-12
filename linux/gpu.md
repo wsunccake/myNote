@@ -166,6 +166,10 @@ Linux:~ # echo quit | nvidia-cuda-mps-control
 # show gpu info
 Linux:~ # nvidia-smi -q -d CLOCK
 Linux:~ # nvidia-smi -q -d SUPPORTED_CLOCKS
+Linux:~ # nvidia-smi -q -d compute 
+
+# monitor gpu
+Linux:~ # nvidia-smi -l
 ```
 
 # Reference

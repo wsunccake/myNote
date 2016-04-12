@@ -118,3 +118,20 @@ Linux:~ # sed -n "/<\!--/,/-->/p" index.html
 ```
 Linux:~ # sed  "/<\!--/,/-->/d" index.html
 ```
+
+## Compile
+
+
+### make
+
+```
+# method 1: 在 configure 時指定安裝路徑
+Linux:~/pkg # ./configure --prefix=/install_dir
+Linux:~/pkg # make
+Linux:~/pkg # make install
+
+method 2: 在 make install 時指定安裝路徑
+Linux:~/pkg # ./configure
+Linux:~/pkg # make
+Linux:~/pkg # make install DESTDIR=/install_dir
+```

@@ -69,85 +69,94 @@ Layout 亦會反映在 Logger 的階層上
 
 下載
 
-	rhel:~ # wget ftp://ftp.twaren.net/Unix/Web/apache/logging/log4j/1.2.17/log4j-1.2.17.tar.gz
-	rhel:~ # tar zxf log4j-1.2.17.tar.gz
+```
+rhel:~ # wget ftp://ftp.twaren.net/Unix/Web/apache/logging/log4j/1.2.17/log4j-1.2.17.tar.gz
+rhel:~ # tar zxf log4j-1.2.17.tar.gz
+```
 
 
 範例
 
-	rhel:~ # cat HelloExample.java
-	import org.apache.log4j.Logger;
-	
-	public class HelloExample{
-	    final static Logger logger = Logger.getLogger(HelloExample.class);
+```
+rhel:~ # cat HelloExample.java
+import org.apache.log4j.Logger;
 
-	    public static void main(String[] args) {
-	        HelloExample obj = new HelloExample();
-	        obj.runMe("Hell LOG4J");
-	    }
+public class HelloExample{
+    final static Logger logger = Logger.getLogger(HelloExample.class);
 
-		private void runMe(String parameter){
-	        if (logger.isDebugEnabled())
-	            logger.debug("This is debug : " + parameter);
+    public static void main(String[] args) {
+        HelloExample obj = new HelloExample();
+        obj.runMe("Hell LOG4J");
+    }
 
-	        if (logger.isInfoEnabled())
-	            logger.info("This is info : " + parameter);
+    private void runMe(String parameter){
+        if (logger.isDebugEnabled())
+            logger.debug("This is debug : " + parameter);
 
-	        logger.warn("This is warn : " + parameter);
-	        logger.error("This is error : " + parameter);
-	        logger.fatal("This is fatal : " + parameter);
-	    }
-	}
+        if (logger.isInfoEnabled())
+            logger.info("This is info : " + parameter);
+
+        logger.warn("This is warn : " + parameter);
+        logger.error("This is error : " + parameter);
+        logger.fatal("This is fatal : " + parameter);
+    }
+}
+```
 
 
 Log4j 設定檔
 
-	rhel:~ # cat log4j.properties
-	# Define the root logger with appender file
-	log = /root/log4j
-	log4j.rootLogger = DEBUG, FILE
+```
+rhel:~ # cat log4j.properties
+# Define the root logger with appender file
+log = /root/log4j
+log4j.rootLogger = DEBUG, FILE
 
-	# Define the file appender
-	log4j.appender.FILE=org.apache.log4j.FileAppender
-	log4j.appender.FILE.File=${log}/log.out
+# Define the file appender
+log4j.appender.FILE=org.apache.log4j.FileAppender
+log4j.appender.FILE.File=${log}/log.out
 
-	# Define the layout for file appender
-	log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
-	log4j.appender.FILE.layout.conversionPattern=%m%n
+# Define the layout for file appender
+log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
+log4j.appender.FILE.layout.conversionPattern=%m%n
+```
 
 
 編譯與執行
 
-	rhel:~ # java -cp apache-log4j-1.2.17/log4j-1.2.17.jar HelloExample.java
-	rhel:~ # java -cp apache-log4j-1.2.17/log4j-1.2.17.jar -Dlog4j.configuration=file:///root/log4j.properties HelloExample
-
+```
+rhel:~ # javac -cp apache-log4j-1.2.17/log4j-1.2.17.jar HelloExample.java
+rhel:~ # java -cp apache-log4j-1.2.17/log4j-1.2.17.jar -Dlog4j.configuration=file:///root/log4j.properties HelloExample
+```
 
 ## Log 輸出到 console
 
-	import org.apache.log4j.*;
+```
+import org.apache.log4j.*;
 
-	public class DemoLog4J {
-	    public static Logger logger = Logger.getLogger(DemoLog4J.class);
-	    public static void main(String[] args) {
-	        String pattern = "Milliseconds since program start: %r %n" +
-	                "Classname of caller: %C %n" +
-	                "Date in ISO8601 format: %d{ISO8601} %n" +
-	                "Location of log event: %l %n" +
-	                "Message: %m %n %n";
+public class DemoLog4J {
+    public static Logger logger = Logger.getLogger(DemoLog4J.class);
+    public static void main(String[] args) {
+        String pattern = "Milliseconds since program start: %r %n" +
+                "Classname of caller: %C %n" +
+                "Date in ISO8601 format: %d{ISO8601} %n" +
+                "Location of log event: %l %n" +
+                "Message: %m %n %n";
 
-	        PatternLayout layout = new PatternLayout(pattern);
-	        ConsoleAppender appender = new ConsoleAppender(layout);
-	
-	        logger.addAppender(appender);
-	        logger.setLevel((Level) Level.DEBUG);
-	
-	        logger.debug("Here is some DEBUG");
-	        logger.info("Here is some INFO");
-	        logger.warn("Here is some WARN");
-	        logger.error("Here is some ERROR");
-	        logger.fatal("Here is some FATAL");
-	    }
-	}
+        PatternLayout layout = new PatternLayout(pattern);
+        ConsoleAppender appender = new ConsoleAppender(layout);
+
+        logger.addAppender(appender);
+        logger.setLevel((Level) Level.DEBUG);
+
+        logger.debug("Here is some DEBUG");
+        logger.info("Here is some INFO");
+        logger.warn("Here is some WARN");
+        logger.error("Here is some ERROR");
+        logger.fatal("Here is some FATAL");
+    }
+}
+```
 
 
 # commons loggin + LOG4J
@@ -156,42 +165,48 @@ Log4j 設定檔
 
 原始碼
 
-	rhel:~ # cat mypackage/DemoLog.java 
-	package mypackage;
+```
+rhel:~ # cat mypackage/DemoLog.java 
+package mypackage;
 
-	import org.apache.commons.logging.Log;
-	import org.apache.commons.logging.LogFactory;
-	
-	public class DemoLog{
-	    static Log logger = LogFactory.getLog(DemoLog.class);
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-	    public static void main(String[] args) {
-	        logger.debug("Here is some DEBUG");
-	        logger.info("Here is some INFO");
-	        logger.warn("Here is some WARN");
-	        logger.error("Here is some ERROR");
-	        logger.fatal("Here is some FATAL");
-	    }
-	}
+public class DemoLog{
+    static Log logger = LogFactory.getLog(DemoLog.class);
+
+    public static void main(String[] args) {
+        logger.debug("Here is some DEBUG");
+        logger.info("Here is some INFO");
+        logger.warn("Here is some WARN");
+        logger.error("Here is some ERROR");
+        logger.fatal("Here is some FATAL");
+    }
+}
+```
 
 設定檔
 
-	rhel:~ # cat log4j.properties 
-	# Define the root logger with appender file
-	log = /root/log4j
-	log4j.rootLogger = DEBUG, FILE
+```
+rhel:~ # cat log4j.properties 
+# Define the root logger with appender file
+log = /root/log4j
+log4j.rootLogger = DEBUG, FILE
 
-	# Define the file appender
-	log4j.appender.FILE=org.apache.log4j.FileAppender
-	log4j.appender.FILE.File=${log}/log.out
+# Define the file appender
+log4j.appender.FILE=org.apache.log4j.FileAppender
+log4j.appender.FILE.File=${log}/log.out
 
-	# Define the layout for file appender
-	log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
-	log4j.appender.FILE.layout.conversionPattern
+# Define the layout for file appender
+log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
+log4j.appender.FILE.layout.conversionPattern
+```
 
 編譯執行
 
-	rhel:~ # javac -cp commons-logging-1.2.jar:log4j-1.2.17.jar mypackage/DemoLog.java
-	rhel:~ # jar cf mypackage.jar mypackage
-	rhel:~ # java -cp commons-logging-1.2.jar:log4j-1.2.17.jar:mypackage.jar -Dlog4j.configuration=file:///root/log4j.properties mypackage.DemoLog
-	rhel:~ # ls log4j/log.out
+```
+rhel:~ # javac -cp commons-logging-1.2.jar:log4j-1.2.17.jar mypackage/DemoLog.java
+rhel:~ # jar cf mypackage.jar mypackage
+rhel:~ # java -cp commons-logging-1.2.jar:log4j-1.2.17.jar:mypackage.jar -Dlog4j.configuration=file:///root/log4j.properties mypackage.DemoLog
+rhel:~ # ls log4j/log.out
+```
