@@ -44,6 +44,13 @@ arch:~ # pacman -Syy
 arch:~ # pacman -Su
 ```
 
+## Remove package_group
+
+```
+arhc:~ # pacman -Qg | awk '/^package_group/{print $2}' | xargs -i pacman -Rs --noconfirm {}
+```
+
+
 ## Essential Packages
 
 ```
@@ -171,6 +178,11 @@ arhc:~ # pacman -S zsh zsh-completions
 
 arhc:~ # yaourt oh-my-zsh-git
 arhc:~ # cp /usr/share/oh-my-zsh/zshrc ~/.zshrc
+
+arhc:~ # yaourt oh-my-zsh-powerline-theme-git
+arhc:~ # vi ~/.zshrc
+...
+ZSH_THEME="powerline"
 ```
 
 ----
@@ -268,6 +280,12 @@ arch:~ # pacman -S ibus-chewing
 arch:~ # ibus-daemon
 arch:~ # ibus engine
 arch:~ # ibus restart
+
+arch:~ # cat ~/.bashrc
+...
+export GTK_IM_MODULE=ibus
+export XMODIFIERS=@im=ibus
+export QT_IM_MODULE=ibus
 ```
 
 ----
