@@ -7,6 +7,9 @@
   Groovy 語法大致上和 Java 語言相似; 卻比 Java 更容易學習與使用, 比更適合剛入門學習寫程式的初學者. 已熟悉 Java 的開發者, 很快就能學會使用 Groovy 寫程式. 
 
 
+----
+
+
 # 安裝
 
 Groovy 可以使用 RPM, DPKG 等系統內建套件直接安裝, 但 Linux, MacOSX, FreeBSD 建議使用 SDKMAN (Software Development Kit MANager), 前身為 GVM (Groovy enVironment Manager) 安裝管理. 因為 Groovy 會使用到 Java, 須先安裝 JDK 6+ (Java Development Kit), 建議 JDK 8+. 使用 SDKMAN 安裝 end user 即可, 不需要 admin.
@@ -31,38 +34,158 @@ Linux:~ $ sdk install groovy
 Linux:~ $ echo $GROOVY_HOME         # 確認 Groovy 環境變數
 ```
 
+----
+
+
 # 使用環境
 
 
 ## command mode / 指令模式
 
-	Linux:~ $ groovy -e "println 'Hi, Groovy'"
+```
+Linux:~ $ groovy -e "println 'Hi, Groovy'"
+```
 
 
 ## script mode / 指令稿模式
 
-	Linux:~ $ cat hi.groovy
-	println 'Hi, Groovy'
-	Linux:~ $ groovy hi.groovy
+```
+Linux:~ $ cat hi.groovy
+println 'Hi, Groovy'
+Linux:~ $ groovy hi.groovy
+```
 
 
 ## inactive mode / 互動模式
 
-	Linux:~ $ export EDITOR=vim
-	Linux:~ $ groovysh
-	groovy> println 'Hi, Groovy'       // 輸入指令方式執行
-	groovy> :load hi.groovy            // 載入檔案方式執行
+```
+Linux:~ $ export EDITOR=vim
+Linux:~ $ groovysh
+groovy> println 'Hi, Groovy'       // 輸入指令方式執行
+groovy> :load hi.groovy            // 載入檔案方式執行
 
-	groovy> :edit                      // 使用編輯方式
-	def abc() {
-	    println "abc"
-	}
-	groovy> abc
+groovy> :edit                      // 使用編輯方式
+def abc() {
+    println "abc"
+}
+groovy> abc
 
-	groovy> :show all                  // 顯示已設定 variable, class, import
+groovy> :show all                  // 顯示已設定 variable, class, import
 
-	groovy> [].getClass()              // 回傳 class java.util.ArrayList
-	groovy> :doc java.util.ArrayList   // 查詢 java.util.ArrayList doc
+groovy> [].getClass()              // 回傳 class java.util.ArrayList
+groovy> :doc java.util.ArrayList   // 查詢 java.util.ArrayList doc
+```
+
+
+# 編譯
+
+
+## Groovy Script
+
+```
+Linux:~ $ cat hi.groovy 
+println 'Hi, Groovy'
+
+Linux:~ $ groovy hi.groovy       # 使用 Groovy 執行
+Linux:~ $ groovyc Main.groovy    # 編譯成 ByteCode
+Linux:~ $ ls
+hi.class    hi.groovy
+
+Linux:~ # java -cp $GROOVY_HOME/embeddable/groovy-all-2.4.4.jar:. Hi   # 使用 Java 執行, 因為有 ByteCode
+```
+
+
+## Groovy Script Load Groovy Class
+
+```
+Linux:~ $ cat myclass/GroovyCar.groovy 
+package myclass
+
+class GroovyCar {
+    int year = 2000
+    int miles
+
+    String toString() {
+        "year: ${year}, miles: ${miles}"
+    }
+}
+
+Linux:~ $ cat runGroovyCar.groovy 
+import myclass.GroovyCar
+
+println new GroovyCar()
+
+Linux:~ $ groovy runGroovyCar.groovy
+
+Linux:~ $ groovyc myclass/GroovyCar.groovy     # 編譯成 ByteCode
+Linux:~ $ groovyc runGroovyCar.groovy
+
+Linux:~ $ java -cp $GROOVY_HOME/embeddable/groovy-all-2.4.4.jar:. runGroovyCar
+```
+
+
+## Groovy Script Load Java Class
+
+```
+Linux:~ $ cat myclass/JavaCar.java 
+package myclass;
+
+public class JavaCar {
+    public JavaCar() {
+        System.out.println("Create Java Car");
+    }
+
+Linux:~ $ cat runJavaCar.groovy 
+import myclass.JavaCar
+
+new JavaCar()
+
+Linux:~ $ javac myclass/JavaCar.java     # 編譯成 ByteCode
+
+Linux:~ $ groovy runJavaCar.groovy       # 沒將 java 編譯成 ByteCode, Groovy 無法 load class
+
+Linux:~ $ groovyc runJavaCar.groovy
+Linux:~ $ java -cp $GROOVY_HOME/embeddable/groovy-all-2.4.4.jar:. runJavaCar
+```
+
+
+## Java Source Load Groovy Class
+
+```
+Linux:~ $ cat myclass/ClosureClass.groovy 
+package myclass
+
+class ClosureClass {
+    def passToClosure(int value, closure) {
+        println "pass ${value} to closure"
+        closure(value)
+    }
+}
+
+Linux:~ $ cat ExeGroovyClosure.java 
+import myclass.ClosureClass;
+
+public class ExeGroovyClosure {
+    public static void main(String[] args) {
+        ClosureClass o = new ClosureClass();
+        o.passToClosure(2, new Object() {
+            public void call(int value) {
+                System.out.println("Java closure");
+            }
+        });
+    }
+}
+
+Linux:~ $ groovyc myclass/ClosureClass.groovy
+Linux:~ $ javac -cp $GROOVY_HOME/embeddable/groovy-all-2.4.4.jar:. ExeGroovyClosure.java
+Linux:~ $ java -cp $GROOVY_HOME/embeddable/groovy-all-2.4.4.jar:. ExeGroovyClosure
+```
+
+## Groovy Script Call Groovy Script
+
+## Java Source Call Groovy Script
+
+----
 
 
 # IDE
