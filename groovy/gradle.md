@@ -182,7 +182,6 @@ task execute(type:JavaExec) {
    classpath = sourceSets.main.runtimeClasspath
 }
 
-
 # gradle lifecycle command
 linux:~/project # gradle compile  
 linux:~/project # gradle test
@@ -191,6 +190,30 @@ linux:~/project # gradle execute
 
 # 若將 build.gradle 中 main = 'mypackage.Hello' 改寫成 main = mainClass (動態載入)
 linux:~/project # gradle -PmainClass=mypackage.Hello execute
+
+# 另一種方式, 使用 application plugin
+linux:~/project # vi build.gradle
+group 'mypackage'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'mypackage.Hello'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'log4j:log4j:1.2.12'
+    testCompile 'junit:junit:4.12'
+}
+
+linux:~/project # gradle run
+
+# 若將 build.gradle 中 mainClassName = 'mypackage.Hello' 改寫成 main = mainClass (動態載入)
+linux:~/project # gradle -PmainClass=mypackage.Hello run
 ```
 
 
