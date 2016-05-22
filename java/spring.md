@@ -5,6 +5,7 @@
 
 # Create Project
 
+![spring](https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcT7BegJ6h8NI3Yx8HSUGcGrv0A3lKnTRRf-POvoaxXnBw4SQ69A)
 
 ## via Maven
 
@@ -83,7 +84,7 @@ Linux:~/spring-example:~ $ src/main/resources/SpringBeans.xml
 <beans xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans
-  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+  http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 <bean id="helloBean" class="com.mycls.HelloWorld">
   <property name="name" value="MMmm" />
@@ -197,7 +198,7 @@ Linux:~/spring-project:~ $ vi src/main/resources/SpringBeans.xml
 <beans xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans
-  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+  http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 <bean id="helloBean" class="com.mycls.HelloWorld">
   <property name="name" value="MMmm" />
@@ -228,3 +229,422 @@ Linux:~/spring-project:~ $ gradle -PmainClass=com.mycls.App run
 
 
 ----
+
+# Dependency Injection
+
+
+## Origin
+
+```
+Linux:~ $ mkdir bean1
+Linux:~ $ cd bean1
+Linux:~/bean1 $ gradle init --type java-library
+Linux:~/bean1 $ mkdir -p src/main/java/com/mycls
+Linux:~/bean1 $ mkdir -p src/test/java/com/mycls
+
+Linux:~/bean1 $ vi src/main/java/com/mycls/MediaPlayer.java
+package com.mycls;
+
+public interface MediaPlayer {
+  void play();
+}
+
+Linux:~/bean1 $ vi src/main/java/com/mycls/CompactDisc.java
+package com.mycls;
+
+public interface CompactDisc {
+  void play();
+}
+
+Linux:~/bean1 $ vi src/main/java/com/mycls/CDPlayer.java
+package com.mycls;
+
+public class CDPlayer implements MediaPlayer{
+  private CompactDisc cd;
+
+  public CDPlayer(CompactDisc cd) {
+    this.cd = cd;
+  }
+
+  @Override
+  public void play() {
+    cd.play();
+  }
+}
+
+Linux:~/bean1 $ vi src/main/java/com/mycls/EasonChan.java
+package com.mycls;
+
+public class EasonChan implements CompactDisc{
+    @Override
+    public void play() {
+        System.out.println("Eason Chan Album");
+    }
+}
+
+Linux:~/bean1 $ vi src/test/java/com/mycls/CDPlayerTest.java
+package com.mycls;
+
+import static org.junit.Assert.*;
+import org.junit.Rule;
+import org.junit.Test;
+
+import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
+
+public class CDPlayerTest {
+    private CompactDisc cd = new EasonChan();
+    private CDPlayer player = new CDPlayer(cd);
+
+    @Rule
+    public final StandardOutputStreamLog log = new StandardOutputStreamLog();
+
+    @Test
+    public void play() {
+        player.play();
+        assertEquals("Eason Chan Album\n", log.getLog());
+    }
+}
+
+Linux:~/bean1 $ vi build.gradle
+group 'com.mycls'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'com.github.stefanbirkner', name: 'system-rules', version: '1.2.0'
+}
+
+Linux:~/bean1 $ gradle test
+```
+
+
+## XML
+
+```
+Linux:~ $ mkdir bean2
+Linux:~ $ cd bean2
+Linux:~/bean2 $ gradle init --type java-library
+Linux:~/bean2 $ mkdir -p src/main/java/com/mycls
+Linux:~/bean2 $ mkdir -p src/main/resources
+Linux:~/bean2 $ mkdir -p src/test/java/com/mycls
+
+Linux:~/bean2 $ vi src/main/java/com/mycls/MediaPlayer.java
+package com.mycls;
+
+public interface MediaPlayer {
+  void play();
+}
+
+Linux:~/bean2 $ vi src/main/java/com/mycls/CompactDisc.java
+package com.mycls;
+
+public interface CompactDisc {
+  void play();
+}
+
+Linux:~/bean2 $ vi src/main/java/com/mycls/CDPlayer.java
+package com.mycls;
+
+public class CDPlayer implements MediaPlayer{
+  private CompactDisc cd;
+
+  public CDPlayer(CompactDisc cd) {
+    this.cd = cd;
+  }
+
+  @Override
+  public void play() {
+    cd.play();
+  }
+}
+
+Linux:~/bean2 $ vi src/main/java/com/mycls/EasonChan.java
+package com.mycls;
+
+public class EasonChan implements CompactDisc{
+    @Override
+    public void play() {
+        System.out.println("Eason Chan Album");
+    }
+}
+
+Linux:~/bean2 $ vi src/main/resources/Bean.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- Definition for outter bean using inner bean -->
+    <bean id="cdPlayer" class="com.mycls.CDPlayer">
+        <constructor-arg name="cd">
+            <bean id="easonChan" class="com.mycls.EasonChan" />
+        </constructor-arg>
+    </bean>
+</beans>
+
+Linux:~/bean2 $ vi src/test/java/com/mycls/CDPlayerTest.java
+package com.mycls;
+
+import static org.junit.Assert.*;
+import org.junit.Rule;
+import org.junit.Test;
+
+import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
+
+public class CDPlayerTest {
+    private CompactDisc cd = new EasonChan();
+    private CDPlayer player = new CDPlayer(cd);
+
+    @Rule
+    public final StandardOutputStreamLog log = new StandardOutputStreamLog();
+
+    @Test
+    public void play() {
+        player.play();
+        assertEquals("Eason Chan Album\n", log.getLog());
+    }
+}
+
+Linux:~/bean2 $ vi build.gradle
+group 'com.mycls'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.springframework', name: 'spring-context', version: '4.1.6.RELEASE'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'com.github.stefanbirkner', name: 'system-rules', version: '1.2.0'
+}
+
+Linux:~/bean3 $ gradle test
+```
+
+### XML with autowaire
+
+```
+Linux:~ $ mkdir bean3
+Linux:~ $ cd bean3
+Linux:~/bean3 $ gradle init --type java-library
+Linux:~/bean3 $ mkdir -p src/main/java/com/mycls
+Linux:~/bean3 $ mkdir -p src/main/resources
+Linux:~/bean3 $ mkdir -p src/test/java/com/mycls
+
+Linux:~/bean3 $ vi src/main/java/com/mycls/MediaPlayer.java
+package com.mycls;
+
+public interface MediaPlayer {
+  void play();
+}
+
+Linux:~/bean3 $ vi src/main/java/com/mycls/CompactDisc.java
+package com.mycls;
+
+public interface CompactDisc {
+  void play();
+}
+
+Linux:~/bean3 $ vi src/main/java/com/mycls/CDPlayer.java
+package com.mycls;
+
+public class CDPlayer implements MediaPlayer{
+  private CompactDisc cd;
+
+  public CDPlayer(CompactDisc cd) {
+    this.cd = cd;
+  }
+
+  @Override
+  public void play() {
+    cd.play();
+  }
+}
+
+Linux:~/bean3 $ vi src/main/java/com/mycls/EasonChan.java
+package com.mycls;
+
+public class EasonChan implements CompactDisc{
+    @Override
+    public void play() {
+        System.out.println("Eason Chan Album");
+    }
+}
+
+Linux:~/bean3 $ vi src/main/resources/Bean.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- Definition for bean using autowire -->
+    <bean id="cdPlayer" class="com.mycls.CDPlayer" autowire="constructor"></bean>
+    <bean id="easonChan" class="com.mycls.EasonChan"></bean>
+</beans>
+
+Linux:~/bean3 $ vi src/test/java/com/mycls/CDPlayerTest.java
+package com.mycls;
+
+import static org.junit.Assert.*;
+import org.junit.Rule;
+import org.junit.Test;
+
+import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
+
+public class CDPlayerTest {
+    private CompactDisc cd = new EasonChan();
+    private CDPlayer player = new CDPlayer(cd);
+
+    @Rule
+    public final StandardOutputStreamLog log = new StandardOutputStreamLog();
+
+    @Test
+    public void play() {
+        player.play();
+        assertEquals("Eason Chan Album\n", log.getLog());
+    }
+}
+
+Linux:~/bean3 $ vi build.gradle
+group 'com.mycls'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.springframework', name: 'spring-context', version: '4.1.6.RELEASE'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'com.github.stefanbirkner', name: 'system-rules', version: '1.2.0'
+}
+
+Linux:~/bean3 $ gradle test
+```
+
+
+### XML with autowaire annotation
+
+```
+Linux:~ $ mkdir bean4
+Linux:~ $ cd bean4
+Linux:~/bean4 $ gradle init --type java-library
+Linux:~/bean4 $ mkdir -p src/main/java/com/mycls
+Linux:~/bean4 $ mkdir -p src/main/resources
+Linux:~/bean4 $ mkdir -p src/test/java/com/mycls
+
+Linux:~/bean4 $ vi src/main/java/com/mycls/MediaPlayer.java
+package com.mycls;
+
+public interface MediaPlayer {
+  void play();
+}
+
+Linux:~/bean4 $ vi src/main/java/com/mycls/CompactDisc.java
+package com.mycls;
+
+public interface CompactDisc {
+  void play();
+}
+
+Linux:~/bean4 $ vi src/main/java/com/mycls/CDPlayer.java
+package com.mycls;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+public class CDPlayer implements MediaPlayer{
+  private CompactDisc cd;
+
+  @Autowired
+  public CDPlayer(CompactDisc cd) {
+    this.cd = cd;
+  }
+
+  @Override
+  public void play() {
+    cd.play();
+  }
+}
+
+Linux:~/bean4 $ vi src/main/java/com/mycls/EasonChan.java
+package com.mycls;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class EasonChan implements CompactDisc{
+    @Override
+    public void play() {
+        System.out.println("Eason Chan Album");
+    }
+}
+
+Linux:~/bean4 $ vi src/main/resources/Bean.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- Definition for bean using autowire annotation -->
+    <context:component-scan base-package="com.mycls" />
+    <bean id="cdPlayer" class="com.mycls.CDPlayer"></bean>
+</beans>
+
+Linux:~/bean4 $ vi src/test/java/com/mycls/CDPlayerTest.java
+package com.mycls;
+
+import static org.junit.Assert.*;
+import org.junit.Rule;
+import org.junit.Test;
+
+import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
+
+public class CDPlayerTest {
+    private CompactDisc cd = new EasonChan();
+    private CDPlayer player = new CDPlayer(cd);
+
+    @Rule
+    public final StandardOutputStreamLog log = new StandardOutputStreamLog();
+
+    @Test
+    public void play() {
+        player.play();
+        assertEquals("Eason Chan Album\n", log.getLog());
+    }
+}
+
+Linux:~/bean4 $ vi build.gradle
+group 'com.mycls'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.springframework', name: 'spring-context', version: '4.1.6.RELEASE'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'com.github.stefanbirkner', name: 'system-rules', version: '1.2.0'
+}
+
+Linux:~/bean4 $ gradle test
+```
+
+
+## Java Config

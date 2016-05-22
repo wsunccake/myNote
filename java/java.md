@@ -805,9 +805,45 @@ ArrayList<int> intList = new ArrayList<>(); // 無法通過編譯
 
 ## thread / process ##
 
-## reflection ##
+## Reflection ##
 
-## anatation ##
+
+```
+/* Class */
+// 1. .class
+Class<?> cls1 = String.class;
+
+// 2. forName()
+Class<?> cls2 = Class.forName("java.lang.String");
+
+// 3. getClass()
+String s = "string";
+Class<?> cls3 = s.getClass();
+
+/* Instance */
+// 1. getConstructor()
+Constructor cons = cls1.getConstructor(new Class[] {});
+Object obj1 = cons.newInstance(new Class[] {});
+
+// 2. newInstance()
+Object obj2 = cons.newInstance();
+
+/* Field */
+// 1. getDeclareDFields
+Field[] flds = cls1.getDecaredFields();
+
+/* Method */
+// getMethod
+Method mthd1 = cls1.getMethod("equals", new Class[] {});  // 只能呼叫 public method
+Method mthd2 = cls1.getDeclaredMethod("equals", new Class[] {});  // 呼叫 all method
+
+mthd2.setAccessible(true); // 讓 private method 可以被使用
+
+// invoke
+Object o = mthd.invoke(object, new Class[] {});
+```
+
+## Anatation ##
 
 
 --------
