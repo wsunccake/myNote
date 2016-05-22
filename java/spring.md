@@ -293,7 +293,7 @@ import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
 
 public class CDPlayerTest {
     private CompactDisc cd = new EasonChan();
-    private CDPlayer player = new CDPlayer(cd);
+    private MediaPlayer player = new CDPlayer(cd);
 
     @Rule
     public final StandardOutputStreamLog log = new StandardOutputStreamLog();
@@ -394,12 +394,13 @@ package com.mycls;
 import static org.junit.Assert.*;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class CDPlayerTest {
-    private CompactDisc cd = new EasonChan();
-    private CDPlayer player = new CDPlayer(cd);
+    private ApplicationContext context = new ClassPathXmlApplicationContext("Bean.xml");
+    private MediaPlayer player = (CDPlayer) context.getBean("cdPlayer");
 
     @Rule
     public final StandardOutputStreamLog log = new StandardOutputStreamLog();
@@ -498,12 +499,15 @@ package com.mycls;
 import static org.junit.Assert.*;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
 
 public class CDPlayerTest {
-    private CompactDisc cd = new EasonChan();
-    private CDPlayer player = new CDPlayer(cd);
+    private ApplicationContext context = new ClassPathXmlApplicationContext("Bean.xml");
+    private MediaPlayer player = (CDPlayer) context.getBean("cdPlayer");
 
     @Rule
     public final StandardOutputStreamLog log = new StandardOutputStreamLog();
@@ -609,12 +613,15 @@ package com.mycls;
 import static org.junit.Assert.*;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
 
 public class CDPlayerTest {
-    private CompactDisc cd = new EasonChan();
-    private CDPlayer player = new CDPlayer(cd);
+    private ApplicationContext context = new ClassPathXmlApplicationContext("Bean.xml");
+    private MediaPlayer player = (CDPlayer) context.getBean("cdPlayer");
 
     @Rule
     public final StandardOutputStreamLog log = new StandardOutputStreamLog();
@@ -647,4 +654,117 @@ Linux:~/bean4 $ gradle test
 ```
 
 
-## Java Config
+## JavaConfig
+
+```
+Linux:~ $ mkdir bean5
+Linux:~ $ cd bean5
+Linux:~/bean5 $ gradle init --type java-library
+Linux:~/bean5 $ mkdir -p src/main/java/com/mycls
+Linux:~/bean5 $ mkdir -p src/test/java/com/mycls
+
+Linux:~/bean5 $ vi src/main/java/com/mycls/MediaPlayer.java
+package com.mycls;
+
+public interface MediaPlayer {
+  void play();
+}
+
+Linux:~/bean5 $ vi src/main/java/com/mycls/CompactDisc.java
+package com.mycls;
+
+public interface CompactDisc {
+  void play();
+}
+
+Linux:~/bean5 $ vi src/main/java/com/mycls/CDPlayer.java
+package com.mycls;
+
+public class CDPlayer implements MediaPlayer{
+  private CompactDisc cd;
+
+  public CDPlayer(CompactDisc cd) {
+    this.cd = cd;
+  }
+
+  @Override
+  public void play() {
+    cd.play();
+  }
+}
+
+Linux:~/bean5 $ vi src/main/java/com/mycls/EasonChan.java
+package com.mycls;
+
+public class EasonChan implements CompactDisc{
+    @Override
+    public void play() {
+        System.out.println("Eason Chan Album");
+    }
+}
+
+Linux:~/bean5 $ vi src/main/java/com/mycls/CDPlayerConfig.java
+package com.mycls;
+
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Bean;
+
+@Configurable
+public class CDPlayerConfig {
+    @Bean
+    private CompactDisc easonChan() {
+        return new EasonChan();
+    }
+
+    @Bean
+    public CDPlayer cdPlayer() {
+        return new CDPlayer(easonChan());
+    }
+}
+
+Linux:~/bean5 $ vi src/test/java/com/mycls/CDPlayerTest.java
+package com.mycls;
+
+import static org.junit.Assert.*;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class CDPlayerTest {
+    ApplicationContext context = new AnnotationConfigApplicationContext(CDPlayerConfig.class);
+    private MediaPlayer player= (CDPlayer) context.getBean("cdPlayer");
+
+    @Rule
+    public final StandardOutputStreamLog log = new StandardOutputStreamLog();
+
+    @Test
+    public void play() {
+        player.play();
+        assertEquals("Eason Chan Album\n", log.getLog());
+    }
+}
+
+Linux:~/bean5 $ vi build.gradle
+group 'com.mycls'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.springframework', name: 'spring-context', version: '4.1.6.RELEASE'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'com.github.stefanbirkner', name: 'system-rules', version: '1.2.0'
+}
+
+Linux:~/bean5 $ gradle test
+```
+
+
+### JavaConfig with autowaire
