@@ -230,7 +230,7 @@ Linux:~/spring-project:~ $ gradle -PmainClass=com.mycls.App run
 
 ----
 
-# Dependency Injection
+# Dependency Injection (DI)
 
 
 ## Origin
@@ -877,4 +877,283 @@ dependencies {
 }
 
 Linux:~/bean6 $ gradle test
+```
+
+----
+
+# Aspect-Oriented Programming (AOP)
+
+
+## Origin
+
+```
+Linux:~ $ mkdir aop1
+Linux:~ $ cd aop1
+Linux:~/aop1 $ gradle init --type java-library
+Linux:~/aop1 $ mkdir -p src/main/java/com/mycls
+Linux:~/aop1 $ mkdir -p src/test/java/com/mycls
+
+Linux:~/aop1 $ vi src/main/java/com/mycls/Instrumentalist.java
+package com.mycls;
+
+public class Instrumentalist {
+    private Instrument instrument;
+
+    public void setInstrument(Instrument instrument){
+        this.instrument = instrument;
+    }
+
+    public Instrument getInstrument() {
+        return instrument;
+    }
+}
+
+Linux:~/aop1 $ vi src/main/java/com/mycls/Instrument.java
+package com.mycls;
+
+public interface Instrument {
+    public void play();
+}
+
+Linux:~/aop1 $ vi src/main/java/com/mycls/Guitar.java
+package com.mycls;
+
+public class Guitar implements Instrument {
+    @Override
+    public void play() {
+        System.out.println("Strum strum strum");
+    }
+}
+
+Linux:~/aop1 $ vi src/main/java/com/mycls/MyGuitar.java
+package com.mycls;
+
+public class MyGuitar extends Guitar {
+    public void play() {
+        System.out.println("before play");
+        super.play();
+        System.out.println("after play");
+    }
+}
+
+Linux:~/aop1:~ $ mkdir -p src/main/resources
+Linux:~/aop1:~ $ vi src/main/resources/Bean.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="instrumentalist" class="com.mycls.Instrumentalist">
+        <property name="instrument" ref="guitar"/>
+    </bean>
+    <bean id="guitar" class="com.mycls.Guitar"></bean>
+    <!-- Setter-base DI -->
+    <bean id="myInstrumentalist" class="com.mycls.Instrumentalist">
+        <property name="instrument" ref="myGuitar"/>
+    </bean>
+    <bean id="myGuitar" class="com.mycls.MyGuitar"></bean>
+</beans>
+
+Linux:~/aop1 $ vi build.gradle
+group 'com.mycls'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.5
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.springframework', name: 'spring-context', version: '4.1.6.RELEASE'
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'com.github.stefanbirkner', name: 'system-rules', version: '1.2.0'
+}
+
+Linux:~/aop1 $ vi src/test/java/com/mycls/InstrumentalistTest.java
+package com.mycls;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import static junit.framework.TestCase.assertEquals;
+
+public class InstrumentalistTest {
+    private ApplicationContext context = new ClassPathXmlApplicationContext("Bean.xml");
+    private Instrumentalist instrumentalist = (Instrumentalist) context.getBean("instrumentalist");
+    private Instrumentalist myInstrumentalist = (Instrumentalist) context.getBean("myInstrumentalist");
+
+    @Rule
+    public final StandardOutputStreamLog log = new StandardOutputStreamLog();
+
+    @Test
+    public void playTest() {
+        instrumentalist.getInstrument().play();
+        assertEquals("Strum strum strum\n", log.getLog());
+    }
+
+    @Test
+    public void myPlayTest() {
+        myInstrumentalist.getInstrument().play();
+        assertEquals("before play\nStrum strum strum\nafter play\n", log.getLog());
+    }
+}
+
+Linux:~/aop1 $ gradle test
+```
+
+## Proxy with Advice
+
+```
+Linux:~ $ mkdir aop2
+Linux:~ $ cd aop1
+Linux:~/aop2 $ gradle init --type java-library
+Linux:~/aop2 $ mkdir -p src/main/java/com/mycls
+Linux:~/aop2 $ mkdir -p src/test/java/com/mycls
+
+Linux:~/aop2 $ vi src/main/java/com/mycls/Instrumentalist.java
+package com.mycls;
+
+public class Instrumentalist {
+    private Instrument instrument;
+
+    public void setInstrument(Instrument instrument){
+        this.instrument = instrument;
+    }
+
+    public Instrument getInstrument() {
+        return instrument;
+    }
+}
+
+Linux:~/aop2 $ vi src/main/java/com/mycls/Instrument.java
+package com.mycls;
+
+public interface Instrument {
+    public void play();
+}
+
+Linux:~/aop2 $ vi src/main/java/com/mycls/Guitar.java
+package com.mycls;
+
+public class Guitar implements Instrument {
+    @Override
+    public void play() {
+        System.out.println("Strum strum strum");
+    }
+}
+
+Linux:~/aop2 $ vi src/main/java/com/mycls/MyBeforeAdvice.java
+package com.mycls;
+
+import org.springframework.aop.MethodBeforeAdvice;
+
+import java.lang.reflect.Method;
+
+public class MyBeforeAdvice implements MethodBeforeAdvice{
+    @Override
+    public void before(Method method, Object[] args, Object target) throws Throwable {
+        System.out.println("before advice");
+    }
+}
+
+Linux:~/aop2 $ vi src/main/java/com/mycls/MyAfterAdvice.java
+package com.mycls;
+
+import org.springframework.aop.AfterReturningAdvice;
+
+import java.lang.reflect.Method;
+
+public class MyAfterAdvice implements AfterReturningAdvice {
+    @Override
+    public void afterReturning(Object returnValue, Method method, Object[] args, Object target) throws Throwable {
+        System.out.println("after advice");
+    }
+}
+
+Linux:~/aop2:~ $ mkdir -p src/main/resources
+Linux:~/aop2:~ $ vi src/main/resources/Bean.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="instrumentalist" class="com.mycls.Instrumentalist">
+        <property name="instrument" ref="guitarProxy"/>
+    </bean>
+    <bean id="guitar" class="com.mycls.Guitar"></bean>
+
+    <!-- advice -->
+    <bean id="myBeforeAdvice" class="com.mycls.MyBeforeAdvice"></bean>
+    <bean id="myAfterAdvice" class="com.mycls.MyAfterAdvice"></bean>
+
+    <!-- AOP via Proxy -->
+    <bean id="guitarProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target" ref="guitar" />
+        <property name="interceptorNames">
+        <list>
+            <value>myBeforeAdvice</value>
+            <value>myAfterAdvice</value>
+        </list>
+        </property>
+    </bean>
+</beans>
+
+Linux:~/aop2 $ vi build.gradle
+group 'com.mycls'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.5
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.springframework', name: 'spring-context', version: '4.1.6.RELEASE'
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'com.github.stefanbirkner', name: 'system-rules', version: '1.2.0'
+}
+
+Linux:~/aop2 $ vi src/test/java/com/mycls/InstrumentalistTest.java
+package com.mycls;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import static junit.framework.TestCase.assertEquals;
+
+public class InstrumentalistTest {
+    private ApplicationContext context = new ClassPathXmlApplicationContext("Bean.xml");
+    private Instrumentalist instrumentalist = (Instrumentalist) context.getBean("instrumentalist");
+
+    @Rule
+    public final StandardOutputStreamLog log = new StandardOutputStreamLog();
+
+    @Test
+    public void myAdiveTest() {
+        instrumentalist.getInstrument().play();
+        assertEquals("before advice\nStrum strum strum\nafter advice\n", log.getLog());
+    }
+}
+
+Linux:~/aop2 $ gradle test
+```
+
+## Proxy with Advice and Pointcut
+
+```
 ```
