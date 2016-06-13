@@ -1156,4 +1156,156 @@ Linux:~/aop2 $ gradle test
 ## Proxy with Advice and Pointcut
 
 ```
+Linux:~ $ mkdir aop3
+Linux:~ $ cd aop1
+Linux:~/aop3 $ gradle init --type java-library
+Linux:~/aop3 $ mkdir -p src/main/java/com/mycls
+Linux:~/aop3 $ mkdir -p src/test/java/com/mycls
+
+Linux:~/aop3 $ vi src/main/java/com/mycls/Instrumentalist.java
+package com.mycls;
+
+public class Instrumentalist {
+    private Instrument instrument;
+
+    public void setInstrument(Instrument instrument){
+        this.instrument = instrument;
+    }
+
+    public Instrument getInstrument() {
+        return instrument;
+    }
+}
+
+Linux:~/aop3 $ vi src/main/java/com/mycls/Instrument.java
+package com.mycls;
+
+public interface Instrument {
+    public void play();
+}
+
+Linux:~/aop3 $ vi src/main/java/com/mycls/Guitar.java
+package com.mycls;
+
+public class Guitar implements Instrument {
+    @Override
+    public void play() {
+        System.out.println("Strum strum strum");
+    }
+}
+
+Linux:~/aop3 $ vi src/main/java/com/mycls/MyAroundAdice.java
+package com.mycls;
+
+import org.aopalliance.intercept.MethodInterceptor;
+import org.aopalliance.intercept.MethodInvocation;
+
+public class MyAroundAdivce implements MethodInterceptor {
+    @Override
+    public Object invoke(MethodInvocation invocation) throws Throwable {
+        System.out.println("before point cut advice");
+        Object result = null;
+        try {
+            result = invocation.proceed();
+            System.out.println("after point cut advice");
+        } catch (IllegalArgumentException e) {
+            System.out.println("");
+        }
+        return result;
+    }
+}
+
+Linux:~/aop3:~ $ mkdir -p src/main/resources
+Linux:~/aop3:~ $ vi src/main/resources/Bean.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="instrumentalist" class="com.mycls.Instrumentalist">
+        <property name="instrument" ref="guitarProxy"/>
+    </bean>
+    <bean id="guitar" class="com.mycls.Guitar"></bean>
+
+
+    <!-- pointcut -->
+    <bean id="playPointcut"
+          class="org.springframework.aop.support.NameMatchMethodPointcut">
+        <property name="mappedName" value="play" />
+    </bean>
+
+    <!-- advice -->
+    <bean id="myAroundAdvice" class="com.mycls.MyAroundAdivce"></bean>
+    <bean id="playPointcutAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+        <property name="pointcut" ref="playPointcut" />
+        <property name="advice" ref="myAroundAdvice" />
+    </bean>
+    <bean id="regPointcutAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+        <property name="patterns">
+            <list>
+                <value>.*play.*</value>
+            </list>
+        </property>
+        <property name="advice" ref="myAroundAdvice" />
+    </bean>
+
+    <!-- AOP via Proxy -->
+    <bean id="guitarProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target" ref="guitar" />
+        <property name="interceptorNames">
+        <list>
+            <value>playPointcutAdvisor</value>
+        </list>
+        </property>
+    </bean>
+</beans>
+
+Linux:~/aop3 $ vi build.gradle
+group 'com.mycls'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.5
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.springframework', name: 'spring-context', version: '4.1.6.RELEASE'
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'com.github.stefanbirkner', name: 'system-rules', version: '1.2.0'
+}
+
+Linux:~/aop3 $ vi src/test/java/com/mycls/InstrumentalistTest.java
+package com.mycls;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import static junit.framework.TestCase.assertEquals;
+
+public class InstrumentalistTest {
+    private ApplicationContext context = new ClassPathXmlApplicationContext("Bean.xml");
+    private Instrumentalist instrumentalist = (Instrumentalist) context.getBean("instrumentalist");
+
+    @Rule
+    public final StandardOutputStreamLog log = new StandardOutputStreamLog();
+
+    @Test
+    public void myAdiveTest() {
+        instrumentalist.getInstrument().play();
+        assertEquals("before advice\nStrum strum strum\nafter advice\n", log.getLog());
+    }
+}
+
+Linux:~/aop3 $ gradle test
 ```
+
+## AspectJ
