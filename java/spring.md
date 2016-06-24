@@ -1312,7 +1312,7 @@ Linux:~/aop3 $ gradle test
 
 ```
 Linux:~ $ mkdir aop4
-Linux:~ $ cd aop1
+Linux:~ $ cd aop4
 Linux:~/aop4 $ gradle init --type java-library
 Linux:~/aop4 $ mkdir -p src/main/java/com/mycls
 Linux:~/aop4 $ mkdir -p src/test/java/com/mycls
@@ -1441,4 +1441,137 @@ public class InstrumentalistTest {
 }
 
 Linux:~/aop4 $ gradle test
+```
+
+## AspectJ with XML
+
+```
+Linux:~ $ mkdir aop5
+Linux:~ $ cd aop5
+Linux:~/aop5 $ gradle init --type java-library
+Linux:~/aop5 $ mkdir -p src/main/java/com/mycls
+Linux:~/aop5 $ mkdir -p src/test/java/com/mycls
+
+Linux:~/aop5 $ vi src/main/java/com/mycls/Instrumentalist.java
+package com.mycls;
+
+public class Instrumentalist {
+    private Instrument instrument;
+
+    public void setInstrument(Instrument instrument){
+        this.instrument = instrument;
+    }
+
+    public Instrument getInstrument() {
+        return instrument;
+    }
+}
+
+Linux:~/aop5 $ vi src/main/java/com/mycls/Instrument.java
+package com.mycls;
+
+public interface Instrument {
+    public void play();
+}
+
+Linux:~/aop5 $ vi src/main/java/com/mycls/Guitar.java
+package com.mycls;
+
+public class Guitar implements Instrument {
+    @Override
+    public void play() {
+        System.out.println("Strum strum strum");
+    }
+}
+
+Linux:~/aop5 $ vi src/main/java/com/mycls/GuitarAspect.java
+package com.mycls;
+
+import org.aspectj.lang.annotation.Aspect;
+
+@Aspect
+public class GuitarAspect {
+    public void beforeAdvice() {
+        System.out.println("before point cut advice");
+    }
+
+    public void afterAdvice(){
+        System.out.println("after point cut advice");
+    }
+}
+
+Linux:~/aop5:~ $ mkdir -p src/main/resources
+Linux:~/aop5:~ $ vi src/main/resources/Bean.xml
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="instrumentalist" class="com.mycls.Instrumentalist">
+        <property name="instrument" ref="guitar"/>
+    </bean>
+    <bean id="guitar" class="com.mycls.Guitar"></bean>
+
+    <bean id="guitarAspect" class="com.mycls.GuitarAspect"></bean>
+
+    <aop:config>
+        <aop:aspect id="guitarAop" ref="guitarAspect" >
+            <aop:pointcut id="pointCutPlay" expression="execution(* com.mycls.Instrument.play(..))" />
+            <aop:before method="beforeAdvice" pointcut-ref="pointCutPlay" />
+            <aop:after method="afterAdvice" pointcut-ref="pointCutPlay" />
+        </aop:aspect>
+    </aop:config>
+</beans>
+
+Linux:~/aop5 $ vi build.gradle
+group 'com.mycls'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.5
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.springframework', name: 'spring-context', version: '4.1.6.RELEASE'
+    compile group: 'org.springframework', name: 'spring-aop', version: '4.1.6.RELEASE'
+    compile group: 'org.aspectj', name: 'aspectjrt', version: '1.8.6'
+    compile group: 'org.aspectj', name: 'aspectjweaver', version: '1.8.6'
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'com.github.stefanbirkner', name: 'system-rules', version: '1.2.0'
+}
+
+Linux:~/aop5 $ vi src/test/java/com/mycls/InstrumentalistTest.java
+package com.mycls;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import static junit.framework.TestCase.assertEquals;
+
+public class InstrumentalistTest {
+    private ApplicationContext context = new ClassPathXmlApplicationContext("Bean.xml");
+    private Instrumentalist instrumentalist = (Instrumentalist) context.getBean("instrumentalist");
+
+    @Rule
+    public final StandardOutputStreamLog log = new StandardOutputStreamLog();
+
+    @Test
+    public void myAdiveTest() {
+        instrumentalist.getInstrument().play();
+        assertEquals("before point cut advice\nStrum strum strum\nafter point cut advice\n", log.getLog());
+    }
+}
+
+Linux:~/aop5 $ gradle test
 ```
