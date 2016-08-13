@@ -62,7 +62,8 @@ if [ "$?" -eq 0 ]; then
   D=`grep nvidia-uvm /proc/devices | awk '{print $1}'`
   mknod -m 666 /dev/nvidia-uvm c $D 0
 else
-  exit 
+  exit
+fi
 ```
 
 

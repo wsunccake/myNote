@@ -145,8 +145,11 @@ rhel:~ # ip addr del 10.0.0.3/24 dev eth0 # 刪除網卡 IP
 rhel:~ # ip route # 顯示路由
 rhel:~ # ip route add default via 10.0.3.254 dev eth0 # 新增預設路由
 rhel:~ # ip route del default via 10.0.3.254 dev eth0 # 刪除預設路由
+rhel:~ # ip route add 192.168.0.0/24 via 10.0.3.254 dev eth0 # 新增靜態路由
 rhel:~ # ip route add via 192.168.0.254 dev eth1 # 新增路由
 rhel:~ # ip route del via 192.168.0.254 dev eth1 # 刪除路由
+rhel:~ # ip route del 192.168.0.0/24 via 10.0.3.254 dev eth0 # 刪除靜態路由
+
 
 # method 4:
 rhel:~ # ifconfig -a # 顯示網卡狀態
@@ -158,8 +161,10 @@ rhel:~ # ifconfig eth0 0.0.0.0 netmask 255.255.255.0 # 刪除網卡 IP
 
 rhel:~ # route add default gw 10.0.3.253 dev eth0 # 新增預設路由
 rhel:~ # route del default gw 10.0.3.253 dev eth0 # 刪除預設路由
+rhel:~ # route add -net 192.168.0.0 netmask 255.255.255.0 dev eth0 # 新增靜態路由
 rhel:~ # route add gw 192.168.0.254 dev eth1 # 新增路由
 rhel:~ # route del gw 192.168.0.254 dev eth1 # 刪除路由
+rhel:~ # route del -net 192.168.0.0 netmask 255.255.255.0 dev eth0 # 刪除靜態路由
 ```
 
 IPv6 方式跟 IPv4 一樣, 將 ipv4 改成 ipv6 即可
