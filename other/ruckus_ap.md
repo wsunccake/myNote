@@ -73,3 +73,7 @@
 	rkscli: set rfald peer <ue_ip>
 	rkscli: set rfald enable
 	rkscli: get rfald
+
+## version ##
+	rkscli: get version
+	# cat /etc/version

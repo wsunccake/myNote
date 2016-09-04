@@ -105,9 +105,9 @@ json
 
 :, 表示 dict
 
-#, 表示註解
+\#, 表示註解
 
->, 換行
+\>, 換行
 
 
 簡單的 ansible-playbook 測試如下
@@ -121,16 +121,23 @@ control:~ # cat playbooks/hello.yml
     - name: Hello World
       shell: echo "hello world"
 
-control:~ # ansible-playbook hello.yml -i hosts
+control:~ # ansible-playbook hello.yml -i hosts  # 執行 playbook
+
+# ansible module help
+control:~ # ansible-doc -l      # 顯示所有 action module
+control:~ # ansible-doc shell
+
+# playbook task
+control:~ # ansible-playbook --list-tasks
+control:~ # ansible-playbook site.yml --start-at-task "Hello World"
 ```
 
-一個 playbook 內容需要有 host 和 task 組成
-
-
-
-
+一個 playbook 內容需要有 host 和 task 組成. task 內除了 name 之外, 皆由 action module 組成.
 
 
 ansible-playbook site.yml -i hosts -e ENV_VARIABLE=env_value
-ansible-playbook --list-tasks
-ansible-playbook site.yml --start-at-task "my task"
+
+
+----
+
+## Inventory
