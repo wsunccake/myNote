@@ -8,7 +8,7 @@ linux:~ # pip install virtualenv
 linux:~ # python -m pip install requests
 linux:~ # pip install --upgrade pip
 linux:~ # cat requirements.txt
-pybuild
+pybuilder
 linux:~ # pip install -r requirements.txt
 linux:~ # pip uninstall requests
 ```

@@ -83,6 +83,7 @@ Linux:~/project $ git pull
 v1 - v2       v1 - v2 - v3
 ```
 
+```
 Linux:~/project $ git checkout v2 
 Linux:~/project $ git merge b1
 ```
@@ -94,7 +95,9 @@ Linux:~/project $ git merge b1
    b1 
    /     => 
 v1 - v2       v1 - v2 - v3
+```
 
+```
 Linux:~/project $ git checkout v2 
 Linux:~/project $ git rebase b1
 ```
