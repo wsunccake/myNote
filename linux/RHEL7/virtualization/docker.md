@@ -47,7 +47,10 @@ rhel:~ # docker restart <container_id>                      # 重啟 container
 rhel:~ # docker kill <container_id>                         # 強制停止 container
 
 rhel:~ # docker attch <container_id>                        # 進入 container, deattch 使用 ctrl^p ctrl^q
-rhel:~ # docker exec -it <container_id> /bin/exec           # 進入 container
+rhel:~ # docker exec -it  /bin/exec           # 進入 container
+rhel:~ # docker exec -it <container_id> sh -c "echo \$DEBUG_LEVEL"  # 顯示環境變數
+rhel:~ # docker show variable
+
 
 rhel:~ # docker top <container_id>
 rhel:~ # docker logs -ft <container_id>
