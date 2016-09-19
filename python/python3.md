@@ -103,3 +103,31 @@ def initialize(project):
 linux:~/myproject3/demo # pyb install_dependencies
 linux:~/myproject3/demo # pyb
 ```
+
+# class
+
+```
+#!/usr/bin/env python3
+ 
+class First(object):
+    def say(self):
+        print("from First")
+ 
+class Second(object):
+    def say(self):
+        print("from Second")
+ 
+class Third(object):
+    def say(self):
+        print("from Third")
+ 
+class Son(First, Second, Third):
+    def say(self):
+        #super().say()                     # from First (same as super(Son, self).say())
+        super(First, self).say()    # from Second
+        #super(Second, self).say()         # from Third
+        #super(Third, self).say()          # error
+ 
+son = Son()
+son.say()
+```

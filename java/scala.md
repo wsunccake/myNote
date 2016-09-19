@@ -537,6 +537,145 @@ httpStatus3(404)   // 會有 MatchError
 ```
 
 
+### Scala Doc
+
+
 ----
 
 
+## Class
+
+
+### Class
+
+```
+class <identifer>([val|var] <identifer>: <type>, ...) [{<filed>/<method>}]
+```
+
+```
+class Person(val name: String, var age: Int = 0,val sex: String) {
+  def sayHi: String = s"Hi $name"
+}
+// Scala 會自動產生 constructor 去 initialize
+// name 會設定成 public field, 但只有 getter
+// age 會設定成 public field, 有 getter 和 setter
+
+val p1 = new Person("John", 2, "Male")
+
+p1.name
+// p1.name = "scala"      // 因為只有 getter
+
+p1.age
+p1.age = 4
+
+p1.sayHi
+```
+
+
+### Extend
+
+```
+class <identifer>([val|var] <identifer>: <type>, ...) extends <class identifer>
+                                                      [{<filed>/<method>}]
+```
+
+```
+// 延續 Class 範例
+class Man(override val name: String, override var age: Int = 0, money: Int) extends Person(name, age, "Male")
+
+val m1 = new Man("Allen", 3, 10)
+```
+
+
+### Abstract Class
+
+```
+abstract class Car {
+  val year: Int
+  def color: String
+}
+
+//c1 = new Car()      // abstract class can't create instance
+val c2 = new Car {    // use anonymous class to create instance
+  override def color: String = "Black"
+  override val year: Int = 1
+}
+
+class RedMini(override val year: Int) extends Car {
+  override def color: String = "Red"
+}
+
+class Benz(val year: Int, val color: String) extends Car
+
+val m1 = new RedMini(1)
+val b1 = new Benz(1, "Silver")
+b1.color                   // 使用 . call method
+b1 color                   // 使用空格 call method
+```
+
+
+### Apply Method
+
+
+```
+class Multiplier(factor: Int) {
+  def apply(input: Int): Int = input * factor
+}
+
+val triple = new Multiplier(3)
+val triple1 = triple.apply(2)
+val triple2 = triple(2)
+// 此時 triple(2) 等同 triple.apply(2)
+```
+
+
+### Object
+
+object 為 singleton, 且 在宣告時不可設定 initialize argument (需要時可藉由 apply)
+
+
+```
+object <identifer> [extends <class identifer>]
+                   [{<filed>/<method>}]
+```
+
+```
+object Hello {
+  println("in Hello")
+  def hi: String = "hi"
+}
+
+println(Hello.hi)     // object 不需要使用 new 建立 instance, object 本身就是 instance
+```
+
+
+### Companion Object
+
+```
+class Multiplier(val x: Int) {
+  def product(y: Int): Int = x * y
+}
+
+object Multiplier { def apply(x: Int) = new Multiplier(x) }
+
+val tripler = Multiplier(3)
+tripler.product(2)
+```
+
+
+### Case Class
+
+
+```
+case class <identifer>([val|var] <identifer>: <type>, ...) [extends <class identifer>]
+                                                           [{<filed>/<method>}]
+```
+
+
+### Trait
+
+
+```
+trait <identifer>([val|var] <identifer>: <type>, ...) [extends <class identifer>]
+                                                      [{<filed>/<method>}]
+```
