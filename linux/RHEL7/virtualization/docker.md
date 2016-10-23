@@ -38,6 +38,7 @@ rhel:~ # nsenter --target <container_id_pid>  --mount --uts --ipc --net --pid /b
 rhel:~ # dock ps                                            # 顯示執行中的 container
 rhel:~ # dock ps -l                                         # 顯示最後一個 container
 rhel:~ # dock ps -a                                         # 顯示所有的 container (包括未執行的)
+rhel:~ # dock ps -aq                                        # 顯示所有的 container id (包括未執行的)
 
 rhel:~ # docker rm <container_id>                           # 刪除 container
 
@@ -56,6 +57,8 @@ rhel:~ # docker top <container_id>
 rhel:~ # docker logs -ft <container_id>
 rhel:~ # docker stats <container_id>
 rhel:~ # docker inspect <container_id>
+rhel:~ # docker inspect --format '{{.State.Pid}}' <container_id>
+rhel:~ # docker inspect --format '{{.NetworkSettings.IPAddress}}' <container_id>
 ```
 
 
@@ -330,6 +333,7 @@ Linux VM 的設定, 可以透過 docker-machine 操作
 ```
 osx:~ $ docker-machine help
 osx:~ $ docker-machine ls
+osx:~ $ docker-machine env
 
 osx:~ $ docker-machine start <docker_machine>
 osx:~ $ docker-machine stop <docker_machine>

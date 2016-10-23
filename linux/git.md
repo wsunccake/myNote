@@ -10,7 +10,7 @@ linux:~ $ git config --global core.editor vim # 設定文字編輯器
 linux:~ $ git config --global merge.tool vimdiff # 設定比較工具 
 linux:~ $ git config --global color.ui true # 設定顯示顏色 
 linux:~ $ git config --global apply.whitespace nowarn # 忽略空白的變化, 空白對有些語言是有影響的 (像是 Ruby) 
-linux:~ $ git config --global alias st status # 設定別名, 打 git st 就等同於打 git status 
+linux:~ $ git config --global alias.log-pretty 'log --graph --oneline --decorate --date-order' # 設定別名
 linux:~ $ git config --list # 顯示當前設定
 
 linux:~ $ cat ~/.gitconfig 
@@ -24,15 +24,12 @@ linux:~ $ cat ~/.gitconfig
 [color] 
     ui = true 
 [alias] 
-    s = status -s -b -uno 
-    b = branch 
-    ba = branch -avv 
+    commit-show = commit -v -uno
+    branch-all = branch -avv
 
-    co = checkout 
-    ci = commit -v -uno 
-
-    l = log -C --stat --decorate 
-    t = log --graph --oneline --boundary --decorate --all --date-order
+    log-pretty = log --graph --oneline --decorate --date-order
+#    log-pretty = log --graph --oneline --boundary --decorate --all --date-order
+    log-full= log -C --stat --decorate
 ```
 
 
@@ -44,27 +41,30 @@ linux:~ $ git clone git@github.com:user/sandbox.git # 下載 project
 linux:~ $ git clone git@github.com:user/sandbox.git newproejct # 下載 project 並改名為 newproject 
 
 # file status
-linux:~/project $ git add file # 檔案納入控制系統 
-linux:~/project $ git rm file # 檔案移出制系統 
+linux:~/project $ git add file                # 檔案納入控制系統 
+linux:~/project $ git rm [--cache|-f] file    # 檔案移出制系統
+linux:~/project $ git mv src_file des_file    # 檔案移出制系統
 
-linux:~/project $ git commit -m 'initial project version' # 提交到控制系統 
-linux:~/project $ git commit --amend # 編輯 commit
+linux:~/project $ git commit -m 'my comment'  # 提交到控制系統 
+linux:~/project $ git commit --amend          # 修改/編輯 commit
+
+linux:~/project $ git reset HEAD~             # 狀態改成前一次 commit
 
 linux:~/project $ git status # version記錄 
 
-linux:~/project $ git log # commit記錄 
-linux:~/project $ git log -1 # show HEAD
+linux:~/project $ git log                     # commit記錄 
+linux:~/project $ git log -1                  # show HEAD
 linux:~/project $ git log --graph --oneline --all --decorate 
 linux:~/project $ git log --graph --oneline --all --decorate --boundary --date-order 
 
 # branch, checkout, fetch
-linux:~/project $ git branch # 顯示分支
-linux:~/project $ git branch --all
-linux:~/project $ git branch b1 # 新增分支
-linux:~/project $ git branch -d b1 # 刪除分支
+linux:~/project $ git branch          # 顯示 branch
+linux:~/project $ git branch --all    # 顯示所有 branch (包括 remote)
+linux:~/project $ git branch b1       # 新增 branch
+linux:~/project $ git branch -d b1    # 刪除 branch
 
-linux:~/project $ git checkout -b b1 # 新增分支
-linux:~/project $ git checkout b1 # 切換分支
+linux:~/project $ git checkout -b b1  # 新增 branch
+linux:~/project $ git checkout b1     # 切換 branch
 
 linux:~/project $ git fetch
 linux:~/project $ git fetch --all
