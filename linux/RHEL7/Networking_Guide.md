@@ -672,9 +672,42 @@ Scheme 5: The traditional unpredictable kernel naming scheme, is used if all oth
 
 ## Trouble shooting ##
 
-	rhel:~ # udevadm info /sys/class/net/ifname | grep ID_NET_NAME
-	rhel:~ # ls /sys/class/net/
+```
+rhel:~ # udevadm info /sys/class/net/ifname | grep ID_NET_NAME
+rhel:~ # ls /sys/class/net/
+```
 
+
+# Network Namespace #
+
+```
+rhel:~ # ip netns list
+rhel:~ # ip netns add qdhcp
+rhel:~ # ip netns exec qdhcp ip addr show
+rhel:~ # ip netns delete qdhcp
+
+rhel:~ # ip -all netns exec ip addr show
+rhel:~ # ip -all netns delete
+```
+
+
+# Netowkr Veth Paire #
+
+```
+rhel:~ # ip link add veth0 type veth peer name veth1
+rhel:~ # ip -d link show
+5: veth1@veth0: ...
+6: veth0@veth1: ...
+# 在相同 namespace 裡, veth1@veth0 表示 veth0 <-> veth1
+
+
+rhel:~ # ip link set veth1 netns qdhcp
+rhel:~ # ip -d link show
+6: veth0@if5: ...
+rhel:~ # ip netns exec qdhcp ip -d link show
+5: veth1@if6: ...
+# 在不同 namespace 裡, veth0@if5 表示 veth0 <-> if5, 但在 另一個 namespce 找到 index 5 為 veth1, 所以 veth0 <-> if5 - if6 <-> veth1
+```
 
 # InfiniBand & Remote Direct Memory Access #
 
@@ -739,78 +772,87 @@ opensm is IB subnet manager. all InfiniBand networks must have a subnet manager 
 
 ## testing ##
 
-	rhel:~ # yum install libibverbs-utils
-	rhel:~ # ibv_devices
-	rhel:~ # ibv_devinfo
-	rhel:~ # ibv_devinfo -d mlx4_1
-	rhel:~ # ibstat mlx4_1
+```
+rhel:~ # yum install libibverbs-utils
+rhel:~ # ibv_devices
+rhel:~ # ibv_devinfo
+rhel:~ # ibv_devinfo -d mlx4_1
+rhel:~ # ibstat mlx4_1
 
-	rhel:~ # yum install infiniband-diags
-	rhel:~ # ibping -S -C mlx4_1 -P 1
-	rhel:~ # ibping -c 10000 -f -C mlx4_0 -P 1 -L 2
-	rhel:~ # ibping -c 10000 -f -C mlx4_0 -P 1 -G 0xf4521403007bcba1
+rhel:~ # yum install infiniband-diags
+rhel:~ # ibping -S -C mlx4_1 -P 1
+rhel:~ # ibping -c 10000 -f -C mlx4_0 -P 1 -L 2
+rhel:~ # ibping -c 10000 -f -C mlx4_0 -P 1 -G 0xf4521403007bcba1
+```
+
 
 ## IPoIB ##
 
-	# method 1:
-	rhel:~ # nmtui
+```
+# method 1:
+rhel:~ # nmtui
 
-	# method 2:
-	rhel:~ # rmmod ib_ipoib
-	rhel:~ # modprobe ib_ipoib
+# method 2:
+rhel:~ # rmmod ib_ipoib
+rhel:~ # modprobe ib_ipoib
 
-	rhel:~ # nmcli connection add type infiniband con-name mlx4_ib0 ifname mlx4_ib0 transport-mode connected mtu 65520
-	rhel:~ # nmcli connection edit mlx4_ib0
-	nmcli> set infiniband.mac-address 80:00:02:00:fe:80:00:00:00:00:00:00:f4:52:14:03:00:7b:cb:a3
-	nmcli> set ipv4.ignore-auto-dns yes
-	nmcli> set ipv4.ignore-auto-routes yes
-	nmcli> set ipv4.never-default true
-	nmcli> set ipv6.ignore-auto-dns yes
-	nmcli> set ipv6.ignore-auto-routes yes
-	nmcli> set ipv6.never-default true
-	nmcli> save
-	nmcli> quit
+rhel:~ # nmcli connection add type infiniband con-name mlx4_ib0 ifname mlx4_ib0 transport-mode connected mtu 65520
+rhel:~ # nmcli connection edit mlx4_ib0
+nmcli> set infiniband.mac-address 80:00:02:00:fe:80:00:00:00:00:00:00:f4:52:14:03:00:7b:cb:a3
+nmcli> set ipv4.ignore-auto-dns yes
+nmcli> set ipv4.ignore-auto-routes yes
+nmcli> set ipv4.never-default true
+nmcli> set ipv6.ignore-auto-dns yes
+nmcli> set ipv6.ignore-auto-routes yes
+nmcli> set ipv6.never-default true
+nmcli> save
+nmcli> quit
 
-	rhel:~ # nmcli con add type infiniband con-name mlx4_ib0.8002 ifname mlx4_ib0.8002 parent mlx4_ib0 p-key 0x8002 # create with P key
+rhel:~ # nmcli con add type infiniband con-name mlx4_ib0.8002 ifname mlx4_ib0.8002 parent mlx4_ib0 p-key 0x8002 # create with P key
+```
 
 
 ## config file ##
 
-	rhel:~ # cat /etc/sysconfig/network-script/ifcfg-ib0
-	DEVICE=mlx4_ib0
-	TYPE=InfiniBand
-	ONBOOT=yes
-	HWADDR=80:00:00:4c:fe:80:00:00:00:00:00:00:f4:52:14:03:00:7b:cb:a1
-	BOOTPROTO=none
-	IPADDR=172.31.0.254
-	PREFIX=24
-	NETWORK=172.31.0.0
-	BROADCAST=172.31.0.255
-	MTU=65520
-	CONNECTED_MODE=yes
-	NAME=mlx4_ib0
+```
+rhel:~ # cat /etc/sysconfig/network-script/ifcfg-ib0
+DEVICE=mlx4_ib0
+TYPE=InfiniBand
+ONBOOT=yes
+HWADDR=80:00:00:4c:fe:80:00:00:00:00:00:00:f4:52:14:03:00:7b:cb:a1
+BOOTPROTO=none
+IPADDR=172.31.0.254
+PREFIX=24
+NETWORK=172.31.0.0
+BROADCAST=172.31.0.255
+MTU=65520
+CONNECTED_MODE=yes
+NAME=mlx4_ib0
 
-	rhel:~ # cat /etc/sysconfig/network-script/ifcfg-ib0.8002
-	DEVICE=mlx4_ib0.8002
-	PHYSDEV=mlx4_ib0
-	PKEY=yes
-	PKEY_ID=2
-	TYPE=InfiniBand
-	ONBOOT=yes
-	HWADDR=80:00:00:4c:fe:80:00:00:00:00:00:00:f4:52:14:03:00:7b:cb:a1
-	BOOTPROTO=none
-	IPADDR=172.31.2.254
-	PREFIX=24
-	NETWORK=172.31.2.0
-	BROADCAST=172.31.2.255
-	MTU=65520
-	CONNECTED_MODE=yes
-	NAME=mlx4_ib0.8002
+rhel:~ # cat /etc/sysconfig/network-script/ifcfg-ib0.8002
+DEVICE=mlx4_ib0.8002
+PHYSDEV=mlx4_ib0
+PKEY=yes
+PKEY_ID=2
+TYPE=InfiniBand
+ONBOOT=yes
+HWADDR=80:00:00:4c:fe:80:00:00:00:00:00:00:f4:52:14:03:00:7b:cb:a1
+BOOTPROTO=none
+IPADDR=172.31.2.254
+PREFIX=24
+NETWORK=172.31.2.0
+BROADCAST=172.31.2.255
+MTU=65520
+CONNECTED_MODE=yes
+NAME=mlx4_ib0.8002
+```
 
 
 ## GUI ##
 
-	rhel:~ # gnome-control-center network
+```
+rhel:~ # gnome-control-center network
+```
 
 
 # DHCP #
@@ -821,42 +863,46 @@ opensm is IB subnet manager. all InfiniBand networks must have a subnet manager 
 
 ### package ###
 
-	rhel:~ # yum install dhcp
+```
+rhel:~ # yum install dhcp
 
-	rhel:~ # systecmctl enable dhcpd.service # or copy /usr/lib/systemd/system/dhcpd.service to /etc/systemd/system/
-	rhel:~ # vi /etc/systemd/system/dhcpd.service
-	...
-	ExecStart=/usr/sbin/dhcpd -f -cf /etc/dhcp/dhcpd.conf -user dhcpd -group dhcpd --no-pid eth0
-	...
-	rhel:~ # systemctl --system daemon-reload
-	rhel:~ # systemctl restart dhcpd
+rhel:~ # systecmctl enable dhcpd.service # or copy /usr/lib/systemd/system/dhcpd.service to /etc/systemd/system/
+rhel:~ # vi /etc/systemd/system/dhcpd.service
+...
+ExecStart=/usr/sbin/dhcpd -f -cf /etc/dhcp/dhcpd.conf -user dhcpd -group dhcpd --no-pid eth0
+...
+rhel:~ # systemctl --system daemon-reload
+rhel:~ # systemctl restart dhcpd
 
-	rhel:~ # systemctl start dhcpd.service
-	rhel:~ # systemctl stop dhcpd.service
+rhel:~ # systemctl start dhcpd.service
+rhel:~ # systemctl stop dhcpd.service
+```
 
 
 ### config file ###
 
-	cp /usr/share/doc/dhcp-version_number/dhcpd.conf.example /etc/dhcp/dhcpd.conf # example
+```
+rhel:~ # cp /usr/share/doc/dhcp-version_number/dhcpd.conf.example /etc/dhcp/dhcpd.conf # example
 
-	cat /etc/dhcp/dhcpd.conf
-	default-lease-time 600;
-	max-lease-time 7200;
-	option subnet-mask 255.255.255.0;
-	option broadcast-address 192.168.1.255;
-	option routers 192.168.1.254;
-	option domain-name-servers 192.168.1.1, 192.168.1.2;
-	option domain-search "example.com";
-	subnet 192.168.1.0 netmask 255.255.255.0 {
-	   range 192.168.1.10 192.168.1.100;
-	   host apex {
-	      option host-name "apex.example.com";
-	      hardware ethernet 00:A0:78:8E:9E:AA;
-	      fixed-address 192.168.1.4;
-	   }
-	}
+rhel:~ # cat /etc/dhcp/dhcpd.conf
+default-lease-time 600;
+max-lease-time 7200;
+option subnet-mask 255.255.255.0;
+option broadcast-address 192.168.1.255;
+option routers 192.168.1.254;
+option domain-name-servers 192.168.1.1, 192.168.1.2;
+option domain-search "example.com";
+subnet 192.168.1.0 netmask 255.255.255.0 {
+   range 192.168.1.10 192.168.1.100;
+   host apex {
+      option host-name "apex.example.com";
+      hardware ethernet 00:A0:78:8E:9E:AA;
+      fixed-address 192.168.1.4;
+   }
+}
 
-	/var/lib/dhcpd/dhcpd.leases
+rhel:~ # ls /var/lib/dhcpd/dhcpd.leases
+```
 
 
 ## dhcrelay ##
@@ -865,23 +911,28 @@ DHCP Relay Agent (dhcrelay) enables the relay of DHCP and BOOTP requests from a 
 
 `IPv4`
 
-	rhel:~ # systecmctl enable dhcpd.service # or copy /lib/systemd/system/dhcrelay.service to /etc/systemd/system/
-	rhel:~ # vi /etc/systemd/system/dhcrelay.service
-	...
-	ExecStart=/usr/sbin/dhcrelay -d --no-pid 192.168.1.1 [-i eth1] # 192.168.1.1 is dhcp server ip, eth1 is specfic listen nic
-	...
-	rhel:~ # systemctl --system daemon-reload
-	rhel:~ # systemctl restart dhcrelay
+```
+rhel:~ # systecmctl enable dhcpd.service # or copy /lib/systemd/system/dhcrelay.service to /etc/systemd/system/
+rhel:~ # vi /etc/systemd/system/dhcrelay.service
+...
+ExecStart=/usr/sbin/dhcrelay -d --no-pid 192.168.1.1 [-i eth1] # 192.168.1.1 is dhcp server ip, eth1 is specfic listen nic
+...
+rhel:~ # systemctl --system daemon-reload
+rhel:~ # systemctl restart dhcrelay
+```
+
 
 `IPv6`
 
-	rhel:~ # cp /lib/systemd/system/dhcrelay.service /etc/systemd/system/dhcrelay6.service
-	rhel:~ # vi /etc/systemd/system/dhcrelay6.service
-	...
-	ExecStart=/usr/sbin/dhcrelay -d --no-pid -6 -l em1 -u em2
-	...
-	rhel:~ # systemctl --system daemon-reload
-	rhel:~ # systemctl restart dhcrelay6
+```
+rhel:~ # cp /lib/systemd/system/dhcrelay.service /etc/systemd/system/dhcrelay6.service
+rhel:~ # vi /etc/systemd/system/dhcrelay6.service
+...
+ExecStart=/usr/sbin/dhcrelay -d --no-pid -6 -l em1 -u em2
+...
+rhel:~ # systemctl --system daemon-reload
+rhel:~ # systemctl restart dhcrelay6
+```
 
 
 # DNS #
@@ -902,138 +953,144 @@ vim -c "set backupcopy=yes" /etc/named.conf
 
 ## bind-chroot ##
 
-	rhel:~ # yum install bind-chroot
-	rhel:~ # systemctl status named
-	rhel:~ # systemctl stop named
-	rhel:~ # systemctl disable named
-	rhel:~ # stemctl enable named-chroot
-	rhel:~ # systemctl start named-chroot
-	rhel:~ # systemctl status named-chroot
+```
+rhel:~ # yum install bind-chroot
+rhel:~ # systemctl status named
+rhel:~ # systemctl stop named
+rhel:~ # systemctl disable named
+rhel:~ # stemctl enable named-chroot
+rhel:~ # systemctl start named-chroot
+rhel:~ # systemctl status named-chroot
+```
 
 
 ### config file ###
 
-	rhel:~ # vi /etc/named.conf
-	acl black-hats {
-	  10.0.2.0/24;
-	  192.168.0.0/24;
-	  1234:5678::9abc/24;
-	};
+```
+rhel:~ # vi /etc/named.conf
+acl black-hats {
+  10.0.2.0/24;
+  192.168.0.0/24;
+  1234:5678::9abc/24;
+};
 
-	acl red-hats {
-	  10.0.1.0/24;
-	};
+acl red-hats {
+  10.0.1.0/24;
+};
 
-	options {
-	  blackhole { black-hats; };
-	  allow-query { red-hats; localhost; };
-	  allow-query-cache { red-hats; };
-	
-	  listen-on port    53 { 127.0.0.1; };
-	  listen-on-v6 port 53 { ::1; };
-	  max-cache-size    256M;
-	  directory         "/var/named";
-	  statistics-file   "/var/named/data/named_stats.txt";
-	
-	  recursion         yes;
-	  dnssec-enable     yes;
-	  dnssec-validation yes;
-	
-	  pid-file          "/run/named/named.pid";
-	  session-keyfile   "/run/named/session.key";
-	};
+options {
+  blackhole { black-hats; };
+  allow-query { red-hats; localhost; };
+  allow-query-cache { red-hats; };
 
-	logging {
-	  channel default_debug {
-	    file "data/named.run";
-	    severity dynamic;
-	  };
-	};
-	
-	zone "example.com" IN { // file in /var/named dir, primary 
-	  type master;
-	  file "example.com.zone";
-	  allow-transfer { 192.168.0.2; };
-	};
+  listen-on port    53 { 127.0.0.1; };
+  listen-on-v6 port 53 { ::1; };
+  max-cache-size    256M;
+  directory         "/var/named";
+  statistics-file   "/var/named/data/named_stats.txt";
 
-	zone "example.com" { # slave
-	  type slave;
-	  file "slaves/example.com.zone";
-	  masters { 192.168.0.1; };
-	};
+  recursion         yes;
+  dnssec-enable     yes;
+  dnssec-validation yes;
 
-	zone "1.0.10.in-addr.arpa" IN {
-	  type master;
-	  file "example.com.rr.zone";
-	  allow-update { none; };
-	};
+  pid-file          "/run/named/named.pid";
+  session-keyfile   "/run/named/session.key";
+};
 
-	include "/etc/named.rfc1912.zones";
-	include "/etc/named.root.key";
+logging {
+  channel default_debug {
+    file "data/named.run";
+    severity dynamic;
+  };
+};
+
+zone "example.com" IN { // file in /var/named dir, primary 
+  type master;
+  file "example.com.zone";
+  allow-transfer { 192.168.0.2; };
+};
+
+zone "example.com" { # slave
+  type slave;
+  file "slaves/example.com.zone";
+  masters { 192.168.0.1; };
+};
+
+zone "1.0.10.in-addr.arpa" IN {
+  type master;
+  file "example.com.rr.zone";
+  allow-update { none; };
+};
+
+include "/etc/named.rfc1912.zones";
+include "/etc/named.root.key";
+```
 
 
 ### zone file ###
 
-	rhel:~ # vi /var/named/example.com.zone
-	$ORIGIN example.com.
-	$TTL 86400
-	@         IN  SOA  dns1.example.com.  hostmaster.example.com. (
-	              2001062501  ; serial
-	              21600       ; refresh after 6 hours
-	              3600        ; retry after 1 hour
-	              604800      ; expire after 1 week
-	              86400 )     ; minimum TTL of 1 day
-	;
-	;
-	          IN  NS     dns1.example.com.
-	          IN  NS     dns2.example.com.
-	dns1      IN  A      10.0.1.1
-	          IN  AAAA   aaaa:bbbb::1
-	dns2      IN  A      10.0.1.2
-	          IN  AAAA   aaaa:bbbb::2
-	;
-	;
-	@         IN  MX     10  mail.example.com.
-	          IN  MX     20  mail2.example.com.
-	mail      IN  A      10.0.1.5
-	          IN  AAAA   aaaa:bbbb::5
-	mail2     IN  A      10.0.1.6
-	          IN  AAAA   aaaa:bbbb::6
-	;
-	;
-	; This sample zone file illustrates sharing the same IP addresses
-	; for multiple services:
-	;
-	services  IN  A      10.0.1.10
-	          IN  AAAA   aaaa:bbbb::10
-	          IN  A      10.0.1.11
-	          IN  AAAA   aaaa:bbbb::11
-	
-	ftp       IN  CNAME  services.example.com.
-	www       IN  CNAME  services.example.com.
-	;
-	;
+```
+rhel:~ # vi /var/named/example.com.zone
+$ORIGIN example.com.
+$TTL 86400
+@         IN  SOA  dns1.example.com.  hostmaster.example.com. (
+              2001062501  ; serial
+              21600       ; refresh after 6 hours
+              3600        ; retry after 1 hour
+              604800      ; expire after 1 week
+              86400 )     ; minimum TTL of 1 day
+;
+;
+          IN  NS     dns1.example.com.
+          IN  NS     dns2.example.com.
+dns1      IN  A      10.0.1.1
+          IN  AAAA   aaaa:bbbb::1
+dns2      IN  A      10.0.1.2
+          IN  AAAA   aaaa:bbbb::2
+;
+;
+@         IN  MX     10  mail.example.com.
+          IN  MX     20  mail2.example.com.
+mail      IN  A      10.0.1.5
+          IN  AAAA   aaaa:bbbb::5
+mail2     IN  A      10.0.1.6
+          IN  AAAA   aaaa:bbbb::6
+;
+;
+; This sample zone file illustrates sharing the same IP addresses
+; for multiple services:
+;
+services  IN  A      10.0.1.10
+          IN  AAAA   aaaa:bbbb::10
+          IN  A      10.0.1.11
+          IN  AAAA   aaaa:bbbb::11
 
-	rhel:~ # vi /var/named/example.com.rr.zone
-	$ORIGIN 1.0.10.in-addr.arpa.
-	$TTL 86400
-	@  IN  SOA  dns1.example.com.  hostmaster.example.com. (
-	       2001062501  ; serial
-	       21600       ; refresh after 6 hours
-	       3600        ; retry after 1 hour
-	       604800      ; expire after 1 week
-	       86400 )     ; minimum TTL of 1 day
-	;
-	@  IN  NS   dns1.example.com.
-	;
-	1  IN  PTR  dns1.example.com.
-	2  IN  PTR  dns2.example.com.
-	;
-	5  IN  PTR  server1.example.com.
-	6  IN  PTR  server2.example.com.
-	;
-	3  IN  PTR  ftp.example.com.
-	4  IN  PTR  ftp.example.com.
+ftp       IN  CNAME  services.example.com.
+www       IN  CNAME  services.example.com.
+;
+;
+
+rhel:~ # vi /var/named/example.com.rr.zone
+$ORIGIN 1.0.10.in-addr.arpa.
+$TTL 86400
+@  IN  SOA  dns1.example.com.  hostmaster.example.com. (
+       2001062501  ; serial
+       21600       ; refresh after 6 hours
+       3600        ; retry after 1 hour
+       604800      ; expire after 1 week
+       86400 )     ; minimum TTL of 1 day
+;
+@  IN  NS   dns1.example.com.
+;
+1  IN  PTR  dns1.example.com.
+2  IN  PTR  dns2.example.com.
+;
+5  IN  PTR  server1.example.com.
+6  IN  PTR  server2.example.com.
+;
+3  IN  PTR  ftp.example.com.
+4  IN  PTR  ftp.example.com.
+```
 
 
 ## rndc ##
