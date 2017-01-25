@@ -1,0 +1,92 @@
+---
+- hosts: all
+  become: yes
+  become_method: su
+#  gather_facts: False
+  vars:
+    os_distro: CentOS
+    os_version: 7
+  vars_prompt:
+    - name: "docker_bip"
+      prompt: "docker default bridge ip"
+      default: '10.253.0.1/24'
+      private: no
+    - name: "private_registry"
+      prompt: "private registry host"
+      default: 'private_registry'
+      private: no
+    - name: "private_dns"
+      prompt: "private dns host"
+      default: '192.168.0.1'
+      private: no
+  tasks:
+    - name: Check OS
+      fail:
+        msg: OS don't support
+      when:
+        - ansible_distribution != '{{ os_distro }}'
+        - ansible_distribution_major_version != '{{ os_version }}'
+
+#        - (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux')
+#        - ansible_distribution in ['CentOS', 'Red Hat Enterprise Linux']
+#        - ansible_distribution == '{{ os_distro }}'
+#        - ansible_distribution in ['{{ os_distro }}']
+#        - ansible_distribution in '{{ os_distro }}'
+#        - ansible_distribution_major_version == "7"
+
+    - name: Install EPEL repository
+      yum:
+        name: epel-release
+        state: installed
+
+    - name: Install docker
+      yum:
+        name: docker
+        state: installed
+
+    - name: Set docker default bridege ip
+      replace:
+        dest: /etc/sysconfig/docker
+        regexp: OPTIONS=.*
+        replace: OPTIONS="--selinux-enabled --log-driver=journald --signature-verification=false --bip={{ docker_bip }}"
+        backup: yes
+
+    - name: Set docker service
+      service:
+        name: docker
+        state: restarted
+        enabled: yes
+
+    - name: Install pip
+      yum:
+        name: python2-pip
+        state: installed
+
+    - name: Install docker-compose
+      pip:
+        name: docker-compose
+        state: present
+
+    - name: Set private registry
+      file:
+        path: /etc/docker/certs.d/{{ private_registry }}:5000
+        state: directory
+        backup: no
+
+    - name: Copy CA
+      copy:
+        src: docker/ca.crt
+        dest: /etc/docker/certs.d/{{ private_registry }}:5000
+        owner: root
+        group: root
+        mode: 0644
+        backup: yes
+
+    - name: Backup resolv
+      lineinfile:
+        dest: /etc/resolv.conf
+        state: absent
+        regexp: '^nameserver\s+{{ private_dns }}$'
+
+    - name: Add private DNS
+      shell: sed -i 1a'nameserver {{ private_dns }}' /etc/resolv.conf

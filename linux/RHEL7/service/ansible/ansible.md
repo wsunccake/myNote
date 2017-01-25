@@ -116,12 +116,12 @@ json
 control:~ # cat playbooks/hello.yml
 ---
 - hosts: all
-  sudo: True
+  gather_facts: False
   tasks:
     - name: Hello World
       shell: echo "hello world"
 
-control:~ # ansible-playbook hello.yml -i hosts  # 執行 playbook
+control:~ # ansible-playbook playbooks/hello.yml  # 執行 playbook
 
 # ansible module help
 control:~ # ansible-doc -l      # 顯示所有 action module
@@ -134,8 +134,26 @@ control:~ # ansible-playbook site.yml --start-at-task "Hello World"
 
 一個 playbook 內容需要有 host 和 task 組成. task 內除了 name 之外, 皆由 action module 組成.
 
+```
+# 使用變數的方式
+control:~ # cat playbooks/say_hello.yml
+---
+- hosts: all
+  gather_facts: False
+  vars_files:
+    - user_vars.yml
+  vars:
+    user: abc
+  tasks:
+    - name: Hello World
+      shell: echo "hello {{ user }}"
 
-ansible-playbook site.yml -i hosts -e ENV_VARIABLE=env_value
+control:~ # cat playbooks/user_vars.yml
+---
+user: zzz
+
+control:~ # ansible-playbook -e 'user=xyz' playbooks/say_hello.yml
+```
 
 
 ----
