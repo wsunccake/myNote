@@ -1,0 +1,2 @@
+192.168.0.10 ansible_ssh_user=root ansible_ssh_pass=password ansible_become_pass=password
+

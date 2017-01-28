@@ -1,0 +1,7 @@
+---
+os_distro: CentOS
+os_version: 7
+docker_bip: 10.253.0.1/24
+private_registry: registry
+private_dns: 192.168.0.1
+

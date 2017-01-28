@@ -1,0 +1,51 @@
+---
+- fail: 
+    msg: OS don't support
+  when:
+    - ansible_distribution != '{{ os_distro }}'
+    - ansible_distribution_major_version != '{{ os_version }}'
+
+- yum:
+    name: epel-release
+    state: installed
+
+- yum:
+    name: docker
+    state: installed
+
+- replace: 
+    dest: /etc/sysconfig/docker
+    regexp: OPTIONS=.*
+    replace: OPTIONS="--selinux-enabled --log-driver=journald --signature-verification=false --bip={{ docker_bip }}"
+    backup: yes
+  notify:
+    - restart service
+
+- yum:
+    name: python2-pip
+    state: installed
+
+- pip:
+    name: docker-compose
+    state: present
+
+- file:
+    path: /etc/docker/certs.d/{{ private_registry }}:5000
+    state: directory
+    backup: no
+
+- copy:
+    src: ca.crt
+    dest: /etc/docker/certs.d/{{ private_registry }}:5000
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+
+- lineinfile:
+    dest: /etc/resolv.conf
+    state: absent
+    regexp: '^nameserver\s+{{ private_dns }}$'
+
+- shell: sed -i 1a'nameserver {{ private_dns }}' /etc/resolv.conf
+

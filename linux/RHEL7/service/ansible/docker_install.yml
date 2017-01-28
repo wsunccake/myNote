@@ -20,9 +20,9 @@
       default: '192.168.0.1'
       private: no
   tasks:
-    - name: Check OS
+    - name: check os
       fail:
-        msg: OS don't support
+        msg: os don't support
       when:
         - ansible_distribution != '{{ os_distro }}'
         - ansible_distribution_major_version != '{{ os_version }}'
@@ -34,46 +34,41 @@
 #        - ansible_distribution in '{{ os_distro }}'
 #        - ansible_distribution_major_version == "7"
 
-    - name: Install EPEL repository
+    - name: install epel repository
       yum:
         name: epel-release
         state: installed
 
-    - name: Install docker
+    - name: install docker
       yum:
         name: docker
         state: installed
 
-    - name: Set docker default bridege ip
+    - name: set docker default bridege ip
       replace:
         dest: /etc/sysconfig/docker
         regexp: OPTIONS=.*
         replace: OPTIONS="--selinux-enabled --log-driver=journald --signature-verification=false --bip={{ docker_bip }}"
         backup: yes
+      notify: set docker service
 
-    - name: Set docker service
-      service:
-        name: docker
-        state: restarted
-        enabled: yes
-
-    - name: Install pip
+    - name: install pip
       yum:
         name: python2-pip
         state: installed
 
-    - name: Install docker-compose
+    - name: install docker-compose
       pip:
         name: docker-compose
         state: present
 
-    - name: Set private registry
+    - name: set private registry
       file:
         path: /etc/docker/certs.d/{{ private_registry }}:5000
         state: directory
         backup: no
 
-    - name: Copy CA
+    - name: copy ca
       copy:
         src: docker/ca.crt
         dest: /etc/docker/certs.d/{{ private_registry }}:5000
@@ -82,11 +77,18 @@
         mode: 0644
         backup: yes
 
-    - name: Backup resolv
+    - name: backup resolv
       lineinfile:
         dest: /etc/resolv.conf
         state: absent
         regexp: '^nameserver\s+{{ private_dns }}$'
 
-    - name: Add private DNS
+    - name: add private DNS
       shell: sed -i 1a'nameserver {{ private_dns }}' /etc/resolv.conf
+
+  handlers:
+    - name: restart service
+      service: 
+        name: docker
+        state: restarted
+        enabled: yes
