@@ -15,16 +15,17 @@ step
 
 `Install Preupgrade Asstant`
 
-	rhel:~ # cat /etc/redhat-release
-	rhel:~ # yum upgrade -y
-	rhel:~ # reboot
-	rhel:~ # redhat-upgrade-tool --device /dev/sdb --addrepo optional=http://hostname/path/to/repo
+```
+rhel:~ # cat /etc/redhat-release
+rhel:~ # yum upgrade -y
+rhel:~ # reboot
+rhel:~ # redhat-upgrade-tool --device /dev/sdb --addrepo optional=http://hostname/path/to/repo
 
-	rhel:~ # subscription-manager repos --enable rhel-6-server-extras-rpms
-	rhel:~ # subscription-manager repos --enable rhel-6-server-optional-rpms
-	rhel:~ # rhn-channel --add --channel rhel-x86_64-server-extras-6
-	rhel:~ # yum -y install preupgrade-assistant preupgrade-assistant-ui preupgrade-assistant-contents
-
+rhel:~ # subscription-manager repos --enable rhel-6-server-extras-rpms
+rhel:~ # subscription-manager repos --enable rhel-6-server-optional-rpms
+rhel:~ # rhn-channel --add --channel rhel-x86_64-server-extras-6
+rhel:~ # yum -y install preupgrade-assistant preupgrade-assistant-ui preupgrade-assistant-contents
+```
 
 
 `Run the Preupgrade Assistant`
@@ -133,6 +134,11 @@ In this example, the device mounted at /optional would not cause boot to fail if
 XFS		user_xattr and acl
 Btrfs	
 LVM
+
+```
+rhel:~ # systemd-cgls
+rhel:~ # systemd-cgtop
+```
 
 
 ### Networking ###

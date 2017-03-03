@@ -9,13 +9,34 @@
 
 method 1. yum
 
+for RHEL, CentOS, Fedora
+
 ```
 control:~ # yum localinstall http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
 control:~ # yum update
 control:~ # yum install ansible
 ```
 
-method 2. pip
+
+method 2. apt
+
+for Debian, Ubuntu
+
+```
+# for Debian
+control:~ # echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" >> /etc/apt/sources.list
+control:~ # apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
+
+# for Ubuntu
+control:~ # apt-get install software-properties-common
+control:~ # apt-add-repository ppa:ansible/ansible
+
+control:~ # apt-get update
+control:~ # apt-get install ansible
+```
+
+
+method 3. pip
 
 ```
 control: ~ # pip install --upgrade pip
@@ -32,9 +53,11 @@ node1 ansible_connection=ssh ansible_ssh_host=192.168.0.11 ansible_ssh_port=22 a
 node2 ansible_connection=ssh ansible_ssh_host=192.168.0.12 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_private_key_file=private_file
 
 # 已指令模式執行 ansible 稱為 Ad-Hoc
-control:~ # ansible test_node -i hosts -m ping  -vvv
+control:~ # ansible all -i hosts -m ping  -vvv
 control:~ # ansible node1 -i hosts -m command -s -a uptime
+control:~ # ansible all -i hosts -m setup
 ```
+
 -i: host file
 -m: moudle
 -a: argument
@@ -272,3 +295,15 @@ control:~/project # cat roles/docker/handlers/main.yml
 ----
 
 ## Inventory
+
+## Galaxy
+
+```
+control:~/project # ansible-galaxy init -p roles abc
+control:~/project # cat roles/abc/meta/main.yml
+control:~/project # ansible-galaxy list -p roles
+
+control:~/project # ansible-galaxy search search ntp
+control:~/project # ansible-galaxy install -p roles bennojoy.ntp
+control:~/project # ansible-galaxy remove -p roles bennojoy.ntp
+```

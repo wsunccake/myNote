@@ -11,14 +11,23 @@
 
 ## Configuration ##
 
-	RHEL:~ # vi /etc/nginx/nginx.conf
+```
+RHEL:~ # vi /etc/nginx/nginx.conf
+...
+http {
 	...
-	    server {
-	        listen       80 default_server;
-	        listen       [::]:80 default_server;
-	        server_name  _;
-	        root         /usr/share/nginx/html;
-	...
-	location / {
-	          autoindex on; # 新增此行, 可以瀏覽目錄
-	        }
+
+	server {
+		listen       80 default_server;
+		listen       [::]:80 default_server;
+		server_name  _;
+		root         /usr/share/nginx/html;
+	
+		...
+
+		location / {
+			autoindex on; # 新增此行, 可以瀏覽目錄
+		}
+		...
+	}
+```
