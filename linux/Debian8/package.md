@@ -27,19 +27,6 @@ rpm -qlp <pkg>.rpm     dpkg -c <pkg>.deb
 rpm -qiR <pkg>         dpkg -s <pkg>, dpkg -p <pkg>
 ```
 
-# aptitude
-
-```
-debian8:~ # aptitude install <pkg>
-debian8:~ # aptitude remove <pkg>
-debian8:~ # aptitude purge <pkg>
-debian8:~ # aptitude search <str>
-debian8:~ # aptitude show <pkg>
-debian8:~ # aptitude update
-debian8:~ # aptitude upgrade
-debian8:~ # aptitude dist-upgrade
-debian8:~ # aptitude 
-```
 
 # apt
 
@@ -71,6 +58,11 @@ debian8:~ # apt-get remove <pkg>
 # upgrade
 debian8:~ # apt-get upgrade
 debian8:~ # apt-get dist-upgrade
+
+# clean download deb in /var/cache/apt/archives
+debina8:~ # apt-get download <pkg>
+debina8:~ # apt-get clean
+debina8:~ # apt-get autoclean
 ```
 
 
@@ -85,7 +77,47 @@ debian8:~ # apt-cache pkgnames <pkg>
 debian8:~ # apt-cache show <pkg>
 debian8:~ # apt-cache showpkg <pkg>
 debian8:~ # apt-cache depends <pkg>
+
+debina8:~ # apt-cache policy
+debina8:~ # apt-cache dumpavail
 ```
+
+## apt
+
+```
+debian8:~ # apt update
+debian8:~ # apt install <pkg>
+debian8:~ # apt remove <pkg>
+
+debian8:~ # apt install <pkg1> <pkg2>-  # 安裝 <pkg1>, 移除 <pkg2>
+debian8:~ # apt remove <pkg1> <pkg2>    # 移除 <pkg1>, 安裝 <pkg2>
+```
+
+
+## apt-key
+
+```
+debian8:~ # apt-key list
+debian8:~ # apt-key finger
+debian8:~ # apt-key add <file>
+debian8:~ # apt-key del <keyid>
+```
+
+
+# aptitude
+
+```
+debian8:~ # aptitude install <pkg>
+debian8:~ # aptitude remove <pkg>
+debian8:~ # aptitude purge <pkg>
+debian8:~ # aptitude search <str>
+debian8:~ # aptitude show <pkg>
+debian8:~ # aptitude update
+debian8:~ # aptitude upgrade
+debian8:~ # aptitude dist-upgrade
+debian8:~ # aptitude 
+```
+
 
 # tasksel
 

@@ -92,6 +92,12 @@ linux:~ # gradle -p subdir hello
 linux:~ # gradle projects
 
 linux:~ # gradle tasks
+
+# help
+linux:~ # gradle help
+linux:~ # gradle tasks
+linux:~ # gradle tasks --all
+linux:~ # gradle help --task init
 ```
 
 

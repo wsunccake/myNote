@@ -281,6 +281,18 @@ rhel:~ # docker run -itd -v /data:/robot_log --name robot robot
 rhel:~ # docker run -itd -p 80:80 --name nginx nginx
 ```
 
+## Docker Registry
+
+```
+rhel:~ # docker login
+rhel:~ # docker login -u user -p password private_registry:5000
+
+rhel:~ # docker logout
+
+rhel:~ # cat ~/.docker/config.json 
+```
+
+
 ## Run GUI Apps on Docker
 
 
