@@ -1,12 +1,12 @@
 
 ```
-robot@ubuntu:~$ mkdir mvc1
-robot@ubuntu:~$ cd mvc1/
-robot@ubuntu:~/mvc1$ gradle init
-robot@ubuntu:~/mvc1$ mkdir -p src/main/{java,webapp,resources}
-robot@ubuntu:~/mvc1$ mkdir -p src/main/webapp/WEB-INF
+linux:~ $ mkdir mvc1
+linux:~ $ cd mvc1/
+linux:~/mvc1 $ gradle init
+linux:~/mvc1 $ mkdir -p src/main/{java,webapp,resources}
+linux:~/mvc1 $ mkdir -p src/main/webapp/WEB-INF
 
-robot@ubuntu:~/mvc1$ vi build.gradle 
+linux:~/mvc1 $ vi build.gradle 
 apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'jetty'
@@ -22,8 +22,12 @@ repositories {
 
 dependencies {
 	compile 'org.springframework:spring-webmvc:4.1.6.RELEASE'
-	compile group: 'junit', name: 'junit', version: '4.4'
+	compile group: 'org.springframework', name: 'spring-test', version: '4.1.6.RELEASE'
+
+	testCompile group: 'junit', name: 'junit', version: '4.4'
+	testCompile "javax.servlet:javax.servlet-api:3.1.0"
 }
+
 
 // Embeded Jetty for testing
 jettyRun{
@@ -36,8 +40,8 @@ jettyRunWar{
 	httpPort = 8080
 }
 
-robot@ubuntu:~/mvc1$ mkdir src/main/java/mypkg
-robot@ubuntu:~/mvc1$ vi src/main/java/mypkg/WelcomeController.java
+linux:~/mvc1 $ mkdir src/main/java/mypkg
+linux:~/mvc1 $ vi src/main/java/mypkg/WelcomeController.java
 package mypkg;
 
 import org.springframework.stereotype.Controller;
@@ -55,8 +59,8 @@ public class WelcomeController {
 
 }
 
-robot@ubuntu:~/mvc1$ mkdir src/main/webapp/WEB-INF/views/jsp
-robot@ubuntu:~/mvc1$ vi src/main/webapp/WEB-INF/views/jsp/home.jsp 
+linux:~/mvc1 $ mkdir src/main/webapp/WEB-INF/views/jsp
+linux:~/mvc1 $ vi src/main/webapp/WEB-INF/views/jsp/home.jsp 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
@@ -71,7 +75,7 @@ robot@ubuntu:~/mvc1$ vi src/main/webapp/WEB-INF/views/jsp/home.jsp
 </body>
 </html>
 
-robot@ubuntu:~/mvc1$ vi src/main/webapp/WEB-INF/web.xml 
+linux:~/mvc1 $ vi src/main/webapp/WEB-INF/web.xml 
 <web-app xmlns="http://java.sun.com/xml/ns/javaee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
@@ -112,7 +116,7 @@ robot@ubuntu:~/mvc1$ vi src/main/webapp/WEB-INF/web.xml
         </context-param>
 </web-app>
 
-robot@ubuntu:~/mvc1$ vi src/main/webapp/WEB-INF/spring-mvc-config.xml 
+linux:~/mvc1 $ vi src/main/webapp/WEB-INF/spring-mvc-config.xml 
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -134,7 +138,7 @@ robot@ubuntu:~/mvc1$ vi src/main/webapp/WEB-INF/spring-mvc-config.xml
 	</bean>
 </beans>
 
-robot@ubuntu:~/mvc1$ vi src/main/webapp/WEB-INF/spring-core-config.xml 
+linux:~/mvc1 $ vi src/main/webapp/WEB-INF/spring-core-config.xml 
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -148,29 +152,36 @@ robot@ubuntu:~/mvc1$ vi src/main/webapp/WEB-INF/spring-core-config.xml
 </beans>
 
 # run
-robot@ubuntu:~/mvc1$ gradle jettyRun
+linux:~/mvc1 $ gradle jettyRun
 
 # http://localhost:8080/mvc1
 
 
-robot@ubuntu:~/mvc1$ mkdir -p src/test/java
-robot@ubuntu:~/mvc1$ cat src/test/java/WelcomeControllerTest.java 
+linux:~/mvc1 $ mkdir -p src/test/java
+linux:~/mvc1 $ cat src/test/java/WelcomeControllerTest.java 
 package mypkg;
 
 import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
-import mypkg.WelcomeController;
+import org.junit.Test;
+import org.springframework.test.web.servlet.MockMvc;
 
 public class WelcomeControllerTest {
 	@Test
 	public void testHomePage() throws Exception {
 		WelcomeController controller = new WelcomeController();
 		assertEquals("home", controller.home());
+
+		MockMvc mockMvc = standaloneSetup(controller).build();
+		mockMvc.perform(get("/")).andExpect(view().name("home"));
 	}
 }
 
 
 # run
-robot@ubuntu:~/mvc1$ gradle test
+linux:~/mvc1$ gradle test
 ```
+

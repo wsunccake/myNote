@@ -85,7 +85,7 @@ def initialize(project):
     project.build_depends_on('mockito')
 
 
-Linux:~/pyproject # pby clean run_unit_tests
+Linux:~/pyproject # pyb clean run_unit_tests
 ```
 
 

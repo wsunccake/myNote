@@ -34,6 +34,18 @@ linux:~/myproject3/demo # pyb -h
 linux:~/myproject3/demo # pyb --start-project
 ```
 
+
+## pycharm/intellij ide plugin
+
+```
+linux:~/project $ vi build.py
+...
+use_plugin('python.pycharm')
+
+linux:~/project $ pyb pycharm_generate
+```
+
+
 ## source code
 
 ```
