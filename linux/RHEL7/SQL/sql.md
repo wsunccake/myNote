@@ -71,6 +71,7 @@ DROP DATABASE testdb;
 ```
 -- for PostgreSQL
 \l
+SELECT datname FROM pg_database;
 ```
 
 
@@ -137,10 +138,10 @@ DROP TABLE company;
 ----
 
 
-# Query
+# Record
 
 
-## Create Query
+## Create Record
 
 ```
 INSERT INTO company (id, name, age, address, salary)
@@ -159,21 +160,21 @@ VALUES (3, 'Kaushik', 23, 'Kota', 2000.00 ),
 (9, 'James', 45, 'Houston', 7000.00 ),
 ```
 
-## Delete Query
+## Delete Record
 
 ```
 DELETE FROM company;
 DELETE FROM company WHERE id = 6;
 ```
 
-## Update Query
+## Update Record
 
 ```
 UPDATE company SET address = 'Pune' WHERE id = 6;
 ```
 
 
-## Selete Query
+## Selete Record
 
 ```
 SELECT * FROM company;
