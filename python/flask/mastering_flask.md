@@ -117,11 +117,11 @@ sql> CREATE TABLE user (
 ...> );
 
 ## Create record
-sql> INSERT INTO user (id, name)
+sql> INSERT INTO user (id, username)
 ...> VALUES (1, 'Ramesh');
-sql> INSERT INTO user (id, name)
+sql> INSERT INTO user (id, username)
 ...> VALUES (2, 'Khilan');
-sql> INSERT INTO user (id, name, age, address, salary)
+sql> INSERT INTO user (id, username, age, address, salary)
 ...> VALUES (3, 'Kaushik'),
 ...> (4, 'Chaitali'),
 ...> (5, 'Hardik'),
@@ -221,4 +221,12 @@ if __name__ == '__main__':
 # create table
 linux:~/orm $ python src/main/python/manage.py shell
 >>> db.create_all()
+```
+
+## Jinja2
+
+```
+
+linux:~ # cat /dev/urandom | tr -cd 'a-zA-Z0-9' | head -c 32 # for Linux
+mac:~ $ cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 32 # for Mac
 ```
