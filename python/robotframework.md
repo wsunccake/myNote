@@ -231,8 +231,16 @@ Library     Collections
 ${var1}=  ${False}
 ${var2}  ${True}
 @{lists}   A  B  C  D
+&{user}   name=John  age=2
 
 *** Keywords ***
+Show Info
+    Log  ${list}
+    Log  ${list[0]}
+
+    Log  ${user}
+    Log  ${user['name']}
+
 String Join
     ${exclude_tags}=  Create List
     Run Keyword IF  ${var1} == ${True}  Append To List  ${exclude_tags}  string1
