@@ -1,14 +1,18 @@
 # Introduction #
 
-RobotFramework 是一套基於 Python 以驗收測試及 ATDD (Acceptance Test-Driven Development) 功能為主而開發的自動化測試框架 (以下簡稱 RF). 
+RobotFramework (以下簡稱RF) 是通用自動化測試框架(generic test automation framework), 以 Python 寫得成, 主要用於 BDD(Behavior Driven Development), ATDD(Acceptance Test-Driven Development) 測試. 寫測試者主要是寫 Keyword (Keyword 相當是 RF 的 function), 然後將這些 Keyword 組成 Test Case.
 
 ## 安裝 / Installtion ##
 
 安裝前需先安裝 Python 及 pip
 
-	linux:~ $ sudo pip install robotframework # for Linux
-	osx:~ $ sudo pip install robotframework # for Mac OS X
+```
+# for Linux
+linux:~ # pip install robotframework
 
+# for MaxOSX
+osx:~ $ sudo pip install robotframework
+```
 
 ## Plugin or IDE ##
 
@@ -114,19 +118,31 @@ RF 檔案分四個部分 Settings, Variables, Keywords 和 Test Cases.
 
 執行 RF, 執行完 RF 會產生 report, 分別為 log.html, output.xml 和 report.html. 一般可以瀏覽器看 log.html
 
-	linux:~ $ pybot test.robot # 使用 pybot 
-	linux:~ $ python -m robot.run test.robot # 使用 python
-	linux:~ $ pybot -V var.py -d output -t 'case1' test.robot # -V: 指定變數檔, -d: 指定輸出目錄, -t: 指定執行 test case
+```
+linux:~ $ pybot test.robot # 使用 pybot
+linux:~ $ pybot --loglevel DEBUG:INFO test.robot  # 除錯選項
+linux:~ $ python -m robot.run test.robot # 使用 python
+linux:~ $ pybot -V var.py -d output -t 'case1' test.robot # -V: 指定變數檔, -d: 指定輸出目錄, -t: 指定執行 test case
+```
 
 產生 report, 只要有 output.xml 就可以重新產生 log.html
 
-	linux:~ $ rebot output.xml
-	linux:~ $ python -m robot.rebot output.xml
+```
+linux:~ $ rebot output.xml
+linux:~ $ python -m robot.rebot output.xml
+
+# combine report
+linux:~ $ rebot test1/output.xml test2/output.xml
+
+# merge report
+linux:~ $ rebot --merge rerun_failed_case/output.xml test1/output.xml
+```
 
 檔案格式轉換
 
-	linux:~ $ python -m robot.tidy -f html test.robot test.html 
-
+```
+linux:~ $ python -m robot.tidy -f html test.robot test.html 
+```
 
 -----------------------------
 
@@ -385,6 +401,15 @@ RF 本身也提供 SSHLibary (底層使用 paramiko module), 方便開發使用 
 使用會載入 SSHLibrary, 需要先安裝 robotframework-sshlibrary (使用 pip 安裝即可). 注意不要安裝 2.0 之前的版本, 因為 keyword 差異.
 [SSHLibrary](http://robotframework.org/SSHLibrary/latest/SSHLibrary.html) 有簡易的說明文件可以參考, 主要是說明 Keywords.
 
+### Install
+
+```
+linux:~ # pip install robotframework-sshlibrary
+```
+
+
+### Example
+
 [`test.robot`](./example/rf3/test.robot)
 
 ```
@@ -418,13 +443,22 @@ Run ${cmd} Command With RC
     Log  stdout: ${stdout}
     Log  stderr: ${stderr}
 
+Run ${cmd} Command Until Prompt
+    Write  ${cmd}
+    Set Client Configuration  prompt=#  
+    Set Client Configuration  timeout=60s
+    ${output}=  Read Until Prompt
+    Log  ${output}
+
 *** Test Cases ***
 Show Hostname
     SSH Login
     Run hostname Command
     Run ls abc Command
     Run ls abc Command With RC
-    Run ls abc Command With RC
+    Run ls /tmp Command
+    Run ls /tmp Command With RC
+    Run wget http://archive.ubuntu.com/ubuntu/dists/zesty/main/installer-amd64/current/images/netboot/mini.iso Command Until Prompt
     SSH Logout
 ```
 
@@ -432,6 +466,16 @@ Show Hostname
 
 使用會載入 Selenium2Library, 需要先安裝 robotframework-selenium2library (使用 pip 安裝即可). 注意不要安裝 robotframework-seleniumlibrary, 因為 locator 語法有差異.
 [Selenium2Library](http://rtomac.github.io/robotframework-selenium2library/doc/Selenium2Library.html) 有簡易的說明文件可以參考, 主要是說明 Keywords 和 Locators 使用, 而 Locators 可以參考 [Locators_table_1_0_2.pdf](http://www.cheat-sheets.org/saved-copy/Locators_groups_1_0_2.pdf) [Locators_table_1_0_2.pdf](http://www.cheat-sheets.org/saved-copy/Locators_table_1_0_2.pdf)
+
+
+### Install
+
+```
+linux:~ # pip install robotframework-selenium2library
+```
+
+
+### Example
 
 [`test.robot`](./example/rf4/test.robot)
 
@@ -466,6 +510,15 @@ Test Google
 ```
 
 
+## Sikuli
+
+### Install
+
+```
+linux:~ # pip install robotframework-SikuliLibrary
+```
+
+
 -----------------------------
 
 # Reference #
@@ -473,3 +526,15 @@ Test Google
 [ROBOT FRAMEWORK](http://robotframework.org/)
 
 [Robot Framework Docs Manager](http://rfdocs.org/)
+
+[robotframework-sshlibrary](http://robotframework.org/SSHLibrary/)
+
+[SSHLibrary](https://github.com/robotframework/SSHLibrary)
+
+[robotframework-selenium2library](http://robotframework.org/Selenium2Library/)
+
+[Selenium2Library](https://github.com/robotframework/Selenium2Library)
+
+[robotframework-SikuliLibrary](http://rainmanwy.github.io/robotframework-SikuliLibrary/)
+
+[Sikuli Robot Framework Library](https://github.com/rainmanwy/robotframework-SikuliLibrary)
