@@ -135,3 +135,21 @@ Linux:~/pkg # ./configure
 Linux:~/pkg # make
 Linux:~/pkg # make install DESTDIR=/install_dir
 ```
+
+
+## Ineternet
+
+
+### Chrome
+
+在 Chrome Dev Tool 中, 輸入以下程式碼, 可直接 import javascript
+
+```
+var jq = document.createElement('script');
+jq.src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js";
+document.getElementsByTagName('head')[0].appendChild(jq);
+
+$("#lst-ib").val("python");
+```
+
+

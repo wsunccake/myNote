@@ -471,13 +471,21 @@ Show Hostname
 ### Install
 
 ```
+# install xpath, selenium
+linux:~ # pip install xpath
 linux:~ # pip install robotframework-selenium2library
+
+
+# install webdriver
+linux:~ # firefox -v
+linux:~ # wget https://github.com/mozilla/geckodriver/releases/download/v0.17.0/geckodriver-v0.17.0-linux64.tar.gz
+linux:~ # tar zxf geckodriver-v0.17.0-linux64.tar.gz -C /usr/local/bin
 ```
 
 
 ### Example
 
-[`test.robot`](./example/rf4/test.robot)
+[`test.robot`](./exampjjle/rf4/test.robot)
 
 ```
 *** Settings ***
@@ -506,6 +514,40 @@ Test Google
     Log  ${url}
     Click Link  xpath=//*[@id="menu"]/div/ul/li[1]/a
     Click Link  css=#menu > div > ul > li:nth-child(2) > a
+    Close Browser
+```
+
+
+### Selenium RC
+
+有時需要使用 Selenium RC (Remote Control) 的方式
+
+```
+# 啟動 Xvfb, 有啟動 x window 可忽略此步驟
+linux:~ # Xvfb :99 -ac -screen 0 1280x960x16 &
+linux:~ # export DISPLAY=:99
+
+# 啟動 selenium rc
+linux:~ # wget -O selenium-server-standalone-3.4.0.jar https://goo.gl/s4o9Vx
+linux:~ # java -jar selenium-server-standalone-3.4.0.jar -port 4444 1> output.log 2> error.log &
+linux:~ # echo $! > selenium.pid
+linux:~ # curl http://localhost:4444/grid/console
+```
+
+```
+*** Settings ***
+Library        Selenium2Library
+
+*** Variables ***
+${delay}=  ${1}
+${google_url}=  http://www.google.com
+${browser}=  firefox
+${remote_url}=  http://127.0.0.1:4444/wd/hub
+
+*** Test Cases ***
+Test Google
+    Open Browser  ${google_url}  ${browser}  remote_url=${remote_url}
+    Capture Page Screenshot
     Close Browser
 ```
 
