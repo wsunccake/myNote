@@ -1,4 +1,4 @@
-# Kebernetes
+# Kubernetes
 
 
 ## Install
@@ -117,6 +117,7 @@ master:~ # etcdctl mk /kube-centos/network/config '{"Network":"172.17.0.0/16"}'
 master:~ # etcdctl mk /kube-centos/network/config '{"Network": "172.30.0.0/16", "SubnetLen": 24, "Backend": {"Type": "vxlan"} }'
 master:~ # etcdctl ls /kube-centos/network/config
 master:~ # etcdctl get /kube-centos/network/config
+master:~ # etcdctl rm /kube-centos/network/config 
 ```
 
 ----
@@ -186,7 +187,7 @@ node:~ # ip a | grep flannel | grep inet
 
 流程同上 Install via Binary 的 all hosts 部分, 還需要另外安裝 docker 跟設定 kubernetes repository
 
-`install docker`
+`install docker and kubeadm`
 
 ```
 centos:~ # vi /etc/yum.repos.d/kubernetes.repo
@@ -200,6 +201,18 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 
 centos:~ # yum install -y docker kubelet kubeadm kubectl kubernetes-cni
+
+centos:~ # systemctl restart docker
+centos:~ # systemctl docker
+
+centos:~ # vi /etc/sysctl.d/bridge-nf-call-iptables.conf
+net.bridge.bridge-nf-call-iptables=1
+net.bridge.bridge-nf-call-ip6tables=1
+centos:~ # sysctl -p /etc/sysctl.d/bridge-nf-call-iptables.conf
+centos:~ # cat /proc/sys/net/bridge/bridge-nf-call-iptables
+
+centos:~ # systemctl restart kubelet
+centos:~ # systemctl enable kubelet
 ```
 
 ----
@@ -216,16 +229,18 @@ master:~ # echo "source <(kubectl completion bash)" >> ~/.bashrc
 `setup master`
 
 ```
+master:~ # kubeadm reset
 master:~ # kubeadm init [--token 1234] [--pod-network-cidr 10.244.0.0/16] [--service-cidr 10.96.0.0/12]
 master:~ # kubeadm token list
-master:~ # kubeadm reset
 ```
+
+network module 使用 flannel, 需要設定 --pod-network-cidr, 否則 kube-dns 會有問題
 
 `config file`
 
 ```
 master:~ # mkdir -p $HOME/.kube
-master:~ # cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+master:~ # cp /etc/kubernetes/admin.conf $HOME/.kube/config
 ```
 
 `install flannel`
@@ -233,6 +248,8 @@ master:~ # cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 ```
 master:~ # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 master:~ # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml
+
+kubectl get pod --all-namespaces -o wide
 ```
 
 #### node
@@ -241,16 +258,51 @@ master:~ # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/mas
 
 ```
 node:~ # echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
+node:~ # kubeadm reset
 node:~ # kubeadm join --token 3a88f0.e98c25d025e85412 masater:6443
 ```
 
-## Manage
 
-``
+## Hello World
 
 ```
+master:~ # kubectl run hello-world --image=gcr.io/google-samples/node-hello:1.0 --port=8080
+master:~ # kubectl get node
+master:~ # kubectl get pod
+master:~ # kubectl get deployment
+master:~ # kubectl get service
+master:~ # kubectl get replicaset
+master:~ # kubectl describe node
+master:~ # kubectl describe pod
+master:~ # kubectl describe deployment
+master:~ # kubectl describe service
+master:~ # kubectl describe replicaset
+
+master:~ # kubectl get pod --all-namespaces -o wide
+master:~ # curl `kubectl get pod -o wide | awk '/hello/{print $6}'`:8080
+
+master:~ # kubectl expose deployment hello-world [--external-ip=192.168.31.200] [--port=80] [--target-port=8080] [--type=NodePort]
+# type: Cluster, LoadBalancer, NodePort
+# Cluster 只能對內; LoadBalancer 是透過 IaaS 環境拿到 IP; NodePort 是手動指定 IP
+# external-ip: 設定對外, ip 要在 kubernetes host 上 (master 或 node 都可)
+master:~ # kubectl get service --all-namespaces -o wide
+master:~ # curl `kubectl get service | awk '/hello/{print $2}'`:8080
+
+master:~ # kubectl delete service hello-world
+master:~ # kubectl delete deployment hello-world
+```
+
+
+## Manage
+
+`basic infomation`
+
+```
+master:~ # kubectl --help
+master:~ # kubectl options
 master:~ # kubectl version
 master:~ # kubectl version --help
+
 master:~ # kubectl cluster-info
 ```
 
@@ -258,5 +310,12 @@ master:~ # kubectl cluster-info
 `node`
 
 ```
-master:~ # kubectl get nodes
+master:~ # kubectl get nodes          # list nodes
+master:~ # kubectl delete node node1  # remove node
+
+node:~ # kubeadm join --token 3a88f0.e98c25d025e85412 masater:6443.  # join master
 ```
+
+
+`pod`
+
