@@ -89,6 +89,10 @@ StartupWMClass=jetbrains-idea
 
 ## Service
 
+```
+ubuntu:~ $ sudo service avahi-daemon stop
+ubuntu:~ $ sudo sh -c "echo manual > /etc/init/avahi-daemon.override"
+```
 
 ----
 

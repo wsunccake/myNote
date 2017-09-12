@@ -263,6 +263,27 @@ node:~ # kubeadm join --token 3a88f0.e98c25d025e85412 masater:6443
 ```
 
 
+## PWK/Play With K8S
+
+http://labs.play-with-k8s.com/
+
+
+`master`
+
+```
+master:~ # kubeadm init --apiserver-advertise-address $(hostname -i)
+master:~ # kubectl apply -n kube-system -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+master:~ # curl -L -s https://git.io/kube-dashboard  | sed 's/targetPort: 9090/targetPort: 9090\n  type: LoadBalancer/' | kubectl apply -f -
+```
+
+
+`node`
+
+```
+node:~ # kubeadm join --token ba7efe.e1db8bd85e84f340 10.0.32.3:6443
+```
+
+
 ## Hello World
 
 ```

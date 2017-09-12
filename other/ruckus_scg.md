@@ -175,3 +175,13 @@ SCG(debug)#  all-log-level
 SCG# config
 SCG(config)#  logging console cli debug 
 ```
+
+vDP
+
+```
+vDP> enable 
+vDP# show running-confing dhcp all
+vDP# debug
+vDP(debug)# diag dp_comm zone wlan show
+vDP(debug)# diag tbldump -rn 27
+```

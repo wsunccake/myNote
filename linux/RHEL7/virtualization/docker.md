@@ -62,6 +62,42 @@ rhel:~ # docker inspect --format '{{.NetworkSettings.IPAddress}}' <container_id>
 ```
 
 
+```
+rhel:~ # docker run/update
+--cpus 4.0
+--cpu-shares 1024
+--cpuset-cpus=4-7
+# cpus 使用數量
+# cpu-shares 使用比例, default 1024
+# cpuset-cpus 限制使用
+
+--memory 4g
+--memory-swap
+--memory-swappiness
+--memory-reservation
+# memory 使用數量, unit: b, k, m, g
+
+--oom-kill-disable
+--oom-score-adj
+
+--device=/dev/sdc:/dev/xvdc
+--device=/dev/sda
+--device-read-bps /dev/sda:1mb
+--device-write-bps
+--device-read-iops /dev/sda:100
+--device-write-iops
+# device-read-bps, device-write-bps, unit: kb, mb, gb
+```
+
+docker cpu/mem/io info
+
+```
+rhel:~ # ls /sys/fs/cgroup/cpu/docker/<docker_id>
+rhel:~ # ls /sys/fs/cgroup/memory/docker/<docker_id>
+rhel:~ # ls /sys/fs/cgroup/blkio/docker/<docker_id>
+```
+
+
 ## Docker Image 
 
 ```
