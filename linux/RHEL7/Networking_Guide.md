@@ -141,14 +141,21 @@ rhel:~ # ip link set dev eth0 down # 關閉網卡
 rhel:~ # ip addr show # 顯示網卡 IP
 rhel:~ # ip addr add 10.0.0.3/24 dev eth0 # 新增網卡 IP
 rhel:~ # ip addr del 10.0.0.3/24 dev eth0 # 刪除網卡 IP
+rhel:~ # ip addr add 10.0.0.4/24 dev eth0 label eth0:1
 
-rhel:~ # ip route # 顯示路由
+
+rhel:~ # ip route show # 顯示路由
 rhel:~ # ip route add default via 10.0.3.254 dev eth0 # 新增預設路由
 rhel:~ # ip route del default via 10.0.3.254 dev eth0 # 刪除預設路由
 rhel:~ # ip route add 192.168.0.0/24 via 10.0.3.254 dev eth0 # 新增靜態路由
 rhel:~ # ip route add via 192.168.0.254 dev eth1 # 新增路由
 rhel:~ # ip route del via 192.168.0.254 dev eth1 # 刪除路由
 rhel:~ # ip route del 192.168.0.0/24 via 10.0.3.254 dev eth0 # 刪除靜態路由
+
+rhel:~ # ip neigh # arp
+rhel:~ # ip neigh add 192.168.0.100 lladdr 33:1g:75:37:r3:84 dev eth0 nud perm
+rhel:~ # ip neigh del 192.168.0.101 dev eth0
+
 
 
 # method 4:

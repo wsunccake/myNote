@@ -287,6 +287,7 @@ node:~ # kubeadm join --token ba7efe.e1db8bd85e84f340 10.0.32.3:6443
 ## Hello World
 
 ```
+# create app
 master:~ # kubectl run hello-world --image=gcr.io/google-samples/node-hello:1.0 --port=8080
 master:~ # kubectl get node
 master:~ # kubectl get pod
@@ -302,6 +303,10 @@ master:~ # kubectl describe replicaset
 master:~ # kubectl get pod --all-namespaces -o wide
 master:~ # curl `kubectl get pod -o wide | awk '/hello/{print $6}'`:8080
 
+# replica app
+master:~ # kubectl scale deployments/hello-world --replicas=4
+
+# expose app
 master:~ # kubectl expose deployment hello-world [--external-ip=192.168.31.200] [--port=80] [--target-port=8080] [--type=NodePort]
 # type: Cluster, LoadBalancer, NodePort
 # Cluster 只能對內; LoadBalancer 是透過 IaaS 環境拿到 IP; NodePort 是手動指定 IP
@@ -309,9 +314,132 @@ master:~ # kubectl expose deployment hello-world [--external-ip=192.168.31.200] 
 master:~ # kubectl get service --all-namespaces -o wide
 master:~ # curl `kubectl get service | awk '/hello/{print $2}'`:8080
 
+# delete app
 master:~ # kubectl delete service hello-world
 master:~ # kubectl delete deployment hello-world
 ```
+
+
+## Pod
+
+```
+master:~ # vi pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello
+  labels:
+    app: hello-world
+spec:
+  containers:
+  - name: hello
+    image: gcr.io/google-samples/node-hello:1.0
+    ports:
+    - containerPort: 8080
+
+master:~ # kubectl create -f pod.yaml
+master:~ # kubectl delete -f pod.yaml
+```
+
+
+## Namespace
+
+```
+# 使用 cli
+master:~ # kubectl create namespace new-namespace
+
+# 使用 config
+master:~ # vi namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: new-namespace
+
+mater:~ # kubectl create -f namespace.yaml
+
+master:~ # kubectl get configmap  -n=kube-public
+master:~ # kubectl delete namespaces new-namespace
+```
+
+
+## Deployment
+
+```
+# 使用 cli
+master:~ # kubectl run hello-world --image=nginx:1.7.9 --port=80
+
+# 使用 config
+master:~ # vi deployment.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        run: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.7.9
+        ports:
+        - containerPort: 80
+
+mater:~ # kubectl create -f deployment.yaml
+mater:~ # kubectl delete -f deployment.yaml
+
+# scaling
+master:~ # kubectl scale deployment nginx-deployment --replicas 10
+master:~ # kubectl autoscale deployment nginx-deployment --min=10 --max=15 --cpu-percent=80
+
+# rolling update
+master:~ # kubectl set image deployment/nginx-deployment nginx=nginx:1.9.1
+master:~ # kubectl rollout status deployment/nginx-deployment
+master:~ # kubectl rollout history deployment/nginx-deployment
+master:~ # kubectl rollout undo deployment/nginx-deployment [--to-revision=2]
+master:~ # kubectl rollout pause deployment/nginx-deployment
+master:~ # kubectl rollout resume deployment/nginx-deployment
+```
+
+## Service
+
+
+ClusterIP, NodePort, LoadBalancer, ExternalName
+
+```
+# 使用 cli
+master:~ # kubectl expose deployment nginx --port 8080 --target-port 80 [--external-ip 10.240.0.9]
+# port: service external port
+# target-port: container forwarding port
+# external-ip: service external ip
+
+# 使用 config
+master:~ # vi service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: nginx
+  name: nginx
+  namespace: default
+spec:
+#  externalIPs:
+#  - 10.240.0.9
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: nginx
+#     此處 selector 底下的 run: nginx 必須與 deploy labels 底下的 run: nginx 一致
+  sessionAffinity: None
+  type: ClusterIP
+
+mater:~ # iptable -L -nv -t nat
+```
+
 
 
 ## Manage
@@ -340,3 +468,15 @@ node:~ # kubeadm join --token 3a88f0.e98c25d025e85412 masater:6443.  # join mast
 
 `pod`
 
+
+## Reference
+
+[Kubernetes指南](https://kubernetes.feisky.xyz/)
+
+[Kubernetes學習筆記](https://gcpug-tw.gitbooks.io/kuberbetes-in-action/content/)
+
+[Kubernetes 入門指南](http://kubernetes.kansea.com/docs/)
+
+[kubectl-cheatsheet](https://kubernetes.io/docs/user-guide/kubectl-cheatsheet/)
+
+[Installing Kubernetes Cluster with 3 minions on CentOS 7 to manage pods and services](https://severalnines.com/blog/installing-kubernetes-cluster-minions-centos7-manage-pods-services)
