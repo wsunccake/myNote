@@ -274,6 +274,28 @@ http://labs.play-with-k8s.com/
 master:~ # kubeadm init --apiserver-advertise-address $(hostname -i)
 master:~ # kubectl apply -n kube-system -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 master:~ # curl -L -s https://git.io/kube-dashboard  | sed 's/targetPort: 9090/targetPort: 9090\n  type: LoadBalancer/' | kubectl apply -f -
+
+master:~ # kubectl run -it busybox --image=busybox --restart=Never
+
+master:~ # kubectl run busybox --image=busybox --restart=Never --command -- sleep 3600
+master:~ # kubectl exec -it busybox /bin/sh
+
+master:~ # vi busybox.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+  namespace: default
+spec:
+  containers:
+  - image: busybox
+    command:
+      - sleep
+      - "3600"
+    imagePullPolicy: IfNotPresent
+    name: busybox
+  restartPolicy: Always
+master:~ # kubectl create -f busybox.yaml
 ```
 
 
@@ -417,6 +439,23 @@ master:~ # kubectl expose deployment nginx --port 8080 --target-port 80 [--exter
 
 # 使用 config
 master:~ # vi service.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        run: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.7.9
+        ports:
+        - containerPort: 80
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -433,7 +472,7 @@ spec:
     targetPort: 80
   selector:
     run: nginx
-#     此處 selector 底下的 run: nginx 必須與 deploy labels 底下的 run: nginx 一致
+# Service spec.selector.run must equal Deployment spec.template.labels.run
   sessionAffinity: None
   type: ClusterIP
 

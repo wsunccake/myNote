@@ -7,6 +7,8 @@
 
 ## Install
 
+`method 1`
+
 ```
 # install package
 centos:~ # vi /etc/yum.repos.d/mongodb-org.repo
@@ -26,5 +28,13 @@ centos:~ # systemctl enable mongodb
 centos:~ # monogo
 ```
 
+`method 2`
+
+```
+centos:~ # docker pull mongo
+centos:~ # docker run -d --name mongo mongo
+```
 
 ----
+
+

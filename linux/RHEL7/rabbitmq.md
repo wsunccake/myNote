@@ -4,6 +4,7 @@
 
 ## Install
 
+`method 1`
 
 ```
 # install package
@@ -24,6 +25,13 @@ centos:~ # netstat -lutnp | grep -E '4369|5671|5672'
 ```
 
 
+`method 2`
+
+```
+centos:~ # docker pull rabbitmq
+centos:~ # docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq
+centos:~ # docker exec -it rabbitmq rabbitmq-plugins enable rabbitmq_management
+```
 ----
 
 ## Operation
@@ -84,7 +92,10 @@ centos:~ # vi /etc/rabbitmq/rabbitmq.config
 
 ----
 
-## Hello
+## Simple
+
+
+![hello world](https://www.rabbitmq.com/img/tutorials/python-one-overall.png)
 
 ```
 centos:~ # pip3 install virtualenv
@@ -105,15 +116,19 @@ centos:~/py3/hello # vi send.py
 #!/usr/bin/env python
 import pika
 
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+rabbitmq_server = 'localhost'
+queue = 'hello'
+message = 'Hello RabbitMQ!'
+
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_server))
 channel = connection.channel()
 
-channel.queue_declare(queue='hello')
+channel.queue_declare(queue=queue)
 
 channel.basic_publish(exchange='',
-                      routing_key='hello',
-                      body='Hello World!')
-print(" [x] Sent 'Hello World!'")
+                      routing_key=queue,
+                      body=message)
+print(" [x] Sent '{}'".format(message))
 connection.close()
 
 centos:~/py3/hello # vi send.py
@@ -128,24 +143,46 @@ centos:~/py3/hello # vi receive.py
 #!/usr/bin/env python
 import pika
 
-connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host='localhost'))
+rabbitmq_server='localhost'
+queue='hello'
+
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_server))
 channel = connection.channel()
 
-
-channel.queue_declare(queue='hello')
+channel.queue_declare(queue=queue)
 
 def callback(ch, method, properties, body):
-    print(" [x] Received %r" % body)
+    print(" [x] Received {}".format(body))
 
-channel.basic_consume(callback,
-                      queue='hello',
-                      no_ack=True)
+channel.basic_consume(callback, queue=queue, no_ack=True)
 
 print(' [*] Waiting for messages. To exit press CTRL+C')
 channel.start_consuming()
 
 centos:~/py3/hello # python receive.py
+
+
+centos:~/py3/hello # vi receive_one.py
+#!/usr/bin/env python
+import pika
+
+rabbitmq_server='localhost'
+queue='hello'
+
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_server))
+channel = connection.channel()
+
+channel.queue_declare(queue=queue)
+
+method_frame, header_frame, body = channel.basic_get(queue=queue)
+if method_frame.NAME == 'Basic.GetEmpty':
+    connection.close()
+else:
+    channel.basic_ack(delivery_tag=method_frame.delivery_tag)
+    connection.close()
+    print(" [x] Received {}".format(body))
+
+centos:~/py3/hello # vi receive_one.py
 ```
 
 
@@ -154,4 +191,93 @@ centos:~/py3/hello # python receive.py
 ```
 centos:~/py3/hello # rabbitmqctl [-p <vhostpath>] list_queues
 ```
+
+
+----
+
+## Publish/Subscribe
+
+
+![publish subscribe](https://www.rabbitmq.com/img/tutorials/bindings.png)
+
+
+
+### Direct
+
+```
+centos:~/py3/direct # vi producer.py
+import pika
+import sys
+
+user = 'guest'
+password = 'guest'
+host = 'localhost'
+exchage = 'hello-exchage'
+routing_key = 'hola'
+
+credentials = pika.PlainCredentials(user, password)
+connect_parameters = pika.ConnectionParameters(host,
+                                               credentials=credentials)
+connect_broker = pika.BlockingConnection(connect_parameters)
+
+channel = connect_broker.channel()
+channel.exchange_declare(exchange=exchage,
+                         exchange_type='direct',
+                         passive=False,
+                         durable=True,
+                         auto_delete=False)
+
+message = sys.argv[1]
+message_properties = pika.BasicProperties()
+message_properties.content_type = 'text/plain'
+
+channel.basic_publish(body=message,
+                      exchange=exchage,
+                      properties=message_properties,
+                      routing_key=routing_key)
+
+centos:~/py3/hello # vi consumer.py
+import pika
+
+user = 'guest'
+password = 'guest'
+host = 'localhost'
+exchage = 'hello-exchage'
+queue = 'hello-queue'
+routing_key = 'hola'
+
+credentials = pika.PlainCredentials(user, password)
+connect_parameters = pika.ConnectionParameters(host,
+                                               credentials=credentials)
+connect_broker = pika.BlockingConnection(connect_parameters)
+
+channel = connect_broker.channel()
+channel.exchange_declare(exchange=exchage,
+                         exchange_type='direct',
+                         passive=False,
+                         durable=True,
+                         auto_delete=False)
+channel.queue_declare(queue=queue)
+channel.queue_bind(queue=queue,
+                   exchange=exchage,
+                   routing_key=routing_key)
+
+
+def message_consumer(channel, method, header, body):
+    channel.basic_ack(delivery_tag=method.delivery_tag)
+    if body.decode('utf-8') == 'quit':
+        channel.basic_cancel(consumer_tag='hello-consumer')
+        channel.stop_consuming()
+    else:
+        print(body)
+
+    return
+
+channel.basic_consume(message_consumer, queue=queue, consumer_tag='hello-consumer')
+channel.start_consuming()
+
+centos:~/py3/hello # rabbitmqctl [-p <vhostpath>] list_exchages
+centos:~/py3/hello # rabbitmqctl [-p <vhostpath>] list_queues
+```
+
 

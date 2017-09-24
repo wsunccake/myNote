@@ -20,6 +20,10 @@ rhel:~ # docker run hello-world                             # 測試
 rhel:~ # usermod -aG docker user                            # 將使用者加入 docker 群組, 確定 docker daemon -G docker
 ```
 
+## PWD/
+
+[http://labs.play-with-docker.com/](http://labs.play-with-docker.com/)
+
 
 ## Run
 
