@@ -1,0 +1,67 @@
+source <(kubectl completion bash)
+
+mkdir nginx_kube_example
+cd nginx_kube_example
+
+vi nginx_pod.yaml
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: nginx
+spec:
+  replicas: 2
+  selector:
+    app: nginx
+  template:
+    metadata:
+      name: nginx
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+
+
+kubectl create -f nginx_pod.yaml
+
+kubectl get pods
+kubectl get pods --show-labels
+kubectl get pods -o wide
+
+kubectl get rc
+kubectl get services
+
+kubectl get nodes
+
+
+kubectl describe pods
+
+kubectl logs <pod>
+kubectl exec -it <pod> <cmd>
+
+
+vi nginx_service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: nginxservice
+  name: nginxservice
+spec:
+  ports:
+    # The port that this service should serve on.
+    - port: 82
+  # Label keys and values that must match in order to receive traffic for this service.
+  selector:
+    app: nginx
+  type: LoadBalancer
+
+kubectl create -f nginx_service.yaml
+
+
+
+kubectl delete service nginxservice
+kubectl delete rc nginx

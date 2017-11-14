@@ -19,6 +19,8 @@ centos:~ # systemctl enable rabbitmq-server
 # install plugin
 centos:~ # rabbitmq-plugins enable rabbitmq_management
 centos:~ # curl http://localhost:15672
+centos:~ # curl http://localhost:15672/cli/rabbitmqadmin -o rabbitmqadmin
+centos:~ # chmod +x rabbitmqadmin
 
 # port
 centos:~ # netstat -lutnp | grep -E '4369|5671|5672'
@@ -143,13 +145,14 @@ centos:~/py3/hello # vi receive.py
 #!/usr/bin/env python
 import pika
 
-rabbitmq_server='localhost'
-queue='hello'
+rabbitmq_server = 'localhost'
+queue = 'hello'
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_server))
 channel = connection.channel()
 
 channel.queue_declare(queue=queue)
+
 
 def callback(ch, method, properties, body):
     print(" [x] Received {}".format(body))
@@ -166,8 +169,8 @@ centos:~/py3/hello # vi receive_one.py
 #!/usr/bin/env python
 import pika
 
-rabbitmq_server='localhost'
-queue='hello'
+rabbitmq_server = 'localhost'
+queue = 'hello'
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_server))
 channel = connection.channel()
@@ -201,7 +204,6 @@ centos:~/py3/hello # rabbitmqctl [-p <vhostpath>] list_queues
 ![publish subscribe](https://www.rabbitmq.com/img/tutorials/bindings.png)
 
 
-
 ### Direct
 
 ```
@@ -212,7 +214,7 @@ import sys
 user = 'guest'
 password = 'guest'
 host = 'localhost'
-exchage = 'hello-exchage'
+exchage = 'direct-exchage'
 routing_key = 'hola'
 
 credentials = pika.PlainCredentials(user, password)
@@ -227,7 +229,7 @@ channel.exchange_declare(exchange=exchage,
                          durable=True,
                          auto_delete=False)
 
-message = sys.argv[1]
+message = ' '.join(sys.argv[1:]) or 'RabbitMQ direct'
 message_properties = pika.BasicProperties()
 message_properties.content_type = 'text/plain'
 
@@ -236,14 +238,14 @@ channel.basic_publish(body=message,
                       properties=message_properties,
                       routing_key=routing_key)
 
-centos:~/py3/hello # vi consumer.py
+centos:~/py3/direct # vi consumer.py
 import pika
 
 user = 'guest'
 password = 'guest'
 host = 'localhost'
-exchage = 'hello-exchage'
-queue = 'hello-queue'
+exchage = 'direct-exchage'
+queue = 'direct-queue'
 routing_key = 'hola'
 
 credentials = pika.PlainCredentials(user, password)
@@ -266,18 +268,182 @@ channel.queue_bind(queue=queue,
 def message_consumer(channel, method, header, body):
     channel.basic_ack(delivery_tag=method.delivery_tag)
     if body.decode('utf-8') == 'quit':
-        channel.basic_cancel(consumer_tag='hello-consumer')
+        channel.basic_cancel(consumer_tag='direct-consumer')
         channel.stop_consuming()
     else:
         print(body)
 
     return
 
-channel.basic_consume(message_consumer, queue=queue, consumer_tag='hello-consumer')
+channel.basic_consume(message_consumer, queue=queue, consumer_tag='direct-consumer')
 channel.start_consuming()
 
-centos:~/py3/hello # rabbitmqctl [-p <vhostpath>] list_exchages
-centos:~/py3/hello # rabbitmqctl [-p <vhostpath>] list_queues
+centos:~ # rabbitmqctl [-p <vhostpath>] list_exchages
+centos:~ # rabbitmqctl [-p <vhostpath>] list_queues
 ```
 
 
+### Fanout
+
+```
+centos:~/py3/fanout # vi producer.py
+import pika
+import sys
+
+user = 'guest'
+password = 'guest'
+host = 'localhost'
+exchage = 'fanout-exchage'
+routing_key = 'hola'
+
+credentials = pika.PlainCredentials(user, password)
+connect_parameters = pika.ConnectionParameters(host,
+                                               credentials=credentials)
+connect_broker = pika.BlockingConnection(connect_parameters)
+
+channel = connect_broker.channel()
+channel.exchange_declare(exchange=exchage,
+                         exchange_type='fanout',
+                         passive=False,
+                         durable=True,
+                         auto_delete=False)
+
+message = ' '.join(sys.argv[1:]) or 'RabbitMQ fanout'
+message_properties = pika.BasicProperties()
+message_properties.content_type = 'text/plain'
+
+channel.basic_publish(body=message,
+                      exchange=exchage,
+                      properties=message_properties,
+                      routing_key=routing_key)
+
+centos:~/py3/fanout # vi consumer.py
+import pika
+
+user = 'guest'
+password = 'guest'
+host = 'locahost'
+exchage = 'fanout-exchage'
+routing_key = 'hola'
+
+credentials = pika.PlainCredentials(user, password)
+connect_parameters = pika.ConnectionParameters(host,
+                                               credentials=credentials)
+connect_broker = pika.BlockingConnection(connect_parameters)
+
+channel = connect_broker.channel()
+channel.exchange_declare(exchange=exchage,
+                         exchange_type='fanout',
+                         passive=False,
+                         durable=True,
+                         auto_delete=False)
+queue = channel.queue_declare(exclusive=True).method.queue
+channel.queue_bind(queue=queue,
+                   exchange=exchage,
+                   routing_key=routing_key)
+
+
+def message_consumer(channel, method, header, body):
+    channel.basic_ack(delivery_tag=method.delivery_tag)
+    if body.decode('utf-8') == 'quit':
+        channel.basic_cancel(consumer_tag='fanout-consumer')
+        channel.stop_consuming()
+    else:
+        print(body)
+
+    return
+
+channel.basic_consume(message_consumer, queue=queue, consumer_tag='fanout-consumer')
+channel.start_consuming()
+
+centos:~ # rabbitmqctl [-p <vhostpath>] list_exchages
+centos:~ # rabbitmqctl [-p <vhostpath>] list_bindings
+centos:~ # rabbitmqctl [-p <vhostpath>] list_queues
+```
+
+### Routing
+
+```
+centos:~/py3/routing # vi producer.py
+import pika
+import sys
+
+user = 'guest'
+password = 'guest'
+host = 'localhost'
+exchage = 'routing-exchage'
+
+
+credentials = pika.PlainCredentials(user, password)
+connect_parameters = pika.ConnectionParameters(host,
+                                               credentials=credentials)
+connect_broker = pika.BlockingConnection(connect_parameters)
+
+channel = connect_broker.channel()
+channel.exchange_declare(exchange=exchage,
+                         exchange_type='direct',
+                         passive=False,
+                         durable=True,
+                         auto_delete=False)
+
+routing_key = sys.argv[1] if len(sys.argv) > 2 else 'info'
+message = ' '.join(sys.argv[2:]) or 'RabbitMQ routing'
+message_properties = pika.BasicProperties()
+message_properties.content_type = 'text/plain'
+
+channel.basic_publish(body=message,
+                      exchange=exchage,
+                      properties=message_properties,
+                      routing_key=routing_key)
+
+centos:~/py3/routing # vi consumer.py
+import pika
+import sys
+
+user = 'guest'
+password = 'guest'
+host = 'localhost'
+exchage = 'routing-exchage'
+routing_keys = sys.argv[1:] if len(sys.argv) > 1 else ['info']
+
+credentials = pika.PlainCredentials(user, password)
+connect_parameters = pika.ConnectionParameters(host,
+                                               credentials=credentials)
+connect_broker = pika.BlockingConnection(connect_parameters)
+
+channel = connect_broker.channel()
+channel.exchange_declare(exchange=exchage,
+                         exchange_type='direct',
+                         passive=False,
+                         durable=True,
+                         auto_delete=False)
+queue = channel.queue_declare(exclusive=True).method.queue
+
+for routing_key in routing_keys:
+    channel.queue_bind(queue=queue,
+                       exchange=exchage,
+                       routing_key=routing_key)
+
+
+def message_consumer(channel, method, header, body):
+    channel.basic_ack(delivery_tag=method.delivery_tag)
+    if body.decode('utf-8') == 'quit':
+        channel.basic_cancel(consumer_tag='fanout-consumer')
+        channel.stop_consuming()
+    else:
+        print(body)
+
+    return
+
+channel.basic_consume(message_consumer, queue=queue, consumer_tag='fanout-consumer')
+channel.start_consuming()
+
+```
+
+### Topic
+
+```
+a
+```
+
+### headers

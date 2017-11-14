@@ -52,6 +52,21 @@ windows 使用 Fedora LiveUSB Creator 程式
 	sh-4.2# sync
 	sh-4.2# /sbin/reboot -f
 
+安裝 grub
+	sh-4.2# mount /dev/sda1 /mnt
+	sh-4.2# mount -obind /dev/ /mnt/dev/
+	sh-4.2# chroot /mnt/
+	sh-4.2# grub
+	grub> root (hd0, 1)
+	grub> setup (hd0)
+
+(hd0, 1) 是包含 /boot 的 partition
+
+安裝 grub2
+	sh-4.2# mount /dev/sda1 /mnt
+	sh-4.2# mount -obind /dev/ /mnt/dev/
+	sh-4.2# chroot /mnt/
+	sh-4.2# grub2-install --root-directory=/mnt /dev/sda
 
 停用 Network Manager (NM), 改用傳統 network daemon
 

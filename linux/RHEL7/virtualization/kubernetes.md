@@ -249,7 +249,7 @@ master:~ # cp /etc/kubernetes/admin.conf $HOME/.kube/config
 master:~ # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 master:~ # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml
 
-kubectl get pod --all-namespaces -o wide
+master:~ # kubectl get pod --all-namespaces -o wide
 ```
 
 #### node
@@ -464,6 +464,7 @@ metadata:
   name: nginx
   namespace: default
 spec:
+  type: ClusterIP
 #  externalIPs:
 #  - 10.240.0.9
   ports:
@@ -474,7 +475,15 @@ spec:
     run: nginx
 # Service spec.selector.run must equal Deployment spec.template.labels.run
   sessionAffinity: None
-  type: ClusterIP
+  
+#  type: NodePort
+#  externalIPs:
+#  - 10.240.0.9
+#  ports:
+#  - port: 8080
+#    protocol: TCP
+#    targetPort: 80
+#    nodePort: 31234
 
 mater:~ # iptable -L -nv -t nat
 ```
