@@ -1,0 +1,37 @@
+Install
+centos:~ # yum install ipmitool
+
+centos:~ # modprobe ipmi_msghandler
+centos:~ # modprobe ipmi_ssif
+centos:~ # lsmod | grep ipmi
+
+
+List
+centos:~ # ipmitool user list [<channel number>]
+centos:~ # ipmitool lan print [<channel number>]
+centos:~ # ipmitool chassis status
+centos:~ # ipmitool channel info
+centos:~ # ipmitool sel list
+centos:~ # ipmitool power status
+
+
+Network
+centos:~ # ipmitool lan set 1 ipsrc static|dhcp
+centos:~ # ipmitool lan set 1 ipaddr <ipaddress>
+centos:~ # ipmitool lan set 1 netmask <netmask>
+centos:~ # ipmitool lan set 1 defgw ipaddr <gatewayip>
+
+
+Power Control
+centos:~ # ipmitool power on|off|reset|cycle
+
+
+Remote
+RMCP/RMCP+: UDP port 623
+centos:~ # netstat -lutnp | grep 623
+centos:~ # ipmitool -I lan -H <ip> -U <user> -P <password> ...
+
+channel number
+Dell: 1
+HP: 2
+SuperMicro: 1
