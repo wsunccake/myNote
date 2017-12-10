@@ -16,12 +16,6 @@ centos:~ # yum install https://www.rabbitmq.com/releases/rabbitmq-server/v3.6.9/
 centos:~ # systemctl start rabbitmq-server
 centos:~ # systemctl enable rabbitmq-server
 
-# install plugin
-centos:~ # rabbitmq-plugins enable rabbitmq_management
-centos:~ # curl http://localhost:15672
-centos:~ # curl http://localhost:15672/cli/rabbitmqadmin -o rabbitmqadmin
-centos:~ # chmod +x rabbitmqadmin
-
 # port
 centos:~ # netstat -lutnp | grep -E '4369|5671|5672'
 ```
@@ -32,7 +26,6 @@ centos:~ # netstat -lutnp | grep -E '4369|5671|5672'
 ```
 centos:~ # docker pull rabbitmq
 centos:~ # docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq
-centos:~ # docker exec -it rabbitmq rabbitmq-plugins enable rabbitmq_management
 ```
 ----
 
@@ -72,25 +65,6 @@ centos:~ # rabbitmqctl delete_vhost <vhostpath>
 centos:~ # rabbitmqctl list_parameters
 centos:~ # rabbitmqctl list_global_parameters
 ```
-
-
-----
-
-## Configure
-
-```
-centos:~ # vi /etc/rabbitmq/rabbitmq.config
-[
- {rabbit,
-  [
-   {tcp_listeners, [5672]},
-%%   {loopback_users, [<<"guest">>]}   %% 把 <<"guest">> 拿掉, guest 即可從外面登入 
-   {loopback_users, []}
-  ]
- }
-].
-```
-
 
 ----
 
@@ -185,7 +159,26 @@ else:
     connection.close()
     print(" [x] Received {}".format(body))
 
-centos:~/py3/hello # vi receive_one.py
+centos:~/py3/hello # vi receive_one_requeue.py
+#!/usr/bin/env python
+import pika
+
+rabbitmq_server = 'localhost'
+queue = 'hello'
+
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_server))
+channel = connection.channel()
+
+channel.queue_declare(queue=queue, auto_delete=True)
+
+
+method_frame, header_frame, body = channel.basic_get(queue=queue, no_ack=False)
+if method_frame.NAME == 'Basic.GetEmpty':
+    connection.close()
+else:
+    channel.basic_nack(delivery_tag=method_frame.delivery_tag, requeue=True)
+    connection.close()
+    print(" [x] Received {}".format(body))
 ```
 
 
@@ -440,10 +433,102 @@ channel.start_consuming()
 
 ```
 
+
 ### Topic
 
 ```
-a
+centos:~ # vi
 ```
 
-### headers
+
+### Headers
+
+```
+centos:~ # vi
+```
+
+
+### RPC
+
+```
+centos:~ # vi
+```
+
+
+----
+
+## rabbitmq_management
+
+### Install Plugin
+
+
+```
+# for host
+centos:~ # rabbitmq-plugins enable rabbitmq_management
+centos:~ # curl http://localhost:15672
+centos:~ # curl http://localhost:15672/cli/rabbitmqadmin -o rabbitmqadmin
+centos:~ # chmod +x rabbitmqadmin
+
+# for docker
+centos:~ # docker exec -it rabbitmq rabbitmq-plugins enable rabbitmq_management
+```
+
+
+### Configure
+
+```
+centos:~ # vi /etc/rabbitmq/rabbitmq.config
+[
+ {rabbit,
+  [
+   {tcp_listeners, [5672]},
+%%   {loopback_users, [<<"guest">>]}   %% 把 <<"guest">> 拿掉, guest 即可從外面登入 
+   {loopback_users, []}
+  ]
+ }
+].
+```
+
+
+### Add Administrator
+
+```
+# add user
+centos:~ # rabbitmqctl add_user admin admin_password
+centos:~ # rabbitmqctl list_users
+
+# set permission
+centos:~ # rabbitmqctl set_permissions admin ".*" ".*" ".*"
+centos:~ # rabbitmqctl set_user_tags admin administrator
+centos:~ # rabbitmqctl list_permissions
+```
+
+
+### Web
+
+access http://rabbitmq_server:15672/
+
+
+### CLI rabbitmqadmin
+
+```
+centos:~ # wget http://localhost:15672/cli/rabbitmqadmin
+centos:~ # rabbitmqadmin --bash-completion > /etc/bash_completion.d/rabbitmqadmin
+
+# local
+centos:~ # rabbitmqadmin list exchanges
+
+# remote
+centos:~ # rabbitmqadmin -H <rabbitmq_server> -P 15672 -u <user> -p <password> -V / list exchanges
+```
+
+
+### Http API
+
+
+
+## Reference
+
+[RabbitMQ Tutorials](https://www.rabbitmq.com/getstarted.html)
+
+[RabbitMQ 中文文檔](http://rabbitmq.mr-ping.com)

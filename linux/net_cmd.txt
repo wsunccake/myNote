@@ -1,0 +1,78 @@
+Deprecated command			Replacement command
+arp							ip neighbor
+ifconfig					ip addr, ip link, ip -s (ip -stats)
+iptunnel					ip tunnel
+iwconfig					iw
+nameif						ip link, ifrename
+netstat						ss, ip route (netstat-r), ip -s link (netstat -i), ip maddr (netstat -g)
+route						ip route
+
+
+arp
+arp -a [host] 				ip n show
+arp -d [ip_addr] 			ip n del [ip_addr], ip neighbor flush [ip_addr]
+arp -i [int] 				ip n [add | chg | del | repl] dev [name]
+arp -s [ip_addr] [hw_addr]	ip n add [ip_addr] lladdr [mac_address] dev [device] nud [nud_state]
+
+ip n del 10.1.2.3 dev eth0
+ip n show dev eth0
+ip n add 10.1.2.3 lladdr 1:2:3:4:5:6 dev eth0 nud perm
+
+
+ifconfig
+ifconfig											ip a
+ifconfig [interface]								ip a show dev [interface]
+ifconfig [address_family]							ip -f [family] a
+ifconfig [interface] add [address/prefixlength]		ip a add [ip_addr/mask] dev [interface]
+ifconfig [interface] address [address]				ip a add [ip_addr/mask] dev [interface]
+
+
+ifconfig [interface] mtu [n]						ip link set dev [interface] mtu [n]
+ifconfig [interface] multicast						ip link set dev [interface] multicast on|off
+ifconfig [interface] [-]pointopoint
+ifconfig [interface] [-]promis						ip link set dev [interface] promisc on|off
+ifconfig [interface] txquelen [n]					ip link set dev [interface] txqueuelen|txqlen [n]
+ifconfig [interface] tunnel [address]				ip tunnel mode sit|ipip|gre
+ifconfig [interface] up|down						ip link set [interface] up|down
+
+ifconfig [interface] media [type]					ethtool
+ifconfig [interface] mem_start [address]
+ifconfig [interface] irq [address]
+ifconfig [interface] io_addr [address]
+
+
+ip link show dev eth0
+ip a add 10.11.12.13/8 dev eth0
+ip link set dev eth0 up
+ip link set dev eth0 mtu 1500
+ip link set dev eth0 address 00:70:b7:d6:cd:ef
+
+
+
+
+
+
+
+
+
+
+route
+route -A [family] [add] or route --[family] [add]
+route -e 
+route -F
+route [add|del] dev [interface]						ip route [add|chg|repl|del] dev [interface]
+route [add|del] [default] gw [gw]					ip route add default via [gw]
+route [add|del] -host							ip route [add|chg|repl|del] [ip_addr] via [ip_addr]
+route [add|del] -net
+
+
+route [add|del] metric [n]						ip route [add|chg|repl|del] metric [number] 
+route [add|del] mss [bytes]						ip route [add|chg|repl|del] advmss [number]
+route [add||del] window [n]						ip route [add|chg|repl|del] window [W]
+route [adddel] reject							ip route add prohibit [network_addr]
+
+
+ip route add 10.23.30.0/24 via 192.168.8.50
+ip route del 10.28.0.0/16 via 192.168.10.50 dev eth0
+ip route chg default via 192.168.25.110 dev eth1
+ip route get 10.23.30.1
