@@ -23,6 +23,25 @@ sh-4.2# /sbin/reboot -f
 
 ### HD
 
+使用  smartctl 確認 SSD 使用狀況, Raw_Read_Error_Rate, Read_Soft_Error_Rate, Soft_Read_Error_Rate
+
+```
+Linux:~ # smartctl -i /dev/sda
+Linux:~ # smartctl -s on|off /dev/sd
+Linux:~ # smartctl -x|-a /dev/sda
+Linux:~ # smartctl -d sat+megaraid,0 -x /dev/sda 
+```
+
+MegaCli
+
+```
+Linux:~ # rpm -ivh MegaCli-8.07.14-1.noarch.rpm
+Linux:~ # alias megacli='/opt/MegaRAID/MegaCli/MegaCli64'
+Linux:~ # megacli -AdpAllInfo -aALL | grep Disks
+Linux:~ # megacli -ldinfo -lALL -aALL
+Linux:~ # megacli -pdlist -aALL | grep state
+Linux:~ # megacli -AdpEventLog -GetLatest 100 -f events.log -aALL
+```
 
 #### 清除 MBR
 
@@ -80,6 +99,15 @@ StartupWMClass=jetbrains-idea
 ```
 
 ### Other
+
+stty 設定終端機顯示行列字數
+
+```
+Linux:~ # stty
+Linux:~ # stty -a
+Linux:~ # stty columns 200
+```
+
 
 ----
 
