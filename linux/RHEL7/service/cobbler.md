@@ -122,3 +122,26 @@ rhel:~ # cobbler profile report
 
 rhel:~ # cobbler system add --name=test-pxe --profile=CentOS7-x86_64 --ip-address=192.168.100.51 --mac=08:00:27:01:02:03 --interface=eth0
 ```
+
+
+# Mirantis
+
+```
+# node manage
+fuel:~ # fuel node --list
+fuel:~ # fuel node --delete --node <node_id>
+fuel:~ # fuel node --delete-from-db --node <node_id>
+
+# task manage
+fuel:~ # fuel task --list
+fuel:~ # fuel task --delete --task
+
+# environment manage
+fuel:~ # fuel env --list
+
+# provision
+fuel:~ # cobbler system list
+fuel:~ # cobbler system remove --name=<node>
+fuel:~ # cobbler sync
+fuel:~ # cobbler list
+```

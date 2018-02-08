@@ -58,7 +58,7 @@ rhel:~ # yum info <pkg>
 rhel:~ # yumdb info <pkg>
 
 # install
-rhel:~ # yum install <pkg>
+rhel:~ # yum install <pkg> | <pkg>-<ver>
 rhel:~ # yum install -y <pkg>
 rhel:~ # yum localinstall <rpm_pkg>
 
@@ -72,6 +72,7 @@ rhel~: # yum upgrade -y --nogpgcheck
 
 # download package
 rhel:~ # yumdownloader <pkg>
+rhel:~ # yum --downloadonly <pkg>
 ```
 
 下載的 package 放在 /var/cache/yum/$basearch/$releasever/packages 目錄下
