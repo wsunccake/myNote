@@ -24,6 +24,9 @@ centos:~ # yum install mongodb-org
 centos:~ # systemctl start mongodb
 centos:~ # systemctl enable mongodb
 
+# default port
+centos:~ # netstat -lutnp | grep 27017
+
 # run mongo client
 centos:~ # monogo
 ```
@@ -32,7 +35,20 @@ centos:~ # monogo
 
 ```bash
 centos:~ # docker pull mongo
-centos:~ # docker run -d --name mongo mongo
+centos:~ # docker run -d --name mongo [-v /path/datadir:/data/db] mongo
+```
+
+---
+
+## Backup & Restore
+
+```bash
+# backup
+centos:~ # mongodump [-h <hostname>[:<port>]
+centos:~ # ls dump                # create dump folder to dump data
+
+# restore
+centos:~ # mongorestore           # load dump folder to database
 ```
 
 ---
@@ -73,7 +89,8 @@ use <databases>
 show collections
 db.<collection>.find().pretty()
 db.<collection>.aggregate({"\$match": {"startTime": {\$gt: ISODate("2018-01-01"), \$lt: ISODate("2018-01-31")}}}, 
-                          {"\$group": {"_id": "\$_id"}}).
+                          {"\$group": {"_id": "\$_id"}},
+                          {"\$sort": {count: -1}}).
                 limit(1).
                 pretty()
 EOF
