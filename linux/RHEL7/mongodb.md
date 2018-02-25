@@ -1,4 +1,4 @@
-# mongoDB
+# MongoDB
 
 ![mongodb](https://webassets.mongodb.com/_com_assets/global/mongodb-logo-white.png)
 
@@ -28,6 +28,7 @@ centos:~ # systemctl enable mongodb
 centos:~ # netstat -lutnp | grep 27017
 
 # run mongo client
+centos:~ # monogo -version
 centos:~ # monogo
 ```
 
@@ -35,7 +36,7 @@ centos:~ # monogo
 
 ```bash
 centos:~ # docker pull mongo
-centos:~ # docker run -d --name mongo [-v /path/datadir:/data/db] mongo
+centos:~ # docker run -d --name mongo [-v /path/datadir:/data/db] [-p 27017:27017] mongo
 ```
 
 ---
@@ -60,7 +61,8 @@ centos:~ # mongorestore           # load dump folder to database
 > help                  // show help
 > show dbs              // show database
 > use <database>        // use database
-> show collections      // after useing database, show collectio/table
+> db                    // show current database
+> show collections      // after useing database, show collection/table
 
 > db.help()
 > db.stats()
@@ -68,12 +70,6 @@ centos:~ # mongorestore           # load dump folder to database
 // query
 > db.<collection>.findOne()
 > db.<collection>.find().limit(1).pretty()
-> db.<collection>.find({<field>: <value>, ...}, {<field>: 1, ...}).limit(1).pretty()
-                        ^                        ^
-                        query field              show field
-> db.<collection>.find({<field>: <value>, ...}, {<field>: 0, ...}).sort(<field>: 1).pretty()
-                        ^                        ^
-                        query field              not show field
 ```
 
 ```bash
@@ -86,6 +82,7 @@ centos:~ # cat ex.sh
 
 docker exec -i mongo mongo << EOF
 use <databases>
+db
 show collections
 db.<collection>.find().pretty()
 db.<collection>.aggregate({"\$match": {"startTime": {\$gt: ISODate("2018-01-01"), \$lt: ISODate("2018-01-31")}}}, 
@@ -97,6 +94,7 @@ EOF
 
 centos:~ # sh ex.sh
 ```
+
 
 ---
 
