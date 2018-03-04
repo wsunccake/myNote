@@ -70,12 +70,12 @@
 ### [find](https://docs.mongodb.com/manual/reference/method/db.collection.find/)
 
 ```sql
-> db.<collection>.find({<field>: <value>, ...}, {<field>: 1, ...}).limit(1).pretty()
+                                                                      not show field
+                                                                      v
+> db.<collection>.find({<field>: <value>, ...}, {<field>: 1, <field>: 0,...}).limit(1).pretty()
                         ^                        ^
                         query                   projection: show field
-> db.<collection>.find({<field>: <value>, ...}, {<field>: 0, ...}).sort(<field>: 1).pretty()
-                        ^                        ^
-                        query                   projection: not show field
+> db.<collection>.find({<field>: <value>, ...}, {<field>: {$slice: [i, j]}, ...}).sort(<field>: 1).pretty()
 ```
 
 `example`
@@ -93,15 +93,17 @@
 > db.fruit.findOne()
 > db.fruit.find()
 > db.fruit.find({qty: 5})
-> db.fruit.find({}, {_id: 1})                 // show field
-> db.fruit.find({qty: {$gte: 5}})             // comparsion operator: $eq, $gt, $gte, $lt, $lte, $in, $ne, $nin
-> db.fruit.find({qty: {$gte: 5}}, {_id: 1})  
-> db.fruit.find({_id: "apples"})              // search string
-> db.fruit.find({_id: /an/})                  // regex
-> db.fruit.find({$or: [                       // logical operator: $and, $not, $or, $nor
+> db.fruit.find({}, {_id: 1})                      // show field
+> db.fruit.find({qty: {$gte: 5}})                  // comparsion operator: $eq, $gt, $gte, $lt, $lte
+> db.fruit.find({qty: {$gte: 5}}, {_id: 1})
+> db.fruit.find({_id: "apples"})                   // search string
+> db.fruit.find({_id: {$in: ["apples", "grape"]})  // comparsion operator: $in, $ne, $nin
+> db.fruit.find({_id: /an/})                       // regex
+> db.fruit.find({$or: [                            // logical operator: $and, $not, $or, $nor
                        {qty: {$gt: 5}},
                        {_id: "apples"}
 ]})
+> db.fruit.find({"qty.ordered": {$exists: true}})  // check field exists or not
 
 // chain
 > db.fruit.find().pretty()
@@ -117,6 +119,11 @@
 > db.fruit.find().forEach(function(myDoc) {
   print("fruite: " + myDoc._id);
 });
+
+// $size
+// $elemMatch
+// $where
+// $regex
 ```
 
 ### [aggregate](https://docs.mongodb.com/manual/reference/method/db.collection.aggregate/)
@@ -140,7 +147,7 @@
 ```
 
 ```
-{author: "dave", score: 80, views: 100},
+{author: "dave", score: 80, views: 100, otherAuthor: ["john", "mary"]},
 {author: "dave", score: 85, views: 521},
 {author: "ahn",  score: 60, views: 1000},
 {author: "li",   score: 55, views: 5000},
@@ -155,20 +162,55 @@
 
 // 配合 group 做分群
 > db.articles.aggregate([
-                       {$match: {author: "dave"}},
-                       {$group: {_id: "$author",
-                                 count: {$sum: 1},
-                                 total_views: {$sum: "$views"}
-                                }
-                        }
+                         {$match: {author: "dave"}},
+                         {$group: {_id: "$author",
+                                   count: {$sum: 1},
+                                   totalViews: {$sum: "$views"}
+                                  }
+                         }
+])
+
+// 配合 project 指定處理 field
+> db.articles.aggregate([{
+                          $match: {views: {$gt: 500}}},
+                          $project: {_id: 1}
 ])
 ```
 
 [$group](https://docs.mongodb.com/manual/reference/operator/aggregation/group/)
 
-$lookup
+```sql
+> db.articles.aggregate([
+                         {$group: {_id: null,
+                                   totalViews: {$sum: "$views"},
+                                   averageSore: {$avg: "$score"}
+                                  }
+                         }
+])
+```
 
-$sort
+[$project](https://docs.mongodb.com/manual/reference/operator/aggregation/project/)
 
-$unwind 
+```sql
+> db.articles.aggregate({$project: {_id: 1, author: 1}})
+```
 
+[$unwind](https://docs.mongodb.com/manual/reference/operator/aggregation/unwind/)
+
+[$out](https://docs.mongodb.com/manual/reference/operator/aggregation/out/)
+
+
+[$lookup](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/)
+
+[$sort](https://docs.mongodb.com/manual/reference/operator/aggregation/sort/)
+
+
+
+---
+
+## Update/Modify
+
+
+---
+
+## Delete/Remove

@@ -1,3 +1,9 @@
+# install
+
+```bash
+centos:~ # yum install python34 python34-pip
+```
+
 # pip
 
 ```
