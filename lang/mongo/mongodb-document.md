@@ -67,7 +67,7 @@
 
 ## Read/Query
 
-### [find](https://docs.mongodb.com/manual/reference/method/db.collection.find/)
+### [find](https://docs.mongodb.com/manual/reference/method/db.collection.find/), [findOne](https://docs.mongodb.com/manual/reference/method/db.collection.findOne/)
 
 ```sql
                                                                       not show field
@@ -132,7 +132,7 @@
 > db.<collection>.aggregate(<pipeline>, <options>)
 ```
 
-### [aggregation-pipeline](https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline/)
+#### [aggregation-pipeline](https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline/)
 
 ```sql
 > db.<collection>.aggregate( [ { <stage> }, ... ] )
@@ -147,11 +147,11 @@
 ```
 
 ```
-{author: "dave", score: 80, views: 100, otherAuthor: ["john", "mary"]},
+{author: "dave", score: 80, views: 100, coAuthor: ["john", "mary"]},
 {author: "dave", score: 85, views: 521},
 {author: "ahn",  score: 60, views: 1000},
 {author: "li",   score: 55, views: 5000},
-{author: "annT", score: 60, views: 50},
+{author: "ann", score: 60, views: 50, coAuthor: ["allen"]},
 {author: "li",   score: 94, views: 999},
 {author: "ty",   score: 95, views: 1000}
 ```
@@ -197,20 +197,118 @@
 
 [$unwind](https://docs.mongodb.com/manual/reference/operator/aggregation/unwind/)
 
+```sql
+> db.articles.aggregate({$match: {coAuthor: {$exists: true}}})
+
+> db.articles.aggregate([
+                       {$match: {coAuthor: {$exists: true}}},
+                       {$unwind: "$coAuthor"}
+])
+```
+
 [$out](https://docs.mongodb.com/manual/reference/operator/aggregation/out/)
 
+```sql
 
-[$lookup](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/)
+> show collections
+
+> db.articles.aggregate([
+                       {$match: {coAuthor: {$exists: true}}},
+                       {$out: "otherAuthor"}
+])
+
+> show collections
+```
 
 [$sort](https://docs.mongodb.com/manual/reference/operator/aggregation/sort/)
 
+```sql
+> db.articles.aggregate([
+                       {$match: {views: {$lt: 1000}}},
+                       {$sort: {author: 1}},
+])
+```
+
+[$limit](https://docs.mongodb.com/manual/reference/operator/aggregation/limit/)
+
+```sql
+> db.articles.aggregate({$limit : 2})
+```
+
+[$lookup](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/)
 
 
 ---
 
 ## Update/Modify
 
+### [update](https://docs.mongodb.com/manual/reference/method/db.collection.update/)
+
+```sql
+> db.collection.update(
+   <query>,
+   <update>,
+   <options>
+)
+```
+
+#### [field update operators](https://docs.mongodb.com/manual/reference/operator/update-field/)
+
+
+```sql
+{
+  _id: 100,
+  sku: "abc123",
+  quantity: 250,
+  instock: true,
+  reorder: false,
+  details: { model: "14Q2", make: "xyz" },
+  tags: [ "apparel", "clothing" ],
+  ratings: [ { by: "ijk", rating: 4 } ]
+}
+```
+
+```sql
+> db.products.update({_id: 100}, {sku: xyz100})
+```
+
+[$set](https://docs.mongodb.com/manual/reference/operator/update/set/#up._S_set)
+
+```sql
+> db.products.update({_id: 100}, {$set: {sku: xyz100}})
+```
+
+[$unset](https://docs.mongodb.com/manual/reference/operator/update/unset/)
+
+```sql
+> db.products.update({_id: 100}, {$unset: {quantity: ""}})
+```
+
+[$inc](https://docs.mongodb.com/manual/reference/operator/update/inc/)
+
+```sql
+> db.products.update({_id: 100}, {$inc: {quantity: 100}})
+```
+
+#### [array update operators](https://docs.mongodb.com/manual/reference/operator/update-array/)
+
+[$addToSet](https://docs.mongodb.com/manual/reference/operator/update/addToSet/)
+
+[$push](https://docs.mongodb.com/manual/reference/operator/update/push/)
+
+[$pop](https://docs.mongodb.com/manual/reference/operator/update/pop/)
+
+[$pull](https://docs.mongodb.com/manual/reference/operator/update/pull/)
+
 
 ---
 
 ## Delete/Remove
+
+### [remove](https://docs.mongodb.com/manual/reference/method/db.collection.remove/)
+
+```sql
+> db.articles.remove({})
+
+> db.fruit.remove({qty: {$gt: 20}})
+```

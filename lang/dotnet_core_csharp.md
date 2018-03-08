@@ -67,7 +67,7 @@ centos:~/myApp # ./bin/Debug/netcoreapp2.0/linux-x64/myApp
 
 ### 字串/String
 
-```
+```cs
 string name = "C#";
 string message = "Hello " + name;
 Console.WriteLine(message);
@@ -89,7 +89,7 @@ Console.WriteLine(message.Contains("Hello"));
 
 `int`
 
-```
+```cs
 int a = 7;
 int b = 4;
 int c = 3;
@@ -103,7 +103,7 @@ int min = int.MinValue;
 
 `double`
 
-```
+```cs
 double a = 5;
 double b = 4;
 double c = 2;
@@ -115,7 +115,7 @@ double min = double.MinValue;
 
 `decimal`
 
-```
+```cs
 decimal min = decimal.MinValue;
 decimal max = decimal.MaxValue;
 
@@ -126,13 +126,82 @@ decimal c = 1.0M;
 decimal d = 3.0M;
 ```
 
+### 集合/Collection
+
+`array`
+
+```cs
+string[] weekDays = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+
+for (int i = 0; i < weekDays.Length; i++) {Console.WriteLine(weekDays[i]);}
+foreach (string day in weekDays) {Console.WriteLine(day);}
+
+int[,] array2D = new int[,] { { 1, 2 }, { 3, 4 }, { 5, 6 }, { 7, 8 } };
+for (int i = 0; i < array2D.GetLength(0); i++)
+{
+    for (int j = 0; j < array2D.GetLength(1); j++) {Console.WriteLine(array2D[i, j]);}
+}
+foreach (int i in array2D) {Console.WriteLine(i);}
+
+```
+
+`list`
+
+```cs
+using System;
+using System.Collections.Generic;
+
+namespace myApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            List<string> students = new List<string>();
+            students.Add("John");
+            students.Add("Mary");
+
+            foreach (string student in students) {Console.WriteLine(student);}
+            Console.WriteLine(String.Join(",", students.ToArray()));
+
+            students.AddAt(0);
+            students.Add("Mary");
+        }
+    }
+}
+
+```
+
+`dictionary`
+
+```cs
+using System;
+using System.Collections.Generic;
+
+namespace myApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Dictionary<string, string> openWith = new Dictionary<string, string>();
+            openWith.Add("txt", "notepad.exe");
+            openWith.Add("bmp", "paint.exe");
+            
+            foreach (var item in openWith) {Console.WriteLine("key: " + item.Key + ", value: " + item.Value);}
+        }
+    }
+}
+```
+
+
 ---
 
 ## 控制流程
 
 ### if/else
 
-```c#
+```cs
 using System;
 
 namespace myApp
@@ -159,7 +228,7 @@ namespace myApp
 }
 ```
 
-```c#
+```cs
 using System;
 
 namespace myApp
@@ -185,7 +254,7 @@ namespace myApp
 }
 ```
 
-```c#
+```cs
 using System;
 using System.IO;
 

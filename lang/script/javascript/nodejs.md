@@ -1,4 +1,6 @@
-# Node.js #
+# Node.js
+
+## Introduction
 
 Node.js 是一個事件驅動 I/O 伺服端 JavaScript 環境, 基於Google的V8引擎. 目的是為了提供撰寫可擴充網路程式, 如 Web 服務. 第一個版本由 Ryan Dahl 於 2009年 釋出, 後來, Joyent 僱用了 Dahl, 並協助發展Node.js
 其他程式語言的類似開發環境, 包含T wisted 於 Python, Perl Object Environment 於 Perl, libevent 於 C, 和 EventMachine 於 Ruby. 與一般 JavaScript 不同的地方, Node.js 並不是在 Web 瀏覽器上執行, 而是一種在伺服器上執行的 Javascript 伺服端 JavaScript. Node.js 實作了部份 CommonJS.
@@ -8,9 +10,19 @@ Node.js 是一個事件驅動 I/O 伺服端 JavaScript 環境, 基於Google的V8
 [Node.js wiki](http://zh.wikipedia.org/wiki/Node.js)
 
 
-### 基本操作 ###
+---
 
-一般執行 nodejs 可分為三種方式, Command, REPL, Script. 各有各的方便之處. Command 適合一次性執行; REPL 適合 debug; Script 適合程式開發. 使用到的環境變數 NODE\_PATH, NODE\_MODULE\_CONTEXTS 和 NODE\_DISABLE\_COLORS.
+## Basic
+
+一般執行 nodejs 可分為三種方式, Command, REPL, Script. 各有各的方便之處.
+
+Command 適合一次性執行;
+
+REPL 適合 debug;
+
+Script 適合程式開發.
+
+使用到的環境變數 NODE\_PATH, NODE\_MODULE\_CONTEXTS 和 NODE\_DISABLE\_COLORS.
 
 | variable                | description                        |
 | ----------------------- | ---------------------------------- |
@@ -19,30 +31,104 @@ Node.js 是一個事件驅動 I/O 伺服端 JavaScript 環境, 基於Google的V8
 | NODE\_DISABLE\_COLORS   | 設定為 1 時, REPL 則不顯示顏色         |
 
 
+---
 
-#### Command ####
+## Install
 
-	linux:~ $ node -e 'console.log("Hello, %s", "Nodejs");'
+`package`
+
+```bash
+centos:~ # yum install nodejs
+centos:~ # node -v
+```
+
+`docker`
+
+```bash
+centos:~ # docker pull node
+centos:~ # cat package.json
+{
+  "name": "docker_web_app",
+  "version": "1.0.0",
+  "description": "Node.js on Docker",
+  "author": "First Last <first.last@example.com>",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.1"
+  }
+}
+
+centos:~ # cat server.js
+'use strict';
+
+const express = require('express');
+
+// Constants
+const PORT = 8080;
+const HOST = '0.0.0.0';
+
+// App
+const app = express();
+app.get('/', (req, res) => {
+  res.send('Hello world\n');
+});
+
+app.listen(PORT, HOST);
+console.log(`Running on http://${HOST}:${PORT}`);
+
+centos:~ # cat Dockerfile 
+FROM node
+
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install
+COPY . .
+
+EXPOSE 8080
+CMD [ "npm", "start" ]
+
+centos:~ # docker build -t node-app .
+centos:~ # docker run -d -p 8080:8080 --name node node-app
+centos:~ # curl http://127.0.0.1:8080
+```
 
 
-#### REPL (Read–Eval–Print Loop) ####
+---
 
-	linux:~ $ node
-	> console.log("Hello Node.js");
+## Hello
+
+`command`
+
+```bash
+centos:~ # node -e 'console.log("Hello, %s", "Nodejs");'
+
+centos:~ # echo 'console.log("Hello NodeJS");' | node -i
+```
+
+`script`
+
+```bash
+centos:~ # cat hello.js
+console.log("Hello NodeJS");
+
+centos:~ # node hello.js
+```
+
+`interactive mode`
+
+```bash
+centos:~ # node
+> console.log("hello, world");
+> process.exit()
+```
 
 
-#### Script  ####
+---
 
-[`hi.js`](./example/nodejs/ex1/hi.js)
-
-	console.log("Hello Node.js");
-
-執行
-
-	linux:~ $ node hi.js
-
-
-#### npm ####
+## npm 
 
 npm 是 node.js 的套件管理工具, 在使用時可分為 global mode 和 local mode 兩種模式. global mode 是系統安裝, 安裝移除時需要 root 權限, 使用 global mode 安裝套件時, 所有使用者都可使用套件; local mode 是使用者個別安裝, 使用 local mode 安裝套件時, 只有該使用者都可使用該套件. node.js 預設為 local mode.
 
@@ -53,87 +139,89 @@ npm 是 node.js 的套件管理工具, 在使用時可分為 global mode 和 loc
 
 使用方式
 
-	# help
-	linux:~ $ npm help # 顯示說明文件
-	linux:~ $ npm help install # 顯示指令說明文件
+```bash
+# help
+linux:~ $ npm help # 顯示說明文件
+linux:~ $ npm help install # 顯示指令說明文件
 
-	# list
-	linux:~ $ npm list # 顯示已安裝套件
-	linux:~ $ npm list -g # 顯示系統已安裝套件
+# list
+linux:~ $ npm list # 顯示已安裝套件
+linux:~ $ npm list -g # 顯示系統已安裝套件
 
-	# search
-	linux:~ $ npm search pkg # 搜尋套件
+# search
+linux:~ $ npm search pkg # 搜尋套件
 
-	# install
-	linux:~ $ npm install pkg # 從 repository 安裝套件
-	linux:~ $ npm install -g pkg # 安裝套件到系統預設目錄
-	linux:~ $ npm install ./pkg.tar.gz # 直接安裝套件
-	linux:~ $ npm install git+https://git@github.com/abc/pkg.git # 從 github 安裝套件
-	linux:~ $ npm install git+ssh://git@github.com/abc/pkg.git
-	linux:~ $ npm install git://github.com/abc/pkg.git#v0.1 # 從 github 安裝套件並指定版本
+# install
+linux:~ $ npm install pkg # 從 repository 安裝套件
+linux:~ $ npm install -g pkg # 安裝套件到系統預設目錄
+linux:~ $ npm install ./pkg.tar.gz # 直接安裝套件
+linux:~ $ npm install git+https://git@github.com/abc/pkg.git # 從 github 安裝套件
+linux:~ $ npm install git+ssh://git@github.com/abc/pkg.git
+linux:~ $ npm install git://github.com/abc/pkg.git#v0.1 # 從 github 安裝套件並指定版本
 
+# uninstall
+linux:~ $ npm uninstall pkg
 
-	# uninstall
-	linux:~ $ npm uninstall pkg
+# upgrade
+linux:~ $ npm upgrade pkg
 
-	# upgrade
-	linux:~ $ npm upgrade pkg
+# other
+linux:~ $ npm info pkg # 顯示套件資訊
+linux:~ $ npm veiw pkg # 同上
 
-	# other
-	linux:~ $ npm info pkg # 顯示套件資訊
-	linux:~ $ npm veiw pkg # 同上
+linux:~ $ npm link pkg # 將 local pkg link to global pkg
 
-	linux:~ $ npm link pkg # 將 local pkg link to global pkg
+linux:~/package $ npm # 建立可發佈 package
 
-	linux:~/package $ npm # 建立可發佈 package
-
-	linux:~/package $ npm publish # 發佈 package
-	linux:~/package $ npm unpublish
+linux:~/package $ npm publish # 發佈 package
+linux:~/package $ npm unpublish
+```
 
 在 somepackage 目錄下建立名稱為 index.js
 
-[`index.js`](./example/nodejs/ex_module/index.js)
 
-	// somepackage/index.js
-	
-	exports.hello = function() {
-	  console.log('Hello.');
-	};
+```bash
+linux:~/somepackage $ cat index.js
+exports.hello = function() {
+    console.log('Hello.');
+};
 
-在該目錄下
+# 建立 package.json 紀錄 package 資訊, 填空需輸入 none
+linux:~/somepackage $ npm init 
+...
 
-	linux:~/somepackage $ npm init # 建立 package.json 紀錄 package 資訊, 填空需輸入 none
-	...
+linux:~/somepackage $ cat package.json
+{
+    "name": "somepackage",
+    "version": "0.0.1",
+    "description": "some pkg",
+    "main": "index.js",
+    "scripts": {
+        "test": "none"
+    },
+    "repository": {
+        "type": "git",
+        "url": "none"
+    },
+    "keywords": [
+        "test"
+    ],
+    "author": "abc",
+    "license": "ISC"
+}
 
-	linux:~/somepackage $ cat package.json
-	{
-	  "name": "somepackage",
-	  "version": "0.0.1",
-	  "description": "some pkg",
-	  "main": "index.js",
-	  "scripts": {
-	    "test": "none"
-	  },
-	  "repository": {
-	    "type": "git",
-	    "url": "none"
-	  },
-	  "keywords": [
-	    "test"
-	  ],
-	  "author": "abc",
-	  "license": "ISC"
-	}
-
-	linux:~ $ npm install somepackage # 安裝該套件
-
+ # 安裝該套件
+linux:~ $ npm install somepackage
+```
 
 [NPM 套件管理工具](https://github.com/nodejs-tw/nodejs-little-book/blob/master/zh-tw/node_npm.rst)
 
 [npm 基本指令](http://dreamerslab.com/blog/tw/npm-basic-commands/)
 
 
-#### Module and Package (CommonJS) ####
+---
+
+#### Module and Package (CommonJS)
 
 [`my_module.js`](./example/nodejs/ex_module/my_module.js)
 
