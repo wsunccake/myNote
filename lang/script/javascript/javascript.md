@@ -8,18 +8,20 @@ JavaScript 一開始發展是在瀏覽器上, 所以在只能在瀏覽器執行,
 
 執行 JavaScript 範例
 
-`rhino`
+`browser`
 
-```bash
-# REPL
-linux:~ # java -jar js.jar
-js> console.log('Hello JavaScript');
+```html
+<!DOCTYPE html>
+<html>
+<head>
+</head>
 
-# script
-linux:~ # cat helle.js
-console.log('Hello JavaScript');
-
-linux:~ # java -jar js.jar hello.js
+<body>
+<script>
+    console.log('Hello JavaScript');
+</script>
+</body>
+</html>
 ```
 
 `Node.JS`
@@ -41,6 +43,41 @@ console.log('Hello JavaScript');
 linux:~ # node hello.js
 ```
 
+`rhino`
+
+```bash
+# REPL
+linux:~ # java -jar js.jar
+js> console.log('Hello JavaScript');
+
+# script
+linux:~ # cat helle.js
+console.log('Hello JavaScript');
+
+linux:~ # java -jar js.jar hello.js
+```
+
+
+---
+
+## Variable
+
+### var
+
+```javascript
+var var1 = 123;
+var var2;
+```
+
+### let
+
+```javascript
+for (let i in [1, 2, 3]) {
+    console.log(i);
+}
+```
+
+
 ---
 
 ## Data Type
@@ -50,7 +87,7 @@ JavaScript 中的變數分為 numerical, string, boolean 和 object type 有 arr
 
 ### String
 
-```js
+```javascript
 let single = 'single-quoted';
 let double = "double-quoted";
 let backticks = `backticks`;
@@ -73,7 +110,6 @@ console.log(`1 + 2 = ${sum(1, 2)}.`);
 // search string
 "JavaScript,PHP,Python,Ruby".indexOf("JavaScript");
 "JavaScript,PHP,Python,Ruby".indexOf("js");
-
 "JavaScript,PHP,Python,Ruby".includes("JavaScript");
 "JavaScript,PHP,Python,Ruby".includes("js");
 
@@ -99,7 +135,7 @@ parseFloat("123.0");
 
 ### Number
 
-```js
+```javascript
 let num1 = 1;          // 十進位
 let num2 = 0xff;       // 十六進位
 let num3 = 033;        // 八進位
@@ -136,46 +172,130 @@ Infinity == Infinity;       // true
 
 ### Boolean
 
-```js
+```javascript
 // 0 or Nan is false, 1 is true
-var bl1 = true;
+var bool1 = true;
+var bool2 = false;
 
 // 轉Boolean 
-Boolean(str3); 
-!!num1;
+Boolean("true"); 
+!!1;
 ```
 
 ### Array
 
-```js
-// array to string
-["do", "re", "mi"].join(" ");
+```javascript
+var arr1 = [1, 2, 3];
+var arr2 = new Array(1, 2, 3);
+var fruits = ["Apple", "Orange", "Pear"];
+var emptyArray1 = [];            // empty array
+var emptyArray2 = new Array;     // empty array
+
+[1, 2, 3].length;
+
+fruits.pop();             // remove last element
+fruits.push("Pear");      // append
+fruits.shift();           // remove first element
+fruits.unshift('Apple');  // add first elemnt
+
+[2, 3, 1].sort();
+[2, 3, 1].reverse();
+
+["do", "re", "mi"].join(" ");   // array to string
+"do,re,mi".split(',');          // string to array
+["do", "re", "mi"].concat("fa", ["so", "ra"])
+
+// loop
+for (let i = 0; i < fruits.length; i++) {
+    console.log(fruits[i]);
+}
+
+for (let key in fruits) {
+    console.log(fruits[key]);
+}
+
+for (let fruit of fruits) {
+    console.log(fruit);
+}
+
+// for each
+["Bilbo", "Gandalf", "Nazgul"].forEach(function(item, index, array) {
+    alert(`${item} is at index ${index} in ${array}`);
+});
+
+["Bilbo", "Gandalf", "Nazgul"].forEach(alert);
+
+["Bilbo", "Gandalf", "Nazgul"].forEach((item, index, array) => {
+    alert(`${item} is at index ${index} in ${array}`);
+});
+
+// map
+var result = ["Bilbo", "Gandalf", "Nazgul"].map(function(item, index, array) {
+    return item.length;
+});
+
+["Bilbo", "Gandalf", "Nazgul"].map(item => item.length)
+
+// find
+[1, 2, 3, 4].find(function(item, index, array) {
+    if (item > 2) return true
+});
+
+[1, 2, 3, 4].find(item => item > 2);
+
+// filter
+var users = [
+  {id: 1, name: "John"},
+  {id: 2, name: "Pete"},
+  {id: 3, name: "Mary"}
+];
+
+var someUsers = users.filter((function(item, index, array) {
+	return item.id < 3
+});
+
+users.filter(item => item.id < 3);
+
+//reduce
+[1, 2, 3, 4, 5].reduce(function(previousValue, item, index, arr) {
+	return previousValue + item
+}, inital);
+
+[1, 2, 3, 4, 5].reduce((sum, current) => sum + current, 0);
 ```
 
 ### Object
-	
-	// String 處理
-	str1.toLowerCase();
-	str2.toUpperCase();
-	" lorem ".trim();
-	" lorem".trimLeft();
-	"lorem ".trimRight();
-	"lorem ipsum".substr(6, 5);
-	"value: " + 8;
 
-	"do re mi".split(" "); // string轉array
-	
+```javascript
+var user = {
+  name: "John",
+  age: 30
+};
+user["money"] = 500;
+var emptyObject1 = {};              // empty object
+var emptyObject2 = new Object();    // empty object
 
-`object`
+// exist
+user.noSuchProperty === undefined;
+"key" in object;
+```
+
+```javascript
+// 定義全域變數 
+var MYGLOBAL = {} || MYGLOBAL;
+MYGLOBAL.var1 = "xyz";
+MYGLOBAL.var2 = 123;
+```
 
 
-	
+---
 
-	
-	// 定義全域變數 
-	var MYGLOBAL = {} || MYGLOBAL;
-	MYGLOBAL.var1 = "xyz";
-	MYGLOBAL.var2 = 123;
+## Condition
+
+### if/else
+
+
+### for	
 
 
 ---

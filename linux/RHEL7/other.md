@@ -29,3 +29,19 @@ centos:~ # echo "fortune | cowsay -pn" >> /etc/profile
 # myself alway show info when login
 centos:~ # echo "fortune | cowsay -pn" >> ~/.bashrc
 ```
+
+## mail
+
+```bash
+centos:~ # mail -s "title" someone@example.com << EOF
+message body
+EOF
+
+centos:~ # echo "message body" | mail -s "title" someone@example.com [-aFrom:sender@exmaple.com]
+```
+
+## usb
+
+```bash
+echo "blacklist usb-storage" >> /etc/modprobe.d/blacklist.conf
+```

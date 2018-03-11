@@ -1,6 +1,6 @@
 # localectl #
 
-```
+```bash
 rhel:~ # localectl status
 rhel:~ # localectl help
 
@@ -11,7 +11,7 @@ rhel:~ # systemctl start systemd-localed
 
 ## System Locale ##
 
-```
+```bash
 # setup
 rhel:~ # localectl list-locales
 rhel:~ # localectl set-locale LANG=zh_TW.utf8
@@ -29,7 +29,7 @@ rhel:~ # locale --all
 
 ## Keyboard Layout ##
 
-```
+```bash
 # setup
 rhel:~ # localectl list-keymaps
 rhel:~ # localectl set-keymap us
@@ -49,7 +49,7 @@ rhel:~ # loadkeys -d
 
 ## Date And Time ##
 
-```
+```bash
 rhel:~ # timedatectl status
 rhel:~ # timedatectl help
 
@@ -69,7 +69,7 @@ rhel:~ # export TZ=Asia/Taipei
 
 ## date ##
 
-```
+```bash
 rhel:~ # date -s HH:MM:SS
 rhel:~ # date -s YYYY-MM-DD
 rhel:~ # date -s YYYY-MM-DD HH:MM:SS
@@ -78,7 +78,7 @@ rhel:~ # date -s YYYY-MM-DD HH:MM:SS
 
 ## hwclock ##
 
-```
+```bash
 rhel:~ # hwclock -w
 rhel:~ # hwclock -s
 ```
@@ -95,32 +95,32 @@ rhel:~ # hwclock -s
 
 ## User ##
 
-```
-rhel:~ # useradd user # 新增使用者
-rhel:~ # useradd -u uid -g gid user # 新增使用者, 且指定 uid, gid
-rhel:~ # useradd -N -G group1,group2 user # 將 user 加入到 group1, group2, ... 但沒有 upg
-rhel:~ # useradd -e YYYY-MM-DD user # 帳號過期 YYYY-MM-DD (-1: 永不過期)
-rhel:~ # useradd -f DD user # DD 日後要改密碼 (0: 馬上過期, -1: 永不過期)
-rhel:~ # useradd -s /sbin/nologin -r sysuser # 新增系統使用者, 禁止使用者登入
+```bash
+rhel:~ # useradd user                               # 新增使用者
+rhel:~ # useradd -u uid -g gid user                 # 新增使用者, 且指定 uid, gid
+rhel:~ # useradd -N -G group1,group2 user           # 將 user 加入到 group1, group2, ... 但沒有 upg
+rhel:~ # useradd -e YYYY-MM-DD user                 # 帳號過期 YYYY-MM-DD (-1: 永不過期)
+rhel:~ # useradd -f DD user                         # DD 日後要改密碼 (0: 馬上過期, -1: 永不過期)
+rhel:~ # useradd -s /sbin/nologin -r sysuser        # 新增系統使用者, 禁止使用者登入
 
-rhel:~ # usermod -G group user # user 加入到 group, 原本的已加入的群組都會被移除
-rhel:~ # usermod -aG group user # user 加入到 group, 除了原本的群組之外還會多加 group
+rhel:~ # usermod -G group user                      # user 加入到 group, 原本的已加入的群組都會被移除
+rhel:~ # usermod -aG group user                     # user 加入到 group, 除了原本的群組之外還會多加 group
 
-rhel:~ # userdel user # 刪除使用者, 但會留下 HOME, MAIL_DIR
-rhel:~ # userdel -r user # 刪除使用者, 包括等 HOME, MAIL_DIR
+rhel:~ # userdel user                               # 刪除使用者, 但會留下 HOME, MAIL_DIR
+rhel:~ # userdel -r user                            # 刪除使用者, 包括等 HOME, MAIL_DIR
 
-rhel:~ # passwd user # 設定 user 密碼 
-rhel:~ # chage -l user # 看帳號狀態
+rhel:~ # passwd user                                # 設定 user 密碼 
+rhel:~ # chage -l user                              # 看帳號狀態
 ```
 
 
 ## Group ##
 
-```
+```bash
 rhel:~ # groupadd group
 
-rhel:~ # gpasswd -a user group # user 加入 group
-rhel:~ # gpasswd -d user group # user 離開 group
+rhel:~ # gpasswd -a user group              # user 加入 group
+rhel:~ # gpasswd -d user group              # user 離開 group
 
 rhel:~ # rhel:~ # groupdel group
 ```
@@ -128,7 +128,7 @@ rhel:~ # rhel:~ # groupdel group
 
 ## 設定群組 ##
 
-```
+```bash
 rhel:~ # mkdir /opt/myproject
 rhel:~ # groupadd myproject
 rhel:~ # chown root:myproject /opt/myproject
@@ -140,7 +140,7 @@ rhel:~ # usermod -aG myproject username
 
 ## 加入系統管理群組 ##
 
-```
+```bash
 rhel:~ # usermod -G wheel user
 rhel:~ # vi /etc/pam.d/su
 #auth           required        pam_wheel.so use_uid
@@ -148,7 +148,7 @@ rhel:~ # vi /etc/pam.d/su
 
 ## sudo ##
 
-```
+```bash
 rhel:~ # vi /etc/sudoers
 Defaults    timestamp_timeout=value
 %users localhost=/sbin/shutdown -h now
@@ -168,7 +168,7 @@ session required pam_tty_audit.so disable=* enable=root
 
 ## Repository ##
 
-```
+```bash
 rhel:~ # yum repolist
 rhel:~ # yum repolist all
 rhel:~ # yum repolist -v
@@ -178,7 +178,7 @@ rhel:~ # yum repoinfo
 
 ## Package ##
 
-```
+```bash
 # search
 rhel:~ # yum search term
 rhel:~ # yum list all # show installed and available package
@@ -224,7 +224,7 @@ rhel:~ # yumdownloader pkackage_name
 
 ## Package Group ##
 
-```
+```bash
 rhel:~ # yum group list glob_expression
 rhel:~ # yum group info glob_expression
 rhel:~ # yum group ids
@@ -245,7 +245,7 @@ rhel:~ # yum remove @kde-desktop
 
 ## History ##
 
-```
+```bash
 rhel:~ # yum history list
 rhel:~ # yum history list all
 rhel:~ # yum history list 1..3
@@ -270,7 +270,7 @@ YUM 使用 SQLite 存放在 /var/lib/yum/history/ 目錄下
 
 ## main config ##
 
-```
+```bash
 rhel:~ # cat /etc/yum.conf
 [main]
 cachedir=/var/cache/yum/$basearch/$releasever
@@ -287,7 +287,7 @@ installonly_limit=3
 
 ## repository config ##
 
-```
+```bash
 rhel:~ # cp /media/media.repo /etc/yum.repo.d/.
 rhel:~ # cat /etc/yum.repo.d/media.repo
 [InstallMedia]
@@ -310,7 +310,7 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 
 ## Config ##
 
-```
+```bash
 rhel:~ # yum-config-manager
 rhel:~ # yum-config-manager section
 rhel:~ # yum-config-manager glob_expression…
@@ -328,7 +328,7 @@ rhel:~ # yum-config-manager --disable glob_expression
 
 ## Create Yum Repository ##
 
-```
+```bash
 rhel:~ # yum install createrepo
 rhel:~ # createrepo --database /mnt/local_repo
 ```
@@ -381,7 +381,7 @@ Directory					Description
 | chkconfig --list			| systemctl list-unit-files --type service	|
 
 
-```
+```bash
 # chkconfig off
 rhel:~ # systemctl mask name.service
 rhel:~ # systemctl disable name.service
@@ -413,7 +413,7 @@ mask/umask link to /dev/null
 | telinit runlevel	| 	systemctl isolate name.target		|
 
 
-```
+```bash
 rhel:~ # systemctl get-default
 rhel:~ # systemctl set-default graphical.target
 rhel:~ # systemctl isolate multi-user.target
@@ -447,14 +447,14 @@ rhel:~ # systemctl list-sockets
 
 ## Remote Machine ##
 
-```
+```bash
 rhel:~ # systemctl -H root@server-01.example.com status httpd.service
 ```
 
 
 ## System Unit File ##
 
-```
+```bash
 rhel:~ # /lib/systemd/system/runxxx.service
 [Unit]
 Description=run xxx
@@ -502,7 +502,7 @@ WantedBy=multi-user.target
 
 ## Starting an OpenSSH Server ##
 
-```
+```bash
 rhel:~ # systemctl start sshd.service
 rhel:~ # systemctl stop sshd.service
 rhel:~ # systemctl enable sshd.service
@@ -511,14 +511,14 @@ rhel:~ # systemctl enable sshd.service
 
 ## Using Key-based Authentication ##
 
-```
+```bash
 rhel:~ # vi /etc/ssh/sshd_config
 PasswordAuthentication no
 ```
 
 ## Generating Key Pairs ##
 
-```
+```bash
 rhel:~ # ssh-keygen -t rsa
 rhel:~ # ssh-copy-id [-i ~/.ssh/id_rsa.pub] user@hostname
 ```
@@ -2753,6 +2753,20 @@ sh-4.2# passwd
 sh-4.2# touch /.autorelabel
 sh-4.2# mount -o remount,ro /
 sh-4.2# /sbin/reboot -f
+```
+
+## Boot
+
+```bash
+rhel:~ # systemd-analyze
+rhel:~ # systemd-analyze blame
+
+rhel:~ # systemd-analyze critical-chain
+rhel:~ # systemd-analyze critical-chain ntp.service networking.service
+rhel:~ # systemd-analyze time -H root@192.168.0.1
+
+rhel:~ # systemd-analyze plot > boot_analysis.svg
+rhel:~ # xviewer boot_analysis.svg  
 ```
 
 

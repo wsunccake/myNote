@@ -141,56 +141,56 @@ npm 是 node.js 的套件管理工具, 在使用時可分為 global mode 和 loc
 
 ```bash
 # help
-linux:~ $ npm help # 顯示說明文件
-linux:~ $ npm help install # 顯示指令說明文件
+centos:~ $ npm help # 顯示說明文件
+centos:~ $ npm help install # 顯示指令說明文件
 
 # list
-linux:~ $ npm list # 顯示已安裝套件
-linux:~ $ npm list -g # 顯示系統已安裝套件
+centos:~ $ npm list # 顯示已安裝套件
+centos:~ $ npm list -g # 顯示系統已安裝套件
 
 # search
-linux:~ $ npm search pkg # 搜尋套件
+centos:~ $ npm search pkg # 搜尋套件
 
 # install
-linux:~ $ npm install pkg # 從 repository 安裝套件
-linux:~ $ npm install -g pkg # 安裝套件到系統預設目錄
-linux:~ $ npm install ./pkg.tar.gz # 直接安裝套件
-linux:~ $ npm install git+https://git@github.com/abc/pkg.git # 從 github 安裝套件
-linux:~ $ npm install git+ssh://git@github.com/abc/pkg.git
-linux:~ $ npm install git://github.com/abc/pkg.git#v0.1 # 從 github 安裝套件並指定版本
+centos:~ $ npm install pkg # 從 repository 安裝套件
+centos:~ $ npm install -g pkg # 安裝套件到系統預設目錄
+centos:~ $ npm install ./pkg.tar.gz # 直接安裝套件
+centos:~ $ npm install git+https://git@github.com/abc/pkg.git # 從 github 安裝套件
+centos:~ $ npm install git+ssh://git@github.com/abc/pkg.git
+centos:~ $ npm install git://github.com/abc/pkg.git#v0.1 # 從 github 安裝套件並指定版本
 
 # uninstall
-linux:~ $ npm uninstall pkg
+centos:~ $ npm uninstall pkg
 
 # upgrade
-linux:~ $ npm upgrade pkg
+centos:~ $ npm upgrade pkg
 
 # other
-linux:~ $ npm info pkg # 顯示套件資訊
-linux:~ $ npm veiw pkg # 同上
+centos:~ $ npm info pkg # 顯示套件資訊
+centos:~ $ npm veiw pkg # 同上
 
-linux:~ $ npm link pkg # 將 local pkg link to global pkg
+centos:~ $ npm link pkg # 將 local pkg link to global pkg
 
-linux:~/package $ npm # 建立可發佈 package
+centos:~/package $ npm # 建立可發佈 package
 
-linux:~/package $ npm publish # 發佈 package
-linux:~/package $ npm unpublish
+centos:~/package $ npm publish # 發佈 package
+centos:~/package $ npm unpublish
 ```
 
 在 somepackage 目錄下建立名稱為 index.js
 
 
 ```bash
-linux:~/somepackage $ cat index.js
+centos:~/somepackage $ cat index.js
 exports.hello = function() {
     console.log('Hello.');
 };
 
 # 建立 package.json 紀錄 package 資訊, 填空需輸入 none
-linux:~/somepackage $ npm init 
+centos:~/somepackage $ npm init 
 ...
 
-linux:~/somepackage $ cat package.json
+centos:~/somepackage $ cat package.json
 {
     "name": "somepackage",
     "version": "0.0.1",
@@ -211,7 +211,7 @@ linux:~/somepackage $ cat package.json
 }
 
  # 安裝該套件
-linux:~ $ npm install somepackage
+centos:~ $ npm install somepackage
 ```
 
 [NPM 套件管理工具](https://github.com/nodejs-tw/nodejs-little-book/blob/master/zh-tw/node_npm.rst)
@@ -321,7 +321,7 @@ linux:~ $ npm install somepackage
 
 在終端機下執行
 
-	linux:~ $ node debug ex_bug.js
+	centos:~ $ node debug ex_bug.js
 	< Debugger listening on port 5858
 	connecting to port 5858... ok
 	break in ex_bug.js:1
@@ -333,8 +333,8 @@ linux:~ $ npm install somepackage
 
 另一種遠端執行
 
-	linux:~ $ node --debug-brk ex_bug.js
-	linux:~ $ node debug 127.0.0.1:5858
+	centos:~ $ node --debug-brk ex_bug.js
+	centos:~ $ node debug 127.0.0.1:5858
 
 
 -----------------------------
@@ -371,7 +371,7 @@ linux:~ $ npm install somepackage
 
 執行並輸入參數
 
-	linux:~ $ node argv.js 123 -v "xyz ABC"
+	centos:~ $ node argv.js 123 -v "xyz ABC"
 
 [`keyin.js`](./example/nodejs/ex_process/keyin.js)
 
@@ -522,14 +522,14 @@ blocking I/O 讀檔
 
 執行
 
-	linux:~ $ node app.js # 使用 node 直接執行, 在瀏覽器上輸入 localhost:3000 可看到
+	centos:~ $ node app.js # 使用 node 直接執行, 在瀏覽器上輸入 localhost:3000 可看到
 
 每次改 code, 都需要重新執行 node, 建議安裝 [nodemon](http://nodemon.io/), [node-supervisor](https://github.com/isaacs/node-supervisor), [node-dev](https://github.com/fgnass/node-dev) 或 [forever](https://github.com/nodejitsu/forever) 這類型 automaticall restart 代替 node 去執行
 
-	linux:~ $ nodemon app.js # 使用 nodemon
-	linux:~ $ supervisor app.js # 使用 node-supervisor
-	linux:~ $ forever -w app.js # 使用 forever
-	linux:~ $ node-dev app.js
+	centos:~ $ nodemon app.js # 使用 nodemon
+	centos:~ $ supervisor app.js # 使用 node-supervisor
+	centos:~ $ forever -w app.js # 使用 forever
+	centos:~ $ node-dev app.js
 
 以 Event 的方式使用 http
 
