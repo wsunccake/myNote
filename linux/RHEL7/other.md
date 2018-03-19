@@ -45,3 +45,18 @@ centos:~ # echo "message body" | mail -s "title" someone@example.com [-aFrom:sen
 ```bash
 echo "blacklist usb-storage" >> /etc/modprobe.d/blacklist.conf
 ```
+
+## loop device
+
+```
+centos:~ # losetup -a
+centos:~ # losetup -d /dev/loop0
+centos:~ # losetup -D
+centos:~ # losetup -f
+
+centos:~ # kpartx -av loop_file
+centos:~ # kpartx -d loop_file
+
+centos:~ # dmsetup ls
+centos:~ # dmsetup remove /dev/loop0
+```

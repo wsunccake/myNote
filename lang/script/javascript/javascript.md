@@ -180,6 +180,27 @@ var bool2 = false;
 // 轉Boolean 
 Boolean("true"); 
 !!1;
+
+// Opera 8.0+
+var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+
+// Firefox 1.0+
+var isFirefox = typeof InstallTrigger !== 'undefined';
+
+// Safari 3.0+ "[object HTMLElementConstructor]" 
+var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
+
+// Internet Explorer 6-11
+var isIE = /*@cc_on!@*/false || !!document.documentMode;
+
+// Edge 20+
+var isEdge = !isIE && !!window.StyleMedia;
+
+// Chrome 1+
+var isChrome = !!window.chrome && !!window.chrome.webstore;
+
+// Blink engine detection
+var isBlink = (isChrome || isOpera) && !!window.CSS;
 ```
 
 ### Array
@@ -278,6 +299,11 @@ var emptyObject2 = new Object();    // empty object
 // exist
 user.noSuchProperty === undefined;
 "key" in object;
+
+// loop
+for(let key in user) {
+    console.log(key + " => " + user[key]);
+}
 ```
 
 ```javascript
@@ -294,9 +320,84 @@ MYGLOBAL.var2 = 123;
 
 ### if/else
 
+```
+window.location
+<protocol>//<hostname>:<port>/<pathname><search><hash>
+
+href - the entire URL
+protocol - the protocol of the URL
+host - the hostname and port of the URL
+hostname - the hostname of the URL
+port - the port number the server uses for the URL
+pathname - the path name of the URL
+search - the query portion of the URL
+hash - the anchor portion of the URL
+```
+
+```html
+<html>
+<body>
+<script>
+    var parameter = window.location.search;
+    parameter = parameter.slice(1, parameter.length);
+    var sex = parameter.split("=")[1];
+    if (sex == "m") {
+        console.log("Male");
+    } else if (sex == "f") {
+        console.log("Female");
+    } else {
+        console.log("Unknown");
+    }
+</script>
+</body>
+</html>
+
+# commoand
+linux:~ # curl http://127.0.0.1/ex.html?sex=m
+```
+
+```javascript
+var browser;
+if (!!window.chrome) {
+    browser = "Chrome";
+} else {
+    browser = "Unknown";
+}
+console.log(browser);
+
+//  使用 ?: ternary operator
+browser = (!!window.chrome) ? "Chrome" : "Unknown";
+console.log(browser);
+```
+
+### switch
+
+```javascript
+// 同 if/else, 改用 switch 方式
+var parameter = window.location.search;
+parameter = parameter.slice(1, parameter.length);
+var sex = parameter.split("=")[1];
+switch (sex) {
+    case "m":
+        console.log("Male");
+        break;
+    case "f":
+        console.log("Female");
+        break;
+    default:
+        console.log("Unknown");
+}
+```
 
 ### for	
 
+
+### while
+
+
+---
+
+## Function
 
 ---
 
