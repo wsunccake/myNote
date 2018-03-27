@@ -19,6 +19,7 @@ linux:~ $ cat ~/.gitconfig
     email = owner@localhost 
 [core] 
     editor = vim 
+    pager =
 [merge] 
     tool = vimdiff 
 [color] 
@@ -139,4 +140,78 @@ linux:~/project $ git pull --rebase
 linux:~/project $ git push
 linux:~/project $ git log
 linux:~/project $ git stash pop
+```
+
+## Multi User
+
+### push commit to remote server
+
+`condition`
+
+```bash
+# user1
+centos:~ $ git add file1
+centos:~ $ git commit -m "Add file1"
+centos:~ $ git push
+
+# user2
+centos:~ $ git add file2
+centos:~ $ git commit "Add file2"
+centos:~ $ git push
+ ! [rejected]        master -> master (fetch first)
+```
+
+`action1`
+
+```bash
+*    (HEAD, master) Merge branch 'master'
+|\
+* |  Add file2
+| *  (origin/master, origin/HEAD) Add file1
+|/
+*
+
+# user2
+centos:~ $ git pull
+centos:~ $ git push
+
+*  (HEAD, origin/master, origin/HEAD, master) Add 1
+*  Add file1
+*  first commit
+
+centos:~ $ git reset <hash add file1>
+centos:~ $ git pull
+centos:~ $ git add file2
+centos:~ $ git commit "Add file2"
+centos:~ $ git push
+```
+
+`action2`
+
+```bash
+# user2
+centos:~ $ git reset <hash Add file1>
+centos:~ $ git pull
+centos:~ $ git add file2
+centos:~ $ git commit "Add file2"
+centos:~ $ git push
+```
+
+`action3`
+
+```bash
+# user2
+centos:~ $ git stash
+centos:~ $ git stash list
+centos:~ $ git pull
+
+centos:~ $ git reset --hard <hash master>
+centos:~ $ git stash pop [<hash stash>]
+
+# if Merge conflict in filex
+centos:~ $ vi filex
+centos:~ $ git stash drop [<hash stash>]
+centos:~ $ git add file2 filex
+centos:~ $ git commit "Add file2"
+centos:~ $ git push
 ```

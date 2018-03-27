@@ -50,6 +50,62 @@ rhel:~ # java -jar jenkins-cli.jar -s http://localhost:8080 delete-job <job>
 ----
 
 
+## Pipeline
+
+`syntax`
+
+```groovy
+// Scripted Pipeline
+node {
+    stage('stage1') {
+        echo "Hello Jenkins"
+    }
+
+    stage('stage2') {
+        sleep 3
+        echo "Hello Pipeline"
+    }
+}
+
+// Declarative Pipeline
+pipeline {
+    agent any
+    stages {
+        stage('stage1') {
+            steps {
+                echo "Hello Jenkins"
+                echo "${params.PW}"
+                echo "${env.PW}"
+                sh "hostname"
+            }
+        }
+        stage('stage2') {
+            steps {
+                echo "Hi Pipeline"
+            }
+        }
+    }
+}
+```
+
+`example`
+
+```bash
+rhel:~/example # cat Jenkinsfile
+node {
+    stage('stage') {
+        echo "Hello Jenkins"
+    }
+}
+
+rhel:~/example # git add Jenkinsfile
+rhel:~/example # git commit -m "Create Jenkinsfile"
+rhel:~/example # git push -u origin master
+```
+
+
+---
+
 ## Plugin
 
 
