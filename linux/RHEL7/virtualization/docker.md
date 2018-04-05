@@ -13,6 +13,10 @@ gpgcheck=0
 
 rhel:~ # yum install docker
 
+rhel:~ # vi /etc/sysconfig/docker                           # 啟動設定
+OPTIONS='-G dockerroot --selinux-enabled --log-driver=journald --signature-verification=false --bip=10.253.42.1/16 --storage-opt dm.loopdatasize=200G --storage-opt dm.loopmetadatasize=10G --storage-opt dm.basesize=50G -g /home/docker'
+...
+
 rhel:~ # systemctl start docker.service                     # 啟動服務
 rhel:~ # systemctl enable docker.service                    # 常駐服務
 rhel:~ # docker run hello-world                             # 測試

@@ -1,3 +1,80 @@
+## curl
+
+```bash
+# GET method
+centos:~ # curl "http://localhost/get.php?name_php=aaa&age_php=12"
+
+# POST method    
+centos:~ # curl -X POST -d "NAME_PHP=aaa&AGE_PHP=12" "http://localhost/post.php"
+# POST method with json data
+centos:~ # curl -X POST -d '{"name": "abc", "age": 123}' http://localhost/json.php
+
+# Upload file, upload_file 為 <input type="file" name="upload_file" id="file_id">
+centos:~ # curl -F upload_file=@local_file http://localhost/upload.php
+
+# Save cookie
+centos:~ # curl -X POST -d 'usernam=account' -d 'password=password' -c tmp.cookie "http://localhost/login.php"
+# Use cookie
+centos:~ # curl -b tmp.cookie "http://localhost/action.php"
+
+# Redirect
+centos:~ # curl -L "http://localhost/action.php"
+
+# Download
+centos:~ # curl [-o file] -L -O http://localhost/file
+# Resume Download
+centos:~ # curl [-o file] -L -O -C - http://localhost/action.php
+
+# FTP download
+centos:~ # curl ftp://user:password@host/download_file -o filename
+# FTP upload
+centos:~ # curl --ftp-create-dirs -T upload_file ftp://user:password@host/file
+```
+
+
+---
+
+## loop device
+
+```bash
+centos:~ # losetup -a
+centos:~ # losetup -d /dev/loop0
+centos:~ # losetup -D
+centos:~ # losetup -f
+
+centos:~ # kpartx -av loop_file
+centos:~ # kpartx -d loop_file
+
+centos:~ # dmsetup info
+centos:~ # dmsetup ls
+centos:~ # dmsetup remove /dev/loop0
+```
+
+
+---
+
+## mail
+
+```bash
+centos:~ # mail -s "title" someone@example.com << EOF
+message body
+EOF
+
+centos:~ # echo "message body" | mail -s "title" someone@example.com [-aFrom:sender@exmaple.com]
+```
+
+
+---
+
+## usb
+
+```bash
+centos:~ # echo "blacklist usb-storage" >> /etc/modprobe.d/blacklist.conf
+```
+
+
+---
+
 ## screenfetch
 
 ```bash
@@ -12,6 +89,7 @@ centos:~ # echo /usr/bin/screenfetch >> /etc/profile
 # myself alway show info when login
 centos:~ # echo /usr/bin/screenfetch >> ~/.bashrc
 ```
+
 
 ---
 
@@ -28,35 +106,4 @@ centos:~ # echo "fortune | cowsay -pn" >> /etc/profile
 
 # myself alway show info when login
 centos:~ # echo "fortune | cowsay -pn" >> ~/.bashrc
-```
-
-## mail
-
-```bash
-centos:~ # mail -s "title" someone@example.com << EOF
-message body
-EOF
-
-centos:~ # echo "message body" | mail -s "title" someone@example.com [-aFrom:sender@exmaple.com]
-```
-
-## usb
-
-```bash
-echo "blacklist usb-storage" >> /etc/modprobe.d/blacklist.conf
-```
-
-## loop device
-
-```
-centos:~ # losetup -a
-centos:~ # losetup -d /dev/loop0
-centos:~ # losetup -D
-centos:~ # losetup -f
-
-centos:~ # kpartx -av loop_file
-centos:~ # kpartx -d loop_file
-
-centos:~ # dmsetup ls
-centos:~ # dmsetup remove /dev/loop0
 ```

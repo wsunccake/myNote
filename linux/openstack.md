@@ -1,10 +1,10 @@
 # glance
 
-```
-glance image-list
-glance image-show ef647309-d560-44bb-a159-6b423dc824ca
-glance image-create --name 'vsz35_446' --disk-format qcow2 \ --container-format bare --progress < vscg-3.5.0.0.446.qcow2
-glance image-delete ef647309-d560-44bb-a159-6b423dc824ca
+```bash
+op:~ # glance image-list
+op:~ # glance image-show ef647309-d560-44bb-a159-6b423dc824ca
+op:~ # glance image-create --name 'vsz35_446' --disk-format qcow2 \ --container-format bare --progress < vscg-3.5.0.0.446.qcow2
+op:~ # glance image-delete ef647309-d560-44bb-a159-6b423dc824ca
 ```
 
 
@@ -12,7 +12,7 @@ glance image-delete ef647309-d560-44bb-a159-6b423dc824ca
 
 # nova
 
-```
+```bash
 # help
 op:~ # nova help
 op:~ # nova help <command>
@@ -70,10 +70,10 @@ op:~ $ nova availability-zone-list
 
 # nova-manage
 
-```
-nova-manage service list
-nova-manage host list
-nova-manage fixed list
+```bash
+op:~ # nova-manage service list
+op:~ # nova-manage host list
+op:~ # nova-manage fixed list
 ```
 
 
@@ -81,7 +81,7 @@ nova-manage fixed list
 
 # ovs
 
-```
+```bash
 op:~ # ovs-vsctl show | grep -E 'Port|Bridge'
 ```
 
@@ -90,17 +90,56 @@ op:~ # ovs-vsctl show | grep -E 'Port|Bridge'
 
 # neutron
 
-```
-neutron security-group-list
-neutron security-group-rule-list
-neutron security-group-rule-delete b5373b9f-3980-4e6d-87ac-6b95dd87f709
-neutron security-group-rule-create --protocol icmp --direction ingress \ --ethertype IPv6 --remote-ip-prefix ::/0 b5373b9f-3980-4e6d-87ac-6b95dd87f709
-neutron security-group-rule-create --protocol tcp --direction ingress \ --ethertype IPv4 --port_range_min 8443 --port-range-max 8443 \ --remote-ip-prefix 0.0.0.0/0 b5373b9f-3980-4e6d-87ac-6b95dd87f709
+```bash
+op:~ # neutron security-group-list
+op:~ # neutron security-group-rule-list
+op:~ # neutron security-group-rule-delete b5373b9f-3980-4e6d-87ac-6b95dd87f709
+op:~ # neutron security-group-rule-create --protocol icmp --direction ingress \ --ethertype IPv6 --remote-ip-prefix ::/0 b5373b9f-3980-4e6d-87ac-6b95dd87f709
+op:~ # neutron security-group-rule-create --protocol tcp --direction ingress \ --ethertype IPv4 --port_range_min 8443 --port-range-max 8443 \ --remote-ip-prefix 0.0.0.0/0 b5373b9f-3980-4e6d-87ac-6b95dd87f709
 
-neutron net-list
-neutron net-show <neutron_id>
-ip netns | grep <neutron_id>
-ip netns exec qdhcp-<neutron_id> ip addr show
-neutron quota-show
-neutron quota-update --port 500
+op~: # neutron net-list
+op~: # neutron net-show <neutron_id>
+op~: # ip netns | grep <neutron_id>
+op~: # ip netns exec qdhcp-<neutron_id> ip addr show
+op~: # neutron quota-show
+op~: # neutron quota-update --port 500
+```
+
+
+---
+
+# other operation
+
+## remove nova compute
+
+```bash
+op:~ # nova hypervisor-list
+op:~ # mysql -u root
+mysql> USE nova;
+mysql> SELECT id, created_at, updated_at, hypervisor_hostname FROM compute_nodes;
+mysql> DELETE FROM compute_nodes WHERE hypervisor_hostname='node1;
+
+op:~ # nova service-list
+op:~ # mysql -u root
+mysql> USE nova;
+mysql> SELECT id, created_at, updated_at, host FROM services;
+mysql> DELETE FROM services WHERE host='node1';
+
+op:~ # neutron agent-list
+op:~ # mysql -u root
+mysql> USE neutron;
+mysql> SELECT id, created_at, host FROM agents;
+mysql> DELETE FROM agents WHERE host='node1';
+
+op:~ # neutron port-list
+op:~ # mysql -u root
+mysql> USE neutron;
+mysql> SELECT id, mac_address FROM ports;
+mysql> DELETE FROM ports WHERE mac_address='node1';
+
+op:~ # cinder service-list
+op:~ # mysql -u root
+mysql> USE cinder;
+mysql> SELECT id, created_at, updated_at, host FROM services;
+mysql> DELETE FROM services WHERE host='node1';
 ```

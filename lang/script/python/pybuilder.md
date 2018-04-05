@@ -3,61 +3,85 @@
 
 ## Install
 
+```bash
+linux:~ # pip install pybuilder  # 安裝
+linux:~ # pyb -h  # help
+linux:~ # pyb --version
+linux:~ # pyb -t  # list task
 ```
-Linux:~ # pip install pybuilder  # 安裝
-Linux:~ # pyb -h  # help
-Linux:~ # pyb --version
-Linux:~ # pyb -t  # list task
+
+
+---
+
+## Create Project
+
+```bash
+linux:~ # mkdir pyproject
+linux:~ # cd pyproject
+linux:~/pyproject # pyb --start-project
+linux:~/pyproject # mkdir -p src/main/{python,scripts} src/unittest/python
 ```
 
 
-## Folder Structure
+---
 
-```
-Linux:~ # mkdir pyproject
-Linux:~ # cd pyproject
-Linux:~/pyproject # mkdir -p src/main/{python,scripts} src/unittest/python
+## IDE
+
+### IntelliJ / PyCharm
+
+```bash
+linux:~/pyproject $ vi build.py
+...
+use_plugin('python.pycharm')
+
+linux:~/pyproject $ pyb pycharm_generate
 ```
 
+
+---
 
 ## Source Code
 
-```
-Linux:~/pyproject # vi src/main/python/helloworld.py
+```bash
+linux:~/pyproject # vi src/main/python/helloworld.py
 import sys
 
 def helloworld(out):
     out.write("Hello world of Python\n")
 
-Linux:~/pyproject # vi build.py
+linux:~/pyproject # vi build.py
 from pybuilder.core import use_plugin
 
 use_plugin("python.core")
 
 default_task = "publish"
 
-Linux:~/pyproject # pyb
-Linux:~/pyproject # pyb clean
+linux:~/pyproject # pyb
+linux:~/pyproject # pyb clean
 ```
 
+
+---
 
 ## Runnable Script
 
-```
-Linux:~/pyproject # vi src/main/scripts/hello-pybuilder
+```bash
+linux:~/pyproject # vi src/main/scripts/hello-pybuilder
 #!/usr/bin/env python
 import sys
 
 sys.stdout.write('Hello from my script!\n')
 
-Linux:~/pyproject # pyb
+linux:~/pyproject # pyb
 ```
 
+
+---
 
 ## Unit Test
 
-```
-Linux:~/pyproject # src/unittest/python/helloworld_tests.py
+```bash
+linux:~/pyproject # src/unittest/python/helloworld_tests.py
 from mockito import mock, verify
 import unittest
 
@@ -71,7 +95,7 @@ class HelloWorldTest(unittest.TestCase):
 
         verify(out).write("Hello world of Python\n")
 
-Linux:~/pyproject # vi build.py
+linux:~/pyproject # vi build.py
 from pybuilder.core import init, use_plugin
 
 use_plugin("python.core")
@@ -85,14 +109,16 @@ def initialize(project):
     project.build_depends_on('mockito')
 
 
-Linux:~/pyproject # pyb clean run_unit_tests
+linux:~/pyproject # pyb clean run_unit_tests
 ```
 
+
+---
 
 ## Test Coverage
 
-```
-Linux:~/pyproject # vi build.py
+```bash
+linux:~/pyproject # vi build.py
 from pybuilder.core import init, use_plugin
 
 use_plugin("python.core")
@@ -107,14 +133,16 @@ def initialize(project):
     project.version = "0.1"
     project.build_depends_on('mockito')
 
-Linux:~/pyproject # pyb
+linux:~/pyproject # pyb
 ```
 
+
+---
 
 ## Publish
 
-```
-Linux:~/pyproject # vi build.py
+```bash
+linux:~/pyproject # vi build.py
 from pybuilder.core import init, use_plugin
 
 use_plugin("python.core")
@@ -132,11 +160,11 @@ def initialize(project):
     project.build_depends_on('mockito')
 
 
-Linux:~/pyproject # pyb clean package
-Linux:~/pyproject # ls target/dist/pyproject-0.1.dev0
+linux:~/pyproject # pyb clean package
+linux:~/pyproject # ls target/dist/pyproject-0.1.dev0
 
-Linux:~/pyproject # pyb clean install
-Linux:~/pyproject # ls -lart /usr/lib/python2.7/site-packages/pyproject-0.1.dist-info
+linux:~/pyproject # pyb clean install
+linux:~/pyproject # ls -lart /usr/lib/python2.7/site-packages/pyproject-0.1.dist-info
 ```
 
 ### clean
@@ -158,10 +186,3 @@ Linux:~/pyproject # ls -lart /usr/lib/python2.7/site-packages/pyproject-0.1.dist
 ### publish
 
 clean + run_unit_tests + package + analyze
-
-
-## Other
-
-```
-Linux:~/pyproject # pyb --start-project
-```

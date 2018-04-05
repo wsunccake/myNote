@@ -1683,7 +1683,7 @@ phc2sys -s eth3 -O -35
 
 # System Process #
 
-```
+```bash
 rhel:~ # ps ax
 rhel:~ # ps aux
 
@@ -1714,6 +1714,13 @@ rhel:~ # gnome-system-monitor
 
 rhel:~ # lspci
 rhel:~ # lspci -v
+rhel:~ # lspci -tv
+rhel:~ # lspci -nv
+# Bus:Device.Function  Class: Vendor:Device
+00:00.0 0600: 8086:3405 (rev 13). 
+...
+rhel:~ # lspci -s <Bus:Device.Function>
+rhel:~ # lspci -d <Vendor:Device>
 
 rhel:~ # lsusb
 rhel:~ # lsusb -v
