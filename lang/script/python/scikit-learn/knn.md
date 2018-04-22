@@ -40,21 +40,60 @@ for i in range(len(iris.target)):
 
 x = iris.data
 y = iris.target
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=.5)
+train_data, test_data, train_target, test_target = train_test_split(x, y, test_size=.5)
 
 # default n_neighbors=5
 clf = KNeighborsClassifier(n_neighbors=1)
-clf.fit(x_train, y_train)
-predictions = clf.predict(x_test)
+clf.fit(train_data, train_target)
+predictions = clf.predict(test_data)
 
 print('### prediction')
 print(predictions)
 
 print('### test')
-print(y_test)
+print(test_target)
 
 print('### accuracy')
-print(accuracy_score(y_test, predictions))
+print(accuracy_score(test_target, predictions))
+```
+
+```python
+from sklearn.datasets import load_iris
+import numpy as np
+from sklearn.metrics import accuracy_score
+from sklearn.neighbors import KNeighborsClassifier
+
+iris = load_iris()
+print('feature: {}'.format(iris.feature_names))
+print('target: {}'.format(iris.target_names))
+
+# print(iris.data[0], iris.target[0])
+# for i in range(len(iris.target)):
+#     print('Example %d: label %s, features %s' %(i, iris.target[i], iris.data[i]))
+
+test_idx = [0, 50, 100]
+
+# training data
+train_target = np.delete(iris.target, test_idx)      # y_train
+train_data = np.delete(iris.data, test_idx, axis=0)  # x_train
+
+# test data
+test_target = iris.target[test_idx]  # y_test
+test_data = iris.data[test_idx]      # x_test
+
+# default n_neighbors=5
+clf = KNeighborsClassifier(n_neighbors=5)
+clf.fit(train_data, train_target)
+predictions = clf.predict(test_data)
+
+print('### prediction')
+print(predictions)
+
+print('### test')
+print(test_target)
+
+print('### accuracy')
+print(accuracy_score(test_target, predictions))
 ```
 
 ---

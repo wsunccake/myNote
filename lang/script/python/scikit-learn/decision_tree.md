@@ -1,5 +1,12 @@
 # Decision Tree
 
+Information Gain
+
+Entropy = - sum[Pi * ln(Pi)]
+
+Gini Index = 1 - sum(Pi * Pi)
+
+Pi: i component probability
 
 ---
 
@@ -38,14 +45,10 @@ print(clf.predict(test_data))
 
 
 # make picture
-dot_data = tree.export_graphviz(clf, out_file=None)
-graph = graphviz.Source(dot_data)
-graph.format = 'png'
-graph.render("iris")
-
 dot_data = tree.export_graphviz(clf, out_file=None, feature_names=iris.feature_names,  class_names=iris.target_names,
                                 filled=True, rounded=True, special_characters=True)
 graph = graphviz.Source(dot_data)
-graph
-# Gini index = 1 - sum(Pi * Pi)
+graph.format = 'png'
+graph.render("iris")
+# Gini index
 ```

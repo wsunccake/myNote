@@ -6,7 +6,7 @@ centos:~ # yum install python34 python34-pip
 
 # pip
 
-```
+```bash
 linux:~ # pip list
 linux:~ # pip help
 linux:~ # pip search virtualenv
@@ -22,7 +22,7 @@ linux:~ # pip uninstall requests
 
 # virtualenv
 
-```
+```bash
 linux:~ # virtualenv --python=python3 myproject3
 linux:~/myproject3 # source bin/activate
 linux:~/myproject3 # VIRTUAL_ENV_DISABLE_PROMPT=1 source bin/activate
@@ -30,11 +30,27 @@ linux:~/myproject3 # deactivate
 ```
 
 
+# ipython 
+
+```bash
+linux:~ # pip install ipython
+linux:~ # ipython
+```
+
+
+# jupyter
+
+```bash
+linux:~ # pip install jupyter
+linux:~ # jupyter notebook
+```
+
+
 # PyBuilder
 
 ## project
 
-```
+```bash
 linux:~/myproject3 # mkdir demo
 linux:~/myproject3/demo # pyb -h
 linux:~/myproject3/demo # pyb --start-project
@@ -43,7 +59,7 @@ linux:~/myproject3/demo # pyb --start-project
 
 ## pycharm/intellij ide plugin
 
-```
+```bash
 linux:~/project $ vi build.py
 ...
 use_plugin('python.pycharm')

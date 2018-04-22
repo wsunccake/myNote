@@ -6,6 +6,49 @@ Multinomial Naive Bayes
 
 Bernoulli Naive Bayes
 
+## Example
+
+In theater
+
+|         | long hair     | short hair  | total |
+| ------- | ------------- | ----------- | ----- |
+| man     | 2             | 48          | 50    |
+| woman   | 25            | 25          | 50    |
+
+`Probability`
+
+P(man) = 50 / (50 + 50)
+
+P(woman) = 50 / (50 + 50)
+
+`Conditional Probability`
+
+P(long|woman) = 25 / 50
+
+P(woman|long) = 25 / (25 + 2)
+
+P(long|man) = 2 / 50
+
+P(man|long) = 2 / (25 + 2)
+
+P(A|B) != P(B|A)
+
+`Joint Probability`
+
+P(woman,short) = 25 / (50 + 50)
+
+= P(woman) * P(short|woman) = 50 / (50 + 50) * 25 / 50
+
+P(A,B) = P(A) * P(B|A)
+
+P(A,B) = P(B,A)
+
+`Marginal Probability`
+
+P(long) = (2 + 25) / (50 + 50)
+
+= P(long,man) + P(long,woman) = 2 / (50 + 50) + 25 / (50 + 50)
+
 ---
 
 ## GaussianNB
