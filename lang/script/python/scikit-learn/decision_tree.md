@@ -2,11 +2,11 @@
 
 Information Gain
 
-Entropy = - sum[Pi * ln(Pi)]
+![Entropy](https://latex.codecogs.com/svg.latex?\Large&space;H(x\)=-\sum_x{P(x\)$log_2$P(x\)})
 
-Gini Index = 1 - sum(Pi * Pi)
+![Information Gain](https://latex.codecogs.com/svg.latex?\Large&space;$Gain(A\)=$Info(D\)-$Info_A(D\))
 
-Pi: i component probability
+![Gini Index](https://latex.codecogs.com/svg.latex?\Large&space;$GI=1-\sum_x{P(x\)^2})
 
 ---
 
