@@ -43,6 +43,7 @@ op:~ # nova boot --image <img_name> --flavor <fv_name> --file /root/.ssh/authori
 op:~ # nova delete <vm_id>|<vm_name>
 op:~ # nova start <vm_id>|<vm_name>
 op:~ # nova stop <vm_id>|<vm_name>
+op:~ # nova reboot [--hard] <vm_id>|<vm_name>
 op:~ # nova suspend <vm_id>|<vm_name>  # save to disk
 op:~ # nova resume <vm_id>|<vm_name>
 op:~ # nova pause <vm_id>|<vm_name>    # save to cache

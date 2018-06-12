@@ -2,6 +2,18 @@
 
 ## System
 
+```bash
+linux:~ # ps aux
+linux:~ # ps axf
+linux:~ # ps fww -p <pid>
+linux:~ # ps -ejf
+```
+
+```bash
+linux:~ # grep VmSwap /proc/<pid>/cmdline
+linux:~ # grep VmSwap /proc/<pid>/status
+```
+
 ### Common
 
 #### 忘記 root 密碼
@@ -26,27 +38,27 @@ sh-4.2# /sbin/reboot -f
 使用  smartctl 確認 SSD 使用狀況, Raw_Read_Error_Rate, Read_Soft_Error_Rate, Soft_Read_Error_Rate
 
 ```
-Linux:~ # smartctl -i /dev/sda
-Linux:~ # smartctl -s on|off /dev/sd
-Linux:~ # smartctl -x|-a /dev/sda
-Linux:~ # smartctl -d sat+megaraid,0 -x /dev/sda 
+linux:~ # smartctl -i /dev/sda
+linux:~ # smartctl -s on|off /dev/sd
+linux:~ # smartctl -x|-a /dev/sda
+linux:~ # smartctl -d sat+megaraid,0 -x /dev/sda 
 ```
 
 MegaCli
 
 ```
-Linux:~ # rpm -ivh MegaCli-8.07.14-1.noarch.rpm
-Linux:~ # alias megacli='/opt/MegaRAID/MegaCli/MegaCli64'
-Linux:~ # megacli -AdpAllInfo -aALL | grep Disks
-Linux:~ # megacli -ldinfo -lALL -aALL
-Linux:~ # megacli -pdlist -aALL | grep state
-Linux:~ # megacli -AdpEventLog -GetLatest 100 -f events.log -aALL
+linux:~ # rpm -ivh MegaCli-8.07.14-1.noarch.rpm
+linux:~ # alias megacli='/opt/MegaRAID/MegaCli/MegaCli64'
+linux:~ # megacli -AdpAllInfo -aALL | grep Disks
+linux:~ # megacli -ldinfo -lALL -aALL
+linux:~ # megacli -pdlist -aALL | grep state
+linux:~ # megacli -AdpEventLog -GetLatest 100 -f events.log -aALL
 ```
 
 #### 清除 MBR
 
 ```
-Linux:~ # dd if=/dev/zero of=/dev/sda bs=512 count=1
+linux:~ # dd if=/dev/zero of=/dev/sda bs=512 count=1
 ```
 
 ### CD/DVD
@@ -54,7 +66,7 @@ Linux:~ # dd if=/dev/zero of=/dev/sda bs=512 count=1
 #### 掛載 image/iso
 
 ```
-Linux:~ # mount -oloop image.iso /mnt
+linux:~ # mount -oloop image.iso /mnt
 ```
 
 #### 光碟燒錄
@@ -62,11 +74,11 @@ Linux:~ # mount -oloop image.iso /mnt
 wodim -> cdrecord (symbol link)
 
 ```
-Linux:~ # wodim -v -dao dev=/dev/cdrw image.iso
+linux:~ # wodim -v -dao dev=/dev/cdrw image.iso
 
-Linux:~ # wodim --devices dev=/dev/sr0
-Linux:~ # wodim -scanbus dev=/dev/sr0
-Linux:~ # wodim -prcap
+linux:~ # wodim --devices dev=/dev/sr0
+linux:~ # wodim -scanbus dev=/dev/sr0
+linux:~ # wodim -prcap
 ```
 
 #### 建立 image/iso
@@ -74,7 +86,7 @@ Linux:~ # wodim -prcap
 genisoimage -> mkisofs (symbol  link)
 
 ```
-Linux:~ # genisoimage -r -joliet-long -V "cd_name" -o image.iso dir
+linux:~ # genisoimage -r -joliet-long -V "cd_name" -o image.iso dir
 ```
 
 ### Desktop
@@ -103,9 +115,9 @@ StartupWMClass=jetbrains-idea
 stty 設定終端機顯示行列字數
 
 ```
-Linux:~ # stty
-Linux:~ # stty -a
-Linux:~ # stty columns 200
+linux:~ # stty
+linux:~ # stty -a
+linux:~ # stty columns 200
 ```
 
 
@@ -131,7 +143,7 @@ ubuntu:~ $ sudo sh -c "echo manual > /etc/init/avahi-daemon.override"
 #### 不顯示 空行 跟 \# 開頭
 
 ```
-Linux:~ # grep -Ev '^$|^#'
+linux:~ # grep -Ev '^$|^#'
 ```
 
 ### sed
@@ -142,13 +154,13 @@ Linux:~ # grep -Ev '^$|^#'
 顯示特定內容
 
 ```
-Linux:~ # sed -n "/<\!--/,/-->/p" index.html
+linux:~ # sed -n "/<\!--/,/-->/p" index.html
 ```
 
 不顯示特定內容
 
 ```
-Linux:~ # sed  "/<\!--/,/-->/d" index.html
+linux:~ # sed  "/<\!--/,/-->/d" index.html
 ```
 
 ## Compile
