@@ -16,3 +16,9 @@
 | Pipe stdout to prog2                  | prog | prog2    |  prog | prog2
 | Pipe stdout and stderr to prog2       | prog |& prog2   |  prog 2>&1 | prog2
 ```
+
+```bash
+linux:~ # tar cf - *.log | gzip > file.tar.gz
+linux:~ # gzip -dc file.tar.gz | tar xf -
+linux:~ # tar cf - *.log | tar xf - -C backup_dir
+```

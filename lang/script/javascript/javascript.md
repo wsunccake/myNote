@@ -60,13 +60,34 @@ linux:~ # java -jar js.jar hello.js
 
 ---
 
+## Comment
+
+```javascript
+// 這是單行註解 
+/* 這是跨行註解 */ 
+```
+
+---
+
+
 ## Variable
+
+var 會有 hosting, let 和 const 只會存在 block scope
 
 ### var
 
 ```javascript
 var var1 = 123;
 var var2;
+
+var v1 = 1;
+console.log(v1);
+
+// hosting
+console.log(v2);
+var v2 = 2;
+
+// console.log(v3); 
 ```
 
 ### let
@@ -75,6 +96,28 @@ var var2;
 for (let i in [1, 2, 3]) {
     console.log(i);
 }
+
+let l1 = 1;
+console.log(l1);
+
+// l2 在使用前必先宣告
+// console.log(l2);
+let l2 = 2;
+```
+
+### const
+
+```javascript
+const pi = 3.14;
+
+const peopel = ["Mary", "Joe"];
+people.push("Telsa");
+
+var humans = people
+humans = "evil";
+
+const frozen = Object.freeze(["Ice", "Ice cube"]);
+frozen.push("Water");
 ```
 
 
@@ -131,6 +174,16 @@ parseFloat("123.0");
 
 // string add
 "abc" + "xyz";
+
+// For ES 6
+var name = "JavaScript";
+var text = `Hello ${name}`;
+console.log(text);
+
+`Now: ${new Date(),toLocaleString()}`;
+`2+3: ${2 + 3}`;
+
+console.log(String.raw `"\n"Hello ${name}`);
 ```
 
 ### Number
@@ -283,11 +336,24 @@ users.filter(item => item.id < 3);
 }, inital);
 
 [1, 2, 3, 4, 5].reduce((sum, current) => sum + current, 0);
+
+// For ES 6
+var names1 = ["James", "L.", "Howlett"];
+var [firstname1, , lastname1] = names1;
+
+var [firstname2 = "John", , lastname2 = "Doe"] = names1;
+
+var right = 1;
+var left = 2;
+[right, left] = [left, right];
+
+[1, ...[2, 3], 4];
 ```
 
 ### Object
 
 ```javascript
+// object literal 方式宣告
 var user = {
   name: "John",
   age: 30
