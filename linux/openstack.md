@@ -3,8 +3,26 @@
 ```bash
 op:~ # glance image-list
 op:~ # glance image-show ef647309-d560-44bb-a159-6b423dc824ca
-op:~ # glance image-create --name 'vsz35_446' --disk-format qcow2 \ --container-format bare --progress < vscg-3.5.0.0.446.qcow2
-op:~ # glance image-delete ef647309-d560-44bb-a159-6b423dc824ca
+
+op:~ # glance image-create --name 'vsz-5.0.0.0.123' \
+  --container-format bare \
+  --disk-format qcow2 \
+  --is-public true \
+  --copy-from http://192.168.0.1/vsz-5.1.0.0.123.qcow2
+
+op:~ # glance image-create --name 'vsz-5.0.0.0.123' \
+  --container-format bare \
+  --disk-format qcow2 \
+  --is-public true \
+  --file vsz-5.1.0.0.123.qcow2
+
+op:~ # glance image-create --name 'vsz-5.0.0.0.123' \
+  --container-format bare \
+  --disk-format qcow2 \
+  --is-public true \
+  --progress < vsz-5.1.0.0.123.qcow2
+
+op:~ # glance image-delete <img_id>
 ```
 
 

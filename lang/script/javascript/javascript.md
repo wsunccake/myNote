@@ -465,6 +465,120 @@ switch (sex) {
 
 ## Function
 
+```javascript
+// function declaration or named function 
+function sayHi(arg) { return "Hi " + arg; }
+
+// function expression or anonymous function
+var sayGood = function(arg) { return "Good " + arg; }
+
+// function constructor 
+var sayHello = new Function("arg", "return \"Hello \"+ arg;");
+
+var countNumber = function () { // closure 
+    var count = 0; // count在countNumber裡的區域變數
+    return function () {
+        return count += 1;
+    }
+};
+
+# for ES 6
+```
+
+---
+
+## Object Oriented
+
+```
+// function declaration 去產生 object
+function Woman(name) {
+      // public attribute 
+      this.name = name;
+}; 
+
+// public method
+Woman.prototype.getName = function() {
+    return this.name; 
+}; 
+
+// function expression 去產生 object 
+var Man = function(name, nickname) { 
+  // static attribute
+  if ( typeof Man.count == 'undefined' ) { 
+    Man.count = 0;
+  } 
+
+  Man.count++; 
+
+  // static method
+  Man.getCount = function() { 
+    return Man.count; 
+  }; 
+
+  // private attribute
+  var _nickName_;
+
+  // private method 
+  var _setNickName_ = function(nk) {
+    _nickName_ = nk; 
+  } 
+  _setNickName_(nickname); 
+  this.getNickName = function() { 
+    return _nickName_; 
+  } 
+
+  // public attribute 
+  this.name = name;
+
+  // public method
+  this.getName = function() { 
+    return this.name; 
+  }; 
+}; 
+
+// public method
+Man.prototype.setAge = function(age) {
+  this.age = age; 
+}; 
+
+// public method
+Man.prototype.getAge = function() {
+  return this.age; 
+};
+
+p1 = new Woman('Mary'); 
+console.log(p1.name); 
+
+p2 = new Man('John', 'Johnny'); 
+console.log(p2.getName() );
+```
+
+`inheritance`
+
+```javascript
+function Person(name, sex) { 
+  this.name = name; 
+  this.sex = sex; 
+}; 
+
+Person.prototype.getName = function() { 
+  return this.name; 
+}; 
+
+ 
+function Man(name) { 
+  this.name = name; 
+  this.sex = "male"; 
+};
+
+// Man 繼承 Person
+Man.prototype = new Person();
+
+# for ES 6
+
+```
+
+
 ---
 
 ## Reference

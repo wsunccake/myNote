@@ -1,0 +1,11 @@
+selector		declare/css				usage/html							description
+contextual/tag	h2 em {color:blue}		<h2>一般<em> 藍色 </em>文字</h2>		指定特定標籤內的標籤可套用樣式
+class			.blue {color:blue;} 	<span class=blue>.......</span> 	讓不同的標籤套用相同的樣式 
+				h2.red {color:red;}		<h2 class=red>.........<h2>			只讓固定的標籤有此樣式
+id				#blue {color:blue;}		<span id=blue>.......</span>		讓指定的標籤套用一次宣告的樣式
+
+style sheets	usage/html
+inline			<h2 style=color:blue;font-family:"Serif">......</h2>
+embedding		<style type="text/css"> h2 {color:blue} </style>
+linking			<link rel=stylesheet type="text/css" href="../main.css">
+import			<style>@import url("../main.css");</style>
