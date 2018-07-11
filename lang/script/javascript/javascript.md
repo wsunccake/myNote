@@ -581,6 +581,60 @@ Man.prototype = new Person();
 
 ---
 
+## Regex
+
+```javascript
+var str = '/usr/lib/python2.6/site-packages/gtk-2.0/gconf.so'; 
+console.log(str); 
+
+// match進行比對，回傳匹配字串array 
+// search進行比對，回傳匹配字串position；indexOF不能用於RE 
+// replace進行比對，將匹配字串修改且回傳 
+// 將要匹配字串放入/pattern/之中 
+
+var re = /(.*)\.(.*?)$/; // RE宣告，將pattern夾在//之中但不適用於變數 
+var restr = str.match(re); 
+console.log(restr[1] + "<=>" + restr[2]); 
+console.log(str.search(re)); 
+console.log(str.replace(/.[^.]*$/, '')); // 不修改str內容，但修改回傳值 
+
+var re = new RegExp(/(.*?)\.(.*)$/); // 另一種RE宣告，適用於變數 
+var restr = str.match(re); 
+console.log(restr[1] + "<=>" + restr[2]); 
+console.log(str.search(re)); 
+console.log(str.replace(/\.(.*)$/, '')); 
+
+var re = /(.*?)\/(.*)$/; 
+var restr = str.match(re); 
+console.log(restr[1] + "<=>" + restr[2]); 
+console.log(str.search(re)); 
+console.log(str.replace(/(.*?)\//, '')); 
+
+var re = /(.*)\/(.*)$/; 
+var restr = str.match(re); 
+console.log(restr[1] + "<=>" + restr[2]); 
+console.log(str.search(re)); 
+console.log(str.replace(/(.*)\//, '')); 
+```
+
+
+---
+
+## Event
+
+
+---
+
+## DOM
+
+
+---
+
+## jQuery
+
+
+---
+
 ## Reference
 
 [JAVASCRIPT.INFO](https://javascript.info/)

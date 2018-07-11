@@ -432,3 +432,93 @@ linux:~/mq # ./gradlew build
 linux:~/mq # java -jar build/libs/mq-0.0.1-SNAPSHOT.jar --spring.profiles.active=hello-world,sender
 linux:~/mq # java -jar build/libs/mq-0.0.1-SNAPSHOT.jar --spring.profiles.active=hello-world,receiver
 ```
+
+
+---
+
+## Schedule
+
+```bash
+# app
+linux:~/demo # vi src/main/java/com/example/shecule/SheculeApplication.java
+package com.example.shecule;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
+@SpringBootApplication
+@EnableScheduling
+public class SheculeApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(SheculeApplication.class, args);
+    }
+}
+
+# scheduled task
+linux:~/scheduled # vi src/main/java/com/example/shecule/ScheduledTask.java
+package com.example.shecule;
+
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+@Component
+public class ScheduledTask {
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private Integer count0 = 1;
+    private Integer count1 = 1;
+    private Integer count2 = 1;
+
+    @Scheduled(fixedRate = 5000)
+    public void reportCurrentTime() throws InterruptedException {
+        System.out.println(String.format("---count: %s, time: %s", count0++, dateFormat.format(new Date())));
+    }
+
+    @Scheduled(fixedDelay = 5000)
+    public void reportCurrentTimeAfterSleep() throws InterruptedException {
+        System.out.println(String.format("===count: %s, time: %s", count1++, dateFormat.format(new Date())));
+    }
+
+    @Scheduled(cron = "0 0 1 * * *")
+    public void reportCurrentTimeCron() throws InterruptedException {
+        System.out.println(String.format("+++count: %s, time: %s", count2++, dateFormat.format(new Date())));
+    }
+}
+
+# gradle
+linux:~/scheduled # vi build.gradle
+buildscript {
+    ext {
+        springBootVersion = '2.0.3.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+```
