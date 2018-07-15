@@ -174,16 +174,6 @@ parseFloat("123.0");
 
 // string add
 "abc" + "xyz";
-
-// For ES 6
-var name = "JavaScript";
-var text = `Hello ${name}`;
-console.log(text);
-
-`Now: ${new Date(),toLocaleString()}`;
-`2+3: ${2 + 3}`;
-
-console.log(String.raw `"\n"Hello ${name}`);
 ```
 
 ### Number
@@ -336,18 +326,6 @@ users.filter(item => item.id < 3);
 }, inital);
 
 [1, 2, 3, 4, 5].reduce((sum, current) => sum + current, 0);
-
-// For ES 6
-var names1 = ["James", "L.", "Howlett"];
-var [firstname1, , lastname1] = names1;
-
-var [firstname2 = "John", , lastname2 = "Doe"] = names1;
-
-var right = 1;
-var left = 2;
-[right, left] = [left, right];
-
-[1, ...[2, 3], 4];
 ```
 
 ### Object
@@ -481,8 +459,6 @@ var countNumber = function () { // closure
         return count += 1;
     }
 };
-
-# for ES 6
 ```
 
 ---
@@ -573,9 +549,6 @@ function Man(name) {
 
 // Man 繼承 Person
 Man.prototype = new Person();
-
-# for ES 6
-
 ```
 
 

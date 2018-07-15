@@ -3,7 +3,7 @@
 
 ## Install
 
-```
+```bash
 rhel:~ # cat /etc/yum.repo.d/docker.repo
 [virt7-docker-common-testing]
 name=virt7-docker-common-testing
@@ -33,7 +33,7 @@ rhel:~ # usermod -aG docker user                            # 將使用者加入
 
 ![docker_intro](https://smlsunxie.gitbooks.io/docker-book/content/basic/images/docker-stages.png)
 
-```
+```bash
 rhel:~ # docker info
 rhel:~ # docker run -it centos /bin/bash                    # 啟用 centos image 的 container, i: inter active mode, t: terminal
 rhel:~ # docker run -it --name my_centos centos /bin/bash   # 指令 container name
@@ -70,7 +70,7 @@ rhel:~ # docker inspect --format '{{.NetworkSettings.IPAddress}}' <container_id>
 ```
 
 
-```
+```bash
 rhel:~ # docker run/update
 --cpus 4.0
 --cpu-shares 1024
@@ -99,7 +99,7 @@ rhel:~ # docker run/update
 
 docker cpu/mem/io info
 
-```
+```bash
 rhel:~ # ls /sys/fs/cgroup/cpu/docker/<docker_id>
 rhel:~ # ls /sys/fs/cgroup/memory/docker/<docker_id>
 rhel:~ # ls /sys/fs/cgroup/blkio/docker/<docker_id>
@@ -108,8 +108,11 @@ rhel:~ # ls /sys/fs/cgroup/blkio/docker/<docker_id>
 
 ## Docker Image 
 
-```
+```bash
 rhel:~ # docker search archlinux                            # 搜尋 Docker Hub 上的 image
+rhel:~ # curl https://registry.hub.docker.com/v2/repositories/library/archlinux/tags/ | jq -m python.tool                   # 顯示 tag
+rhel:~ # curl https://registry.hub.docker.com/v2/repositories/library/archlinux/tags/ | jq '."results"[]["name"]' | sort    # 顯示 tag
+
 
 rhel:~ # docker images                                      # 顯示本機上的 images
 
@@ -124,7 +127,7 @@ rhel:~ # docker rmi -f hello-world                          # 強制刪除 image
 
 已有的 image 上 create image
 
-```
+```bash
 rhel:~ # docker commit -m -a <container_id> <image_name> [tag]
 ```
 
@@ -132,7 +135,7 @@ rhel:~ # docker commit -m -a <container_id> <image_name> [tag]
 
 匯入 LXC template, 可到 [OpenVZ 下載](https://openvz.org/Download/template/precreated)
 
-```
+```bash
 rhel:~ # docker import http://download.openvz.org/template/precreated/suse-13.1-x86_64-minimal.tar.gz <image_name[:tag]>
 
 rhel:~ # wget http://download.openvz.org/template/precreated/suse-13.1-x86_64-minimal.tar.gz
@@ -143,7 +146,7 @@ rhel:~ # cat suse-13.1-x86_64-minimal.tar.gz | docker import - <image_name[:tag]
 
 從 dockerfile 產生
 
-```
+```bash
 rhel:~ # mkdir test_img
 rhel:~ # cd test_img/
 rhel:~/test_img # cat Dockerfile
@@ -183,7 +186,7 @@ rhel:~/test_img # docker images test_image
 
 `import / export, save / load`
 
-```
+```bash
 rhel:~ # docker save <image_name[:tag]> > <image>.tar
 rhel:~ # docker load <image_name[:tag]> < <image>.tar
 
@@ -195,7 +198,7 @@ rhel:~ # docker import image.tar <image_name>
 
 `container`
 
-```
+```bash
 rhel:~ # docker run -it --name webser -v /opt/webapp centos /bin/bash # -v: 建立 /opt/webapp
 rhel:~ # docker exec webser ls /opt
 ```
@@ -206,7 +209,7 @@ rhel:~ # docker exec webser ls /opt
 
 將 host 的目錄直接給 container 使用
 
-```
+```bash
 rhel:~ # docker run -it --name webser -v /tmp/webapp:/opt/webapp centos /bin/bash
 rhel:~ # touch /tmp/webapp/tmp_file
 rhel:~ # docker exec webser ls /opt/webapp
@@ -219,7 +222,7 @@ rhel:~ # docker inspect --format '{{.Mounts}}' webser # 顯示 volume
 
 將 host 的檔案直接給 container 使用
 
-```
+```bash
 rhel:~ # docker run -it -v /tmp/lxc_1.history:/root/.history centos /bin/bash
 rhel:~ # docker run -it -v /tmp/config:/etc/app/config:ro centos /bin/bash # 使用 read only 模式
 ```
@@ -228,7 +231,7 @@ rhel:~ # docker run -it -v /tmp/config:/etc/app/config:ro centos /bin/bash # 使
 
 `container - container`
 
-```
+```bash
 rhel:~ # docker run -it --name web_master -v /opt/webapp centos /bin/bash
 rhel:~ # docker run -it --name web_slave --volumes-from web_master -v /opt/webapp ubuntu /bin/bash
 ```
@@ -239,7 +242,7 @@ docker 在設定 port forwarding 時使用 iptables, 但 RHEL 7 預設的防火�
 
 `port`
 
-```
+```bash
 rhel:~ # docker run -t -d -p 8000:9000 --name nc busybox /bin/sh # -p: host 開啟 8000 port 轉到 container 9000 port
 
 # 從 iptable 觀察
@@ -276,7 +279,7 @@ rhel:~ # docker inspect -f "{{ .HostConfig.Links }}" web
 
 ![docker hub](https://smlsunxie.gitbooks.io/docker-book/content/basic/images/docker-hub.png)
 
-```
+```bash
 rhel:~ # docker login # 登入 Docker Hub, 設定在 $HOME/.dockercfg
 rhel:~ # docker logout
 
@@ -289,7 +292,7 @@ rhel:~ # docker pull
 
 Docker File 用來在已建立/存在 image 上, 在建立新的 image
 
-```
+```bash
 rhel:~ # cat robotframework/Dockerfiles     # create image for robotframework
 # comment
 FROM centos
@@ -327,7 +330,7 @@ rhel:~ # docker run -itd -p 80:80 --name nginx nginx
 
 ## Docker Registry
 
-```
+```bash
 rhel:~ # docker login
 rhel:~ # docker login -u user -p password private_registry:5000
 
@@ -342,7 +345,7 @@ rhel:~ # cat ~/.docker/config.json
 
 ### UNIX X11 Socket
 
-```
+```bash
 rhel:~ # cat Dockerfile
 FROM ubuntu:14.04
 
@@ -386,7 +389,7 @@ check /tmp/.X11-unix permission (chmod 1777 /tmp/.X11-unix)
 
 Linux VM 的設定, 可以透過 docker-machine 操作
 
-```
+```bash
 osx:~ $ docker-machine help
 osx:~ $ docker-machine ls
 osx:~ $ docker-machine env
@@ -411,17 +414,120 @@ osx:~ $ docker-machine rm <docker_machine>
 
 ## Install
 
-```
+```bash
+# Download From Github
 rhel:~ # curl -L https://github.com/docker/compose/releases/download/1.5.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 rhel:~ # chmod +x /usr/local/bin/docker-compose
+
+# Install From EPEL
+rhel:~ # yum install docker-compose
 ```
 
 ## Compose file
 
-```
+```bash
 rhel:~ # cat docker-compose.yml
+version: '3'
+services:
+  hello:
+    image: hello-world
+    container_name: hello
+
+rhel:~ # docker-compose up
 ```
 
+```bash
+rhel:~/hello # cat app.py 
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return 'Hello World!'
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080)
+
+rhel:~/hello # cat requirements.txt 
+Flask==1.0.2
+
+rhel:~/hello # cat Dockerfile 
+FROM python:alpine
+
+EXPOSE 8080
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY requirements.txt /usr/src/app/
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY app.py /usr/src/app/app.py
+
+CMD [ "python", "app.py" ]
+
+rhel:~/hello # cat docker-compose.yml
+version: '3'
+services:
+  hello:
+    container_name: hello
+    build: .
+    image: hello
+    ports:
+    - "8080:8080"
+
+rhel:~/hello # docker-compose -f docker-compose.yml up -d
+```
+
+---
+
+# GUI
+
+## Portainer
+
+```bash
+rhel: # docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock --name portainer portainer/portainer
+```
+
+---
+
+# Docker Swarm
+
+## Config
+
+```bash
+# init manager
+manager:~ # docker swarm init --advertise-addr <manage_node_ip>
+manager:~ # docker swarm join-token worker    # show token for worker
+manager:~ # docker swarm join-token manager   # show token for manager
+
+# init worker
+worker:~ # docker swarm join --token <token> <manage_node_ip>:2377
+```
+
+## Usage
+
+```bash
+# node/service status
+manager:~ # docker node ls
+manager:~ # docker service ls
+
+# create service
+manager:~ # docker service create --name cluster --constraint "node.role == worker" -p 80:80 russmckendrick/cluster
+manager:~ # docker service scale cluster=4
+
+# show detail service
+manager:~ # docker service inspect cluster
+
+# remove service
+manager:~ # docker service rm cluster
+
+# GUI
+manager:~ # docker run -it -d -p 8080:8080 -e HOST=<manage_node_ip> -v /var/run/docker.sock:/var/run/docker.sock dockersamples/visualizer
+```
+
+---
 
 # Ref
 
