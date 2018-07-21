@@ -132,6 +132,83 @@ linux:~/IdeaProjects/demo # java -jar build/libs/demo-0.0.1-SNAPSHOT.jar
 linux:~ # curl http://127.0.0.1:8080
 ```
 
+
+---
+
+# Web With Docker
+
+```bash
+# source code 無需做任何修改 (同 Web), 只需要改 build.gradle 和 加入 Dockerfile
+
+# gradle
+linux:~/IdeaProjects/demo # vi build.gradle
+buildscript {
+    ext {
+        springBootVersion = '2.0.3.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath('gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.19.0')
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.palantir.docker'
+
+bootJar {
+    baseName = 'hello'
+    version =  '0.1.0'
+}
+
+group = 'springio'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+docker {
+    dockerfile file('Dockerfile')
+    dependsOn build
+    name "${project.group}/${bootJar.baseName}"
+    files bootJar.archivePath
+    buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
+}
+
+# Dockerfile
+linux:~/IdeaProjects/demo # vi build.gradle
+FROM openjdk:8-jdk-alpine
+
+VOLUME /tmp
+ARG JAR_FILE
+COPY ${JAR_FILE} app.jar
+
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar","/app.jar"]
+
+# build docker image
+linux:~/IdeaProjects/demo # ./gradlew docker -x test
+
+# run docker
+linux:~/IdeaProjects/demo # docker run -itd -p 8080:8080 --name hello springis/hello
+```
+
+
 ---
 
 ## Runner

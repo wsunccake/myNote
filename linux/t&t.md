@@ -125,6 +125,7 @@ linux:~ # stty columns 200
 
 ## Network
 
+
 ----
 
 ## Service
@@ -133,6 +134,7 @@ linux:~ # stty columns 200
 ubuntu:~ $ sudo service avahi-daemon stop
 ubuntu:~ $ sudo sh -c "echo manual > /etc/init/avahi-daemon.override"
 ```
+
 
 ----
 
@@ -163,6 +165,9 @@ linux:~ # sed -n "/<\!--/,/-->/p" index.html
 linux:~ # sed  "/<\!--/,/-->/d" index.html
 ```
 
+
+---
+
 ## Compile
 
 
@@ -180,6 +185,8 @@ Linux:~/pkg # make
 Linux:~/pkg # make install DESTDIR=/install_dir
 ```
 
+
+---
 
 ## Ineternet
 

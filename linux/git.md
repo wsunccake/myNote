@@ -150,14 +150,14 @@ linux:~/project $ git stash pop
 
 ```bash
 # user1
-centos:~ $ git add file1
-centos:~ $ git commit -m "Add file1"
-centos:~ $ git push
+centos:~/project $ git add file1
+centos:~/project $ git commit -m "Add file1"
+centos:~/project $ git push
 
 # user2
-centos:~ $ git add file2
-centos:~ $ git commit "Add file2"
-centos:~ $ git push
+centos:~/project $ git add file2
+centos:~/project $ git commit "Add file2"
+centos:~/project $ git push
  ! [rejected]        master -> master (fetch first)
 ```
 
@@ -172,46 +172,65 @@ centos:~ $ git push
 *
 
 # user2
-centos:~ $ git pull
-centos:~ $ git push
+centos:~/project $ git pull
+centos:~/project $ git push
 
 *  (HEAD, origin/master, origin/HEAD, master) Add 1
 *  Add file1
 *  first commit
 
-centos:~ $ git reset <hash add file1>
-centos:~ $ git pull
-centos:~ $ git add file2
-centos:~ $ git commit "Add file2"
-centos:~ $ git push
+centos:~/project $ git reset <hash add file1>
+centos:~/project $ git pull
+centos:~/project $ git add file2
+centos:~/project $ git commit "Add file2"
+centos:~/project $ git push
 ```
 
 `action2`
 
 ```bash
 # user2
-centos:~ $ git reset <hash Add file1>
-centos:~ $ git pull
-centos:~ $ git add file2
-centos:~ $ git commit "Add file2"
-centos:~ $ git push
+centos:~/project $ git reset <hash Add file1>
+centos:~/project $ git pull
+centos:~/project $ git add file2
+centos:~/project $ git commit "Add file2"
+centos:~/project $ git push
 ```
 
 `action3`
 
 ```bash
 # user2
-centos:~ $ git stash
-centos:~ $ git stash list
-centos:~ $ git pull
+centos:~/project $ git stash
+centos:~/project $ git stash list
+centos:~/project $ git pull
 
-centos:~ $ git reset --hard <hash master>
-centos:~ $ git stash pop [<hash stash>]
+centos:~/project $ git reset --hard <hash master>
+centos:~/project $ git stash pop [<hash stash>]
 
 # if Merge conflict in filex
-centos:~ $ vi filex
-centos:~ $ git stash drop [<hash stash>]
-centos:~ $ git add file2 filex
-centos:~ $ git commit "Add file2"
-centos:~ $ git push
+centos:~/project $ vi filex
+centos:~/project $ git stash drop [<hash stash>]
+centos:~/project $ git add file2 filex
+centos:~/project $ git commit "Add file2"
+centos:~/project $ git push
+```
+
+---
+
+## Tag
+
+```bash
+# add tag
+linux:~/project # git tag <tag_name>
+
+# del tag
+linux:~/project # git tag -d <tag_name>
+
+# push tag to remote
+linux:~/project # git push origin <tag_name>    # one tag
+linux:~/project # git push origin --tags        # all tag
+
+# remove tag to remote
+linux:~/project # git push -d origin <tag_name>
 ```
