@@ -88,17 +88,23 @@ linux:~/project # gradle test
 
 ## Functional Test
 
+### Java
+
+`project`
+
 ```bash
-linux:~ # mkdir project
-linux:~ # cd project
 linux:~/project # gradle init
-linux:~/project # mkdir -p src/main/java/my/app
-linux:~/project # vi src/main/java/my/app/Main.java
+```
+
+`main class`
+
+```bash
+linux:~/project # vi src/main/java/my/app/MainApp.java
 package my.app;
 
 import ratpack.server.RatpackServer;
 
-public class Main {
+public class MainApp {
    public static void main(String... args) throws Exception {
        RatpackServer.start(server -> server 
             .handlers(chain -> chain
@@ -108,31 +114,59 @@ public class Main {
        );
    }
 }
+```
 
-linux:~/project # mkdir -p src/test/groovy/my/app
-linux:~/project # vi src/test/groovy/my/app/FunctionalSpec.groovy
+`unit test`
+
+```bash
+linux:~/project # vi src/test/groovy/my/app/MainAppSpec.groovy
 package my.app
 
+import my.App.MainApp
+import ratpack.test.ApplicationUnderTest
 import ratpack.test.MainClassApplicationUnderTest
+import spock.lang.AutoCleanup
+import spock.lang.Shared
 import spock.lang.Specification
 
-class FunctionalSpec extends Specification {
+class MainAppSpec extends Specification {
 
-  void "default handler should render Hello Ratpack!"() {
-    setup:
-    def aut = new MainClassApplicationUnderTest(Main)
-
+  @Shared
+  @AutoCleanup
+  private ApplicationUnderTest aut = new MainClassApplicationUnderTest(MainApp)
+  
+  def 'default page'() {
     when:
     def response = aut.httpClient.text
 
     then:
     response == "Hello Ratpack!"
+  }
 
-    cleanup:
-    aut.close()
+  def 'user name'() {
+    expect:
+    aut.httpClient.get(name).body.text == body
+
+    where:
+    name        | body
+    "Ratpack"   | "Hello Ratpack!"
+    "Spock"     | "Hello Spock!"
+  }
+
+  def 'remote host'() {
+    when:
+    ApplicationUnderTest app = {'https://ratpack.io/'.toURI()}
+    TestHttpClient httpClient = app.httpClient
+
+    then:
+    httpClient.text.contains("Ratpack") == true
   }
 }
+```
 
+`gradle`
+
+```bash
 linux:~ # vi build.gradle
 buildscript {
   repositories {
@@ -143,26 +177,41 @@ buildscript {
   }
 }
 
-apply plugin: "io.ratpack.ratpack-java"
+plugins {
+  id 'groovy'
+  id 'java'
+  id 'idea'
+}
+
+apply plugin: 'io.ratpack.ratpack-java'
 apply plugin: 'io.ratpack.ratpack-groovy'
-apply plugin: "idea"
+
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+mainClassName = "my.app.Main"
 
 repositories {
+  mavenCentral()
   jcenter()
 }
 
 dependencies {
   runtime "org.slf4j:slf4j-simple:1.7.25"
+  compile 'org.codehaus.groovy:groovy-all:2.4.11'
   testCompile ratpack.dependency('test')
   testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
-  testCompile 'cglib:cglib:2.2.2'
-  testCompile 'org.objenesis:objenesis:2.1'
 }
+```
 
-mainClassName = "my.app.Main"
+`run`
 
+```bash
 linux:~/project # gradle test
 ```
+
+
+### Groovy
 
 ```bash
 linux:~ # mkdir project
