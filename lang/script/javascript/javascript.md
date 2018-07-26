@@ -600,6 +600,49 @@ console.log(str.replace(/(.*)\//, ''));
 
 ## DOM
 
+```javascript
+// getElementById 
+var text1 = document.getElementById('text1'); 
+var text2Value = document.getElementById('text2').getAttribute("value"); 
+
+// getElementsByTagName 
+var form1 = document.getElementById("form1"); 
+var form1_inputs = form1.getElementsByTagName("input"); 
+```
+
+function              | description
+---                   | ---
+getElementsByTagName  | 依 tag 取得 node, 回傳 NodeList 
+getElementsByName     | 依 name 取得 node, 回傳 NodeList 
+getElementById        | 依 id 取得 node, 回傳 Node; 但 documenet 中出現重複 id, 會以第一個符合為主
+parentNode            | 取得父節點 
+previousSibling       | 前鄰接節點 
+nextSibling           | 後鄰接節點 
+firstChild            | 首個子節點 
+lastChild             | 最後一個子節點 
+childNodes            | 所有直接子節點
+
+`other`
+
+```javascript
+for (var i = 0; i < 10; i++)
+{
+  var a = document.createElement("a");
+  a.innerHTML = arr[i];
+  div.appendChild(a);
+}
+
+
+var frag = document.createDocumentFragment();
+for (var i = 0; i < 10; i++)
+{
+  var a = document.createElement("a");
+  a.innerHTML = arr[i];
+  frag.appendChild(a);
+}
+div.appendChild(frag);
+```
+
 
 ---
 
