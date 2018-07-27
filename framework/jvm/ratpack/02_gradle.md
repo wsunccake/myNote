@@ -16,7 +16,9 @@
      │      └─ styles
      │
      ├── main
-     │   └─ groovy
+     │   ├─ groovy
+     │   │  └─ // App classes in here
+     │   └─ java
      │      └─ // App classes in here
      │
      └── test
@@ -24,13 +26,22 @@
             └─ // Spock tests in here
 ```
 
+
+---
+
 ## Groovy / Ratpack DSL
+
+`project`
 
 ```bash
 linux:~ # mkdir project
 linux:~ # cd project
 linux:~/project # gradle init
-linux:~/project # mkdir -p src/ratpack
+```
+
+`code`
+
+```bash
 linux:~/project # vi src/ratpack/Ratpack.groovy
 import static ratpack.groovy.Groovy.ratpack
 
@@ -41,7 +52,11 @@ ratpack {
     }
   }
 }
+```
 
+`gradle`
+
+```bash
 linux:~/project # vi build.gradle
 buildscript {
   repositories {
@@ -57,21 +72,38 @@ apply plugin: 'io.ratpack.ratpack-groovy'
 repositories {
   jcenter()
 }
+```
 
+`run`
+
+```bash
 linux:~/project # gradle run
 linux:~/project # gradle -t run
 linux:~/project # gradle -t run --debug-jvm 
+```
 
+`test`
+
+```
 linux:~ # curl http://localhost:5050
 ```
 
+
+---
+
 ## Java
+
+`project`
 
 ```bash
 linux:~ # mkdir project
 linux:~ # cd project
 linux:~/project # gradle init
-linux:~/project # mkdir -p src/main/java/my/app
+```
+
+`code`
+
+```bash
 linux:~/project # vi src/main/java/my/app/Main.java
 package my.app;
 
@@ -87,7 +119,11 @@ public class Main {
        );
    }
 }
+```
 
+`gradle`
+
+```bash
 linux:~ # vi build.gradle
 buildscript {
   repositories {
@@ -110,20 +146,31 @@ dependencies {
 }
 
 mainClassName = "my.app.Main"
+```
 
-linux:~/project # gradle run
+`test`
 
+```bash
 linux:~ # curl http://localhost:5050
 linux:~ # curl http://localhost:5050/kitty
 ```
 
+
+---
+
 ## Groovy
+
+`code`
 
 ```bash
 linux:~ # mkdir project
 linux:~ # cd project
 linux:~/project # gradle init
-linux:~/project # mkdir -p src/main/groovy/my/app
+```
+
+`code`
+
+```bash
 linux:~/project # vi src/main/groovy/my/app/Main.groovy
 package my.app
 
@@ -142,7 +189,11 @@ class MainGroovy {
     }
   }
 }
+```
 
+`gradle`
+
+```bash
 linux:~/project # vi build.gradle
 buildscript {
   repositories {
@@ -160,11 +211,16 @@ mainClassName = 'my.app.MainGroovy'
 repositories {
   jcenter()
 }
+```
 
-linux:~/project # gradle run
+`test`
 
+```bash
 linux:~ # curl http://localhost:5050
 ```
+
+
+---
 
 ## Handler
 

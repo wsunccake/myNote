@@ -1,8 +1,8 @@
-# Groovy
+# Basic
 
-## Script
+## Hello
 
-### Hello
+`code`
 
 ```bash
 linux:~ # cat app.groovy
@@ -16,13 +16,29 @@ ratpack {
         }
     }
 }
+```
 
+
+`run`
+
+```bash
 linux:~ # groovy app.groovy
+```
 
+`test`
+
+```
 linux:~ # curl http://localhost:5050
 ```
 
-### Path
+
+---
+
+## URL
+
+### path
+
+`code`
 
 ```bash
 linux:~ # cat app.groovy
@@ -33,17 +49,14 @@ ratpack {
     handlers {
         path("foo") {
             byMethod {
-//              http://localhost:5050/foo
                 get {
                     render "Hello, Foo! Get"
                 }
 
-//              http://localhost:5050/foo/action -> 404
                 get("action") {
                     render "Hello, Foo! Action"
                 }
 
-//              http://localhost:5050/foo
                 post {
                     render "Hello, Foo! Post"
                 }
@@ -51,15 +64,22 @@ ratpack {
         }
     }
 }
+```
 
-linux:~ # groovy app.groovy
+get 和 post 是 htpp method, 可以在裡面加入 url path
 
+`test`
+
+```bash
 linux:~ # curl http://localhost:5050/foo
 linux:~ # curl -XPOST http://localhost:5050/foo
 linux:~ # curl http://localhost:5050/foo/action
 ```
 
-### Prefix
+
+### prefix
+
+`code`
 
 ```bash
 linux:~ # cat app.groovy
@@ -77,22 +97,41 @@ ratpack {
                 render "Product Get"
             }
 
-            get("search") {
+            post("search") {
                 render "Product Search"
+            }
+
+            prefix("id/:id") {
+                get {
+                    render "Produciton: ${allPathTokens.id} Get"
+                }
+
+                post {
+                    render "Post ${allPathTokens.id} Post"
+                }
+
             }
         }
     }
 }
+```
 
-linux:~ # groovy app.groovy
+prefix 是另一種做法, 特定 path 已做某 service 行為控制.
 
+prefix 底下可在接 prefix 或 path
+
+`test`
+
+```bash
 linux:~ # curl http://localhost:5050/products/list
 linux:~ # curl http://localhost:5050/products/get
-linux:~ # curl http://localhost:5050/products/search
+linux:~ # curl -XPOST http://localhost:5050/products/search
 ```
 
 
-### Parameter
+### token
+
+`code`
 
 ```bash
 linux:~ # cat app.groovy
@@ -107,15 +146,21 @@ ratpack {
         }
     }
 }
+```
 
-linux:~ # groovy app.groovy
+:var 這事表示 url 上的特定欄位變數
 
+用 pathTokens 或 allPathTokens 取出變數
+
+`test`
+
+```bash
 linux:~ # curl http://localhost:5050/foo
 linux:~ # curl http://localhost:5050/foo/kitty
 ```
 
 
-### URL
+### param
 
 ```bash
 linux:~ # cat app.groovy
@@ -130,15 +175,23 @@ ratpack {
         }
     }
 }
+```
 
-linux:~ # groovy app.groovy
+當變數是使用
 
+`test`
+
+```bash
 linux:~ # curl http://localhost:5050
 linux:~ # curl http://localhost:5050?name=Kitty
 ```
 
 
-### FORM
+---
+
+## Data
+
+### form
 
 ```bash
 linux:~ # cat app.groovy
@@ -188,13 +241,54 @@ ratpack {
         }
     }
 }
-
-linux:~ # groovy app.groovy
-
-linux:~ # curl http://localhost:5050
 ```
 
-### Header
+`test`
+
+```
+linux:~ # curl http://localhost:5050
+linux:~ # curl --request POST --form age=10 http://localhost:5050/hello/test   
+```
+
+
+### json
+
+```bash
+linux:~ # vi app.groovy
+@Grab('io.ratpack:ratpack-groovy:1.3.3')
+import static ratpack.groovy.Groovy.ratpack
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+JsonSlurper jsonSlurper = new JsonSlurper()
+
+ratpack {
+    handlers {
+        path('api') {
+            byMethod {
+                post {
+                    request.body.map {body ->
+                        jsonSlurper.parseText(body.text) as Map
+                    }.then { data ->
+                        data << ['id': '1']
+                        response.send(JsonOutput.toJson(data))
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+`test`
+
+```bash
+linux:~ # curl --request POST --data '{"name": "Ratpack"}' http://localhost:5050/api  
+```
+
+---
+
+## Header
 
 ```bash
 linux:~ # cat app.groovy
