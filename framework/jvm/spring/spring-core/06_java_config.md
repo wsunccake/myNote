@@ -72,6 +72,10 @@ public class HelloWorldConfig {
 }
 ```
 
+@Configuration 設定 class 為 spring java config
+
+@Bean 宣告 method 為 bean
+
 `main class`
 
 ```bash
@@ -91,3 +95,39 @@ public class MainApp {
   }
 }
 ```
+
+
+---
+
+## Bean
+
+### Scope
+
+`config`
+
+```bash
+linux:~/project # vi src/main/java/com/mycls/HelloWorldConfig.java
+package com.mycls;
+
+import org.springframework.context.annotation.*;
+
+@Configuration
+public class HelloWorldConfig {
+  @Bean
+  @Scope("prototype")
+  public HelloWorld helloWorld(){
+    return new HelloWorld();
+  }
+}
+```
+
+@Scope 可以為 singleton 或 prototype
+
+
+### Life Cycle
+
+
+### Post Processor
+
+
+### Definition Inheritance

@@ -14,24 +14,24 @@
 
 Groovy 可以使用 RPM, DPKG 等系統內建套件直接安裝, 但 Linux, MacOSX, FreeBSD 建議使用 SDKMAN (Software Development Kit MANager), 前身為 GVM (Groovy enVironment Manager) 安裝管理. 因為 Groovy 會使用到 Java, 須先安裝 JDK 6+ (Java Development Kit), 建議 JDK 8+. 使用 SDKMAN 安裝 end user 即可, 不需要 admin.
 
-```
+```bash
 # install jdk, 這裏使用安裝 openjdk 
-Linux:~ # yum install -y java-1.8.0-openjdk-devel
-Linux:~ # echo $JAVA_HOME            # 確認 Java 環境變數
+linux:~ # yum install -y java-1.8.0-openjdk-devel
+linux:~ # echo $JAVA_HOME            # 確認 Java 環境變數
 ```
 
 在安裝 sdk 之後, 會在寫入 $HOME/.bashrc $HOME/.bash_profile, $HOME/.zshrc 加入環境設定. 而 sdkman 套件安裝在 $HOME/.sdkman 底下
 
-```
+```bash
 # install sdk
-Linux:~ $ curl -s get.sdkman.io | bash
-Linux:~ $ cat ~/.bashrc
+linux:~ $ curl -s get.sdkman.io | bash
+linux:~ $ cat ~/.bashrc
 source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 # install groovy
-Linux:~ $ sdk list
-Linux:~ $ sdk install groovy
-Linux:~ $ echo $GROOVY_HOME         # 確認 Groovy 環境變數
+linux:~ $ sdk list
+linux:~ $ sdk install groovy
+linux:~ $ echo $GROOVY_HOME         # 確認 Groovy 環境變數
 ```
 
 ----
@@ -42,25 +42,25 @@ Linux:~ $ echo $GROOVY_HOME         # 確認 Groovy 環境變數
 
 ## command mode / 指令模式
 
-```
-Linux:~ $ groovy -e "println 'Hi, Groovy'"
+```bash
+linux:~ $ groovy -e "println 'Hi, Groovy'"
 ```
 
 
 ## script mode / 指令稿模式
 
-```
-Linux:~ $ cat hi.groovy
+```bash
+linux:~ $ cat hi.groovy
 println 'Hi, Groovy'
-Linux:~ $ groovy hi.groovy
+linux:~ $ groovy hi.groovy
 ```
 
 
 ## inactive mode / 互動模式
 
-```
-Linux:~ $ export EDITOR=vim
-Linux:~ $ groovysh
+```bash
+linux:~ $ export EDITOR=vim
+linux:~ $ groovysh
 groovy> println 'Hi, Groovy'       // 輸入指令方式執行
 groovy> :load hi.groovy            // 載入檔案方式執行
 
@@ -82,23 +82,23 @@ groovy> :doc java.util.ArrayList   // 查詢 java.util.ArrayList doc
 
 ## Groovy Script
 
-```
-Linux:~ $ cat hi.groovy 
+```bash
+linux:~ $ cat hi.groovy 
 println 'Hi, Groovy'
 
-Linux:~ $ groovy hi.groovy       # 使用 Groovy 執行
-Linux:~ $ groovyc Main.groovy    # 編譯成 ByteCode
-Linux:~ $ ls
+linux:~ $ groovy hi.groovy       # 使用 Groovy 執行
+linux:~ $ groovyc Main.groovy    # 編譯成 ByteCode
+linux:~ $ ls
 hi.class    hi.groovy
 
-Linux:~ # java -cp $GROOVY_HOME/embeddable/groovy-all-2.4.4.jar:. Hi   # 使用 Java 執行, 因為有 ByteCode
+linux:~ # java -cp $GROOVY_HOME/embeddable/groovy-all-2.4.4.jar:. Hi   # 使用 Java 執行, 因為有 ByteCode
 ```
 
 
 ## Groovy Script Load Groovy Class
 
-```
-Linux:~ $ cat myclass/GroovyCar.groovy 
+```bash
+linux:~ $ cat myclass/GroovyCar.groovy 
 package myclass
 
 class GroovyCar {
@@ -110,24 +110,24 @@ class GroovyCar {
     }
 }
 
-Linux:~ $ cat runGroovyCar.groovy 
+linux:~ $ cat runGroovyCar.groovy 
 import myclass.GroovyCar
 
 println new GroovyCar()
 
-Linux:~ $ groovy runGroovyCar.groovy
+linux:~ $ groovy runGroovyCar.groovy
 
-Linux:~ $ groovyc myclass/GroovyCar.groovy     # 編譯成 ByteCode
-Linux:~ $ groovyc runGroovyCar.groovy
+linux:~ $ groovyc myclass/GroovyCar.groovy     # 編譯成 ByteCode
+linux:~ $ groovyc runGroovyCar.groovy
 
-Linux:~ $ java -cp $GROOVY_HOME/embeddable/groovy-all-2.4.4.jar:. runGroovyCar
+linux:~ $ java -cp $GROOVY_HOME/embeddable/groovy-all-2.4.4.jar:. runGroovyCar
 ```
 
 
 ## Groovy Script Load Java Class
 
-```
-Linux:~ $ cat myclass/JavaCar.java 
+```bash
+linux:~ $ cat myclass/JavaCar.java 
 package myclass;
 
 public class JavaCar {
@@ -135,24 +135,24 @@ public class JavaCar {
         System.out.println("Create Java Car");
     }
 
-Linux:~ $ cat runJavaCar.groovy 
+linux:~ $ cat runJavaCar.groovy 
 import myclass.JavaCar
 
 new JavaCar()
 
-Linux:~ $ javac myclass/JavaCar.java     # 編譯成 ByteCode
+linux:~ $ javac myclass/JavaCar.java     # 編譯成 ByteCode
 
-Linux:~ $ groovy runJavaCar.groovy       # 沒將 java 編譯成 ByteCode, Groovy 無法 load class
+linux:~ $ groovy runJavaCar.groovy       # 沒將 java 編譯成 ByteCode, Groovy 無法 load class
 
-Linux:~ $ groovyc runJavaCar.groovy
-Linux:~ $ java -cp $GROOVY_HOME/embeddable/groovy-all-2.4.4.jar:. runJavaCar
+linux:~ $ groovyc runJavaCar.groovy
+linux:~ $ java -cp $GROOVY_HOME/embeddable/groovy-all-2.4.4.jar:. runJavaCar
 ```
 
 
 ## Java Source Load Groovy Class
 
-```
-Linux:~ $ cat myclass/ClosureClass.groovy 
+```bash
+linux:~ $ cat myclass/ClosureClass.groovy 
 package myclass
 
 class ClosureClass {
@@ -162,7 +162,7 @@ class ClosureClass {
     }
 }
 
-Linux:~ $ cat ExeGroovyClosure.java 
+linux:~ $ cat ExeGroovyClosure.java 
 import myclass.ClosureClass;
 
 public class ExeGroovyClosure {
@@ -176,9 +176,9 @@ public class ExeGroovyClosure {
     }
 }
 
-Linux:~ $ groovyc myclass/ClosureClass.groovy
-Linux:~ $ javac -cp $GROOVY_HOME/embeddable/groovy-all-2.4.4.jar:. ExeGroovyClosure.java
-Linux:~ $ java -cp $GROOVY_HOME/embeddable/groovy-all-2.4.4.jar:. ExeGroovyClosure
+linux:~ $ groovyc myclass/ClosureClass.groovy
+linux:~ $ javac -cp $GROOVY_HOME/embeddable/groovy-all-2.4.4.jar:. ExeGroovyClosure.java
+linux:~ $ java -cp $GROOVY_HOME/embeddable/groovy-all-2.4.4.jar:. ExeGroovyClosure
 ```
 
 ## Groovy Script Call Groovy Script
@@ -258,7 +258,7 @@ groovy 像一般 script language 一樣是 dynamic type, 使用時不需要先�
 
 ## Number / 數值
 
-```
+```groovy
 i = 10
 int j = 20
 Integer k = 30
@@ -269,7 +269,7 @@ def l = 40
 
 一般字串放在 ' (單引號) 或 "(雙引號), 中間. ' 內的所有字元, 皆無特殊意義; " 內的字元, 有些會有特需意義, 例如 \n 是換行, ...
 
-```
+```groovy
 // single line string
 println "don't say \"no\""
 
@@ -299,7 +299,7 @@ Regular Expression / 正規表示
 
 arraylist 像是其他一般語言的陣列 (array), index 從 0 開始, 和陣列不一樣的, arraylist 不需要宣告型別, arraylist 可裝任何型別. arraylist 在 assign value 時, 是 copy by reference 而非 copy by value
 
-```
+```groovy
 // assign value
 list1 = []                   // empty arraylist
 println("list1: " + list1 + ", list1 type: " + list1.getClass())
@@ -374,8 +374,8 @@ hash1.Tues = 'Tuesday'      // 同上
 hast1.remove(A)             // delete element
 println "hash1" + hash1
 println hash2
-println hash1.keySet()
-println hash1.values()
+println hash1.keySet()      // 顯示 all key
+println hash1.values()      // 顯示 all value
 println hash1['Sun']        // 顯示該 key value 
 println hash1.Sun           // 同上
 
@@ -546,12 +546,12 @@ groovy 把 {} 當 anonymous method 和 closure 使用
 groovy 會把檔案當成 class 來處理 (跟 Java 一樣)
 
 ```
-Linux:~ $ tree
+linux:~ $ tree
 .
 ├── Main.groovy
 └── MyFun.groovy
 
-Linux:~ $ cat MyFun.groovy
+linux:~ $ cat MyFun.groovy
 // define method
 static def show_ps1() {
     println "ps aux".execute().text
@@ -658,7 +658,7 @@ enum Sex {
 
 ## class
 
-```
+```groovy
 class Person {
     final String name
     int age = 0
@@ -682,6 +682,27 @@ println p1.age = 10   // p1.setAge(10)
 
 // static data field 只會自動產生對應的 get
 println p1.name       // p1.getName()
+
+// class property
+Person.metaClass.properties.findAll {
+    println it.name
+}
+p1.getProperty('name')       // 動態取得 property
+p1.setProperty('age', 11)    // 動態設定 property
+p1.properties['age'] = 12
+p1.properties['age']
+
+
+// 顯示 class method
+Person.metaClass.methods.findAll {
+    println it.name
+}
+p1."getAge"()                 // 動態使用 method
+```
+
+```groovy
+methodMissing
+invokeMethod
 ```
 
 ## extends
@@ -1053,3 +1074,13 @@ binding.setProperty('name', 'Groovy')
 shell = new GroovyShell(binding)
 shell.evaluate(new File('script2.groovy'))
 ```
+
+---
+
+# Ref
+
+[Groovy Language Documentation](http://docs.groovy-lang.org/next/html/documentation/)
+
+[Metaprogramming](http://docs.groovy-lang.org/next/html/documentation/core-metaprogramming.html)
+
+[Groovy Tutorial](https://www.tutorialspoint.com/groovy/index.htm)
