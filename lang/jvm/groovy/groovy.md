@@ -1081,6 +1081,8 @@ shell.evaluate(new File('script2.groovy'))
 
 [Groovy Language Documentation](http://docs.groovy-lang.org/next/html/documentation/)
 
+[Working with collections](http://docs.groovy-lang.org/next/html/documentation/working-with-collections.html)
+
 [Metaprogramming](http://docs.groovy-lang.org/next/html/documentation/core-metaprogramming.html)
 
 [Groovy Tutorial](https://www.tutorialspoint.com/groovy/index.htm)
