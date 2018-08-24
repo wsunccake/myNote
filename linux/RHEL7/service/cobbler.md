@@ -126,7 +126,22 @@ rhel:~ # cobbler system add --name=test-pxe --profile=CentOS7-x86_64 --ip-addres
 
 # Mirantis
 
-```
+```bash
+# check mirror
+fuel:~ # ls /var/www/nailgun/mirrors
+
+# create mirror
+fuel:~ # fuel-createmirror
+
+# check boostrap image
+fuel:~ # ls /var/www/nailgun/boostraps
+
+# create boostrap image
+fuel:~ # fuel-bootstrap build  # create image -> /tmp/93f117b9-65b7-41fa-ade2-52002989dda1.tar.gz
+fuel:~ # fuel-bootstrap import /tmp/<93f117b9-65b7-41fa-ade2-52002989dda1>.tar.gz
+fuel:~ # fuel-bootstrap activate <93f117b9-65b7-41fa-ade2-52002989dda1>
+fuel:~ # fuel-bootstrap list
+
 # node manage
 fuel:~ # fuel node --list
 fuel:~ # fuel node --delete --node <node_id>
@@ -144,4 +159,18 @@ fuel:~ # cobbler system list
 fuel:~ # cobbler system remove --name=<node>
 fuel:~ # cobbler sync
 fuel:~ # cobbler list
+```
+
+
+# MCollective
+
+```bash
+fuel:~ # mco help
+fuel:~ # mco ping
+
+# for ubuntu
+node:~ # initctl help
+node:~ # initctl list
+node:~ # initctl status mcollective
+node:~ # initctl start mcollective
 ```

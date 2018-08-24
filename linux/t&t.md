@@ -150,6 +150,10 @@ linux:~ # grep -Ev '^$|^#'
 
 ### sed
 
+```bash
+// remove ansi color code
+linux:~ # sed 's/\x1b\[[0-9;]*m//g'  file.log
+```
 
 #### 跨行搜尋
 
