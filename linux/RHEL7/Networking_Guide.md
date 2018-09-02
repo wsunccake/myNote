@@ -692,6 +692,8 @@ rhel:~ # ip netns delete qdhcp
 
 rhel:~ # ip -all netns exec ip addr show
 rhel:~ # ip -all netns delete
+
+rhel:~ # uuidgen ifcfg-eth0
 ```
 
 

@@ -4,7 +4,12 @@
 centos:~ # yum install python34 python34-pip
 ```
 
+
+---
+
 # pip
+
+安裝 virtualenv, pybuilder 為例子
 
 ```bash
 linux:~ # pip list
@@ -20,6 +25,8 @@ linux:~ # pip uninstall requests
 ```
 
 
+---
+
 # virtualenv
 
 ```bash
@@ -30,6 +37,8 @@ linux:~/myproject3 # deactivate
 ```
 
 
+---
+
 # ipython 
 
 ```bash
@@ -38,6 +47,8 @@ linux:~ # ipython
 ```
 
 
+---
+
 # jupyter
 
 ```bash
@@ -45,6 +56,8 @@ linux:~ # pip install jupyter
 linux:~ # jupyter notebook
 ```
 
+
+---
 
 # PyBuilder
 
@@ -70,7 +83,7 @@ linux:~/project $ pyb pycharm_generate
 
 ## source code
 
-```
+```bash
 linux:~/myproject3/demo # mkdir -p src/main/python
 linux:~/myproject3/demo # cat src/main/python/hell.py
 import sys
@@ -81,7 +94,7 @@ def helloworld(out):
 
 ## executable
 
-```
+```bash
 linux:~/myproject3/demo # mkdir -p src/main/scripts
 linux:~/myproject3/demo # cat src/main/scripts/hello
 #!/usr/bin/env python
@@ -95,7 +108,7 @@ linux:~/myproject3/demo # chmod +x src/main/scripts/hello
 
 ## unit test
 
-```
+```bash
 linux:~/myproject3/demo # cat src/unittest/python/hello_tests.py 
 from mockito import mock, verify
 import unittest
@@ -111,7 +124,7 @@ class HelloTest(unittest.TestCase):
 
 ## build file
 
-```
+```bash
 linux:~/myproject3/demo # cat build.py
 from pybuilder.core import init, use_plugin
 
@@ -129,18 +142,18 @@ default_task = ['clean', 'publish']
 def initialize(project):
     project.build_depends_on('mockito')
     project.version = '0.1'
-
+```
 
 ## run
 
-```
+```bash
 linux:~/myproject3/demo # pyb install_dependencies
 linux:~/myproject3/demo # pyb
 ```
 
 # class
 
-```
+```bash
 #!/usr/bin/env python3
  
 class First(object):
