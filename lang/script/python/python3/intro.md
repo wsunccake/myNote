@@ -935,12 +935,40 @@ print('{0[a]} {0[b]} {0[c]}{1}'.format(example_dict, 'others'))
 print('{0: f}'.format(7.03))
 ```
 
+## here document
 
----
-
-# process
+```python
+print('''hello python2
+hi python3''')
+```
 
 
 ---
 
 # file
+
+```python
+f = open('/etc/passwd', 'r') 
+lines1 = f.readlines() 
+for line in lines1: 
+    print lines.rstrip() 
+f.close() 
+
+with open('somefile.txt', 'w') as f:
+    f.write('hello python')
+```
+
+
+---
+
+# process
+
+```python
+import subprocess
+
+subprocess.call(['ls', '-l'])
+
+c1 = subprocess.Popen(['grep', '^root', '/etc/passwd'], stdout = subprocess.PIPE)
+c2 = subprocess.Popen(["cut", "-d:", "-f1"], stdin = c1.stdout)
+c2.communicate()
+```
