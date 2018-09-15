@@ -275,6 +275,27 @@ rhel:~ # docker run -d -P --name web --link db:db training/webapp python app.py
 rhel:~ # docker inspect -f "{{ .HostConfig.Links }}" web
 ```
 
+
+`multi nic`
+
+```bash
+# create network
+centos:~ # docker network ls
+centos:~ # docker network create blue_network
+centos:~ # docker network create red_network
+
+# create container
+centos:~ # docker run -td --network=blue_network <container>
+
+# attach network
+centos:~ # docker network connect red_network <container>
+
+# verify container
+centos:~ # docker inspect <container> | jq '.[0].NetworkSettings.Networks'
+centos:~ # docker inspect -f '{{json .NetworkSettings.Networks}}' <container>
+centos:~ # docker exec -it <container> ip link show
+```
+
 ## Docker Hub / Registry
 
 ![docker hub](https://smlsunxie.gitbooks.io/docker-book/content/basic/images/docker-hub.png)
@@ -379,6 +400,140 @@ check /tmp/.X11-unix permission (chmod 1777 /tmp/.X11-unix)
 
 ----
 
+# Docker IPv6
+
+## NAT
+
+`Network Topology`
+
+```
+            host_1                  ---     host_2
+ens33:      2001:db8:1::1:2/64              2001:db:1::1/64
+docker0:    fc00:db8::1/125
+            |
+            |
+            container0
+eth0:       fc00:db8::2/125
+```
+
+
+`Enable IPv6`
+
+```bash
+host_1:~ # sysctl net.ipv6.conf.default.forwarding=1
+host_1:~ # sysctl net.ipv6.conf.all.forwarding=1
+host_1:~ # sysctl net.ipv6.conf.all.proxy_ndp=1
+
+host_1:~ # cat /etc/docker/daemon.json 
+{
+  "ipv6": true,
+  "fixed-cidr-v6": "fc00:db8::1/125"
+}
+
+host_1:~ # systemctl restart docker
+```
+
+
+`Internal Network`
+
+```
+# host ping internel
+host_1:~ # ping -6 -c3 2001:db8:1::1:2
+host_1:~ # ping -6 -c3 fc00:db8::1
+host_1:~ # ping -6 -c3 fc00:db8::2
+
+# container ping internel
+host_1:~ # docker exec -it <container> ping -6 -c3 2001:db8:1::1:2
+host_1:~ # docker exec -it <container> ping -6 -c3 fc00:db8::1
+host_1:~ # docker exec -it <container> ping -6 -c3 fc00:db8::2
+```
+
+
+`External Network`
+
+```
+host_1:~ # ip6tables -t nat -I POSTROUTING -s fc00:db8::1/125 -j MASQUERADE
+
+
+# host ping external
+host_1:~ # ping -6 -c3 2001:db8:1::1
+
+# container ping external
+host_1:~ # docker exec -it <container> ping -6 -c3 2001:db8:1::1
+```
+
+
+## Direct
+
+`Network Topology`
+
+```
+            host_1                  ---     host_2
+ens33:      2001:db8:1::1:2/64              2001:db:1::1/64
+docker0:    2001:db8:1::1:9/125
+            |
+            |
+            container0
+eth0:       2001:db8:1::1:a/125
+```
+
+
+`Enable IPv6`
+
+```bash
+host_1:~ # sysctl net.ipv6.conf.default.forwarding=1
+host_1:~ # sysctl net.ipv6.conf.all.forwarding=1
+host_1:~ # sysctl net.ipv6.conf.all.proxy_ndp=1
+
+host_1:~ # cat /etc/docker/daemon.json 
+{
+  "ipv6": true,
+  "fixed-cidr-v6": "2001:db8:1::1:8/125"
+}
+
+host_1:~ # systemctl restart docker
+```
+
+
+`Internal Network`
+
+```bash
+# routing setup
+host_1:~ # ip -6 route add <container_subnet>/<prefix> dev <docker_bridge>
+host_1:~ # ip -6 route add 2001:db8:1::/64 dev docker0
+host_1:~ # ip -6 route show
+host_1:~ # docker exec -it <container> sh -c "ip -6 addr show; ip -6 route show"
+
+# host ping internel
+host_1:~ # ping -6 -c3 2001:db8:1::1:2
+host_1:~ # ping -6 -c3 2001:db8:1::1:9
+host_1:~ # ping -6 -c3 2001:db8:1::1:a
+
+# container ping internel
+host_1:~ # docker exec -it <container> ping -6 -c3 2001:db8:1::1:2
+host_1:~ # docker exec -it <container> ping -6 -c3 2001:db8:1::1:9
+host_1:~ # docker exec -it <container> ping -6 -c3 2001:db8:1::1:a
+```
+
+
+`External Network`
+
+```bash
+# ndp setup
+host_1:~ # ip -6 neigh add proxy <container_ip> dev <host_nic>
+host_1:~ # ip -6 neigh add proxy 2001:db8:1::1:a dev ens33
+host_1:~ # ip -6 neigh show
+host_1:~ # ip -6 neigh show proxy
+
+# host ping external
+host_1:~ # ping -6 -c3 2001:db8:1::1
+
+# container ping external
+host_1:~ # docker exec -it <container> ping -6 -c3 2001:db8:1::1
+```
+
+
+---
 
 # Dokcer Machine
 
