@@ -452,8 +452,10 @@ host_1:~ # docker exec -it <container> ping -6 -c3 fc00:db8::2
 `External Network`
 
 ```
+# setup iptable
 host_1:~ # ip6tables -t nat -I POSTROUTING -s fc00:db8::1/125 -j MASQUERADE
-
+host_1:~ # ip6tables -I FORWARD ! -i docker0 -o docker0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+host_1:~ # ip6tables -I FORWARD -i docker0 ! -o docker0 -j ACCEPT
 
 # host ping external
 host_1:~ # ping -6 -c3 2001:db8:1::1

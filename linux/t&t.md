@@ -114,10 +114,28 @@ StartupWMClass=jetbrains-idea
 
 stty 設定終端機顯示行列字數
 
-```
+```bash
 linux:~ # stty
 linux:~ # stty -a
 linux:~ # stty columns 200
+```
+
+
+complete 自動補齊
+
+```bash
+# list all completion
+linux:~ # complete -p
+
+# completion all command
+linux:~ # complete -c which == complete -A command which 
+linux:~ # which [TAB] [TAB]
+# completion all command
+# completion
+
+# customed definition completion
+linux:~ # complete -W 'host1' ssh
+linux:~ # ssh [TAB] [TAB]
 ```
 
 
