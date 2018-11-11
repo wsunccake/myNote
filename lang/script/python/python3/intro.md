@@ -443,6 +443,24 @@ my_greater_than = lambda x, y: x if x > y else y
 print(my_greater_than(7, 3))
 ```
 
+```python
+x = 10
+a = lambda y: x + y
+x = 20
+b = lambda y: x + y
+a(10)
+b(10)
+```
+
+```python
+x = 10
+a = lambda y, x=x: x + y
+x = 20
+b = lambda y, x=x: x + y
+a(10)
+b(10)
+```
+
 
 ## decorator
 
@@ -551,6 +569,17 @@ def greet_someone(someone):
 
 greet_someone('John') 
 print(greet_someone.__name__)
+```
+
+
+## comment
+
+```python
+def add1(x, y):
+    return x + y
+
+def add2(x:int, y:int) -> int:
+    return x + y
 ```
 
 

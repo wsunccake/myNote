@@ -28,6 +28,9 @@
 linux:~ # tar cf - *.log | gzip > file.tar.gz
 linux:~ # gzip -dc file.tar.gz | tar xf -
 linux:~ # tar cf - *.log | tar xf - -C backup_dir
+
+linux:~ # curl http://download/file.tar.gz -o file.tar.gz && tar zxf file.tar.gz
+linux:~ # curl http://download/file.tar.gz | tar zx
 ```
 
 
