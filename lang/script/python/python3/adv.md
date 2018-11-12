@@ -28,6 +28,10 @@ for t in threads:
     t.join()
 ```
 
+start(): 開始執行 thread
+
+join(): 等待 thread 結束
+
 
 ## class
 
@@ -60,6 +64,8 @@ for i in range(5):
 for t in threads:
     t.join()
 ```
+
+overwrite run()
 
 
 ## queue
@@ -113,6 +119,8 @@ for i in range(5):
 for c in consumers:
     c.join()
 ```
+
+queue.put(), queue.get()
 
 
 ## lock
@@ -202,6 +210,10 @@ lock.acquire()     # block
 lock.release()
 ```
 
+lock.acquire()
+
+lock.release()
+
 
 ## rlock
 
@@ -219,12 +231,191 @@ lock.release()
 
 ## semaphore
 
+```python
+import datetime
+import random
+import threading
+import time
+
+semaphore = threading.Semaphore(2)
+
+
+def func(index):
+    semaphore.acquire()
+    sleep_time = random.randint(1, 5)
+    print("func call by thread {} and name {}, {}".format(index, threading.currentThread().getName(), datetime.datetime.now()))
+    time.sleep(sleep_time)
+    print("func call by thread {} and sleep {} second, {}".format(index, sleep_time, datetime.datetime.now()))
+    semaphore.release()
+
+
+threads = []
+
+for i in range(5):
+    t = threading.Thread(target=func, args=(i,))
+    threads.append(t)
+    t.start()
+
+for t in threads:
+    t.join()
+```
+
+threading.Semaphore(n), n >= 0
+
+semaphore.acquire(), => -1
+
+semaphore.release(), => +1
+
+
 
 ## condition
+
+```python
+import datetime
+import random
+import threading
+import time
+
+items = []
+condition = threading.Condition()
+
+
+class Producer(threading.Thread):
+    global condition
+    global items
+
+    def __init__(self):
+        # threading.Thread.__init__(self)
+        super().__init__()
+
+    def run(self):
+        condition.acquire()
+        for i in range(5):
+            sleep_time = random.randint(1, 5)
+            print("Producer: {}, sleep: {}, {}".format(threading.currentThread().getName(), sleep_time, datetime.datetime.now()))
+            items.append(sleep_time)
+        condition.notify()
+        condition.release()
+
+
+class Consumer(threading.Thread):
+    global condition
+    global items
+
+    def __init__(self):
+        # threading.Thread.__init__(self)
+        super().__init__()
+
+    def run(self):
+        condition.acquire()
+        if len(items) <= 0:
+            condition.wait()
+            condition.notify()
+        condition.release()
+
+        item = items.pop()
+        print("Consumer: {}, {}".format(threading.currentThread().getName(), datetime.datetime.now()))
+        time.sleep(item)
+        print("Consumer: {}, sleep: {}, {}".format(threading.currentThread().getName(), item, datetime.datetime.now()))
+        
+
+workers = []
+
+for i in range(5):
+    c = Consumer()
+    c.start()
+    workers.append(c)
+
+p = Producer()
+p.start()
+workers.append(p)
+
+for worker in workers:
+    worker.join()
+
+print(items)
+```
+
+condition.acquire()
+
+condition.wait()
+
+condition.notify()
+
+condition.release()
 
 
 ## event
 
+```python
+import datetime
+import random
+import threading
+import time
+
+items = []
+event = threading.Event()
+
+
+class Producer(threading.Thread):
+    global items
+
+    def __init__(self, event):
+        threading.Thread.__init__(self)
+        self.event = event
+
+    def run(self):
+        for i in range(10):
+            sleep_time = random.randint(1, 5)
+            print("Producer: {}, sleep: {}, {}".format(threading.currentThread().getName(), sleep_time, datetime.datetime.now()))
+            items.append(sleep_time)
+        self.event.set()
+        self.event.clear()
+
+
+class Consumer(threading.Thread):
+    global items
+
+    def __init__(self, event):
+        threading.Thread.__init__(self)
+        self.event = event
+
+    def run(self):
+        if len(items) <= 0:
+            self.event.wait()
+
+        item = items.pop()
+        print("Consumer: {}, {}".format(threading.currentThread().getName(), datetime.datetime.now()))
+        time.sleep(item)
+        print("Consumer: {}, sleep: {}, {}".format(threading.currentThread().getName(), item, datetime.datetime.now()))
+
+
+workers = []
+
+for i in range(5):
+    c = Consumer(event)
+    c.start()
+    workers.append(c)
+
+p = Producer(event)
+p.start()
+workers.append(p)
+
+for worker in workers:
+    worker.join()
+
+print(items)
+```
+event.set()
+
+event.clear()
+
+event.wait()
+
+
+## with
+
+## barrier
 
 ## pool
 
