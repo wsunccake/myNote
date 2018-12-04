@@ -58,6 +58,47 @@ linux:~ $ pip search pkg # 搜尋線上有的 module
 
 ---
 
+## config
+
+/etc/pip.conf, $HOME/.pip/pip.conf, $HOME/.config/pip/pip.conf
+
+```bash
+linux:~ # cat /etc/pip.conf
+
+[global]
+extra-index-url = http://192.168.0.1:3141/root/public/
+
+[install]
+trusted-host = 192.168.0.1
+
+linux:~ # pip install -r /root/requirements.txt
+```
+
+
+---
+
+## PyPI
+
+
+
+```
+linux:~ # cat $HOME/.pypirc
+[distutils]
+index-servers =
+    dev 
+
+[dev]
+repository: http://192.168.0.1:3141/root/public/
+username: user 
+password: password 
+
+
+linux:~ # python setup.py register -r dev
+linux:~ # python setup.py sdist upload -r dev
+```
+
+---
+
 ## yolk
 
 使 pip 搜尋軟體時, 沒辦法知道有哪些版本可以安裝, 此時就需要另外安裝 yolk
