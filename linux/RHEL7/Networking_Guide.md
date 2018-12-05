@@ -697,7 +697,7 @@ rhel:~ # uuidgen ifcfg-eth0
 ```
 
 
-# Netowkr Veth Paire #
+# Netowkr Veth Pair #
 
 ```
 rhel:~ # ip link add veth0 type veth peer name veth1
@@ -713,6 +713,11 @@ rhel:~ # ip -d link show
 rhel:~ # ip netns exec qdhcp ip -d link show
 5: veth1@if6: ...
 # 在不同 namespace 裡, veth0@if5 表示 veth0 <-> if5, 但在 另一個 namespce 找到 index 5 為 veth1, 所以 veth0 <-> if5 - if6 <-> veth1
+
+rhel:~ # ethtool -S veth0
+NIC statistics:
+     peer_ifindex: 5
+# 搜尋 peer if index 5 就是 對應的 veth
 ```
 
 # InfiniBand & Remote Direct Memory Access #

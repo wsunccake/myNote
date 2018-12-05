@@ -1,4 +1,4 @@
-# ngix #
+# nginx #
 
 
 ## Package ##
