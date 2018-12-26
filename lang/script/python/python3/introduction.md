@@ -728,9 +728,7 @@ griffin.eat()
 ```python
 import abc
 
-class AbcCar:
-    __metaclass__ = abc.ABCMeta
-
+class AbcCar(metaclass=abc.ABCMeta):
     def __init__(self, volume):
         self._set_gasoline_volume(volume)
         self._gasoline = 0.0
@@ -980,7 +978,7 @@ hi python3''')
 f = open('/etc/passwd', 'r') 
 lines1 = f.readlines() 
 for line in lines1: 
-    print lines.rstrip() 
+    print(lines.rstrip())
 f.close() 
 
 with open('somefile.txt', 'w') as f:
@@ -1001,3 +999,4 @@ c1 = subprocess.Popen(['grep', '^root', '/etc/passwd'], stdout = subprocess.PIPE
 c2 = subprocess.Popen(["cut", "-d:", "-f1"], stdin = c1.stdout)
 c2.communicate()
 ```
+
