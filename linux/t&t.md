@@ -110,6 +110,24 @@ Terminal=false
 StartupWMClass=jetbrains-idea
 ```
 
+#### GNOME 3 Startup 設定
+
+
+```bash
+linux:~ # gnome-session-properties
+
+linux:~ # vi ~/.config/autostart/app.desktop
+Type=Application
+Exec=java -jar /usr/local/bin/selenium-server-standalone-3.4.0.jar
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_US]=Selenium RC
+Name=Selenium RC
+Comment[en_US]=Run Selenium RC
+Comment=Run Selenium RC
+```
+
 ### Other
 
 stty 設定終端機顯示行列字數
