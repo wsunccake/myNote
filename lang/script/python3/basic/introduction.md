@@ -172,6 +172,38 @@ print(my_list3)
 my_list4 = [[x + 3 * y for x in range(3)] for y in range(5)] 
 print(my_list4)
 print(my_list4[3][2])
+
+# example
+m = 4
+n = 2
+
+list1 = []
+for i in range(n):
+    list1.append(i)
+print(list1, list1[1])
+
+list1 = [i for i in range(n)]
+print(list1)
+
+list2 = []
+for i in range(n):
+    for j in range(m):
+        list2.append(j + i * m)
+print(list2)
+
+list2 = [j + i * m for i in range(n) for j in range(m)]
+print(list2)
+
+list3 = []
+for i in range(n):
+    tmp = []
+    for j in range(m):
+        tmp.append(j + i * m)
+    list3.append(tmp)
+print(list3)
+
+list3 = [[j + i * m for j in range(m)] for i in range(n)]
+print(list3)
 ```
 
 
