@@ -55,3 +55,4 @@ if __name__ == '__main__':
     sol = Solution()
     assert sol.isAnagram('anagram', 'nagaram') is True, 'Fail'
     assert sol.isAnagram('rat', 'cat') is False, 'Fail'
+    assert sol.isAnagram('obby', 'boy') is False, 'Fail'

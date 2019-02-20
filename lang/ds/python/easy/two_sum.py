@@ -9,39 +9,6 @@ return [0, 1].
 """
 
 
-elements = [2, 7, 11, 15]
-target = 9
-
-
-for i in range(len(elements)-1):
-    for j in range(i+1, len(elements)):
-        if elements[i] + elements[j] == target:
-            print('{}: {}, {}: {}'.format(i, elements[i], j, elements[j]))
-
-
-for i in range(len(elements)-1):
-    goal = target - elements[i]
-    if goal in elements:
-        for j in range(i+1, len(elements)):
-            if goal == elements[j]:
-                print('{}: {}, {}: {}'.format(i, elements[i], j, elements[j]))
-
-
-for i in range(len(elements)-1):
-    goal = target - elements[i]
-    if goal in elements:
-        j = elements.index(goal)
-        print('{}: {}, {}: {}'.format(i, elements[i], j, elements[j]))
-        break
-
-
-for e in elements:
-    goal = target - e
-    if goal in elements:
-        print('{}: {}, {}: {}'.format(elements.index(e), e, elements.index(goal), goal))
-        break
-
-
 class Solution:
     def twoSum(self, nums: 'List[int]', target: 'int') -> 'List[int]':
         result = [0, 0]

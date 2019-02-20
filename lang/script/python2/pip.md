@@ -30,7 +30,7 @@ linux:~ $ pip help install
 
 # install module
 linux:~ $ sudo pip install pkg.zip # 安裝下載的 module
-linux:~ $ sudo pip install [--install-option="--prefix=/path"] pkg[==ver]* # 線上安裝 module, 可指定版本
+linux:~ $ sudo pip install [--install-option="--prefix=/path"] pkg[==ver]* [--user] # 線上安裝 module, 可指定版本
 
 linux:~ $ cat requirement.txt # 將欲安裝 module 寫在檔案裡
 Django==1.6

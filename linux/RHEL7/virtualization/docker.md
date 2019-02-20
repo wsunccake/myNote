@@ -112,6 +112,8 @@ rhel:~ # ls /sys/fs/cgroup/blkio/docker/<docker_id>
 rhel:~ # docker search archlinux                            # 搜尋 Docker Hub 上的 image
 rhel:~ # curl https://registry.hub.docker.com/v2/repositories/library/archlinux/tags/ | jq -m python.tool                   # 顯示 tag
 rhel:~ # curl https://registry.hub.docker.com/v2/repositories/library/archlinux/tags/ | jq '."results"[]["name"]' | sort    # 顯示 tag
+rhel:~ # curl https://registry.hub.docker.com/v2/repositories/library/python/tags/ | jq '.results[].name'
+rhel:~ # curl https://registry.hub.docker.com/v2/repositories/library/python/tags/ | jq '.results[] | {name: .name}'
 
 
 rhel:~ # docker images                                      # 顯示本機上的 images
