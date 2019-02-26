@@ -1,15 +1,3 @@
-class LinkedNode:
-    def __init__(self, val):
-        self.val = val
-        self.next = None
-
-
-def traverse(node):
-    while node:
-        print(node.val, end=' -> ')
-        node = node.next
-
-
 class Student:
     def __init__(self, name, score):
         self.name = name
@@ -19,20 +7,46 @@ class Student:
         return '{}: {}'.format(self.name, self.score)
 
 
-def compare_score(s1, s2):
+def better_score(s1, s2):
     if s1.score > s2.score:
         return True
     return False
+
+
+def equal_score(s1, s2):
+    if s1.score == s2.score:
+        return True
+    return False
+
+
+class LinkedNode:
+    def __init__(self, val):
+        self.val = val
+        self.next = None
+
+
+def traverse(node):
+    nodes = []
+    while node:
+        print(node.val, end=' -> ')
+        nodes.append(node)
+        node = node.next
+
+    return nodes
 
 
 class LinkedList:
     def __init__(self, node, comparison):
         self.head = node
         self.comparison = comparison
+        self.equal = None
+
+    def set_equal(self, equal):
+        self.equal = equal
 
     def insert1(self, node):
         if self.head.next is None:
-            if self.comparison(self.head.val, node.val):
+            if self.comparison(node.val, self.head.val):
                 node.next = self.head
                 self.head = node
             else:
@@ -44,13 +58,13 @@ class LinkedList:
         current = self.head
 
         while True:
-            if self.comparison(current.val, node.val):
+            if self.comparison(node.val, current.val):
                 node.next = current
                 prev.next = node
                 break
 
             if current.next is None:
-                if self.comparison(current.val, node.val):
+                if self.comparison(node.val, current.val):
                     node.next = current
                     prev.next = node
                 else:
@@ -65,7 +79,7 @@ class LinkedList:
 
     def insert2(self, node):
         if self.head.next is None:
-            if self.comparison(self.head.val, node.val):
+            if self.comparison( node.val, self.head.val):
                 node.next = self.head
                 self.head = node
             else:
@@ -77,7 +91,7 @@ class LinkedList:
         current = self.head
 
         while current:
-            if self.comparison(current.val, node.val):
+            if self.comparison(node.val, current.val):
                 node.next = current
                 prev.next = node
                 break
@@ -94,7 +108,7 @@ class LinkedList:
 
     def insert(self, node):
         current = self.head
-        if self.comparison(current.val, node.val):
+        if self.comparison(node.val, current.val):
             node.next = current
             self.head = node
             return
@@ -103,7 +117,7 @@ class LinkedList:
         current = self.head
 
         while current:
-            if self.comparison(current.val, node.val):
+            if self.comparison(node.val, current.val):
                 node.next = current
                 prev.next = node
                 break
@@ -115,24 +129,45 @@ class LinkedList:
             prev = current
             current = current.next
 
+    def find(self, val):
+        current = self.head
+
+        while current:
+            if self.equal(val, current.val):
+                return current.val
+
+            current = current.next
+
+        return None
+
 
 if __name__ == '__main__':
     # data
-    s1 = Student('a', 60)
-    s2 = Student('b', 90)
+    s1 = Student('s1', 60)
+    s2 = Student('s2', 90)
+    s3 = Student('s3', 80)
+    s4 = Student('s4', 40)
+    s5 = Student('s5', 50)
+    s6 = Student('s6', 100)
 
     # insert
     n1 = LinkedNode(s1)
     n1.next = LinkedNode(s2)
-    n1.next.next = LinkedNode(Student('c', 80))
+    n1.next.next = LinkedNode(s3)
     traverse(n1)
     print()
 
     # sort insert
-    linked_list = LinkedList(LinkedNode(s1), compare_score)
+    linked_list = LinkedList(LinkedNode(s1), better_score)
     linked_list.insert(LinkedNode(s2))
-    linked_list.insert(LinkedNode(Student('c', 80)))
-    linked_list.insert(LinkedNode(Student('d', 40)))
-    linked_list.insert(LinkedNode(Student('e', 50)))
-    linked_list.insert(LinkedNode(Student('f', 100)))
+    linked_list.insert(LinkedNode(s3))
+    linked_list.insert(LinkedNode(s4))
+    linked_list.insert(LinkedNode(s5))
+    linked_list.insert(LinkedNode(s6))
     traverse(linked_list.head)
+    print()
+
+    # find
+    linked_list.set_equal(equal_score)
+    s = linked_list.find(Student('', 40))
+    print(s)
