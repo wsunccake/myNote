@@ -140,6 +140,74 @@ def find_most_right(node):
     return node, parent
 
 
+def height(node):
+    if not node:
+        return 0
+
+    if not node.right and not node.left:
+        return 1
+
+    if height(node.right) > height(node.left):
+        return 1 + height(node.right)
+    else:
+        return 1 + height(node.left)
+
+
+def balance_factor(node):
+    if not node:
+        return None
+
+    return height(node.left) - height(node.right)
+
+
+def balance(node):
+    root = node
+    root_bf = balance_factor(node)
+
+    if -1 <= root_bf <= 1:
+        return root
+    left_bf = balance_factor(node.left) if node.left else 0
+    right_bf = balance_factor(node.right) if node.right else 0
+
+    # LL type
+    if root_bf > 0 and left_bf > 0:
+        root = node.left
+        node.left = root.right
+        root.right = node
+        return balance(root)
+
+    # RR type
+    if root_bf < 0 and right_bf < 0:
+        root = node.right
+        node.right = root.left
+        root.left = node
+        return balance(root)
+
+    # LR type
+    # if root_bf > 0 and left_bf < 0 :
+    if root_bf > 0 > left_bf:
+        root = node.left.right
+        tmp = node.left
+        tmp.right = root.left
+        node.left = root.right
+        root.right = node
+        root.left = tmp
+        return balance(root)
+
+    # RL type
+    # if root_bf < 0 and right_bf > 0:
+    if root_bf < 0 < right_bf:
+        root = node.right.left
+        tmp = node.right
+        tmp.left = root.right
+        node.right = root.left
+        root.right = tmp
+        root.left = node
+        return balance(root)
+
+    return root
+
+
 class BinaryTree:
     def __init__(self, node, comparison):
         self.root = node
@@ -212,11 +280,6 @@ class BinaryTree:
         return result, parent
 
     def delete(self, val):
-        """
-        no implement
-        :param val:
-        :return:
-        """
         current, parent = self.find_node(val)
 
         # no found
@@ -225,7 +288,6 @@ class BinaryTree:
 
         # root
         if parent is None:
-            "no implement"
             # leaf
             if current.right is None and current.left is None:
                 self.root = None
@@ -305,40 +367,49 @@ if __name__ == '__main__':
     s10 = Student('s10', 0)
     s11 = Student('s11', 15)
 
-    # # insert
-    # n0 = TreeNode(s0)
-    # n0.left = TreeNode(s1)
-    # n0.right = TreeNode(s2)
-    # n0.left.left = TreeNode(s3)
-    # n0.left.right = TreeNode(s4)
-    # n0.right.right = TreeNode(s5)
-    # n0.left.left.left = TreeNode(s6)
-    # n0.left.left.right = TreeNode(s7)
-    # n0.right.right.left = TreeNode(s8)
-    # n0.right.right.right = TreeNode(s9)
-    # print(n0.left.val, n0.right.val)
-    #
-    # # traverse
-    # global traversal_list
-    #
-    # traversal_list = []
-    # pre_order_traverse(n0)
-    # print()
-    #
-    # traversal_list = []
-    # in_order_traverse(n0)
-    # print()
-    #
-    # post_traversal_list = []
-    # post_order_traverse(n0, post_traversal_list)
-    # print()
-    #
-    # post_order_traverse2(n0)
-    #
-    # print()
-    # level_order_traverse(n0)
+    # insert
+    n0 = TreeNode(s0)
+    n0.left = TreeNode(s1)
+    n0.right = TreeNode(s2)
+    n0.left.left = TreeNode(s3)
+    n0.left.right = TreeNode(s4)
+    n0.right.right = TreeNode(s5)
+    n0.left.left.left = TreeNode(s6)
+    n0.left.left.right = TreeNode(s7)
+    n0.right.right.left = TreeNode(s8)
+    n0.right.right.right = TreeNode(s9)
+    print('node val:')
+    print(n0.left.val, n0.right.val)
+    print()
+
+    # traverse
+    global traversal_list
+
+    traversal_list = []
+    print('pre order:')
+    pre_order_traverse(n0)
+    print('\n')
+
+    traversal_list = []
+    print('in order:')
+    in_order_traverse(n0)
+    print('\n')
+
+    post_traversal_list = []
+    print('post order:')
+    post_order_traverse(n0, post_traversal_list)
+    print('\n')
+
+    print('post order:')
+    post_order_traverse2(n0)
+    print('\n')
+
+    print('level order:')
+    level_order_traverse(n0)
+    print('\n')
 
     # sort insert
+    print('insert:')
     binary_tree = BinaryTree(TreeNode(Student('s0', 60)), better_score)
     binary_tree.insert(TreeNode(s1))
     binary_tree.insert(TreeNode(s2))
@@ -352,29 +423,85 @@ if __name__ == '__main__':
     binary_tree.insert(TreeNode(s10))
     binary_tree.insert(TreeNode(s11))
 
-    # print(binary_tree.root.val)
-
+    print(binary_tree.root.val)
     level_order_traverse(binary_tree.root)
+    print('\n')
+    print(binary_tree.root.left.val, '\n', binary_tree.root.right.val, '\n')
 
-    # print(binary_tree.root.left.val, binary_tree.root.right.val)
-    # print(binary_tree.root.right.left, binary_tree.root.right.right)
+    # search
+    print('search:')
     binary_tree.set_equal(equal_score)
-    print()
 
-    # b = binary_tree.find_val(Student('b', 50))
-    # print(b)
-    # print()
+    print('find val:')
+    v = binary_tree.find_val(Student('b', 50))
+    print('val', v, '\n')
 
-    c1, p1 = binary_tree.find_node(Student('b', 40))
-    # print(c1.val)
-    # print(p1)
-    print()
+    print('find node:')
+    n, p = binary_tree.find_node(Student('b', 40))
+    print('node:', n.val, '\nparent:', p.val, '\n')
 
-    # c2, p2 = find_most_right(c1)
-    # print(c2.val)
-    # print(p2.val)
-    # print()
+    print('find far right node:')
+    n, p = find_most_right(n)
+    print('node:', n.val, '\nparent:', p.val, '\n')
 
-    # binary_tree.delete(Student('b', 40))
+    print('delete:')
+    binary_tree.delete(Student('b', 40))
     binary_tree.delete(Student('b', 60))
     level_order_traverse(binary_tree.root)
+    print('\n')
+
+    # LL example
+    print('ll type')
+    n0 = TreeNode(Student('l0', 50))
+    n0.left = TreeNode(Student('l1', 40))
+    n0.left.left = TreeNode(Student('l2', 30))
+    n0.left.left.left = TreeNode(Student('l3', 20))
+    n0.left.left.left.left = TreeNode(Student('l4', 10))
+    level_order_traverse(n0)
+    print()
+    n1 = balance(n0)
+    level_order_traverse(n1)
+    print('\n')
+
+    # RR example
+    print('rr type')
+    n0 = TreeNode(Student('l0', 50))
+    n0.right = TreeNode(Student('l1', 60))
+    n0.right.right = TreeNode(Student('l2', 70))
+    n0.right.right.right = TreeNode(Student('l3', 80))
+    n0.right.right.right.right = TreeNode(Student('l4', 90))
+    level_order_traverse(n0)
+    print()
+    n1 = balance(n0)
+    level_order_traverse(n1)
+    print('\n')
+
+    # LR example
+    print('lr type')
+    n0 = TreeNode(Student('l0', 70))
+    n0.right = TreeNode(Student('l1', 80))
+    n0.left = TreeNode(Student('l2', 30))
+    n0.left.right = TreeNode(Student('l3', 50))
+    n0.left.left = TreeNode(Student('l4', 20))
+    n0.left.right.right = TreeNode(Student('l5', 60))
+    n0.left.right.left = TreeNode(Student('l6', 40))
+    level_order_traverse(n0)
+    print()
+    n1 = balance(n0)
+    level_order_traverse(n1)
+    print('\n')
+
+    # RL example
+    print('rl type')
+    n0 = TreeNode(Student('l0', 40))
+    n0.right = TreeNode(Student('l1', 80))
+    n0.left = TreeNode(Student('l2', 30))
+    n0.right.right = TreeNode(Student('l3', 90))
+    n0.right.left = TreeNode(Student('l4', 60))
+    n0.right.left.right = TreeNode(Student('l5', 70))
+    n0.right.left.left = TreeNode(Student('l6', 50))
+    level_order_traverse(n0)
+    print()
+    n1 = balance(n0)
+    level_order_traverse(n1)
+    print('\n')
