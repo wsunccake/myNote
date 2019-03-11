@@ -41,7 +41,10 @@ rhel:~ # docker run -itdP centos /bin/bash                  # d: background mode
 
 rhel:~ # docker exec <container_id> /bin/sh                 # 在 host 端送 command 到 container 端執行
 
+# docker exec <container_id> /bin/sh then show below error
+# rpc error: code = 2 desc = oci runtime error: exec failed: container_linux.go:247: starting container process caused "process_linux.go:75: starting setns process caused \"fork/exec /
 rhel:~ # nsenter --target <container_id_pid>  --mount --uts --ipc --net --pid /bin/sh
+rhel:~ # nsenter --target <container_id_pid>  --mount --uts --ipc --net --pid
 
 rhel:~ # dock ps                                            # 顯示執行中的 container
 rhel:~ # dock ps -l                                         # 顯示最後一個 container
