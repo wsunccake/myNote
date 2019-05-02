@@ -36,6 +36,10 @@ esxi: ~ # cat /etc/ssh/keys-root/authorized_keys
 
 ```bash
 linux:~ # ovftool --acceptAllEulas --noSSLVerify --diskMode=thin --name=<vm_name> --datastore=<data_store> --network=<vm_network> <vm>.ova vi://root:<password>@<esxi_ip>
+
+# the provided manifest file is invalid
+linux:~ # tar xf <xxx>.ova
+linux:~ # ovftool <xxx>.ovf <new_xxx>.ova
 ```
 
 
