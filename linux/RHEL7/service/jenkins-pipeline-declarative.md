@@ -294,6 +294,74 @@ pipeline {
 
 ---
 
+## library
+
+```
+(root)
++- vars
+|   +- log.groovy
+|   +- sayHello.groovy
+```
+
+```groovy
+// log.groovy
+def info(message) {
+    echo "INFO: ${message}"
+}
+```
+
+```groovy
+// sayHello.groovy
+def call(String name = 'human') {
+  echo "Hello ${name}"
+}
+```
+
+`global`
+
+```
+@Library('global-library@master') _
+
+pipeline {
+    agent any
+    stages {
+        stage('vars') {
+            steps {
+                sayHello 'Jenkins'
+                script {
+                    log.info 'info message'
+                }
+            }
+        }
+    }
+}
+```
+
+`dynamic`
+
+```groovy
+ibrary identifier: 'dynamic-libary@master', retriever: modernSCM(
+  [$class: 'GitSCMSource',
+   remote: 'https://git/jenkins-example.git'])
+
+pipeline {
+    agent any
+    stages {
+        stage('vars') {
+            steps {
+                sayHello 'Jenkins'
+                script {
+                    log.info 'info message'
+                }
+            }
+        }
+    }
+}
+```
+
+
+---
+
 ## Ref
 
 [Pipeline Syntax](https://jenkins.io/doc/book/pipeline/syntax/)
