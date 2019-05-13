@@ -123,6 +123,40 @@ node {
 ```
 
 
+## resources
+
+
+```
+(root)
++- resources
+|       +- foo.json
+```
+
+`foo.json`
+
+```
+{
+    "version": "0.1"
+}
+```
+
+`resources`
+
+```groovy
+library identifier: 'dynamic-libary@master', retriever: modernSCM(
+  [$class: 'GitSCMSource',
+   remote: 'https://git/jenkins-example.git'])
+
+def fooJson = libraryResource 'foo.json'
+
+node {
+    stage('resources') {
+        echo "${fooJson}"
+    }
+}
+```
+
+
 ### vars & src
 
 ```groovy

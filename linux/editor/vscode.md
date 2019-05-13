@@ -1,7 +1,6 @@
 # vscode
 
 
-
 ## plugin
 
 `theme & icon`
