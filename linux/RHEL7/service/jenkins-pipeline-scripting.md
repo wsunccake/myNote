@@ -97,6 +97,7 @@ node {
 (root)
 +- src/org/foo
 |           +- Zot.groovy
+|           +- Bar.groovy
 ```
 
 `function`
@@ -110,21 +111,50 @@ def showMessage(msg) {
 return this
 ```
 
+`class`
+
+```groovy
+// Bar.groovy
+package org.foo
+
+class Bar {
+    def steps
+
+    Bar(steps) {
+        this.steps = steps
+    }
+
+    def show(tasks) {
+        steps.echo "bar: ${tasks}"
+    }
+}
+```
+
+`dynamic`
+
 ```groovy
 node {
-    stage('src') {
+    stage('src-function') {
         library (
-        identifier: 'dynamic-libary@master', retriever: modernSCM(
-            [$class: 'GitSCMSource',
-            remote: 'https://git/jenkins-example.git'])
+            identifier: 'dynamic-libary@master', retriever: modernSCM(
+                [$class: 'GitSCMSource',
+                remote: 'https://git/jenkins-example.git'])
         ).org.foo.Zot.new().showMessage 'show zot'
+    }
+
+    stage('src-class') {
+        def bar = library (
+            identifier: 'dynamic-libary@master', retriever: modernSCM(
+                [$class: 'GitSCMSource',
+                remote: 'https://git/jenkins-example.git'])
+        ).org.foo.Bar.new()
+        bar.show('bar')
     }
 }
 ```
 
 
 ## resources
-
 
 ```
 (root)
