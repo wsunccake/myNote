@@ -3,10 +3,9 @@
 
 ```bash
 ~ # vmware -vl
-
-
 ```
 
+http://<esxi_ip>/ui
 
 ---
 
@@ -56,9 +55,7 @@ esxi: ~ # vim-vmd vmsvc/power.shutdown <vm_id>
 esxi: ~ # vim-vmd vmsvc/power.getstate <vm_id>
 esxi: ~ # vim-vmd vmsvc/power.on <vm_id>
 
+esxi: ~ # vim-cmd hostsvc/net/info | grep "mac ="
 
 esxi: ~ # cat /vmfs/volumes/<data_store>/<vm_name>/<vm_name>.vmx
-
-
-esxi: ~ # vim-cmd hostsvc/net/info | grep "mac ="
 ```
