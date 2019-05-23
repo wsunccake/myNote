@@ -376,6 +376,7 @@
 
 ```sql
 > db.products.update({_id: 100}, {$set: {sku: xyz100}})
+> db.products.update({}, {$set: {sku: xyz100}}, {multi: true})
 ```
 
 [$unset](https://docs.mongodb.com/manual/reference/operator/update/unset/)

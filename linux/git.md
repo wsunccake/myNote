@@ -1,17 +1,17 @@
-# Git #
+# Git
 
 
-## Environment ##
+## Environment
 
-```
-linux:~ $ git config --global user.name 'owner' # 設定使用者名稱 
+```bash
+linux:~ $ git config --global user.name 'owner'            # 設定使用者名稱 
 linux:~ $ git config --global user.email 'owner@localhost' # 設定email 
-linux:~ $ git config --global core.editor vim # 設定文字編輯器 
-linux:~ $ git config --global merge.tool vimdiff # 設定比較工具 
-linux:~ $ git config --global color.ui true # 設定顯示顏色 
-linux:~ $ git config --global apply.whitespace nowarn # 忽略空白的變化, 空白對有些語言是有影響的 (像是 Ruby) 
+linux:~ $ git config --global core.editor vim              # 設定文字編輯器 
+linux:~ $ git config --global merge.tool vimdiff           # 設定比較工具 
+linux:~ $ git config --global color.ui true                # 設定顯示顏色 
+linux:~ $ git config --global apply.whitespace nowarn      # 忽略空白的變化, 空白對有些語言是有影響的 (像是 Ruby) 
 linux:~ $ git config --global alias.log-pretty 'log --graph --oneline --decorate --date-order' # 設定別名
-linux:~ $ git config --list # 顯示當前設定
+linux:~ $ git config --list                                # 顯示當前設定
 
 linux:~ $ cat ~/.gitconfig 
 [user] 
@@ -34,11 +34,13 @@ linux:~ $ cat ~/.gitconfig
 ```
 
 
-## Normal ##
+---
 
-```
+## Normal
+
+```bash
 # download project
-linux:~ $ git clone git@github.com:user/sandbox.git # 下載 project 
+linux:~ $ git clone git@github.com:user/sandbox.git            # 下載 project 
 linux:~ $ git clone git@github.com:user/sandbox.git newproejct # 下載 project 並改名為 newproject 
 
 # file status
@@ -78,13 +80,13 @@ linux:~/project $ git pull
 
 ## Merge
 
-```
+```bash
    b1              b1 
    /     =>      /    \ 
 v1 - v2       v1 - v2 - v3
 ```
 
-```
+```bash
 linux:~/project $ git checkout v2 
 linux:~/project $ git merge b1
 ```
@@ -92,40 +94,28 @@ linux:~/project $ git merge b1
 
 ## Rebase
 
-```
+```bash
    b1 
    /     => 
 v1 - v2       v1 - v2 - v3
 ```
 
-```
+```bash
 linux:~/project $ git checkout v2 
 linux:~/project $ git rebase b1
 ```
 
 
-## Reset
-
-| option 	 | HEAD 	 | index | workdir 	 |
-| ---------- | --------- | ----- | --------- |
-| --soft 	 | Y		 | 		 | 			 |
-| --mixed 	 | Y 		 | Y 	 | 			 |
-| --hard 	 | Y 		 | Y 	 | Y 		 |
-
-```
-linux:~/project $ git reset HEAD
-linux:~/project $ git reset --mixed HEAD # 同上
-linux:~/project $ git reset --soft HEAD
-linux:~/project $ git reset --hard HEAD
-```
-
-
 ## Stash
 
-```
-linux:~/project $ git stash      # 先將以改修改過的 code 存入 stash
+```bash
+linux:~/project $ git stash                  # 先將以改修改過的 code 存入 stash
+linux:~/project $ git list                   # 顯示所有 stash
+linux:~/project $ git show [stash@{0}]
+linux:~/project $ git apply [stash@{0}]
+linux:~/project $ git drop  [stash@{0}]
+linux:~/project $ git stash pop [stash@{0}]  # 再將以改修改過的 code 從 stash 寫回
 linux:~/project $ git pull
-linux:~/project $ git stash pop  # 再將以改修改過的 code 從 stash 寫回
 
 # pull code step:
 linux:~/project $ git stash
@@ -141,6 +131,25 @@ linux:~/project $ git push
 linux:~/project $ git log
 linux:~/project $ git stash pop
 ```
+
+
+## Reset
+
+| option 	 | HEAD 	 | index | workdir 	 |
+| ---------- | --------- | ----- | --------- |
+| --soft 	 | Y		 | 		 | 			 |
+| --mixed 	 | Y 		 | Y 	 | 			 |
+| --hard 	 | Y 		 | Y 	 | Y 		 |
+
+```bash
+linux:~/project $ git reset HEAD
+linux:~/project $ git reset --mixed HEAD # 同上
+linux:~/project $ git reset --soft HEAD
+linux:~/project $ git reset --hard HEAD
+```
+
+
+---
 
 ## Multi User
 

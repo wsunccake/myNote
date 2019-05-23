@@ -433,10 +433,63 @@ switch (sex) {
 }
 ```
 
+
 ### for	
+
+```javascript
+let weeks = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+for (let i = 0; i < weeks.length; i++) {
+    console.log(weeks[i]);
+}
+
+for (let day in weeks) {
+    console.log(day);
+}
+
+for (let day of weeks) {
+    console.log(day);
+}
+```
 
 
 ### while
+
+```javascript
+let weeks = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+let i = 0;
+
+while (i < weeks.length) {
+    console.log(weeks[i++]);
+}
+```
+
+
+### do
+
+```javascript
+let weeks = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+let i = 0;
+
+do {
+    console.log(weeks[i++]);
+} while (i < weeks.length);
+```
+
+
+### forEach 
+
+```javascript
+let weeks = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+weeks.forEach(function (element, index) {
+   console.log(element, index);
+});
+
+weeks.forEach((element, index) => {
+    console.log(element, index);
+});
+```
 
 
 ---
@@ -465,7 +518,7 @@ var countNumber = function () { // closure
 
 ## Object Oriented
 
-```
+```javascript
 // function declaration 去產生 object
 function Woman(name) {
       // public attribute 
