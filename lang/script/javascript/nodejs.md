@@ -221,38 +221,44 @@ centos:~ $ npm install somepackage
 
 ---
 
-#### Module and Package (CommonJS)
+## Module and Package (CommonJS)
 
 [`my_module.js`](./example/nodejs/ex_module/my_module.js)
 
-	var name;
-	
-	exports.setName = function(thyName) {
-	  name = thyName;
-	};
-	
-	exports.sayHello = function() {
-	  console.log('Hello ' + name);
-	};
+```javascript
+var name;
+
+exports.setName = function(thyName) {
+  name = thyName;
+};
+
+exports.sayHello = function() {
+  console.log('Hello ' + name);
+};
+```
+
 
 [`Hello1.js`](./example/nodejs/ex_module/Hello1.js)
 
-	var Hello1 = function() {
-	  var name;
-	
-	  this.setName = function (thyName) {
-	    name = thyName;
-	  };
-	
-	  this.sayHello = function () {
-	    console.log('Hello ' + name);
-	  };
+```javascript
+var Hello1 = function() {
+	var name;
+	this.setName = function (thyName) {
+  	name = thyName;
 	};
-	
-	exports.Hello1 = Hello1;
+
+  this.sayHello = function () {
+    console.log('Hello ' + name);
+  };
+};
+
+exports.Hello1 = Hello1;
+```
+
 
 [`Hello2.js`](./example/nodejs/ex_module/Hello2.js)
 
+```javascript
 	var Hello2 = function() {
 	  var name;
 	
@@ -266,155 +272,180 @@ centos:~ $ npm install somepackage
 	};
 	
 	module.exports = Hello2;
+```
+
 
 [`main.js`](./example/nodejs/ex_module/main.js)
 
-	var x1 = require('./my_module');
-	x1.setName('X1');
-	x1.sayHello();
-	
-	var x2 = require('./my_module');
-	x2.setName('X2');
-	x2.sayHello();
-	
-	x1.sayHello();
-	
-	
-	Hello1 = require('./Hello1').Hello1
-	
-	var y1 = new Hello1();
-	y1.setName('Y1');
-	y1.sayHello();
-	
-	var y2 = new Hello1();
-	y2.setName('Y2')
-	y2.sayHello();
-	
-	y1.sayHello();
-	
-	
-	Hello2 = require('./Hello2');
-	
-	var z1 = new Hello2();
-	z1.setName('Z1');
-	z1.sayHello();
-	
-	var z2 = new Hello2();
-	z2.setName('Z2');
-	z2.sayHello();
-	
-	z1.sayHello();
+```javascript
+// 沒使用 new
+var x1 = require('./my_module');
+x1.setName('X1');
+x1.sayHello();
+
+var x2 = require('./my_module');
+x2.setName('X2');
+x2.sayHello();
+
+x1.sayHello();
+
+// 使用 new
+Hello1 = require('./Hello1').Hello1
+var y1 = new Hello1();
+y1.setName('Y1');
+y1.sayHello();
+
+var y2 = new Hello1();
+y2.setName('Y2')
+y2.sayHello();
+
+y1.sayHello();
+
+// new
+Hello2 = require('./Hello2');
+
+var z1 = new Hello2();
+z1.setName('Z1');
+z1.sayHello();
+
+var z2 = new Hello2();
+z2.setName('Z2');
+z2.sayHello();
+
+z1.sayHello();
+```
 
 [node.js 基本教學](http://dreamerslab.com/blog/tw/node-js-basics/)
 
-#### debug ####
+
+---
+
+## debug
 
 [ex_bug.js](./example/nodejs/ex_bug.js)
 
-	var a = 1;
-	var b = 'world';
-	var c = function (x) {
-	  console.log('hello ' + x + a);
-	};
-	
-	c(b);
+```javascript
+var a = 1;
+var b = 'world';
+var c = function (x) {
+  console.log('hello ' + x + a);
+};
+
+c(b);
+```
 
 在終端機下執行
 
-	centos:~ $ node debug ex_bug.js
-	< Debugger listening on port 5858
-	connecting to port 5858... ok
-	break in ex_bug.js:1
-	> 1 var a = 1;
-	  2 var b = 'world';
-	  3 var c = function (x) {
-	  4   console.log('hello ' + x + a);
-	  5 };
+```bash
+centos:~ $ node debug ex_bug.js
+< Debugger listening on port 5858
+connecting to port 5858... ok
+break in ex_bug.js:1
+> 1 var a = 1;
+  2 var b = 'world';
+  3 var c = function (x) {
+  4   console.log('hello ' + x + a);
+  5 };
+```
 
 另一種遠端執行
 
-	centos:~ $ node --debug-brk ex_bug.js
-	centos:~ $ node debug 127.0.0.1:5858
+```bash
+centos:~ $ node --debug-brk ex_bug.js
+centos:~ $ node debug 127.0.0.1:5858
+```
+
+---
+
+## Common Module
 
 
------------------------------
-
-### 常用模組 ###
-
-
-#### console ####
+### console
 
 類似 C 的 printf 的格式化輸出, 測試執行時間
 
 [`run_time.js`](./example/nodejs/ex_console/run_time.js)
 
-	console.log(global);
-	console.log(__dirname);
-	console.log(__filename);
-	
-	console.time('Run loop');
-	for (var i = 10; i--;) {
-	  console.log('%d loop', i);
-	}
-	console.timeEnd('Run loop');
+```javascript
+console.log(global);
+console.log(__dirname);
+console.log(__filename);
+
+console.time('Run loop');
+for (var i = 10; i--;) {
+  console.log('%d loop', i);
+}
+console.timeEnd('Run loop');
+```
 
 
-#### process ####
+### process
 
 [`argv.js`](./example/nodejs/ex_process/argv.js)
 
 參數使用方式
 
-	console.log(process.cwd());
-	console.log(process.chdir('..'));
-	console.log(process.argv);
+```javascript
+console.log(process.cwd());
+console.log(process.chdir('..'));
+console.log(process.argv);
+```
 
 執行並輸入參數
 
-	centos:~ $ node argv.js 123 -v "xyz ABC"
+```bash
+centos:~ $ node argv.js 123 -v "xyz ABC"
+```
 
 [`keyin.js`](./example/nodejs/ex_process/keyin.js)
 
 從 stdin 輸入後並輸出在 stdout
 
-	process.stdin.resume();
-	
-	process.stdin.on('data', function(data) {
-	  process.stdout.write('read from console: ' + data.toString());
-	});
+```javascript
+process.stdin.resume();
+
+process.stdin.on('data', function(data) {
+  process.stdout.write('read from console: ' + data.toString());
+});
+```
 
 
-#### filesystem####
+### filesystem
 
-non-blocking I/O 讀檔
+`non-blocking I/O 讀檔`
 
 [`readfile.js`](./example/nodejs/ex_fs/readfile.js)
 
-	var fs = require('fs');
+```javascript
+var fs = require('fs');
 
-	fs.readFile('file.txt', 'utf-8', function(err, data) {
-	  if (err) {
-	    console.error(err);
-	  }
-	  else {
-	    console.log(data);
-	  }
-	});
-	console.log('end.');
+console.log('start.');
+fs.readFile('file.txt', 'utf-8', function(err, data) {
+  if (err) {
+    console.error(err);
+  }
+  else {
+    console.log(data);
+  }
+});
+console.log('end.');
+```
 
 
-blocking I/O 讀檔
+`blocking I/O 讀檔`
 
 [`readfilesync.js`](./example/nodejs/ex_fs/readfilesync.js)
 
-	var fs = require('fs');
-	var data = fs.readFileSync('file.txt', 'utf-8');
+```javascript
+var fs = require('fs');
+console.log('start.');
+var data = fs.readFileSync('file.txt', 'utf-8');
+console.log(data);
+console.log('end.');
+```
 
-	console.log(data);
-	console.log('end.');
 
-
-以 C 的方式讀檔案
+`以 C 的方式讀檔案`
 
 [`readc.js`](./example/nodejs/ex_fs/readc.js)
 
@@ -440,114 +471,126 @@ blocking I/O 讀檔
 	});
 
 
-
-#### os ####
+### os
 
 [`sysinfo.js`](./example/nodejs/ex_os/sysinfo.js)
 
-	var os = require('os');
-	
-	console.log(os.cpus() );
-	console.log(os.networkInterfaces() );
+```javascript
+var os = require('os');
+
+console.log(os.cpus() );
+console.log(os.networkInterfaces() );
+```
+
+### utils
 
 
-#### utils ####
-
-
-#### Event ####
+### Event
 
 [`event1.js`](./example/nodejs/ex_event/event1.js)
 
-	console.log('Start');
-	
-	setTimeout(function() {
-	  console.log('Trigger');
-	}, 1000);
-	
-	console.log('End');
+```javascript
+console.log('Start');
+
+setTimeout(function() {
+  console.log('Trigger');
+}, 1000);
+
+console.log('End');
+```
 
 
 [`event2.js`](./example/nodejs/ex_event/event2.js)
 
-	console.log('Start');
-	
-	setTimeout(function() {
-	  console.log('Trigger');
-	}, 0);
-	
-	console.log('End');
+```javascript
+console.log('Start');
+
+setTimeout(function() {
+  console.log('Trigger');
+}, 0);
+
+console.log('End');
+```
 
 
 [`event3.js`](./example/nodejs/ex_event/event3.js)
 
-	var EventEmitter = require('events').EventEmitter;
-	var event = new EventEmitter();
-	
-	event.on('some_event', function() {
-	  console.log('some_event occured.');
-	});
-	
-	setTimeout(function() {
-	  event.emit('some_event');
-	}, 1000);
+```javascript
+var EventEmitter = require('events').EventEmitter;
+var event = new EventEmitter();
+
+event.on('some_event', function() {
+  console.log('some_event occured.');
+});
+
+setTimeout(function() {
+  event.emit('some_event');
+}, 1000);
+```
 
 
 [`event4.js`](./example/nodejs/ex_event/event4.js)
 
-	var events = require('events');
-	var emitter = new events.EventEmitter();
-	
-	emitter.on('someEvent', function(arg1, arg2) {
-	  console.log('listener1', arg1, arg2);
-	});
-	emitter.on('someEvent', function(arg1, arg2) {
-	  console.log('listener2', arg1, arg2);
-	});
-	
-	emitter.emit('someEvent', 'abc', 123);
+```javascript
+var events = require('events');
+var emitter = new events.EventEmitter();
+
+emitter.on('someEvent', function(arg1, arg2) {
+  console.log('listener1', arg1, arg2);
+});
+emitter.on('someEvent', function(arg1, arg2) {
+  console.log('listener2', arg1, arg2);
+});
+
+emitter.emit('someEvent', 'abc', 123);
+```
 
 
-#### http ####
+### http
 
 [`app1.js`](./example/nodejs/ex_http/app1.js)
 
-	var http = require("http");
+```javascript
+var http = require("http");
 
-	http.createServer(function(req, res) {
-	  res.writeHead(200, {'Content-Type': 'text/html'});
-	  res.write('<h1>Node.js</h1>');
-	  res.end('<p>Hello World</p>');
-	}).listen(3000);
-	console.log("HTTP server is listening at port 3000.");
+http.createServer(function(req, res) {
+  res.writeHead(200, {'Content-Type': 'text/html'});
+  res.write('<h1>Node.js</h1>');
+  res.end('<p>Hello World</p>');
+}).listen(3000);
+console.log("HTTP server is listening at port 3000.");
+```
 
 執行
 
-	centos:~ $ node app.js # 使用 node 直接執行, 在瀏覽器上輸入 localhost:3000 可看到
+```bash
+centos:~ $ node app.js # 使用 node 直接執行, 在瀏覽器上輸入 localhost:3000 可看到
+```
 
 每次改 code, 都需要重新執行 node, 建議安裝 [nodemon](http://nodemon.io/), [node-supervisor](https://github.com/isaacs/node-supervisor), [node-dev](https://github.com/fgnass/node-dev) 或 [forever](https://github.com/nodejitsu/forever) 這類型 automaticall restart 代替 node 去執行
 
-	centos:~ $ nodemon app.js # 使用 nodemon
-	centos:~ $ supervisor app.js # 使用 node-supervisor
-	centos:~ $ forever -w app.js # 使用 forever
-	centos:~ $ node-dev app.js
+```bash
+centos:~ $ nodemon app.js # 使用 nodemon
+centos:~ $ supervisor app.js # 使用 node-supervisor
+centos:~ $ forever -w app.js # 使用 forever
+centos:~ $ node-dev app.js
+```
+
 
 以 Event 的方式使用 http
 
 [`app2.js`](./example/nodejs/ex_http/app2.js)
 
-	var http = require('http');
-	var server = new http.Server(); server.on('request', function(req, res) {
-	  res.writeHead(200, {'Content-Type': 'text/html'});
-	  res.write('<h1>Node.js</h1>');
-	  res.end('<p>Hello World</p>');
-	});
-	
-	server.listen(3000);
-	console.log("HTTP server is listening at port 3000.");
+```javascript
+var http = require('http');
+var server = new http.Server(); server.on('request', function(req, res) {
+  res.writeHead(200, {'Content-Type': 'text/html'});
+  res.write('<h1>Node.js</h1>');
+  res.end('<p>Hello World</p>');
+});
 
-
-
-
-
+server.listen(3000);
+console.log("HTTP server is listening at port 3000.");
+```
 
 [gulp入門指南](https://987.tw/2014/07/09/gulpru-men-zhi-nan/)
