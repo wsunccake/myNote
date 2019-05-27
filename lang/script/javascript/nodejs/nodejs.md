@@ -141,23 +141,23 @@ npm 是 node.js 的套件管理工具, 在使用時可分為 global mode 和 loc
 
 ```bash
 # help
-centos:~ $ npm help # 顯示說明文件
+centos:~ $ npm help         # 顯示說明文件
 centos:~ $ npm help install # 顯示指令說明文件
 
 # list
-centos:~ $ npm list # 顯示已安裝套件
+centos:~ $ npm list    # 顯示已安裝套件
 centos:~ $ npm list -g # 顯示系統已安裝套件
 
 # search
 centos:~ $ npm search pkg # 搜尋套件
 
 # install
-centos:~ $ npm install pkg # 從 repository 安裝套件
-centos:~ $ npm install -g pkg # 安裝套件到系統預設目錄
+centos:~ $ npm install pkg          # 從 repository 安裝套件
+centos:~ $ npm install -g pkg       # 安裝套件到系統預設目錄
 centos:~ $ npm install ./pkg.tar.gz # 直接安裝套件
 centos:~ $ npm install git+https://git@github.com/abc/pkg.git # 從 github 安裝套件
 centos:~ $ npm install git+ssh://git@github.com/abc/pkg.git
-centos:~ $ npm install git://github.com/abc/pkg.git#v0.1 # 從 github 安裝套件並指定版本
+centos:~ $ npm install git://github.com/abc/pkg.git#v0.1      # 從 github 安裝套件並指定版本
 
 # uninstall
 centos:~ $ npm uninstall pkg
@@ -171,7 +171,7 @@ centos:~ $ npm veiw pkg # 同上
 
 centos:~ $ npm link pkg # 將 local pkg link to global pkg
 
-centos:~/package $ npm # 建立可發佈 package
+centos:~/package $ npm  # 建立可發佈 package
 
 centos:~/package $ npm publish # 發佈 package
 centos:~/package $ npm unpublish
@@ -218,6 +218,32 @@ centos:~ $ npm install somepackage
 
 [npm 基本指令](http://dreamerslab.com/blog/tw/npm-basic-commands/)
 
+
+### Version Rule
+
+```
+<major>.<minor>.<patch>
+
+^: update to patch and minor, ^0.13.0 => 0.13.1, 0.14.0
+
+~: update to patch, ~0.13.0 => 0.13.1
+
+>: accept any higher than
+
+>=: accept any equal to or higher than
+
+<=: accept any version equal or lower to
+
+<: accept any lower to
+
+=: accept equal to
+
+-: accept range of, 2.1.0 - 2.6.2
+
+||: combine sets. Example: < 2.1 || > 2.6
+```
+
+[npm semver calculator](https://semver.npmjs.com/)
 
 ---
 
