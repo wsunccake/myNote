@@ -21,6 +21,27 @@ pipeline {
 
 ---
 
+## script
+
+```groovy
+def showInfo(p) { echo "Hi ${p.name}, you are ${p.age}" }
+def person = ['name': 'jenkins', 'age': 5]
+
+pipeline {
+    agent any
+    stages {
+        stage('Hello') {
+            steps {
+                script { showInfo(person) }
+            }
+        }
+    }
+}
+```
+
+
+---
+
 ## triggers
 
 `cron`
@@ -107,9 +128,6 @@ pipeline {
     agent any
     parameters { string(name: 'version', defaultValue: '1.0.0.0', description: '') }
     stages {
-        stage('Hello') {
-            steps { echo 'Hello Jenkins2' }
-        }
         stage('Build') {
             steps { echo "Current Version: ${params.version}" }
         }
@@ -340,7 +358,7 @@ pipeline {
 `dynamic`
 
 ```groovy
-ibrary identifier: 'dynamic-libary@master', retriever: modernSCM(
+library identifier: 'dynamic-libary@master', retriever: modernSCM(
   [$class: 'GitSCMSource',
    remote: 'https://git/jenkins-example.git'])
 

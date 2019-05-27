@@ -10,6 +10,23 @@ node {
 }
 ```
 
+
+---
+
+## script
+
+```groovy
+def showInfo(p) { echo "Hi ${p.name}, you are ${p.age}" }
+def person = ['name': 'jenkins', 'age': 5]
+
+node {
+    stage('Hello') {
+        script { showInfo(person) }
+    }
+}
+```
+
+
 ---
 
 ## triggers
@@ -25,6 +42,90 @@ node {
     }
 }
 ```
+
+
+---
+
+## input
+
+
+---
+
+## opt
+
+
+---
+
+## param
+
+```groovy
+node {
+    properties([
+        parameters([string(defaultValue: '1.0.0.0', name: 'version')])
+    ])    
+    stage('Build') { echo "Current Version: ${params.version}" }
+}
+```
+
+
+---
+
+## env
+
+```groovy
+node {
+    withEnv(['DB_ENGINE=sqlite']) {
+        stage('Hello') {
+            sh 'env'
+            echo "${env.DB_ENGINE}"
+            sh "echo $DB_ENGINE"
+        }        
+    }
+}
+```
+
+
+---
+
+## timeout, retry, waitUntil
+
+```groovy
+node {
+    stage('timeout') {
+        timeout(time: 3, unit: 'SECONDS') {
+            sh 'm=`date +%s`; n=`expr $m % 10`; echo $n && sleep $n'
+        }
+    }
+
+    stage('retry') {
+        retry(5) {
+            sh 'm=`date +%s`; n=`expr $m % 10`; echo $n; test $n -gt 5 && true || false'
+        }
+    }
+
+    stage('wait until') {
+        waitUntil {
+            script {
+                def r = sh script: 'm=`date +%s`; n=`expr $m % 10`; echo $n; test $n -gt 5 && true || false', returnStatus: true
+                return (r == 0);
+            }
+        }
+    }
+}
+```
+
+---
+
+## parallel
+
+---
+
+## when
+
+
+---
+
+## post
 
 
 ---
