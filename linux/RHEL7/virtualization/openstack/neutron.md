@@ -15,6 +15,8 @@ op~: # ip netns | grep <neutron_id>
 op~: # ip netns exec qdhcp-<neutron_id> ip addr show
 op~: # neutron quota-show
 op~: # neutron quota-update --port 500
+
+op:~ # neutron agent-list
 ```
 
 ---

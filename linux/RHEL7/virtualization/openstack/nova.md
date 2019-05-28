@@ -20,10 +20,10 @@ controller:~ # nova [--ephemeral <ephemeral>] [--swap <swap>] [--is-public <is-p
 controller:~ # nova flavor-delete <flv_id>|<flv_name>
 
 # network
-controller:~ # network-list
-controller:~ # network-show <net_id>|<net_name>
-controller:~ # network-create
-controller:~ # network-delete <net_id>|<net_name>
+controller:~ # nova network-list
+controller:~ # nova network-show <net_id>|<net_name>
+controller:~ # nova network-create
+controller:~ # nova network-delete <net_id>|<net_name>
 
 # instance
 controller:~ # nova list
