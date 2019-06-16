@@ -1,12 +1,7 @@
-# JavaScript #
+# Javascript
 
-## Introduction
 
-1995 年 Netscape 的 Brendan Eich 設計出 JavaScript (原名為 LiveScript, 為了與昇陽合作, 搭上 Java 的順風車, 改名為 JavaScript), 加入到 Netscape 2.0 瀏覽器中, 因而成為瀏覽器的共通語言. JavaScript 是一種原型導向的語言, 具有動態與弱型別等特性, 後來各家瀏覽器紛紛支援, 但是由於實作方式和語法都不統一 (JavaScript 同時存在: Netscape Navigator 3.0 的 JavaScript, IE 中的 JScript 以及 CEnvi 中的 ScriptEase), 因此造成了混亂的狀況, 於是在 1998 年提交到 ECMA 組織制訂成 ECMA Script 的標準, 以便統一 JavaScript 的語法.  
-Web 2.0 的風潮進一步刺激了 JavaScript 的廣泛使用, 許多網站利用 AJAX 的 JavaScript 技術達成了高度的網頁互動性, 像是 Google Map 就是其中最著名的網站. 在 HTML5 的草案提出之後, JavaScript 更受到高度的重視, 由於 HTML5 的強大功能, 讓大家對 JavaScript 的發展充滿了信心, 很多人認為 JavaScript 將會是繼 C 之後最重要的程式語言.
-JavaScript 一開始發展是在瀏覽器上, 所以在只能在瀏覽器執行, 可是不利於在終端機下直接在使用. 在 1997 年, [Rhino](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino) 專案以 Java 開發了可以在終端機下執行的 JavaScript Engine. 在 2009 年, [Node.js](https://nodejs.org/) 基於 Google 的 V8 JavaScript Engine.
-
-執行 JavaScript 範例
+## Run
 
 `browser`
 
@@ -24,7 +19,8 @@ JavaScript 一開始發展是在瀏覽器上, 所以在只能在瀏覽器執行,
 </html>
 ```
 
-`Node.JS`
+
+`node.js`
 
 ```bash
 # REPL
@@ -37,11 +33,12 @@ linux:~ # node -e 'console.log("Hello, %s", "Nodejs");'
 linux:~ # echo 'console.log("Hello NodeJS");' | node -i
 
 # script
-linux:~ # cat helle.js
+linux:~ # cat hello.js
 console.log('Hello JavaScript');
 
 linux:~ # node hello.js
 ```
+
 
 `rhino`
 
@@ -67,8 +64,8 @@ linux:~ # java -jar js.jar hello.js
 /* 這是跨行註解 */ 
 ```
 
----
 
+---
 
 ## Variable
 
@@ -139,6 +136,10 @@ Pete
 Mary
 `;
 
+console.log('single ${single}');
+console.log("double ${double}");
+console.log(`backticks ${backticks}`);
+
 // inline
 function sum(a, b) {
   return a + b;
@@ -175,6 +176,7 @@ parseFloat("123.0");
 // string add
 "abc" + "xyz";
 ```
+
 
 ### Number
 
@@ -213,6 +215,7 @@ isFinite(Infinity)
 Infinity == Infinity;       // true
 ```
 
+
 ### Boolean
 
 ```javascript
@@ -245,6 +248,7 @@ var isChrome = !!window.chrome && !!window.chrome.webstore;
 // Blink engine detection
 var isBlink = (isChrome || isOpera) && !!window.CSS;
 ```
+
 
 ### Array
 
@@ -328,6 +332,7 @@ users.filter(item => item.id < 3);
 [1, 2, 3, 4, 5].reduce((sum, current) => sum + current, 0);
 ```
 
+
 ### Object
 
 ```javascript
@@ -348,6 +353,8 @@ user.noSuchProperty === undefined;
 for(let key in user) {
     console.log(key + " => " + user[key]);
 }
+
+Object.keys(user).forEach(p => console.log(`${p}: ${user[p]}`));
 ```
 
 ```javascript
@@ -358,9 +365,129 @@ MYGLOBAL.var2 = 123;
 ```
 
 
+### null
+
+```javascript
+let n = null;
+
+console.log("null: ", n);
+console.log(n == null);
+console.log(n != null);
+console.log(n === null);
+console.log(n !== null);
+```
+
+
+### undefined
+
+```javascript
+let d;
+
+console.log("undefined: ", d);
+console.log(d == undefined);
+console.log(d != undefined);
+console.log(d === undefined);
+console.log(d !== undefined);
+```
+
+
+### Symbol
+
+```javascript
+let s1 = Symbol('js');
+let s2 = Symbol('js');
+
+console.log("s1: ", s1, "s2 :", s2);
+console.log(s1 == s2);
+console.log(s1 != s2);
+console.log(s1 === s2);
+console.log(s1 !== s2);
+```
+
+
+### Set
+
+
+### Map
+
+---
+
+## Operator
+
+```javascript
+let x, y;
+x = y = 15;
+
+console.log("to do: ", x);
+console.log("doing: ", x++);
+console.log("done: ", x);
+
+console.log("to do: ", y);
+console.log("doing: ", ++y);
+console.log("done: ", y);
+```
+
+
+### typeof
+
+```javascript
+console.log("undefined: ", typeof undefined);
+console.log("null: ", typeof null);
+console.log("object: ", typeof {});
+console.log("number: ", typeof 1);
+console.log("string: ", typeof "abc");
+console.log("true: ", typeof true);
+console.log("symbol: ", typeof Symbol());
+console.log("function", typeof function() {});
+```
+
+
+### compare
+
+```javascript
+const x = 5;
+const y = "5";
+
+console.log("==: ", x == y);
+console.log("===: ", x === y);
+console.log("!=: ", x != y);
+console.log("!==: ", x !== y);
+```
+
+
+### destructuring assignment
+
+`array destructure`
+
+```javascript
+let [firstname = "John", , ,lastname = "Doe"] = ["James", "L.", "Howlett"];
+console.log(firstname, lastname);
+
+let right = 1;
+let left = 2;
+console.log(right, left);
+[right, left] = [left, right];
+console.log(right, left);
+
+[a, b, ...other] = [1, 2, 3, 4, 5];
+console.log(a, b, other);
+```
+
+
+`object destructure`
+
+```javascript
+let {name: n, age: a=10} = {name: 'Jane'};
+console.log(n, a);
+
+let {name, age} = {name: 'Jane'};
+console.log(name, age);
+```
+
 ---
 
 ## Condition
+
 
 ### if/else
 
@@ -395,7 +522,9 @@ hash - the anchor portion of the URL
 </script>
 </body>
 </html>
+```
 
+```bash
 # commoand
 linux:~ # curl http://127.0.0.1/ex.html?sex=m
 ```
@@ -413,6 +542,16 @@ console.log(browser);
 browser = (!!window.chrome) ? "Chrome" : "Unknown";
 console.log(browser);
 ```
+
+```javascript
+if (!options) {
+    options = {}
+}
+
+//  使用 || 簡化空值判斷
+options = options || {};
+```
+
 
 ### switch
 
@@ -496,14 +635,19 @@ weeks.forEach((element, index) => {
 
 ## Function
 
+
 ```javascript
-// function declaration or named function 
+// function declaration or named function or defined function
 function sayHi(arg) { return "Hi " + arg; }
 
 // function expression or anonymous function
-var sayGood = function(arg) { return "Good " + arg; }
+var sayGood = function(arg) { return "Good " + arg; };
 
-// function constructor 
+// arrow function
+// arrow function 沒有 prototype, 所以無法使用 new, 也無法變更 this 的內容
+var sayNice = (arg) => { return "Nice " + arg; };
+
+// function constructor
 var sayHello = new Function("arg", "return \"Hello \"+ arg;");
 
 var countNumber = function () { // closure 
@@ -514,100 +658,619 @@ var countNumber = function () { // closure
 };
 ```
 
----
 
-## Object Oriented
+### parameter
 
 ```javascript
-// function declaration 去產生 object
-function Woman(name) {
-      // public attribute 
-      this.name = name;
-}; 
-
-// public method
-Woman.prototype.getName = function() {
-    return this.name; 
-}; 
-
-// function expression 去產生 object 
-var Man = function(name, nickname) { 
-  // static attribute
-  if ( typeof Man.count == 'undefined' ) { 
-    Man.count = 0;
-  } 
-
-  Man.count++; 
-
-  // static method
-  Man.getCount = function() { 
-    return Man.count; 
-  }; 
-
-  // private attribute
-  var _nickName_;
-
-  // private method 
-  var _setNickName_ = function(nk) {
-    _nickName_ = nk; 
-  } 
-  _setNickName_(nickname); 
-  this.getNickName = function() { 
-    return _nickName_; 
-  } 
-
-  // public attribute 
-  this.name = name;
-
-  // public method
-  this.getName = function() { 
-    return this.name; 
-  }; 
-}; 
-
-// public method
-Man.prototype.setAge = function(age) {
-  this.age = age; 
-}; 
-
-// public method
-Man.prototype.getAge = function() {
-  return this.age; 
+// default parameter
+var f0 = function (arg = "JavaScript") {
+    return `Hello ${arg}`;
 };
 
-p1 = new Woman('Mary'); 
-console.log(p1.name); 
+var f1 = f0;    // function reference
+var f2 = f0();  // function call/invoke
 
-p2 = new Man('John', 'Johnny'); 
-console.log(p2.getName() );
+console.log(f0);
+console.log(f1);
+console.log(f2);
+
+console.log(f0());
+console.log(f1());
+// console.log(f2());
+
+// rest parameter
+function cast(a, b, ...others) {
+    console.log(`a: ${a}`);
+    console.log(`b: ${b}`);
+    console.log(`others: ${others}`);
+}
+
+cast(1,2,3);
+cast(1,2,3,4,5);
+cast(1,2);
+
+// parameter with object destructure
+function m1({x = 0, y = 0} = {}) {
+    return [x, y];
+}
+
+function m2({x, y} = { x: 0, y: 0 }) {
+    return [x, y];
+}
+
+m1();
+m2();
+
+m1({x: 3, y: 8});
+m2({x: 3, y: 8});
+
+m1({x: 3});
+m2({x: 3});
+
+m1({});
+m2({});
+
+m1({z: 3});
+m2({z: 3});
 ```
 
-`inheritance`
+
+### this
 
 ```javascript
-function Person(name, sex) { 
-  this.name = name; 
-  this.sex = sex; 
-}; 
+const o = {
+    name: "property",
+    showMessage: function () {
+        console.log(`Hi ${this.name}`);
+    },
+    showThis: function () {
+        let that = this.name;
+        let anonymous = function () {
+            console.log(`anonymous this: ${this.name}`);
+            console.log(`anonymous that: ${that}`);
+        };
+        let arrow = () => {
+            console.log(`arrow this: ${this.name}`);
+            console.log(`arrow that: ${that}`);
+        };
 
-Person.prototype.getName = function() { 
-  return this.name; 
-}; 
-
- 
-function Man(name) { 
-  this.name = name; 
-  this.sex = "male"; 
+        anonymous();
+        arrow();
+    }
 };
 
-// Man 繼承 Person
-Man.prototype = new Person();
+console.log(o.name);
+console.log(o.showMessage());
+console.log(o.showThis());
+
+name = "global";
+let msg = o.showMessage;
+msg();
+```
+
+
+---
+
+## Class
+
+
+### function
+
+```javascript
+// function before ES5
+function Car0(make, model) {
+    // member
+    this.make = make;
+    this.model = model;
+    this._userGears = ['P', 'N', 'R', 'D'];
+    this._userGear = this._userGears[0];
+
+    // method
+    this.userGear = function () {
+        return this._userGear;
+    };
+
+    // static method
+    if ( typeof Car0.number == 'undefined' ) {
+        Car0.number = 0;
+    }
+    Car0.count = function (){
+        Car0.number++;
+    };
+    Car0.count();
+}
+// dynamic bind method
+// anti pattern
+Car0.prototype.shift = function (gear) {
+        this._userGear = gear;
+};
+
+let car0 = new Car0("Tesla", "Model S");
+console.log(car0._userGear);
+console.log(car0.userGear());
+car0.shift('D');
+console.log(car0.userGear());
+
+console.log(Car0.number);
+Car0.count();
+console.log(Car0.number);
+```
+
+### class
+
+```javascript
+class Car1 {
+    constructor(make, model) {
+        this.make = make;
+        this.model = model;
+        this._userGears = ['P', 'N', 'R', 'D'];
+        this._userGear = this._userGears[0];
+        Car1.count();
+    }
+
+    get userGear() {
+        return this._userGear;
+    }
+
+    set userGear(value) {
+        if (this._userGears.indexOf(value) < 0) {
+            throw new Error(`Invalid gear: ${value}`);
+        }
+        this._userGear = value;
+    }
+
+    shift(gear) {
+        this.userGear = gear;
+    }
+
+    static count() {
+        Car1.number ++;
+    }
+}
+Car1.number = 0;
+
+let car1 = new Car1("Tesla", "Model S");
+console.log(car1._userGear);
+console.log(car1.userGear);
+car1.shift('D');
+console.log(car1.userGear);
+car1.userGear = 'R';
+console.log(car1.userGear);
+car1._userGear = 'P';
+console.log(car1.userGear);
+
+console.log(Car1.number);
+Car1.count();
+console.log(Car1.number);
+```
+
+### extends
+
+```javascript
+class Vehicle {
+    constructor() {
+        this.passengers = [];
+        console.log("create vehicle");
+    }
+    addPasseneger(p) {
+        this.passengers.push(p)
+    }
+}
+
+class Car extends Vehicle {
+    constructor() {
+        super();
+        console.log("create car");
+    }
+    deployAirBag() {
+        console.log("air bag");
+    }
+}
+
+const v = new Vehicle();
+v.addPasseneger("John");
+console.log(v.passengers);
+
+const c = new Car();
+c.addPasseneger("Mary");
+console.log(c.passengers);
+c.deployAirBag();
+
+class Moto extends Vehicle {}
+const m = new Moto();
+
+console.log(`m instanceof Vehicle: ${m instanceof Vehicle}`);
+console.log(`m instanceof Car: ${m instanceof Car}`);
+console.log(`m instanceof Moto: ${m instanceof Moto}`);
+```
+
+
+### mixin
+
+```javascript
+class InsurancePolicy {}
+function makeInsurable(o) {
+    o.addInsurancePolicy = function (p) { this.insurancePolicy = p; };
+    o.getInsurancePolicy = function () { return this.insurancePolicy; };
+    o.isInsured = function () { return !!this.insurancePolicy; };
+}
+
+let insurance = new InsurancePolicy();
+insurance.tax = 10;
+
+// method 1
+const car1 = new Car();
+makeInsurable(car1);
+car1.addInsurancePolicy(insurance);
+console.log(car1.getInsurancePolicy());
+
+
+// method 2
+makeInsurable(Car.prototype);
+const car1 = new Car();
+car1.addInsurancePolicy(insurance);
+console.log(car1.getInsurancePolicy());
+```
+
+
+---
+
+
+## Exception
+
+
+### try / catch / finally
+
+```javascript
+var validateEmail = function(email) {
+  return email.match(/@/) ? email : new Error(`invalid email ${email}`);
+};
+
+// const email = "abc@dot.net";
+// const email = "dot.net";
+const  email = null;
+
+try {
+    const res = validateEmail(email);
+    if (res instanceof Error) {
+        console.error(`Error ${res}`);
+    } else {
+        console.log(`Validate email ${email}`);
+    }
+} catch (e) {
+    console.error(`Error ${e.message}`);
+} finally {
+    console.log(`Always do it`);
+}
+```
+
+
+### throw
+
+```javascript
+let div = function (a, b) {
+    if (b === 0) {
+        throw new Error(`b isn't 0`);
+    }
+    return a / b
+};
+
+try {
+    console.log(div(1, 1));
+    // console.log(div(1, 0));
+} catch (e) {
+    console.error(e.message);
+}
+
+console.log(div(1, 0));
+```
+
+
+---
+
+## Iterator
+
+
+### iterator
+
+```javascript
+const weeks = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const it = weeks.values();   // array -> iterator
+let current = it.next();     // get iterator value
+
+while (!current.done) {
+    console.log(current);
+    current = it.next();
+}
+```
+
+
+### iterable protocol
+
+```javascript
+class Log {
+    constructor() {
+        this.messages= [];
+    }
+    add(message) {
+        this.messages.push({message, timestamp: Date.now()});
+    }
+    [Symbol.iterator]() {
+        return this.messages.values()
+    }
+}
+
+const log = new Log();
+log.add("create api");
+log.add("update api");
+log.add("update api");
+
+for (let entry of log) {
+    console.log(`${entry.message} @ ${entry.timestamp}`);
+}
+```
+
+
+### iterator protocol
+
+```javascript
+class Log {
+    constructor() {
+        this.messages= [];
+    }
+    add(message) {
+        this.messages.push({message, timestamp: Date.now()});
+    }
+    [Symbol.iterator]() {
+        let i = 0;
+        const messages = this.messages;
+        return {
+            next() {
+                if(i >= messages.length) {
+                    return { value: undefined, done: true}
+                } else {
+                    return { value: messages[i++], done: false}
+                }
+            }
+        }
+    }
+}
+
+const log = new Log();
+log.add("create api");
+log.add("update api");
+log.add("update api");
+
+for (let entry of log) {
+    console.log(`${entry.message} @ ${entry.timestamp}`);
+}
+```
+
+
+---
+
+## Generator
+
+
+### yield
+
+```javascript
+const rainbow = function* () {
+    yield "red";
+    yield "orange";
+    yield "yellow";
+    yield "green";
+    yield "blue";
+    yield "indigo";
+    yield "violet";
+};
+
+for (let color of rainbow()) {
+    console.log(color);
+}
+```
+
+### return
+
+```javascript
+const abc = function* () {
+    yield "a";
+    yield "b";
+    return "c";
+};
+
+for (let c of abc()) {
+    console.log(c);
+}
+
+const it = abc();
+console.log(it.next());
+console.log(it.next());
+console.log(it.next());
+```
+
+
+### next
+
+```javascript
+const interrogate = function* () {
+    const name = yield "who's your name?";
+    const color = yield "what's your favorite color?";
+    return `${name}'s favorite color is ${color}`;
+};
+
+const it = interrogate();
+console.log(it.next());
+console.log(it.next("Joe"));
+console.log(it.next("red"));
+```
+
+
+---
+
+## Async
+
+### call back
+
+```javascript
+function countdown(s) {
+    var i;
+    for (i = s; i >= 0; i--) {
+        setTimeout(function () {
+            console.log(i === 0 ? "go!" : i);
+        }, ((s - i) * 1000));
+    }
+}
+
+countdown(5);
+```
+
+`IIFE`
+
+Immediately Invoked Function Expression
+
+```javascript
+function countdown(s) {
+    var i;
+    for (i=s; i>=0; i--) {
+        (function(i) {
+            setTimeout(function () {
+                console.log(i === 0 ? "go!" : i);
+            }, ((s - i) * 1000));
+        })(i);
+    }
+}
+
+countdown(5);
+```
+
+`scope`
+
+```javascript
+function countdown(s) {
+    for (let i=s; i>=0; i--) {
+        setTimeout(function () {
+            console.log(i === 0 ? "go!" : i);
+            }, ((s - i) * 1000));
+        }
+}
+
+countdown(5);
+```
+
+`call back hell`
+
+
+### promise
+
+```javascript
+function countdown(s) {
+    return new Promise(function (resolve, reject) {
+        for (let i = s; i >= 0; i--) {
+            setTimeout(function () {
+                i === 0 ? resolve(console.log("go!")) : console.log(i)
+            }, (s - i) * 1000);
+        }
+    });
+}
+
+countdown(5).then();
+
+countdown(5).then(
+    function () {
+        console.log("countdown successful");
+    },
+    function (err) {
+        console.log("countdown fail" + err.message);
+    }
+);
+```
+
+```javascript
+var promise = new Promise(function(resolve, reject) {
+  // do a thing, possibly async, then…
+
+  if (/* everything turned out fine */) {
+    resolve("Stuff worked!");
+  }
+  else {
+    reject(Error("It broke"));
+  }
+});
+
+promise.then(function(result) {
+  console.log(result); // "Stuff worked!"
+}, function(err) {
+  console.log(err); // Error: "It broke"
+});
+```
+
+
+### co -> sequence run
+
+```javascript
+function* seqRun() {
+    try {
+        yield countdown(5);
+        console.log("countdown successful");
+    } catch (err) {
+        console.log("countdown fail" + err.message);
+    }
+}
+
+for (let f of seqRun()) {
+    f;
+}
+```
+
+```javascript
+let co = require('co');
+
+co(function *() {
+    try {
+        yield countdown(5);
+        console.log("countdown successful");
+    } catch (err) {
+        console.log("countdown fail" + err.message);
+    }
+});
+```
+
+
+### async / await
+
+```javascript
+async function aRun() {
+    try {
+        await countdown(5);
+        console.log("countdown successful");
+    } catch (err) {
+        console.log("countdown fail" + err.message);
+    }
+}
+
+aRun();
 ```
 
 
 ---
 
 ## Regex
+
+```javascript
+const re1 = /going/;
+const re2 = new RegExp("going");
+const sta = "As I was going to movie";
+
+console.log(sta.match(re1));
+console.log(sta.search(re1));
+
+console.log(sta.match(re2));
+console.log(sta.search(re2));
+
+console.log(re1.test(sta));
+console.log(re1.exec(sta));
+```
 
 ```javascript
 var str = '/usr/lib/python2.6/site-packages/gtk-2.0/gconf.so'; 
@@ -644,62 +1307,109 @@ console.log(str.replace(/(.*)\//, ''));
 ```
 
 
----
+### capturing
 
-## Event
+`syntax`
 
-
----
-
-## DOM
-
-```javascript
-// getElementById 
-var text1 = document.getElementById('text1'); 
-var text2Value = document.getElementById('text2').getAttribute("value"); 
-
-// getElementsByTagName 
-var form1 = document.getElementById("form1"); 
-var form1_inputs = form1.getElementsByTagName("input"); 
+```
+(subexpression)
 ```
 
-function              | description
----                   | ---
-getElementsByTagName  | 依 tag 取得 node, 回傳 NodeList 
-getElementsByName     | 依 name 取得 node, 回傳 NodeList 
-getElementById        | 依 id 取得 node, 回傳 Node; 但 documenet 中出現重複 id, 會以第一個符合為主
-parentNode            | 取得父節點 
-previousSibling       | 前鄰接節點 
-nextSibling           | 後鄰接節點 
-firstChild            | 首個子節點 
-lastChild             | 最後一個子節點 
-childNodes            | 所有直接子節點
+```javascript
+const text = "Visit oreilly.com today";
+const re = /[a-z]+(\.com|\.org|\.edu)/;
 
-`other`
+console.log(text.match(re));
+console.log(text.replace(re, "\n$$&: ($&)\n$$1: ($1)\n$$`: ($`)\n$$: ($$)\n$$':($')\n"));
+```
 
 ```javascript
-for (var i = 0; i < 10; i++)
-{
-  var a = document.createElement("a");
-  a.innerHTML = arr[i];
-  div.appendChild(a);
-}
+const t = "ABCDEDCBABCDE";
 
+const r1 = /(C).*C/;
+const r2 = /(C).*?C/;
+console.log(t.match(r1));
+console.log(t.match(r2));
 
-var frag = document.createDocumentFragment();
-for (var i = 0; i < 10; i++)
-{
-  var a = document.createElement("a");
-  a.innerHTML = arr[i];
-  frag.appendChild(a);
-}
-div.appendChild(frag);
+const r3 = /(C).*\1/;
+const r4 = /(C).*?\1/;
+console.log(t.match(r3));
+console.log(t.match(r4));
 ```
 
 
----
+### non capturing
 
-## jQuery
+`syntax`
+
+```
+(?:subexpression)
+```
+
+```javascript
+const text = "Visit oreilly.com today";
+const re = /[a-z]+(:?\.com|\.org|\.edu)/;
+
+console.log(text.match(re));
+console.log(text.replace(re, "\n$$&: ($&)\n$$1: ($1)\n$$`: ($`)\n$$: ($$)\n$$':($')\n"));
+```
+
+```javascript
+const t = "ABCDEDCBABCDE";
+
+const r1 = /(:?C).*C/;
+const r2 = /(:?C).*?C/;
+console.log(t.match(r1));
+console.log(t.match(r2));
+
+const r3 = /(:?C).*\1/;
+const r4 = /(:?C).*?\1/;
+console.log(t.match(r3));
+console.log(t.match(r4));
+```
+
+
+### lookahead
+
+`syntax`
+
+```
+(?=subexpression)
+(?!subexpression)
+```
+
+```javascript
+function validPassword1(p) {
+    return /[A-Z]/.test(p) &&
+        /[0-9]/.test(p) &&
+        /[a-z]/.test(p) &&
+        !/[^a-zA-Z0-9]/.test(p);
+}
+
+function validPassword2(p) {
+    return /[A-Z].*[0-9][a-z]/.test(p);
+}
+
+function validPassword3(p) {
+    return /(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])(?!.*[^a-zA-Z0-9])/.test(p);
+}
+
+const p1 = 'xyzABC123';
+const p2 = 'ABCxyz123';
+const p3 = 'ABC123xyz';
+
+console.log(validPassword1(p1));
+console.log(validPassword2(p1));
+console.log(validPassword3(p1));
+
+console.log(validPassword1(p2));
+console.log(validPassword2(p2));
+console.log(validPassword3(p2));
+
+console.log(validPassword1(p3));
+console.log(validPassword2(p3));
+console.log(validPassword3(p3));
+```
 
 
 ---
