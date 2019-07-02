@@ -301,6 +301,38 @@ centos:~ # docker inspect -f '{{json .NetworkSettings.Networks}}' <container>
 centos:~ # docker exec -it <container> ip link show
 ```
 
+
+### manual create veth
+
+```bash
+# create namespace
+centos:~ # ip netns add <ns>
+
+# list namespace
+centos:~ # ip netns
+
+# exec namespace
+centos:~ # ip link netns <ns> ip link  ~=  ip link netns <ns> <cmd>  # all command
+centos:~ # ip -n <ns> link                                           # only for ip command
+
+
+# create veth
+centos:~ # ip link add <veth> type veth peer name <peer>
+centos:~ # ip link set <veth> netns <ns>
+
+# delete veth
+centos:~ # ip link del <veth> netns <ns>
+
+
+# create bridge
+centos:~ # ip link add <br> type bridge
+centos:~ # ip link set dev <br> up
+
+# add eth to bridge
+centos:~ # ip link set <eth> master <br>
+```
+
+
 ## Docker Hub / Registry
 
 ![docker hub](https://smlsunxie.gitbooks.io/docker-book/content/basic/images/docker-hub.png)

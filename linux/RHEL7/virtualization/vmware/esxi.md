@@ -34,6 +34,7 @@ esxi: ~ # cat /etc/ssh/keys-root/authorized_keys
 ## ovftool
 
 ```bash
+# update ova
 linux:~ # ovftool --acceptAllEulas --noSSLVerify --diskMode=thin --name=<vm_name> --datastore=<data_store> --network=<vm_network> <vm>.ova vi://root:<password>@<esxi_ip>
 
 # the provided manifest file is invalid
@@ -47,15 +48,40 @@ linux:~ # ovftool <xxx>.ovf <new_xxx>.ova
 ## usage
 
 ```bash
-esxi: ~ # vim-vmd vmsvc/getallvms
-esxi: ~ # vim-vmd vmsvc/destroy <vm_id>
-esxi: ~ # vim-vmd vmsvc/reload <vm_id>
+# list vm
+esxi:~ # vim-cmd vmsvc/getallvms
 
-esxi: ~ # vim-vmd vmsvc/power.shutdown <vm_id>
-esxi: ~ # vim-vmd vmsvc/power.getstate <vm_id>
-esxi: ~ # vim-vmd vmsvc/power.on <vm_id>
+# power state
+esxi:~ # vim-cmd vmsvc/power.getstate <vm_id>
 
+# update vm config
+esxi:~ # ls /vmfs/volumes/<data_store>/<vm_name>
+esxi:~ # vi /vmfs/volumes/<data_store>/<vm_name>/<vm_name>.vmx
+# setup cpu
+numvcpus = "1"
+sched.cpu.affinity = "all"
+sched.cpu.htsharing = "any"
+
+# setup mem
+sched.mem.min = "1024"
+sched.mem.affinity = "all"
+sched.mem.shares = "normal"
+
+# setup nic
+ethernet0.address = "00:11:22:33:44:55"
+ethernet0.checkMACAddress = "FALSE"
+ethernet0.addressType = "static"         # generated, vpx, static
+# ethernet0.generatedAddress
+
+# lauch vm
+esxi:~ # vim-cmd vmsvc/power.on <vm_id>
+
+# delete vm
+esxi:~ # vim-cmd vmsvc/power.off <vm_id>
+esxi:~ # vim-cmd vmsvc/destroy <vm_id>
+esxi:~ # ls /vmfs/volumes/<data_store>/<vm_name>
+
+# other
 esxi: ~ # vim-cmd hostsvc/net/info | grep "mac ="
-
-esxi: ~ # cat /vmfs/volumes/<data_store>/<vm_name>/<vm_name>.vmx
 ```
+

@@ -20,7 +20,7 @@ linux:~ # grep VmSwap /proc/<pid>/status
 
 在 grub2 的 kerenl 後面加上 init=/bin/sh
 
-```
+```sh
 sh-4.2# mount -oremount,rw /
 sh-4.2# mount -oremount,rw /proc
 sh-4.2# password
@@ -37,7 +37,7 @@ sh-4.2# /sbin/reboot -f
 
 使用  smartctl 確認 SSD 使用狀況, Raw_Read_Error_Rate, Read_Soft_Error_Rate, Soft_Read_Error_Rate
 
-```
+```bash
 linux:~ # smartctl -i /dev/sda
 linux:~ # smartctl -s on|off /dev/sd
 linux:~ # smartctl -x|-a /dev/sda
@@ -57,7 +57,7 @@ linux:~ # megacli -AdpEventLog -GetLatest 100 -f events.log -aALL
 
 #### 清除 MBR
 
-```
+```bash
 linux:~ # dd if=/dev/zero of=/dev/sda bs=512 count=1
 ```
 
@@ -65,7 +65,7 @@ linux:~ # dd if=/dev/zero of=/dev/sda bs=512 count=1
 
 #### 掛載 image/iso
 
-```
+```bash
 linux:~ # mount -oloop image.iso /mnt
 ```
 
@@ -73,7 +73,7 @@ linux:~ # mount -oloop image.iso /mnt
 
 wodim -> cdrecord (symbol link)
 
-```
+```bash
 linux:~ # wodim -v -dao dev=/dev/cdrw image.iso
 
 linux:~ # wodim --devices dev=/dev/sr0
@@ -85,7 +85,7 @@ linux:~ # wodim -prcap
 
 genisoimage -> mkisofs (symbol  link)
 
-```
+```bash
 linux:~ # genisoimage -r -joliet-long -V "cd_name" -o image.iso dir
 ```
 
@@ -96,7 +96,7 @@ linux:~ # genisoimage -r -joliet-long -V "cd_name" -o image.iso dir
 
 GNOME3 app 檔副檔名為 `*.desktop`, 存放目錄為, /usr/share/applications/, /usr/local/share/applications/, ~/.local/share/applications
 
-```
+```bash
 Linux:~/.local/share/applications # vi app.desktop
 [Desktop Entry]
 Version=1.0
@@ -166,7 +166,7 @@ linux:~ # ssh [TAB] [TAB]
 
 ## Service
 
-```
+```bash
 ubuntu:~ $ sudo service avahi-daemon stop
 ubuntu:~ $ sudo sh -c "echo manual > /etc/init/avahi-daemon.override"
 ```
@@ -180,7 +180,7 @@ ubuntu:~ $ sudo sh -c "echo manual > /etc/init/avahi-daemon.override"
 
 #### 不顯示 空行 跟 \# 開頭
 
-```
+```bash
 linux:~ # grep -Ev '^$|^#'
 ```
 
@@ -195,13 +195,13 @@ linux:~ # sed 's/\x1b\[[0-9;]*m//g'  file.log
 
 顯示特定內容
 
-```
+```bash
 linux:~ # sed -n "/<\!--/,/-->/p" index.html
 ```
 
 不顯示特定內容
 
-```
+```bash
 linux:~ # sed  "/<\!--/,/-->/d" index.html
 ```
 
@@ -213,13 +213,13 @@ linux:~ # sed  "/<\!--/,/-->/d" index.html
 
 ### make
 
-```
+```bash
 # method 1: 在 configure 時指定安裝路徑
 Linux:~/pkg # ./configure --prefix=/install_dir
 Linux:~/pkg # make
 Linux:~/pkg # make install
 
-method 2: 在 make install 時指定安裝路徑
+# method 2: 在 make install 時指定安裝路徑
 Linux:~/pkg # ./configure
 Linux:~/pkg # make
 Linux:~/pkg # make install DESTDIR=/install_dir
@@ -231,11 +231,27 @@ Linux:~/pkg # make install DESTDIR=/install_dir
 ## Ineternet
 
 
+### SSH
+
+```bash
+# forwarding port
+linux:~ # ssh -L <local_port>:<remote_ip>:<remote_port> <forwarding_host>
+linux:~ # ssh -L 9000:192.168.0.1:5901 <forwarding_host>
+linux:~ # vncviewer 127.0.0.1 ::9000
+
+# dynamic forwarding port
+linux:~ # ssh -D <local_port> <forwarding_host>
+linux:~ # ssh -D 9999 <forwarding_host>
+
+# browser set proxy is socket5 127.0.0.1:9000
+```
+
+
 ### Chrome
 
 在 Chrome Dev Tool 中, 輸入以下程式碼, 可直接 import javascript
 
-```
+```javascript
 var jq = document.createElement('script');
 jq.src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js";
 document.getElementsByTagName('head')[0].appendChild(jq);
