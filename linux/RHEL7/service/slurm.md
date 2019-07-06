@@ -4,7 +4,7 @@
 
 ```
          +-------------------+
-         controller     compute node
+         controller     compute
          192.168.0.1    192.168.0.101
 service: munge          munge
          ypserv         ypbind
@@ -72,13 +72,14 @@ centos:~ # rpmbuild -ta slurm-19.05.0.tar.bz2
 ## Controller / Server
 
 ```bash
-# package
-controller:~ # yum install slurm-19.05.0-1.el7.x86_64.rpm slurm-slurmctld-19.05.0-1.el7.x86_64.rpm
+# install package
+controller:~ # yum install slurm-19.05.0-1.el7.x86_64.rpm slurm-slurmctld-19.05.0-1.el7.x86_64.rpm slurm-example-configs-19.05.0-1.el7.x86_64.rpm
 
-# config
+# update config
+controller:~ # cp slurm-19.05.0/etc/slurm.conf.example /etc/slurm/slurm.conf
 controller:~ # vi /etc/slurm/slurm.conf
 
-# service
+# run service
 controller:~ # systemctl start slurmctld
 controller:~ # systemctl enable slurmctld
 ```
@@ -89,13 +90,13 @@ controller:~ # systemctl enable slurmctld
 ## Compute / Client
 
 ```bash
-# package
+# install package
 compute:~ # yum install slurm-19.05.0-1.el7.x86_64.rpm slurm-slurmd-19.05.0-1.el7.x86_64.rpm
 
-# config
+# copy config from controller
 compute:~ # scp controller:/etc/slurm/slurm.conf /etc/slurm/slurm.conf
 
-# service
+# run service
 compute:~ # systemctl start slurmd
 compute:~ # systemctl enable slurmd
 ```
@@ -129,6 +130,9 @@ controller:~ $ sbatch test.sbatch
 controller:~ $ scancel <job_id>
 ```
 
+sacct, salloc, sattach, sbatch, sbcast, scancel, scontrol, sinfo, smap, squeue, srun, strigger, sview
+
+
 ---
 
 ## Admin
@@ -148,4 +152,105 @@ controller:~ # scontrol show job 10
 # syntax
 scontrol: update <specification>
 scontrol: show <entity> [<id>]
+```
+
+
+---
+
+# Slurmdbd
+
+## Status
+
+```
+         +-----------------------+
+         controller & dbd       compute
+         192.168.0.1            192.168.0.101
+service: munge                  munge
+         ypserv                 ypbind
+         slurmctld              slurmd
+```
+
+## Preparation
+
+```bash
+dbd:~ # yum install mariadb-server
+dbd:~ # systemctl start mariadb.service
+dbd:~ # systemctl enable mariadb.service
+
+# setup database and table
+dbd:~ # mysql -p
+mysql> grant all on slurm_acct_db.* TO '<user>'@'<host>' identified by '<password>' with grant option;
+mysql> show VARIABLES LIKE 'have_innodb';
+mysql> create database slurm_acct_db;
+mysql> quit;
+
+# verify
+dbd:~ # mysql -u <user> -p
+mysql> shoe databases;
+mysql> quit;
+```
+
+
+## Dbd
+
+```bash
+# install package
+dbd:~ # yum install slurm-19.05.0-1.el7.x86_64.rpm slurm-slurmdbd-19.05.0-1.el7.x86_64.rpm
+dbd:~ # mkdir -p /var/log/slurm
+dbd:~ # chowm slurm:slurm /var/log/slurm
+
+# setup config
+dbd:~ # cp /etc/slurm/slurmdbd.conf.example /etc/slurm/slurmdbd.conf
+dbd:~ # vi /etc/slurm/slurmdbd.conf
+...
+StorageType=accounting_storage/mysql
+StoragePass=<password>
+StorageUser=<user>
+...
+
+# run service
+dbd:~ # systemctl start slurmdbd
+dbd:~ # systemctl enable slurmdbd
+```
+
+
+## Controller
+
+```bash
+# update config
+controller:~ # vi /etc/slurm/slurm.conf
+...
+AccountingStorageHost=localhost                      # database host
+AccountingStoragePass=/var/run/munge/munge.socket.2  # munge socket
+AccountingStoragePort=3306
+AccountingStoragePass=<user>
+AccountingStorageUser=<password>
+...
+
+# restart service
+controller:~ # systemctl start slurmctld
+```
+
+
+## Compute
+
+```bash
+# copy config from controller
+compute:~ # scp controller:/etc/slurm/slurm.conf /etc/slurm/slurm.conf
+
+# restart service
+controller:~ # systemctl start slurmctld
+```
+
+## Usage
+
+```bash
+controller:~ # sacct
+```
+
+
+## Admin
+
+```bash
+controller:~ # sacctmgr
 ```
