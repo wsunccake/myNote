@@ -128,6 +128,54 @@ centos:~ # node
 
 ---
 
+
+## Different with Browser
+
+`addTwo.js`
+
+```javascript
+var base = 2;
+
+function addTwo(input) {
+    return parseInt(input) + base;
+};
+
+exports.addTwo = addTwo;
+```
+
+
+`test.html`
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="addTwo.js"></script>
+    <script>
+        var base = 10;
+        var result = addTwo(2);
+        console.log(result);
+    </script>
+</head>
+<body>
+    <p>result: <script>result;</script></p>  <!-- result overwrite base, value = 12 -->
+</body>
+</html>
+```
+
+
+`test.js`
+
+```javascript
+var addTwo = require('./addTwo').addTwo;
+var base = 10;
+var result = addTwo(2);
+console.log(result);  // result not overwrite base, value = 4
+```
+
+
 ## npm 
 
 npm 是 node.js 的套件管理工具, 在使用時可分為 global mode 和 local mode 兩種模式. global mode 是系統安裝, 安裝移除時需要 root 權限, 使用 global mode 安裝套件時, 所有使用者都可使用套件; local mode 是使用者個別安裝, 使用 local mode 安裝套件時, 只有該使用者都可使用該套件. node.js 預設為 local mode.
@@ -618,5 +666,7 @@ var server = new http.Server(); server.on('request', function(req, res) {
 server.listen(3000);
 console.log("HTTP server is listening at port 3000.");
 ```
+
+[nodejs beginner](./nodejs_beginner.md)
 
 [gulp入門指南](https://987.tw/2014/07/09/gulpru-men-zhi-nan/)

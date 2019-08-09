@@ -246,6 +246,18 @@ linux:~ # ssh -D 9999 <forwarding_host>
 # browser set proxy is socket5 127.0.0.1:9000
 ```
 
+### SFTP
+
+```bash
+linux:~ # sftp 192.168.0.1
+# 下載續傳
+sftp> get -ar <remote_file>
+sftp> reget <remote_file>
+# 上傳續傳
+sftp> put -ar <local_file>
+sftp> reput <local_file>
+```
+
 
 ### Chrome
 
