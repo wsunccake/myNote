@@ -36,6 +36,25 @@ linux:~ # curl http://download/file.tar.gz | tar zx
 
 ---
 
+## prefix suffix
+
+```bash
+F=/usr/lib/python/site-package/xxx-1.0/yyy.zz
+
+echo "raw:"
+echo ${F}
+
+echo "prefix:"
+echo ${F%.*}
+echo ${F%%.*}
+
+echo ${F#*/}
+echo ${F##*/}
+```
+
+
+---
+
 ## array
 
 ```bash

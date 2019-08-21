@@ -17,11 +17,20 @@ master port: 4505 (publish_port), 4506(ret_port)
 ### install
 
 ```bash
+# package
 master:~ # zypper install salt-master
+
+# service
 master:~ # systemctl enable salt-master
 master:~ # systemctl start salt-master
+
+# port
 master:~ # ss -lutnp | grep 4505
 master:~ # ss -lutnp | grep 4506
+
+# firewall
+master:~ # firewall-cmd --add-port=4505/tcp --add-port=4506/tcp --permanent
+master:~ # firewall-cmd --reload
 ```
 
 ### config
@@ -126,20 +135,97 @@ master:~ # salt '*' state.sls base.vim [saltenv='base']
 
 ## grains
 
+attribute on minion
+
+
+### config minion
+
+```bash
+minion:~ # vi /etc/salt/minion.d/grains.conf
+grains:
+  roles:
+    - compute
+    - backend
+  dc_location: datecenter1
+
+
+minion:~ # systemctl restart salt-minion
+```
+
+
+### usage master
+
 ```bash
 master:~ # salt '*' grains.ls
 master:~ # salt '*' grains.items
 master:~ # salt '*' grains.item os
+
+master:~ # salt '*' grains.item roles
+master:~ # salt '*' grains.item dc_localtion
 ```
+
+[GRAINS](https://docs.saltstack.com/en/latest/topics/grains/)
 
 
 ---
 
 ## pillar
 
+attribute on master
+
+
+### config master
+
 ```bash
+# config
+master:~ # vi /etc/salt/master
+...
+pillar_roots:
+  base:
+    - /srv/pillar
+...
+
+
+master:~ # vi /srv/pillar/top.sls
+base:
+  '*'
+    - package
+    - service
+
+
+master:~ # vi /srv/pillar/package.sls
+http:
+  package-name: nginx
+  version: 1.14.0
+
+ftp:
+  package-name: vsftpd
+  version: 3.0.3
+
+
+master:~ # vi /srv/pillar/service.sls
+http:
+  port:
+    - 80
+    - 8080
+
+
+master:~ # systemctl restart salt-master
+master:~ # salt '*' saltutil.refresh_pillar
+```
+
+
+### usage master
+
+```bash
+master:~ # salt '*' sys.doc pillar
+master:~ # salt '*' sys.list_functions pillar
+
+master:~ # salt '*' pillar.ls
 master:~ # salt '*' pillar.items
 ```
+
+[STORING STATIC DATA IN THE PILLAR](https://docs.saltstack.com/en/latest/topics/pillar/)
 
 
 ---

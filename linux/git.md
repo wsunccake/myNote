@@ -105,6 +105,30 @@ linux:~/project $ git checkout v2
 linux:~/project $ git rebase b1
 ```
 
+```bash
+c1 -> c2 -> c3  =>  c1 -> c3
+```
+
+```bash
+linux:~/project $ git checkout c3
+
+linux:~/project $ git log --graph --oneline
+* f47dc45 c3
+* 1f93216 c2
+* c28beea c1
+
+linux:~/project $ git rebase -i  c1
+pick 1f93216 c2
+pick f47dc45 c3
+->
+pick 1f93216 c2
+squash f47dc45 c3
+
+linux:~/project $ git log --graph --oneline
+* 445b1ba c3
+* c28beea c1
+```
+
 
 ## Stash
 
