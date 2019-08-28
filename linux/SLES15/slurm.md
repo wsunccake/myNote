@@ -32,7 +32,7 @@ suse:~ # vi /etc/hosts
 suse:~ # hostname -s controller
 ```
 
-setup ntp
+[setup ntp](./ntp.md)
 
 [setup nis](./nis.md)
 
