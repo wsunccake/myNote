@@ -24,9 +24,18 @@ sle:~ # timedatectl set-timezone UTC
 sle:~ # timedatectl set-time "YYYY/mm/dd HH:MM:SS"
 sle:~ # timedatectl set-local-rtc no
 sle:~ # timedatectl set-local-rtc yes
+
+# ntp
+sle:~ # vi /etc/systemd/timesyncd
+[Time]
+NTP=tw.pool.ntp.org
+
 sle:~ # timedatectl set-ntp no
 sle:~ # timedatectl set-ntp yes
+sle:~ # systemctl enable systemd-timesyncd
+sle:~ # systemctl start systemd-timesyncd
 ```
+
 
 
 ---
@@ -151,6 +160,10 @@ client:~ # zypper install ntp
 `config`
 
 ```bash
+# config by yast
+client:~ # yast ntp-client
+
+# config file
 client:~ # vi /etc/chrony.conf
 ...
 server <ntp_server>

@@ -10,50 +10,56 @@
 
 `Unix`
 
-	# for sh/bash
-	Linux:~ $ export JAVA_HOME=/usr/lib/java
-	Linux:~ $ export CLASSPATH=$JAVA_HOME/lib
-	Linux:~ $ PATH=$PATH:$JAVA_HOME/bin
+```bash
+# for sh/bash
+linux:~ $ export JAVA_HOME=/usr/lib/java
+linux:~ $ export CLASSPATH=$JAVA_HOME/lib
+linux:~ $ PATH=$PATH:$JAVA_HOME/bin
 
-	# for csh/tcsh
-	Linux:~ $ setenv JAVA_HOME /usr/lib/java
-	Linux:~ $ setenv CLASSPATH ${JAVA_HOME}/lib
-	Linux:~ $ set path = ( $path ${JAVA_HOME}/bin )
-
+# for csh/tcsh
+linux:~ $ setenv JAVA_HOME /usr/lib/java
+linux:~ $ setenv CLASSPATH ${JAVA_HOME}/lib
+linux:~ $ set path = ( $path ${JAVA_HOME}/bin )
+```
 
 `Windows`
 
-	JAVA_HOME="C:\Program File\Java\jdk"
-	CLASSPATH=%JAVA_HOME%\lib
-	path=%path;%JAVA_HOME%\bin
-
+```batch
+JAVA_HOME="C:\Program File\Java\jdk"
+CLASSPATH=%JAVA_HOME%\lib
+path=%path;%JAVA_HOME%\bin
+```
 
 多版本 Java 設定
 
-```
+```bash
 # Mac OS X
-osx: /usr/libexec/java_home -V
-osx: export JAVA_HOME=`/usr/libexec/java_home -v x.y.z_a-b-c`
+osx:~ $ /usr/libexec/java_home -V
+osx:~ $ export JAVA_HOME=`/usr/libexec/java_home -v x.y.z_a-b-c`
 
 # Linux
-linux: 
+linux:~ $
 ```
 
 ### Test ###
 
 安裝完之後, 可寫個 HelloWorld.java 來測試.
 
-	Linux:~ $ cat HelloWorld.java
-	public class HelloWorld {
-	    public static void main(String[] args) {
-	        System.out.println("Hello World!");
-	    }
-	}
+```bash
+linux:~ $ cat HelloWorld.java
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello World!");
+    }
+}
+```
 
 注意, HelloWorld.java 檔名有分大小寫, 且 HelloWorld 除了是檔案名稱 (file name) 之外還是類別名稱 (class name).
 
-	Linux:~ $ javac HelloWorld.java # java 編譯成 class
-	Linux:~ $ java HelloWorld # 執行 class
+```bash
+linux:~ $ javac HelloWorld.java # java 編譯成 class
+linux:~ $ java HelloWorld # 執行 class
+```
 
 使用 javac, 將 HelloWorld.javac 編譯成 HelloWorld.class, 使用 java 執行 HelloWorld.class
 
@@ -67,21 +73,24 @@ source         vm             run
 
 `compile java`
 
-	Linux:~ $ javac [-cp classpath] -d [output_dir] src.java # compile, 將 .java 編譯成 .class
-	Linux:~ $ java  [-cp classpath] src # run, 執行.class
-
+```bash
+linux:~ $ javac [-cp classpath] -d [output_dir] src.java # compile, 將 .java 編譯成 .class
+linux:~ $ java  [-cp classpath] src # run, 執行.class
+```
 
 `generate jar`
 
-	Linux:~ $ jar cf src.jar -C out_dir
-	Linux:~ $ jar tf src.jar
-	Linux:~ $ jar xf src.jar
+```bash
+linux:~ $ jar cf src.jar -C out_dir
+linux:~ $ jar tf src.jar
+linux:~ $ jar xf src.jar
+```
 
 ### package / module ###
 
 `HelloWithPackage.java`
 
-```Java
+```java
 package mypackage.mycls;
 
 public class HelloWithPackage {
@@ -97,16 +106,19 @@ public class HelloWithPackage {
 
 Failed to Run
 
-    Linux:~ $ tree
-    .
-    └─── HelloWithPackage.java
-    Linux:~ $ javac HelloWithPackage.java
-    Linux:~ $ tree
-    .
-    ├── HelloWithPackage.class
-    └── HelloWithPackage.java
-    Linux:~ $ java HelloWithPackage # error 
+```bash
+linux:~ $ tree
+.
+└─── HelloWithPackage.java
 
+linux:~ $ javac HelloWithPackage.java
+linux:~ $ tree
+.
+├── HelloWithPackage.class
+└── HelloWithPackage.java
+
+linux:~ $ java HelloWithPackage # error 
+```
 
 Succeful to Run
 
@@ -622,7 +634,7 @@ public class Circle extends GeometricObject {
 
 `Rectangle.java`
 
-```Java
+```java
 public class Rectangle extends GeometricObject{
     private double width;
     private double height;
@@ -651,7 +663,7 @@ public class Rectangle extends GeometricObject{
 
 `TestGeometricObject.java`
 
-```Java
+```java
 public abstract class TestGeometricObject {
     public static void main(String[] args) {
         GeometricObject geoObject1 = new Circle(5);
@@ -770,9 +782,9 @@ public class DemoAssert {
 }
 ```
 
-## Generics ##
+## Generics
 
-```Java
+```java
 GenericsClass<Class> generic = new GenericsClass<Class>();
 GenericsClass<Class> generic = new GenericsClass<>(); // 只有 Class 為 Object 才可省略, Premitive data 不可省略
 
@@ -783,6 +795,97 @@ ArrayList<int> intList = new ArrayList<int>();
 ArrayList<int> intList = new ArrayList<>(); // 無法通過編譯
 ```
 
+
+### Old
+
+```java
+package mypackage;
+
+public class GenericsType1 {
+    private Object t;
+
+    public Object get() {
+        return t;
+    }
+
+    public void set(Object t) {
+        this.t = t;
+    }
+
+    public void show() {
+        System.out.println(t.getClass());
+    }
+
+    public static void main(String[] args) {
+        GenericsType1 gt1 = new GenericsType1();
+        gt1.set("java");
+        gt1.show();
+        String s1 = (String) gt1.get();
+        System.out.println(s1);
+    }
+}
+```
+
+
+### New
+
+```java
+package mypackage;
+
+public class GenericsType2<T> {
+    private T t;
+
+    public T get() {
+        return this.t;
+    }
+
+    public void set(T t) {
+        this.t = t;
+    }
+
+    public void show() {
+        System.out.println(t.getClass());
+    }
+
+    public static void main(String[] args) {
+        GenericsType2<String> gt2 = new GenericsType2<>();
+        gt2.set("java");
+        gt2.show();
+        String s2 = gt2.get();
+        System.out.println(s2);
+    }
+}
+```
+
+
+### Extends
+
+```java
+package mypackage;
+
+class Animal {
+}
+
+class Human extends Animal {
+}
+
+class Toy {
+}
+
+class Duck<T extends Animal> {
+}
+
+public class GenericsExtends {
+    public static void main(String[] args) {
+        Duck<Animal> ad = new Duck<Animal>();
+        Duck<Human> hd = new Duck<Human>();
+        // Duck<Toy> td = new Duck<Toy>();  // Toy isn't sub class of Animnal
+    }
+}
+```
+
+
+---
 
 ## Container ##
 
@@ -808,7 +911,7 @@ ArrayList<int> intList = new ArrayList<>(); // 無法通過編譯
 ## Reflection ##
 
 
-```
+```java
 /* Class */
 // 1. .class
 Class<?> cls1 = String.class;
@@ -858,7 +961,7 @@ Object o = mthd.invoke(object, new Class[] {});
 
 `HelloJavaFX.java`
 
-```Java
+```java
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
@@ -882,7 +985,7 @@ public class HelloJavaFX extends Application{
 
 `ShowFlowPane.java`
 
-```Java
+```java
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;

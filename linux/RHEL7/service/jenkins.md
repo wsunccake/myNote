@@ -37,15 +37,36 @@ rhel:~ # docker cp ~/Downloads/p4 <container_id>:/usr/bin/p4
 
 ## CLI
 
+
+### Jenkins 1.x
+
+```bash
+rhel:~ # java -jar jenkins-cli.jar -s http://<jenkins>:8080 help
+rhel:~ # java -jar jenkins-cli.jar -s http://<jenkins>:8080 help --help
+
+rhel:~ # java -jar jenkins-cli.jar -s http://<jenkins>:8080 list-jobs [--username <username> --password <password>]
+rhel:~ # java -jar jenkins-cli.jar -s http://<jenkins>:8080 build <job> [--username <username> --password <password>] [-p <key>=<val>]
+
+rhel:~ # cat <job>.xml | java -jar jenkins-cli.jar -s http://<jenkins>:8080 create-job <job> [--username <username> --password <password>]
+rhel:~ # cat <view>.xml | java -jar jenkins-cli.jar -s http://<jenkins>:8080 create-view [--username <username> --password <password>]
+
+rhel:~ # java -jar jenkins-cli.jar -s http://<jenkins>:8080 delete-job <job> [--username <username> --password <password>]
 ```
-rhel:~ # java -jar jenkins-cli.jar -s http://localhost:8080 list-jobs
 
-rhel:~ # cat <job>.xml | java -jar jenkins-cli.jar -s http://localhost:8080 create-job <job>
-rhel:~ # cat <view>.xml | java -jar jenkins-cli.jar -s http://localhost:8080 create-view
 
-rhel:~ # java -jar jenkins-cli.jar -s http://localhost:8080 delete-job <job>
+### Jenkins 2.x
+
+```bash
+rhel:~ # java -jar jenkins-cli.jar -s http://<jenkins>:8080 help
+
+# auth 1
+rhel:~ # java -jar jenkins-cli.jar -s http://<jenkins>:8080 [-auth <username>:<password>] list-jobs
+
+# auth 2
+rhel:~ # export JENKINS_USER_ID=<username>
+rhel:~ # export JENKINS_API_TOKEN=<password>
+rhel:~ # java -jar jenkins-cli.jar -s http://<jenkins>:8080 list-jobs
 ```
-
 
 ----
 

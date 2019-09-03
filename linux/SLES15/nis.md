@@ -26,8 +26,8 @@ ypserv:~ # nisdomainname <nisdomainname>
 `daemon`
 
 ```bash
-ypserv:~ # systemctl start ypserv.service
-ypserv:~ # systemctl enable ypserv.service
+ypserv:~ # systemctl start ypserv
+ypserv:~ # systemctl enable ypserv
 ```
 
 ---
@@ -72,8 +72,8 @@ yp:~ # nisdomainname <nisdomainname>
 `daemon`
 
 ```bash
-yp:~ # systemctl start ypbind.service
-yp:~ # systemctl enable ypbind.service
+yp:~ # systemctl start ypbind
+yp:~ # systemctl enable ypbind
 ```
 
 `test`

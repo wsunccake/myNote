@@ -70,3 +70,28 @@ mysql> SELECT id, created_at, updated_at, host FROM services;
 mysql> DELETE FROM services WHERE host='node1';
 ```
 
+
+## convert image format
+
+```bash
+# ova
+linux:~ # tar zxf image.ova
+=>
+image.ovf
+image.vmdk
+
+# qcow2 -> raw
+linux:~ # qemu-img convert -f qcow2 -O raw image.qcow2 image.img
+
+# vmdk -> raw
+linux:~ # qemu-img convert -f vmdk -O raw image.vmdk image.img
+
+# raw -> qcow2
+linux:~ # qemu-img convert -f raw -O qcow2 image.img image.qcow2
+
+# vmdk -> qcow2
+linux:~ # qemu-img convert -f vmdk -O qcow2 image.vmdk image.qcow2
+
+# vdi -> raw
+linux:~ # VBoxManage clonehd image.vdi image.img --format raw
+```

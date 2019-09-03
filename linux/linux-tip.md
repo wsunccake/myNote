@@ -12,6 +12,7 @@ linux:~ # ps -ejf
 ```bash
 linux:~ # grep VmSwap /proc/<pid>/cmdline
 linux:~ # grep VmSwap /proc/<pid>/status
+linux:~ # grep VmSwap /proc/*/status | sort -n -k2
 ```
 
 ### Common

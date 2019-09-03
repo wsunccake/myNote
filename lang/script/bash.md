@@ -36,20 +36,34 @@ linux:~ # curl http://download/file.tar.gz | tar zx
 
 ---
 
-## prefix suffix
+## prefix and suffix
 
 ```bash
-F=/usr/lib/python/site-package/xxx-1.0/yyy.zz
-
+FILE_PATH=/usr/lib/python/site-package/xxx-1.0/yyy.zz
 echo "raw:"
-echo ${F}
+echo ${FILE_PATH}
 
 echo "prefix:"
-echo ${F%.*}
-echo ${F%%.*}
+echo ${FILE_PATH%.*}
+echo ${FILE_PATH%%.*}
 
-echo ${F#*/}
-echo ${F##*/}
+echo "suffix:"
+echo ${FILE_PATH#*/}
+echo ${FILE_PATH##*/}
+
+# For bash 4.x
+SENTENCE="That is a test."
+echo "sentence:"
+echo "${SENTENCE}"
+
+echo "reverse:"
+echo "${SENTENCE~~}"
+
+echo "upper:"
+echo "${SENTENCE^^}"
+
+echo "lower:"
+echo "${SENTENCE,,}"
 ```
 
 

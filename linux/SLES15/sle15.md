@@ -87,9 +87,8 @@ sle:~ # yast firewall
 `package`
 
 ```bash
-sle:~ # zypper in vim
-sle:~ # zypper in mlocate
-sle:~ # zypper in iputils
+sle:~ # zypper in vim mlocate
+sle:~ # zypper in iputils psmisc
 sle:~ # zypper in -t pattern yast2_basis
 
 sle:~ # yast sw_single
@@ -102,4 +101,64 @@ sle:~ # yast sw_single
 sle:~ # yast lan
 
 sle:~ # ls /etc/sysconfig/network/ifcfg-<nic>
+
+sle:~ # ifup eth0
+sle:~ # ifdown eth0
+sle:~ # ifstatus eth0
+sle:~ # ifprobe eth0
+```
+
+
+`sys log`
+
+```bash
+sle:~ # zypper in rsyslog
+sle:~ # systemctl enable rsyslog
+sle:~ # systemctl start rsyslog
+
+sle:~ # vi /etc/systemd/journald.conf
+ForwardToSyslog=yes
+...
+
+sle:~ # systemctl restart systemd-journald
+
+sle:~ # journalctl -f
+sle:~ # journalctl -n 100 -f
+# log level: "emerg" (0), "alert" (1), "crit" (2), "err" (3), "warning" (4), "notice" (5), "info" (6), "debug" (7)
+sle:~ # journalctl -p err
+sle:~ # journalctl -p 3
+```
+
+`fs`
+
+```bash
+sle:~ # vi /etc/fstab
+sle:~ # mount -a
+sle:~ # mount /dev/sda1 <mnt>
+sle:~ # mount -oloop image.iso <mnt>
+sle:~ # mount -oremount,rw <mnt>
+sle:~ # mount -oremount,ro <mnt>
+sle:~ # mount -t iso9660 /dev/sr0 <mnt>
+sle:~ # cat /etc/mtab
+sle:~ # cat /proc/mounts
+sle:~ # umount <mnt>
+sle:~ # fuser -l
+sle:~ # fuser -mv <mnt>
+sle:~ # fuser -mk <mnt>
+sle:~ # fusermount /dev/sda1 <mnt>
+sle:~ # fusermount -u <mnt>
+
+sle:~ # lsblk [-fs|-p]
+sle:~ # df -h
+sle:~ # du -hs [.|*]
+sle:~ # cat /proc/partitions
+
+sle:~ # fdisk [-l] /dev/sda
+sle:~ # gdisk [-l] /dev/sda
+sle:~ # parted [-l] /dev/sda
+sle:~ # partprobe
+
+sle:~ # mkfs -t xfs /dev/sda1
+sle:~ # mkfs.xfs /dev/sda1
+sle:~ # mkswap  /dev/sda2
 ```
