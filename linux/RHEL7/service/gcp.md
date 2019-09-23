@@ -35,6 +35,16 @@ linux:~ # ls .boto
 
 web: https://console.cloud.google.com/
 
+
+### config
+
+```bash
+linux:~ # gcloud config --help
+linux:~ # gcloud config list [--all]
+linux:~ # gcloud config set core/project <project>
+```
+
+
 ---
 
 ## Google Storage
@@ -95,6 +105,7 @@ linux:~ # gcloud compute disk-types describe <disk-type>
 # instance/vm
 ## list
 linux:~ # gcloud compute instances list
+linux:~ # gcloud compute instances list --filter="status=RUNNING"
 linux:~ # gcloud compute instances list --filter="zone:asia-east AND name~<xxx>"
 linux:~ # gcloud compute instances describe <instance>
 ## create with machine-type

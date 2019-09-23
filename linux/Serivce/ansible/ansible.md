@@ -11,7 +11,7 @@ method 1. yum
 
 for RHEL, CentOS, Fedora
 
-```
+```bash
 control:~ # yum localinstall http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
 control:~ # yum update
 control:~ # yum install ansible
@@ -22,7 +22,7 @@ method 2. apt
 
 for Debian, Ubuntu
 
-```
+```bash
 # for Debian
 control:~ # echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" >> /etc/apt/sources.list
 control:~ # apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
@@ -38,7 +38,7 @@ control:~ # apt-get install ansible
 
 method 3. pip
 
-```
+```bash
 control: ~ # pip install --upgrade pip
 control: ~ # pip install ansible
 ```
@@ -46,7 +46,7 @@ control: ~ # pip install ansible
 
 ## Ad-Hoc
 
-```
+```bash
 control:~ # cat playbooks/hosts
 [test_node]
 node1 ansible_connection=ssh ansible_ssh_host=192.168.0.11 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_pass=password ansible_become_pass=password
@@ -55,6 +55,7 @@ node2 ansible_connection=ssh ansible_ssh_host=192.168.0.12 ansible_ssh_port=22 a
 # 已指令模式執行 ansible 稱為 Ad-Hoc
 control:~ # ansible all -i hosts -m ping  -vvv
 control:~ # ansible node1 -i hosts -m command -s -a uptime
+control:~ # ansible all -i hosts -m copy -a "src=/etc/hosts dest=/tmp/hosts"
 control:~ # ansible all -i hosts -m setup
 ```
 
@@ -91,7 +92,7 @@ nocows = 1
 
 PlayBook 是 YAML 格式, yaml 其實可以轉成對應的 json, 範例如下
 
-```
+```bash
 yml/yaml
 ---
 - hosts: all
@@ -136,7 +137,7 @@ json
 
 簡單的 ansible-playbook 測試如下
 
-```
+```bash
 control:~/playbooks # cat ansible.cfg
 [defaults]
 hostfile = hosts
@@ -163,7 +164,7 @@ control:~/playbooks # ansible-playbook site.yml --start-at-task "Hello World"
 
 一個 playbook 內容需要有 host 和 task 組成. task 內除了 name 之外, 皆由 action module 組成.
 
-```
+```bash
 # 使用變數的方式
 control:~/playbooks # cat say_hello.yml
 ---
@@ -191,7 +192,7 @@ control:~/playbooks/ # ansible-playbook -e '@ext_vars.yml' say_hello.yml
 
 範例 [docker_install.yml](./docker_install.yml)
 
-```
+```bash
 control:~/project # tree
 .
 ├── ansible.cfg
@@ -298,7 +299,7 @@ control:~/project # cat roles/docker/handlers/main.yml
 
 ## Galaxy
 
-```
+```bash
 control:~/project # ansible-galaxy init -p roles abc
 control:~/project # cat roles/abc/meta/main.yml
 control:~/project # ansible-galaxy list -p roles

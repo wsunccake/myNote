@@ -1,5 +1,25 @@
 # BASH
 
+## run
+
+```bash
+# method 1
+linux:~ # chmod +x script.sh
+linux:~ # ./script.sh
+
+# method 2
+linux:~ # sh script.sh
+
+# method 3
+linux:~ # export VAR=value
+linux:~ # ./script.sh
+
+# method 4s
+linux:~ # env VAR=value ./script.sh
+```
+
+---
+
 ## stdout, stderr
 
 ```bash
@@ -64,6 +84,159 @@ echo "${SENTENCE^^}"
 
 echo "lower:"
 echo "${SENTENCE,,}"
+
+# define var operation
+VAR="Hello Bash"
+echo "define VAR: ${VAR}"
+echo "\${VAR:=value}: ${VAR:=value}"
+echo "VAR: ${VAR}"
+echo
+
+VAR="Hello Bash"
+echo "define VAR: ${VAR}"
+echo "\${VAR:-value}: ${VAR:-value}"
+echo "VAR: ${VAR}"
+echo
+
+VAR="Hello Bash"
+echo "define VAR: ${VAR}"
+echo "VAR:+value ${VAR:+value}"
+echo "VAR: ${VAR}"
+echo
+
+VAR="Hello Bash"
+echo "define VAR: ${VAR}"
+echo "\${VAR:?value}: ${VAR:?value}"
+echo "VAR: ${VAR}"
+echo
+
+# undefine var operation
+unset VAR
+echo "undefine VAR: ${VAR}"
+echo "\${VAR:=value}: ${VAR:=value}"
+echo "VAR: ${VAR}"
+echo
+
+unset VAR
+echo "undefine VAR: ${VAR}"
+echo "\${VAR:-value}: ${VAR:-value}"
+echo "VAR: ${VAR}"
+echo
+
+unset VAR
+echo "undefine VAR: ${VAR}"
+echo "\${VAR:+value}: ${VAR:+value}"
+echo "VAR: ${VAR}"
+echo
+
+unset VAR
+echo "undefine VAR: ${VAR}"
+#echo "VAR:?value ${VAR:?value}"  # show err
+echo "VAR: ${VAR}"
+echo
+```
+
+
+---
+
+## if
+
+```bash
+if [ "x$SEX" == "xmale" ]; then
+  echo "Hi male"
+else
+  echo "Hi Female"
+fi
+
+[ "x$SEX" == "xmale" ] && echo "Hi male" || echo "Hi Female"
+```
+
+
+---
+
+## for
+
+```bash
+for ((i=1; i<=3; i++)); do
+  echo $i
+done
+
+for E in "1 2 3"; do
+  echo "index: $E"
+done
+
+for E in 1 2 3; do
+  echo "index: $E"
+done
+
+for E in `echo -e "1\n2\n3"`; do
+  echo "index: $E"
+done
+
+for E in `seq 3`; do
+  echo "index: $E"
+done
+
+seq 3 | xargs -i echo "{}"
+```
+
+
+---
+
+## while
+
+```bash
+i=0
+while [ $i -lt 3 ]; do
+  i=`expr $i + 1`
+  echo "$i"
+done
+
+i=0
+while true; do
+  i=`expr $i + 1`
+  echo "$i"
+  if [ $i -ge 3 ]; then
+    break
+  fi
+done
+```
+
+---
+
+## until
+
+
+---
+
+## case
+
+
+---
+
+## select
+
+
+---
+
+## heredoc
+
+```bash
+cat > tmp.txt << EOF
+echo "hello bash"
+EOF
+
+mysql -u root << EOF
+  USE nova;
+  SELECT id hypervisor_hostname FROM compute_nodes WHERE hypervisor_hostname = "$HOST";
+  DELETE FROM compute_nodes WHERE hypervisor_hostname = "$HOST";
+EOF
+
+mongo << EOF
+use $DB
+print("$COLLECTION")
+db.getCollection("$COLLECTION").findOne()
+EOF
 ```
 
 
