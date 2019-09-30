@@ -206,15 +206,51 @@ done
 
 ## until
 
+```bash
+i=0
+until [ $i -eq 3 ]; do   
+  i=`expr $i + 1`          
+  echo "$i"                
+done                                                                                                                                                
+
+i=0
+until false; do
+i=`expr $i + 1`                                                                                                                                       echo "$i"
+  [ $i -ge 3 ] && break
+done
+```
+
 
 ---
 
 ## case
 
+```bash
+case $SHELL in
+  "/bin/bash")
+    echo "BASH"
+    ;;
+
+  "/bin/tcsh")
+    echo "TCSH"
+    ;;
+    
+  *)
+    echo "UNKNOWN"
+    ;;
+esac
+```
 
 ---
 
 ## select
+
+```bash
+select V in a b q; do
+  echo "select: $V"
+  [ "$V" == "q" ] && break
+done
+```
 
 
 ---
@@ -269,3 +305,60 @@ for KEY in ${!MAP[@]}; do
   echo "KEY: $KEY, VALUE: ${MAP[$KEY]}"
 done
 ```
+
+
+---
+
+## grep
+
+
+---
+
+## sed
+
+
+---
+
+## awk
+
+```bash
+linux:~ # seq 5 | awk ' { sum = sum + $1 } END { print sum }'
+
+# awk access shell variable
+linux:~ # awk -v today="`date`" 'BEGIN {print today}'
+
+# awk access environment variable
+linux:~ # awk 'BEGIN {print ENVIRON["HOME"]}'
+
+# awk argument
+linux:~ # awk 'BEGIN {print ARGV[0], ARGV[1]}' "`date`"
+
+# awk script
+linux:~ # cat avg.awk
+#!/usr/bin/awk -f
+
+BEGIN {
+  sum = 0
+  i = 0
+}                                                                                                                                                   
+
+{
+  sum = sum + $1
+  i += 1
+}
+
+END {
+  "count:", i
+  "sum: ", sum
+  "average: %f\n", sum/i
+}
+```
+
+---
+
+## find
+
+
+---
+
+## expect
