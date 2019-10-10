@@ -307,3 +307,46 @@ node {
     }
 }
 ```
+
+
+---
+
+## Example
+
+```groovy
+node {
+    properties([
+        parameters([string(defaultValue: '1.2.3.4', name: 'version')])
+    ])
+    
+    currentBuild.displayName = "${params.version} - #${currentBuild.number}"
+
+    stage('S1') {
+        echo "Current Version: ${params.version}"
+        sh '''#!/bin/bash
+echo "${version}"
+'''
+    }
+    
+    stage('S2') {
+        build job: 'any_job'
+    }
+
+    stage('S3') {
+        build job: 'always_false', propagate: false
+        // build job: 'always_false'
+    }
+    
+    try {
+        stage('S4') {
+            build job: 'always_false'
+        }
+    } catch (Exception e) {
+        echo "Stage ${currentBuild.result}, but we continue"  
+    }
+
+    stage('S5') {
+        build job: 'any_job', parameters: [string(name: 'version', value: "${params.version}")]
+    }
+}
+```

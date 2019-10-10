@@ -111,7 +111,7 @@ linux:~ # gcloud compute instances describe <instance>
 ## create with machine-type
 linux:~ # gcloud compute instances create <instance> --zone=<zone> --image-project=<image-project> --image=<image> --machine-type=<machine-type> [--boot-disk-size=<disk-szie> --boot-disk-type=<disk-type>]
 ## create with custom
-linux:~ # gcloud compute instances create <instance> --zone=<zone> --image-project=<image-project> --image=<image> --custom-cpu=<cpu-number> --custom-memory=<mem-size> [--boot-disk-size=<disk-size> --boot-disk-type=<disk-type>]
+linux:~ # gcloud compute instances create <instance> --zone=<zone> --image-project=<image-project> --image=<image> --custom-cpu=<cpu-number> --custom-memory=<mem-size> [--boot-disk-size=<disk-size> --boot-disk-type=<disk-type> --tags=<tag1>,<tag2>]
 ## delete
 linux:~ # gcloud compute instances delete <instance>
 ## start
@@ -120,4 +120,16 @@ linux:~ # gcloud compute instances start <instance>
 linux:~ # gcloud compute instances stop <instance>
 ## show
 linux:~ # gcloud compute instances describe <instance>
+
+# ssh
+linux:~ # gcloud compute ssh [<user>@]<instance>
+<vm>:~ $ sudo passwd `whoami`
+
+# serial, ~. to escape
+linux:~ # gcloud compute connect-to-serial-port <instance>
+
+# info
+linux:~ # gcloud compute project-info describe
+linux:~ # gcloud compute project-info add-metadata --metadata enable-oslogin=TRUE
+linux:~ # gcloud compute project-info remove-metadata --keys=enable-oslogin
 ```

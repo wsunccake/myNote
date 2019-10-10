@@ -23,7 +23,10 @@ gmetad:~ # ss -lutnp | grep 8652
 
 # config
 gmetad:~ # vi /etc/ganglia/gmetad.conf
-data_source "my cluster" localhost <gmond1_ip> ...
+data_source "my cluster" localhost <gmond_ip> ...
+
+# command
+gmetad:~ # gstat -a
 ```
 
 
@@ -71,4 +74,28 @@ gmond:~ # ss -lutnp | grep 8649
 
 # config
 gmond:~ # ls /etc/ganglia/gmond.conf
+globals {
+  ...
+  send_metadata_interval = 10 /*secs */
+}
+
+cluster {
+  name = "unspecified"
+  owner = "unspecified"
+  latlong = "unspecified"
+  url = "unspecified"
+}
+
+udp_send_channel {
+#  mcast_join = 239.2.11.71
+  host = <gmetad_ip>
+  port = 8649
+  ttl = 1
+} 
+
+udp_recv_channel {
+#  mcast_join = 239.2.11.71
+  port = 8649
+#  bind = 239.2.11.71
+}
 ```

@@ -380,6 +380,61 @@ pipeline {
 
 ---
 
+## Example
+
+```groovy
+pipeline {
+    agent any
+    parameters { string(name: 'version', defaultValue: '1.2.3.4', description: '') }
+
+    stages {
+        stage('Show') {
+            steps {
+                script {
+                    currentBuild.displayName = "${version} - #${currentBuild.number}"
+                }
+
+                echo "Current Version: ${params.version}"
+                sh '''#!/bin/bash
+echo "${version}"
+'''
+            }
+        }
+
+        stage('S1') {
+            steps {
+                build job: 'any_job'
+            }
+        }
+        
+        stage('S2') {
+            steps {
+                build job: 'always_false', propagate: false
+                // build job: 'always_false'
+            }
+        }
+        
+        stage('S3') {
+            steps {
+                catchError {
+                    build job: 'always_false'
+                }
+                echo "Stage ${currentBuild.result}, but we continue"  
+            }
+        }
+
+        stage('S5') {
+            steps {
+                build job: 'any_job', parameters: [string(name: 'version', value: "${params.version}")]
+            }
+        }
+
+    }
+}
+```
+
+---
+
 ## Ref
 
 [Pipeline Syntax](https://jenkins.io/doc/book/pipeline/syntax/)
