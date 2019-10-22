@@ -283,8 +283,8 @@ EOF
 ```bash
 # Array
 declare -a ARR
-ARR=( eth0 em1 )
-
+ARR=("eth0" "em1")
+ARR+=("en0")
 echo "ARR Length: ${#ARR[@]}"
 
 for ITEM in ${ARR[*]}; do
@@ -304,6 +304,29 @@ echo "MAP Length: ${#MAP[@]}"
 for KEY in ${!MAP[@]}; do
   echo "KEY: $KEY, VALUE: ${MAP[$KEY]}"
 done
+```
+
+
+---
+
+## arg
+
+```bash
+echo "#: $#, @: $@, *: $*, 1: $1"
+shift
+echo "#: $#, @: $@, *: $*, 1: $1"
+```
+
+
+---
+
+## set
+
+```bash
+linux:~ # set
+linux:~ # set -o
+linux:~ # set -e
+linux:~ # set +e
 ```
 
 
