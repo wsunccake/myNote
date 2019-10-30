@@ -303,7 +303,7 @@ void swap1(int x, int y) {
    return;
 }
 
-// call by reference
+// call by address
 void swap2(int *x, int *y) {
    int temp;
    temp = *x;
@@ -416,8 +416,6 @@ int (* ptr)[5] = NULL;
 
 // pointer to pointer
 int **ptr;
-
-
 ```
 
 
@@ -545,8 +543,7 @@ int main () {
 ### pointer to array
 
 ```c
-int main() 
-{ 
+int main() { 
   int arr[] = { 3, 5, 6, 7, 9 };
   int *p = arr;
   int (*ptr)[5] = &arr;
@@ -653,13 +650,11 @@ int main () {
 ### function pointer
 
 ```c
-int sum (int num1, int num2)
-{
+int sum (int num1, int num2) {
    return num1+num2;
 }
 
-int main()
-{
+int main() {
    int (*f2p) (int, int);
    f2p = sum;
    
@@ -731,14 +726,12 @@ int main () {
 #include <stdio.h>
 #include <string.h>
  
-struct Employee  
-{
+struct Employee {
    char name[50];
    float salary;
 };
 
-struct Book
-{
+struct Book {
    int id;  
    char name[50];  
 } b1, b2;
@@ -787,7 +780,7 @@ union Data {
    char str[20];
 };
  
-int main( ) {
+int main() {
    union Data data;        
 
    data.i = 10;

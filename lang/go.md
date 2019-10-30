@@ -13,6 +13,8 @@ centos:~ # go env
 ```
 
 
+---
+
 ## hello
 
 ```bash
@@ -31,6 +33,120 @@ linux:~ # go run hello.go
 # compile to binary
 linux:~ # go build hello.go
 linux:~ # ./hello
+```
+
+
+---
+
+## project
+
+### simple
+
+```bash
+linux:~ # mkdir project
+linux:~ # cd project
+linux:~/project # vi main.go
+package main
+
+func main() {
+	println("Hello go")
+}
+
+# run with source
+linux:~/project # go run main.go
+
+# build binary
+linux:~/project # export GOBIN=~/project/bin
+linux:~/project # go install
+linux:~/project # ls $GOBIN
+
+# run with binary
+linux:~/project # ./bin/project
+
+linux:~/project # tree
+.
+├── bin
+│   └── project
+└── main.go
+```
+
+
+### import
+
+```bash
+linux:~/project # mkdir -p src/hello
+linux:~/project # vi src/hello/myFunc.go
+package hello
+
+func Hello() {
+	println("Hello GO")
+}
+
+func Hi() string {
+	return "Hi GO"
+}
+
+linux:~/project # vi main.go
+package main
+
+import "hello"
+
+func main() {
+    println("Hello go")
+    hello.Hello()
+}
+
+# run with source
+linux:~/project # export GOPATH=~/project
+linux:~/project # go run main.go
+
+# build binary
+linux:~/project # export GOBIN=~/project/bin
+linux:~/project # go install
+linux:~/project # ls $GOBIN
+
+# run with binary
+linux:~/project # ./bin/project
+
+linux:~/project # tree
+.
+├── bin
+│   └── project
+├── main.go
+└── src
+    └── hello
+        └── myFunc.go
+```
+
+
+### test
+
+```bash
+linux:~/project # vi hello_test.go
+package main
+
+import "testing"
+imrpot "hello"
+
+func TestHello(t *testing.T) {
+	if hello.Hi() != "Hi Go" {
+		t.Error("fail")
+	}
+}
+
+# test
+linux:~/project # export GOPATH=~/project
+linux:~/project # go test
+
+linux:~/project # tree
+.
+├── bin
+│   └── project
+├── hello_test.go
+├── main.go
+└── src
+    └── hello
+        └── myFunc.go
 ```
 
 ---
@@ -259,7 +375,7 @@ func swap1(x, y int) {
 	y = temp
 }
 
-// call by reference
+// call by address
 func swap2(x, y *int) {
 	var temp int
 	temp = *x
@@ -318,6 +434,7 @@ func main() {
 	simple(add1)
 	simple(add2)
 	simple(add3)
+}
 ```
 
 
@@ -369,6 +486,7 @@ func main() {
 }
 ```
 
+
 ### 2d
 
 ```go
@@ -385,10 +503,201 @@ func main() {
 ```
 
 
+### slice
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	odds := []int{2, 4, 6, 8, 10}
+	o1 := odds[1:3]
+	o2 := odds[:2]
+	o3 := odds[3:]
+	o4 := odds[3]
+	fmt.Println(o1, o2, o3, o4)
+
+	names := []string{"Finn", "LPJ", "Tino"}
+	n1 := names[0]
+	fmt.Println(n1, n1[2:], n1[:], n1[1:3])
+```
+
+
+### make, append
+
+```go
+package main
+
+import (
+	"fmt"
+	"reflect"
+)
+
+func main() {
+	a1 := []int{1, 2, 3}
+	fmt.Println(reflect.TypeOf(a1), a1, len(a1), cap(a1))
+	//a1[3] = 4
+	a1 = append(a1, 4)
+	fmt.Println(a1, len(a1), cap(a1))
+	a1[3] = 1
+	fmt.Println(a1, len(a1), cap(a1))
+
+	a2 := [5]int{1, 2, 3}
+	fmt.Println(reflect.TypeOf(a2), a2, len(a2), cap(a2))
+	//a2[5] = 1
+	//a2 = append(a2, 4)
+
+	a3 := make([]int, 3, 10)
+	fmt.Println(reflect.TypeOf(a3), a3, len(a3), cap(a3))
+	//a3[3]=1
+	a3 = append(a3, 3)
+	fmt.Println(a3, len(a3), cap(a3))
+}
+```
+
 ---
 
 ## pointer
 
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var v1 int = 20
+	var p1 *int
+	p1 = &v1
+	var p2 *int = &v1
+	p3 := &v1
+	p4 := new(int)
+	p4 = &v1
+	fmt.Printf("value v1: %d, *p1: %d, *p2: %d, *p3: %d, *p4: %d\n", v1, *p1, *p2, *p3, *p4)
+	fmt.Printf("addres &v1: %x, p1: %x, p2: %x, p3: %x, p4: %x\n", &v1, p1, p2, p3, p4)
+}
+```
+
+
+---
+
+## struct
+
+```go
+package main
+
+import "fmt"
+
+type Person struct {
+	name string
+	age int
+}
+
+type Employee struct {
+	Person
+	int
+}
+
+func main() {
+	var p1 Person = Person{name: "LPJ", age: 20}
+	var p2 Person
+	p2 = Person{"Tino", 25}
+	p3 := Person{"Finn", 20}
+	fmt.Printf("p1: %+v, p2: %+v, p3: %+v\n", p1, p2, p3)
+	fmt.Println(p1.name, p1.age)
+
+	e1 := Employee{Person{"yoyo", 21}, 1}
+	fmt.Printf("e1: %+v\n", e1)
+	fmt.Println(e1.name, e1.age, e1.int)
+}
+```
+
+
+### function / method
+
+```go
+package main
+
+import "fmt"
+
+type Person struct {
+	name string
+	age int
+}
+
+func (p Person) grow1() {
+	p.age++
+}
+
+func (p *Person) grow2() {
+	p.age++
+}
+
+func main() {
+	p := Person{name: "LPJ", age: 20}
+	fmt.Printf("p: %+v\n", p)
+	p.grow1()
+	fmt.Printf("p: %+v\n", p)
+	p.grow2()
+	fmt.Printf("p: %+v\n", p)
+}
+```
+
+
+---
+
+## interface
+
+```go
+package main
+
+import "fmt"
+
+type vehicle interface {
+	accelerate()
+}
+
+func describe(v vehicle)  {
+	fmt.Printf("%+v\n", v)
+	v.accelerate()
+}
+
+type Car struct {
+	vendor string
+	color string
+}
+
+func (c Car) accelerate() {
+	fmt.Println("10 m/s")
+}
+
+type Toyota struct {
+	Car
+	model string
+}
+
+type BMW struct {
+	Car
+	model string
+}
+
+func (b BMW) accelerate() {
+	fmt.Println("100 m/s")
+}
+
+func main() {
+	c := Car{"unknown", "black"}
+	describe(c)
+
+	t := Toyota{Car{"toyota", "white"}, "ae86"}
+	describe(t)
+
+	b := BMW{Car{"bmw", "white"}, "m3"}
+	describe(b)
+}
+```
 
 ---
 
