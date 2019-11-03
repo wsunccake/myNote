@@ -440,6 +440,105 @@ func main() {
 
 ---
 
+## string
+
+```go
+package main
+
+import (
+	"fmt"
+	"reflect"
+	"strings"
+)
+
+func main() {
+	var str string = "Hello Go"
+	fmt.Println(str)
+	fmt.Println("type: ", reflect.TypeOf(str))
+	fmt.Println("length: ", len(str))
+	fmt.Println("A ascii: ", "A"[0])
+
+	fmt.Println("upper: ", strings.ToUpper(str))
+	fmt.Println("lower: ", strings.ToLower(str))
+	fmt.Println("has prefix: ", strings.HasPrefix(str,"hello"))
+	fmt.Println("has suffix: ", strings.HasSuffix(str,"go"))
+
+	lang := []string{"C", "C++", "Go"}
+	fmt.Println(lang)
+	fmt.Println("join: ", strings.Join(lang, ","))
+
+	csvStr := "C,C++,Go"
+	fmt.Println(csvStr)
+	fmt.Println("split", strings.Split(csvStr, ","))
+}
+```
+
+
+---
+
+## regex
+
+```go
+package main
+
+import (
+	"fmt"
+	"regexp"
+)
+
+func main() {
+	str := "/usr/lib/python2.6/site-packages/gtk-2.0/gconf.so"
+
+	re1, _ := regexp.Compile(`(.*)\.(.*?)$`)
+	res1 := re1.FindAllStringSubmatch(str, -1)
+	fmt.Printf("%+v\n", res1)
+	for _, e := range res1 {
+		fmt.Println("match: ", e[0])
+		fmt.Println("group1: ",e[1])
+		fmt.Println("group2: ",e[2])
+	}
+
+	re2, _ := regexp.Compile(`(.*?)\.(.*)`)
+	res2 := re2.FindAllStringSubmatch(str, -1)
+	fmt.Printf("%+v\n", res2)
+	for _, e := range res2 {
+		fmt.Println("match: ", e[0])
+		fmt.Println("group1: ",e[1])
+		fmt.Println("group2: ",e[2])
+	}
+
+	re3, _ := regexp.Compile(`(.*?)/(.*)`)
+	res3 := re3.FindAllStringSubmatch(str, -1)
+	fmt.Printf("%+v\n", res3)
+	for _, e := range res3 {
+		fmt.Println("match: ", e[0])
+		fmt.Println("group1: ",e[1])
+		fmt.Println("group2: ",e[2])
+	}
+
+	re4, _ := regexp.Compile(`(.*)/(.*)`)
+	res4 := re4.FindAllStringSubmatch(str, -1)
+	fmt.Printf("%+v\n", res4)
+	for _, e := range res4 {
+		fmt.Println("match: ", e[0])
+		fmt.Println("group1: ",e[1])
+		fmt.Println("group2: ",e[2])
+	}
+
+	re5, _ := regexp.Compile(`/python.*/`)
+	res5 := re5.FindString(str)
+	fmt.Println("greedy: ", res5)
+
+	re6, _ := regexp.Compile(`/python.*?/`)
+	res6 := re6.FindString(str)
+	fmt.Println("lazy: ", res6)
+
+}
+```
+
+
+---
+
 ## array
 
 ```go
@@ -557,6 +656,51 @@ func main() {
 	fmt.Println(a3, len(a3), cap(a3))
 }
 ```
+
+
+---
+
+## map
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var countryCapitalMap map[string]string
+	countryCapitalMap = make(map[string]string)
+
+	countryCapitalMap["France"] = "Paris"
+	countryCapitalMap["Italy"] = "Rome"
+	countryCapitalMap["Japan"] = "Tokyo"
+
+	weekDay := map[string]string{
+		"sun": "Sunday",
+		"mon": "Monday",
+		"tues": "Tuesday",
+		"wed": "Wednesday",
+		"thurs": "Thursday",
+		"fri": "Friday",
+		"sat": "Saturday"}
+
+	delete(countryCapitalMap, "Italy")
+
+	for k, v := range countryCapitalMap {
+		fmt.Printf("%s -> %s\n", k, v)
+	}
+
+
+	k := "abc"
+	v, ok := weekDay[k]
+	if ok {
+		fmt.Println(k, "->", v)
+	} else {
+		fmt.Println("no found", k)
+	}
+}
+```
+
 
 ---
 
@@ -699,6 +843,185 @@ func main() {
 }
 ```
 
+
+---
+
+## sync
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+var wg = sync.WaitGroup{}
+
+func f1() {
+	for i := 0; i < 10; i++ {
+		fmt.Println("f1,  ->", i)
+		time.Sleep(time.Duration(5 * time.Millisecond))
+	}
+}
+
+func f2() {
+	for i := 0; i < 10; i++ {
+		fmt.Println("f2,  ->", i)
+		time.Sleep(time.Duration(10 * time.Millisecond))
+	}
+}
+
+func f3() {
+	for i := 0; i < 10; i++ {
+		fmt.Println("f3,  ->", i)
+		time.Sleep(time.Duration(5 * time.Millisecond))
+	}
+	wg.Done()
+}
+
+func f4() {
+	for i := 0; i < 10; i++ {
+		fmt.Println("f4,  ->", i)
+		time.Sleep(time.Duration(10 * time.Millisecond))
+	}
+	wg.Done()
+}
+
+func main() {
+	fmt.Println("no sync start")
+	f1()
+	f2()
+	fmt.Println("no sync finish")
+
+	fmt.Println("no sync start")
+	go f1()
+	f2()
+	fmt.Println("no sync finish")
+	fmt.Println("sync and delta: 1 start")
+	wg.Add(1)
+	go f3()
+	go f4()
+	wg.Wait()
+	fmt.Println("sync and delta: 1 finish")
+
+	fmt.Println("sync and delta: 2 start")
+	wg.Add(2)
+	go f3()
+	go f4()
+	wg.Wait()
+	fmt.Println("sync and delta: 2 finish")
+}
+```
+
+```go
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"sync"
+	"sync/atomic"
+	"time"
+)
+
+var wait sync.WaitGroup
+var count int64
+var mutex sync.Mutex
+
+func increment1(s string) {
+	for i := 0; i < 10; i++ {
+		x := count
+		x++
+		time.Sleep(time.Duration(rand.Intn(4)) * time.Millisecond)
+		count = x
+		fmt.Println(s, i, "Count: ", count)
+
+	}
+	wait.Done()
+}
+
+func increment2(s string) {
+	for i := 0; i < 10; i++ {
+		mutex.Lock()
+		x := count
+		x++
+		time.Sleep(time.Duration(rand.Intn(4)) * time.Millisecond)
+		count = x
+		mutex.Unlock()
+		fmt.Println(s, i, "Count: ", count)
+	}
+	wait.Done()
+}
+
+func increment3(s string) {
+	for i := 0; i < 10; i++ {
+		time.Sleep(time.Duration((rand.Intn(4))) * time.Millisecond)
+		atomic.AddInt64(&count, 1)
+		fmt.Println(s, i, "Count ->", count)
+	}
+	wait.Done()
+}
+
+func main() {
+	count = 0
+	wait.Add(2)
+	go increment1("foo: ")
+	go increment1("bar: ")
+	wait.Wait()
+	fmt.Println("Last Count:", count)
+
+	count = 0
+	wait.Add(2)
+	go increment2("foo: ")
+	go increment2("bar: ")
+	wait.Wait()
+	fmt.Println("Last Count:", count)
+
+	count = 0
+	wait.Add(2)
+	go increment3("foo: ")
+	go increment3("bar: ")
+	wait.Wait()
+	fmt.Println("Last Count:", count)
+}
+```
+
+---
+
+## channel
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	chanInt := make(chan int, 1)
+	chanInt <- 1
+	// chanInt <- 2
+	fmt.Println(<- chanInt)
+
+	s := make(chan string)
+
+	// s <- "hello"
+
+	// func () {
+	// 	s <- "hello"
+	// }()
+
+	go func () {
+		s <- "hello"
+	}()
+
+	val := <- s
+	fmt.Println(val)
+}
+```
+
 ---
 
 ## reference
@@ -706,3 +1029,5 @@ func main() {
 [Golang tutorial series](https://golangbot.com/learn-golang-series/)
 
 [Go Tutorial](https://www.tutorialspoint.com/go/index.htm)
+
+[Go Bootcamp](http://www.golangbootcamp.com/book/frontmatter)

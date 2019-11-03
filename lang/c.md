@@ -805,8 +805,205 @@ int main() {
 
 ---
 
+## error
+
+```c
+#include <stdio.h>
+#include <errno.h>
+#include <string.h>
+
+extern int errno ;
+
+int main () {
+
+   FILE * pf;
+   pf = fopen ("unexist.txt", "rb");
+	
+   if (pf == NULL) {
+      fprintf(stderr, "Value of errno: %d\n", errno);
+      perror("Error printed by perror");
+      fprintf(stderr, "Error opening file: %s\n", strerror(errno));
+   } else {   
+      fclose (pf);
+   }
+   
+   return 0;
+}
+```
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+   int dividend = 20;
+   int divisor = 5;
+   int quotient;
+ 
+   if( divisor == 0) {
+      fprintf(stderr, "Division by zero! Exiting...\n");
+      exit(EXIT_FAILURE);
+   }
+	
+   quotient = dividend / divisor;
+   fprintf(stderr, "Value of quotient : %d\n", quotient );
+
+   exit(EXIT_SUCCESS);
+
+   return 0;
+}
+```
+
+---
+
 ## file
 
+
+### write text
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+   int num;
+   FILE *fptr;
+   fptr = fopen("/tmp/tmp.txt", "w+");
+
+   if(fptr == NULL)
+   {
+      printf("Error!");   
+      exit(1);             
+   }
+   printf("Enter num: ");
+   scanf("%d",&num);
+   fprintf(fptr,"%d",num);
+   // fputs(num, fptr);
+   fclose(fptr);
+
+   return 0;
+}
+```
+
+
+### read text
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+   int num;
+   FILE *fptr;
+
+   if ((fptr = fopen("/tmp/tmp.txt", "r+")) == NULL) {
+       printf("Error! opening file");
+       exit(1);
+   }
+
+   fscanf(fptr,"%d", &num);
+   printf("Value of n=%d", num);
+   fclose(fptr); 
+  
+   return 0;
+}
+```
+
+### write binary
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+struct threeNum {
+   int n1, n2, n3;
+};
+
+int main() {
+   int n;
+   struct threeNum num;
+   FILE *fptr;
+
+   if ((fptr = fopen("/tmp/tmp.bin","wb")) == NULL) {
+       printf("Error! opening file");
+       exit(1);
+   }
+
+   for(n = 1; n < 5; ++n) {
+      num.n1 = n;
+      num.n2 = 5*n;
+      num.n3 = 5*n + 1;
+      fwrite(&num, sizeof(struct threeNum), 1, fptr); 
+   }
+   fclose(fptr); 
+  
+   return 0;
+}
+```
+
+### read binary
+
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+struct threeNum {
+   int n1, n2, n3;
+};
+
+int main() {
+   int n;
+   struct threeNum num;
+   FILE *fptr;
+
+   if ((fptr = fopen("/tmp/tmp.bin","rb")) == NULL){
+       printf("Error! opening file");
+       exit(1);
+   }
+
+   for(n = 1; n < 5; ++n) {
+      fread(&num, sizeof(struct threeNum), 1, fptr); 
+      printf("n1: %d\tn2: %d\tn3: %d\n", num.n1, num.n2, num.n3);
+   }
+   fclose(fptr); 
+  
+   return 0;
+}
+```
+
+### seek
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+struct threeNum {
+   int n1, n2, n3;
+};
+
+int main() {
+   int n;
+   struct threeNum num;
+   FILE *fptr;
+
+   if ((fptr = fopen("/tmp/tmp.bin","rb")) == NULL){
+       printf("Error! opening file");
+       // Program exits if the file pointer returns NULL.
+       exit(1);
+   }
+   
+   fseek(fptr, -sizeof(struct threeNum), SEEK_END);
+   for(n = 1; n < 5; ++n) {
+      fread(&num, sizeof(struct threeNum), 1, fptr); 
+      printf("n1: %d\tn2: %d\tn3: %d\n", num.n1, num.n2, num.n3);
+      fseek(fptr, -2*sizeof(struct threeNum), SEEK_CUR);
+   }
+   fclose(fptr); 
+  
+   return 0;
+}
+```
 
 ---
 
@@ -848,7 +1045,7 @@ int main() {
 #endif
 
   printf("Architecture: %s\n", Arch);
-  return 1;
+  return 0;
 }
 ```
 
@@ -866,12 +1063,72 @@ linux:~ # gcc -o x86_64.exe _test.c
 
 ## header
 
+```bash
+linux:~ # cat hello/func.h
+#define PI 3.14
 
----
+void hello(char * name);
 
-## error
+linux:~ # cat cat hello/func.c 
+void hello(char * name) {
+   printf("Hello %s\n", name);
+}
+
+linux:~ # cat main.c
+#include <stdio.h>
+#include "hello/func.h"
+#include "hello/func.c"
+
+int main() {
+   printf("main program\n");
+   float r = 10.0;
+   printf("circle area: %f\n", PI * r * r);
+ 
+   hello("c");
+   return 0;
+}
+
+linux:~ # tree
+.
+├── hello
+│   ├── func.c
+│   └── func.h
+└── main.c
+
+linux:~ # gcc -o main.exe main.c
+```
 
 
 ---
 
 ## memory
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+   int *ptr, i , n1, n2;
+ 
+   printf("Enter size: ");
+   scanf("%d", &n1);
+
+   // ptr = (int*) calloc(n1, sizeof(int));
+   ptr = (int*) malloc(n1 * sizeof(int));
+   printf("Addresses of previously allocated memory: "); 
+   for(i = 0; i < n1; ++i)
+      printf("%u\n",ptr + i);
+
+   printf("\nEnter the new size: ");
+   scanf("%d", &n2);
+
+   ptr = realloc(ptr, n2 * sizeof(int));
+   printf("Addresses of newly allocated memory: ");
+   for(i = 0; i < n2; ++i)
+      printf("%u\n", ptr + i);
+
+   free(ptr);
+
+   return 0;
+}
+```
