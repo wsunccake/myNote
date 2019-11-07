@@ -844,6 +844,164 @@ func main() {
 ```
 
 
+## channel
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func chanFunc(n int, ch chan int) {
+	for i := 0; i < n; i++ {
+		ch <- i
+		fmt.Printf("receive: channel <- %v\n", i)
+		time.Sleep(time.Duration(10 * time.Millisecond))
+	}
+}
+
+func main() {
+	var chan1 chan int
+	chan2 := make(chan int)
+	fmt.Printf("chan1 type: %T, value: %v\n", chan1, chan1)
+	fmt.Printf("chan2 type: %T, value: %v\n", chan2, chan2)
+
+	// buffer
+	chan3 := make(chan int, 1)
+
+	// receive
+	chan3 <- 1
+
+	// send
+	fmt.Println(<- chan3)
+
+	chan4 := make(chan string)
+
+	// chan4 <- "hello"
+
+	// func () {
+	// 	chan4 <- "hello"
+	// }()
+
+	go func () {
+		chan4 <- "hello"
+	}()
+
+	val := <- chan4
+	fmt.Println(val)
+
+	chan5 := make(chan int)
+	n := 5
+	go chanFunc(n, chan5)
+	for i:=0; i < n; i++ {
+		fmt.Printf("send: %v <- channel\n", <- chan5)
+	}
+}
+```
+
+
+### range
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func main() {}
+	chan6 := make(chan int)
+	go func() {
+		for i:=0; i < 5; i++ {
+			chan6 <- i
+			fmt.Printf("recevei: channel <- %v\n", i)
+		}
+		close(chan6)
+	}()
+
+	for c := range chan6 {
+		fmt.Println(c)
+	}
+}
+```
+
+
+### select
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func receive(ch1, ch2, ch3, quit chan int) {
+	for i := 0; i < 2; i++ {
+		fmt.Printf("receive %d from ch1\n", <-ch1)
+		fmt.Printf("receive %d from ch2\n", <-ch2)
+		fmt.Printf("receive %d from ch3\n", <-ch3)
+	}
+	quit <- 0
+}
+
+func send(ch1, ch2, ch3, quit chan int) {
+	for i := 0; i < 10; i++ {
+		select {
+		case ch1 <- i:
+			fmt.Printf("send %d to ch1\n", i)
+		case ch2 <- i:
+			fmt.Printf("send %d to ch2\n", i)
+		case ch3 <- i:
+			fmt.Printf("send %d to ch3\n", i)
+		case <-quit:
+			fmt.Println("quit")
+			return
+		}
+	}
+}
+
+func main() {
+	ch1 := make(chan int)
+	ch2 := make(chan int)
+	ch3 := make(chan int)
+	quit := make(chan int)
+	go receive(ch1, ch2, ch3, quit)
+	send(ch1, ch2, ch3, quit)
+}
+```
+
+
+### arg
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func send(c chan<- int) {
+	fmt.Printf("send: %T\n", c)
+	c <- 1
+}
+
+func recv(c <-chan int) {
+	fmt.Printf("recv: %T\n", c)
+	fmt.Println(<-c)
+}
+
+func main() {
+	c := make(chan int)
+	fmt.Printf("%T\n", c)
+	go send(c)
+	go recv(c)
+	time.Sleep(1 * time.Second)
+}
+```
+
+
 ---
 
 ## sync
@@ -988,39 +1146,6 @@ func main() {
 }
 ```
 
----
-
-## channel
-
-```go
-package main
-
-import (
-	"fmt"
-)
-
-func main() {
-	chanInt := make(chan int, 1)
-	chanInt <- 1
-	// chanInt <- 2
-	fmt.Println(<- chanInt)
-
-	s := make(chan string)
-
-	// s <- "hello"
-
-	// func () {
-	// 	s <- "hello"
-	// }()
-
-	go func () {
-		s <- "hello"
-	}()
-
-	val := <- s
-	fmt.Println(val)
-}
-```
 
 ---
 
@@ -1031,3 +1156,5 @@ func main() {
 [Go Tutorial](https://www.tutorialspoint.com/go/index.htm)
 
 [Go Bootcamp](http://www.golangbootcamp.com/book/frontmatter)
+
+[cyent/golang](https://cyent.github.io/golang/)
