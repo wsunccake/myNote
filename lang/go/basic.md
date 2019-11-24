@@ -263,9 +263,6 @@ func main() {
 ```
 
 
-### select
-
-
 ---
 
 ## loop
@@ -658,6 +655,48 @@ func main() {
 ```
 
 
+### array / slice to slice
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	array1 := [5]int{1, 2, 3, 4, 5}
+	slice1 := array1[2:4]
+
+	fmt.Printf("array: %+v\n", array1)
+	fmt.Printf("array len: %d, cap: %d\n", len(array1), cap(array1))
+	fmt.Printf("slice: %+v\n", slice1)
+	fmt.Printf("slice len: %d, cap: %d\n", len(slice1), cap(slice1))
+
+	fmt.Println("change slice...")
+	slice1[1] = 22
+	fmt.Printf("array: %+v\n", array1)
+	fmt.Printf("slice: %+v\n", slice1)
+
+	fmt.Println("append slice...")
+	slice1 = append(slice1, 33)
+	fmt.Printf("array: %+v\n", array1)
+	fmt.Printf("slice: %+v\n", slice1)
+	fmt.Printf("slice len: %d, cap: %d\n", len(slice1), cap(slice1))
+
+	fmt.Println("append slice...")
+	slice1 = append(slice1, 44)
+	fmt.Printf("array: %+v\n", array1)
+	fmt.Printf("slice: %+v\n", slice1)
+	fmt.Printf("slice len: %d, cap: %d\n", len(slice1), cap(slice1))
+
+	fmt.Println("change slice...")
+	slice1[1] = 2222
+	fmt.Printf("array: %+v\n", array1)
+	fmt.Printf("slice: %+v\n", slice1)
+}
+```
+
 ---
 
 ## map
@@ -843,6 +882,33 @@ func main() {
 }
 ```
 
+
+### switch
+
+```go
+package main
+
+import "fmt"
+
+func do(i interface{}) {
+	switch v := i.(type) {
+	case int:
+		fmt.Printf("Twice %v is %v\n", v, v*2)
+	case string:
+		fmt.Printf("%q is %v bytes long\n", v, len(v))
+	default:
+		fmt.Printf("I don't know about type %T!\n", v)
+	}
+}
+
+func main() {
+	do(21)
+	do("hello")
+	do(true)
+}
+```
+
+---
 
 ## channel
 
