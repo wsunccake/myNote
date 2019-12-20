@@ -3,17 +3,17 @@
 
 ## Connect
 
-```
+```bash
 # for PostgreSQL
-Linux:~ # psql -U postgre [-h localhost] [-p 5432] [-d postgres]
+linux:~ # psql -U postgre [-h localhost] [-p 5432] [-d postgres]
 
 # for SQLite
-Linux:~ # sqlite3 db.sqlite3
+linux:~ # sqlite3 db.sqlite3
 ```
 
 ## Help
 
-```
+```sql
 -- for PostgreSQL
 \h # help with SQL
 \? # help with PSQL
@@ -25,7 +25,7 @@ Linux:~ # sqlite3 db.sqlite3
 
 ## Script
 
-```
+```sql
 -- for PostgreSQL
 \i xxx.psql
 ```
@@ -33,13 +33,14 @@ Linux:~ # sqlite3 db.sqlite3
 
 ## Shell
 
-```
+```sql
 -- for PostgreSQL
 \! ls
 ```
 
 ## Expression
-```
+
+```sql
 SELECT (15 + 6) AS ADDITION;
 SELECT CURRENT_TIMESTAMP;
 ```
@@ -52,7 +53,7 @@ SELECT CURRENT_TIMESTAMP;
 
 ## Create Database
 
-```
+```sql
 -- for PostgreSQL
 CREATE DATABASE testdb;
 ```
@@ -60,7 +61,7 @@ CREATE DATABASE testdb;
 
 ## Delete Database
 
-```
+```sql
 -- for PostgreSQL
 DROP DATABASE testdb;
 ```
@@ -68,7 +69,7 @@ DROP DATABASE testdb;
 
 ## Show All Database
 
-```
+```sql
 -- for PostgreSQL
 \l
 SELECT datname FROM pg_database;
@@ -77,7 +78,7 @@ SELECT datname FROM pg_database;
 
 ## Show Current Database
 
-```
+```sql
 -- for PostgreSQL
 \c
 ```
@@ -85,7 +86,7 @@ SELECT datname FROM pg_database;
 
 ## Use Database
 
-```
+```sql
 -- for PostgreSQL
 \c testdb
 ```
@@ -98,7 +99,7 @@ SELECT datname FROM pg_database;
 
 ## Create Table
 
-```
+```sql
 CREATE TABLE company(
   id   INT              NOT NULL,
   name VARCHAR (20)     NOT NULL,
@@ -111,13 +112,13 @@ CREATE TABLE company(
 
 ## Delete Table
 
-```
+```sql
 DROP TABLE company;
 ```
 
 ## Show Table
 
-```
+```sql
 -- for PostgreSQL
 \d
 
@@ -127,7 +128,7 @@ DROP TABLE company;
 
 ## Show Table Schema
 
-```
+```sql
 -- for PostgreSQL
 \d company
 
@@ -143,7 +144,7 @@ DROP TABLE company;
 
 ## Create Record
 
-```
+```sql
 INSERT INTO company (id, name, age, address, salary)
 VALUES (1, 'Ramesh', 32, 'Ahmedabad', 2000.00 );
 
@@ -162,21 +163,21 @@ VALUES (3, 'Kaushik', 23, 'Kota', 2000.00 ),
 
 ## Delete Record
 
-```
+```sql
 DELETE FROM company;
 DELETE FROM company WHERE id = 6;
 ```
 
 ## Update Record
 
-```
+```sql
 UPDATE company SET address = 'Pune' WHERE id = 6;
 ```
 
 
 ## Selete Record
 
-```
+```sql
 SELECT * FROM company;
 SELECT name, salary FROM company;
 SELECT DISTINCT address FROM company;
@@ -200,7 +201,7 @@ SELECT * FROM company ORDER BY age DESC, salary ASC;
 
 ## Aggregate
 
-```
+```sql
 -- max, min, sum, count, avg
 SELECT max(salary), min(salary), sum(salary), count(salary), avg(salary) FROM company;
 
@@ -211,7 +212,7 @@ SELECT address, count(name), avg(salary) FROM company GROUP BY address HAVING co
 
 ## String
 
-```
+```sql
 -- 字串連結 concat 或 ||
 SELECT concat(name, ' is ', age) FROM customers;
 SELECT name || ' is ' || age FROM customers;

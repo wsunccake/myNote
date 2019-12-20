@@ -42,7 +42,7 @@ centos:~ # systemctl disable firewalld
 
 ```
 centos:~ # systemctl start ntpd
-centos:~ #systemctl enable ntpd
+centos:~ # systemctl enable ntpd
 ```
 
 
@@ -203,7 +203,7 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
 centos:~ # yum install -y docker kubelet kubeadm kubectl kubernetes-cni
 
 centos:~ # systemctl restart docker
-centos:~ # systemctl docker
+centos:~ # systemctl enable docker
 
 centos:~ # vi /etc/sysctl.d/bridge-nf-call-iptables.conf
 net.bridge.bridge-nf-call-iptables=1

@@ -112,7 +112,6 @@ linux:~/project # cat main.go
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 )
@@ -754,6 +753,131 @@ linux:~/project # tree
 └── main.go
 
 linux:~ # curl http://127.0.0.1:8080
+```
+
+
+---
+
+## csv
+
+
+---
+
+## sql
+
+```bash
+linux:~ # cat << EOF > date.sql
+CREATE TABLE users (
+  id   serial primary key,
+  name text not null,
+  age  int  not null
+);
+INSERT INTO users(id, name, age) VALUES(1, 'john', 20);
+INSERT INTO users(id, name, age) VALUES(2, 'mary', 18);
+
+linux:~ # psql -f date.sql
+```
+
+```go
+package main
+
+import (
+	"fmt"
+	"database/sql"
+	_ "github.com/lib/pq"
+)
+
+type User struct {
+	Id      int
+	Name    string
+	Age     int
+}
+
+const (
+	host     = "127.0.0.1"
+	port     = 5432
+	user     = "user"
+	password = "password"
+	dbname   = "testdb"
+)
+
+var Db *sql.DB
+
+func init() {
+	var err error
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+	Db, err = sql.Open("postgres", psqlInfo)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func GetUser(id int) (user User, err error) {
+	user = User{}
+	err = Db.QueryRow("SELECT id, name, age FROM users WHERE id = $1", id).Scan(&user.Id, &user.Name, &user.Age)
+	return
+}
+
+func GetUsers(limit int) (users []User, err error) {
+	rows, err := Db.Query("SELECT id, name, age FROM users limit $1", limit)
+	if err != nil {
+		return
+	}
+	for rows.Next() {
+		user := User{}
+		err = rows.Scan(&user.Id, &user.Name, &user.Age)
+		if err != nil {
+			return
+		}
+		users = append(users, user)
+	}
+	rows.Close()
+	return
+}
+
+func (user *User) Create() (err error) {
+	statement := "INSERT INTO users(name, age) VALUES ($1, $2) returning id"
+	stmt, err := Db.Prepare(statement)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+	err = stmt.QueryRow(user.Name, user.Age).Scan(&user.Id)
+	return
+}
+
+func (user *User) Update() (err error)  {
+	_, err = Db.Exec("UPDATE users SET name = $2, age = $3 WHERE id = $1", user.Id, user.Name, user.Age)
+	return
+}
+
+func (user *User) Delete() (err error) {
+	_, err = Db.Exec("DELETE FROM users WHERE id = $1", user.Id)
+	return
+}
+
+func main() {
+	// create
+	user := User{Name: "abc", Age: 20}
+	fmt.Printf("%+v\n", user)
+	user.Create()
+	fmt.Printf("%+v\n", user)
+
+	// read
+	tmpUser, _ := GetUser(user.Id)
+	fmt.Printf("%+v\n", tmpUser)
+
+	// update
+	tmpUser.Age = tmpUser.Age + 1
+	tmpUser.Update()
+
+	// page
+	users, _ := GetUsers(10)
+	fmt.Printf("%+v\n", users)
+
+	// delete
+	tmpUser.Delete()
+}
 ```
 
 
