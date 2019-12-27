@@ -459,6 +459,66 @@ linux:~ # date >> tmp.txt
 linux:~ # curl -X POST --form uploadfile=@tmp.txt http://127.0.0.1:8080/upload
 ```
 
+### plain, xml, json
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"encoding/xml"
+	"log"
+	"net/http"
+)
+
+type User struct {
+	Id      int
+	Name    string
+	Age     int
+}
+
+var allUsers = []User {
+	{Id: 1,Name: "john", Age: 20},
+	{Id: 2,Name: "mary", Age: 18},
+}
+
+func plainHandler (writer http.ResponseWriter, request *http.Request) {
+	writer.Header().Set("Content-Type", "text/plain")
+	writer.Write([]byte("Hello Go"))
+}
+
+func xmlHandler (writer http.ResponseWriter, request *http.Request) {
+	x, err := xml.MarshalIndent(allUsers[0], "", "  ")
+	if err != nil {
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	writer.Header().Set("Content-Type", "application/xml")
+	writer.Write(x)
+}
+
+func jsonHandler (writer http.ResponseWriter, request *http.Request) {
+	js, err := json.Marshal(allUsers[0])
+	if err != nil {
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.Write(js)
+}
+
+func main() {
+	http.HandleFunc("/plain", plainHandler)
+	http.HandleFunc("/xml", xmlHandler)
+	http.HandleFunc("/json", jsonHandler)
+
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
+}
+```
 
 ### cookie
 
@@ -758,12 +818,147 @@ linux:~ # curl http://127.0.0.1:8080
 
 ---
 
-## csv
+## file
+
+### csv
+
+```go
+package main
+
+import (
+	"encoding/csv"
+	"fmt"
+	"os"
+	"strconv"
+)
+
+type User struct {
+	Id      int
+	Name    string
+	Age     int
+}
+
+func main() {
+	// create csv
+	csvFile, err := os.Create("users.csv")
+	if err != nil {
+		panic(err)
+	}
+
+	// create user
+	allUsers := []User {
+		{Id: 1,Name: "john", Age: 20},
+		{Id: 2,Name: "mary", Age: 18},
+	}
+	fmt.Printf("%+v\n", allUsers)
+
+	// write csv
+	write := csv.NewWriter(csvFile)
+	for _, user := range allUsers {
+		line := []string{strconv.Itoa(user.Id), user.Name, strconv.Itoa(user.Age)}
+		err := write.Write(line)
+		if err != nil {
+			panic(err)
+		}
+	}
+	write.Flush()
+
+	// open file
+	file, err := os.Open("users.csv")
+	if err != nil {
+		panic(err)
+	}
+	// close file
+	defer file.Close()
+
+	// read csv
+	reader := csv.NewReader(file)
+	reader.FieldsPerRecord = -1
+	record, err := reader.ReadAll()
+	if err != nil {
+		panic(err)
+	}
+
+	for _, item := range record {
+		id, _ := strconv.ParseInt(item[0], 0, 0)
+		name := item[1]
+		age, _ := strconv.ParseInt(item[2], 0, 0)
+		fmt.Printf("id: %d, name: %s, age: %d\n", id, name, age)
+	}
+}
+```
+
+
+### gob
+
+```go
+package main
+
+import (
+	"encoding/gob"
+	"fmt"
+	"os"
+)
+
+type User struct {
+	Id      int
+	Name    string
+	Age     int
+}
+
+func writeGob(filePath string,object interface{}) error {
+	file, err := os.Create(filePath)
+	if err == nil {
+		encoder := gob.NewEncoder(file)
+		encoder.Encode(object)
+	}
+	file.Close()
+	return err
+}
+
+func readGob(filePath string,object interface{}) error {
+	file, err := os.Open(filePath)
+	if err == nil {
+		decoder := gob.NewDecoder(file)
+		err = decoder.Decode(object)
+	}
+	file.Close()
+	return err
+}
+
+func main() {
+	allUsers := []User {
+		{Id: 1,Name: "john", Age: 20},
+		{Id: 2,Name: "mary", Age: 18},
+	}
+
+	err := writeGob("./data.gob", allUsers)
+	if err != nil{
+		fmt.Println(err)
+	}
+
+	var userRead = new ([]User)
+	err = readGob("./data.gob",userRead)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		for _,v := range *userRead{
+			fmt.Println(v.Name, "\t", v.Age)
+		}
+	}
+}
+```
 
 
 ---
 
 ## sql
+
+### SQLite
+
+### MySQL
+
+### PostgreSQL
 
 ```bash
 linux:~ # cat << EOF > date.sql
@@ -877,6 +1072,162 @@ func main() {
 
 	// delete
 	tmpUser.Delete()
+}
+```
+
+
+---
+
+## RPC
+
+`server`
+
+```go
+package main
+
+import (
+	"log"
+	"net"
+	"net/rpc"
+)
+
+type Listener int
+
+func (l *Listener) GetLine(line []byte, ack *bool) error {
+	log.Println(string(line))
+	return nil
+}
+
+func main() {
+	addy, err := net.ResolveTCPAddr("tcp", "0.0.0.0:8080")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	inbound, err := net.ListenTCP("tcp", addy)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	listener := new(Listener)
+	rpc.Register(listener)
+	rpc.Accept(inbound)
+}
+```
+
+`client`
+
+```go
+package main
+
+import (
+	"bufio"
+	"log"
+	"net/rpc"
+	"os"
+)
+
+func main() {
+	client, err := rpc.Dial("tcp", "localhost:8080")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	in := bufio.NewReader(os.Stdin)
+	for {
+		line, _, err := in.ReadLine()
+		if err != nil {
+			log.Fatal(err)
+		}
+		var reply bool
+		err = client.Call("Listener.GetLine", line, &reply)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+}
+```
+
+
+---
+
+## serialize
+
+`server`
+
+```go
+package main
+
+import (
+	"encoding/gob"
+	"log"
+	"net"
+)
+
+type User struct {
+	Id      int
+	Name    string
+	Age     int
+}
+
+func handleConnection(conn net.Conn) {
+	dec := gob.NewDecoder(conn)
+	p := &User{}
+
+	dec.Decode(p)
+	log.Println("Hello ",p.Name,", Your Age is ",p.Age);
+
+	conn.Close()
+}
+
+
+func main() {
+	ln, err := net.Listen("tcp", ":8080")
+	if err != nil {
+		panic(err)
+	}
+
+	for {
+		conn, err := ln.Accept()
+		if err != nil {
+			continue
+		}
+		go handleConnection(conn)
+	}
+}
+```
+
+`client`
+
+```go
+package main
+
+import (
+	"encoding/gob"
+	"log"
+	"net"
+)
+
+type User struct {
+	Id      int
+	Name    string
+	Age     int
+}
+
+func main() {
+	studentEncode := User{Id: 1, Name:"john", Age: 20}
+	log.Println("start client");
+
+	conn, err := net.Dial("tcp", "localhost:8080")
+	if err != nil {
+		log.Fatal("Connection error", err)
+	}
+
+	encoder := gob.NewEncoder(conn)
+	encoder.Encode(studentEncode)
+
+	conn.Close()
+	log.Println("done")
 }
 ```
 

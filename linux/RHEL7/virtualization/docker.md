@@ -48,7 +48,7 @@ rhel:~ # nsenter --target <container_id_pid>  --mount --uts --ipc --net --pid
 
 rhel:~ # dock ps                                            # 顯示執行中的 container
 rhel:~ # dock ps -l                                         # 顯示最後一個 container
-rhel:~ # dock ps -a                                         # 顯示所有的 container (包括未執行的)
+rhel:~ # dock ps -a  [ -f status=exited]                    # 顯示所有的 container (包括未執行的)
 rhel:~ # dock ps -aq                                        # 顯示所有的 container id (包括未執行的)
 
 rhel:~ # docker rm <container_id>                           # 刪除 container
