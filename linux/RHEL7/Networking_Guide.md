@@ -488,6 +488,20 @@ rhel:~ # nmcli connection add type bridge-slave ifname eth0 cons-name eth0 maste
 
 # method 3:
 
+# bridge
+rhel:~ # ip link add name br0 type bridge
+rhel:~ # ip link set eth0 master br0
+rhel:~ # ip link set br0 up
+rhel:~ # ip link set eth0 up
+
+rhel:~ # ip -d link show dev br0
+rhel:~ # bridge link
+
+# remove bridge
+rhel:~ # ip link set eth0 nomaster
+rhel:~ # ip link delete br0
+
+# method 4:
 rhel:~ # modprobe bridge
 rhel:~ # modinfo bridge
 

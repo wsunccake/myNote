@@ -31,6 +31,9 @@ linux:~ # gcloud init [--skip-diagnostics|--console-only]
 ...
 
 linux:~ # ls .boto
+
+
+linux:~ # gcloud auth login <account>
 ```
 
 web: https://console.cloud.google.com/
@@ -133,6 +136,15 @@ linux:~ # gcloud compute connect-to-serial-port <instance>
 linux:~ # gcloud compute project-info describe
 linux:~ # gcloud compute project-info add-metadata --metadata enable-oslogin=TRUE
 linux:~ # gcloud compute project-info remove-metadata --keys=enable-oslogin
+
+# address
+linux:~ # gcloud compute addresses list
+linux:~ # gcloud compute addresses create <access_config> --region <region>
+linux:~ # gcloud compute addresses delete <access_config>
+
+linux:~ # gcloud compute instances describe <vm>   # show current access config
+linux:~ # gcloud compute instances add-access-config <vm> --access-config-name <access_config> --address <ip>
+linux:~ # gcloud compute instances delete-access-config <vm> --access-config-name <access_config>
 ```
 
 ---
