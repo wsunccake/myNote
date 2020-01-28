@@ -478,8 +478,8 @@ type User struct {
 }
 
 var allUsers = []User {
-	{Id: 1,Name: "john", Age: 20},
-	{Id: 2,Name: "mary", Age: 18},
+	{Id: 1, Name: "john", Age: 20},
+	{Id: 2, Name: "mary", Age: 18},
 }
 
 func plainHandler (writer http.ResponseWriter, request *http.Request) {
@@ -1233,6 +1233,78 @@ func main() {
 
 
 ---
+
+## test
+
+```go
+// main.go
+package main
+
+import "fmt"
+
+type User struct {
+	Id      int
+	Name    string
+	Age     int
+}
+
+var allUsers = []User {
+	{Id: 0, Name: "john", Age: 20},
+	{Id: 1, Name: "mary", Age: 18},
+}
+
+func getUserById(id int) (user User) {
+	user = allUsers[id]
+	return user
+}
+
+func main() {
+	u1 := getUserById(0)
+	fmt.Printf("%v", u1)
+}
+```
+
+```go
+// main_test.go
+package main
+
+import "testing"
+
+func Test1(t *testing.T)  {
+	testUser := User{0, "john", 20}
+	u := getUserById(0)
+	if u.Id != testUser.Id {
+		t.Error("Wrong Id")
+	}
+}
+
+func Test2(t *testing.T)  {
+	if testing.Short() {
+		t.Skip("skip addUser")
+	}
+
+	testUser := User{2, "lin", 10}
+	addUser(testUser)
+	u := getUserById(2)
+
+	if u.Id != testUser.Id {
+		t.Error("Wrong Id")
+	}
+}
+
+func Benchmark1(b *testing.B)  {
+	for i := 0; i < b.N; i++ {
+		getUserById(0)
+	}
+}
+```
+
+```bash
+linux:~ # go test -v
+linux:~ # go test -v -cover
+linux:~ # go test -v -short
+linux:~ # go test -run x -bench . -count=5
+```
 
 ## reference
 

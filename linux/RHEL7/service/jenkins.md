@@ -68,6 +68,17 @@ rhel:~ # export JENKINS_API_TOKEN=<password>
 rhel:~ # java -jar jenkins-cli.jar -s http://<jenkins>:8080 list-jobs
 ```
 
+
+### 1.x different with 2.x
+
+```
+     JENKINS_HOME=/var/lib/jenkins
+     JOB_BASE_NAME=SSR_NGA_Executor
+1.x  WORKSPACE=${JENKINS_HOME}/jobs/${JOB_BASE_NAME}/workspace@2
+2.x  WORKSPACE=${JENKINS_HOME}/workspace/${JOB_BASE_NAME}@2
+```
+
+
 ----
 
 
