@@ -346,6 +346,53 @@ rhel:~ # docker push
 rhel:~ # docker pull
 ```
 
+### Registry Server
+
+```bash
+server:~ # vi /etc/docker/daemon.json
+{
+  "live-restore": true,
+  "group": "dockerroot",
+  "insecure-registries": ["<registry_ip>:5000"]
+}
+
+server:~ # systemctl restart docker
+
+# start service
+server:~ # docker run -d -p 5000:5000 --restart=always --name registry -v /data/registry:/var/lib/registry registry:2
+
+# delete image
+server:~ # rm -rf /data/registry/docker/registry/v2/repositories/<name>
+
+# web
+server:~ # docker run -d -p 8080:8080 --restart=always --name registry-web --link registry -e REGISTRY_URL=http://<registry_ip>:5000/v2 hyper/docker-registry-web
+```
+
+### Registry Client
+
+```bash
+client:~ # vi /etc/docker/daemon.json
+{
+  "live-restore": true,
+  "group": "dockerroot",
+  "insecure-registries": ["<registry_ip>:5000"]
+}
+
+# upload image
+client:~ # docker pull docker.io/busybox
+client:~ # docker tag docker.io/busybox <registry_ip>:5000/busybox
+client:~ # docker push <registry_ip>:5000/busybox
+
+# list image
+client:~ # curl -X GET http://<registry_ip>:5000/v2/_catalog
+client:~ # curl -X GET http://<registry_ip>:5000/v2/<name>/tags/list
+
+# download image
+client:~ # docker rmi docker.io/busybox <registry_ip>:5000/busybox
+client:~ # docker images
+client:~ # docker pull <registry_ip>:5000/busybox
+```
+
 ## Docker File
 
 Docker File 用來在已建立/存在 image 上, 在建立新的 image

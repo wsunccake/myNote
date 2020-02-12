@@ -1234,6 +1234,105 @@ func main() {
 
 ---
 
+## protocol buffers
+
+download protocol buffers [Protocol Buffers v3.0.0](https://github.com/protocolbuffers/protobuf/releases/tag/v3.0.0)
+
+`setup`
+
+```bash
+linux:~ # wget https://github.com/protocolbuffers/protobuf/releases/download/v3.0.0/protoc-3.0.0-linux-x86_64.zip
+linux:~ # unzip -l protoc-3.0.0-linux-x86_64.zip
+linux:~ # unzip protoc-3.0.0-linux-x86_64.zip /usr/local/bin/protoc
+
+linux:~ # go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
+linux:~ # ls `go env GOPATH`/bin/protoc-gen-go
+```
+
+`protocol`
+
+```bash
+linux:~ # vi user.proto
+syntax = "proto3";  
+package protobuf;
+
+message User {  
+    int64  id   = 1;
+    string name = 2;
+    int32  age = 3;
+}
+
+linux:~ # protoc --go_out=. *.proto
+linux:~ # ls user.pb.go
+linux:~ # mkdir `go env GOPATH`/src/protobuf
+linux:~ # mv user.pb.go `go env GOPATH`/src/protobuf
+```
+
+`server`
+
+```go
+package main
+
+import (
+    "github.com/golang/protobuf/proto"
+    "net/http"
+    "fmt"
+    "io/ioutil"
+    "protobuf"
+)
+
+func main() {
+    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+        user:= protobuf.User{}
+
+        data, err := ioutil.ReadAll(r.Body)
+        if err != nil {
+            fmt.Println(err)
+        }
+        if err := proto.Unmarshal(data, &user); err != nil {
+            fmt.Println(err)
+        }
+        fmt.Println(user.Id, ":", user.Name)
+   })
+
+    http.ListenAndServe(":3000", nil)
+}
+```
+
+`client`
+
+```go
+package main
+
+import (
+    "github.com/golang/protobuf/proto"
+    "net/http"
+    "fmt"
+    "bytes"
+    "protobuf"
+)
+
+func main() {
+	user := protobuf.User{Id: 1, Name: "joho", Age: 20}
+
+    data, err := proto.Marshal(&user)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+
+    _, err = http.Post("http://localhost:3000", "", bytes.NewBuffer(data))
+
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+}
+```
+
+
+---
+
 ## test
 
 ```go
