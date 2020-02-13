@@ -906,7 +906,7 @@ type User struct {
 	Age     int
 }
 
-func writeGob(filePath string,object interface{}) error {
+func writeGob(filePath string, object interface{}) error {
 	file, err := os.Create(filePath)
 	if err == nil {
 		encoder := gob.NewEncoder(file)
@@ -916,7 +916,7 @@ func writeGob(filePath string,object interface{}) error {
 	return err
 }
 
-func readGob(filePath string,object interface{}) error {
+func readGob(filePath string, object interface{}) error {
 	file, err := os.Open(filePath)
 	if err == nil {
 		decoder := gob.NewDecoder(file)
@@ -938,7 +938,7 @@ func main() {
 	}
 
 	var userRead = new ([]User)
-	err = readGob("./data.gob",userRead)
+	err = readGob("./data.gob", userRead)
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -1078,255 +1078,70 @@ func main() {
 
 ---
 
-## RPC
-
-`server`
-
-```go
-package main
-
-import (
-	"log"
-	"net"
-	"net/rpc"
-)
-
-type Listener int
-
-func (l *Listener) GetLine(line []byte, ack *bool) error {
-	log.Println(string(line))
-	return nil
-}
-
-func main() {
-	addy, err := net.ResolveTCPAddr("tcp", "0.0.0.0:8080")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	inbound, err := net.ListenTCP("tcp", addy)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	listener := new(Listener)
-	rpc.Register(listener)
-	rpc.Accept(inbound)
-}
-```
-
-`client`
-
-```go
-package main
-
-import (
-	"bufio"
-	"log"
-	"net/rpc"
-	"os"
-)
-
-func main() {
-	client, err := rpc.Dial("tcp", "localhost:8080")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	in := bufio.NewReader(os.Stdin)
-	for {
-		line, _, err := in.ReadLine()
-		if err != nil {
-			log.Fatal(err)
-		}
-		var reply bool
-		err = client.Call("Listener.GetLine", line, &reply)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-}
-```
-
-
----
-
-## serialize
-
-`server`
-
-```go
-package main
-
-import (
-	"encoding/gob"
-	"log"
-	"net"
-)
-
-type User struct {
-	Id      int
-	Name    string
-	Age     int
-}
-
-func handleConnection(conn net.Conn) {
-	dec := gob.NewDecoder(conn)
-	p := &User{}
-
-	dec.Decode(p)
-	log.Println("Hello ",p.Name,", Your Age is ",p.Age);
-
-	conn.Close()
-}
-
-
-func main() {
-	ln, err := net.Listen("tcp", ":8080")
-	if err != nil {
-		panic(err)
-	}
-
-	for {
-		conn, err := ln.Accept()
-		if err != nil {
-			continue
-		}
-		go handleConnection(conn)
-	}
-}
-```
-
-`client`
-
-```go
-package main
-
-import (
-	"encoding/gob"
-	"log"
-	"net"
-)
-
-type User struct {
-	Id      int
-	Name    string
-	Age     int
-}
-
-func main() {
-	studentEncode := User{Id: 1, Name:"john", Age: 20}
-	log.Println("start client");
-
-	conn, err := net.Dial("tcp", "localhost:8080")
-	if err != nil {
-		log.Fatal("Connection error", err)
-	}
-
-	encoder := gob.NewEncoder(conn)
-	encoder.Encode(studentEncode)
-
-	conn.Close()
-	log.Println("done")
-}
-```
-
-
----
-
 ## protocol buffers
 
 download protocol buffers [Protocol Buffers v3.0.0](https://github.com/protocolbuffers/protobuf/releases/tag/v3.0.0)
 
-`setup`
-
 ```bash
 linux:~ # wget https://github.com/protocolbuffers/protobuf/releases/download/v3.0.0/protoc-3.0.0-linux-x86_64.zip
 linux:~ # unzip -l protoc-3.0.0-linux-x86_64.zip
-linux:~ # unzip protoc-3.0.0-linux-x86_64.zip /usr/local/bin/protoc
+linux:~ # unzip protoc-3.0.0-linux-x86_64.zip bin/protoc -d /usr/local
 
 linux:~ # go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
 linux:~ # ls `go env GOPATH`/bin/protoc-gen-go
 ```
 
-`protocol`
-
-```bash
-linux:~ # vi user.proto
-syntax = "proto3";  
-package protobuf;
-
-message User {  
-    int64  id   = 1;
-    string name = 2;
-    int32  age = 3;
-}
-
-linux:~ # protoc --go_out=. *.proto
-linux:~ # ls user.pb.go
-linux:~ # mkdir `go env GOPATH`/src/protobuf
-linux:~ # mv user.pb.go `go env GOPATH`/src/protobuf
-```
-
-`server`
-
 ```go
 package main
 
 import (
-    "github.com/golang/protobuf/proto"
-    "net/http"
-    "fmt"
-    "io/ioutil"
-    "protobuf"
+	"github.com/golang/protobuf/proto"
+	"io/ioutil"
+	"log"
+	"protobuf"
 )
 
-func main() {
-    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        user:= protobuf.User{}
+func writeProtobuf(filePath string, user protobuf.User) error {
+	data, err := proto.Marshal(&user)
 
-        data, err := ioutil.ReadAll(r.Body)
-        if err != nil {
-            fmt.Println(err)
-        }
-        if err := proto.Unmarshal(data, &user); err != nil {
-            fmt.Println(err)
-        }
-        fmt.Println(user.Id, ":", user.Name)
-   })
+	if err != nil {
+		log.Fatalln("fail to encode data:", err)
+	}
+	if err := ioutil.WriteFile(filePath, data, 0644); err != nil {
+		log.Fatalln("fail to write data:", err)
+	}
 
-    http.ListenAndServe(":3000", nil)
+	return err
 }
-```
 
-`client`
+func readProtobuf(filePath string, user *protobuf.User) error {
+	data, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		log.Fatalln("fail to read file:", err)
+	}
 
-```go
-package main
+	if err := proto.Unmarshal(data, user); err != nil {
+		log.Fatalln("Failed to parse address book:", err)
+	}
 
-import (
-    "github.com/golang/protobuf/proto"
-    "net/http"
-    "fmt"
-    "bytes"
-    "protobuf"
-)
+	return err
+}
 
 func main() {
-	user := protobuf.User{Id: 1, Name: "joho", Age: 20}
+	user := protobuf.User{Id: 1, Name: "john", Age: 20}
 
-    data, err := proto.Marshal(&user)
-    if err != nil {
-        fmt.Println(err)
-        return
-    }
+	err := writeProtobuf("./data.pb", user)
+	if err != nil {
+		log.Println(err)
+	}
 
-    _, err = http.Post("http://localhost:3000", "", bytes.NewBuffer(data))
-
-    if err != nil {
-        fmt.Println(err)
-        return
-    }
+	refUser := &protobuf.User{}
+	err = readProtobuf("./data.pb", refUser)
+	if err != nil {
+		log.Println(err)
+	} else {
+		log.Println("id: ", refUser.Id, "name: ", refUser.Name)
+	}
 }
 ```
 
