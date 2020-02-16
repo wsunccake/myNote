@@ -67,11 +67,10 @@ func main() {
 }
 ```
 
+
 ---
 
 ## serialize
-
-### gob
 
 `server`
 
@@ -152,7 +151,9 @@ func main() {
 ```
 
 
-### protocol buffers
+---
+
+## protocol buffers
 
 `setup`
 
@@ -197,6 +198,10 @@ import (
     "protobuf"
 )
 
+const (
+	serverPort = ":8080"
+)
+
 func main() {
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
         user:= protobuf.User{}
@@ -211,7 +216,7 @@ func main() {
         fmt.Println(user.Id, ":", user.Name)
    })
 
-    http.ListenAndServe(":3000", nil)
+    http.ListenAndServe(serverPort, nil)
 }
 ```
 
@@ -228,8 +233,13 @@ import (
     "protobuf"
 )
 
+const (
+	serverHost = "localhost"
+	serverPort = ":8080"
+)
+
 func main() {
-	user := protobuf.User{Id: 1, Name: "joho", Age: 20}
+	user := protobuf.User{Id: 1, Name: "john", Age: 20}
 
     data, err := proto.Marshal(&user)
     if err != nil {
@@ -237,7 +247,7 @@ func main() {
         return
     }
 
-    _, err = http.Post("http://localhost:3000", "", bytes.NewBuffer(data))
+    _, err = http.Post("http://" + serverHost + serverPort, "", bytes.NewBuffer(data))
 
     if err != nil {
         fmt.Println(err)
@@ -269,8 +279,13 @@ func (l *Listener) GetLine(line []byte, ack *bool) error {
 	return nil
 }
 
+const (
+	serverProtocol = "tcp"
+	serverPort = ":8080"
+)
+
 func main() {
-	addy, err := net.ResolveTCPAddr("tcp", "0.0.0.0:8080")
+	addy, err := net.ResolveTCPAddr(serverProtocol, "0.0.0.0" + serverPort)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -298,8 +313,14 @@ import (
 	"os"
 )
 
+const (
+	serverProtocol = "tcp"
+	serverHost = "localhost"
+	serverPort = ":8080"
+)
+
 func main() {
-	client, err := rpc.Dial("tcp", "localhost:8080")
+	client, err := rpc.Dial(serverProtocol, serverHost + serverPort)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -319,3 +340,144 @@ func main() {
 }
 ```
 
+---
+
+## gRPC
+
+```
+
+protoc --go_out=plugins=grpc:. *.proto
+```
+
+
+`setup`
+
+```bash
+linux:~ # wget https://github.com/protocolbuffers/protobuf/releases/download/v3.0.0/protoc-3.0.0-linux-x86_64.zip
+linux:~ # unzip -l protoc-3.0.0-linux-x86_64.zip
+linux:~ # unzip protoc-3.0.0-linux-x86_64.zip bin/protoc -d /usr/local
+
+linux:~ # go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
+linux:~ # ls `go env GOPATH`/bin/protoc-gen-go
+linux:~ # go get -u google.golang.org/grpc
+```
+
+`protocol`
+
+```bash
+linux:~ # vi echo.proto
+syntax = "proto3";
+
+package protobuf;
+
+service Echo {
+    rpc GetUser (Id) returns(User){}
+}
+
+message Id {
+    int64  id   = 1;
+}
+
+message User {
+    int64  id   = 1;
+    string name = 2;
+    int32  age = 3;
+}
+
+
+linux:~ # protoc --go_out=plugins=grpc:. *.proto
+linux:~ # ls echo.pb.go
+linux:~ # mkdir `go env GOPATH`/src/protobuf
+linux:~ # mv echo.pb.go `go env GOPATH`/src/protobuf
+```
+
+`server`
+
+```go
+package main
+
+import (
+	"context"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
+	"log"
+	"net"
+	"protobuf"
+)
+
+const (
+	grpcProtocol = "tcp"
+	grpcPort     = ":8080"
+)
+
+var allUsers = []protobuf.User{
+	{Id: 0, Name: "", Age: 0},
+	{Id: 1, Name: "john", Age: 20},
+	{Id: 2, Name: "mary", Age: 18},
+}
+
+type EchoServer struct{}
+
+func (e *EchoServer) GetUser(ctx context.Context, req *protobuf.Id) (resp *protobuf.User, err error) {
+	log.Printf("receive client request: %d\n", req.Id)
+	user := allUsers[req.Id]
+
+	return &protobuf.User{
+		Id: user.Id,
+		Name: user.Name,
+		Age: user.Age,
+	}, nil
+}
+
+func main() {
+	apiListener, err := net.Listen(grpcProtocol, grpcPort)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	echoServer := &EchoServer{}
+	grpcServer := grpc.NewServer()
+	protobuf.RegisterEchoServer(grpcServer, echoServer)
+
+	reflection.Register(grpcServer)
+	if err := grpcServer.Serve(apiListener); err != nil {
+		log.Fatal("gRPC Serve Error: ", err)
+		return
+	}
+}
+```
+
+`client`
+
+```go
+package main
+
+import (
+	"context"
+	"google.golang.org/grpc"
+	"log"
+	"protobuf"
+)
+
+const (
+	grpcHost = "localhost"
+	grpcPort = ":8080"
+)
+
+func main() {
+	conn, err := grpc.Dial(grpcHost + grpcPort, grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("fail to connect： %v", err)
+	}
+	defer conn.Close()
+
+	client := protobuf.NewEchoClient(conn)
+
+	user, err := client.GetUser(context.Background(), &protobuf.Id{Id: 1})
+	if err != nil {
+		log.Fatalf("fail to run： %v", err)
+	}
+	log.Printf("name： %s, age: %d", user.Name, user.Age)
+}
+```
