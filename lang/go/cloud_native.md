@@ -481,3 +481,106 @@ func main() {
 	log.Printf("name： %s, age: %d", user.Name, user.Age)
 }
 ```
+
+
+---
+
+## docker
+
+`app`
+
+```bash
+linux:~ # vi main.go
+package main
+
+import (
+        "fmt"
+        "net/http"
+)
+
+func handler(writer http.ResponseWriter, request *http.Request) {
+        fmt.Fprint(writer, "Hello Go")
+}
+
+func main() {
+        http.HandleFunc("/", handler)
+        http.ListenAndServe(":8080", nil)
+}
+
+linux:~ # go build -o app main.go
+linux:~ # ./app
+
+linux:~ # curl 127.0.0.1:8080
+```
+
+`containerize 1`
+
+```bash
+linux:~ # vi dockerfile
+FROM  golang
+
+ADD  main.go /src/main.go
+RUN  cd /src && go build -o /app/app main.go
+
+WORKDIR /app/
+EXPOSE 8080
+ENTRYPOINT ./app
+
+
+linux:~ # docker build -t go-app .
+linux:~ # docker run -itd -p 8080:8080 go-app
+```
+
+`containerize 2`
+
+```bash
+linux:~ # vi dockerfile
+FROM  golang:alpine
+
+ADD  main.go /src/main.go
+RUN  cd /src && go build -o /app/app main.go
+
+WORKDIR /app/
+EXPOSE 8080
+ENTRYPOINT ./app
+
+
+linux:~ # docker build -t go-app .
+linux:~ # docker run -itd -p 8080:8080 go-app
+```
+
+`containerize 3`
+
+```bash
+linux:~ # vi dockerfile
+# multi-stage
+# build
+FROM  golang:alpine  AS build-env
+
+ADD  main.go /src/main.go
+RUN  cd /src && go build -o /app/app main.go
+
+
+# run
+FROM alpine:latest
+
+WORKDIR /app/
+COPY --from=build-env /app/app /app/
+
+EXPOSE 8080
+ENTRYPOINT ./app
+
+
+linux:~ # docker build -t go-app .
+linux:~ # docker run -itd -p 8080:8080 go-app
+```
+
+`other`
+
+```bash
+linux:~ # docker pull golang
+linux:~ # docker pull golang:alpine
+linux:~ # docker pull alpine
+
+linux:~ # curl https://registry.hub.docker.com/v2/repositories/library/golang/tags/
+```
