@@ -119,10 +119,12 @@ master:~ # echo "source <(kubectl completion bash)" >> ~/.bashrc
 ## token id
 master:~ # kubeadm token list
 
+
 ## ca hash
 master:~ # openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
 
-master:~ # kubectl -n kube-system get cm kubeadm-config -oyaml
+master:~ # kubectl -n kube-system get cm kubeadm-config -o yaml
+master:~ # kubectl config view
 ```
 
 
@@ -201,10 +203,17 @@ node:~ # rm -rf $HOME/.kube
 node:~ # rm -rf /etc/cni/net.d/*
 node:~ # kubeadm reset
 
+# basic
+master:~ # kubectl version
+master:~ # kubectl api-resources
+master:~ # kubectl --help
+master:~ # kubectl <cmd> --help
+
 # debug
-master:~ # kubectl -n <namespace> describe pod <pod>
-master:~ # kubectl -n <namespace> logs <pod> -c <container>
-master:~ # kubectl -n <namespace> exec <pod> [-c <container>] -it <cmd>
+master:~ # kubectl describe pod <pod>
+master:~ # kubectl logs <pod> -c <container>
+master:~ # kubectl exec <pod> [-c <container>] -it <cmd>
+master:~ # kubectl run -it alpine --image=alpine --restart=Never -- sh
 ```
 
 
@@ -615,7 +624,7 @@ spec:
     spec:
       containers:
       - name: hello
-        image: wsunccake/hello-go:v1
+          image: gcr.io/google-samples/node-hello:1.0
         ports:
         - containerPort: 8080
 ```
@@ -649,7 +658,7 @@ master:~ # kubectl delete ns demo
 master:~ # kubectl get <resource> -l '<key> = <val>'                        # equal
 master:~ # kubectl get <resource> -l '<key> != <val>'                       # not equal
 master:~ # kubectl get <resource> -l '<key1> = <val1>, <key2> != <val2>'    # () and ()
-master:~ # kubectl get <resource> -l '<key> in (<val1>, <val2>)'           # in
+master:~ # kubectl get <resource> -l '<key> in (<val1>, <val2>)'            # in
 master:~ # kubectl get <resource> -l '<key> notin (<val1>, <val2>)'         # not in
 ```
 
@@ -792,37 +801,261 @@ master:~ # kubectl delete -f label.yml
 
 ---
 
-## variable
+## envar
+
+```bash
+master:~ # kubectl set env <resource> --all --list
+master:~ # kubectl set env <resource> <key>=<val>
+```
+
+`ie`
 
 ```yml
-# var.yml
-apiVersion: v1
-kind: Pod
+# envar.yml
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: hello
-  labels:
-    app: hello-world
 spec:
-  containers:
-  - name: hello
-    image: gcr.io/google-samples/node-hello:1.0
-    ports:
-    - containerPort: 8080
-    env:
-    - name: DEMO_MESSAGE
-      value: "Hello from the environment"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+        env: dev
+        version: v1
+    spec:
+      containers:
+      - name: hello
+        image: gcr.io/google-samples/node-hello:1.0
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DEMO_MESSAGE
+          value: "Hello from the environment"
+        - name: DEMO_APP_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
 ```
 
 ```bash
 master:~ # kubectl create ns demo
-master:~ # kubectl -n demo create -f var.yml
+master:~ # kubectl -n demo create -f envar.yml
 
 master:~ # kubectl -n demo exec hello env
 master:~ # kubectl -n demo exec hello -- sh -c 'echo $DEMO_MESSAGE'
+master:~ # kubectl -n demo set env pods --all --list
+master:~ # kubectl -n demo set env deployment.apps/hello --all MY_ENV=my_val
 
-master:~ # kubectl -n demo delete -f var.yml
+master:~ # kubectl -n demo delete -f envar.yml
 master:~ # kubectl delete ns demo
 ```
+
+
+---
+
+## secret
+
+```bash
+master:~ # kubectl create secret generic <secret> --from-literal=<key>=<val> --from-file=<file>
+master:~ # kubectl delete secret <secret>
+```
+
+`ie`
+
+```yml
+# secret.yml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: demo-secret
+type: Opaque
+data:
+  passphrase: cGhyYXNl
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+        env: dev
+        version: v1
+    spec:
+      containers:
+      - name: hello
+        image: gcr.io/google-samples/node-hello:1.0
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SECRET_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: username
+        - name: SECRET_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: password
+        - name: SECRET_PASSPHRASE
+          valueFrom:
+            secretKeyRef:
+              name: demo-secret
+              key: passphrase
+        volumeMounts:
+          - name: secret-volume
+            mountPath: /tmp
+            readOnly: true
+      volumes:
+        - name: secret-volume
+          secret:
+            secretName: demo-secret
+```
+
+```bash
+master:~ # kubectl create ns demo
+
+master:~ # echo -n "pass" > ./password
+master:~ # echo -n "phrase" | base64
+master:~ # echo 'cGhyYXNl' | base64 --decode
+
+master:~ # kubectl -n demo create secret generic db-secret --from-literal=username=admin --from-file=./password
+master:~ # kubectl -n demo get secrets
+master:~ # kubectl -n demo describe secret db-secret
+
+master:~ # kubectl -n demo create -f secret.yml
+master:~ # kubectl -n demo exec hello-xxx-xxx env
+master:~ # kubectl -n demo exec -it hello-xxx-xxx -- ls /tmp/
+master:~ # kubectl -n demo exec -it hello-xxx-xxx -- cat /tmp/passphrase
+
+master:~ # kubectl -n demo delete -f secret.yml
+master:~ # kubectl -n demo delete secret db-secret
+master:~ # kubectl delete ns demo
+```
+
+
+---
+
+## config map
+
+```bash
+master:~ # kubectl create configmap <configmap> --from-file=<file>
+master:~ # kubectl get configmaps
+master:~ # kubectl describe configmaps <config>
+
+master:~ # kubectl delete configmaps <config>
+```
+
+`ie`
+
+```yml
+# configMap.yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    nodePort: 30080
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: nginx
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: hello
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: conf-volume
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: conf-volume
+        configMap:
+          name: configmap-html
+          items:
+          - key: test.html
+            path: test.html
+```
+
+```html
+<!-- test.html -->
+<!DOCTYPE html>
+<html>
+<head>
+<title>title</title>
+</head>
+<body>
+
+<h1>test</h1>
+<p>configMap</p>
+
+</body>
+</html>
+```
+
+```bash
+master:~ # kubectl create ns demo
+
+master:~ # kubectl -n demo create configmap configmap-html --from-file=./test.html
+master:~ # kubectl -n demo get configmaps
+master:~ # kubectl -n demo describe configmaps configmap-html
+master:~ # kubectl -n demo create -f configMap.yml
+
+master:~ # curl <master_ip>:30080
+master:~ # curl <master_ip>:30080/test.html
+
+master:~ # kubectl -n demo delete -f configMap.yml
+master:~ # kubectl -n demo delete configmap configmap-html
+master:~ # kubectl delete ns demo
+```
+
+
+---
+
+## service discovery
+
+
+--
+
+## health check
+
+
+---
+
+## volume
+
 
 ---
 
