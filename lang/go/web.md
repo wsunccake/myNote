@@ -1091,6 +1091,23 @@ linux:~ # go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
 linux:~ # ls `go env GOPATH`/bin/protoc-gen-go
 ```
 
+```bash
+linux:~ # vi user.proto
+syntax = "proto3";  
+package protobuf;
+
+message User {  
+    int64  id   = 1;
+    string name = 2;
+    int32  age = 3;
+}
+
+linux:~ # protoc --go_out=. *.proto
+linux:~ # ls user.pb.go
+linux:~ # mkdir `go env GOPATH`/src/protobuf
+linux:~ # mv user.pb.go `go env GOPATH`/src/protobuf
+```
+
 ```go
 package main
 

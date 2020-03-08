@@ -11,11 +11,22 @@ service: munge          munge
          slurmctld      slurmd
 ```
 
+---
+
 ## Port
 
 slurmctld: 6817/tcp
 
 slurmd: 6818/tcp
+
+slurmdbd: 6819/tcp
+
+```bash
+# firewall config
+linux:~ # firewall-cmd --add-port=6818/tcp --permanent
+linux:~ # firewall-cmd --add-port=6817/tcp --permanent
+linux:~ # firewall-cmd --reload
+```
 
 ---
 
@@ -60,6 +71,11 @@ ClusterName=<cluster>
 
 # controller
 ControlMachine=<server>
+
+ReturnToService=2
+# 0: down -> idle*
+# 1: down -> down
+# 2: down -> idle
 
 # node config
 NodeName=DEFAULT Sockets=2 CoresPerSocket=4 ThreadsPerCore=1
@@ -117,109 +133,150 @@ node:~ # systemctl enable slurmd.service
 node:~ # slurmd -C
 ```
 
-## Usage
-
-`queue`
-
-```
-controller:~ # squeue
-controller:~ # squeue -l
-controller:~ # squeue -a
-controller:~ # squeue -s
-controller:~ # squeue -j <job_id>
-controller:~ # squeue -u <user>
-```
-
-`status`
-
-```bash
-controller:~ # sinfo
-controller:~ # sinfo -l
-controller:~ # sinfo -a
-
-controller:~ # smap
-```
-
-`job`
-
-```bash
-# run job
-controller:~ # srun -N1 hostname
-
-# cancel job
-controller:~ # scancel <job_id>
-```
-
-`config`
-
-```bash
-controller:~ # scontrol show nodes
-controller:~ # scontrol show jobs
-controller:~ # scontrol update nodename=node1 state=resume
-controller:~ # scontrol show config
-```
-
 
 ---
 
 ## Job
 
-`script`
+### list
+
+`squeue`
 
 ```bash
-controller:~ # cat test.slurm
+controller:~ # squeue
+controller:~ # squeue -la
+controller:~ # squeue -j <job_id>
+controller:~ # squeue -u <user>
+```
+
+
+`smap`
+
+```bash
+controller:~ # smap
+```
+
+
+### submit
+
+`srun`
+
+```bash
+controller:~ # srun -N 2 hostname
+controller:~ # srun -w <node> hostname
+controller:~ # srun env
+```
+
+
+`salloc`
+
+```bash
+controller:~ # salloc
+> srun <cmd>
+> exit
+```
+
+
+`sbatch`
+
+```bash
+controller:~ # cat <job>.sh
 #!/bin/sh
-#SBATCH -J test
-#SBATCH -N 1
-#SBATCH -o test.out
-#SBATCH -e test.err
+#SBATCH -J <job>               ## job Name
+#SBATCH -o %j.out              ## stdout
+#SBATCH -e %j.err              ## stderr
+#SBATCH -p <parition>          ## partition
+#SBATCH -t 24:00:00            ## time for 1 day
+#SBATCH -N 1                   ## node
+#SBATCH --ntasks-per-node=4    ## task/node
 
 echo $SLURM_NODEID
 sleep 5
 
-controller:~ # sbatch test.slurm
+# intel mpi
+mpiexec.hydra -hosts-group $SLURM_JOB_NODELIST -n $SLURM_NTASKS -ppn $SLURM_NTASKS_PER_NODE <mpi_cmd>
+
+controller:~ # sbatch <job>.sh
 ```
 
-`smp`
 
-`mpi`
+### cancal
+
+`scancal`
+
+```bash
+controller:~ # scancel <job_id>
+```
+
+### other
+
+`sstat`
+
+```bash
+controller:~ # sstat -e
+controller:~ # sstat <job_id>
+controller:~ # sstat -o JobID,Nodelist,Ntasks <job_id>
+```
+
+`scontrol`
+
+```bash
+controller:~ # scontrol show job
+controller:~ # scontrol show job <job_id>
+controller:~ # scontrol suspend <job_id>
+controller:~ # scontrol resume <job_id>
+controller:~ # scontrol hold <job_id>
+controller:~ # scontrol release <job_id>
+```
 
 
 ---
 
-## QoS
+## Admin
 
+### partition
 
-`check`
+`sinfo`
 
 ```bash
-controller:~ # scontrol show config | grep SchedulerType
-controller:~ # scontrol show config | grep PriorityType
+controller:~ # sinfo
+controller:~ # sinfo -la
 ```
 
-SchedulerType: sched/wiki -> maui, sched/wiki2 -> moab, sched/builtin or sched/backfill -> slurm
 
-PriorityType: priority/basic, priority/multifactor
+### config
+
+`scontrol`
 
 ```bash
-controller:~ # sprio
+controller:~ # scontrol show <ENTITY> [<ID>]  # ENTITY: config, node, partition, job
+
+controller:~ # scontrol show config
+controller:~ # scontrol show node [<node>]
+controller:~ # scontrol update NodeName=<node> State=idle
+
+controller:~ # vi /etc/slurm/slurm.conf
+controller:~ # scontrol reconfigure
 ```
 
 
 ---
 
-## Accouting
+## MariaDB
 
 `package`
 
 ```bash
-controller:~ # zypper in slurm-slurmdbd
 controller:~ # zypper in mariadb
+
+# setup mariadb root
+controller:~ # /usr/bin/mysqladmin -u root password <new-password>
+controller:~ # /usr/bin/mysqladmin -u root -h <hostname> password <new-password>
+controller:~ # /usr/bin/mysql_secure_installation
 ```
 
-### DB
 
-`db config`
+`config`
 
 ```bash
 controller:~ # vi /etc/my.cnf
@@ -234,7 +291,7 @@ controller:~ # systemctl start mariadb.service
 controller:~ # systemctl enable mariadb.service
 ```
 
-`check config`
+`check`
 
 ```bash
 controller:~ # mysql -u root
@@ -260,11 +317,16 @@ MariaDB> drop database slurm_acct_db;
 
 ```sql
 -- create user
-MariaDB> create user 'slurm'@'localhost' identified by 'password';
-MariaDB> create user 'slurm'@'controller' identified by 'password';
+MariaDB> create user 'slurm'@'localhost' identified by '<password>';
+MariaDB> create user 'slurm'@'controller' identified by '<password>';
 MariaDB> select Host, User, Password from mysql.user;
 MariaDB> drop user 'slurm'@'localhost';
 MariaDB> drop user 'slurm'@'controller';
+
+-- change password
+MariaDB> set PASSWORD FOR 'slurm'@'localhost' = PASSWORD('<password>');
+MariaDB> set PASSWORD FOR 'slurm'@'controller' = PASSWORD('<password>');
+
 
 -- setup grant privilege
 MariaDB> grant all on slurm_acct_db.* TO 'slurm'@'localhost';
@@ -272,9 +334,35 @@ MariaDB> grant all on slurm_acct_db.* TO 'slurm'@'controller';
 MariaDB> show grants for slurm@localhost;
 ```
 
+`test`
+
+```bash
+controller:~ # mysql -u slurm
+MariaDB> use slurm_acct_db;
+```
 
 
-### SlurmDB Daemon
+---
+
+## SlurmDB Daemon
+
+```
+         +-------------------+
+         controller     compute node
+         192.168.0.1    192.168.0.101
+service: munge          munge
+         ypserv         ypbind
+         slurmctld      slurmd
+         mariadb
+         slurmddb
+```
+
+`package`
+
+```bash
+controller:~ # zypper in slurm-slurmdbd
+```
+
 
 `slurm config`
 
@@ -302,6 +390,11 @@ JobCompType: jobcomp/none, jobcomp/elasticsearch, jobcomp/filetxt, jobcomp/mysql
 ```bash
 controller:~ # vi /etc/slurm/slurmdbd.conf
 StorageType=accounting_storage/mysql
+
+StorageUser=slurm
+StoragePass=<password>
+StorageLoc=slurm_acct_db
+
 ```
 
 `daemon`
@@ -322,24 +415,46 @@ MariaDB> use slurm_acct_db;
 MariaDB> show tables;
 ```
 
-`add data`
+```bash
+controller: # sacct
+```
+
+
+---
+
+## Accouting
+
+`sacct`
 
 ```bash
+controller:~ # sacct
+```
+
+`sacctmgr`
+
+```bash
+controller:~ # sacctmgr show configuration
+
+controller:~ # sacctmgr list <ENTITY> [<SPECS>]
+# <ENTITY>: account, association, cluster, configuration, coordinator,
+#           event, federation, job, problem, qos, resource, reservation,
+#           runawayjobs, stats,transaction, tres, user, wckey
+
+# cluster
 controller:~ # sacctmgr list cluster
 controller:~ # sacctmgr add cluster <cluster>       # map db table
 controller:~ # sacctmgr delete cluster <cluster>
 
+# account
 controller:~ # sacctmgr list account
-controller:~ # sacctmgr add account <account> cluster=<cluster> Description="none" Organization="none"
+controller:~ # sacctmgr add account <account> [Clusters=<cluster>] [Description="none"] [Organization="none"]
+controller:~ # sacctmgr remove account <account> 
 
+# user
 controller:~ # sacctmgr list user
-controller:~ # sacctmgr add user <user> account=<account>
-```
-
-`usage`
-
-```bash
-controller:~ # sacct
+controller:~ # sacctmgr add user <user> [Account=<account>]
+controller:~ # sacctmgr remove user <user> [where Account=<account>]
+controller:~ # sacctmgr modify user set default=none where Account=<account>
 ```
 
 [Accounting and Resource Limits](https://slurm.schedmd.com/accounting.html)
@@ -347,10 +462,75 @@ controller:~ # sacct
 
 ---
 
-## Other
+## QoS
 
-change cluster name
+
+`scontrol`
+
+```bash
+controller:~ # scontrol show config
+controller:~ # scontrol show config | grep SchedulerType
+controller:~ # scontrol show config | grep PriorityType
+```
+
+SchedulerType: sched/wiki -> maui, sched/wiki2 -> moab, sched/builtin or sched/backfill -> slurm
+
+PriorityType: priority/basic, priority/multifactor
+
+`sacctmgr`
+
+```bash
+controller:~ # sacctmgr list qos
+controller:~ # sacctmgr add qos <qos> [Priority=1000]
+controller:~ # sacctmgr remove qos <qos>
+```
+
+`sprio`
+
+```bash
+controller:~ # sprio
+controller:~ # sprio -l
+```
+
+
+---
+
+
+
+---
+
+## Question
+
+1. change cluster name
 
 ```bash
 controller:~ # rm /var/lib/slurm/clustername
+```
+
+
+2. munge didn't start when boot
+
+```bash
+node:~ # systemctld status systemd-tmpfile-setup
+node:~ # systemctl status systemd-tmpfiles-clean
+node:~ # cat /usr/lib/tmpfiles.d/munge.conf
+node:~ # systemctld start systemd-tmpfile-setup
+
+node:~ # systemctld stop ypbind
+node:~ # zypepr in -f munge
+node:~ # reboot
+```
+
+
+3. slurm didn't start when boot
+
+```bash
+node:~ # systemctld status systemd-tmpfile-setup
+node:~ # systemctl status systemd-tmpfiles-clean
+node:~ # cat /usr/lib/tmpfiles.d/slurm.conf
+node:~ # systemctld start systemd-tmpfile-setup
+
+node:~ # systemctld stop ypbind
+node:~ # zypper in -f slurm-config
+node:~ # reboot
 ```
