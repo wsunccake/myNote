@@ -283,8 +283,8 @@ EOF
 ```bash
 # Array
 declare -a ARR
-ARR=("eth0" "em1")
-ARR+=("en0")
+ARR=(eth0 em1)
+ARR+=(en0)
 echo "ARR Length: ${#ARR[@]}"
 
 for ITEM in ${ARR[*]}; do
@@ -294,6 +294,15 @@ done
 for ((i=0; i < ${#ARR[@]}; i++)); do
   echo "Index: $i, ITEM: ${ARR[$i]}"
 done
+
+# Array Append
+A1=(1 2 3 X)
+A2=(a b c X)
+A3=(${A1[@]} ${A2[*]})
+
+# String to Array
+S=1,2,3,4
+A=(`echo $S | sed 's/,/ /g'`)
 
 # Associated Array
 declare -A MAP

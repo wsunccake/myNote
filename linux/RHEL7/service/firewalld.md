@@ -110,6 +110,12 @@ rhel:~ # firewall-cmd -–query-masquerade
 rhel:~ # firewall-cmd --direct --get-all-rules
 
 rhel:~ # firewall-cmd --direct --add-rule ipv4 filter INPUT 0 -p tcp --dport 9000 -j ACCEPT
+rhel:~ # firewall-cmd --permanent --direct --add-rule ipv4 filter INPUT 0 -p tcp --dport 9000 -j ACCEPT 
+
+rhel:~ # firewall-cmd --direct --add-rule ipv6 nat POSTROUTING 1 -s fc00:db8::1/112 -j MASQUERADE
+rhel:~ # firewall-cmd --permanent --direct --add-rule ipv6 nat POSTROUTING 1 -s fc00:db8::1/112 -j MASQUERADE
+
+rhel:~ # firewall-cmd --reload
 ```
 
 

@@ -147,6 +147,13 @@ controller:~ # squeue
 controller:~ # squeue -la
 controller:~ # squeue -j <job_id>
 controller:~ # squeue -u <user>
+
+# format
+controller:~ # squeue -o "%.18i %.9P %.8j %.8u %.2t %.10M %.6D %R"        # default
+controller:~ # squeue -o "%.18i %.9P %.8j %.8u %.8T %.10M %.9l %.6D %R"   # long, -l
+controller:~ # squeue -o "%.15i %.8j %.9P %.8u %.9M %N"                   # step, -s
+controller:~ # squeue -o "%8i %8u %15a %.10r %.10L %.5D %.10Q"
+controller:~ # squeue -O jobid:8,name:8,username:8,account:15,partition:12,timeused:15,qos:8,prioritylong:.10
 ```
 
 
@@ -430,6 +437,7 @@ controller: # sacct
 controller:~ # sacct
 ```
 
+
 `sacctmgr`
 
 ```bash
@@ -464,26 +472,43 @@ controller:~ # sacctmgr modify user set default=none where Account=<account>
 
 ## QoS
 
-
 `scontrol`
 
 ```bash
 controller:~ # scontrol show config
 controller:~ # scontrol show config | grep SchedulerType
 controller:~ # scontrol show config | grep PriorityType
+controller:~ # scontrol show config | grep AccountingStorageEnforce
+controller:~ # scontrol show config | grep PriorityWeightQOS
+
 ```
 
 SchedulerType: sched/wiki -> maui, sched/wiki2 -> moab, sched/builtin or sched/backfill -> slurm
 
 PriorityType: priority/basic, priority/multifactor
 
+AccountingStorageEnforce: associations,limits
+
+PriorityWeightQOS: != 0
+
+
 `sacctmgr`
 
 ```bash
-controller:~ # sacctmgr list qos
+controller:~ # sacctmgr list qos [format=Name,Priority,GrpCPUs]
 controller:~ # sacctmgr add qos <qos> [Priority=1000]
-controller:~ # sacctmgr remove qos <qos>
+controller:~ # sacctmgr del qos <qos>
+controller:~ # sacctmgr mod qos <qos> set GrpCPUs=-1 Flags=OverPartQOS # -1 is default, unlimited
+controller:~ # sacctmgr mod qos <qos> set GrpJobs=<n>   # job number
+controller:~ # sacctmgr mod qos <qos> set Priority=<n>  # job priority
+
+# associate qos
+controller:~ # sacctmgr mod account <account> set qos=<qos>
+controller:~ # sacctmgr mod user <user> set qos=<qos>
+
+controller:~ # list associations
 ```
+
 
 `sprio`
 
@@ -491,10 +516,6 @@ controller:~ # sacctmgr remove qos <qos>
 controller:~ # sprio
 controller:~ # sprio -l
 ```
-
-
----
-
 
 
 ---
@@ -533,4 +554,22 @@ node:~ # systemctld start systemd-tmpfile-setup
 node:~ # systemctld stop ypbind
 node:~ # zypper in -f slurm-config
 node:~ # reboot
+```
+
+
+4. job priority
+
+```
+Job_priority =
+	site_factor +
+	(PriorityWeightAge) * (age_factor) +
+	(PriorityWeightAssoc) * (assoc_factor) +
+	(PriorityWeightFairshare) * (fair-share_factor) +
+	(PriorityWeightJobSize) * (job_size_factor) +
+	(PriorityWeightPartition) * (partition_factor) +
+	(PriorityWeightQOS) * (QOS_factor) +
+	SUM(TRES_weight_cpu * TRES_factor_cpu,
+	    TRES_weight_<type> * TRES_factor_<type>,
+	    ...)
+	- nice_factor
 ```
