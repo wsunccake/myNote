@@ -77,6 +77,8 @@ ReturnToService=2
 # 1: down -> down
 # 2: down -> idle
 
+PrivateData=jobs
+
 # node config
 NodeName=DEFAULT Sockets=2 CoresPerSocket=4 ThreadsPerCore=1
 NodeName=node[1-10]
@@ -487,7 +489,7 @@ SchedulerType: sched/wiki -> maui, sched/wiki2 -> moab, sched/builtin or sched/b
 
 PriorityType: priority/basic, priority/multifactor
 
-AccountingStorageEnforce: associations,limits
+AccountingStorageEnforce: limits
 
 PriorityWeightQOS: != 0
 
