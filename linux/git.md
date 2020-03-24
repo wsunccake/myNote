@@ -75,6 +75,12 @@ linux:~/project $ git fetch --all
 # push, pull
 linux:~/project $ git push
 linux:~/project $ git pull
+
+# remote
+linux:~/project # git remote -v
+linux:~/project # git remote add origin <url>
+linux:~/project # git remote set-url origin <url>
+linux:~/project # git push -u origin master
 ```
 
 
