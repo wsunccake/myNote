@@ -1070,6 +1070,45 @@ func main() {
 
 ---
 
+## json
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"log"
+	"os"
+)
+
+type Data struct {
+	Id   int    `json:id`
+	Name string `json: name`
+}
+
+func main() {
+	arg1 := os.Args[1]
+	data := Data{}
+
+	if err := json.Unmarshal([]byte(arg1), &data); err == nil {
+		log.Printf("data: %v", data)
+		log.Print("id: ", data.Id, "name: ", data.Name)
+
+		jsondata, _ := json.Marshal(data)
+		log.Println(string(jsondata))
+	} else {
+		log.Print(err)
+	}
+}
+```
+
+```bash
+linux:~ # go run main.go '{"id": 1, "name": "go"}'
+```
+
+
+---
+
 ## sync
 
 ```go
