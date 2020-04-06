@@ -77,6 +77,8 @@ twenty_train = fetch_20newsgroups(subset='train', categories=categories)
 
 count_vector = CountVectorizer()
 X_train_counts = count_vector.fit_transform(twenty_train.data)
+# print(count_vector.get_feature_names())
+# print(count_vector.vocabulary_)
 
 tfidf_transformer = TfidfTransformer()
 X_train_tfidf = tfidf_transformer.fit_transform(X_train_counts)
