@@ -23,6 +23,7 @@ ubuntu:~ # systemctl enable sshd
 ubuntu:~ # systemctl start sshd
 ```
 
+
 ---
 
 ## nginx
@@ -46,7 +47,18 @@ server {
         }
 }
 
-curl http://localhost:8080/
+ubuntu:~ # curl http://localhost:8080/
 ```
 
 
+---
+
+## docker
+
+```bash
+ubuntu:~ # apt install docker.io
+ubuntu:~ # systemctl enable docker --now
+
+ubuntu:~ # curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+ubuntu:~ # chmod +x /usr/local/bin/docker-compose
+```

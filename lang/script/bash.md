@@ -452,3 +452,18 @@ expect -re "\\\$|#" {
 
 exit
 ```
+
+
+---
+
+## xargs
+
+```bash
+linux:~ # seq 5 | xargs echo
+linux:~ # seq 5 | xargs -t echo
+linux:~ # seq 5 | xargs -t -n1 echo
+linux:~ # seq 5 | xargs -I {} echo {}
+linux:~ # seq 5 | xargs -i date
+linux:~ # seq 5 | xargs -i sh -c 'expr {} + 1'
+linux:~ # find . -type d | xargs -n1 ls -l
+```
