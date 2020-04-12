@@ -1,9 +1,10 @@
 # numpy
 
+## 1D
+
 ```python
 import numpy as np
 
-# 1D
 np1 = np.array([1, 2, 3])
 np2 = np.array([4, 5, 6])
 
@@ -13,15 +14,33 @@ print('np1[2]: ', np1[2])
 print('np1[-1]: ', np1[-1])
 print('np1[[0, 2]]: ', np1[[0, 2]])
 print('np1 + np2 = ', np1 + np2)
+print(3 * np1)
+print(np1 * np2)
+```
 
-# 2D
+
+---
+
+## 2D
+
+```python
 np2_1 = np.array([[1, 2], [3, 4], [5, 6], [7, 8]])
-
 print('np2_1: ', np2_1)
 print('np2_1[0]: ', np2_1[0])
 print('np2_1[0, -1]: ', np2_1[[0, -1]])
 print('np2_1[0][1]: ', np2_1[0][1])
+
+np2_2 = np.array([[1], [0]])
+# print(np2_1 * np2_2)
+print(np2_1.dot(np2_2))
+
+np1_1 = np.array([1, 0])
+print(np2_1 * np1_1)
+print(np2_1.dot(np1_1))
 ```
+
+
+---
 
 ## logic gate
 
@@ -84,4 +103,20 @@ print(f'0 xor 0 => {xor_gate(0, 0)}')
 print(f'1 xor 0 => {xor_gate(1, 0)}')
 print(f'0 xor 1 => {xor_gate(0, 1)}')
 print(f'1 xor 1 => {xor_gate(1, 1)}')
+```
+
+
+---
+
+## function
+
+```python
+def step(x):
+    return np.array(x > 0, dtype=np.int)
+
+def sigmod(x):
+    return 1 / (1 + np.exp(-x))
+
+def relu(x):
+    return np.maximum(0, x)
 ```
