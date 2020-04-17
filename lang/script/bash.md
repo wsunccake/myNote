@@ -338,6 +338,21 @@ linux:~ # set -e
 linux:~ # set +e
 ```
 
+```bash
+set -e
+foo
+echo "bar"
+
+
+set -eo pipefail
+foo | echo "a"
+echo "bar"
+
+
+set -u
+echo $a
+echo "bar"
+```
 
 ---
 
