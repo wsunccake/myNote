@@ -760,7 +760,7 @@ root:~ # chown -R root:root /mnt/lfs/tools
 
 ---
 
-## build systen
+## build system
 
 ### preparing virtual kernel file system
 
@@ -910,14 +910,6 @@ EOF
 (lfs chroot) root:/sources # tar xf glibc-2.31.tar.xz 
 (lfs chroot) root:/sources # cd glibc-2.31 
 (lfs chroot) root:/sources/glibc-2.31 # patch -Np1 -i ../glibc-2.31-fhs-1.patch
-# (lfs chroot) root:/sources/glibc-2.31 # case $(uname -m) in
-#     i?86)   ln -sfv ld-linux.so.2 /lib/ld-lsb.so.3
-#     ;;
-#     x86_64) ln -sfv ../lib/ld-linux-x86-64.so.2 /lib64
-#             ln -sfv ../lib/ld-linux-x86-64.so.2 /lib64/ld-lsb-x86-64.so.3
-#     ;;
-# esac
-
 (lfs chroot) root:/sources/glibc-2.31 # make build
 (lfs chroot) root:/sources/glibc-2.31 # cd build
 (lfs chroot) root:/sources/glibc-2.31/build # CC="gcc -ffile-prefix-map=/tools=/usr" \
@@ -928,7 +920,101 @@ EOF
   --with-headers=/usr/include            \
   libc_cv_slibdir=/lib
 (lfs chroot) root:/sources/glibc-2.31/build # make
+(lfs chroot) root:/sources/glibc-2.31/build # case $(uname -m) in
+  i?86)   ln -sfnv $PWD/elf/ld-linux.so.2        /lib ;;
+  x86_64) ln -sfnv $PWD/elf/ld-linux-x86-64.so.2 /lib ;;
+esac
 (lfs chroot) root:/sources/glibc-2.31/build # make check
-(lfs chroot) root:/sources/glibc-2.31/build # 
+(lfs chroot) root:/sources/glibc-2.31/build # touch /etc/ld.so.conf
+(lfs chroot) root:/sources/glibc-2.31/build # sed '/test-installation/s@$(PERL)@echo not running@' -i ../Makefile
+(lfs chroot) root:/sources/glibc-2.31/build # make install
+(lfs chroot) root:/sources/glibc-2.31/build # cp -v ../nscd/nscd.conf /etc/nscd.conf
+(lfs chroot) root:/sources/glibc-2.31/build # mkdir -pv /var/cache/nscd
+(lfs chroot) root:/sources/glibc-2.31/build # install -v -Dm644 ../nscd/nscd.tmpfiles /usr/lib/tmpfiles.d/nscd.conf
+(lfs chroot) root:/sources/glibc-2.31/build # install -v -Dm644 ../nscd/nscd.service /lib/systemd/system/nscd.service
+(lfs chroot) root:/sources/glibc-2.31/build # mkdir -pv /usr/lib/locale
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i POSIX -f UTF-8 C.UTF-8 2> /dev/null || true
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i cs_CZ -f UTF-8 cs_CZ.UTF-8
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i de_DE -f ISO-8859-1 de_DE
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i de_DE@euro -f ISO-8859-15 de_DE@euro
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i de_DE -f UTF-8 de_DE.UTF-8
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i el_GR -f ISO-8859-7 el_GR
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i en_GB -f UTF-8 en_GB.UTF-8
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i en_HK -f ISO-8859-1 en_HK
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i en_PH -f ISO-8859-1 en_PH
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i en_US -f ISO-8859-1 en_US
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i en_US -f UTF-8 en_US.UTF-8
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i es_MX -f ISO-8859-1 es_MX
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i fa_IR -f UTF-8 fa_IR
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i fr_FR -f ISO-8859-1 fr_FR
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i fr_FR@euro -f ISO-8859-15 fr_FR@euro
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i fr_FR -f UTF-8 fr_FR.UTF-8
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i it_IT -f ISO-8859-1 it_IT
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i it_IT -f UTF-8 it_IT.UTF-8
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i ja_JP -f EUC-JP ja_JP
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i ja_JP -f SHIFT_JIS ja_JP.SIJS 2> /dev/null || true
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i ja_JP -f UTF-8 ja_JP.UTF-8
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i ru_RU -f KOI8-R ru_RU.KOI8-R
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i ru_RU -f UTF-8 ru_RU.UTF-8
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i tr_TR -f UTF-8 tr_TR.UTF-8
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i zh_CN -f GB18030 zh_CN.GB18030
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i zh_HK -f BIG5-HKSCS zh_HK.BIG5-HKSCS
+(lfs chroot) root:/sources/glibc-2.31/build # make localedata/install-locales
 ```
 
+```bash
+(lfs chroot) root:~ # mv /lib64/ld-linux-x86-64.so.2 /lib64/ld-linux-x86-64.so.2.tools
+(lfs chroot) root:~ # case $(uname -m) in
+    i?86)   ln -sfv ld-linux.so.2 /lib/ld-lsb.so.3
+    ;;
+    x86_64) ln -sfv ../lib/ld-linux-x86-64.so.2 /lib64
+            ln -sfv ../lib/ld-linux-x86-64.so.2 /lib64/ld-lsb-x86-64.so.3
+    ;;
+esac
+
+(lfs chroot) root:~ # cat > /etc/nsswitch.conf << "EOF"
+# Begin /etc/nsswitch.conf
+
+passwd: files
+group: files
+shadow: files
+
+hosts: files dns
+networks: files
+
+protocols: files
+services: files
+ethers: files
+rpc: files
+
+# End /etc/nsswitch.conf
+EOF
+
+(lfs chroot) root:~ # cat > /etc/ld.so.conf << "EOF"
+/usr/local/lib
+/opt/lib
+
+include /etc/ld.so.conf.d/*.conf
+
+EOF
+(lfs chroot) root:~ # mkdir -pv /etc/ld.so.conf.d
+
+(lfs chroot) root:/sources # mkdir tz
+(lfs chroot) root:/sources # tar xf tzdata2019c.tar.gz -C tz
+(lfs chroot) root:/sources # cd tz
+(lfs chroot) root:/sources/tz # ZONEINFO=/usr/share/zoneinfo
+(lfs chroot) root:/sources/tz # mkdir -pv $ZONEINFO/{posix,right}
+(lfs chroot) root:/sources/tz # for tz in etcetera southamerica northamerica europe africa antarctica  \
+          asia australasia backward pacificnew systemv; do
+    zic -L /dev/null   -d $ZONEINFO       ${tz}
+    zic -L /dev/null   -d $ZONEINFO/posix ${tz}
+    zic -L leapseconds -d $ZONEINFO/right ${tz}
+done
+
+(lfs chroot) root:/sources/tz # cp -v zone.tab zone1970.tab iso3166.tab $ZONEINFO
+(lfs chroot) root:/sources/tz # zic -d $ZONEINFO -p America/New_York
+(lfs chroot) root:/sources/tz # unset ZONEINFO
+
+(lfs chroot) root:~ # tzselect
+(lfs chroot) root:~ # ln -sfv /usr/share/zoneinfo/<xxx> /etc/localtime
+```
