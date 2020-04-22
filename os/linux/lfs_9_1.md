@@ -1018,3 +1018,1019 @@ done
 (lfs chroot) root:~ # tzselect
 (lfs chroot) root:~ # ln -sfv /usr/share/zoneinfo/<xxx> /etc/localtime
 ```
+
+
+### adjust toolchain
+
+```bash
+(lfs chroot) root:~ # mv -v /tools/bin/{ld,ld-old}
+(lfs chroot) root:~ # mv -v /tools/$(uname -m)-pc-linux-gnu/bin/{ld,ld-old}
+(lfs chroot) root:~ # mv -v /tools/bin/{ld-new,ld}
+(lfs chroot) root:~ # ln -sv /tools/bin/ld /tools/$(uname -m)-pc-linux-gnu/bin/ld
+(lfs chroot) root:~ # gcc -dumpspecs | sed -e 's@/tools@@g' \
+  -e '/\*startfile_prefix_spec:/{n;s@.*@/usr/lib/ @}' \
+  -e '/\*cpp:/{n;s@$@ -isystem /usr/include@}' >      \
+  `dirname $(gcc --print-libgcc-file-name)`/specs
+(lfs chroot) root:~ # echo 'int main(){}' > dummy.c
+(lfs chroot) root:~ # cc dummy.c -v -Wl,--verbose &> dummy.log
+(lfs chroot) root:~ # ldd a.out
+
+(lfs chroot) root:~ # readelf -l a.out | grep ': /lib'
+(lfs chroot) root:~ # grep -o '/usr/lib.*/crt[1in].*succeeded' dummy.log
+(lfs chroot) root:~ # grep -B1 '^ /usr/include' dummy.log
+(lfs chroot) root:~ # grep 'SEARCH.*/usr/lib' dummy.log |sed 's|; |\n|g'
+(lfs chroot) root:~ # grep "/lib.*/libc.so.6 " dummy.log
+(lfs chroot) root:~ # grep found dummy.log
+(lfs chroot) root:~ # rm -v dummy.c a.out dummy.log
+```
+
+
+### zlib
+
+```bash
+(lfs chroot) root:/sources # tar xf zlib-1.2.11.tar.xz 
+(lfs chroot) root:/sources # cd zlib-1.2.11
+(lfs chroot) root:/sources/zlib-1.2.11 # ./configure --prefix=/usr
+(lfs chroot) root:/sources/zlib-1.2.11 # make
+(lfs chroot) root:/sources/zlib-1.2.11 # make check
+(lfs chroot) root:/sources/zlib-1.2.11 # make install
+(lfs chroot) root:/sources/zlib-1.2.11 # mv -v /usr/lib/libz.so.* /lib
+(lfs chroot) root:/sources/zlib-1.2.11 # ln -sfv ../../lib/$(readlink /usr/lib/libz.so) /usr/lib/libz.so
+```
+
+
+### bzip2
+
+```bash
+(lfs chroot) root:/sources # tar xf bzip2-1.0.8.tar.gz 
+(lfs chroot) root:/sources # cd bzip2-1.0.8
+(lfs chroot) root:/sources/bzip2-1.0.8 # patch -Np1 -i ../bzip2-1.0.8-install_docs-1.patch
+(lfs chroot) root:/sources/bzip2-1.0.8 # sed -i 's@\(ln -s -f \)$(PREFIX)/bin/@\1@' Makefile
+(lfs chroot) root:/sources/bzip2-1.0.8 # sed -i "s@(PREFIX)/man@(PREFIX)/share/man@g" Makefile
+(lfs chroot) root:/sources/bzip2-1.0.8 # make -f Makefile-libbz2_so
+(lfs chroot) root:/sources/bzip2-1.0.8 # make clean
+(lfs chroot) root:/sources/bzip2-1.0.8 # make
+(lfs chroot) root:/sources/bzip2-1.0.8 # make PREFIX=/usr install
+(lfs chroot) root:/sources/bzip2-1.0.8 # cp -v bzip2-shared /bin/bzip2
+(lfs chroot) root:/sources/bzip2-1.0.8 # cp -av libbz2.so* /lib
+(lfs chroot) root:/sources/bzip2-1.0.8 # ln -sv ../../lib/libbz2.so.1.0 /usr/lib/libbz2.so
+(lfs chroot) root:/sources/bzip2-1.0.8 # rm -v /usr/bin/{bunzip2,bzcat,bzip2}
+(lfs chroot) root:/sources/bzip2-1.0.8 # ln -sv bzip2 /bin/bunzip2
+(lfs chroot) root:/sources/bzip2-1.0.8 # ln -sv bzip2 /bin/bzcat
+```
+
+
+### xz
+
+```bash
+(lfs chroot) root:/sources # tar xf xz-5.2.4.tar.xz 
+(lfs chroot) root:/sources # cd xz-5.2.4
+(lfs chroot) root:/sources/xz-5.2.4 # ./configure --prefix=/usr  \
+  --disable-static \
+  --docdir=/usr/share/doc/xz-5.2.4
+(lfs chroot) root:/sources/xz-5.2.4 # make
+(lfs chroot) root:/sources/xz-5.2.4 # make check
+(lfs chroot) root:/sources/xz-5.2.4 # make install
+(lfs chroot) root:/sources/xz-5.2.4 # mv -v   /usr/bin/{lzma,unlzma,lzcat,xz,unxz,xzcat} /bin
+(lfs chroot) root:/sources/xz-5.2.4 # mv -v /usr/lib/liblzma.so.* /lib
+(lfs chroot) root:/sources/xz-5.2.4 # ln -svf ../../lib/$(readlink /usr/lib/liblzma.so) /usr/lib/liblzma.so
+```
+
+
+### file
+
+```bash
+(lfs chroot) root:/sources # tar xf file-5.38.tar.gz 
+(lfs chroot) root:/sources # cd file-5.38
+(lfs chroot) root:/sources/file-5.38 # ./configure --prefix=/usr
+(lfs chroot) root:/sources/file-5.38 # make
+(lfs chroot) root:/sources/file-5.38 # make install
+```
+
+
+### readline
+
+```bash
+(lfs chroot) root:/sources # tar xf readline-8.0.tar.gz 
+(lfs chroot) root:/sources # cd readline-8.0
+(lfs chroot) root:/sources/readline-8.0 # sed -i '/MV.*old/d' Makefile.in
+(lfs chroot) root:/sources/readline-8.0 # sed -i '/{OLDSUFF}/c:' support/shlib-install
+(lfs chroot) root:/sources/readline-8.0 # ./configure --prefix=/usr  \
+  --disable-static \
+  --docdir=/usr/share/doc/readline-8.0
+(lfs chroot) root:/sources/readline-8.0 # make SHLIB_LIBS="-L/tools/lib -lncursesw"
+(lfs chroot) root:/sources/readline-8.0 # make SHLIB_LIBS="-L/tools/lib -lncursesw" install
+(lfs chroot) root:/sources/readline-8.0 # mv -v /usr/lib/lib{readline,history}.so.* /lib
+(lfs chroot) root:/sources/readline-8.0 # chmod -v u+w /lib/lib{readline,history}.so.*
+(lfs chroot) root:/sources/readline-8.0 # ln -sfv ../../lib/$(readlink /usr/lib/libreadline.so) /usr/lib/libreadline.so
+(lfs chroot) root:/sources/readline-8.0 # ln -sfv ../../lib/$(readlink /usr/lib/libhistory.so ) /usr/lib/libhistory.so
+(lfs chroot) root:/sources/readline-8.0 # install -v -m644 doc/*.{ps,pdf,html,dvi} /usr/share/doc/readline-8.0
+```
+
+
+### m4
+
+```bash
+(lfs chroot) root:/sources # tar xf m4-1.4.18.tar.xz 
+(lfs chroot) root:/sources # cd m4-1.4.18
+(lfs chroot) root:/sources/m4-1.4.18 # sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' lib/*.c
+(lfs chroot) root:/sources/m4-1.4.18 # echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h
+(lfs chroot) root:/sources/m4-1.4.18 # ./configure --prefix=/usr
+(lfs chroot) root:/sources/m4-1.4.18 # make
+(lfs chroot) root:/sources/m4-1.4.18 # make check
+(lfs chroot) root:/sources/m4-1.4.18 # make install
+```
+
+
+### bc
+
+```bash
+(lfs chroot) root:/sources # tar xf bc-2.5.3.tar.gz 
+(lfs chroot) root:/sources # cd bc-2.5.3
+(lfs chroot) root:/sources/bc-2.5.3 # PREFIX=/usr CC=gcc CFLAGS="-std=c99" ./configure.sh -G -O3
+(lfs chroot) root:/sources/bc-2.5.3 # make
+(lfs chroot) root:/sources/bc-2.5.3 # make test
+(lfs chroot) root:/sources/bc-2.5.3 # make install
+```
+
+
+### binutils
+
+```bash
+(lfs chroot) root:/sources # expect -c "spawn ls"
+(lfs chroot) root:/sources # tar xf binutils-2.34.tar.xz 
+(lfs chroot) root:/sources # cd binutils-2.34
+(lfs chroot) root:/sources/binutils-2.34 # sed -i '/@\tincremental_copy/d' gold/testsuite/Makefile.in
+(lfs chroot) root:/sources/binutils-2.34 # mkdir build
+(lfs chroot) root:/sources/binutils-2.34 # cd build
+(lfs chroot) root:/sources/binutils-2.34/build # ../configure --prefix=/usr  \
+  --enable-gold       \
+  --enable-ld=default \
+  --enable-plugins    \
+  --enable-shared     \
+  --disable-werror    \
+  --enable-64-bit-bfd \
+  --with-system-zlib
+(lfs chroot) root:/sources/binutils-2.34/build # make tooldir=/usr
+(lfs chroot) root:/sources/binutils-2.34/build # make -k check
+(lfs chroot) root:/sources/binutils-2.34/build # make tooldir=/usr install
+```
+
+
+### gmp
+
+```bash
+(lfs chroot) root:/sources # tar xf gmp-6.2.0.tar.xz 
+(lfs chroot) root:/sources # cd gmp-6.2.0
+
+# not optimized host processor
+(lfs chroot) root:/sources/gmp-6.2.0 # cp -v configfsf.guess config.guess
+(lfs chroot) root:/sources/gmp-6.2.0 # cp -v configfsf.sub   config.sub
+
+(lfs chroot) root:/sources/gmp-6.2.0 # ./configure --prefix=/usr    \
+  --enable-cxx     \
+  --disable-static \
+  --docdir=/usr/share/doc/gmp-6.2.0
+(lfs chroot) root:/sources/gmp-6.2.0 # make
+(lfs chroot) root:/sources/gmp-6.2.0 # make html
+(lfs chroot) root:/sources/gmp-6.2.0 # make check 2>&1 | tee gmp-check-log
+(lfs chroot) root:/sources/gmp-6.2.0 # awk '/# PASS:/{total+=$3} ; END{print total}' gmp-check-log
+(lfs chroot) root:/sources/gmp-6.2.0 # make install
+(lfs chroot) root:/sources/gmp-6.2.0 # make install-html
+```
+
+
+### mpfr
+
+```bash
+(lfs chroot) root:/sources # tar xf mpfr-4.0.2.tar.xz 
+(lfs chroot) root:/sources # cd mpfr-4.0.2
+(lfs chroot) root:/sources/mpfr-4.0.2 # ./configure --prefix=/usr        \
+  --disable-static     \
+  --enable-thread-safe \
+  --docdir=/usr/share/doc/mpfr-4.0.2
+(lfs chroot) root:/sources/mpfr-4.0.2 # make check
+(lfs chroot) root:/sources/mpfr-4.0.2 # make install
+(lfs chroot) root:/sources/mpfr-4.0.2 # make install-html
+```
+
+
+### mpc
+
+```bash
+(lfs chroot) root:/sources # tar xf mpc-1.1.0.tar.gz 
+(lfs chroot) root:/sources # cd mpc-1.1.0
+(lfs chroot) root:/sources/mpc-1.1.0 # ./configure --prefix=/usr    \
+  --disable-static \
+  --docdir=/usr/share/doc/mpc-1.1.0
+(lfs chroot) root:/sources/mpc-1.1.0 # make
+(lfs chroot) root:/sources/mpc-1.1.0 # make html
+(lfs chroot) root:/sources/mpc-1.1.0 # make check
+(lfs chroot) root:/sources/mpc-1.1.0 # make install
+(lfs chroot) root:/sources/mpc-1.1.0 # make install-html
+```
+
+
+### attr
+
+```bash
+(lfs chroot) root:/sources # tar xf attr-2.4.48.tar.gz 
+(lfs chroot) root:/sources # cd attr-2.4.48
+(lfs chroot) root:/sources/attr-2.4.48 # ./configure --prefix=/usr     \
+  --bindir=/bin     \
+  --disable-static  \
+  --sysconfdir=/etc \
+  --docdir=/usr/share/doc/attr-2.4.48
+(lfs chroot) root:/sources/attr-2.4.48 # make
+(lfs chroot) root:/sources/attr-2.4.48 # make check
+(lfs chroot) root:/sources/attr-2.4.48 # make install
+(lfs chroot) root:/sources/attr-2.4.48 # mv -v /usr/lib/libattr.so.* /lib
+(lfs chroot) root:/sources/attr-2.4.48 # ln -sfv ../../lib/$(readlink /usr/lib/libattr.so) /usr/lib/libattr.so
+```
+
+
+### acl
+
+```bash
+(lfs chroot) root:/sources # tar xf acl-2.2.53.tar.gz 
+(lfs chroot) root:/sources # cd acl-2.2.53
+(lfs chroot) root:/sources/acl-2.2.53 # ./configure --prefix=/usr         \
+  --bindir=/bin         \
+  --disable-static      \
+  --libexecdir=/usr/lib \
+  --docdir=/usr/share/doc/acl-2.2.53
+(lfs chroot) root:/sources/acl-2.2.53 # make
+(lfs chroot) root:/sources/acl-2.2.53 # make install
+(lfs chroot) root:/sources/acl-2.2.53 # mv -v /usr/lib/libacl.so.* /lib
+(lfs chroot) root:/sources/acl-2.2.53 # ln -sfv ../../lib/$(readlink /usr/lib/libacl.so) /usr/lib/libacl.so
+```
+
+### shadow
+
+```bash
+(lfs chroot) root:/sources # tar xf shadow-4.8.1.tar.xz 
+(lfs chroot) root:/sources # cd shadow-4.8.1
+(lfs chroot) root:/sources/shadow-4.8.1 # sed -i 's/groups$(EXEEXT) //' src/Makefile.in
+(lfs chroot) root:/sources/shadow-4.8.1 # find man -name Makefile.in -exec sed -i 's/groups\.1 / /'   {} \;
+(lfs chroot) root:/sources/shadow-4.8.1 # find man -name Makefile.in -exec sed -i 's/getspnam\.3 / /' {} \;
+(lfs chroot) root:/sources/shadow-4.8.1 # find man -name Makefile.in -exec sed -i 's/passwd\.5 / /'   {} \;
+(lfs chroot) root:/sources/shadow-4.8.1 # sed -i -e 's@#ENCRYPT_METHOD DES@ENCRYPT_METHOD SHA512@' \
+       -e 's@/var/spool/mail@/var/mail@' etc/login.defs
+(lfs chroot) root:/sources/shadow-4.8.1 # sed -i 's/1000/999/' etc/useradd
+(lfs chroot) root:/sources/shadow-4.8.1 # ./configure --sysconfdir=/etc --with-group-name-max-length=32
+(lfs chroot) root:/sources/shadow-4.8.1 # make
+(lfs chroot) root:/sources/shadow-4.8.1 # make install
+```
+
+```bash
+(lfs chroot) root:~ # pwconv
+(lfs chroot) root:~ # cat /etc/passwd
+(lfs chroot) root:~ # cat /etc/shadow
+
+(lfs chroot) root:~ # grpconv
+(lfs chroot) root:~ # cat /etc/group
+(lfs chroot) root:~ # cat /etc/gshadow
+
+(lfs chroot) root:~ # sed -i 's/yes/no/' /etc/default/useradd
+(lfs chroot) root:~ # passwd root
+```
+
+
+### gcc
+
+```bash
+(lfs chroot) root:/sources # tar xf gcc-9.2.0.tar.xz 
+(lfs chroot) root:/sources # cd gcc-9.2.0
+(lfs chroot) root:/sources/gcc-9.2.0 # case $(uname -m) in
+  x86_64)
+    sed -e '/m64=/s/lib64/lib/' \
+        -i.orig gcc/config/i386/t-linux64
+  ;;
+esac
+(lfs chroot) root:/sources/gcc-9.2.0 # sed -e '1161 s|^|//|' \
+    -i libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc
+
+(lfs chroot) root:/sources/gcc-9.2.0 # mkdir build
+(lfs chroot) root:/sources/gcc-9.2.0 # cd build/
+(lfs chroot) root:/sources/gcc-9.2.0/build #  SED=sed                               \
+../configure --prefix=/usr            \
+             --enable-languages=c,c++ \
+             --disable-multilib       \
+             --disable-bootstrap      \
+             --with-system-zlib
+(lfs chroot) root:/sources/gcc-9.2.0/build # make
+(lfs chroot) root:/sources/gcc-9.2.0/build # ulimit -s 32768
+(lfs chroot) root:/sources/gcc-9.2.0/build # chown -Rv nobody . 
+(lfs chroot) root:/sources/gcc-9.2.0/build # su nobody -s /bin/bash -c "PATH=$PATH make -k check"
+(lfs chroot) root:/sources/gcc-9.2.0/build # ../contrib/test_summary
+(lfs chroot) root:/sources/gcc-9.2.0/build # make install
+(lfs chroot) root:/sources/gcc-9.2.0/build # rm -rf /usr/lib/gcc/$(gcc -dumpmachine)/9.2.0/include-fixed/bits/
+(lfs chroot) root:/sources/gcc-9.2.0/build # chown -v -R root:root /usr/lib/gcc/*linux-gnu/9.2.0/include{,-fixed}
+(lfs chroot) root:/sources/gcc-9.2.0/build # ln -sv ../usr/bin/cpp /lib
+(lfs chroot) root:/sources/gcc-9.2.0/build # ln -sv gcc /usr/bin/cc
+(lfs chroot) root:/sources/gcc-9.2.0/build # install -v -dm755 /usr/lib/bfd-plugins
+(lfs chroot) root:/sources/gcc-9.2.0/build # ln -sfv ../../libexec/gcc/$(gcc -dumpmachine)/9.2.0/liblto_plugin.so /usr/lib/bfd-plugins/
+
+(lfs chroot) root:/sources/gcc-9.2.0/build # echo 'int main(){}' > dummy.c
+(lfs chroot) root:/sources/gcc-9.2.0/build # cc dummy.c -v -Wl,--verbose &> dummy.log
+(lfs chroot) root:/sources/gcc-9.2.0/build # readelf -l a.out | grep ': /lib'
+(lfs chroot) root:/sources/gcc-9.2.0/build # grep -o '/usr/lib.*/crt[1in].*succeeded' dummy.log
+(lfs chroot) root:/sources/gcc-9.2.0/build # grep -B4 '^ /usr/include' dummy.log
+(lfs chroot) root:/sources/gcc-9.2.0/build # grep 'SEARCH.*/usr/lib' dummy.log |sed 's|; |\n|g'
+(lfs chroot) root:/sources/gcc-9.2.0/build # grep "/lib.*/libc.so.6 " dummy.log
+(lfs chroot) root:/sources/gcc-9.2.0/build # grep found dummy.log
+(lfs chroot) root:/sources/gcc-9.2.0/build # rm -v dummy.c a.out dummy.log
+
+(lfs chroot) root:/sources/gcc-9.2.0/build # mkdir -pv /usr/share/gdb/auto-load/usr/lib
+(lfs chroot) root:/sources/gcc-9.2.0/build # mv -v /usr/lib/*gdb.py /usr/share/gdb/auto-load/usr/lib
+```
+
+
+### pkg-config
+
+```bash
+(lfs chroot) root:/sources # tar xf pkg-config-0.29.2.tar.gz 
+(lfs chroot) root:/sources # cd pkg-config-0.29.2
+(lfs chroot) root:/sources/pkg-config-0.29.2 # ./configure --prefix=/usr \
+  --with-internal-glib       \
+  --disable-host-tool        \
+  --docdir=/usr/share/doc/pkg-config-0.29.2
+(lfs chroot) root:/sources/pkg-config-0.29.2 # make
+(lfs chroot) root:/sources/pkg-config-0.29.2 # make check
+(lfs chroot) root:/sources/pkg-config-0.29.2 # make install
+```
+
+
+### ncurses
+
+```bash
+(lfs chroot) root:/sources # tar xf ncurses-6.2.tar.gz 
+(lfs chroot) root:/sources # cd ncurses-6.2
+(lfs chroot) root:/sources/ncurses-6.2 # sed -i '/LIBTOOL_INSTALL/d' c++/Makefile.in
+(lfs chroot) root:/sources/ncurses-6.2 # ./configure --prefix=/usr \
+  --mandir=/usr/share/man \
+  --with-shared           \
+  --without-debug         \
+  --without-normal        \
+  --enable-pc-files       \
+  --enable-widec 
+(lfs chroot) root:/sources/ncurses-6.2 # make
+(lfs chroot) root:/sources/ncurses-6.2 # make install
+
+
+(lfs chroot) root:/sources/ncurses-6.2 # mv -v /usr/lib/libncursesw.so.6* /lib
+(lfs chroot) root:/sources/ncurses-6.2 # ln -sfv ../../lib/$(readlink /usr/lib/libncursesw.so) /usr/lib/libncursesw.so
+(lfs chroot) root:/sources/ncurses-6.2 # for lib in ncurses form panel menu ; do
+    rm -vf                    /usr/lib/lib${lib}.so
+    echo "INPUT(-l${lib}w)" > /usr/lib/lib${lib}.so
+    ln -sfv ${lib}w.pc        /usr/lib/pkgconfig/${lib}.pc
+done
+(lfs chroot) root:/sources/ncurses-6.2 # rm -vf                     /usr/lib/libcursesw.so
+(lfs chroot) root:/sources/ncurses-6.2 # echo "INPUT(-lncursesw)" > /usr/lib/libcursesw.so
+(lfs chroot) root:/sources/ncurses-6.2 # ln -sfv libncurses.so      /usr/lib/libcurses.so
+(lfs chroot) root:/sources/ncurses-6.2 # mkdir -v       /usr/share/doc/ncurses-6.2
+(lfs chroot) root:/sources/ncurses-6.2 # cp -v -R doc/* /usr/share/doc/ncurses-6.2
+```
+
+
+### libcap
+
+```bash
+(lfs chroot) root:/sources # tar xf libcap-2.31.tar.xz 
+(lfs chroot) root:/sources # cd libcap-2.31
+(lfs chroot) root:/sources/libcap-2.31 # sed -i '/install.*STA...LIBNAME/d' libcap/Makefile
+(lfs chroot) root:/sources/libcap-2.31 # make lib=lib
+(lfs chroot) root:/sources/libcap-2.31 # make test
+(lfs chroot) root:/sources/libcap-2.31 # make lib=lib install
+(lfs chroot) root:/sources/libcap-2.31 # chmod -v 755 /lib/libcap.so.2.31
+```
+
+
+### sed
+
+```bash
+(lfs chroot) root:/sources # tar xf sed-4.8.tar.xz 
+(lfs chroot) root:/sources # cd sed-4.8
+(lfs chroot) root:/sources/sed-4.8 # sed -i 's/usr/tools/'                 build-aux/help2man
+(lfs chroot) root:/sources/sed-4.8 # sed -i 's/testsuite.panic-tests.sh//' Makefile.in
+(lfs chroot) root:/sources/sed-4.8 # ./configure --prefix=/usr --bindir=/bin
+(lfs chroot) root:/sources/sed-4.8 # make
+(lfs chroot) root:/sources/sed-4.8 # make html
+(lfs chroot) root:/sources/sed-4.8 # make check
+(lfs chroot) root:/sources/sed-4.8 # make install
+(lfs chroot) root:/sources/sed-4.8 # install -d -m755           /usr/share/doc/sed-4.8
+(lfs chroot) root:/sources/sed-4.8 # install -m644 doc/sed.html /usr/share/doc/sed-4.8
+```
+
+
+### psmisc
+
+```bash
+(lfs chroot) root:/sources # tar xf psmisc-23.2.tar.xz 
+(lfs chroot) root:/sources # cd psmisc-23.2
+(lfs chroot) root:/sources/psmisc-23.2 # ./configure --prefix=/usr
+(lfs chroot) root:/sources/psmisc-23.2 # make
+(lfs chroot) root:/sources/psmisc-23.2 # make install
+(lfs chroot) root:/sources/psmisc-23.2 # mv -v /usr/bin/fuser   /bin
+(lfs chroot) root:/sources/psmisc-23.2 # mv -v /usr/bin/killall /bin
+```
+
+
+### iana-etc
+
+```bash
+(lfs chroot) root:/sources # tar xf iana-etc-2.30.tar.bz2 
+(lfs chroot) root:/sources # cd iana-etc-2.30
+(lfs chroot) root:/sources/iana-etc-2.30 # make
+(lfs chroot) root:/sources/iana-etc-2.30 # make install
+```
+
+### bison
+
+```bash
+(lfs chroot) root:/sources # tar xf bison-3.5.2.tar.xz 
+(lfs chroot) root:/sources # cd bison-3.5.2
+(lfs chroot) root:/sources/bison-3.5.2 # ./configure --prefix=/usr --docdir=/usr/share/doc/bison-3.5.2
+(lfs chroot) root:/sources/bison-3.5.2 # make
+(lfs chroot) root:/sources/bison-3.5.2 # make install
+```
+
+
+### flex
+
+```bash
+(lfs chroot) root:/sources # tar xf flex-2.6.4.tar.gz 
+(lfs chroot) root:/sources # cd flex-2.6.4
+(lfs chroot) root:/sources/flex-2.6.4 # sed -i "/math.h/a #include <malloc.h>" src/flexdef.h
+(lfs chroot) root:/sources/flex-2.6.4 # HELP2MAN=/tools/bin/true ./configure --prefix=/usr --docdir=/usr/share/doc/flex-2.6.4
+(lfs chroot) root:/sources/flex-2.6.4 # make
+(lfs chroot) root:/sources/flex-2.6.4 # make check
+(lfs chroot) root:/sources/flex-2.6.4 # make install
+(lfs chroot) root:/sources/flex-2.6.4 # ln -sv flex /usr/bin/lex
+```
+
+
+### grep
+
+```bash
+(lfs chroot) root:/sources # tar xf grep-3.4.tar.xz 
+(lfs chroot) root:/sources # cd grep-3.4
+(lfs chroot) root:/sources/grep-3.4 # ./configure --prefix=/usr --bindir=/bin
+(lfs chroot) root:/sources/grep-3.4 # make
+(lfs chroot) root:/sources/grep-3.4 # make check
+(lfs chroot) root:/sources/grep-3.4 # make install
+```
+
+
+### bash
+
+```bash
+(lfs chroot) root:/sources # tar xf bash-5.0.tar.gz 
+(lfs chroot) root:/sources # cd bash-5.0
+(lfs chroot) root:/sources/bash-5.0 # patch -Np1 -i ../bash-5.0-upstream_fixes-1.patch
+(lfs chroot) root:/sources/bash-5.0 # ./configure --prefix=/usr \
+  --docdir=/usr/share/doc/bash-5.0 \
+  --without-bash-malloc            \
+  --with-installed-readline
+(lfs chroot) root:/sources/bash-5.0 # make 
+(lfs chroot) root:/sources/bash-5.0 # chown -Rv nobody .
+(lfs chroot) root:/sources/bash-5.0 # su nobody -s /bin/bash -c "PATH=$PATH HOME=/home make tests"
+(lfs chroot) root:/sources/bash-5.0 # make install
+(lfs chroot) root:/sources/bash-5.0 # mv -vf /usr/bin/bash /bin
+(lfs chroot) root:/sources/bash-5.0 # exec /bin/bash --login +h
+```
+
+
+### libtool
+
+```bash
+(lfs chroot) root:/sources # tar xf libtool-2.4.6.tar.xz 
+(lfs chroot) root:/sources # cd libtool-2.4.6
+(lfs chroot) root:/sources/libtool-2.4.6 # ./configure --prefix=/usr
+(lfs chroot) root:/sources/libtool-2.4.6 # make
+(lfs chroot) root:/sources/libtool-2.4.6 # make check
+(lfs chroot) root:/sources/libtool-2.4.6 # make install
+```
+
+
+### gdbm
+
+```bash
+(lfs chroot) root:/sources # tar xf gdbm-1.18.1.tar.gz 
+(lfs chroot) root:/sources # cd gdbm-1.18.1
+(lfs chroot) root:/sources/gdbm-1.18.1 # ./configure --prefix=/usr    \
+  --disable-static \
+  --enable-libgdbm-compat
+(lfs chroot) root:/sources/gdbm-1.18.1 # make
+(lfs chroot) root:/sources/gdbm-1.18.1 # make check
+(lfs chroot) root:/sources/gdbm-1.18.1 # make install
+```
+
+
+### gperf
+
+```bash
+(lfs chroot) root:/sources # tar xf gperf-3.1.tar.gz 
+(lfs chroot) root:/sources # cd gperf-3.1
+(lfs chroot) root:/sources/gperf-3.1 # ./configure --prefix=/usr --docdir=/usr/share/doc/gperf-3.1
+(lfs chroot) root:/sources/gperf-3.1 # make
+(lfs chroot) root:/sources/gperf-3.1 # make -j1 check
+(lfs chroot) root:/sources/gperf-3.1 # make install
+```
+
+
+### expat
+
+```bash
+(lfs chroot) root:/sources # tar xf expat-2.2.9.tar.xz 
+(lfs chroot) root:/sources # cd expat-2.2.9
+(lfs chroot) root:/sources/expat-2.2.9 # sed -i 's|usr/bin/env |bin/|' run.sh.in
+(lfs chroot) root:/sources/expat-2.2.9 # ./configure --prefix=/usr \
+  --disable-static \
+  --docdir=/usr/share/doc/expat-2.2.9
+(lfs chroot) root:/sources/expat-2.2.9 # make
+(lfs chroot) root:/sources/expat-2.2.9 # make check
+(lfs chroot) root:/sources/expat-2.2.9 # make install
+(lfs chroot) root:/sources/expat-2.2.9 # install -v -m644 doc/*.{html,png,css} /usr/share/doc/expat-2.2.9
+```
+
+
+### inetutils
+
+```bash
+(lfs chroot) root:/sources # tar xf inetutils-1.9.4.tar.xz 
+(lfs chroot) root:/sources # cd inetutils-1.9.4
+(lfs chroot) root:/sources/inetutils-1.9.4 # ./configure --prefix=/usr \
+  --localstatedir=/var \
+  --disable-logger     \
+  --disable-whois      \
+  --disable-rcp        \
+  --disable-rexec      \
+  --disable-rlogin     \
+  --disable-rsh        \
+  --disable-servers
+(lfs chroot) root:/sources/inetutils-1.9.4 # make
+(lfs chroot) root:/sources/inetutils-1.9.4 # make check
+(lfs chroot) root:/sources/inetutils-1.9.4 # make install
+(lfs chroot) root:/sources/inetutils-1.9.4 # mv -v /usr/bin/{hostname,ping,ping6,traceroute} /bin
+(lfs chroot) root:/sources/inetutils-1.9.4 # mv -v /usr/bin/ifconfig /sbin
+```
+
+
+### perl
+
+```bash
+(lfs chroot) root:/sources # tar xf perl-5.30.1.tar.xz 
+(lfs chroot) root:/sources # cd perl-5.30.1
+(lfs chroot) root:/sources/perl-5.30.1 # echo "127.0.0.1 localhost $(hostname)" > /etc/hosts
+(lfs chroot) root:/sources/perl-5.30.1 # export BUILD_ZLIB=False
+(lfs chroot) root:/sources/perl-5.30.1 # export BUILD_BZIP2=0
+(lfs chroot) root:/sources/perl-5.30.1 # sh Configure -des -Dprefix=/usr                 \
+  -Dvendorprefix=/usr           \
+  -Dman1dir=/usr/share/man/man1 \
+  -Dman3dir=/usr/share/man/man3 \
+  -Dpager="/usr/bin/less -isR"  \
+  -Duseshrplib                  \
+  -Dusethreads
+(lfs chroot) root:/sources/perl-5.30.1 # make
+(lfs chroot) root:/sources/perl-5.30.1 # make test
+(lfs chroot) root:/sources/perl-5.30.1 # make install
+(lfs chroot) root:/sources/perl-5.30.1 # unset BUILD_ZLIB BUILD_BZIP2
+```
+
+
+### xml
+
+```bash
+(lfs chroot) root:/sources # tar xf XML-Parser-2.46.tar.gz 
+(lfs chroot) root:/sources # cd XML-Parser-2.46
+(lfs chroot) root:/sources/XML-Parser-2.46 # perl Makefile.PL
+(lfs chroot) root:/sources/XML-Parser-2.46 # make
+(lfs chroot) root:/sources/XML-Parser-2.46 # make test
+(lfs chroot) root:/sources/XML-Parser-2.46 # make install
+```
+
+
+### intltool
+
+```bash
+(lfs chroot) root:/sources # tar xf intltool-0.51.0.tar.gz 
+(lfs chroot) root:/sources # cd intltool-0.51.0
+(lfs chroot) root:/sources/intltool-0.51.0 # sed -i 's:\\\${:\\\$\\{:' intltool-update.in
+(lfs chroot) root:/sources/intltool-0.51.0 # ./configure --prefix=/usr
+(lfs chroot) root:/sources/intltool-0.51.0 # make
+(lfs chroot) root:/sources/intltool-0.51.0 # make check
+(lfs chroot) root:/sources/intltool-0.51.0 # make install
+(lfs chroot) root:/sources/intltool-0.51.0 # install -v -Dm644 doc/I18N-HOWTO /usr/share/doc/intltool-0.51.0/I18N-HOWTO
+```
+
+
+### autoconf
+
+```bash
+(lfs chroot) root:/sources # tar xf autoconf-2.69.tar.xz 
+(lfs chroot) root:/sources # cd autoconf-2.69
+(lfs chroot) root:/sources/autoconf-2.69 # sed '361 s/{/\\{/' -i bin/autoscan.in
+(lfs chroot) root:/sources/autoconf-2.69 # ./configure --prefix=/usr
+(lfs chroot) root:/sources/autoconf-2.69 # make
+(lfs chroot) root:/sources/autoconf-2.69 # make check
+(lfs chroot) root:/sources/autoconf-2.69 # make install
+```
+
+
+### automake
+
+```bash
+(lfs chroot) root:/sources # tar xf automake-1.16.1.tar.xz
+(lfs chroot) root:/sources # cd automake-1.16.1
+(lfs chroot) root:/sources/automake-1.16.1 # ./configure --prefix=/usr --docdir=/usr/share/doc/automake-1.16.1
+(lfs chroot) root:/sources/automake-1.16.1 # make
+(lfs chroot) root:/sources/automake-1.16.1 # make -j4 check
+(lfs chroot) root:/sources/automake-1.16.1 # make install
+```
+
+
+### kmod
+
+```bash
+(lfs chroot) root:/sources # tar xf kmod-26.tar.xz 
+(lfs chroot) root:/sources # cd kmod-26
+(lfs chroot) root:/sources/kmod-26 # ./configure --prefix=/usr \
+  --bindir=/bin          \
+  --sysconfdir=/etc      \
+  --with-rootlibdir=/lib \
+  --with-xz              \
+  --with-zlib
+(lfs chroot) root:/sources/kmod-26 # make
+(lfs chroot) root:/sources/kmod-26 # make install
+(lfs chroot) root:/sources/kmod-26 # for target in depmod insmod lsmod modinfo modprobe rmmod; do
+  ln -sfv ../bin/kmod /sbin/$target
+done
+(lfs chroot) root:/sources/kmod-26 # ln -sfv kmod /bin/lsmod
+```
+
+
+### gettext
+
+```bash
+(lfs chroot) root:/sources # tar xf gettext-0.20.1.tar.xz 
+(lfs chroot) root:/sources # cd gettext-0.20.1
+(lfs chroot) root:/sources/gettext-0.20.1 # ./configure --prefix=/usr    \
+  --disable-static \
+  --docdir=/usr/share/doc/gettext-0.20.1
+(lfs chroot) root:/sources/gettext-0.20.1 # make
+(lfs chroot) root:/sources/gettext-0.20.1 # make check
+(lfs chroot) root:/sources/gettext-0.20.1 # make install
+(lfs chroot) root:/sources/gettext-0.20.1 # chmod -v 0755 /usr/lib/preloadable_libintl.so
+```
+
+
+### elfutils
+
+```bash
+(lfs chroot) root:/sources # tar xf elfutils-0.178.tar.bz2 
+(lfs chroot) root:/sources # cd elfutils-0.178
+(lfs chroot) root:/sources/elfutils-0.178 # ./configure --prefix=/usr --disable-debuginfod
+(lfs chroot) root:/sources/elfutils-0.178 # make
+(lfs chroot) root:/sources/elfutils-0.178 # make check
+(lfs chroot) root:/sources/elfutils-0.178 # make -C libelf install
+(lfs chroot) root:/sources/elfutils-0.178 # install -vm644 config/libelf.pc /usr/lib/pkgconfig
+(lfs chroot) root:/sources/elfutils-0.178 # rm /usr/lib/libelf.a
+```
+
+
+### libffi
+
+```bash
+(lfs chroot) root:/sources # tar xf libffi-3.3.tar.gz 
+(lfs chroot) root:/sources # cd libffi-3.3
+(lfs chroot) root:/sources/libffi-3.3 # ./configure --prefix=/usr --disable-static --with-gcc-arch=native
+(lfs chroot) root:/sources/libffi-3.3 # make
+(lfs chroot) root:/sources/libffi-3.3 # make check
+(lfs chroot) root:/sources/libffi-3.3 # make install
+```
+
+
+### openssl
+
+```bash
+(lfs chroot) root:/sources # tar xf openssl-1.1.1d.tar.gz 
+(lfs chroot) root:/sources # cd openssl-1.1.1d
+(lfs chroot) root:/sources/openssl-1.1.1d # ./config --prefix=/usr \
+  --openssldir=/etc/ssl \
+  --libdir=lib          \
+  shared                \
+  zlib-dynamic
+(lfs chroot) root:/sources/openssl-1.1.1d # make
+(lfs chroot) root:/sources/openssl-1.1.1d # make test
+(lfs chroot) root:/sources/openssl-1.1.1d # sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
+(lfs chroot) root:/sources/openssl-1.1.1d # make MANSUFFIX=ssl install
+(lfs chroot) root:/sources/openssl-1.1.1d # mv -v /usr/share/doc/openssl /usr/share/doc/openssl-1.1.1d
+(lfs chroot) root:/sources/openssl-1.1.1d # cp -vfr doc/* /usr/share/doc/openssl-1.1.1d
+```
+
+
+### python
+
+```bash
+(lfs chroot) root:/sources # tar xf Python-3.8.1.tar.xz 
+(lfs chroot) root:/sources # cd Python-3.8.1
+(lfs chroot) root:/sources/Python-3.8.1 # ./configure --prefix=/usr \
+  --enable-shared     \
+  --with-system-expat \
+  --with-system-ffi   \
+  --with-ensurepip=yes
+(lfs chroot) root:/sources/Python-3.8.1 # make
+(lfs chroot) root:/sources/Python-3.8.1 # make install
+(lfs chroot) root:/sources/Python-3.8.1 # chmod -v 755 /usr/lib/libpython3.8.so
+(lfs chroot) root:/sources/Python-3.8.1 # chmod -v 755 /usr/lib/libpython3.so
+(lfs chroot) root:/sources/Python-3.8.1 # ln -sfv pip3.8 /usr/bin/pip3
+(lfs chroot) root:/sources/Python-3.8.1 # install -v -dm755 /usr/share/doc/python-3.8.1/html 
+(lfs chroot) root:/sources/Python-3.8.1 # tar --strip-components=1  \
+  --no-same-owner       \
+  --no-same-permissions \
+  -C /usr/share/doc/python-3.8.1/html \
+  -xvf ../python-3.8.1-docs-html.tar.bz2
+```
+
+
+### ninja
+
+```bash
+(lfs chroot) root:/sources # tar xf ninja-1.10.0.tar.gz 
+(lfs chroot) root:/sources # cd ninja-1.10.0
+(lfs chroot) root:/sources/ninja-1.10.0 # export NINJAJOBS=4
+(lfs chroot) root:/sources/ninja-1.10.0 # sed -i '/int Guess/a \
+  int   j = 0;\
+  char* jobs = getenv( "NINJAJOBS" );\
+  if ( jobs != NULL ) j = atoi( jobs );\
+  if ( j > 0 ) return j;\
+' src/ninja.cc
+(lfs chroot) root:/sources/ninja-1.10.0 # python3 configure.py --bootstrap
+(lfs chroot) root:/sources/ninja-1.10.0 # ./ninja ninja_test
+(lfs chroot) root:/sources/ninja-1.10.0 # ./ninja_test --gtest_filter=-SubprocessTest.SetWithLots
+(lfs chroot) root:/sources/ninja-1.10.0 # install -vm755 ninja /usr/bin/
+(lfs chroot) root:/sources/ninja-1.10.0 # install -vDm644 misc/bash-completion /usr/share/bash-completion/completions/ninja
+(lfs chroot) root:/sources/ninja-1.10.0 # install -vDm644 misc/zsh-completion  /usr/share/zsh/site-functions/_ninja
+```
+
+
+### meson
+
+```bash
+(lfs chroot) root:/sources # tar xf meson-0.53.1.tar.gz 
+(lfs chroot) root:/sources # cd meson-0.53.1
+(lfs chroot) root:/sources/meson-0.53.1 # python3 setup.py build
+(lfs chroot) root:/sources/meson-0.53.1 # python3 setup.py install --root=dest
+(lfs chroot) root:/sources/meson-0.53.1 # cp -rv dest/* /
+```
+
+
+### coreutils
+
+```bash
+(lfs chroot) root:/sources # tar xf coreutils-8.31.tar.xz
+(lfs chroot) root:/sources # cd coreutils-8.31
+(lfs chroot) root:/sources/coreutils-8.31 # patch -Np1 -i ../coreutils-8.31-i18n-1.patch
+(lfs chroot) root:/sources/coreutils-8.31 # sed -i '/test.lock/s/^/#/' gnulib-tests/gnulib.mk
+(lfs chroot) root:/sources/coreutils-8.31 # autoreconf -fiv
+(lfs chroot) root:/sources/coreutils-8.31 # FORCE_UNSAFE_CONFIGURE=1 ./configure \
+  --prefix=/usr            \
+  --enable-no-install-program=kill,uptime
+(lfs chroot) root:/sources/coreutils-8.31 # make
+(lfs chroot) root:/sources/coreutils-8.31 # make NON_ROOT_USERNAME=nobody check-root
+(lfs chroot) root:/sources/coreutils-8.31 # echo "dummy:x:1000:nobody" >> /etc/group
+(lfs chroot) root:/sources/coreutils-8.31 # chown -Rv nobody . 
+(lfs chroot) root:/sources/coreutils-8.31 # su nobody -s /bin/bash -c "PATH=$PATH make RUN_EXPENSIVE_TESTS=yes check"
+(lfs chroot) root:/sources/coreutils-8.31 # sed -i '/dummy/d' /etc/group
+(lfs chroot) root:/sources/coreutils-8.31 # make install
+(lfs chroot) root:/sources/coreutils-8.31 # mv -v /usr/bin/{cat,chgrp,chmod,chown,cp,date,dd,df,echo} /bin
+(lfs chroot) root:/sources/coreutils-8.31 # mv -v /usr/bin/{false,ln,ls,mkdir,mknod,mv,pwd,rm} /bin
+(lfs chroot) root:/sources/coreutils-8.31 # mv -v /usr/bin/{rmdir,stty,sync,true,uname} /bin
+(lfs chroot) root:/sources/coreutils-8.31 # mv -v /usr/bin/chroot /usr/sbin
+(lfs chroot) root:/sources/coreutils-8.31 # mv -v /usr/share/man/man1/chroot.1 /usr/share/man/man8/chroot.8
+(lfs chroot) root:/sources/coreutils-8.31 # sed -i s/\"1\"/\"8\"/1 /usr/share/man/man8/chroot.8
+(lfs chroot) root:/sources/coreutils-8.31 # mv -v /usr/bin/{head,nice,sleep,touch} /bin
+```
+
+
+### check
+
+```bash
+(lfs chroot) root:/sources # tar xf check-0.14.0.tar.gz 
+(lfs chroot) root:/sources # cd check-0.14.0
+(lfs chroot) root:/sources/check-0.14.0 # ./configure --prefix=/usr
+(lfs chroot) root:/sources/check-0.14.0 # make
+(lfs chroot) root:/sources/check-0.14.0 # make check
+(lfs chroot) root:/sources/check-0.14.0 # make docdir=/usr/share/doc/check-0.14.0 install
+(lfs chroot) root:/sources/check-0.14.0 # sed -i '1 s/tools/usr/' /usr/bin/checkmk
+```
+
+
+### diffutils
+
+```bash
+(lfs chroot) root:/sources # tar xf diffutils-3.7.tar.xz 
+(lfs chroot) root:/sources # cd diffutils-3.7
+(lfs chroot) root:/sources/diffutils-3.7 # ./configure --prefix=/usr
+(lfs chroot) root:/sources/diffutils-3.7 # make
+(lfs chroot) root:/sources/diffutils-3.7 # make check
+(lfs chroot) root:/sources/diffutils-3.7 # make install
+```
+
+
+### gawk
+
+```bash
+(lfs chroot) root:/sources # tar xf gawk-5.0.1.tar.xz 
+(lfs chroot) root:/sources # cd gawk-5.0.1
+(lfs chroot) root:/sources/gawk-5.0.1 # sed -i 's/extras//' Makefile.in
+(lfs chroot) root:/sources/gawk-5.0.1 # ./configure --prefix=/usr
+(lfs chroot) root:/sources/gawk-5.0.1 # make
+(lfs chroot) root:/sources/gawk-5.0.1 # make check
+(lfs chroot) root:/sources/gawk-5.0.1 # make install
+(lfs chroot) root:/sources/gawk-5.0.1 # mkdir -v /usr/share/doc/gawk-5.0.1
+(lfs chroot) root:/sources/gawk-5.0.1 # cp    -v doc/{awkforai.txt,*.{eps,pdf,jpg}} /usr/share/doc/gawk-5.0.1
+```
+
+
+### findutils
+
+```bash
+(lfs chroot) root:/sources # tar xf findutils-4.7.0.tar.xz  
+(lfs chroot) root:/sources # cd findutils-4.7.0
+(lfs chroot) root:/sources/findutils-4.7.0 # ./configure --prefix=/usr --localstatedir=/var/lib/locate
+(lfs chroot) root:/sources/findutils-4.7.0 # make
+(lfs chroot) root:/sources/findutils-4.7.0 # make check
+(lfs chroot) root:/sources/findutils-4.7.0 # make install
+(lfs chroot) root:/sources/findutils-4.7.0 # mv -v /usr/bin/find /bin
+(lfs chroot) root:/sources/findutils-4.7.0 # sed -i 's|find:=${BINDIR}|find:=/bin|' /usr/bin/updatedb
+```
+
+
+### groff
+
+```bash
+(lfs chroot) root:/sources # tar zxf groff-1.22.4.tar.gz 
+(lfs chroot) root:/sources # cd groff-1.22.4
+(lfs chroot) root:/sources/groff-1.22.4 # PAGE=A4 ./configure --prefix=/usr
+(lfs chroot) root:/sources/groff-1.22.4 # make -j1
+(lfs chroot) root:/sources/groff-1.22.4 # make install
+```
+
+
+### grub
+
+```bash
+(lfs chroot) root:/sources # tar xf grub-2.04.tar.xz 
+(lfs chroot) root:/sources # cd grub-2.04
+(lfs chroot) root:/sources/grub-2.04 # ./configure --prefix=/usr          \
+  --sbindir=/sbin        \
+  --sysconfdir=/etc      \
+  --disable-efiemu       \
+  --disable-werror
+(lfs chroot) root:/sources/grub-2.04 # make
+(lfs chroot) root:/sources/grub-2.04 # make install
+(lfs chroot) root:/sources/grub-2.04 # mv -v /etc/bash_completion.d/grub /usr/share/bash-completion/completions
+```
+
+
+### less
+
+```bash
+(lfs chroot) root:/sources # tar xf less-551.tar.gz 
+(lfs chroot) root:/sources # cd less-551
+(lfs chroot) root:/sources/less-551 # ./configure --prefix=/usr --sysconfdir=/etc
+(lfs chroot) root:/sources/less-551 # make
+(lfs chroot) root:/sources/less-551 # make install
+```
+
+
+### gzip
+
+```bash
+(lfs chroot) root:/sources # tar xf gzip-1.10.tar.xz 
+(lfs chroot) root:/sources # cd gzip-1.10
+(lfs chroot) root:/sources/gzip-1.10 # ./configure --prefix=/usr
+(lfs chroot) root:/sources/gzip-1.10 # make
+(lfs chroot) root:/sources/gzip-1.10 # make check
+(lfs chroot) root:/sources/gzip-1.10 # make install
+(lfs chroot) root:/sources/gzip-1.10 # mv -v /usr/bin/gzip /bin
+```
+
+
+### zstd
+
+```bash
+(lfs chroot) root:/sources # tar xf zstd-1.4.4.tar.gz 
+(lfs chroot) root:/sources # cd zstd-1.4.4
+(lfs chroot) root:/sources/zstd-1.4.4 # make
+(lfs chroot) root:/sources/zstd-1.4.4 # make prefix=/usr install
+(lfs chroot) root:/sources/zstd-1.4.4 # rm -v /usr/lib/libzstd.a
+(lfs chroot) root:/sources/zstd-1.4.4 # mv -v /usr/lib/libzstd.so.* /lib
+(lfs chroot) root:/sources/zstd-1.4.4 # ln -sfv ../../lib/$(readlink /usr/lib/libzstd.so) /usr/lib/libzstd.so
+```
+
+
+### iproute2
+
+```bash
+(lfs chroot) root:/sources # tar xf iproute2-5.5.0.tar.xz 
+(lfs chroot) root:/sources # cd iproute2-5.5.0
+(lfs chroot) root:/sources/iproute2-5.5.0 # sed -i /ARPD/d Makefile
+(lfs chroot) root:/sources/iproute2-5.5.0 # rm -fv man/man8/arpd.8
+(lfs chroot) root:/sources/iproute2-5.5.0 # sed -i 's/.m_ipt.o//' tc/Makefile
+(lfs chroot) root:/sources/iproute2-5.5.0 # make
+(lfs chroot) root:/sources/iproute2-5.5.0 # make DOCDIR=/usr/share/doc/iproute2-5.5.0 install
+```
+
+
+### kbd
+
+```bash
+(lfs chroot) root:/sources # tar xf kbd-2.2.0.tar.xz 
+(lfs chroot) root:/sources # cd kbd-2.2.0
+(lfs chroot) root:/sources/kbd-2.2.0 # patch -Np1 -i ../kbd-2.2.0-backspace-1.patch
+(lfs chroot) root:/sources/kbd-2.2.0 # sed -i 's/\(RESIZECONS_PROGS=\)yes/\1no/g' configure
+(lfs chroot) root:/sources/kbd-2.2.0 # sed -i 's/resizecons.8 //' docs/man/man8/Makefile.in
+(lfs chroot) root:/sources/kbd-2.2.0 # PKG_CONFIG_PATH=/tools/lib/pkgconfig ./configure --prefix=/usr --disable-vlock
+(lfs chroot) root:/sources/kbd-2.2.0 # make
+(lfs chroot) root:/sources/kbd-2.2.0 # make check
+(lfs chroot) root:/sources/kbd-2.2.0 # make install
+(lfs chroot) root:/sources/kbd-2.2.0 # mkdir -v       /usr/share/doc/kbd-2.2.0
+(lfs chroot) root:/sources/kbd-2.2.0 # cp -R -v docs/doc/* /usr/share/doc/kbd-2.2.0
+```
+
+
+### libpipeline
+
+```bash
+(lfs chroot) root:/sources # tar xf libpipeline-1.5.2.tar.gz 
+(lfs chroot) root:/sources # cd libpipeline-1.5.2
+(lfs chroot) root:/sources/libpipeline-1.5.2 # ./configure --prefix=/usr
+(lfs chroot) root:/sources/libpipeline-1.5.2 # make
+(lfs chroot) root:/sources/libpipeline-1.5.2 # make check
+(lfs chroot) root:/sources/libpipeline-1.5.2 # make install
+```
+
+
+### make
+
+```bash
+(lfs chroot) root:/sources # tar xf make-4.3.tar.gz 
+(lfs chroot) root:/sources # cd make-4.3
+(lfs chroot) root:/sources/make-4.3 # ./configure --prefix=/usr
+(lfs chroot) root:/sources/make-4.3 # make
+(lfs chroot) root:/sources/make-4.3 # make PERL5LIB=$PWD/tests/ check
+(lfs chroot) root:/sources/make-4.3 # make install
+```
+
+
+### patch
+
+```bash
+(lfs chroot) root:/sources # tar xf patch-2.7.6.tar.xz 
+(lfs chroot) root:/sources # cd patch-2.7.6
+(lfs chroot) root:/sources/patch-2.7.6 # ./configure --prefix=/usr
+(lfs chroot) root:/sources/patch-2.7.6 # make
+(lfs chroot) root:/sources/patch-2.7.6 # make check
+(lfs chroot) root:/sources/patch-2.7.6 # make install
+```
+
+
+### man-db
+
+```bash
+(lfs chroot) root:/sources # tar xf man-db-2.9.0.tar.xz 
+(lfs chroot) root:/sources # cd man-db-2.9.0
+(lfs chroot) root:/sources/man-db-2.9.0 # ./configure --prefix=/usr                        \
+  --docdir=/usr/share/doc/man-db-2.9.0 \
+  --sysconfdir=/etc                    \
+  --disable-setuid                     \
+  --enable-cache-owner=bin             \
+  --with-browser=/usr/bin/lynx         \
+  --with-vgrind=/usr/bin/vgrind        \
+  --with-grap=/usr/bin/grap            \
+  --with-systemdtmpfilesdir=           \
+  --with-systemdsystemunitdir=
+(lfs chroot) root:/sources/man-db-2.9.0 # make
+(lfs chroot) root:/sources/man-db-2.9.0 # make check
+(lfs chroot) root:/sources/man-db-2.9.0 # make install
+```
+
+
+### tar
+
+```bash
+(lfs chroot) root:/sources # tar xf tar-1.32.tar.xz 
+(lfs chroot) root:/sources # cd tar-1.32
+(lfs chroot) root:/sources/tar-1.32 # FORCE_UNSAFE_CONFIGURE=1  \
+  ./configure --prefix=/usr \
+  --bindir=/bin
+(lfs chroot) root:/sources/tar-1.32 # make
+(lfs chroot) root:/sources/tar-1.32 # make check
+(lfs chroot) root:/sources/tar-1.32 # make install
+(lfs chroot) root:/sources/tar-1.32 # make -C doc install-html docdir=/usr/share/doc/tar-1.32
+```
+
+
