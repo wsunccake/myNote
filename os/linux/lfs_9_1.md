@@ -757,6 +757,12 @@ lfs@kali:/mnt/lfs/sources $ find /tools/{lib,libexec} -name \*.la -delete
 root:~ # chown -R root:root /mnt/lfs/tools
 ```
 
+### clean temporary directory
+
+```bash
+root:~ # mkdir /mnt/lfs/temporary_system
+root:~ # find /mnt/lfs/sources -mindepth 1 -maxdepth 1 -type d | xargs -i mv {} /mnt/lfs/temporary_system/.
+```
 
 ---
 
@@ -2034,3 +2040,212 @@ done
 ```
 
 
+### texinfo
+
+```bash
+(lfs chroot) root:/sources # tar xf texinfo-6.7.tar.xz 
+(lfs chroot) root:/sources # cd texinfo-6.7
+(lfs chroot) root:/sources/texinfo-6.7 # ./configure --prefix=/usr --disable-static
+(lfs chroot) root:/sources/texinfo-6.7 # make
+(lfs chroot) root:/sources/texinfo-6.7 # make check
+(lfs chroot) root:/sources/texinfo-6.7 # make install
+(lfs chroot) root:/sources/texinfo-6.7 # make TEXMF=/usr/share/texmf install-tex
+(lfs chroot) root:/sources/texinfo-6.7 # pushd /usr/share/info
+(lfs chroot) root:/sources/texinfo-6.7 # rm -v dir
+(lfs chroot) root:/sources/texinfo-6.7 # for f in *
+  do install-info $f dir 2>/dev/null
+done
+(lfs chroot) root:/sources/texinfo-6.7 # popd
+```
+
+
+### vim
+
+```bash
+(lfs chroot) root:/sources # tar xf vim-8.2.0190.tar.gz 
+(lfs chroot) root:/sources # cd vim-8.2.0190
+(lfs chroot) root:/sources/vim-8.2.0190 # echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
+(lfs chroot) root:/sources/vim-8.2.0190 # ./configure --prefix=/usr
+(lfs chroot) root:/sources/vim-8.2.0190 # make
+(lfs chroot) root:/sources/vim-8.2.0190 # chown -Rv nobody .
+(lfs chroot) root:/sources/vim-8.2.0190 # su nobody -s /bin/bash -c "LANG=en_US.UTF-8 make -j1 test" &> vim-test.log
+(lfs chroot) root:/sources/vim-8.2.0190 # make install
+(lfs chroot) root:/sources/vim-8.2.0190 # ln -sv vim /usr/bin/vi
+(lfs chroot) root:/sources/vim-8.2.0190 # for L in  /usr/share/man/{,*/}man1/vim.1; do
+    ln -sv vim.1 $(dirname $L)/vi.1
+done
+(lfs chroot) root:/sources/vim-8.2.0190 # ln -sv ../vim/vim82/doc /usr/share/doc/vim-8.2.0190
+```
+
+```bash
+(lfs chroot) root:~ # cat > /etc/vimrc << "EOF"
+" Begin /etc/vimrc
+
+" Ensure defaults are set before customizing settings, not after
+source $VIMRUNTIME/defaults.vim
+let skip_defaults_vim=1 
+
+set nocompatible
+set backspace=2
+set mouse=
+syntax on
+if (&term == "xterm") || (&term == "putty")
+  set background=dark
+endif
+
+" End /etc/vimrc
+EOF
+
+(lfs chroot) root:~ # vim -c ':options'
+```
+
+
+### systemd
+
+```bash
+(lfs chroot) root:/sources # tar xf systemd-244.tar.gz 
+(lfs chroot) root:/sources # cd systemd-244
+(lfs chroot) root:/sources/systemd-244 # ln -sf /tools/bin/true /usr/bin/xsltproc
+(lfs chroot) root:/sources/systemd-244 # for file in /tools/lib/lib{blkid,mount,uuid}.so*; do
+  ln -sf $file /usr/lib/
+done
+(lfs chroot) root:/sources/systemd-244 # tar xf ../systemd-man-pages-244.tar.xz
+(lfs chroot) root:/sources/systemd-244 # sed '177,$ d' -i src/resolve/meson.build
+(lfs chroot) root:/sources/systemd-244 # sed -i 's/GROUP="render", //' rules.d/50-udev-default.rules.in
+(lfs chroot) root:/sources/systemd-244 # mkdir build
+(lfs chroot) root:/sources/systemd-244 # cd build
+(lfs chroot) root:/sources/systemd-244/build # PKG_CONFIG_PATH="/usr/lib/pkgconfig:/tools/lib/pkgconfig" \
+LANG=en_US.UTF-8                   \
+meson --prefix=/usr                \
+  --sysconfdir=/etc            \
+  --localstatedir=/var         \
+  -Dblkid=true                 \
+  -Dbuildtype=release          \
+  -Ddefault-dnssec=no          \
+  -Dfirstboot=false            \
+  -Dinstall-tests=false        \
+  -Dkmod-path=/bin/kmod        \
+  -Dldconfig=false             \
+  -Dmount-path=/bin/mount      \
+  -Drootprefix=                \
+  -Drootlibdir=/lib            \
+  -Dsplit-usr=true             \
+  -Dsulogin-path=/sbin/sulogin \
+  -Dsysusers=false             \
+  -Dumount-path=/bin/umount    \
+  -Db_lto=false                \
+  -Drpmmacrosdir=no            \
+  ..
+(lfs chroot) root:/sources/systemd-244/build # LANG=en_US.UTF-8 ninja
+(lfs chroot) root:/sources/systemd-244/build # LANG=en_US.UTF-8 ninja install
+(lfs chroot) root:/sources/systemd-244/build # rm -f /usr/bin/xsltproc
+(lfs chroot) root:/sources/systemd-244/build # systemd-machine-id-setup
+(lfs chroot) root:/sources/systemd-244/build # systemctl preset-all
+(lfs chroot) root:/sources/systemd-244/build # systemctl disable systemd-time-wait-sync.service
+(lfs chroot) root:/sources/systemd-244/build # rm -fv /usr/lib/lib{blkid,uuid,mount}.so*
+```
+
+
+### dbus
+
+```bash
+(lfs chroot) root:/sources # tar xf dbus-1.12.16.tar.gz 
+(lfs chroot) root:/sources # cd dbus-1.12.16
+(lfs chroot) root:/sources/dbus-1.12.1 6 # ./configure --prefix=/usr                       \
+  --sysconfdir=/etc                   \
+  --localstatedir=/var                \
+  --disable-static                    \
+  --disable-doxygen-docs              \
+  --disable-xml-docs                  \
+  --docdir=/usr/share/doc/dbus-1.12.16 \
+  --with-console-auth-dir=/run/console
+(lfs chroot) root:/sources/dbus-1.12.1 6 # make
+(lfs chroot) root:/sources/dbus-1.12.1 6 # make install
+(lfs chroot) root:/sources/dbus-1.12.1 6 # mv -v /usr/lib/libdbus-1.so.* /lib
+(lfs chroot) root:/sources/dbus-1.12.1 6 # ln -sfv ../../lib/$(readlink /usr/lib/libdbus-1.so) /usr/lib/libdbus-1.so
+(lfs chroot) root:/sources/dbus-1.12.1 6 # ln -sfv /etc/machine-id /var/lib/dbus
+```
+
+
+### procps-ng
+
+```bash
+(lfs chroot) root:/sources # tar xf procps-ng-3.3.15.tar.xz 
+(lfs chroot) root:/sources # cd procps-ng-3.3.15
+(lfs chroot) root:/sources/procps-ng-3.3.15 # ./configure --prefix=/usr \
+  --exec-prefix=                           \
+  --libdir=/usr/lib                        \
+  --docdir=/usr/share/doc/procps-ng-3.3.15 \
+  --disable-static                         \
+  --disable-kill                           \
+  --with-systemd
+(lfs chroot) root:/sources/procps-ng-3.3.15 # make
+(lfs chroot) root:/sources/procps-ng-3.3.15 # sed -i -r 's|(pmap_initname)\\\$|\1|' testsuite/pmap.test/pmap.exp
+(lfs chroot) root:/sources/procps-ng-3.3.15 # sed -i '/set tty/d' testsuite/pkill.test/pkill.exp
+(lfs chroot) root:/sources/procps-ng-3.3.15 # rm testsuite/pgrep.test/pgrep.exp
+(lfs chroot) root:/sources/procps-ng-3.3.15 # make check
+(lfs chroot) root:/sources/procps-ng-3.3.15 # make install
+(lfs chroot) root:/sources/procps-ng-3.3.15 # mv -v /usr/lib/libprocps.so.* /lib
+(lfs chroot) root:/sources/procps-ng-3.3.15 # ln -sfv ../../lib/$(readlink /usr/lib/libprocps.so) /usr/lib/libprocps.so
+```
+
+
+### util-linux
+
+```bash
+(lfs chroot) root:/sources # tar xf util-linux-2.35.1.tar.xz 
+(lfs chroot) root:/sources # cd util-linux-2.35.1
+(lfs chroot) root:/sources/util-linux-2.35.1 # mkdir -pv /var/lib/hwclock
+(lfs chroot) root:/sources/util-linux-2.35.1 # ./configure ADJTIME_PATH=/var/lib/hwclock/adjtime   \
+  --docdir=/usr/share/doc/util-linux-2.35.1 \
+  --disable-chfn-chsh  \
+  --disable-login      \
+  --disable-nologin    \
+  --disable-su         \
+  --disable-setpriv    \
+  --disable-runuser    \
+  --disable-pylibmount \
+  --disable-static     \
+  --without-python     \
+  --without-systemd    \
+  --without-systemdsystemunitdir
+(lfs chroot) root:/sources/util-linux-2.35.1 # make
+(lfs chroot) root:/sources/util-linux-2.35.1 # chown -Rv nobody .
+(lfs chroot) root:/sources/util-linux-2.35.1 # su nobody -s /bin/bash -c "PATH=$PATH make -k check"
+(lfs chroot) root:/sources/util-linux-2.35.1 # make install
+```
+
+
+### e2fsprogs
+
+```bash
+(lfs chroot) root:/sources # tar xf e2fsprogs-1.45.5.tar.gz 
+(lfs chroot) root:/sources # cd e2fsprogs-1.45.5
+(lfs chroot) root:/sources/e2fsprogs-1.45.5 # mkdir build
+(lfs chroot) root:/sources/e2fsprogs-1.45.5 # cd build/
+(lfs chroot) root:/sources/e2fsprogs-1.45.5/build # ../configure --prefix=/usr \
+  --bindir=/bin           \
+  --with-root-prefix=""   \
+  --enable-elf-shlibs     \
+  --disable-libblkid      \
+  --disable-libuuid       \
+  --disable-uuidd         \
+  --disable-fsck
+(lfs chroot) root:/sources/e2fsprogs-1.45.5/build # make
+(lfs chroot) root:/sources/e2fsprogs-1.45.5/build # make check
+(lfs chroot) root:/sources/e2fsprogs-1.45.5/build # make install
+(lfs chroot) root:/sources/e2fsprogs-1.45.5/build # chmod -v u+w /usr/lib/{libcom_err,libe2p,libext2fs,libss}.a
+(lfs chroot) root:/sources/e2fsprogs-1.45.5/build # gunzip -v /usr/share/info/libext2fs.info.gz
+(lfs chroot) root:/sources/e2fsprogs-1.45.5/build # install-info --dir-file=/usr/share/info/dir /usr/share/info/libext2fs.info
+(lfs chroot) root:/sources/e2fsprogs-1.45.5/build # makeinfo -o      doc/com_err.info ../lib/et/com_err.texinfo
+(lfs chroot) root:/sources/e2fsprogs-1.45.5/build # install -v -m644 doc/com_err.info /usr/share/info
+(lfs chroot) root:/sources/e2fsprogs-1.45.5/build # install-info --dir-file=/usr/share/info/dir /usr/share/info/com_err.info
+```
+
+
+### clean build directory
+
+```bash
+(lfs chroot) root:~ # mkdir /build_system
+(lfs chroot) root:~ # find /mnt/lfs/sources -mindepth 1 -maxdepth 1 -type d | xargs -i mv {} /build_system/.
+```
