@@ -2243,9 +2243,276 @@ meson --prefix=/usr                \
 ```
 
 
+### stripping
+
+```bash
+(lfs chroot) root:~ # save_lib="ld-2.31.so libc-2.31.so libpthread-2.31.so libthread_db-1.0.so"
+
+(lfs chroot) root:~ # cd /lib
+
+(lfs chroot) root:~ # for LIB in $save_lib; do
+    objcopy --only-keep-debug $LIB $LIB.dbg 
+    strip --strip-unneeded $LIB
+    objcopy --add-gnu-debuglink=$LIB.dbg $LIB 
+done    
+
+(lfs chroot) root:~ # save_usrlib="libquadmath.so.0.0.0 libstdc++.so.6.0.27 libitm.so.1.0.0 libatomic.so.1.2.0" 
+(lfs chroot) root:~ # cd /usr/lib
+(lfs chroot) root:~ # for LIB in $save_usrlib; do
+    objcopy --only-keep-debug $LIB $LIB.dbg
+    strip --strip-unneeded $LIB
+    objcopy --add-gnu-debuglink=$LIB.dbg $LIB
+done
+
+(lfs chroot) root:~ # unset LIB save_lib save_usrlib
+(lfs chroot) root:~ # exec /tools/bin/bash
+(lfs chroot) root:~ # /tools/bin/find /usr/lib -type f -name \*.a -exec /tools/bin/strip --strip-debug {} ';'
+(lfs chroot) root:~ # /tools/bin/find /lib /usr/lib -type f \( -name \*.so* -a ! -name \*dbg \) -exec /tools/bin/strip --strip-unneeded {} ';'
+(lfs chroot) root:~ # /tools/bin/find /{bin,sbin} /usr/{bin,sbin,libexec} -type f -exec /tools/bin/strip --strip-all {} ';'
+```
+
+
 ### clean build directory
 
 ```bash
+(lfs chroot) root:~ # rm -rf /tmp/*
+(lfs chroot) root:~ # logout
+(lfs chroot) root:~ # chroot "$LFS" /usr/bin/env -i \
+  HOME=/root TERM="$TERM"            \
+  PS1='(lfs chroot) \u:\w\$ '        \
+  PATH=/bin:/usr/bin:/sbin:/usr/sbin \
+  /bin/bash --login
+(lfs chroot) root:~ # rm -f /usr/lib/lib{bfd,opcodes}.a
+(lfs chroot) root:~ # rm -f /usr/lib/libbz2.a
+(lfs chroot) root:~ # rm -f /usr/lib/lib{com_err,e2p,ext2fs,ss}.a
+(lfs chroot) root:~ # rm -f /usr/lib/libltdl.a
+(lfs chroot) root:~ # rm -f /usr/lib/libfl.a
+(lfs chroot) root:~ # rm -f /usr/lib/libz.a
+(lfs chroot) root:~ # find /usr/lib /usr/libexec -name \*.la -delete
 (lfs chroot) root:~ # mkdir /build_system
 (lfs chroot) root:~ # find /mnt/lfs/sources -mindepth 1 -maxdepth 1 -type d | xargs -i mv {} /build_system/.
+```
+
+
+---
+
+## system configuration
+
+### system clock
+
+```bash
+cat > /etc/adjtime << "EOF"
+0.0 0 0.0
+0
+LOCAL
+EOF
+
+(lfs chroot) root:~ # timedatectl set-local-rtc 1
+(lfs chroot) root:~ # timedatectl set-time <YYYY-MM-DD> <HH:MM:SS>
+(lfs chroot) root:~ # timedatectl list-timezones
+(lfs chroot) root:~ # timedatectl set-timezone <timezone>
+(lfs chroot) root:~ # systemctl disable systemd-timesyncd
+```
+
+
+### linux console
+
+```bash
+(lfs chroot) root:~ # cat > /etc/vconsole.conf << "EOF"
+KEYMAP="us"
+FONT="eurlatgr"
+EOF
+
+(lfs chroot) root:~ # localectl list-keymaps
+(lfs chroot) root:~ # localectl set-keymap us
+(lfs chroot) root:~ # localectl set-x11-keymap us
+```
+
+
+### system locale
+
+```bash
+(lfs chroot) root:~ # cat > /etc/locale.conf << "EOF"
+LANG=en_US.UTF-8
+EOF
+
+(lfs chroot) root:~ # localectl list-locales
+(lfs chroot) root:~ # locale -a
+(lfs chroot) root:~ # localectl set-locale LANG="en_US.UTF-8" LC_CTYPE="en_US"
+```
+
+
+### inputrc
+
+```bash
+(lfs chroot) root:~ # cat > /etc/inputrc << "EOF"
+# Begin /etc/inputrc
+# Modified by Chris Lynn <roryo@roryo.dynup.net>
+
+# Allow the command prompt to wrap to the next line
+set horizontal-scroll-mode Off
+
+# Enable 8bit input
+set meta-flag On
+set input-meta On
+
+# Turns off 8th bit stripping
+set convert-meta Off
+
+# Keep the 8th bit for display
+set output-meta On
+
+# none, visible or audible
+set bell-style none
+
+# All of the following map the escape sequence of the value
+# contained in the 1st argument to the readline specific functions
+"\eOd": backward-word
+"\eOc": forward-word
+
+# for linux console
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
+"\e[5~": beginning-of-history
+"\e[6~": end-of-history
+"\e[3~": delete-char
+"\e[2~": quoted-insert
+
+# for xterm
+"\eOH": beginning-of-line
+"\eOF": end-of-line
+
+# for Konsole
+"\e[H": beginning-of-line
+"\e[F": end-of-line
+
+# End /etc/inputrc
+EOF
+```
+
+
+### shells
+
+```bash
+(lfs chroot) root:~ # cat > /etc/shells << "EOF"
+# Begin /etc/shells
+
+/bin/sh
+/bin/bash
+
+# End /etc/shells
+EOF
+```
+
+
+### systemd
+
+```bash
+(lfs chroot) root:~ # mkdir -pv /etc/systemd/system/getty@tty1.service.d
+(lfs chroot) root:~ # cat > /etc/systemd/system/getty@tty1.service.d/noclear.conf << EOF
+[Service]
+TTYVTDisallocate=no
+EOF
+
+(lfs chroot) root:~ # ln -sfv /dev/null /etc/systemd/system/tmp.mount
+(lfs chroot) root:~ # mkdir -p /etc/tmpfiles.d
+(lfs chroot) root:~ # cp /usr/lib/tmpfiles.d/tmp.conf /etc/tmpfiles.d
+```
+
+
+---
+
+## boot
+
+### fstab
+
+```bash
+(lfs chroot) root:~ # cat > /etc/fstab << "EOF"
+/dev/sda2     /            ext4     defaults            1     1
+/dev/sda1     swap         swap     pri=1               0     0
+EOF
+```
+
+
+### kernel
+
+```bash
+(lfs chroot) root:/sources # tar xf linux-5.5.3.tar.xz 
+(lfs chroot) root:/sources # cd linux-5.5.3
+(lfs chroot) root:/sources/linux-5.5.3 # make mrproper
+(lfs chroot) root:/sources/linux-5.5.3 # make menuconfig
+(lfs chroot) root:/sources/linux-5.5.3 # make
+(lfs chroot) root:/sources/linux-5.5.3 # make modules_install
+
+(lfs chroot) root:/sources/linux-5.5.3 # cp -iv arch/x86_64/boot/bzImage /boot/vmlinuz-5.5.3-lfs-9.1-systemd
+(lfs chroot) root:/sources/linux-5.5.3 # cp -iv System.map /boot/System.map-5.5.3
+(lfs chroot) root:/sources/linux-5.5.3 # cp -iv .config /boot/config-5.5.3
+(lfs chroot) root:/sources/linux-5.5.3 # install -d /usr/share/doc/linux-5.5.3
+(lfs chroot) root:/sources/linux-5.5.3 # cp -r Documentation/* /usr/share/doc/linux-5.5.3
+(lfs chroot) root:/sources/linux-5.5.3 # install -v -m755 -d /etc/modprobe.d
+(lfs chroot) root:/sources/linux-5.5.3 # cat > /etc/modprobe.d/usb.conf << "EOF"
+# Begin /etc/modprobe.d/usb.conf
+
+install ohci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i ohci_hcd ; true
+install uhci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i uhci_hcd ; true
+
+# End /etc/modprobe.d/usb.conf
+EOF
+```
+
+
+### grub
+
+```bash
+(lfs chroot) root:~ # grub-install /dev/sda
+(lfs chroot) root:~ # cat > /boot/grub/grub.cfg << "EOF"
+# Begin /boot/grub/grub.cfg
+set default=0
+set timeout=5
+
+insmod ext2
+set root=(hd0,2)
+
+menuentry "GNU/Linux, Linux 5.5.3-lfs-9.1-systemd" {
+        linux   /boot/vmlinuz-5.5.3-lfs-9.1-systemd root=/dev/sda2 ro
+}
+EOF
+
+# vfs unable to mount root fs on unknown-block(8, 2) -> /dev/sda2
+```
+
+
+### release info
+
+```bash
+(lfs chroot) root:~ # echo 9.1-systemd > /etc/lfs-release
+(lfs chroot) root:~ # cat > /etc/lsb-release << "EOF"
+DISTRIB_ID="Linux From Scratch"
+DISTRIB_RELEASE="9.1-systemd"
+DISTRIB_CODENAME="<your name here>"
+DISTRIB_DESCRIPTION="Linux From Scratch"
+EOF
+
+(lfs chroot) root:~ # cat > /etc/os-release << "EOF"
+NAME="Linux From Scratch"
+VERSION="9.1-systemd"
+ID=lfs
+PRETTY_NAME="Linux From Scratch 9.1-systemd"
+VERSION_CODENAME="<your name here>"
+EOF
+```
+
+
+### end
+
+```bash
+(lfs chroot) root:~ # logout
+root:~ # umount -v $LFS/dev/pts
+root:~ # umount -v $LFS/dev
+root:~ # umount -v $LFS/run
+root:~ # umount -v $LFS/proc
+root:~ # umount -v $LFS/sys
+root:~ # umount -v $LFS
+root:~ # umount -v $LFS
+root:~ # shutdown -r now
 ```
