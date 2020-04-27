@@ -53,6 +53,10 @@ controller:~ # nova hypervisor-list
 controller:~ # nova hypervisor-servers <hv_id>|<hv_name>   # chcek vm on hyperviror
 controller:~ # nova hypervisor-show <hv_id>|<hv_name>
 
+# security group
+controller:~ # nova secgroup-list
+controller:~ # nova secgroup-list-rules <security_group_id>
+
 # other
 controller:~ $ nova availability-zone-list
 ```
