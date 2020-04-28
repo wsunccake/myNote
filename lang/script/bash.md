@@ -502,3 +502,47 @@ linux:~ # compgen -g  # group
 # wild list
 linux:~ # compgen -W "aa ab Aa xyz abc123" -- a
 ```
+
+
+---
+
+## complete
+
+```bash
+linux:~ # complete -p   # list bash completion
+linux:~ # complete -r   # remove bash completion
+
+linux:~ # echo -e '#!/bin/bash\n\necho "ARG: $@"' > foo
+linux:~ # chmod +x foo
+linux:~ # touch a.foo b.foo c.foo
+
+# filter pattern
+linux:~ # complete -f -X '!*.foo' foo
+linux:~ # ./foo <TAB><TAB>
+
+# word list
+linux:~ # complete -W 'abc xyz 123' foo
+linux:~ # ./foo <TAB><TAB>
+
+# function
+linux:~ # function _foo_complete_() {
+    local cmd="${1##*/}"
+    local word=${COMP_WORDS[COMP_CWORD]}
+    local line=${COMP_LINE}
+    local xpat='!*.foo'
+
+    echo
+    echo "cmd: $cmd"
+    echo "cur: ${cur}"
+    echo "comp_cword: $COMP_CWORD"
+    echo "comp_words: ${COMP_WORDS[*]}"
+    echo "comp_line: ${COMP_LINE}"
+
+    COMPREPLY=($(compgen -f -X "$xpat" -- "${cur}"))
+
+    echo "compreply: ${COMPREPLY[*]}"
+
+}
+linux:~ # complete -F _foo_complete_ foo
+linux:~ # ./foo <TAB><TAB>
+```
