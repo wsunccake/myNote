@@ -965,6 +965,7 @@ esac
 (lfs chroot) root:/sources/glibc-2.31/build # localedef -i tr_TR -f UTF-8 tr_TR.UTF-8
 (lfs chroot) root:/sources/glibc-2.31/build # localedef -i zh_CN -f GB18030 zh_CN.GB18030
 (lfs chroot) root:/sources/glibc-2.31/build # localedef -i zh_HK -f BIG5-HKSCS zh_HK.BIG5-HKSCS
+(lfs chroot) root:/sources/glibc-2.31/build # localedef -i zh_TW -f UTF-8 zh_TW.UTF-8
 (lfs chroot) root:/sources/glibc-2.31/build # make localedata/install-locales
 ```
 
