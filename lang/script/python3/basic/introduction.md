@@ -473,6 +473,10 @@ print(my_sum(1, 3))
 
 my_greater_than = lambda x, y: x if x > y else y 
 print(my_greater_than(7, 3))
+
+round_up = lambda x, y: int(x / y) + (x % y > 0)
+round_down = lambda x, y: int(x / y)
+round_half = lambda x, y: int(x / y + 0.5)
 ```
 
 ```python
