@@ -148,6 +148,28 @@ check public api version in control package
 
 https://scg_manamgement_ip:7443/api
 
+## bacup & restore
+
+```bash
+# backup config
+vSZ# show backup-config-state
+vSZ# show backup-config
+vSZ# copy backup-config ftp://<username>:<password>@<ftp-host>[/<dir-path>]
+
+# restore config
+vSZ# copy ftp://<username>:<password>@<ftp-host>[/<dir-path>] backup-config
+vSZ# restore config
+
+# backup
+vSZ# show backup-state
+vSZ# show backup
+vSZ# copy backup ftp://<username>:<password>@<ftp-host>[/<dir-path>]
+
+# restore
+vSZ# copy ftp://<username>:<password>@<ftp-host>[/<dir-path>] backup
+vSZ# restore
+```
+
 
 ## snapshot
 
