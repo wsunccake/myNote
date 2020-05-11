@@ -22,7 +22,9 @@ var app = new Vue({
   data: {
     message: 'Hello Vue!'
   }
-})
+});
+
+console.log(app.$data.message);
 </script>
       
 </body>
@@ -31,7 +33,9 @@ var app = new Vue({
 
 ---
 
-## v-if
+## v-
+
+### v-if
 
 ```html
 <div id="app">
@@ -51,9 +55,7 @@ var app = new Vue({
 ```
 
 
----
-
-## v-for
+### v-for
 
 ```html
 <div id="app">
@@ -68,8 +70,12 @@ var app = new Vue({
     data: {
         weeks: ["Sunda", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
         week: {
-            sun: "Sunday", mon: "Monday", tues: "Tuesday",
-            wed: "Wednesday", thur: "Thursday", fri: "Friday",
+            sun: "Sunday",
+            mon: "Monday",
+            tues: "Tuesday",
+            wed: "Wednesday",
+            thur: "Thursday",
+            fri: "Friday",
             sat: "Saturday"
         }
     }
@@ -78,9 +84,7 @@ var app = new Vue({
 ```
 
 
----
-
-## v-model
+### v-model
 
 ```html
 <div id="app">
@@ -96,3 +100,6 @@ var app = new Vue({
 })
 </script>  
 ```
+
+
+---
