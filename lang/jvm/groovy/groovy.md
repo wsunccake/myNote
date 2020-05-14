@@ -433,25 +433,22 @@ else
     println 'Unknown'
 ```
 
-
-## ternary
-
 ```groovy
 def data = null
 // def data = "value"
 def var = "empty"
 
-
+// if-else
 if (data != null) {
   var = data
 }
 println var
 
-
+// ternary operator
 var = data != null ? data : "empty"
 println var
 
-
+// elvis operator
 var = data ?: "empty"
 println var
 ```
