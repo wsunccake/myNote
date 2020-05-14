@@ -434,6 +434,29 @@ else
 ```
 
 
+## ternary
+
+```groovy
+def data = null
+// def data = "value"
+def var = "empty"
+
+
+if (data != null) {
+  var = data
+}
+println var
+
+
+var = data != null ? data : "empty"
+println var
+
+
+var = data ?: "empty"
+println var
+```
+
+
 ## switch
 
 ```
