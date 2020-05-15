@@ -522,6 +522,22 @@ controller:~ # sprio -l
 
 ---
 
+## HA
+
+```bash
+controller:~ # vi /etc/slurm/slurm.conf
+# cluster
+ClusterName=<cluster>
+
+# controller
+#ControlMachine=<server>
+SlurmctldHost=<server>
+SlurmctldHost=<ha_server>
+```
+
+
+---
+
 ## Question
 
 1. change cluster name
