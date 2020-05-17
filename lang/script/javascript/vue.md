@@ -1,7 +1,7 @@
 # Vue
 
 
-## Hello
+## mustache, \{\{}}
 
 ```html
 <!DOCTYPE html>
@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Hello Vue!</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>    
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
 <div id="app">
@@ -22,16 +22,61 @@ var app = new Vue({
   data: {
     message: 'Hello Vue!'
   }
-})
+});
+
+console.log(app.$data.message);
 </script>
-      
+
 </body>
 </html>
 ```
 
+
+### javascript expression
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello Vue!</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <div>normal: {{a}}</div>
+    <div v-once>render once: {{a}}</div>
+    <div>plus one: {{a + 1}}</div>
+    <div>ternary expressions: {{a % 2 === 0 ? 'even' : 'odd'}}</div>
+    <div>length: {{a.toString().length}}</div>
+    <div>pow 2: {{Math.pow(a, 2)}}</div>
+    <!--<div>{{var a = 0;}}</div>-->
+    <!--<div>{{if(a > 100) a=1;}}</div>-->
+</div>
+<script>
+var vm = new Vue({
+  el: "#app",
+  data: {
+    a: 1
+  },
+  created() {
+    setInterval(() => {
+      this.a++;
+    }, 1000);
+  }
+});
+</script>
+
+</body>
+</html>
+```
+
+
 ---
 
-## v-if
+## directive, v-
+
+### v-if
 
 ```html
 <div id="app">
@@ -51,9 +96,7 @@ var app = new Vue({
 ```
 
 
----
-
-## v-for
+### v-for
 
 ```html
 <div id="app">
@@ -68,8 +111,12 @@ var app = new Vue({
     data: {
         weeks: ["Sunda", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
         week: {
-            sun: "Sunday", mon: "Monday", tues: "Tuesday",
-            wed: "Wednesday", thur: "Thursday", fri: "Friday",
+            sun: "Sunday",
+            mon: "Monday",
+            tues: "Tuesday",
+            wed: "Wednesday",
+            thur: "Thursday",
+            fri: "Friday",
             sat: "Saturday"
         }
     }
@@ -78,9 +125,7 @@ var app = new Vue({
 ```
 
 
----
-
-## v-model
+### v-model
 
 ```html
 <div id="app">
@@ -96,3 +141,6 @@ var app = new Vue({
 })
 </script>  
 ```
+
+
+---
