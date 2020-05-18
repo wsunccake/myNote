@@ -3,7 +3,7 @@
 
 ## require
 
-OS:   cento7
+OS:   centos 7
 
 vCPU: 8
 
