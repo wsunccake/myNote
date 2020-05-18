@@ -6,8 +6,11 @@
 OS:   cento7
 
 vCPU: 8
+
 vRAM: 16GB 
+
 HD:   80GB 
+
 NIC:  1
 
 
