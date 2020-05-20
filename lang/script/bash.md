@@ -16,6 +16,9 @@ linux:~ # ./script.sh
 
 # method 4s
 linux:~ # env VAR=value ./script.sh
+
+# run with debug
+linux:~ # sh -xv script.sh
 ```
 
 ---
