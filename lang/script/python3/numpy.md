@@ -130,4 +130,11 @@ def softmax_c(x):
     exp_x = np.exp(x - c)
     sum_exp_x = np.sum(exp_x)
     return exp_x / sum_exp_x
+
+def mean_square_error(y, t):
+    return 0.5 * np.sum((y - t) ** 2)
+
+def cross_entropy_error(y, t):
+    delta = 1e-7
+    return -np.sum(t * np.log(y + delta))
 ```
