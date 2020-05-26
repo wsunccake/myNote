@@ -485,3 +485,14 @@ linux:~ # seq 5 | xargs -i date
 linux:~ # seq 5 | xargs -i sh -c 'expr {} + 1'
 linux:~ # find . -type d | xargs -n1 ls -l
 ```
+
+
+---
+
+## parallel
+
+```bash
+linux:~ # date && seq 5 | xargs -i sh -c "echo {} && sleep {}" && date
+linux:~ # date && seq 5 | xargs -P 5 -i sh -c "echo {} && sleep {}" && date
+linux:~ # date && seq 5 | parallel -j 5 "echo {} && sleep {}" && date
+```
