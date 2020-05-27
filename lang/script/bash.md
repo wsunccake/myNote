@@ -401,9 +401,17 @@ END {
 }
 ```
 
+
 ---
 
 ## find
+
+```bash
+linux:~ # find . -maxdepth 1 -mindepth 1 -type d
+linux:~ # find . -ctime +7 -type f
+linux:~ # find . -ctime -7 -type f
+linux:~ # find . -ctime  7 -type f
+```
 
 
 ---
@@ -481,4 +489,75 @@ linux:~ # seq 5 | xargs -I {} echo {}
 linux:~ # seq 5 | xargs -i date
 linux:~ # seq 5 | xargs -i sh -c 'expr {} + 1'
 linux:~ # find . -type d | xargs -n1 ls -l
+```
+
+
+---
+
+## compgen
+
+```bash
+# command
+linux:~ # compgen -a  # alias
+linux:~ # compgen -b  # builtin command
+linux:~ # compgen -c  # command
+
+# variable
+linux:~ # compgen -e  # shell variable
+linux:~ # compgen -v  # all variable
+
+# file, directory
+linux:~ # compgen -f  # file
+linux:~ # compgen -d  # directory
+
+# user, group
+linux:~ # compgen -u  # user
+linux:~ # compgen -g  # group
+
+# wild list
+linux:~ # compgen -W "aa ab Aa xyz abc123" -- a
+```
+
+
+---
+
+## complete
+
+```bash
+linux:~ # complete -p   # list bash completion
+linux:~ # complete -r   # remove bash completion
+
+linux:~ # echo -e '#!/bin/bash\n\necho "ARG: $@"' > foo
+linux:~ # chmod +x foo
+linux:~ # touch a.foo b.foo c.foo
+
+# filter pattern
+linux:~ # complete -f -X '!*.foo' foo
+linux:~ # ./foo <TAB><TAB>
+
+# word list
+linux:~ # complete -W 'abc xyz 123' foo
+linux:~ # ./foo <TAB><TAB>
+
+# function
+linux:~ # function _foo_complete_() {
+    local cmd="${1##*/}"
+    local word=${COMP_WORDS[COMP_CWORD]}
+    local line=${COMP_LINE}
+    local xpat='!*.foo'
+
+    echo
+    echo "cmd: $cmd"
+    echo "cur: ${cur}"
+    echo "comp_cword: $COMP_CWORD"
+    echo "comp_words: ${COMP_WORDS[*]}"
+    echo "comp_line: ${COMP_LINE}"
+
+    COMPREPLY=($(compgen -f -X "$xpat" -- "${cur}"))
+
+    echo "compreply: ${COMPREPLY[*]}"
+
+}
+linux:~ # complete -F _foo_complete_ foo
+linux:~ # ./foo <TAB><TAB>
 ```
