@@ -71,6 +71,7 @@ linux:~ # java -jar js.jar hello.js
 
 var 會有 hosting, let 和 const 只會存在 block scope
 
+
 ### var
 
 ```javascript
@@ -87,6 +88,7 @@ var v2 = 2;
 // console.log(v3); 
 ```
 
+
 ### let
 
 ```javascript
@@ -101,6 +103,7 @@ console.log(l1);
 // console.log(l2);
 let l2 = 2;
 ```
+
 
 ### const
 
@@ -162,8 +165,9 @@ console.log(`1 + 2 = ${sum(1, 2)}.`);
 "JavaScript".slice(0, 4);
 
 // loop
-for (let char of "Hello") {console.log(char);}
-for (let char in "Hello") {console.log(char);}
+for (let char of "Hello") {console.log(char);}                 // H e l l o
+for (let char in "Hello") {console.log(char, "Hello"[char]);}  // 0 1 2 3 4
+[..."Hello"].forEach(c => console.log(c));                     // H e l l o
 
 // split to list
 "JavaScript,PHP,Python,Ruby".split(" ");
@@ -410,6 +414,20 @@ console.log(s1 !== s2);
 
 ### Map
 
+
+### type conversion
+
+```javascript
+console.log(8 * null);             // 0
+console.log("5" * 2);              // 10
+console.log("five" * 2);           // Nan
+console.log(false == 0);           // true
+console.log(null == undefined);    // true
+console.log(null == 0);            // false
+
+console.log(false === 0);          // false
+```
+
 ---
 
 ## Operator
@@ -639,23 +657,48 @@ weeks.forEach((element, index) => {
 ```javascript
 // function declaration or named function or defined function
 function sayHi(arg) { return "Hi " + arg; }
+console.log(sayHi("JS"));
 
 // function expression or anonymous function
-var sayGood = function(arg) { return "Good " + arg; };
+let sayGood = function(arg) { return "Good " + arg; };
+console.log(sayGood("JS"));
 
 // arrow function
 // arrow function 沒有 prototype, 所以無法使用 new, 也無法變更 this 的內容
-var sayNice = (arg) => { return "Nice " + arg; };
+const sayNice = (arg) => { return "Nice " + arg; };
+const sayNice2 = arg => { return "Nice " + arg; };
+const sayNice3 = () => { return "Nice JS"; };
+const sayNice4 = () => "Nice JS";
+console.log(sayNice("JS"));
+console.log(sayNice2("JS"));
+console.log(sayNice3());
+console.log(sayNice4());
 
 // function constructor
-var sayHello = new Function("arg", "return \"Hello \"+ arg;");
+let sayHello = new Function("arg", "return \"Hello \"+ arg;");
+console.log(sayHello("JS"));
 
-var countNumber = function () { // closure 
-    var count = 0; // count在countNumber裡的區域變數
+// closure function
+let countNumber = function () {
+    let count = 0; // count在countNumber裡的區域變數
     return function () {
         return count += 1;
     }
 };
+console.log(countNumber());    // Function
+console.log(countNumber()());  // 1
+console.log(countNumber()());  // 1
+
+const c = countNumber();
+console.log(c());              // 1
+console.log(c());              // 2
+
+// partial function, currying function
+function multiplier(factor) {
+    return number => number * factor;
+}
+const twice = multiplier(2);
+console.log(twice(10));
 ```
 
 
@@ -739,13 +782,18 @@ const o = {
     }
 };
 
-console.log(o.name);
-console.log(o.showMessage());
-console.log(o.showThis());
+console.log(o.name);                  // property
+console.log(o.showMessage());         // Hi property
+                                      // undefined
+console.log(o.showThis());            // anonymous this: undefined
+                                      // anonymous that: property
+                                      // arrow this: property
+                                      // arrow that: property
+                                      // undefined
 
 name = "global";
 let msg = o.showMessage;
-msg();
+msg();                                // Hi global
 ```
 
 
@@ -770,13 +818,15 @@ function Car0(make, model) {
         return this._userGear;
     };
 
-    // static method
+    // initialize
     if ( typeof Car0.number == 'undefined' ) {
+        // static member
         Car0.number = 0;
     }
     Car0.count = function (){
         Car0.number++;
     };
+    // static method
     Car0.count();
 }
 // dynamic bind method
@@ -795,6 +845,7 @@ console.log(Car0.number);
 Car0.count();
 console.log(Car0.number);
 ```
+
 
 ### class
 
@@ -843,6 +894,7 @@ console.log(Car1.number);
 Car1.count();
 console.log(Car1.number);
 ```
+
 
 ### extends
 
