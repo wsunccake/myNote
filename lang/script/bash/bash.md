@@ -348,6 +348,11 @@ linux:~ # set +e
 
 ## sed
 
+```bash
+linux:~ # echo "Hello BASH script" | sed 's/.//6g'              # Hello
+linux:~ # echo "Hello BASH script" | sed 's/.\{6\}//'           # BASH script
+linux:~ # echo "Hello BASH script" | sed 's/.\{6\}//;s/.//5g'   # BASH
+```
 
 ---
 
