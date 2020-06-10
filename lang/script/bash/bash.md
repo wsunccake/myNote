@@ -352,6 +352,25 @@ linux:~ # set +e
 linux:~ # echo "Hello BASH script" | sed 's/.//6g'              # Hello
 linux:~ # echo "Hello BASH script" | sed 's/.\{6\}//'           # BASH script
 linux:~ # echo "Hello BASH script" | sed 's/.\{6\}//;s/.//5g'   # BASH
+
+linux:~ # STR=/usr/lib64/man-db/libmandb-2.6.3.so
+linux:~ # echo $STR
+
+# /usr/lib64/man-db/libmandb-2.6.3
+linux:~ # echo ${STR%.*}
+linux:~ # echo /usr/lib64/man-db/libmandb-2.6.3.so | sed 's/\(.*\)\..*$/\1/'
+
+# /usr/lib64/man-db/libmandb-2
+linux:~ # echo ${STR%%.*}
+linux:~ # sed 's/\..*$//'
+
+# usr/lib64/man-db/libmandb-2.6.3.so
+linux:~ # echo ${STR#*/}    
+linux:~ # sed 's/\///'
+
+# libmandb-2.6.3.so
+linux:~ # echo ${STR##*/}
+linux:~ # sed 's/.*\///'
 ```
 
 ---
