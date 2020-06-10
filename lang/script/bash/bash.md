@@ -61,15 +61,15 @@ linux:~ # curl http://download/file.tar.gz | tar zx
 ```bash
 FILE_PATH=/usr/lib/python/site-package/xxx-1.0/yyy.zz
 echo "raw:"
-echo ${FILE_PATH}
+echo ${FILE_PATH}        # /usr/lib/python/site-package/xxx-1.0/yyy.zz
 
 echo "prefix:"
-echo ${FILE_PATH%.*}
-echo ${FILE_PATH%%.*}
+echo ${FILE_PATH%.*}     # /usr/lib/python/site-package/xxx-1.0/yyy
+echo ${FILE_PATH%%.*}    # /usr/lib/python/site-package/xxx-1
 
 echo "suffix:"
-echo ${FILE_PATH#*/}
-echo ${FILE_PATH##*/}
+echo ${FILE_PATH#*/}     # usr/lib/python/site-package/xxx-1.0/yyy.zz
+echo ${FILE_PATH##*/}    # yyy.zz
 
 # For bash 4.x
 SENTENCE="That is a test."
@@ -353,24 +353,28 @@ linux:~ # echo "Hello BASH script" | sed 's/.//6g'              # Hello
 linux:~ # echo "Hello BASH script" | sed 's/.\{6\}//'           # BASH script
 linux:~ # echo "Hello BASH script" | sed 's/.\{6\}//;s/.//5g'   # BASH
 
-linux:~ # STR=/usr/lib64/man-db/libmandb-2.6.3.so
-linux:~ # echo $STR
+linux:~ # echo /usr/lib/python/site-package/xxx-1.0/yyy.zz | sed 's/\(.*\)\..*$/\1/'    # /usr/lib/python/site-package/xxx-1.0/yyy
+linux:~ # echo /usr/lib/python/site-package/xxx-1.0/yyy.zz | sed 's/\..*$//'            # /usr/lib/python/site-package/xxx-1
+linux:~ # echo /usr/lib/python/site-package/xxx-1.0/yyy.zz | sed 's/\///'               # usr/lib/python/site-package/xxx-1.0/yyy.zz
+linux:~ # echo /usr/lib/python/site-package/xxx-1.0/yyy.zz | sed 's/.*\///'             # yyy.zz
+```
 
-# /usr/lib64/man-db/libmandb-2.6.3
-linux:~ # echo ${STR%.*}
-linux:~ # echo /usr/lib64/man-db/libmandb-2.6.3.so | sed 's/\(.*\)\..*$/\1/'
+```bash
+linux:~ # cat data.csv
+Andy Jiang, ACA-4566, 10
+Joe Hwang, M16-1226, 20
+Tim Cheng, YKC-7725, 10
+John Cheng, YKC-7722, 10
+Kevin Lin, NI2-039, 100
+David Lee, 2C-323, 200
+Herry McGray Jr., 3C-123, 500
+LeeLongDa, 3C-123, 500 
 
-# /usr/lib64/man-db/libmandb-2
-linux:~ # echo ${STR%%.*}
-linux:~ # sed 's/\..*$//'
-
-# usr/lib64/man-db/libmandb-2.6.3.so
-linux:~ # echo ${STR#*/}    
-linux:~ # sed 's/\///'
-
-# libmandb-2.6.3.so
-linux:~ # echo ${STR##*/}
-linux:~ # sed 's/.*\///'
+linux:~ # sed -n 2,4p data.csv
+linux:~ # sed -n '2p;4p' data.csv
+linux:~ # sed -n '/Joe/,/Cheng/p' data.csv
+linux:~ # sed -n '/Joe/p;/Cheng/p' data.csv
+linux:~ # sed '/Tim/q' data.csv
 ```
 
 ---
@@ -395,18 +399,16 @@ linux:~ # cat avg.awk
 
 BEGIN {
   sum = 0
-  i = 0
 }                                                                                                                                                   
 
 {
   sum = sum + $1
-  i += 1
 }
 
 END {
-  "count:", i
+  "count:", NR
   "sum: ", sum
-  "average: %f\n", sum/i
+  "average: %f\n", sum/NR
 }
 ```
 
