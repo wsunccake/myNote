@@ -866,13 +866,13 @@ print("%s <=> %s" %(restr.group(1), restr.group(2)))
 print(re.sub('\.(.*)', '', str))
 
 
-# same as sh ${STR0#*/} 
+# same as sh ${STR#*/} 
 restr = re.compile('(.*?)/(.*)').match(str)
 print("%s <=> %s" %(restr.group(1), restr.group(2)))
 print(re.sub('^(.*?)/', '', str))
 
 
-# same as sh ${STR0##*/}
+# same as sh ${STR##*/}
 restr = re.compile('(.*)/(.*)').match(str)
 print("%s <=> %s" %(restr.group(1), restr.group(2)))
 print(re.sub('(.*)/', '', str))
