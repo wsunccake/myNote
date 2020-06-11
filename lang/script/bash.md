@@ -484,6 +484,7 @@ linux:~ # seq 5 | xargs -I {} echo {}
 linux:~ # seq 5 | xargs -i date
 linux:~ # seq 5 | xargs -i sh -c 'expr {} + 1'
 linux:~ # find . -type d | xargs -n1 ls -l
+linux:~ # awk -F: '$7 !~/nologin/{print $1, $3}' /etc/passwd | xargs -n2  sh -c 'echo "uid: $1 user: $0"'
 ```
 
 
