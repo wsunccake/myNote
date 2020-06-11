@@ -218,7 +218,8 @@ done
 
 i=0
 until false; do
-i=`expr $i + 1`                                                                                                                                       echo "$i"
+  i=`expr $i + 1`
+  echo "$i"
   [ $i -ge 3 ] && break
 done
 ```
