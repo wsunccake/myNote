@@ -520,6 +520,13 @@ linux:~ # seq 5 | xargs -i date
 linux:~ # seq 5 | xargs -i sh -c 'expr {} + 1'
 linux:~ # find . -type d | xargs -n1 ls -l
 linux:~ # awk -F: '$7 !~/nologin/{print $1, $3}' /etc/passwd | xargs -n2  sh -c 'echo "uid: $1 user: $0"'
+
+linux:~ # hi() {
+  local h=$1
+  echo "Hi $h"
+}
+linux:~ # export -f hi
+linux:~ # awk -F: '{print $1}' /etc/passwd | xargs -i sh -c 'hi {}'
 ```
 
 
