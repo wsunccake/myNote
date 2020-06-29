@@ -69,6 +69,11 @@ linux:~/project $ git branch -d b1    # 刪除 branch
 linux:~/project $ git checkout -b b1  # 新增 branch
 linux:~/project $ git checkout b1     # 切換 branch
 
+# same checkout -b for previous version
+linux:~/project $ git checkout -b <branch>
+linux:~/project $ git branch <branch> origin/<branch>
+
+
 linux:~/project $ git fetch
 linux:~/project $ git fetch --all
 
