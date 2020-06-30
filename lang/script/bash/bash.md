@@ -610,3 +610,25 @@ linux:~ # function _foo_complete_() {
 linux:~ # complete -F _foo_complete_ foo
 linux:~ # ./foo <TAB><TAB>
 ```
+
+
+---
+
+## trap
+
+```bash
+linux:~ # trap "echo hello trap" SIGTERM
+linux:~ # trap -p
+linux:~ # kill -s SIGTERM `echo $$`
+linux:~ # trap - SIGTERM
+
+linux:~ # trap "echo hello trap" 15
+linux:~ # trap -p
+linux:~ # kill -15 `echo $$`
+linux:~ # trap - 15
+
+linux:~ # trap "echo hello trap" 2
+linux:~ # trap
+linux:~ # ctrl^c
+linux:~ # trap 2
+```
