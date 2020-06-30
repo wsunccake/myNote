@@ -70,7 +70,7 @@ linux:~/project $ git checkout -b b1  # 新增 branch
 linux:~/project $ git checkout b1     # 切換 branch
 
 # same checkout -b for previous version
-linux:~/project $ git checkout -b <branch>
+linux:~/project $ git checkout <branch>
 linux:~/project $ git branch <branch> origin/<branch>
 
 
