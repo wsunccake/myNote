@@ -44,14 +44,15 @@ linux:~ $ git clone git@github.com:user/sandbox.git            # 下載 project
 linux:~ $ git clone git@github.com:user/sandbox.git newproejct # 下載 project 並改名為 newproject 
 
 # file status
-linux:~/project $ git add file                # 檔案納入控制系統 
-linux:~/project $ git rm [--cache|-f] file    # 檔案移出制系統
-linux:~/project $ git mv src_file des_file    # 檔案移出制系統
+linux:~/project $ git add file                    # 檔案納入控制系統 
+linux:~/project $ git rm [--cache|-f] file        # 檔案移出制系統
+linux:~/project $ git mv src_file des_file        # 檔案移出制系統
 
-linux:~/project $ git commit -m 'my comment'  # 提交到控制系統 
-linux:~/project $ git commit --amend          # 修改/編輯 commit
+linux:~/project $ git commit -m '<my_comment>'    # 提交到控制系統 
+linux:~/project $ git commit -m                   # 提交到控制系統 
+linux:~/project $ git commit --amend              # 修改/編輯 commit
 
-linux:~/project $ git reset HEAD~             # 狀態改成前一次 commit
+linux:~/project $ git reset HEAD~                 # 狀態改成前一次 commit
 
 linux:~/project $ git status # version記錄 
 
@@ -59,20 +60,21 @@ linux:~/project $ git log                     # commit記錄
 linux:~/project $ git log -1                  # show HEAD
 linux:~/project $ git log --graph --oneline --all --decorate 
 linux:~/project $ git log --graph --oneline --all --decorate --boundary --date-order 
+linux:~/project $ git log --graph --oneline --decorate=full --date-order --all
+linux:~/project $ git log --graph --decorate=full --date-order --stat
 
 # branch, checkout, fetch
-linux:~/project $ git branch          # 顯示 branch
-linux:~/project $ git branch --all    # 顯示所有 branch (包括 remote)
-linux:~/project $ git branch b1       # 新增 branch
-linux:~/project $ git branch -d b1    # 刪除 branch
+linux:~/project $ git branch                # 顯示 branch
+linux:~/project $ git branch --all          # 顯示所有 branch (包括 remote)
+linux:~/project $ git branch <branch>       # 新增 branch
+linux:~/project $ git branch -d <branch>    # 刪除 branch
 
-linux:~/project $ git checkout -b b1  # 新增 branch
-linux:~/project $ git checkout b1     # 切換 branch
+linux:~/project $ git checkout -b <branch>  # 新增 branch
+linux:~/project $ git checkout <branch>     # 切換 branch
 
 # same checkout -b for previous version
-linux:~/project $ git checkout <branch>
 linux:~/project $ git branch <branch> origin/<branch>
-
+linux:~/project $ git checkout <branch>
 
 linux:~/project $ git fetch
 linux:~/project $ git fetch --all
