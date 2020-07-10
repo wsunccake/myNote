@@ -52,7 +52,9 @@ linux:~/project $ git commit -m '<my_comment>'    # 提交到控制系統
 linux:~/project $ git commit -m                   # 提交到控制系統 
 linux:~/project $ git commit --amend              # 修改/編輯 commit
 
-linux:~/project $ git reset HEAD~                 # 狀態改成前一次 commit
+# rollback, 狀態改成前一次 commit
+linux:~/project $ git reset HEAD^           # no record, only revert commit and keep change file
+linux:~/project $ git reset HEAD^ --hard    # no record, revert commit and file
 
 linux:~/project $ git status # version記錄 
 
