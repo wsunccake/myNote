@@ -118,6 +118,47 @@ node {
 
 ## parallel
 
+```
+node {
+    stage('Hello') {
+        echo 'Hello Jenkins2'
+    }
+
+    parallel(
+        "parallel 1": {
+            echo "parallel 1"
+        },
+        "parallel 2": {
+            echo "parallel 2"
+        }
+    )
+
+    stage('Parallel Hello') {
+        parallel(
+            "parallel hello 1": {
+                echo "parallel hello 1"
+            },
+            "parallel hello 2": {
+                echo "parallel hello 2"
+            }
+        )
+    }
+
+    parallel(
+        "parallel stage 1": {
+            stage('paralle stage 1') {
+                echo 'paralle stage 1'
+            }
+        },
+        "parallel stage 2": {
+            stage('parallel stage 2') {
+                echo 'parallel stage 2'
+            }
+        }
+    )
+}
+```
+
 ---
 
 ## when
