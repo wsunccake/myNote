@@ -39,3 +39,10 @@ centos:~ # vi /etc/docker/daemon.json
 # service
 centos:~ # systemctl enable --now docker
 ```
+
+## firewall
+
+```bash
+centos:~ # firewall-cmd --permanent --zone=public --add-masquerade
+centos:~ # firewall-cmd --reload
+```
