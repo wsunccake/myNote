@@ -43,6 +43,14 @@ centos:~ # systemctl enable --now docker
 ## firewall
 
 ```bash
+# setup ipv4
 centos:~ # firewall-cmd --permanent --zone=public --add-masquerade
+
+# setup ipv6
+centos:~ # firewall-cmd --permanent --direct --add-rule ipv6 nat POSTROUTING 1 -s <ipv6_cidr> -j MASQUERADE
+centos:~ # firewall-cmd --permanent --direct --add-rule ipv6 filter FORWARD 1 ! -i docker0 -o docker0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+centos:~ # firewall-cmd --permanent --direct --add-rule ipv6 filter FORWARD 2 -i docker0 ! -o docker0 -j ACCEPT
+
+# reload config
 centos:~ # firewall-cmd --reload
 ```
