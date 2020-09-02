@@ -138,6 +138,28 @@ rhel:~/example # git push -u origin master
 
 ---
 
+## CSRF
+
+disable csrf after 2.222
+
+```bash
+rhel:~ # mkdir -p $JENKINS_HOME/init.groovy.d
+rhel:~ # cat $JENKINS_HOME/init.groovy.d/csrf.groovy 
+import hudson.security.csrf.DefaultCrumbIssuer
+import jenkins.model.Jenkins
+
+def jenkins = Jenkins.instance;
+jenkins.setCrumbIssuer(null); 
+jenkins.save();
+```
+
+disable cstf before 2.222
+
+[Disable CSRF checking](https://www.jenkins.io/doc/book/managing/security/#disable-csrf-checking)
+
+---
+
+
 ## Plugin
 
 
