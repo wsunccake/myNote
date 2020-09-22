@@ -144,8 +144,6 @@ restful_api "$(declare -p api_data)"
 restful_api() {
   local -n api_data=$1
 
-  echo $api_data
-
   local method=${api_data['method']}
   local url=${api_data['url']}
   local data=${api_data['data']}
