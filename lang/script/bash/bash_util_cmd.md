@@ -164,7 +164,7 @@ restful_api() {
   fi
 
   echo -n 'Response body: '
-  curl_cmd ${method} ${url} "${data}"
+  curl_api_cmd ${method} ${url} "${data}"
 }
 
 declare -A API_DATA=([url]=https://api.github.com [method]=GET)
