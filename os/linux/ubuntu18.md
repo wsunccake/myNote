@@ -21,6 +21,21 @@ ubuntu:~ # apt install python3-pip
 ubuntu:~ # apt install openssh-server
 ubuntu:~ # systemctl enable sshd
 ubuntu:~ # systemctl start sshd
+
+# ulimit ssh
+ubuntu:~ # vi /etc/systemd/logind.conf
+UserTasksMax=infinity
+
+ubuntu:~ # vi /lib/systemd/system/ssh.service
+[Service]
+TasksMax=infinity
+
+ubuntu:~ # systemctl daemon-reload
+ubuntu:~ # systemctl restart ssh
+
+ubuntu:~ # systemctl show --property DefaultTasksMax
+ubuntu:~ # systemctl show -a | grep -i task
+ubuntu:~ # systemctl status ssh  |grep -e Tasks
 ```
 
 

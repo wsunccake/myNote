@@ -520,6 +520,13 @@ linux:~ # seq 5 | xargs -i date
 linux:~ # seq 5 | xargs -i sh -c 'expr {} + 1'
 linux:~ # find . -type d | xargs -n1 ls -l
 linux:~ # awk -F: '$7 !~/nologin/{print $1, $3}' /etc/passwd | xargs -n2  sh -c 'echo "uid: $1 user: $0"'
+
+linux:~ # hi() {
+  local h=$1
+  echo "Hi $h"
+}
+linux:~ # export -f hi
+linux:~ # awk -F: '{print $1}' /etc/passwd | xargs -i sh -c 'hi {}'
 ```
 
 
@@ -602,4 +609,26 @@ linux:~ # function _foo_complete_() {
 }
 linux:~ # complete -F _foo_complete_ foo
 linux:~ # ./foo <TAB><TAB>
+```
+
+
+---
+
+## trap
+
+```bash
+linux:~ # trap "echo hello trap" SIGTERM
+linux:~ # trap -p
+linux:~ # kill -s SIGTERM `echo $$`
+linux:~ # trap - SIGTERM
+
+linux:~ # trap "echo hello trap" 15
+linux:~ # trap -p
+linux:~ # kill -15 `echo $$`
+linux:~ # trap - 15
+
+linux:~ # trap "echo hello trap" 2
+linux:~ # trap
+linux:~ # ctrl^c
+linux:~ # trap 2
 ```
