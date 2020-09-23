@@ -491,3 +491,13 @@ func triple(x int) (result int) {
 }
 fmt.Println(triple(4)) // "12"
 ```
+
+
+---
+
+## panic
+
+
+---
+
+## recover
