@@ -27,3 +27,28 @@ op:~ # neutron agent-list
 op:~ # ovs-vsctl show | grep -E 'Port|Bridge'
 ```
 
+
+---
+
+## conf
+
+```bash
+op:~ # vi /etc/neutron/plugins/ml2/openvswitch_agent.ini
+
+[agent]
+bridge_mappings = physnet1:br-floating,physnet2:br-prv,physnet3:br<xxx>
+...
+
+
+op:~ # vi /etc/neutron/plugins/ml2/ml2_conf.ini
+[ml2]
+physical_network_mtus = physnet1:1500,physnet2:1500,physnet3:1500
+...
+
+[ml2_type_vlan]
+network_vlan_ranges = physnet1,physnet2:2141:2150,physnet3
+...
+
+
+op:~ # service neutron-plugin-openvswitch-agent restart
+```

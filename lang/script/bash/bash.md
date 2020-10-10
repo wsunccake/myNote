@@ -319,6 +319,65 @@ for KEY in ${!MAP[@]}; do
 done
 ```
 
+```bash
+###
+### for bash 4.2-
+###
+
+# pass array to function
+show_array() {
+  eval "declare -A arr="${1#*=}
+
+  for i in "${arr[@]}"; do
+    echo "$i"
+  done
+}
+
+arr=(one two three)
+show_array "$(declare -p arr)"
+
+# pass associative array to function
+show_associative_array() {
+  eval "declare -A ass_arr="${1#*=}
+
+  for k in ${!ass_arr[@]}; do
+    echo "key: $k -> val: ${ass_arr[$k]}"
+  done
+}
+
+declare -A ass_arr
+ass_arr=([eth0]=192.168.0.1 [em1]=172.16.0.1)
+show_associative_array "$(declare -p ass_arr)"
+
+###
+### for bash 4.3+
+###
+
+# pass array to function
+show_array() {
+  local -n arr=$1
+
+  for i in "${arr[@]}"; do
+    echo "$i"
+  done
+}
+
+ARRAY=(one two three)
+show_array ARRAY
+
+# pass associative array to function
+show_associative_array() {
+  local -n ass_arr=$1
+
+  for k in ${!ass_arr[@]}; do
+    echo "key: $k -> val: ${ass_arr[$k]}"
+  done
+}
+
+declare -A MAP
+MAP=([eth0]=192.168.0.1 [em1]=172.16.0.1)
+show_associative_array MAP
+```
 
 ---
 
