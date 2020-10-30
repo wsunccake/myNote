@@ -57,6 +57,8 @@ control:~ # ansible all -i hosts -m ping  -vvv
 control:~ # ansible node1 -i hosts -m command -s -a uptime
 control:~ # ansible all -i hosts -m copy -a "src=/etc/hosts dest=/tmp/hosts"
 control:~ # ansible all -i hosts -m setup
+control:~ # ansible all -i <host>, -m ping
+control:~ # ansible all -i <ip>, -m ping
 ```
 
 -i: host file
