@@ -295,9 +295,45 @@ control:~/project # cat roles/docker/handlers/main.yml
     state: restarted
     enabled: yes
 ```
+
+
 ----
 
 ## Inventory
+
+```bash
+control:~ # cat inventory
+[atlanta]
+host1   http_port=80    maxRequestsPerChild=808
+host2   http_port=303   maxRequestsPerChild=909
+
+[atlanta:vars]
+ntp_server=ntp.atlanta.example.com
+proxy=proxy.atlanta.example.com
+
+[raleigh]
+host2
+host3
+
+[southeast:children]
+atlanta
+raleigh
+
+[southeast:vars]
+some_server=foo.southeast.example.com
+halon_system_timeout=30
+self_destruct_countdown=60
+escape_pods=2
+
+[usa:children]
+southeast
+northeast
+southwest
+northwest
+```
+
+
+---
 
 ## Galaxy
 
