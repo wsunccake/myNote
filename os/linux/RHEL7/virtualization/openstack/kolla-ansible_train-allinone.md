@@ -15,14 +15,16 @@ NIC: 2
 
 ---
 
-##
+## nic topology
 
+```
                        all-in-one
 openstack management   |  eth0
                        |  192.168.10.101
                        +
 public / external      |  eth1
-                       |  192.168.100.101
+                       |
+```
 
 ---
 
