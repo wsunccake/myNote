@@ -1,8 +1,15 @@
 # openstack
 
+
 ## cli
 
 ```bash
+# service
+op:~ # openstack host list
+op:~ # openstack hypervisor list
+op:~ # openstack compute service list
+op:~ # openstack agent list
+
 # project
 op:~ # openstack project list
 op:~ # openstack project show <project>
@@ -29,6 +36,18 @@ op:~ # openstack network delete <network>
 op:~ # openstack subnet list
 op:~ # openstack subnet show <subnet>
 op:~ # openstack subnet create --name <subnet> <network> 172.16.1.0/24    # neutron subnet-create
+
+# compute
+op:~ # openstack server list
+op:~ # openstack server show <vm>
+op:~ # openstack server create --image <image> --flavor <flavor> --file <pub_key> --nic net-id=<net_id> [--availability-zone ZONE:HOST] <vm>  # nova boot
+op:~ # openstack server server <vm>
+
+# image
+op:~ # openstack image list
+
+# flavor
+op:~ # openstack flavor list
 ```
 
 
@@ -43,7 +62,7 @@ op:~ # nova hypervisor-list
 op:~ # mysql -u root
 mysql> USE nova;
 mysql> SELECT id, created_at, updated_at, hypervisor_hostname FROM compute_nodes;
-mysql> DELETE FROM compute_nodes WHERE hypervisor_hostname='node1;
+mysql> DELETE FROM compute_nodes WHERE hypervisor_hostname='node1';
 
 op:~ # nova service-list
 op:~ # mysql -u root
@@ -95,3 +114,4 @@ linux:~ # qemu-img convert -f vmdk -O qcow2 image.vmdk image.qcow2
 # vdi -> raw
 linux:~ # VBoxManage clonehd image.vdi image.img --format raw
 ```
+

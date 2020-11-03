@@ -27,10 +27,17 @@ neutron external                    eth1
 control, compute, storage
 
 
-### prepare
+### all
 
 
 ```bash
+# setup hostname
+centos:~ # hostnamectl set-hostname <hostname>
+
+# install package by dnf
+centos:~ # dnf makecache
+centos:~ # dnf install epel-release
+
 # install docker
 centos:~ # dnf autoremove podman
 centos:~ # dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
@@ -60,6 +67,23 @@ centos:~ # curl -X GET http://<deploy_ip>:5000/v2/_catalog
 centos:~ # docker pull kolla/centos-binary-chrony:ussuri
 ```
 
+
+### storage
+
+```bash
+storage:~ # dnf install lvm2
+storage:~ # lsblk -fp
+
+# pv
+storage:~ # pvs
+storage:~ # pvcreate /dev/sdb
+
+# vg
+storage:~ # vgs
+storage:~ # vgcreate cinder-volumes /dev/sdb
+```
+
+
 ---
 
 ## deploy node
@@ -68,16 +92,19 @@ centos:~ # docker pull kolla/centos-binary-chrony:ussuri
 ### prepare
 
 ```bash
+# setup hostname
+deploy:~ # hostnamectl set-hostname deploy
+
 # install package by dnf
 deploy:~ # dnf makecache
-deploy:~ # dnf install git
 deploy:~ # dnf install epel-release
-deploy:~ # dnf install python3-pip wget
+deploy:~ # dnf install python3
+deploy:~ # dnf install ansible
 
 # install package by pip
 deploy:~ # pip3 install -U pip
 deploy:~ # pip3 install wheel
-deploy:~ # pip3 install ansible            # ansible (>= 2.9)
+deploy:~ # pip3 install ansible            # ansible (2.8 ~ 2.9)
 deploy:~ # pip3 install kolla-ansible
 
 # install docker
@@ -216,6 +243,28 @@ deploy:~ # kolla-ansible -i /etc/kolla/multinode prechecks
 deploy:~ # kolla-ansible -i /etc/kolla/multinode pull
 deploy:~ # kolla-ansible -i /etc/kolla/multinode deploy
 ```
+
+
+### usage
+
+```bash
+deploy:~ # grep keystone_admin_password /etc/kolla/passwords.yml
+
+# generate openstack rc
+deploy:~ # kolla-ansible post-deploy
+
+deploy:~ # ls /etc/kolla/admin-openrc.sh
+deploy:~ # source /etc/kolla/admin-openrc.sh
+
+# openstack client
+deploy:~ # pip3 install python-openstackclient
+deploy:~ # openstack service list
+
+# create example
+deploy:~ # /usr/local/share/kolla-ansible/init-runonce
+deploy:~ # openstack server create --image cirros --flavor m1.tiny --key-name mykey --network demo-net demo1
+```
+
 
 ---
 

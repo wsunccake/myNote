@@ -31,16 +31,18 @@ public / external      |  eth1
 ## prepare
 
 ```bash
+# install package
 centos8:~ # dnf makecache
 centos8:~ # dnf install epel-release
-centos8:~ # dnf install git ansible
+centos8:~ # dnf install git                # source
+centos8:~ # dnf install ansible            # source
+centos8:~ # dnf install python3
 
 # disable selinux
 centos8:~ # sed -i s/^SELINUX=.*/SELINUX=disabled/ /etc/selinux/config
 
 # stop firewall
-centos8:~ # systemctl stop firewalld
-centos8:~ # systemctl disable firewalld
+centos8:~ # systemctl stop firewalld --now
 
 # install docker
 centos8:~ # dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
@@ -65,7 +67,6 @@ centos8:~ # reboot
 
 ```bash
 centos8:~ # pip3 install -U pip
-centos8:~ # mkdir -p /etc/kolla
 
 # binary
 centos8:~ # pip3 install wheel
@@ -79,6 +80,7 @@ centos8:~ # pip3 install ./kolla
 centos8:~ # pip3 install ./kolla-ansible
 
 # config
+centos8:~ # mkdir -p /etc/kolla
 centos8:~ # cp -r /usr/local/share/kolla-ansible/etc_examples/kolla/* /etc/kolla/.
 # globals.yml, passwords.yml 
 centos8:~ # cp -r /usr/local/share/kolla-ansible/ansible/inventory/* /etc/kolla/.
@@ -107,9 +109,11 @@ centos8:~ # vi /etc/kolla/globals.yml
 kolla_base_distro: "centos"
 kolla_install_type: "binary"
 openstack_release: "train"
+node_custom_config: "/etc/kolla/config"
 network_interface: "eth0"                       # openstack management network
 neutron_external_interface: "eth1"              # openstack external network
-kolla_internal_vip_address: "192.168.10.123"    # <ip> must in openstack management network and can't using
+enable_haproxy: "yes"
+kolla_internal_vip_address: "192.168.10.123"    # <ip> must in openstack management network and cannot using if enable_haproxy
 nova_compute_virt_type: "kvm"                   # egrep -c '(vmx|svm)' /proc/cpuinfo > 0 => kvm, = 0 => qemu
                                                 # kvm: hardware support, qemu: no hardware support
 
@@ -141,6 +145,7 @@ centos8:~ # openstack service list
 
 # create example
 centos8:~ # /usr/local/share/kolla-ansible/init-runonce
+centos8:~ # openstack server create --image cirros --flavor m1.tiny --key-name mykey --network demo-net demo1 
 ```
 
 

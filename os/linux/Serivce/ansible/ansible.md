@@ -86,6 +86,10 @@ control:~ # cat /etc/ansible/ansible.cfg
 [defaults]
 ansible_python_interpreter = /usr/bin/python2
 nocows = 1
+
+control:~ # ansible-config view
+control:~ # ansible-config list
+control:~ # ansible-config dump
 ```
 
 ----
