@@ -4,14 +4,14 @@
 ## nic topology
 
 ```
-    +----------+-------------+------------+  openstack management
-	|          |             |            |
-	|          |             |            |
+        +----------+-------------+------------+  openstack management
+        |          |             |            |
+        |          |             |            |
  deploy		control       compute      storage
-			   |
-			   |neutron external
-			   v 
-			internet
+                   |
+                   |neutron external
+                   v 
+                internet
 ```
 
 ```
@@ -22,7 +22,9 @@ neutron external                    eth1
 
 ---
 
-## control / compute
+## non deploy node
+
+control, compute, storage
 
 
 ### prepare
@@ -30,37 +32,37 @@ neutron external                    eth1
 
 ```bash
 # install docker
-deploy:~ # dnf autoremove podman
-deploy:~ # dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
-deploy:~ # dnf install docker-ce --nobest
-deploy:~ # systemctl enable docker --now
+centos:~ # dnf autoremove podman
+centos:~ # dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+centos:~ # dnf install docker-ce --nobest
+centos:~ # systemctl enable docker --now
 
 # update hosts
-deploy:~ # vi /etc/hosts
+centos:~ # vi /etc/hosts
 192.168.10.100  control01
 192.168.10.110  compute01
 
 # disable firewall
-control:~ # systemctl disable firewalld --now
+centos:~ # systemctl disable firewalld --now
 
 # disable selinux
-control:~ # sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
-control:~ # reboot
+centos:~ # sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/onfig
+centos:~ # reboot
 
 # private registry
-conrtol:~ # vi /etc/docker/daemon.json
+centos:~ # vi /etc/docker/daemon.json
 {
   "insecure-registries": ["<deploy_ip>:5000"]
 }
 
-conrtol:~ # systemctl daemon-reload
-conrtol:~ # curl -X GET http://<deploy_ip>:5000/v2/_catalog
-conrtol:~ # docker pull kolla/centos-binary-chrony:ussuri
+centos:~ # systemctl daemon-reload
+centos:~ # curl -X GET http://<deploy_ip>:5000/v2/_catalog
+centos:~ # docker pull kolla/centos-binary-chrony:ussuri
 ```
 
 ---
 
-## deploy
+## deploy node
 
 
 ### prepare
@@ -160,6 +162,27 @@ deploy:~ # kolla-genpwd
 ```
 
 
+#### endpoint network configuration
+
+kolla_internal_vip_address
+
+network_interface
+
+kolla_external_vip_address
+
+kolla_external_vip_interface
+
+
+#### openstack service configuration in kolla
+
+node_custom_config
+
+
+#### ip address constrained environment
+
+enable_haproxy
+
+
 ### pull image
 
 ```bash
@@ -195,3 +218,8 @@ deploy:~ # kolla-ansible -i /etc/kolla/multinode deploy
 ```
 
 ---
+
+## ref
+
+[Welcome to Kolla-Ansible’s documentation!](https://docs.openstack.org/kolla-ansible/latest/)
+
