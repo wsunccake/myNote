@@ -25,10 +25,14 @@ rhel:~ # usermod -aG docker user                            # 將使用者加入
 ```
 
 
+---
+
 ## PWD/
 
 [http://labs.play-with-docker.com/](http://labs.play-with-docker.com/)
 
+
+---
 
 ## Run
 
@@ -109,6 +113,8 @@ rhel:~ # ls /sys/fs/cgroup/memory/docker/<docker_id>
 rhel:~ # ls /sys/fs/cgroup/blkio/docker/<docker_id>
 ```
 
+
+---
 
 ## Docker Image 
 
@@ -200,6 +206,9 @@ rhel:~ # docker export <container_id> > image.tar
 rhel:~ # docker import image.tar <image_name>
 ```
 
+
+---
+
 ## Docker Volume ##
 
 `container`
@@ -242,7 +251,23 @@ rhel:~ # docker run -it --name web_master -v /opt/webapp centos /bin/bash
 rhel:~ # docker run -it --name web_slave --volumes-from web_master -v /opt/webapp ubuntu /bin/bash
 ```
 
-## Dokcer Network ##
+`command`
+
+```bash
+rhel:~ # docker volume ls
+rhel:~ # docker volume create <vol>
+rhel:~ # docker volume inspect <vol>
+rhel:~ # docker volume rm <vol>
+
+rhel:~ # docker run -itd -v <vol>:<path> <image>
+```
+
+default path: /var/lib/docker/volumes/<vol>
+
+
+---
+
+## Dokcer Network
 
 docker 在設定 port forwarding 時使用 iptables, 但 RHEL 7 預設的防火牆 firewalld 可能會有問題, 目前建議換成 iptables 或是關掉 firewalld. 在 docker run -P 的使用上, 會隨機將 container 上的 EXPOSE port 對應到 host 上的 49000 ~ 49900 port
 
@@ -333,6 +358,8 @@ centos:~ # ip link set dev <br> up
 centos:~ # ip link set <eth> master <br>
 ```
 
+
+---
 
 ## Docker Hub / Registry
 
@@ -446,6 +473,8 @@ rhel:~ # cat ~/.docker/config.json
 ```
 
 
+---
+
 ## Run GUI Apps on Docker
 
 
@@ -485,9 +514,9 @@ check /tmp/.X11-unix permission (chmod 1777 /tmp/.X11-unix)
 
 ----
 
-# Docker IPv6
+## Docker IPv6
 
-## NAT
+### NAT
 
 `Network Topology`
 
@@ -550,7 +579,7 @@ host_1:~ # docker exec -it <container> ping -6 -c3 2001:db8:1::1
 ```
 
 
-## Direct
+### Direct
 
 `Network Topology`
 
@@ -622,156 +651,18 @@ host_1:~ # docker exec -it <container> ping -6 -c3 2001:db8:1::1
 
 ---
 
-# Dokcer Machine
+## GUI
 
-因為 Linux 本身就支援 LXC, 所以 Dokcer 有支援. 而 Windows 和 Mac OS X 並沒支援, 要使用 Docker 需要透過 VM. 在此會先安裝 VirtualBox, 然後安裝 Linux VM (這步驟在安裝後第一次啟動會自動執行). 之後的 Container 皆是透過該 Linux VM 啟動.
-
-
-## Command
-
-Linux VM 的設定, 可以透過 docker-machine 操作
-
-```bash
-osx:~ $ docker-machine help
-osx:~ $ docker-machine ls
-osx:~ $ docker-machine env
-
-osx:~ $ docker-machine start <docker_machine>
-osx:~ $ docker-machine stop <docker_machine>
-osx:~ $ docker-machine status <docker_machine>
-
-osx:~ $ docker-machine ip <docker_machine>
-osx:~ $ docker-machine ssh <docker_machine>
-osx:~ $ docker-machine inspect <docker_machine>
-
-osx:~ $ docker-machine kill <docker_machine>
-osx:~ $ docker-machine rm <docker_machine>
-```
-
-----
-
-
-# Docker Compose
-
-
-## Install
-
-```bash
-# Download From Github
-rhel:~ # curl -L https://github.com/docker/compose/releases/download/1.5.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
-rhel:~ # chmod +x /usr/local/bin/docker-compose
-
-# Install From EPEL
-rhel:~ # yum install docker-compose
-```
-
-## Compose file
-
-```bash
-rhel:~ # cat docker-compose.yml
-version: '3'
-services:
-  hello:
-    image: hello-world
-    container_name: hello
-
-rhel:~ # docker-compose up
-```
-
-```bash
-rhel:~/hello # cat app.py 
-from flask import Flask
-
-app = Flask(__name__)
-
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
-
-rhel:~/hello # cat requirements.txt 
-Flask==1.0.2
-
-rhel:~/hello # cat Dockerfile 
-FROM python:alpine
-
-EXPOSE 8080
-
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-
-COPY requirements.txt /usr/src/app/
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY app.py /usr/src/app/app.py
-
-CMD [ "python", "app.py" ]
-
-rhel:~/hello # cat docker-compose.yml
-version: '3'
-services:
-  hello:
-    container_name: hello
-    build: .
-    image: hello
-    ports:
-    - "8080:8080"
-
-rhel:~/hello # docker-compose -f docker-compose.yml up -d
-```
-
----
-
-# GUI
-
-## Portainer
+### Portainer
 
 ```bash
 rhel: # docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock --name portainer portainer/portainer
 ```
 
----
-
-# Docker Swarm
-
-## Config
-
-```bash
-# init manager
-manager:~ # docker swarm init --advertise-addr <manage_node_ip>
-manager:~ # docker swarm join-token worker    # show token for worker
-manager:~ # docker swarm join-token manager   # show token for manager
-
-# init worker
-worker:~ # docker swarm join --token <token> <manage_node_ip>:2377
-```
-
-## Usage
-
-```bash
-# node/service status
-manager:~ # docker node ls
-manager:~ # docker service ls
-
-# create service
-manager:~ # docker service create --name cluster --constraint "node.role == worker" -p 80:80 russmckendrick/cluster
-manager:~ # docker service scale cluster=4
-
-# show detail service
-manager:~ # docker service inspect cluster
-
-# remove service
-manager:~ # docker service rm cluster
-
-# GUI
-manager:~ # docker run -it -d -p 8080:8080 -e HOST=<manage_node_ip> -v /var/run/docker.sock:/var/run/docker.sock dockersamples/visualizer
-```
 
 ---
 
-# Ref
+## Ref
 
 [docker](https://docs.docker.com/)
 
@@ -782,3 +673,4 @@ manager:~ # docker run -it -d -p 8080:8080 -e HOST=<manage_node_ip> -v /var/run/
 [Using GUI's with Docker](http://wiki.ros.org/docker/Tutorials/GUI)
 
 [Running GUI apps with Docker](http://fabiorehm.com/blog/2014/09/11/running-gui-apps-with-docker/)
+
