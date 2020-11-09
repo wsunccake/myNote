@@ -8,7 +8,7 @@
 op:~ # openstack host list
 op:~ # openstack hypervisor list
 op:~ # openstack compute service list
-op:~ # openstack agent list
+op:~ # openstack network agent list
 
 # project
 op:~ # openstack project list

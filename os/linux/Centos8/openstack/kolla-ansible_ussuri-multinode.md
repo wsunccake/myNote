@@ -44,10 +44,14 @@ centos:~ # dnf config-manager --add-repo=https://download.docker.com/linux/cento
 centos:~ # dnf install docker-ce --nobest
 centos:~ # systemctl enable docker --now
 
-# update hosts
-centos:~ # vi /etc/hosts
-192.168.10.100  control01
-192.168.10.110  compute01
+# setup private registry
+centos:~ # vi /etc/docker/daemon.json
+{
+  "insecure-registries": ["<deploy_ip>:5000"]
+}
+centos:~ # systemctl daemon-reload
+centos:~ # curl -X GET http://<deploy_ip>:5000/v2/_catalog
+centos:~ # docker pull kolla/centos-binary-chrony:ussuri
 
 # disable firewall
 centos:~ # systemctl disable firewalld --now
@@ -55,16 +59,6 @@ centos:~ # systemctl disable firewalld --now
 # disable selinux
 centos:~ # sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
 centos:~ # reboot
-
-# private registry
-centos:~ # vi /etc/docker/daemon.json
-{
-  "insecure-registries": ["<deploy_ip>:5000"]
-}
-
-centos:~ # systemctl daemon-reload
-centos:~ # curl -X GET http://<deploy_ip>:5000/v2/_catalog
-centos:~ # docker pull kolla/centos-binary-chrony:ussuri
 ```
 
 
@@ -282,6 +276,97 @@ deploy:~ # openstack service list
 # create example
 deploy:~ # /usr/local/share/kolla-ansible/init-runonce
 deploy:~ # openstack server create --image cirros --flavor m1.tiny --key-name mykey --network demo-net demo1
+```
+
+
+---
+
+## provider network
+
+
+### all openstack node
+
+```bash
+centos:~ # dnf install network-scripts
+centos:~ # systemctl enable network --now
+centos:~ # systemctl disable NetworkManager --now
+ 
+# setup openvswitch
+centos:~ # docker exec -it openvswitch_vswitchd ovs-vsctl show
+centos:~ # docker exec -it openvswitch_vswitchd ovs-vsctl add-br br0
+centos:~ # docker exec -it openvswitch_vswitchd ovs-vsctl add-port br0 eth0
+ 
+# list bridge and port
+centos:~ # ip addr show dev br0
+centos:~ # ip addr show dev eth0
+centos:~ # docker exec -it openvswitch_vswitchd ovs-vsctl show
+centos:~ # docker exec -it openvswitch_vswitchd ovs-vsctl list-ports br0
+```
+
+
+### control node
+
+```bash
+# setup neutron-openvswitch-agent
+control:~ # vi /etc/kolla/neutron-openvswitch-agent/openvswitch_agent.ini
+...
+[ovs]
+bridge_mappings = physnet1:br-ex,physnet3:br0
+...
+ 
+# setup neutron-server
+control:~ # vi /etc/kolla/neutron-server/ml2_conf.ini
+...
+[ml2_type_flat]
+flat_networks = physnet1,physnet3
+...
+ 
+centos:~ # reboot
+
+# list bridge and port
+control:~ # docker exec -it openvswitch_vswitchd ovs-vsctl show
+control:~ # docker exec -it openvswitch_vswitchd ovs-vsctl list-ports br0
+```
+
+
+### compute node
+
+```bash
+# setup neutron-openvswitch-agent
+compute:~ # vi /etc/kolla/neutron-openvswitch-agent/openvswitch_agent.ini
+...
+[ovs]
+bridge_mappings = physnet3:br192
+...
+ 
+compute:~ # reboot
+
+# list bridge and port
+control:~ # docker exec -it openvswitch_vswitchd ovs-vsctl show
+control:~ # docker exec -it openvswitch_vswitchd ovs-vsctl list-ports br0
+```
+
+
+### deploy node
+
+```bash
+# check network agent
+deploy:~ # openstack network agent list
+ 
+ 
+# create provider network
+deploy:~ # openstack network create --share \
+  --provider-physical-network physnet3 \
+  --provider-network-type flat \
+  provider_network
+ 
+ 
+# create subnet network
+deploy:~ # openstack subnet create --subnet-range 192.168.0.0/24 \
+  --gateway 192.168.0.1 \
+  --network provider_network \
+  --allocation-pool start=192.168.0.100,end=192.168.0.200 \
+  provider_network_v4
 ```
 
 
