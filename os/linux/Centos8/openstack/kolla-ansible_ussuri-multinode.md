@@ -261,6 +261,7 @@ deploy:~ # kolla-ansible -i /etc/kolla/multinode --yes-i-really-really-mean-it d
 ### usage
 
 ```bash
+# get dashboard password
 deploy:~ # grep keystone_admin_password /etc/kolla/passwords.yml
 
 # generate openstack rc
@@ -303,6 +304,8 @@ centos:~ # docker exec -it openvswitch_vswitchd ovs-vsctl show
 centos:~ # docker exec -it openvswitch_vswitchd ovs-vsctl list-ports br0
 ```
 
+NetworkManager don't support openvswitch
+
 
 ### control node
 
@@ -321,7 +324,7 @@ control:~ # vi /etc/kolla/neutron-server/ml2_conf.ini
 flat_networks = physnet1,physnet3
 ...
  
-centos:~ # reboot
+control:~ # reboot
 
 # list bridge and port
 control:~ # docker exec -it openvswitch_vswitchd ovs-vsctl show
@@ -336,14 +339,14 @@ control:~ # docker exec -it openvswitch_vswitchd ovs-vsctl list-ports br0
 compute:~ # vi /etc/kolla/neutron-openvswitch-agent/openvswitch_agent.ini
 ...
 [ovs]
-bridge_mappings = physnet3:br192
+bridge_mappings = physnet3:br0
 ...
  
 compute:~ # reboot
 
 # list bridge and port
-control:~ # docker exec -it openvswitch_vswitchd ovs-vsctl show
-control:~ # docker exec -it openvswitch_vswitchd ovs-vsctl list-ports br0
+compute:~ # docker exec -it openvswitch_vswitchd ovs-vsctl show
+compute:~ # docker exec -it openvswitch_vswitchd ovs-vsctl list-ports br0
 ```
 
 
@@ -352,21 +355,19 @@ control:~ # docker exec -it openvswitch_vswitchd ovs-vsctl list-ports br0
 ```bash
 # check network agent
 deploy:~ # openstack network agent list
- 
- 
+
 # create provider network
 deploy:~ # openstack network create --share \
   --provider-physical-network physnet3 \
   --provider-network-type flat \
   provider_network
- 
- 
+
 # create subnet network
 deploy:~ # openstack subnet create --subnet-range 192.168.0.0/24 \
   --gateway 192.168.0.1 \
   --network provider_network \
   --allocation-pool start=192.168.0.100,end=192.168.0.200 \
-  provider_network_v4
+  provider_subnet_v4
 ```
 
 
@@ -375,4 +376,3 @@ deploy:~ # openstack subnet create --subnet-range 192.168.0.0/24 \
 ## ref
 
 [Welcome to Kolla-Ansible’s documentation!](https://docs.openstack.org/kolla-ansible/latest/)
-
