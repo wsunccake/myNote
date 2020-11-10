@@ -18,18 +18,17 @@
                          deploy     control     compute
 openstack management     eth0       eth0        eth0
 neutron external                    eth1
-                                    eth2        eth2
+provider network                    eth2        eth2
 ```
 
 ---
 
 ## non deploy node
 
+
 control, compute, storage
 
-
 ### all
-
 
 ```bash
 # setup hostname
@@ -235,7 +234,10 @@ deploy:~ # docker images
 
 ```bash
 deploy:~ # docker run -d -p 5000:5000 --restart=always --name registry -v <data>:/var/lib/registry registry:2
-deploy:~ # docker run -d -p 80:80 -e ENV_DOCKER_REGISTRY_HOST=<registry_ip> -e ENV_DOCKER_REGISTRY_PORT=5000 konradkleine/docker-registry-frontend:v2
+deploy:~ # docker run -d -p 80:80 \
+  -e ENV_DOCKER_REGISTRY_HOST=<registry_ip> \
+  -e ENV_DOCKER_REGISTRY_PORT=5000 \
+  konradkleine/docker-registry-frontend:v2
 ```
 
 
@@ -277,7 +279,12 @@ deploy:~ # openstack service list
 
 # create example
 deploy:~ # /usr/local/share/kolla-ansible/init-runonce
-deploy:~ # openstack server create --image cirros --flavor m1.tiny --key-name mykey --network demo-net demo1
+deploy:~ # openstack server create \
+  --image cirros \
+  --flavor m1.tiny \
+  --key-name mykey \
+  --network demo-net \
+  demo1
 ```
 
 
@@ -369,6 +376,49 @@ deploy:~ # openstack subnet create --subnet-range 192.168.0.0/24 \
   --network provider_network \
   --allocation-pool start=192.168.0.100,end=192.168.0.200 \
   provider_subnet_v4
+```
+
+
+---
+
+## other
+
+
+### quota port number
+
+```bash
+deploy:~ # openstack quota show
+deploy:~ # openstack quota list --network
+deploy:~ # openstack quota set --ports 5000 <project>
+```
+
+
+### resource overcommitting
+
+```bash
+control:~ # vi /etc/kolla/nova-scheduler/nova.conf
+[DEFAULT]
+...
+cpu_allocation_ratio=1.0
+ram_allocation_ratio=1.0
+disk_allocation_ratio=1.0
+...
+
+control:~ # docker restart nova_scheduler
+```
+
+
+### glance image space
+
+```bash
+control:~ # docker volume inspect glance
+control:~ # vi /etc/fstab
+...
+<nfs_ip>:<nfs_path>     /var/lib/docker/volumes/glance      nfs     defaults        0 0
+...
+
+control:~ # mount -a
+control:~ # reboot
 ```
 
 
