@@ -48,6 +48,10 @@ op:~ # openstack image list
 
 # flavor
 op:~ # openstack flavor list
+
+# quota
+op:~ # openstack quota show
+op:~ # openstack quota list
 ```
 
 

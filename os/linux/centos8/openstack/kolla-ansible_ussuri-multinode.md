@@ -276,6 +276,8 @@ deploy:~ # source /etc/kolla/admin-openrc.sh
 # install openstack client module
 deploy:~ # pip3 install python-openstackclient
 deploy:~ # openstack service list
+deploy:~ # pip3 install python-novaclient       # deprecated
+deploy:~ # pip3 install python-neutronclient    # deprecated
 
 # create example
 deploy:~ # /usr/local/share/kolla-ansible/init-runonce
