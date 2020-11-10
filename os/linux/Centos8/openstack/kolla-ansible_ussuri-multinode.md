@@ -18,6 +18,7 @@
                          deploy     control     compute
 openstack management     eth0       eth0        eth0
 neutron external                    eth1
+                                    eth2        eth2
 ```
 
 ---
@@ -270,7 +271,7 @@ deploy:~ # kolla-ansible post-deploy
 deploy:~ # ls /etc/kolla/admin-openrc.sh
 deploy:~ # source /etc/kolla/admin-openrc.sh
 
-# openstack client
+# install openstack client module
 deploy:~ # pip3 install python-openstackclient
 deploy:~ # openstack service list
 
@@ -295,16 +296,16 @@ centos:~ # systemctl disable NetworkManager --now
 # setup openvswitch
 centos:~ # docker exec -it openvswitch_vswitchd ovs-vsctl show
 centos:~ # docker exec -it openvswitch_vswitchd ovs-vsctl add-br br0
-centos:~ # docker exec -it openvswitch_vswitchd ovs-vsctl add-port br0 eth0
+centos:~ # docker exec -it openvswitch_vswitchd ovs-vsctl add-port br0 eth2
  
 # list bridge and port
 centos:~ # ip addr show dev br0
-centos:~ # ip addr show dev eth0
+centos:~ # ip addr show dev eth2
 centos:~ # docker exec -it openvswitch_vswitchd ovs-vsctl show
 centos:~ # docker exec -it openvswitch_vswitchd ovs-vsctl list-ports br0
 ```
 
-NetworkManager don't support openvswitch
+NetworkManager do not support openvswitch
 
 
 ### control node
@@ -376,3 +377,4 @@ deploy:~ # openstack subnet create --subnet-range 192.168.0.0/24 \
 ## ref
 
 [Welcome to Kolla-Ansible’s documentation!](https://docs.openstack.org/kolla-ansible/latest/)
+
