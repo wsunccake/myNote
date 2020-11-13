@@ -4,14 +4,22 @@
 ## nic topology
 
 ```
-        +----------+-------------+------------+  openstack management
-        |          |             |            |
-        |          |             |            |
- deploy		control       compute      storage
-                   |
-                   |neutron external
-                   v 
-                internet
+deploy     control       compute      storage
+   |          |             |            |
+   |          |             |            |
+   +----------+-------------+------------+  br-mgmt    / api_interface
+              |             |            |
+              |             |            |
+              +-------------+------------+  br-storage / storage_interface
+              |             |
+              |             |
+              +-------------+               br-tun     / tunnel_interface
+              |
+              |
+              +                             br-ex      / neutron_external_interface
+              |
+              |
+           internet
 ```
 
 ```
@@ -203,6 +211,10 @@ node_custom_config
 
 enable_haproxy
 
+no, kolla_internal_vip_address must be control openstack management ip, kolla_external_vip_address do not work
+
+yes, kolla_internal_vip_address must be in control openstack management network and not using, kolla_external_vip_address can work
+
 
 #### network configuration
 
@@ -257,6 +269,7 @@ deploy:~ # kolla-ansible -i /etc/kolla/multinode prechecks
 deploy:~ # kolla-ansible -i /etc/kolla/multinode pull
 deploy:~ # kolla-ansible -i /etc/kolla/multinode deploy
 
+deploy:~ # kolla-ansible -i /etc/kolla/multinode reconfigure
 deploy:~ # kolla-ansible -i /etc/kolla/multinode --yes-i-really-really-mean-it destroy
 ```
 
@@ -421,6 +434,20 @@ control:~ # vi /etc/fstab
 
 control:~ # mount -a
 control:~ # reboot
+```
+
+### nova compute hypervisor
+
+```bash
+compute:~ # cat /etc/kolla/nova-compute/nova.conf
+...
+[libvirt]
+connection_uri = qemu+tcp://192.168.10.110/system
+live_migration_inbound_addr = 192.168.10.110
+virt_type = kvm
+...
+
+compute:~ # docker restart nova_compute
 ```
 
 

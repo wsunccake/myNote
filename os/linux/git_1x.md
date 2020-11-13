@@ -98,13 +98,40 @@ linux:~/project # git push -u origin master
 ```bash
    b1              b1 
    /     =>      /    \ 
-v1 - v2       v1 - v2 - v3
+m1 - m2       m1 - m2 - m3
 ```
 
 ```bash
-linux:~/project $ git checkout v2 
+linux:~/project $ git checkout m2 
 linux:~/project $ git merge b1
 ```
+
+
+### fast-forward
+
+```bash
+   b1
+   /     =>
+m1              m1  - b1
+```
+
+```bash
+linux:~/project $ git checkout m1
+linux:~/project $ git merge [--ff] b1
+```
+
+
+```bash
+   b1              b1 
+   /     =>      /    \ 
+m1 - m2       m1  ---  m2
+```
+
+```bash
+linux:~/project $ git checkout m2 
+linux:~/project $ git merge --no-ff b1
+```
+
 
 
 ## Rebase
