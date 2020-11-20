@@ -37,7 +37,7 @@ test class default name must be Test*
 
 ## option
 
-`tasks/test_demo.py`
+`tests/test_demo.py`
 
 ```python
 import pytest
