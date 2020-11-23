@@ -9,15 +9,6 @@ linux:~ # pip install allure-pytest
 
 ---
 
-## usage
-
-```bash
-linux:~ # pytest --alluredir=./result
-```
-
-
----
-
 ## install allure
 
 ```bash
@@ -94,13 +85,17 @@ def test_yyy():
 
 ---
 
-## generate report
+## report
 
 ```bash
+# run test
 linux:~ # pytest --alluredir=result --clean-alluredir
 
+# generate report and start server
 linux:~ # allure serve result
 
+# generate report
 linux:~ # allure generate result --clean
+# start server
 linux:~ # allure open
 ```
