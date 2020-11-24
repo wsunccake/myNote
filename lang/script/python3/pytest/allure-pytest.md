@@ -13,7 +13,7 @@ linux:~ # pip install allure-pytest
 
 ```bash
 linux:~ # wget https://repo1.maven.org/maven2/io/qameta/allure/allure-commandline/2.13.6/allure-commandline-2.13.6.zip
-linux:~ # unzip allure-commandline-2.13.6.zip /usr/local
+linux:~ # unzip allure-commandline-2.13.6.zip -d /usr/local
 linux:~ # ln -s /usr/local/allure-2.13.6/bin/allure /usr/local/bin/.
 ```
 
