@@ -1,5 +1,21 @@
 # SLE15
 
+## Validate
+
+```bash
+sle:~ # ls SLE-15-SP2-Full-x86_64-GM-Media1.iso SLE-15-SP2-Full-x86_64-GM-Media2.iso
+
+sle:~ # vi sle15sp2_sha256.txt
+938dd99becf3bf29d0948a52d04bcd1952ea72621a334f33ddb5e83909116b55  SLE-15-SP2-Full-x86_64-GM-Media1.iso
+c4c9393c35feffd3ffaea4a8860ae7428fe7bf996d202c4582a3abc1c4228604  SLE-15-SP2-Full-x86_64-GM-Media2.iso
+
+sle:~ # sha256sum -c sle15sp2_sha256.txt
+sle:~ # sha256sum SLE-15-SP2-Full-x86_64-GM-Media1.iso
+```
+
+
+---
+
 ## Install
 
 安裝時, 預設 filesystem 為 btrfs, 建議使用 xfs (效能較佳)
@@ -14,7 +30,7 @@
 
 ```bash
 # on local
-sel:~ # mount /dev/sr0 /mnt
+sle:~ # mount /dev/sr0 /mnt
 sle:~ # zypper rr -a
 sle:~ # zypper ar /mnt/Module-Basesystem Basesystem
 sle:~ # ls -d /mnt/{M,P}* | xarg -i zypper ar {} `basename {}`

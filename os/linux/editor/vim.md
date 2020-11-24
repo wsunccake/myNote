@@ -203,6 +203,9 @@
 
   `gD`, global declaration
 
+
+---
+
 ## Level 5
 
 
@@ -235,3 +238,46 @@ vim -d file1 file2 ...
 在 cmdline mode
 
   :`diffu`[pdate], 更新 diff
+
+
+---
+
+## Level 6
+
+### Mode / 模式
+
+`cc`, change a line
+
+
+#### word
+
+`ciw`, change a word
+
+`caw`, change a word
+
+`gUaw`, a word to upper case
+
+`guaw`, a word to lower case
+
+
+#### sentence
+
+`cis`, change a sentence
+
+`cas`, change a sentence
+
+`gUas`, a sentence to upper case
+
+`guas`, a sentence to lower case
+
+
+#### paragraph
+
+`cip`, change a paragraph
+
+`cap`, change a paragraph
+
+`gUap`, a paragraph to upper case
+
+`guap`, a paragraph to lower case
+
