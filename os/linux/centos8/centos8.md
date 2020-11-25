@@ -1,6 +1,9 @@
 # centos 8
 
-## gnome3
+
+## gui
+
+### gnome3
 
 after mini install, source from iso/image
 
@@ -32,7 +35,8 @@ centos:~ # systemctl set-default graphical
 centos:~ # systemctl isolate graphical
 ```
 
-## gnome3 tweak 
+
+### gnome3 tweak 
 
 ```bash
 centos:~ # dnf install gnome-tweaks
@@ -45,27 +49,60 @@ centos:~ # dnf install gnome-tweaks
 
 ---
 
-## software
+## repository
+
+### epel
 
 ```bash
 centos:~ # dnf install epel-release
+```
 
-# openjdk
+
+---
+
+## develop
+
+
+### openjdk
+
+```bash
 centos:~ # dnf install java-11-openjdk-devel
+```
 
-# git
+
+### git
+
+```bash
 centos:~ # dnf install git
+```
 
-# chrome
-centos:~ # wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-centos:~ # dnf install google-chrome-stable_current_x86_64.rpm
 
-# vscode
+---
+
+## editor/ide
+
+### sublime
+
+```bash
+centos:~ # rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
+centos:~ # wget -P /etc/yum.repos.d/ https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
+centos:~ # dnf install sublime-text
+```
+
+
+### vscode
+
+```bash
 centos:~ # rpm --import https://packages.microsoft.com/keys/microsoft.asc
 centos:~ # echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo
 centos:~ # dnf check-update
 centos:~ # dnf install code
+```
 
+
+### intellij idea
+
+```bash
 # intellij idea
 centos:~ # vi ~/.local/share/applications/idea.desktop
 [Desktop Entry]
@@ -83,3 +120,82 @@ StartupWMClass=jetbrains-idea
 # /usr/local/share/applications/
 # ~/.local/share/applications
 ```
+
+
+---
+
+## browser
+
+### chrome
+
+```bash
+# chrome
+centos:~ # wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+centos:~ # dnf install google-chrome-stable_current_x86_64.rpm
+```
+
+
+---
+
+## terminal
+
+### zsh
+
+```bash
+centos:~ # dnf install zsh
+```
+
+
+### oh-my-zsh
+
+```bash
+centos:~ # sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+
+### fzf
+
+```bash
+centos:~ # git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+centos:~ # ~/.fzf/install
+
+# fzf for bash
+centos:~ # vi ~/.bashrc
+...
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+centos:~ # vi ~/.fzf.bash
+# Setup fzf
+# ---------
+if [[ ! "$PATH" == *$HOME/.fzf/bin* ]]; then
+  export PATH="${PATH:+${PATH}:}$HOME/.fzf/bin"
+fi
+
+# Auto-completion
+# ---------------
+[[ $- == *i* ]] && source "$HOME/.fzf/shell/completion.bash" 2> /dev/null
+
+# Key bindings
+# ------------
+source "$HOME/.fzf/shell/key-bindings.bash"
+
+# fzf for zsh
+centos:~ # vi ~/.zshrc
+...
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+cat ~/.fzf.zsh
+# Setup fzf
+# ---------
+if [[ ! "$PATH" == *$HOME/.fzf/bin* ]]; then
+  export PATH="${PATH:+${PATH}:}$HOME/.fzf/bin"
+fi
+
+# Auto-completion
+# ---------------
+[[ $- == *i* ]] && source "$HOME/.fzf/shell/completion.zsh" 2> /dev/null
+
+# Key bindings
+# ------------
+source "$HOME/.fzf/shell/key-bindings.zsh"
+```
+
