@@ -124,6 +124,24 @@ StartupWMClass=jetbrains-idea
 
 ---
 
+## network
+
+### disable ipv6
+
+```bash
+centos:~ # sysctl -w net.ipv6.conf.all.disable_ipv6=1
+centos:~ # sysctl -w net.ipv6.conf.default.disable_ipv6=1
+
+centos:~ # vi /etc/sysctl.d/ipv6.conf
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+
+centos:~ # reboot
+```
+
+
+---
+
 ## browser
 
 ### chrome
