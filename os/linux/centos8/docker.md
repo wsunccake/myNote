@@ -43,11 +43,28 @@ centos:~ # vi /etc/docker/daemon.json
 
 centos 8 default firewall use nftables not iptables, docker 19 still not support.
 
+`method 1`
+
 ```bash
 centos:~ # vi /etc/firewalld/firewalld.conf
 FirewallBackend=nftables
 ->
 FirewallBackend=iptables
 
-centos:~ # systemctl restart firewalld.service
+centos:~ # systemctl restart firewalld
+```
+
+`method 2`
+
+```bash
+centos:~ # firewall-cmd --get-active-zones
+centos:~ # firewall-cmd --get-zone-of-interface=docker0
+
+centos:~ # firewall-cmd --permanent --zone=public --add-interface=docker0
+centos:~ # firewall-cmd --permanent --direct --add-rule ipv4 filter INPUT 4 -i docker0 -j ACCEPT
+centos:~ # firewall-cmd --permanent --direct --add-rule ipv6 filter INPUT 6 -i docker0 -j ACCEPT
+centos:~ # firewall-cmd --permanent --zone=public --add-masquerade
+centos:~ # firewall-cmd --reload
+
+centos:~ # systemctl restart docker
 ```
