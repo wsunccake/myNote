@@ -1,13 +1,16 @@
 # install
 
 ```bash
-centos:~ # yum install python34 python34-pip
+centos:~ # yum install python34 python34-pip   # for centos 7
+centos:~ # dnf module install python36         # for centos 8
 ```
 
 
 ---
 
-# pip
+# package management
+
+## pip
 
 安裝 virtualenv, pybuilder 為例子
 
@@ -27,7 +30,9 @@ linux:~ # pip uninstall requests
 
 ---
 
-# virtualenv
+# virtual environment
+
+## virtualenv
 
 ```bash
 linux:~ # virtualenv --python=python3 myproject3
@@ -37,9 +42,20 @@ linux:~/myproject3 # deactivate
 ```
 
 
+## venv
+
+```bash
+linux:~ # python3 -m venv venv
+linux:~ # source venv/bin/activate
+(vevn) linux:~ # deactivate
+```
+
+
 ---
 
-# ipython 
+# read-eval-print loop / repl
+
+## ipython 
 
 ```bash
 linux:~ # pip install ipython
@@ -47,9 +63,7 @@ linux:~ # ipython
 ```
 
 
----
-
-# jupyter
+## jupyter
 
 ```bash
 linux:~ # pip install jupyter
@@ -59,9 +73,11 @@ linux:~ # jupyter notebook
 
 ---
 
-# PyBuilder
+# build tool
 
-## project
+## PyBuilder
+
+### project
 
 ```bash
 linux:~/myproject3 # mkdir demo
@@ -70,7 +86,7 @@ linux:~/myproject3/demo # pyb --start-project
 ```
 
 
-## pycharm/intellij ide plugin
+### pycharm/intellij ide plugin
 
 ```bash
 linux:~/project $ vi build.py
@@ -81,7 +97,7 @@ linux:~/project $ pyb pycharm_generate
 ```
 
 
-## source code
+### source code
 
 ```bash
 linux:~/myproject3/demo # mkdir -p src/main/python
@@ -92,7 +108,7 @@ def helloworld(out):
     out.write('Hello Python\n')
 ```
 
-## executable
+### executable
 
 ```bash
 linux:~/myproject3/demo # mkdir -p src/main/scripts
@@ -106,7 +122,7 @@ sys.stdout.write('Hello Python\n')
 linux:~/myproject3/demo # chmod +x src/main/scripts/hello 
 ```
 
-## unit test
+### unit test
 
 ```bash
 linux:~/myproject3/demo # cat src/unittest/python/hello_tests.py 
@@ -122,7 +138,7 @@ class HelloTest(unittest.TestCase):
         verify(out).write('Hello Python\n')
 ```
 
-## build file
+### build file
 
 ```bash
 linux:~/myproject3/demo # cat build.py
@@ -144,12 +160,15 @@ def initialize(project):
     project.version = '0.1'
 ```
 
-## run
+### run
 
 ```bash
 linux:~/myproject3/demo # pyb install_dependencies
 linux:~/myproject3/demo # pyb
 ```
+
+
+---
 
 # class
 
@@ -171,7 +190,7 @@ class Third(object):
 class Son(First, Second, Third):
     def say(self):
         #super().say()                     # from First (same as super(Son, self).say())
-        super(First, self).say()    # from Second
+        super(First, self).say()           # from Second
         #super(Second, self).say()         # from Third
         #super(Third, self).say()          # error
  
