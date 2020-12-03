@@ -48,6 +48,41 @@ linux:~/myproject3 # deactivate
 linux:~ # python3 -m venv venv
 linux:~ # source venv/bin/activate
 (vevn) linux:~ # deactivate
+
+linux:~ # cat venv/pyvenv.cfg
+prompt = 
+```
+
+
+## pipenv
+
+```bash
+linux:~ # pip install pipenv
+
+linux:~ # pipenv --help
+
+# setup pip + venv + python ver
+linux:~ # pipenv --python 2.7
+linux:~ # pipenv --python 3.6
+linux:~ # pipenv --two
+linux:~ # pipenv --three
+
+# environment
+linux:~ # pipenv --py
+linux:~ # pipenv --venv
+
+# install package
+linux:~ # pipenv install <package>
+linux:~ # pipenv install -r requirements.txt
+
+# run
+linux:~ # pipenv run python <script.py>
+
+linux:~ # source `pipenv --venv`/bin/activate
+(venv) linux:~ # 
+
+# remove
+linux:~ # pipenv --rm
 ```
 
 
