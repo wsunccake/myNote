@@ -142,6 +142,30 @@ centos:~ # reboot
 
 ---
 
+## remote
+
+### vnc
+
+```bash
+centos:~ # dnf install tigervnc-server
+centos:~ # vncserver -list
+
+The XKEYBOARD keymap compiler (xkbcomp) reports:
+> Internal error:   Could not resolve keysym XF86MonBrightnessCycle
+> Internal error:   Could not resolve keysym XF86RotationLockToggle
+Errors from xkbcomp are not fatal to the X server
+
+centos:~ # grep -ir XF86MonBrightnessCycle /usr/share/X11/xkb
+centos:~ # grep -ir XF86RotationLockToggle /usr/share/X11/xkb
+
+centos:~ # vncserver [:1]
+centos:~ # vncserver -list
+centos:~ # vncserver -kill :1
+```
+
+
+---
+
 ## browser
 
 ### chrome
@@ -217,3 +241,14 @@ fi
 source "$HOME/.fzf/shell/key-bindings.zsh"
 ```
 
+
+---
+
+## other
+
+### gpm
+
+```bash
+centos:~ # dnf install gpm
+centos:~ # systemctl enable --now gpm
+```
