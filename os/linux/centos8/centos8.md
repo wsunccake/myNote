@@ -77,6 +77,17 @@ centos:~ # dnf install git
 ```
 
 
+### robo 3t
+
+```bash
+centos:~ # dnf search libcurl-devel
+centos:~ # ln -s /usr/lib64/libcurl.so.4 /usr/lib64/libcurl-gnutls.so.4
+
+centos:~ # wget https://download.studio3t.com/robomongo/linux/robo3t-1.4.2-linux-x86_64-8650949.tar.gz
+centos:~ # tar zxf robo3t-1.4.2-linux-x86_64-8650949.tar.gz -C /opt
+```
+
+
 ---
 
 ## editor/ide
