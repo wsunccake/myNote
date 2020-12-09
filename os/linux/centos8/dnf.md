@@ -17,7 +17,7 @@ centos:~ # dnf module install <module>
 
 ```bash
 centos:~ # dnf list
-centos:~ # dnf repoquery
+centos:~ # dnf repoquery [-l] [<package>]
 centos:~ # dnf search <package>
 centos:~ # dnf info <package>
 centos:~ # dnf module provides <package>
