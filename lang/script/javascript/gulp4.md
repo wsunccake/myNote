@@ -1,4 +1,4 @@
-# gulp 4
+# gulp 4.x
 
 ## install
 
@@ -40,15 +40,16 @@ const gulp = require('gulp');
 function clean(cb) {
   // body omitted
   cb();
-}
+};
 
-function build(cb) {
+const build = (cb) => {
   // body omitted
   cb();
-}
+};
 
+exports.clean = clean;
 exports.build = build;
-exports.default = series(clean, build);
+exports.default = gulp.series(clean, build);
 ```
 
 
@@ -59,20 +60,19 @@ exports.default = series(clean, build);
 [linux:project] $ vi gulpfile.babel.js
 import gulp from 'gulp';
 
-function clean(cb) {
+export function clean(cb) {
   // body omitted
   cb();
-}
+};
 
-function build(cb) {
+export const build = (cb) => {
   // body omitted
   cb();
-}
+};
 
-exports.build = build;
-exports.default = gulp.series(clean, build);
+export default gulp.series(clean, build);
 
-[linux:project] $ vi 
+[linux:project] $ vi .babelrc
 {
   "presets": ["@babel/preset-env"]
 }
