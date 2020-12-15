@@ -21,5 +21,5 @@ Categories=Development;
 
 ```bash
 [linux:project ] $ npm install newman
-[linux:project ] $ ./node_modules/newman/bin/newman.js run <collection>.json -k -e <environment>.json
+[linux:project ] $ `npm bin`/newman run <collection>.json -k -e <environment>.json
 ```
