@@ -237,6 +237,64 @@ var left = 2;
 
 ## Module
 
+### common js
+
+```javascript
+// m.js 
+exports.PI = 3.14;
+
+// main.js
+const m = require('./m.js');
+console.log(m.PI);
+
+// main.js
+const m = require('./m.js');
+const {PI: pi} = m;
+console.log(pi);
+
+// main.js
+const {PI} = require('./m.js');
+console.log(PI);
+
+// main.js
+const m = require('./m.js');
+const {PI} = m;
+console.log(PI);
+```
+
+
+### es module
+
+```javascript
+// m.js
+export default {
+  PI: 3.14
+};
+
+// main.js
+import m from './m.js';
+console.log(m.PI);
+
+// main.js
+import m from './m.js';
+const {PI} = m
+console.log(PI);
+
+// main.js
+import m from './m.js';
+const {PI: pi} = m
+console.log(PI: pi);
+```
+
+```javascript
+// m.js
+export const PI = 3.14;
+
+// main.js
+import {PI} from './m.js';
+console.log(PI);
+```
+
 
 ---
 
