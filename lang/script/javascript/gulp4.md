@@ -57,6 +57,10 @@ exports.default = gulp.series(clean, build);
 
 ```bash
 [linux:project] $ npm install --save-dev @babel/core @babel/preset-env @babel/register
+[linux:project] $ vi .babelrc
+{
+  "presets": ["@babel/preset-env"]
+}
 [linux:project] $ vi gulpfile.babel.js
 import gulp from 'gulp';
 
@@ -66,14 +70,28 @@ export function clean(cb) {
 };
 
 export const build = (cb) => {
-  // body omitted
+  const e = util.promisify(exec);
+  const r = async () => {
+    const { stdout, stderr } = await e("echo build");
+    console.log(`stdout: ${stdout}`);
+    console.error(`stderr: ${stderr}`);
+  };
+  r();
+ 
+  cb();
+};
+
+export const run = (cb) => {
+  exec("echo run", (error, stdout, stderr) => {
+    if (error) {
+      console.error(`error: ${error}`);
+    } else {
+      console.log(`stdout: ${stdout}`);
+      console.error(`stderr: ${stderr}`);
+    };
+  });
   cb();
 };
 
 export default gulp.series(clean, build);
-
-[linux:project] $ vi .babelrc
-{
-  "presets": ["@babel/preset-env"]
-}
 ```
