@@ -10,6 +10,7 @@
 ```
 
 /var/lib/containers
+
 $HOME/.local/share/containers
 
 
@@ -39,6 +40,7 @@ $HOME/.local/share/containers
 image: host/repository/image:tag
 
 /etc/containers/registries.conf
+
 $HOME/.config/containers/registries.conf
 
 
@@ -137,8 +139,57 @@ ENTRYPOINT ./app
 [centos:~] # podman pod create -p 8080:8080 --name web
 [centos:~] # podman run -itd --name hello --pod web go-app
 
-
+# test
 [centos:~] # curl http://127.0.0.1:8080
+```
+
+
+---
+
+## service
+
+```bash
+[centos:~] # podman generate kube <pod>|<container> > <service>.yaml
+[centos:~] # podman play kube <pod>|<container>
+```
+
+```bash
+[centos:~] # podman generate systemd <pod>|<container> > <service>.service
+
+# for system
+[centos:~] # cp <service>.service /etc/systemd/system
+[centos:~] # systemctl enable <service>.service
+
+# for user
+[centos:~] # cp <service>.service $HOME/.config/systemd/user
+[centos:~] # systemctl enable <service>.service --user
+```
+
+---
+
+## network
+
+```bash
+[centos:~] # podman network ls
+[centos:~] # podman network inspect <network>
+[centos:~] # podman network create <network>
+[centos:~] # podman network rm <network>
+
+[centos:~] # podman port -a
+[centos:~] # podman port -l
+[centos:~] # podman port <container>
+```
+
+
+---
+
+## volume
+
+```bash
+[centos:~] # podman volume ls
+[centos:~] # podman volume inspect <volume>
+[centos:~] # podman volume create <volume>
+[centos:~] # podman volume rm <volume>
 ```
 
 
