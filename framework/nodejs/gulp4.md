@@ -6,6 +6,8 @@
 [linux:project] $ npm install --global gulp-cli
 [linux:project] $ npm install --save-dev gulp
 [linux:project] $ `npm bin`/gulp --version
+[linux:project] $ npx gulp --version
+[linux:project] $ gulp --version
 ```
 
 
