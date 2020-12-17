@@ -195,3 +195,62 @@ centos:~ # podman pod rm mypod
 centos:~ # podman ps
 centos:~ # podman pod ps
 ```
+
+
+---
+
+## adding software to a running ubi container
+
+
+### adding software inside the standard UBI container
+
+```bash
+# dnf install --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos bzip2
+# dnf install zsh
+# dnf install --enablerepo=rhel-7-server-optional-rpms zsh-html
+```
+
+
+### adding software inside the minimal UBI container
+
+```bash
+# microdnf install bzip2
+# microdnf install --enablerepo=rhel-7-server-rpms zsh
+# microdnf install --enablerepo=rhel-7-server-rpms --enablerepo=rhel-7-server-optional-rpms zsh-html
+```
+
+
+```bash
+centos:~ # vi dockerfile
+FROM registry.access.redhat.com/ubi8-minimal
+USER root
+LABEL maintainer="John Doe"
+# Update image
+RUN microdnf update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos -y && rm -rf /var/cache/yum
+RUN microdnf install --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos httpd -y && rm -rf /var/cache/yum
+# Add default Web page and expose port
+RUN echo "The Web Server is Running" > /var/www/html/index.html
+EXPOSE 80
+# Start the service
+CMD ["-D", "FOREGROUND"]
+ENTRYPOINT ["/usr/sbin/httpd"]
+
+centos:~ # buildah bud -t webserver -f dockerfile
+centos:~ # podman run -d -p 8080:80 webserver
+
+centos:~ # curl http://localhost:8080/index.html
+```
+
+ubi8/php-72: PHP 7.2 platform for building and running applications
+
+ubi8/nodejs-10: Node.js 10 platform for building and running applications. Used by Node.js 10 Source-To-Image builds
+
+ubi8/ruby25: Ruby 2.5 platform for building and running applications
+
+ubi8/python-27: Python 2.7 platform for building and running applications
+
+ubi8/python-36: Python 3.6 platform for building and running applications
+
+ubi8/s2i-core: Base image with essential libraries and tools used as a base for builder images like perl, python, ruby, and so on
+
+ubi8/s2i-base: Base image for Source-to-Image builds

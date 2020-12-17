@@ -27,6 +27,21 @@ $HOME/.local/share/containers
 
 ---
 
+## rootless
+
+```bash
+centos:~ # dnf install slirp4netns podman
+centos:~ # echo "user.max_user_namespaces=28633" > /etc/sysctl.d/userns.conf
+centos:~ # sysctl -p /etc/sysctl.d/userns.conf
+
+centos:~ # podman info
+centos:~ # cat /etc/subuid
+centos:~ # cat /etc/subgid
+```
+
+
+---
+
 ## image
 
 ```bash

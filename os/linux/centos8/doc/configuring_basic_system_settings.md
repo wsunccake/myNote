@@ -733,3 +733,18 @@ centos:~ # vi hello.php
 
 centos:~ # php hello.php
 ```
+
+
+---
+
+## using langpacks
+
+```bash
+centos:~ # yum list langpacks-*
+centos:~ # yum list installed langpacks*
+centos:~ # yum list available langpacks*
+centos:~ # yum repoquery --whatsupplements langpacks-<locale_code>
+centos:~ # yum install langpacks-<locale_code>
+centos:~ # yum remove langpacks-<locale_code>
+centos:~ # yum install glibc-langpack-<locale_code>
+```
