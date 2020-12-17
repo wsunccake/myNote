@@ -40,7 +40,7 @@ ENTRYPOINT ["/usr/sbin/httpd"]
 
 ## build by command
 
-```
+```bash
 [centos:~] # buildah from registry.access.redhat.com/ubi8-minimal
 [centos:~] # buildah images
 [centos:~] # buildah containers
