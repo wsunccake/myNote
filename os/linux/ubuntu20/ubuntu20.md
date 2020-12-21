@@ -33,3 +33,23 @@ ubuntu:~ # ls /usr/share/doc/netplan/examples/       # setup example
 
 
 ---
+
+## development
+
+### openjdk
+
+```bash
+ubuntu:~ # apt install openjdk-11-jdk
+```
+
+
+---
+
+## terminal
+
+### zsh
+
+```bash
+ubuntu:~ # apt install zsh
+```
+
