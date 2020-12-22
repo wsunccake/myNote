@@ -5,9 +5,9 @@
 netplan.io
 
 ```bash
-ubuntu:~ # dpkg -l netplan.io
+[ubuntu:~ ] # dpkg -l netplan.io
 
-ubuntu:~ # vi /etc/netplan/00-installer-config.yaml
+[ubuntu:~ ] # vi /etc/netplan/00-installer-config.yaml
 network:
   version: 2
   renderer: networkd
@@ -24,11 +24,11 @@ network:
     ens224:
       dhcp4: yes
 
-ubuntu:~ # netplan try
-ubuntu:~ # netplan apply
+[ubuntu:~ ] # netplan try
+[ubuntu:~ ] # netplan apply
 
-ubuntu:~ # ls /run/systemd/network/                  # auto generate systemd script
-ubuntu:~ # ls /usr/share/doc/netplan/examples/       # setup example
+[ubuntu:~ ] # ls /run/systemd/network/                  # auto generate systemd script
+[ubuntu:~ ] # ls /usr/share/doc/netplan/examples/       # setup example
 ```
 
 
@@ -39,7 +39,7 @@ ubuntu:~ # ls /usr/share/doc/netplan/examples/       # setup example
 ### openjdk
 
 ```bash
-ubuntu:~ # apt install openjdk-11-jdk
+[ubuntu:~ ] # apt install openjdk-11-jdk
 ```
 
 
@@ -50,6 +50,6 @@ ubuntu:~ # apt install openjdk-11-jdk
 ### zsh
 
 ```bash
-ubuntu:~ # apt install zsh
+[ubuntu:~ ] # apt install zsh
 ```
 
