@@ -529,3 +529,605 @@ app.use('/admin', router, function (req, res) {
 ---
 
 ## overriding express api
+
+```javascript
+app.response.sendStatus = function (statusCode, type, message) {
+  // code is intentionally kept simple for demonstration purpose
+  return this.contentType(type)
+    .status(statusCode)
+    .send(message)
+}
+```
+
+```javascript
+res.sendStatus(404, 'application/json', '{"error":"resource not found"}')
+```
+
+
+---
+
+## using template engine
+
+```bash
+[linux:myapp] $ npm install pug --save
+
+[linux:myapp] $ vi views/index.pug
+html
+  head
+    title= title
+  body
+    h1= message
+
+[linux:myapp] $ vi app.js
+app.set('view engine', 'pug')
+...
+app.get('/', function (req, res) {
+  res.render('index', { title: 'Hey', message: 'Hello there!' })
+})
+```
+
+
+---
+
+## error handling
+
+### catching Error
+
+```javascript
+app.get('/', function (req, res) {
+  throw new Error('BROKEN') // Express will catch this on its own.
+})
+```
+
+```javascript
+app.get('/', function (req, res, next) {
+  fs.readFile('/file-does-not-exist', function (err, data) {
+    if (err) {
+      next(err) // Pass errors to Express.
+    } else {
+      res.send(data)
+    }
+  })
+})
+```
+
+```javascript
+app.get('/user/:id', async function (req, res, next) {
+  var user = await getUserById(req.params.id)
+  res.send(user)
+})
+```
+
+```javascript
+app.get('/', [
+  function (req, res, next) {
+    fs.writeFile('/inaccessible-path', 'data', next)
+  },
+  function (req, res) {
+    res.send('OK')
+  }
+])
+```
+
+```javascript
+app.get('/', function (req, res, next) {
+  setTimeout(function () {
+    try {
+      throw new Error('BROKEN')
+    } catch (err) {
+      next(err)
+    }
+  }, 100)
+})
+```
+
+```javascript
+app.get('/', function (req, res, next) {
+  Promise.resolve().then(function () {
+    throw new Error('BROKEN')
+  }).catch(next) // Errors will be passed to Express.
+})
+```
+
+```javascript
+app.get('/', [
+  function (req, res, next) {
+    fs.readFile('/maybe-valid-file', 'utf-8', function (err, data) {
+      res.locals.data = data
+      next(err)
+    })
+  },
+  function (req, res) {
+    res.locals.data = res.locals.data.split(',')[1]
+    res.send(res.locals.data)
+  }
+])
+```
+
+
+### default error handler
+
+```javascript
+function errorHandler (err, req, res, next) {
+  if (res.headersSent) {
+    return next(err)
+  }
+  res.status(500)
+  res.render('error', { error: err })
+}
+```
+
+
+### writing error handler
+
+```javascript
+app.use(function (err, req, res, next) {
+  console.error(err.stack)
+  res.status(500).send('Something broke!')
+})
+```
+
+```javascript
+var bodyParser = require('body-parser')
+var methodOverride = require('method-override')
+
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
+app.use(bodyParser.json())
+app.use(methodOverride())
+app.use(logErrors)
+app.use(clientErrorHandler)
+app.use(errorHandler)
+
+function logErrors (err, req, res, next) {
+  console.error(err.stack)
+  next(err)
+}
+
+function clientErrorHandler (err, req, res, next) {
+  if (req.xhr) {
+    res.status(500).send({ error: 'Something failed!' })
+  } else {
+    next(err)
+  }
+}
+
+function errorHandler (err, req, res, next) {
+  res.status(500)
+  res.render('error', { error: err })
+}
+```
+
+```javascript
+app.get('/a_route_behind_paywall',
+  function checkIfPaidSubscriber (req, res, next) {
+    if (!req.user.hasPaid) {
+      // continue handling this request
+      next('route')
+    } else {
+      next()
+    }
+  }, function getPaidContent (req, res, next) {
+    PaidContent.find(function (err, doc) {
+      if (err) return next(err)
+      res.json(doc)
+    })
+  })
+```
+
+
+---
+
+## debugging
+
+```bash
+[linux:myapp] $ DEBUG=express:* node index.js
+[linux:myapp] $ DEBUG=express:* node ./bin/www   # npx express-generator
+```
+
+
+---
+
+## database integration
+
+### cassandra
+
+```bash
+[linux:myapp] $ npm install cassandra-driver
+```
+
+```javascript
+var cassandra = require('cassandra-driver')
+var client = new cassandra.Client({ contactPoints: ['localhost'] })
+
+client.execute('select key from system.local', function (err, result) {
+  if (err) throw err
+  console.log(result.rows[0])
+})
+```
+
+
+### couchnode
+
+```bash
+[linux:myapp] $ npm install couchnode
+```
+
+```javascript
+var couchbase = require('couchbase')
+var bucket = (new couchbase.Cluster('http://localhost:8091')).openBucket('bucketName')
+
+// add a document to a bucket
+bucket.insert('document-key', { name: 'Matt', shoeSize: 13 }, function (err, result) {
+  if (err) {
+    console.log(err)
+  } else {
+    console.log(result)
+  }
+})
+
+// get all documents with shoe size 13
+var n1ql = 'SELECT d.* FROM `bucketName` d WHERE shoeSize = $1'
+var query = N1qlQuery.fromString(n1ql)
+bucket.query(query, [13], function (err, result) {
+  if (err) {
+    console.log(err)
+  } else {
+    console.log(result)
+  }
+})
+```
+
+
+### couchdb
+
+```bash
+[linux:myapp] $ npm install nano
+```
+
+```javascript
+var nano = require('nano')('http://localhost:5984')
+nano.db.create('books')
+var books = nano.db.use('books')
+
+// Insert a book document in the books database
+books.insert({ name: 'The Art of war' }, null, function (err, body) {
+  if (err) {
+    console.log(err)
+  } else {
+    console.log(body)
+  }
+})
+
+// Get a list of all books
+books.list(function (err, body) {
+  if (err) {
+    console.log(err)
+  } else {
+    console.log(body.rows)
+  }
+})
+```
+
+
+### leveldb
+
+```bash
+[linux:myapp] $ npm install level levelup leveldown
+```
+
+```javascript
+var levelup = require('levelup')
+var db = levelup('./mydb')
+
+db.put('name', 'LevelUP', function (err) {
+  if (err) return console.log('Ooops!', err)
+
+  db.get('name', function (err, value) {
+    if (err) return console.log('Ooops!', err)
+
+    console.log('name=' + value)
+  })
+})
+```
+
+
+### mysql
+
+```bash
+[linux:myapp] $ npm install mysql
+```
+
+```javascript
+var mysql = require('mysql')
+var connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'dbuser',
+  password: 's3kreee7',
+  database: 'my_db'
+})
+
+connection.connect()
+
+connection.query('SELECT 1 + 1 AS solution', function (err, rows, fields) {
+  if (err) throw err
+
+  console.log('The solution is: ', rows[0].solution)
+})
+
+connection.end()
+```
+
+
+### mongodb
+
+```bash
+[linux:myapp] $ npm install mongodb
+```
+
+```javascript
+// for v2.*
+var MongoClient = require('mongodb').MongoClient
+
+MongoClient.connect('mongodb://localhost:27017/animals', function (err, db) {
+  if (err) throw err
+
+  db.collection('mammals').find().toArray(function (err, result) {
+    if (err) throw err
+
+    console.log(result)
+  })
+})
+```
+
+```javascript
+// for v3.*
+var MongoClient = require('mongodb').MongoClient
+
+MongoClient.connect('mongodb://localhost:27017/animals', function (err, client) {
+  if (err) throw err
+
+  var db = client.db('animals')
+
+  db.collection('mammals').find().toArray(function (err, result) {
+    if (err) throw err
+
+    console.log(result)
+  })
+})
+```
+
+
+### neo4j
+
+```bash
+[linux:myapp] $ npm install apoc
+```
+
+```javascript
+var apoc = require('apoc')
+
+apoc.query('match (n) return n').exec().then(
+  function (response) {
+    console.log(response)
+  },
+  function (fail) {
+    console.log(fail)
+  }
+)
+```
+
+
+### oracle
+
+```bash
+[linux:myapp] $ npm install oracledb
+```
+
+```javascript
+const oracledb = require('oracledb')
+const config = {
+  user: '<your db user>',
+  password: '<your db password>',
+  connectString: 'localhost:1521/orcl'
+}
+
+async function getEmployee (empId) {
+  let conn
+
+  try {
+    conn = await oracledb.getConnection(config)
+
+    const result = await conn.execute(
+      'select * from employees where employee_id = :id',
+      [empId]
+    )
+
+    console.log(result.rows[0])
+  } catch (err) {
+    console.log('Ouch!', err)
+  } finally {
+    if (conn) { // conn assignment worked, need to close
+      await conn.close()
+    }
+  }
+}
+
+getEmployee(101)
+```
+
+
+### postgresql
+
+```bash
+[linux:myapp] $ npm install pg-promise
+```
+
+```javascript
+var pgp = require('pg-promise')(/* options */)
+var db = pgp('postgres://username:password@host:port/database')
+
+db.one('SELECT $1 AS value', 123)
+  .then(function (data) {
+    console.log('DATA:', data.value)
+  })
+  .catch(function (error) {
+    console.log('ERROR:', error)
+  })
+```
+
+
+### redis
+
+```bash
+[linux:myapp] $ npm install redis
+```
+
+```javascript
+var redis = require('redis')
+var client = redis.createClient()
+
+client.on('error', function (err) {
+  console.log('Error ' + err)
+})
+
+client.set('string key', 'string val', redis.print)
+client.hset('hash key', 'hashtest 1', 'some value', redis.print)
+client.hset(['hash key', 'hashtest 2', 'some other value'], redis.print)
+
+client.hkeys('hash key', function (err, replies) {
+  console.log(replies.length + ' replies:')
+
+  replies.forEach(function (reply, i) {
+    console.log('    ' + i + ': ' + reply)
+  })
+
+  client.quit()
+})
+```
+
+
+### sql server
+
+```bash
+[linux:myapp] $ npm install tedious
+```
+
+```javascript
+var Connection = require('tedious').Connection
+var Request = require('tedious').Request
+
+var config = {
+  server: 'localhost',
+  authentication: {
+    type: 'default',
+    options: {
+      userName: 'your_username', // update me
+      password: 'your_password' // update me
+    }
+  }
+}
+
+var connection = new Connection(config)
+
+connection.on('connect', function (err) {
+  if (err) {
+    console.log(err)
+  } else {
+    executeStatement()
+  }
+})
+
+function executeStatement () {
+  request = new Request("select 123, 'hello world'", function (err, rowCount) {
+    if (err) {
+      console.log(err)
+    } else {
+      console.log(rowCount + ' rows')
+    }
+    connection.close()
+  })
+
+  request.on('row', function (columns) {
+    columns.forEach(function (column) {
+      if (column.value === null) {
+        console.log('NULL')
+      } else {
+        console.log(column.value)
+      }
+    })
+  })
+
+  connection.execSql(request)
+}
+```
+
+
+### sqlite
+
+```bash
+[linux:myapp] $ npm install sqlite3
+```
+
+```javascript
+var sqlite3 = require('sqlite3').verbose()
+var db = new sqlite3.Database(':memory:')
+
+db.serialize(function () {
+  db.run('CREATE TABLE lorem (info TEXT)')
+  var stmt = db.prepare('INSERT INTO lorem VALUES (?)')
+
+  for (var i = 0; i < 10; i++) {
+    stmt.run('Ipsum ' + i)
+  }
+
+  stmt.finalize()
+
+  db.each('SELECT rowid AS id, info FROM lorem', function (err, row) {
+    console.log(row.id + ': ' + row.info)
+  })
+})
+
+db.close()
+```
+
+
+### elasticsearch
+
+```bash
+[linux:myapp] $ npm install elasticsearch
+```
+
+```javascript
+```
+
+###
+
+```bash
+[linux:myapp] $ npm install
+```
+
+```javascript
+var elasticsearch = require('elasticsearch')
+var client = elasticsearch.Client({
+  host: 'localhost:9200'
+})
+
+client.search({
+  index: 'books',
+  type: 'book',
+  body: {
+    query: {
+      multi_match: {
+        query: 'express js',
+        fields: ['title', 'description']
+      }
+    }
+  }
+}).then(function (response) {
+  var hits = response.hits.hits
+}, function (error) {
+  console.trace(error.message)
+})
+```
