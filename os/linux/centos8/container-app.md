@@ -15,7 +15,7 @@
 
 [centos:~ ] # cat plugins.txt
 greenballs:latest
-[centos:~ ] # podman plugins.txt jenkins:/tmp/.
+[centos:~ ] # podman cp plugins.txt jenkins:/tmp/.
 [centos:~ ] # podman exec -it jenkins sh -c "/usr/local/bin/install-plugins.sh < /tmp/plugis.txt"
 ```
 
