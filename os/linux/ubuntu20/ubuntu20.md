@@ -21,8 +21,10 @@ network:
          addresses:
            - 192.168.1.1
            - 8.8.8.8
-    ens224:
+    ens172:
       dhcp4: yes
+      dhcp4-overrides:
+        use-routes: false
 
 [ubuntu:~ ] # netplan try
 [ubuntu:~ ] # netplan apply
