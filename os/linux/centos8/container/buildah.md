@@ -44,16 +44,16 @@ ENTRYPOINT ["/usr/sbin/httpd"]
 [centos:~] # buildah from registry.access.redhat.com/ubi8-minimal
 [centos:~] # buildah images
 [centos:~] # buildah containers
-[centos:~] # buildah run --tty <image id> /bin/sh
+[centos:~] # buildah run --tty <container id> /bin/sh
 sh-4.4# microdnf update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos -y
 sh-4.4# microdnf install --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos httpd -y
 sh-4.4# rm -rf /var/cache/yum
 sh-4.4# echo "The Web Server is Running" > /var/www/html/index.html
 sh-4.4# exit
 [centos:~] # buildah config --port 80 <image id>
-[centos:~] # buildah config --cmd '-D FOREGROUND' <image id>
-[centos:~] # buildah config --entrypoint '["/usr/sbin/httpd"]' <image id>
-[centos:~] # buildah commit <image id> webserver
+[centos:~] # buildah config --cmd '-D FOREGROUND' <container id>
+[centos:~] # buildah config --entrypoint '["/usr/sbin/httpd"]' <container id>
+[centos:~] # buildah commit <container id> webserver
 [centos:~] # curl http://localhost:8080/index.html
-[centos:~] # buildah rm <image id>
+[centos:~] # buildah rm <container id>
 ```
