@@ -340,7 +340,7 @@ linux:~/project # git push -d origin <tag_name>
 # remove sub repo
 [linux:repo] $ git rm [--cached] <sub-path>
 [linux:repo] $ vi .gitmodules
-[linux:repo] $ .git/config
+[linux:repo] $ vi .git/config
 [linux:repo] $ git submodule sync
 [linux:repo] $ git commit -m "remove sub repo"
 ```
