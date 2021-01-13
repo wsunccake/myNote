@@ -66,7 +66,19 @@ baseurl=file:///mnt/BaseOS
 ### openjdk
 
 ```bash
+# openjdk 11
 [centos:~ ] # dnf install java-11-openjdk-devel
+[centos:~ ] # alternatives --set java /usr/lib/jvm/java-11-openjdk/bin/java
+[centos:~ ] # alternatives --set javac /usr/lib/jvm/java-11-openjdk/bin/javac
+
+# openjdk 1.8
+[centos:~ ] # dnf install java-1.8.0-openjdk-devel
+[centos:~ ] # alternatives --set java /usr/lib/jvm/java-1.8.0-openjdk/bin/java
+[centos:~ ] # alternatives --set javac /usr/lib/jvm/java-1.8.0-openjdk/bin/javac
+
+[centos:~ ] # alternatives --list
+[centos:~ ] # alternatives --config java
+[centos:~ ] # alternatives --config javac
 ```
 
 
