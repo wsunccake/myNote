@@ -244,3 +244,45 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 ```
+
+
+---
+
+# init project
+
+```bash
+[linux:~/proecjt] $ gradle --help
+
+# create project
+[linux:~/proecjt] $ gradle init
+[linux:~/proecjt] $ tree
+.
+├── build.gradle
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradlew
+├── gradlew.bat
+└── settings.gradle
+
+# clean wrapper
+[linux:~/proecjt] $ rm -rf gradle gradlew gradlew.bat
+
+# create wrapper
+[linux:~/proecjt] $ gradle wrapper
+[linux:~/proecjt] $ tree
+.
+├── build.gradle
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradlew
+├── gradlew.bat
+└── settings.gradle
+
+# list task
+[linux:~/proecjt] $ gradle tasks
+[linux:~/proecjt] $ ./gradlew tasks
+```
