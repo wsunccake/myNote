@@ -3,7 +3,8 @@
 ## install
 
 ```bash
-[centos:~ ] # dnf autoremove podman
+[centos:~ ] # dnf autoremove podman runc docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-engine
+[centos:~ ] # dnf autoremove podman runc containerd.io buildah skopeo runc
 
 [centos:~ ] # dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
 [centos:~ ] # dnf install docker-ce --nobest
