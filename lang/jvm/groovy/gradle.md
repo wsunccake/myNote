@@ -45,7 +45,7 @@ task hello {
 Gradle 預設的 build file 名稱為 build.gradle 
 
 ```bash
-[linux:~ ] # cat build.gradle
+[linux:~ ] $ cat build.gradle
 task compile << {
     println 'compiling source'
 }
@@ -63,57 +63,57 @@ task dist(dependsOn: [compile, test]) << {
 }
 
 # compile
-[linux:~ ] # gradle compile
+[linux:~ ] $ gradle compile
 
 # dist
-[linux:~ ] # gradle dist
+[linux:~ ] $ gradle dist
 
 # dist not test
-[linux:~ ] # gradle dist -x test
+[linux:~ ] $ gradle dist -x test
 
 # compileTest (cT)
-[linux:~ ] # gradle cT
+[linux:~ ] $ gradle cT
 
 # dist (di)
-[linux:~ ] # gradle di
+[linux:~ ] $ gradle di
 ```
 
 
 Gradle 可用 -b 指定 build file
 
 ```bash
-[linux:~ ] # cat subdir/myproject.gradle
+[linux:~ ] $ cat subdir/myproject.gradle
 task hello << {
     println "using build file '$buildFile.name' in '$buildFile.parentFile.name'."
 }
 
 # 指定特定檔案
-[linux:~ ] # gradle -b subdir/myproject.gradle hello
+[linux:~ ] $ gradle -b subdir/myproject.gradle hello
 ```
 
 
 Gradle 可用 -p 指定 build folder
 
 ```bash
-[linux:~ ] # cat subdir/build.gradle
+[linux:~ ] $ cat subdir/build.gradle
 task hello << {
     println "using build file '$buildFile.name' in '$buildFile.parentFile.name'."
 }
 
 # 指定特定資料夾
-[linux:~ ] # gradle -p subdir hello
+[linux:~ ] $ gradle -p subdir hello
 ```
 
 ```bash
-[linux:~ ] # gradle projects
+[linux:~ ] $ gradle projects
 
-[linux:~ ] # gradle tasks
+[linux:~ ] $ gradle tasks
 
 # help
-[linux:~ ] # gradle help
-[linux:~ ] # gradle tasks
-[linux:~ ] # gradle tasks --all
-[linux:~ ] # gradle help --task init
+[linux:~ ] $ gradle help
+[linux:~ ] $ gradle tasks
+[linux:~ ] $ gradle tasks --all
+[linux:~ ] $ gradle help --task init
 ```
 
 
@@ -126,15 +126,15 @@ task hello << {
 ## folder
 
 ```bash
-[linux:~/project ] # mkdir -p src/{main,test}/{java,resources}
-[linux:~/project ] # mkdir -p src/main/{java,test}/mypackage
+[linux:~/project ] $ mkdir -p src/{main,test}/{java,resources}
+[linux:~/project ] $ mkdir -p src/main/{java,test}/mypackage
 ```
 
 
 ## code
 
 ```bash
-[linux:~/project ] # vi src/main/java/mypackage/Hello.java
+[linux:~/project ] $ vi src/main/java/mypackage/Hello.java
 package mypackage;
 
 import org.apache.log4j.Logger;
@@ -163,7 +163,7 @@ public class Hello {
 ## unit test
 
 ```bash
-[linux:~/project ] # vi src/test/java/mypackage/HelloTest.java
+[linux:~/project ] $ vi src/test/java/mypackage/HelloTest.java
 package mypackage;
 
 import org.junit.Test;
@@ -181,7 +181,7 @@ public class HelloTest {
 ## log4j config
 
 ```bash
-[linux:~/project ] # vi src/main/resources/log4j.properties
+[linux:~/project ] $ vi src/main/resources/log4j.properties
 # Define the root logger with appender file
 log = /tmp/log4j
 log4j.rootLogger = DEBUG, FILE
@@ -199,7 +199,7 @@ log4j.appender.FILE.layout.conversionPattern=%m%n
 ## build file
 
 ```bash
-[linux:~/project ] # vi build.gradle
+[linux:~/project ] $ vi build.gradle
 group 'mypackage'
 version '1.0-SNAPSHOT'
 
@@ -227,13 +227,13 @@ task execute(type:JavaExec) {
 
 ```bash
 # gradle lifecycle command
-[linux:~/project ] # gradle compile  
-[linux:~/project ] # gradle test
-[linux:~/project ] # gradle jar
-[linux:~/project ] # gradle execute
+[linux:~/project ] $ gradle compile  
+[linux:~/project ] $ gradle test
+[linux:~/project ] $ gradle jar
+[linux:~/project ] $ gradle execute
 
 # 若將 build.gradle 中 main = 'mypackage.Hello' 改寫成 main = mainClass (動態載入)
-[linux:~/project ] # gradle -PmainClass=mypackage.Hello execute
+[linux:~/project ] $ gradle -PmainClass=mypackage.Hello execute
 ```
 
 
@@ -241,7 +241,7 @@ task execute(type:JavaExec) {
 
 ```bash
 # 另一種方式, 使用 application plugin
-[linux:~/project ] # vi build.gradle
+[linux:~/project ] $ vi build.gradle
 group 'mypackage'
 version '1.0-SNAPSHOT'
 
@@ -259,10 +259,10 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-[linux:~/project ] # gradle run
+[linux:~/project ] $ gradle run
 
 # 若將 build.gradle 中 mainClassName = 'mypackage.Hello' 改寫成 main = mainClass (動態載入)
-[linux:~/project ] # gradle -PmainClass=mypackage.Hello run
+[linux:~/project ] $ gradle -PmainClass=mypackage.Hello run
 ```
 
 
@@ -272,30 +272,19 @@ dependencies {
 
 ![grvooy_lifecycle](https://docs.gradle.org/current/userguide/img/groovyPluginTasks.png)
 
-```bash
-[linux:~/project ] # mkdir -p src/{main,test}/{groovy,resources}
-[linux:~/project ] # mkdir -p src/main/{groovy,test}/mypackage
-```
+
+## folder
 
 ```bash
-apply plugin: 'eclipse'
-apply plugin: 'groovy'
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.4.4'
-    testCompile 'junit:junit:4.12'
-}
+[linux:~/project ] $ mkdir -p src/{main,test}/{groovy,resources}
+[linux:~/project ] $ mkdir -p src/main/{groovy,test}/mypackage
 ```
 
 
 ## code
 
 ```bash
-[linux:~/project ] # vi src/main/java/mypackage/Hello.groovy
+[linux:~/project ] $ vi src/main/groovy/mypackage/Hello.groovy
 package mypackage
 
 import org.apache.log4j.Logger
@@ -319,13 +308,18 @@ class Hello {
         return "Hello Gradle"
     }
 }
+
+[linux:~/project ] $ vi src/main/groovy/mypackage/Hello.groovy
+package mypackage
+
+println("hi gradle")
 ```
 
 
 ## unit test
 
 ```bash
-[linux:~/project ] # vi src/test/groovy/mypackage/HelloTest.groovy
+[linux:~/project ] $ vi src/test/groovy/mypackage/HelloTest.groovy
 package mypackage
 
 import org.junit.Test
@@ -343,7 +337,7 @@ class HelloTest {
 ## log4j config
 
 ```bash
-[linux:~/project ] # vi src/main/resources/log4j.properties
+[linux:~/project ] $ vi src/main/resources/log4j.properties
 # Define the root logger with appender file
 log = /tmp/log4j
 log4j.rootLogger = DEBUG, FILE
@@ -361,11 +355,12 @@ log4j.appender.FILE.layout.conversionPattern=%m%n
 ## build file
 
 ```bash
-[linux:~/project ] # vi build.gradle
+[linux:~/project ] $ vi build.gradle
 group 'mypackage'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'groovy'
+apply plugin: 'application'
 
 repositories {
     mavenCentral()
@@ -384,15 +379,21 @@ task execute(type:JavaExec) {
 }
 
 defaultTasks 'execute'
+
+application {
+    mainClass = 'mypackage.hi'
+}
 ```
 
 
 ## command
 
 ```bash
-[linux:~/project ] # gradle -PmainClass=mypackage.Hello execute
-[linux:~/project ] # gradle -q
-[linux:~/project ] # gradle test
+[linux:~/project ] $ gradle execute   # task execute
+[linux:~/project ] $ gradle -q        # defaultTasks
+[linux:~/project ] $ gradle test
+
+[linux:~/project ] $ gradle run       # application
 ```
 
 
