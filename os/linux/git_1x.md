@@ -40,8 +40,9 @@ linux:~ $ cat ~/.gitconfig
 
 ```bash
 # download project
-linux:~ $ git clone git@github.com:user/sandbox.git            # 下載 project 
-linux:~ $ git clone git@github.com:user/sandbox.git newproejct # 下載 project 並改名為 newproject 
+linux:~ $ git clone git@github.com:user/sandbox.git            # download project 
+linux:~ $ git clone git@github.com:user/sandbox.git newproejct # download project to rename newproject 
+linux:~ $ ssh-agent bash -c 'ssh-add <private key>; git clone <ssh-repo>'   # use other private to download project 
 
 # file status
 linux:~/project $ git add file                    # 檔案納入控制系統 
@@ -336,6 +337,11 @@ linux:~/project # git push -d origin <tag_name>
 [linux:repo] $ git submodule init <sub-path>
 [linux:repo] $ git submodule update [--remote] <sub-path>
 [linux:repo] $ ls <sub-path>
+
+# pull latest sub repo 
+[linux:repo] $ cd <sub-path>
+[linux:<sub-path>] $ git pull <remote> <branch>
+[linux:<sub-path>] $ git pull origin master
 
 # remove sub repo
 [linux:repo] $ git rm [--cached] <sub-path>

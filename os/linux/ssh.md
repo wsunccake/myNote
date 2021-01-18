@@ -1,0 +1,48 @@
+# ssh
+
+
+## login with identity file / private key
+
+
+```bash
+# keygen
+[client:~ ] $ ssh-keygen
+[client:~ ] $ ls ~/.ssh
+
+# copy public key by command
+[client:~ ] $ ssh-copy-id [<user>@]<server>
+
+# copy public key by 
+[server:~ ] $ mkdir -p ~/.ssh
+[server:~ ] $ cat <public key> >> ~/.ssh/authorized_keys
+```
+
+
+---
+
+## forwarding
+
+
+```bash
+[client:~ ] $ ssh -D<port> <server>
+```
+
+
+---
+
+## keygen
+
+```bash
+[client:~ ] $ ssh-keygen -f <private key>
+cat <private key>
+-----BEGIN OPENSSH PRIVATE KEY-----
+...
+-----END OPENSSH PRIVATE KEY-----
+
+
+[client:~ ] $ ssh-keygen -f <private key> -m pem
+cat <private key>
+-----BEGIN RSA PRIVATE KEY-----
+...
+-----END RSA PRIVATE KEY-----
+```
