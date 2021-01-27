@@ -389,6 +389,29 @@ print(primes)
 ```
 
 
+## dictionary comprehension
+
+```python
+l = [1, 2, 3]
+
+dict1 = {}
+for i in l:
+    dict1[i] = i*i
+print(dict1)
+
+dict2 = {}
+for i in l:
+    dict2.update({i: i*i})
+print(dict2)
+
+dict3 = {i: i * i for i in l}
+print(dict3)
+
+dict4 = {k: v * v for k, v in enumerate(l)}
+print(dict4)
+```
+
+
 ## while
 
 ```
