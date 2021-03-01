@@ -158,22 +158,24 @@ centos:~ # reboot
 ### vnc
 
 ```bash
-centos:~ # dnf install tigervnc-server
-centos:~ # vncserver -list
+[centos:~ ] # dnf install tigervnc-server
+[centos:~ ] # vi /etc/tigervnc/vncserver.users
+#:x=<user>
+:1=<vnc_user>
+[centos:~ ] # cat /etc/tigervnc/vncserver-config-defaults
+[centos:~ ] # su - <vnc_user>
+[centos:~ ] $ vncpasswd
+[centos:~ ] $ cat $HOME/.vnc/config
+[centos:~ ] $ restorecon -RFv $HOME/.vnc
+[centos:~ ] $ exit
+[centos:~ ] # cat /usr/lib/systemd/system/vncserver@.service
+[centos:~ ] # systemctl enable vncserver@:<display>.service
+[centos:~ ] # systemctl start vncserver@:<display>.service
 
-The XKEYBOARD keymap compiler (xkbcomp) reports:
-> Internal error:   Could not resolve keysym XF86MonBrightnessCycle
-> Internal error:   Could not resolve keysym XF86RotationLockToggle
-Errors from xkbcomp are not fatal to the X server
-
-centos:~ # grep -ir XF86MonBrightnessCycle /usr/share/X11/xkb
-centos:~ # grep -ir XF86RotationLockToggle /usr/share/X11/xkb
-
-centos:~ # vncserver [:1]
-centos:~ # vncserver -list
-centos:~ # vncserver -kill :1
+[centos:~ ] # vncserver [:1]
+[centos:~ ] # vncserver -list
+[centos:~ ] # vncserver -kill :1
 ```
-
 
 ---
 
