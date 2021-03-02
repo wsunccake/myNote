@@ -103,6 +103,9 @@ linux:~ # tar zxf image.ova
 image.ovf
 image.vmdk
 
+# qcow2 disk info
+linux:~ # qemu-img info image.qcow2
+
 # qcow2 -> raw
 linux:~ # qemu-img convert -f qcow2 -O raw image.qcow2 image.img
 
