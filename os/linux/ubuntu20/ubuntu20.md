@@ -25,6 +25,11 @@ network:
       dhcp4: yes
       dhcp4-overrides:
         use-routes: false
+    ens2: {}
+  vlans:
+    vlan100:
+      id: 100
+      link ens2
 
 [ubuntu:~ ] # netplan try
 [ubuntu:~ ] # netplan apply
