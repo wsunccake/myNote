@@ -191,6 +191,7 @@ npm 是 node.js 的套件管理工具, 在使用時可分為 global mode 和 loc
 # help
 centos:~ $ npm help         # 顯示說明文件
 centos:~ $ npm help install # 顯示指令說明文件
+centos:~ $ npm -l           # 顯示指令
 
 # list
 centos:~ $ npm list    # 顯示已安裝套件
@@ -200,8 +201,12 @@ centos:~ $ npm list -g # 顯示系統已安裝套件
 centos:~ $ npm search pkg # 搜尋套件
 
 # install
+centos:~ $ npm install              # 根據 package.json 安裝套件
 centos:~ $ npm install pkg          # 從 repository 安裝套件
-centos:~ $ npm install -g pkg       # 安裝套件到系統預設目錄
+centos:~ $ npm install pkg -P       # 安裝套件同時將套件資訊寫入 package.json 的 dependencies
+centos:~ $ npm install pkg -D       # 安裝套件同時將套件資訊寫入 package.json 的 devDependencies
+centos:~ $ npm install pkg -O       # 安裝套件同時將套件資訊寫入 package.json 的 optionalDependencies
+centos:~ $ npm install pkg -g       # 安裝套件到系統預設目錄
 centos:~ $ npm install ./pkg.tar.gz # 直接安裝套件
 centos:~ $ npm install git+https://git@github.com/abc/pkg.git # 從 github 安裝套件
 centos:~ $ npm install git+ssh://git@github.com/abc/pkg.git
