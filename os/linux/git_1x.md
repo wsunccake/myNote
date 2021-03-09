@@ -40,8 +40,9 @@ linux:~ $ cat ~/.gitconfig
 
 ```bash
 # download project
-linux:~ $ git clone git@github.com:user/sandbox.git            # 下載 project 
-linux:~ $ git clone git@github.com:user/sandbox.git newproejct # 下載 project 並改名為 newproject 
+linux:~ $ git clone git@github.com:user/sandbox.git            # download project 
+linux:~ $ git clone git@github.com:user/sandbox.git newproejct # download project to rename newproject 
+linux:~ $ ssh-agent bash -c 'ssh-add <private key>; git clone <ssh-repo>'   # use other private to download project 
 
 # file status
 linux:~/project $ git add file                    # 檔案納入控制系統 
@@ -291,6 +292,7 @@ centos:~/project $ git commit "Add file2"
 centos:~/project $ git push
 ```
 
+
 ---
 
 ## Tag
@@ -309,3 +311,43 @@ linux:~/project # git push origin --tags        # all tag
 # remove tag to remote
 linux:~/project # git push -d origin <tag_name>
 ```
+
+
+---
+
+## Submodule
+
+```bash
+# add sub repo to repo
+[linux:repo] $ git submodule add <sub-repo> <sub-path>
+[linux:repo] $ cat .gitmodules
+[submodule "<sub>"]
+        path = <sub-path>
+        url = <sub-repo>
+[linux:repo] $ cat .git/config
+[linux:repo] $ git commit -m "add sub repo"
+[linux:repo] $ git push
+
+# clone repo
+[linux:~] $ git clone <repo>
+[linux:~] $ cd repo
+
+# clone sub repo
+[linux:repo] $ git submodule status
+[linux:repo] $ git submodule init <sub-path>
+[linux:repo] $ git submodule update [--remote] <sub-path>
+[linux:repo] $ ls <sub-path>
+
+# pull latest sub repo 
+[linux:repo] $ cd <sub-path>
+[linux:<sub-path>] $ git pull <remote> <branch>
+[linux:<sub-path>] $ git pull origin master
+
+# remove sub repo
+[linux:repo] $ git rm [--cached] <sub-path>
+[linux:repo] $ vi .gitmodules
+[linux:repo] $ vi .git/config
+[linux:repo] $ git submodule sync
+[linux:repo] $ git commit -m "remove sub repo"
+```
+

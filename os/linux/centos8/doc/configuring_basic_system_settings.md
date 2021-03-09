@@ -659,3 +659,92 @@ centos:~ # ssh-keygen -D pkcs11:
 centos:~ # ssh-copy-id -f -i keys.pub <user>@<example.com>
 ```
 
+
+---
+
+## using python
+
+```bash
+# for python3.6
+centos:~ # dnf install python3
+centos:~ # dnf install python3-requests
+centos:~ # alternatives --set python /usr/bin/python3
+
+# for python3.8
+centos:~ # dnf install python38
+centos:~ # dnf install python38-requests
+centos:~ # alternatives --set python /usr/bin/python3.8
+
+# for python2.7
+centos:~ # dnf install python2
+centos:~ # dnf install python2-requests
+centos:~ # alternatives --set python /usr/bin/python2
+
+centos:~ # alternatives --config python
+centos:~ # alternatives --auto python
+```
+
+
+---
+
+## using the php scripting language
+
+```bash
+centos:~ # dnf module install php:7.4
+centos:~ # dnf module install php:7.4/minimal
+```
+
+
+### using php with the apache http Server
+
+```bash
+centos:~ # dnf module install httpd:2.4
+centos:~ # systemctl start httpd
+centos:~ # systemctl restart httpd
+centos:~ # systemctl start php-fpm
+centos:~ # systemctl enable php-fpm httpd
+
+centos:~ # echo '<?php phpinfo(); ?>' > /var/www/html/index.php
+centos:~ # curl http://127.0.0.1
+```
+
+
+### using php with the apache nginx Server
+
+```bash
+centos:~ # dnf module install nginx:1.18
+centos:~ # systemctl start nginx
+centos:~ # systemctl restart nginx
+centos:~ # systemctl start php-fpm
+centos:~ # systemctl enable php-fpm nginx
+
+centos:~ # echo '<?php phpinfo(); ?>' > /usr/share/nginx/html/index.php
+centos:~ # curl http://127.0.0.1
+```
+
+
+### running a php script using the command-line interface
+
+```bash
+centos:~ # vi hello.php
+<?php
+    echo 'Hello, World!';
+?>
+
+centos:~ # php hello.php
+```
+
+
+---
+
+## using langpacks
+
+```bash
+centos:~ # yum list langpacks-*
+centos:~ # yum list installed langpacks*
+centos:~ # yum list available langpacks*
+centos:~ # yum repoquery --whatsupplements langpacks-<locale_code>
+centos:~ # yum install langpacks-<locale_code>
+centos:~ # yum remove langpacks-<locale_code>
+centos:~ # yum install glibc-langpack-<locale_code>
+```

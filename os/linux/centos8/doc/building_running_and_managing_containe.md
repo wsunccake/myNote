@@ -1,0 +1,256 @@
+# building running and managing container
+
+## starting with container
+
+podman - For directly managing pods and container images (run, stop, start, ps, attach, exec, and so on)
+buildah - For building, pushing and signing container images
+skopeo - For copying, inspecting, deleting, and signing images
+runc - For providing container run and build features to podman and buildah
+
+podman - Client tool for managing containers. Can replace most features of the docker command for working with individual containers and images.
+buildah - Client tool for building OCI-compliant container images.
+skopeo - Client tool for copying container images to and from container registries. Includes features for signing and authenticating images as well.
+runc - Container runtime client for running and working with Open Container Initiative (OCI) format containers.
+
+
+```bash
+centos:~ # dnf module install container-tools
+centos:~ # dnf install podman-docker
+centos:~ # touch /etc/containers/nodocker
+```
+
+/var/lib/containers
+$HOME/.local/share/containers
+
+
+### set up for rootless container
+
+
+```bash
+centos:~ # dnf install slirp4netns podman
+centos:~ # echo "user.max_user_namespaces=28633" > /etc/sysctl.d/userns.conf
+centos:~ # sysctl -p /etc/sysctl.d/userns.conf
+
+centos:~ # podman info
+```
+
+```bash
+centos:~ $ podman search ubi
+centos:~ $ podman pull registry.access.redhat.com/ubi8-minimal
+centos:~ $ podman run registry.access.redhat.com/ubi8-minimal cat /etc/os-release
+
+centos:~ # cat /etc/subuid
+centos:~ # cat /etc/subgid
+```
+
+
+---
+
+## working with container image
+
+### pulling images from registry
+
+```bash
+centos:~ # podman pull registry.redhat.io/ubi8/ubi
+centos:~ # podman tag registry.redhat.io/ubi8/ubi registry.example.com:5000/ubi8/ubi
+centos:~ # podman push registry.example.com:5000/ubi8/ubi
+
+centos:~ # grep -vE '^#' /etc/containers/registries.conf
+centos:~ # podman search quay.io/
+centos:~ # podman login quay.io
+centos:~ # podman search postgresql-10
+centos:~ # podman search registry.redhat.io/postgresql-10
+```
+
+/etc/containers/registries.conf
+$HOME/.config/containers/registries.conf
+
+
+### inspecting local image
+
+```bash
+centos:~ # podman pull <registry>[:<port>]/[<namespace>/]<name>:<tag>
+
+centos:~ # podman images
+centos:~ # podman inspect registry.redhat.io/ubi8/ubi
+centos:~ # podman run -d registry.redhat.io/ubi8/ubi
+centos:~ # podman ps
+
+centos:~ # skopeo inspect docker://registry.redhat.io/ubi8/ubi-init
+
+centos:~ # podman tag <image_id> <registry>[:<port>]/[<namespace>/]<name>:<tag>
+```
+
+
+### saving and loading image
+
+```bash
+centos:~ # podman save -o myrsyslog.tar registry.redhat.io/rhel8/rsyslog:latest
+centos:~ # podman load -i myrsyslog.tar
+```
+
+
+### removing image
+
+```bash
+centos:~ # podman rmi ubi8-init
+centos:~ # podman rmi -a
+centos:~ # podman rmi -f <image_id>
+```
+
+
+---
+
+## working with container and pod
+
+### running container
+
+```bash
+centos:~ # podman run --rm registry.redhat.io/ubi8/ubi cat /etc/os-release
+
+centos:~ # podman run --name=mybash -it registry.redhat.io/ubi8/ubi /bin/bash
+centos:~ # podman ps -a
+centos:~ # podman start -ai mybash
+
+centos:~ # podman run --name="log_test" -v /dev/log:/dev/log --rm registry.redhat.io/ubi8/ubi logger "Testing logging to the host"
+centos:~ # journalctl -b
+
+centos:~ # podman run -d --name=mylog --ip=10.88.0.44 registry.access.redhat.com/rhel7/rsyslog
+centos:~ # podman inspect mylog
+centos:~ # podman inspect --format='{{.NetworkSettings.IPAddress}}' mylog
+```
+
+
+### investigating running and stopped container
+
+```bash
+centos:~ # podman exec -it 74b1da000a11 /bin/bash
+centos:~ # podman start myrhel_httpd
+centos:~ # podman start -a -i agitated_hopper
+centos:~ # podman stop 74b1da000a11
+centos:~ # podman kill --signal="SIGHUP" 74b1da000a11
+```
+
+
+### sharing files between two container
+
+```bash
+centos:~ # podman volume create hostvolume
+centos:~ # podman volume inspect hostvolume
+
+centos:~ # echo "Hello from host" >> $mntPoint/host.txt
+centos:~ # ls $mntPoint/
+
+centos:~ # podman run -it --name myubi1 -v $mntPoint:/containervolume1 registry.access.redhat.com/ubi8/ubi /bin/bash
+centos:~ # podman run -it --name myubi2 -v $mntPoint:/containervolume2 registry.access.redhat.com/ubi8/ubi  /bin/bash
+
+centos:~ # podman volume ls
+centos:~ # podman volume rm hostvolume
+```
+
+
+### removing container
+
+```bash
+centos:~ # podman rm goofy_wozniak
+centos:~ # podman rm clever_yonath furious_shockley drunk_newton
+centos:~ # podman rm -a
+```
+
+
+### creating pod
+
+```bash
+centos:~ # podman pod create --name mypod
+centos:~ # podman pod ps
+centos:~ # podman ps -a --pod
+
+centos:~ # podman run -dt --name myubi --pod mypod registry.access.redhat.com/ubi8/ubi  /bin/bash
+centos:~ # podman pod ps
+centos:~ # podman ps -a --pod
+```
+
+
+### displaying pod information
+
+```bash
+centos:~ # podman pod top mypod
+centos:~ # podman pod stats -a --no-stream
+centos:~ # podman pod inspect mypod
+```
+
+
+### stopping pod
+
+```bash
+centos:~ # podman pod stop mypod
+centos:~ # podman ps -a --pod
+```
+
+
+### removing pod
+
+```bash
+centos:~ # podman pod rm mypod
+centos:~ # podman ps
+centos:~ # podman pod ps
+```
+
+
+---
+
+## adding software to a running ubi container
+
+
+### adding software inside the standard UBI container
+
+```bash
+# dnf install --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos bzip2
+# dnf install zsh
+# dnf install --enablerepo=rhel-7-server-optional-rpms zsh-html
+```
+
+
+### adding software inside the minimal UBI container
+
+```bash
+# microdnf install bzip2
+# microdnf install --enablerepo=rhel-7-server-rpms zsh
+# microdnf install --enablerepo=rhel-7-server-rpms --enablerepo=rhel-7-server-optional-rpms zsh-html
+```
+
+
+```bash
+centos:~ # vi dockerfile
+FROM registry.access.redhat.com/ubi8-minimal
+USER root
+LABEL maintainer="John Doe"
+# Update image
+RUN microdnf update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos -y && rm -rf /var/cache/yum
+RUN microdnf install --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos httpd -y && rm -rf /var/cache/yum
+# Add default Web page and expose port
+RUN echo "The Web Server is Running" > /var/www/html/index.html
+EXPOSE 80
+# Start the service
+CMD ["-D", "FOREGROUND"]
+ENTRYPOINT ["/usr/sbin/httpd"]
+
+centos:~ # buildah bud -t webserver -f dockerfile
+centos:~ # podman run -d -p 8080:80 webserver
+
+centos:~ # curl http://localhost:8080/index.html
+```
+
+ubi8/php-72: PHP 7.2 platform for building and running applications
+
+ubi8/nodejs-10: Node.js 10 platform for building and running applications. Used by Node.js 10 Source-To-Image builds
+
+ubi8/ruby25: Ruby 2.5 platform for building and running applications
+
+ubi8/python-27: Python 2.7 platform for building and running applications
+
+ubi8/python-36: Python 3.6 platform for building and running applications
+
+ubi8/s2i-core: Base image with essential libraries and tools used as a base for builder images like perl, python, ruby, and so on
+
+ubi8/s2i-base: Base image for Source-to-Image builds
