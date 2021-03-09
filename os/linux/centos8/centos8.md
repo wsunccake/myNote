@@ -170,8 +170,8 @@ net.ipv6.conf.default.disable_ipv6 = 1
 ### vnc
 
 ```bash
+# setup
 [centos:~ ] # dnf install tigervnc-server
-<<<<<<< HEAD
 [centos:~ ] # vi /etc/tigervnc/vncserver.users
 #:x=<user>
 :1=<vnc_user>
@@ -184,21 +184,12 @@ net.ipv6.conf.default.disable_ipv6 = 1
 [centos:~ ] # cat /usr/lib/systemd/system/vncserver@.service
 [centos:~ ] # systemctl enable vncserver@:<display>.service
 [centos:~ ] # systemctl start vncserver@:<display>.service
-=======
-[centos:~ ] # vncserver -list
 
-The XKEYBOARD keymap compiler (xkbcomp) reports:
-> Internal error:   Could not resolve keysym XF86MonBrightnessCycle
-> Internal error:   Could not resolve keysym XF86RotationLockToggle
-Errors from xkbcomp are not fatal to the X server
-
-[centos:~ ] # grep -ir XF86MonBrightnessCycle /usr/share/X11/xkb
-[centos:~ ] # grep -ir XF86RotationLockToggle /usr/share/X11/xkb
->>>>>>> master
-
+# vnc command
 [centos:~ ] # vncserver [:1]
 [centos:~ ] # vncserver -list
 [centos:~ ] # vncserver -kill :1
+
 ```
 
 ---
