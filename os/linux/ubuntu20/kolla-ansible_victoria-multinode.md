@@ -260,7 +260,10 @@ deploy01:~ # openstack subnet create \
   provider_subnet_v4
 
 # create ipv6 subnet network
-deploy01:~ # openstack subnet create --ip-version 6 \
+deploy01:~ # openstack subnet create \
+  --ip-version 6 \
+  --ipv6-ra-mode slaac \
+  --ipv6-address-mode slaac \
   --subnet-range 2001:192::/64 \
   --gateway 2001:192::1 \
   --network provider_network \
