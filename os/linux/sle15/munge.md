@@ -21,8 +21,8 @@ server:~ # dd if=/dev/urandom bs=1 count=1024 >/etc/munge/munge.key
 `daemon`
 
 ```bash
-server:~ # systemctl start munge.servce
-server:~ # systemctl enable munge.servce
+server:~ # systemctl start munge.service
+server:~ # systemctl enable munge.service
 ```
 
 `test`
@@ -53,6 +53,6 @@ server:~ # scp /etc/munge/munge.key root@<client>:/etc/munge/.
 `daemon`
 
 ```bash
-server:~ # systemctl start munge.servce
-server:~ # systemctl enable munge.servce
+server:~ # systemctl start munge.service
+server:~ # systemctl enable munge.service
 ```

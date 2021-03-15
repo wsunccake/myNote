@@ -43,13 +43,13 @@ suse:~ # vi /etc/hosts
 suse:~ # hostname -s controller
 ```
 
-[setup ntp](./ntp.md)
+setup [ntp](./ntp.md)
 
-[setup nis](./nis.md)
+setup [nis](./nis.md)
 
-setup nfs
+setup nfs or [chrony](./chrony.md)
 
-[setup munge](./munge.md)
+setup [munge](./munge.md)
 
 
 ---
@@ -77,7 +77,9 @@ ReturnToService=2
 # 1: down -> down
 # 2: down -> idle
 
-PrivateData=jobs
+PrivateData=jobs                        # hidden regular users
+SrunPortRange=60001-63000               # listening ports to communicate
+LaunchParameters=use_interactive_step   # interactive mode
 
 # node config
 NodeName=DEFAULT Sockets=2 CoresPerSocket=4 ThreadsPerCore=1
@@ -174,6 +176,7 @@ controller:~ # smap
 controller:~ # srun -N 2 hostname
 controller:~ # srun -w <node> hostname
 controller:~ # srun env
+controller:~ # srun -N 1 –pty bash -i  # interactive mode
 ```
 
 
