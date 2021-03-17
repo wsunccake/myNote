@@ -59,3 +59,21 @@ linux:~ # echo '[{"lang": "bash"}, {"lang": "python"}, {"lang": "js"}]' | jq '. 
 linux:~ # echo '[{"lang": "bash"}, {"lang": "python"}, {"lang": "js"}]' | jq '.[] | select(.lang == "js")'
 linux:~ # echo '[{"lang": "bash"}, {"lang": "python"}, {"lang": "js"}]' | jq '.[] | map_values(select(. == "js"))'
 ```
+
+---
+
+## content
+
+```bash
+linux:~ # csplit /etc/passwd 10
+linux:~ # csplit /etc/passwd 10 {2}
+linux:~ # csplit /etc/passwd 10 // '{*}'
+
+linux:~ # sort /etc/passwd
+linux:~ # sort -r /etc/passwd
+linux:~ # sort -t: -k3 -n /etc/passwd
+
+linux:~ # shuf /etc/passwd
+
+linux:~ # uniq
+```
