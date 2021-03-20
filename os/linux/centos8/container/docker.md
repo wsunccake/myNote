@@ -11,7 +11,7 @@
 [centos:~ ] # systemctl enable docker --now
 
 # allow user run docker
-[centos:~ ] # usermod -aF docker <user>
+[centos:~ ] # usermod -aG docker <user>
 ```
 
 
