@@ -46,3 +46,17 @@ cat <private key>
 ...
 -----END RSA PRIVATE KEY-----
 ```
+
+---
+
+## other
+
+### Too many authentication failures
+
+```bash
+[client:~ ] $ ssh -o IdentitiesOnly=yes <server_ip>
+Received disconnect from <server_ip> port 22:2: Too many authentication failures
+Disconnected from <server_ip> port 22
+
+[client:~ ] $ ssh -o IdentitiesOnly=yes <server_ip>
+```
