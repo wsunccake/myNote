@@ -1466,6 +1466,42 @@ console.log(validPassword3(p3));
 
 ---
 
+## DOM event
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DOM Event</title>
+</head>
+<body>
+
+<!-- inline model -->
+<button id="button1" onclick="console.log('Hello Button1!');">Button1</button><br />
+<button id="button2" onclick>Button2</button><br />
+<button id="button3" onclick>Button3</button><br />
+
+
+<script type="text/javascript">
+// traditional model
+document.getElementById('button2').onclick = function(){
+    console.log('Hello Button2!')
+}
+
+// even listener
+const el = document.getElementById('button3')
+el.addEventListener( 'click', function(){
+     console.log('Helloo Button3!')
+}, false)
+</script>
+
+</body>
+</html>
+```
+
+
+---
+
 ## Reference
 
 [JAVASCRIPT.INFO](https://javascript.info/)
