@@ -402,11 +402,12 @@ application {
 # init project
 
 ```bash
-[linux:~/proecjt] $ gradle --help
+[linux:~/project] $ gradle --help
+[linux:~/project] $ gradle help --task init
 
 # create project
-[linux:~/proecjt] $ gradle init
-[linux:~/proecjt] $ tree
+[linux:~/project] $ gradle init --type basic --dsl groovy --project-name <project>
+[linux:~/project] $ tree
 .
 ├── build.gradle
 ├── gradle
@@ -418,11 +419,11 @@ application {
 └── settings.gradle
 
 # clean wrapper
-[linux:~/proecjt] $ rm -rf gradle gradlew gradlew.bat
+[linux:~/project] $ rm -rf gradle gradlew gradlew.bat
 
 # create wrapper
-[linux:~/proecjt] $ gradle wrapper
-[linux:~/proecjt] $ tree
+[linux:~/project] $ gradle wrapper
+[linux:~/project] $ tree
 .
 ├── build.gradle
 ├── gradle
@@ -434,6 +435,6 @@ application {
 └── settings.gradle
 
 # list task
-[linux:~/proecjt] $ gradle tasks
-[linux:~/proecjt] $ ./gradlew tasks
+[linux:~/project] $ gradle tasks
+[linux:~/project] $ ./gradlew tasks
 ```
