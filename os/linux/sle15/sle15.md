@@ -178,3 +178,22 @@ sle:~ # mkfs -t xfs /dev/sda1
 sle:~ # mkfs.xfs /dev/sda1
 sle:~ # mkswap  /dev/sda2
 ```
+
+
+---
+
+## security
+
+### fail2ban
+
+```bash
+sle:~ # zypper addrepo https://download.opensuse.org/repositories/network:utilities/SLE_15_SP2/network:utilities.repo
+sle:~ # zypper refresh
+sle:~ # zypper install python-pyinotify
+
+sle:~ # zypper addrepo https://download.opensuse.org/repositories/security/SLE_15_SP2/security.repo
+sle:~ # zypper refresh
+sle:~ # zypper install fail2ban
+
+sle:~ # systemctl enable fail2ban --now
+```

@@ -23,8 +23,7 @@ slurmdbd: 6819/tcp
 
 ```bash
 # firewall config
-linux:~ # firewall-cmd --add-port=6818/tcp --permanent
-linux:~ # firewall-cmd --add-port=6817/tcp --permanent
+linux:~ # firewall-cmd --add-port=6819/tcp --add-port=6818/tcp --add-port=6817/tcp --permanent
 linux:~ # firewall-cmd --reload
 ```
 
@@ -388,7 +387,7 @@ AccountingStorageType=accounting_storage/slurmdbd
 
 JobAcctGatherType=jobacct_gather/cgroup
 
-JobCompType=jobcomp/mysql
+JobCompType=jobcomp/none
 ```
 
 AccountingStorageType: accounting_storage/none, accounting_storage/filetxt, accounting_storage/slurmdbd

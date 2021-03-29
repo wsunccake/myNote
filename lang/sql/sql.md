@@ -7,6 +7,9 @@
 # for PostgreSQL
 linux:~ # psql -U postgre [-h localhost] [-p 5432] [-d postgres]
 
+# for MariaDB
+linux:~ # mysql -u root [-h localhost] [-P 3306] [-p]
+
 # for SQLite
 linux:~ # sqlite3 db.sqlite3
 ```
@@ -17,6 +20,11 @@ linux:~ # sqlite3 db.sqlite3
 -- for PostgreSQL
 \h # help with SQL
 \? # help with PSQL
+
+-- for MariaDB
+\?
+\h
+help;
 
 -- for SQLite
 .help
@@ -73,6 +81,9 @@ DROP DATABASE testdb;
 -- for PostgreSQL
 \l
 SELECT datname FROM pg_database;
+
+-- for MariaDB
+show databases;
 ```
 
 
