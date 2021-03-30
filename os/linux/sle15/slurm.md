@@ -176,6 +176,7 @@ controller:~ # srun -N 2 hostname
 controller:~ # srun -w <node> hostname
 controller:~ # srun env
 controller:~ # srun -N 1 –pty bash -i  # interactive mode
+controller:~ # srun -l -N1 -c2 sh -c "hostname && sleep 10" &
 ```
 
 
@@ -252,6 +253,7 @@ controller:~ # scontrol release <job_id>
 ```bash
 controller:~ # sinfo
 controller:~ # sinfo -la
+controller:~ # sinfo -Nla
 ```
 
 
@@ -510,7 +512,7 @@ controller:~ # sacctmgr mod qos <qos> set Priority=<n>  # job priority
 controller:~ # sacctmgr mod account <account> set qos=<qos>
 controller:~ # sacctmgr mod user <user> set qos=<qos>
 
-controller:~ # list associations
+controller:~ # sacctmgr list associations
 ```
 
 
@@ -521,6 +523,48 @@ controller:~ # sprio
 controller:~ # sprio -l
 ```
 
+
+### example
+
+```bash
+# for qos
+controller:~ # sacctmgr list configuration
+controller:~ # sacctmgr list cluster
+controller:~ # sacctmgr list qos format=name,priority,grpjobs
+controller:~ # sacctmgr list account
+controller:~ # sacctmgr list user
+controller:~ # sacctmgr list association format=qos,account,user
+controller:~ # sacctmgr list stats
+
+controller:~ # sacctmgr add qos high_qos   priority=1000
+controller:~ # sacctmgr add qos medium_qos priority=100
+controller:~ # sacctmgr add qos low_qos    priority=10
+
+controller:~ # sacctmgr add account high_acc   cluster=mycluster qos=high_qos
+controller:~ # sacctmgr add account medium_acc cluster=mycluster qos=medium_qos
+controller:~ # sacctmgr add account low_acc    cluster=mycluster qos=low_qos
+
+controller:~ # sacctmgr add user name=high_user   account=high_acc   cluster=mycluster
+controller:~ # sacctmgr add user name=medium_user account=medium_acc cluster=mycluster
+controller:~ # sacctmgr add user name=low_user    account=low_acc    cluster=mycluster
+
+# for job
+controller:~ # squeue
+controller:~ # squeue -l
+
+controller:~ # sinfo
+controller:~ # sinfo -al
+controller:~ # sinfo -Nal
+
+controller:~ # sprio
+controller:~ # sprio -nl
+controller:~ # sprio -nl
+
+controller:~ # sshare
+controller:~ # sshare -al
+
+controller:~ # sstat -j <job_id>
+```
 
 ---
 
