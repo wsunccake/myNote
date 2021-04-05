@@ -50,6 +50,8 @@ rhel:~ # firewall-cmd --permanent --new-zone=test        # 新增 zone
 rhel:~ # firewall-cmd --permanent --delete-zone=test     # 新增 zone
 
 rhel:~ # firewall-cmd --reload                           # 重載設定
+
+rhel:~ # ls /etc/firewalld/zones/*.xml                   # 設定檔
 ```
 
 
