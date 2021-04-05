@@ -65,7 +65,13 @@ FirewallBackend=iptables
 [centos:~ ] # firewall-cmd --permanent --direct --add-rule ipv4 filter INPUT 4 -i docker0 -j ACCEPT
 [centos:~ ] # firewall-cmd --permanent --direct --add-rule ipv6 filter INPUT 6 -i docker0 -j ACCEPT
 [centos:~ ] # firewall-cmd --permanent --zone=public --add-masquerade
+
 [centos:~ ] # firewall-cmd --reload
 
 [centos:~ ] # systemctl restart docker
+
+# if docker service start to fail, then firewall issue
+[centos:~ ] # firewall-cmd --zone=trusted --change-interface=docker0 --permanent 
+[centos:~ ] # firewall-cmd --zone=trusted --add-masquerade --permanent
+[centos:~ ] # firewall-cmd --zone=docker --remove-interface=docker0
 ```

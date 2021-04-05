@@ -23,8 +23,7 @@ slurmdbd: 6819/tcp
 
 ```bash
 # firewall config
-linux:~ # firewall-cmd --add-port=6818/tcp --permanent
-linux:~ # firewall-cmd --add-port=6817/tcp --permanent
+linux:~ # firewall-cmd --add-port=6819/tcp --add-port=6818/tcp --add-port=6817/tcp --permanent
 linux:~ # firewall-cmd --reload
 ```
 
@@ -43,13 +42,13 @@ suse:~ # vi /etc/hosts
 suse:~ # hostname -s controller
 ```
 
-[setup ntp](./ntp.md)
+setup [ntp](./ntp.md)
 
-[setup nis](./nis.md)
+setup [nis](./nis.md)
 
-setup nfs
+setup nfs or [chrony](./chrony.md)
 
-[setup munge](./munge.md)
+setup [munge](./munge.md)
 
 
 ---
@@ -77,7 +76,9 @@ ReturnToService=2
 # 1: down -> down
 # 2: down -> idle
 
-PrivateData=jobs
+PrivateData=jobs                        # hidden regular users
+SrunPortRange=60001-63000               # listening ports to communicate
+LaunchParameters=use_interactive_step   # interactive mode
 
 # node config
 NodeName=DEFAULT Sockets=2 CoresPerSocket=4 ThreadsPerCore=1
@@ -87,6 +88,7 @@ NodeName=node[20-30] Sockets=2 CoresPerSocket=4 ThreadsPerCore=2 Feature=HyperTh
 # partition config
 PartitionName=DEFAULT State=UP
 PartitionName=normal Nodes=node[0-10,25-30] Default=YES MaxTime=24:00:00 State=UP
+PartitionName=vip Nodes=node[40-50] State=UP AllowAccounts=VIP
 ```
 
 [Slurm Version 17.11 Configuration Tool](https://slurm.schedmd.com/configurator.html)
@@ -174,6 +176,8 @@ controller:~ # smap
 controller:~ # srun -N 2 hostname
 controller:~ # srun -w <node> hostname
 controller:~ # srun env
+controller:~ # srun -N 1 –pty bash -i  # interactive mode
+controller:~ # srun -l -N1 -c2 sh -c "hostname && sleep 10" &
 ```
 
 
@@ -238,6 +242,28 @@ controller:~ # scontrol hold <job_id>
 controller:~ # scontrol release <job_id>
 ```
 
+```
+scontrol show job(s): Admin, Operator, Coordinator
+scontrol update job: Admin, Operator, Coordinator
+scontrol requeue: Admin, Operator, Coordinator
+scontrol show step(s): Admin, Operator, Coordinator
+scontrol update step: Admin, Operator, Coordinator
+scontrol show node: Admin, Operator
+scontrol update node: Admin
+scontrol show node: Admin, Operator
+scontrol update node: Admin
+scontrol create partition: Admin
+scontrol show partition: Admin, Operator
+scontrol update partition: Admin
+scontrol delete partition: Admin
+scontrol create reservation: Admin, Operator
+scontrol show reservation: Admin, Operator
+scontrol update reservation: Admin, Operator
+scontrol delete reservation: Admin, Operator
+scontrol reconfig: Admin
+scontrol shutdown: Admin
+scontrol takeover: Admin
+```
 
 ---
 
@@ -250,6 +276,7 @@ controller:~ # scontrol release <job_id>
 ```bash
 controller:~ # sinfo
 controller:~ # sinfo -la
+controller:~ # sinfo -Nla
 ```
 
 
@@ -385,7 +412,7 @@ AccountingStorageType=accounting_storage/slurmdbd
 
 JobAcctGatherType=jobacct_gather/cgroup
 
-JobCompType=jobcomp/mysql
+JobCompType=jobcomp/none
 ```
 
 AccountingStorageType: accounting_storage/none, accounting_storage/filetxt, accounting_storage/slurmdbd
@@ -393,6 +420,9 @@ AccountingStorageType: accounting_storage/none, accounting_storage/filetxt, acco
 JobAcctGatherType: jobacct_gather/none, jobacct_gather/linux, jobacct_gather/cgroup
 
 JobCompType: jobcomp/none, jobcomp/elasticsearch, jobcomp/filetxt, jobcomp/mysql, jobcomp/script
+
+[slurm.conf](https://slurm.schedmd.com/slurm.conf.html)
+
 
 `slurmdbd config`
 
@@ -405,6 +435,9 @@ StoragePass=<password>
 StorageLoc=slurm_acct_db
 
 ```
+
+[slurmdbd.conf](https://slurm.schedmd.com/slurmdbd.conf.html)
+
 
 `daemon`
 
@@ -487,11 +520,11 @@ controller:~ # scontrol show config | grep PriorityWeightQOS
 
 SchedulerType: sched/wiki -> maui, sched/wiki2 -> moab, sched/builtin or sched/backfill -> slurm
 
-PriorityType: priority/basic, priority/multifactor
+PriorityType: priority/basic -> fifo, priority/multifactor -> job priority factor
 
 AccountingStorageEnforce: limits
 
-PriorityWeightQOS: != 0
+PriorityWeightQOS: =0 don't use the qos factor, != 0 use the qos factor
 
 
 `sacctmgr`
@@ -508,9 +541,10 @@ controller:~ # sacctmgr mod qos <qos> set Priority=<n>  # job priority
 controller:~ # sacctmgr mod account <account> set qos=<qos>
 controller:~ # sacctmgr mod user <user> set qos=<qos>
 
-controller:~ # list associations
+controller:~ # sacctmgr list associations
 ```
 
+[Resource Limits](https://slurm.schedmd.com/resource_limits.html)
 
 `sprio`
 
@@ -519,6 +553,59 @@ controller:~ # sprio
 controller:~ # sprio -l
 ```
 
+
+### example
+
+```bash
+# for qos
+controller:~ # sacctmgr list configuration
+controller:~ # sacctmgr list cluster
+controller:~ # sacctmgr list qos format=name,priority,usagefactor
+controller:~ # sacctmgr list qos format=name,maxsubmitjobsperuser,maxjob
+controller:~ # sacctmgr list qos format=name,grpsubmitjob,grpjob
+controller:~ # sacctmgr list account
+controller:~ # sacctmgr list user
+controller:~ # sacctmgr list association format=qos,account,user
+controller:~ # sacctmgr list stats
+
+controller:~ # sacctmgr add qos high_qos   priority=1000 usagefactor=1.0
+controller:~ # sacctmgr add qos medium_qos priority=100  usagefactor=0.8
+controller:~ # sacctmgr add qos low_qos    priority=10   usagefactor=0.5
+
+controller:~ # sacctmgr add account high_acc   cluster=mycluster qos=high_qos
+controller:~ # sacctmgr add account medium_acc cluster=mycluster qos=medium_qos
+controller:~ # sacctmgr add account low_acc    cluster=mycluster qos=low_qos
+
+controller:~ # sacctmgr add user name=high_user   account=high_acc   cluster=mycluster
+controller:~ # sacctmgr add user name=medium_user account=medium_acc cluster=mycluster
+controller:~ # sacctmgr add user name=low_user    account=low_acc    cluster=mycluster
+
+# for job
+controller:~ # squeue
+controller:~ # squeue -l
+
+controller:~ # sinfo
+controller:~ # sinfo -al
+controller:~ # sinfo -Nal
+
+controller:~ # sprio
+controller:~ # sprio -nl
+controller:~ # sprio -nl
+
+controller:~ # sshare
+controller:~ # sshare -al
+
+controller:~ # sstat -j <job_id>
+
+# config
+controller:~ # scontrol show node
+controller:~ # scontrol show partition
+controller:~ # scontrol show job
+
+# repot
+controller:~ # sreport cluster UserUtilizationByAccount
+controller:~ # sreport user TopUsage
+```
 
 ---
 
@@ -533,6 +620,8 @@ ClusterName=<cluster>
 #ControlMachine=<server>
 SlurmctldHost=<server>
 SlurmctldHost=<ha_server>
+
+controller:~ # scontrol ping
 ```
 
 
