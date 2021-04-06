@@ -1,6 +1,5 @@
 # Basic
 
-
 ## Connect
 
 ```bash
@@ -14,12 +13,13 @@ linux:~ # mysql -u root [-h localhost] [-P 3306] [-p]
 linux:~ # sqlite3 db.sqlite3
 ```
 
+
 ## Help
 
 ```sql
 -- for PostgreSQL
-\h # help with SQL
-\? # help with PSQL
+\h -- help with SQL
+\? -- help with PSQL
 
 -- for MariaDB
 \?
@@ -53,13 +53,18 @@ SELECT (15 + 6) AS ADDITION;
 SELECT CURRENT_TIMESTAMP;
 ```
 
-----
+
+---
+
+# DDL – Data Definition Language
+
+CREATE, ALTER, DROP
 
 
-# Database
+## Database
 
 
-## Create Database
+### Create Database
 
 ```sql
 -- for PostgreSQL
@@ -67,7 +72,7 @@ CREATE DATABASE testdb;
 ```
 
 
-## Delete Database
+### Delete Database
 
 ```sql
 -- for PostgreSQL
@@ -75,7 +80,7 @@ DROP DATABASE testdb;
 ```
 
 
-## Show All Database
+### Show All Database
 
 ```sql
 -- for PostgreSQL
@@ -87,7 +92,7 @@ show databases;
 ```
 
 
-## Show Current Database
+### Show Current Database
 
 ```sql
 -- for PostgreSQL
@@ -95,20 +100,18 @@ show databases;
 ```
 
 
-## Use Database
+### Use Database
 
 ```sql
 -- for PostgreSQL
 \c testdb
 ```
 
-----
+
+## Table
 
 
-# Table
-
-
-## Create Table
+### Create Table
 
 ```sql
 CREATE TABLE company(
@@ -121,13 +124,13 @@ CREATE TABLE company(
 );
 ```
 
-## Delete Table
+### Delete Table
 
 ```sql
 DROP TABLE company;
 ```
 
-## Show Table
+### Show Table
 
 ```sql
 -- for PostgreSQL
@@ -137,7 +140,7 @@ DROP TABLE company;
 .table
 ```
 
-## Show Table Schema
+### Show Table Schema
 
 ```sql
 -- for PostgreSQL
@@ -147,13 +150,17 @@ DROP TABLE company;
 .schema company
 ```
 
-----
+
+---
+
+# DML – Data Manipulation Language
+
+INSERT, UPDATE, DELETE
+
+## Row
 
 
-# Record
-
-
-## Create Record
+### Create Row
 
 ```sql
 INSERT INTO company (id, name, age, address, salary)
@@ -172,21 +179,21 @@ VALUES (3, 'Kaushik', 23, 'Kota', 2000.00 ),
 (9, 'James', 45, 'Houston', 7000.00 ),
 ```
 
-## Delete Record
+### Delete Row
 
 ```sql
 DELETE FROM company;
 DELETE FROM company WHERE id = 6;
 ```
 
-## Update Record
+### Update Row
 
 ```sql
 UPDATE company SET address = 'Pune' WHERE id = 6;
 ```
 
 
-## Selete Record
+### Selete Row
 
 ```sql
 SELECT * FROM company;
@@ -204,13 +211,11 @@ SELECT * FROM company LIMIT 3;
 SELECT * FROM company ORDER BY age DESC, salary ASC;
 ```
 
-----
+
+## Function
 
 
-# SQL Function
-
-
-## Aggregate
+### Aggregate
 
 ```sql
 -- max, min, sum, count, avg
@@ -221,7 +226,7 @@ SELECT address, count(name), avg(salary) FROM company GROUP BY address;
 SELECT address, count(name), avg(salary) FROM company GROUP BY address HAVING count(name) >= 2;
 ```
 
-## String
+### String
 
 ```sql
 -- 字串連結 concat 或 ||
@@ -241,10 +246,21 @@ SELECT name, substring(name from 0 for 3) FROM customers;
 SELECT upper(name), lower(name) FROM customers;
 ```
 
-## Mathematical
+### Mathematical
+
+
+---
+
+# DCL – Data Control Language
+
+GRANT, REVOKE
+
+
+---
+
+# TCL – Transaction Control Language
+
+COMMIT, SAVEPOINT, ROLLBACK
 
 
 ----
-
-
-# SQL Advanced 
