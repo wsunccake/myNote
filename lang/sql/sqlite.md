@@ -17,13 +17,13 @@ linux:~ # sqlite3 db.sqlite3
 ```
 
 ```sql
-sqlite3> .help                     -- help
-sqlite3> .databases                -- show database
-sqlite3> .tables [<table_name>]    -- show table
-sqlite3> .schema [<table_name>]    -- show schema
-sqlite3> .show                     -- show config
-sqlite3> .quit
-sqlite3> .exit
+sqlite> .help                     -- help
+sqlite> .databases                -- show database
+sqlite> .tables [<table_name>]    -- show table
+sqlite> .schema [<table_name>]    -- show schema
+sqlite> .show                     -- show config
+sqlite> .quit
+sqlite> .exit
 ```
 
 
@@ -43,6 +43,7 @@ sqlite> CREATE TABLE COMPANY(
    SALARY         REAL
 );
 
+sqlite> DROP TABLE IF EXISTS DEPARTMENT;
 sqlite> CREATE TABLE DEPARTMENT(
    ID INT PRIMARY KEY      NOT NULL,
    DEPT           CHAR(50) NOT NULL,
@@ -59,6 +60,37 @@ sqlite> .tables comp%
 sqlite> .schema
 sqlite> .schema company
 sqlite> .schema comp%
+```
+
+### alter table
+
+```sql
+-- reanme table
+sqlite> ALTER TABLE COMPANY RENAME TO COMPANY_RENAME;
+sqlite> .tables
+
+-- add column
+sqlite> ALTER TABLE COMPANY_RENAME ADD COLUMN SEX CHAR(1);
+
+-- rename column
+sqlite> ALTER TABLE COMPANY_RENAME RENAME COLUMN SEX TO SEX_RENAME;
+sqlite> .schema COMPANY_RENAME 
+
+-- drop column
+PRAGMA foreign_keys=off;
+BEGIN TRANSACTION;
+CREATE TABLE COMPANY(
+   ID INTEGER PRIMARY KEY AUTOINCREMENT,
+   NAME           TEXT     NOT NULL,
+   AGE            INT      DEFAULT 20,
+   ADDRESS        CHAR(50) NOT NULL,
+   SALARY         REAL     CHECK(SALARY > 0)
+);
+INSERT INTO COMPANY (ID, NAME, AGE, ADDRESS, SALARY)
+  SELECT ID, NAME, AGE, ADDRESS, SALARY
+  FROM COMPANY_RENAME;
+COMMIT;
+PRAGMA foreign_keys=on;
 ```
 
 
@@ -430,7 +462,7 @@ sqlite> UPDATE COMPANY_BKP SET SALARY = SALARY * 0.50 WHERE AGE
 ```sql
 sqlite: CREATE TABLE COMPANY_NEW(
    ID INTEGER PRIMARY KEY AUTOINCREMENT,       -- autoincrememt
-   NAME           TEXT     NOT NULL UNIQUE,
+   NAME           TEXT     NOT NULL,
    AGE            INT      DEFAULT 20,
    ADDRESS        CHAR(50) NOT NULL,
    SALARY         REAL     CHECK(SALARY > 0)
@@ -457,4 +489,50 @@ sqlite> EXPLAIN SELECT *  FROM COMPANY WHERE SALARY >= 20000;
 
 -- explain query plan
 sqlite> EXPLAIN QUERY PLAN SELECT * FROM COMPANY WHERE Salary >= 20000;
+```
+
+
+---
+
+## database
+
+### dump
+
+```bash
+linux:~ # sqlite3 db.sqlite3 .dump > db.sql    # backup
+linux:~ # sqlite3 db.sqlite3 < db.sql          # restore
+```
+
+
+### attach
+
+```sql
+sqlite> ATTACH DATABASE 'new_db.sqlite3' AS 'new_db'
+sqlite> .databases
+sqlite> .tables
+```
+
+
+### detach
+
+```sql
+sqlite> DETACH DATABASE new_db
+sqlite> .databases
+```
+
+
+### vacuum
+
+```sql
+-- manual vacuum
+sqlite> VACUUM;
+
+-- auto vacuum
+sqlite> PRAGMA auto_vacuum = FULL;          -- enable full
+sqlite> PRAGMA auto_vacuum = INCREMENTAL;   -- enable incremental
+sqlite> PRAGMA auto_vacuum = NONE;          -- disable
+```
+
+```bash
+linux:~ # sqlite3 db.sqlite3 "VACUUM;"
 ```
