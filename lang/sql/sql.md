@@ -46,12 +46,24 @@ help;
 \! ls
 ```
 
+
 ## Expression
 
 ```sql
 SELECT (15 + 6) AS ADDITION;
 SELECT CURRENT_TIMESTAMP;
 ```
+
+
+## concept
+
+* DQL: Data Query Language
+
+* DML: Data Manipulation Language
+
+* DDL: Data Definition Language
+
+SQL command (一般習慣使用大寫表示), table name 不分大小寫. Column 有分大小寫
 
 
 ---

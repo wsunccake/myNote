@@ -14,7 +14,14 @@ linux:~ # yum install mariadb
 
 ```bash
 linux:~ # docker pull mysql
-linux:~ # docker run -d [-p 3306:3306] [-p 33060:33060] [-v /data/db:/var/lib/mysql] [-v /data/cnf:/etc/mysql/conf.d] --name mysql -e MYSQL_ROOT_PASSWORD=<password> mysql
+linux:~ # docker run -d \
+    --name mysql \
+    -e MYSQL_ROOT_PASSWORD=<password> \
+    [-v /data/db:/var/lib/mysql] \
+    [-v /data/cnf:/etc/mysql/conf.d] \
+    [-p 3306:3306] \
+    [-p 33060:33060] \
+    mysql
 
 linux:~ # docker exec -it mysql mysql -u root -p
 ```
@@ -70,6 +77,7 @@ linux:~ # ./run.sh
 ```sql
 mysql> CREATE DATABASE <database_name>;   -- create database
 mysql> DROP DATABASE <database_name>;     -- delete database
+mysql> SHOW DATABASES;                    -- list database
 mysql> USE <database_name>;               -- use database
 
 -- example
@@ -83,8 +91,9 @@ mysql> USE tutorials_db;
 ## table
 
 ```sql
-mysql> CREATE TABLE <table_name> (<column_name> <column_type>);        -- create table
-mysql> DROP TABLE <table_name>;                                        -- delete table
+mysql> CREATE TABLE <table_name> (<column_name> <data_type>);        -- create table
+mysql> DROP TABLE <table_name>;                                      -- delete table
+mysql> SHOW TABLES;                                                  -- list table
 
 -- example
 mysql> CREATE TABLE tutorials_tbl(
@@ -110,18 +119,17 @@ mysql> INSERT INTO <table_name> (<column1>, <column2>, ... <columnN>)  -- add ro
 
 -- example
 mysql> INSERT INTO tutorials_tbl (tutorial_title, tutorial_author, submission_date)
-  VALUES ("Learn PHP", "John", NOW());
-mysql> INSERT INTO tutorials_tbl (tutorial_title, tutorial_author, submission_date)
-VALUES ("Learn MySQL", "Mary", NOW()),
-("JAVA Tutorial", "Joe", '2020-01-01');
-("SQL Tutorial", "John", NOW());
+  VALUES ("Learn PHP", "John", NOW()),
+  ("Learn MySQL", "Mary", NOW()),
+  ("JAVA Tutorial", "Joe", '2020-01-01');
+  ("SQL Tutorial", "John", NOW());
 ```
 
 
 ### read / query
 
 ```sql
-mysql> SELECT <column1>, <column2>, ... <columnN> FROM <table_name1>, <table_name2>...
+mysql> SELECT <column1>, <column2>, ... <columnN> FROM <table1>, <table2>...
   [WHERE Clause]
   [OFFSET M ][LIMIT N]
 
@@ -137,6 +145,7 @@ mysql>  SELECT ...
 mysql> SELECT * FROM tutorials_tbl;
 mysql> SELECT tutorial_author, tutorial_title FROM tutorials_tbl;
 
+-- where
 mysql> SELECT * FROM tutorials_tbl WHERE tutorial_author = "john";
 mysql> SELECT * FROM tutorials_tbl WHERE BINARY tutorial_author = "john";   -- case sensitive
 mysql> SELECT * FROM tutorials_tbl WHERE submission_date <= '2020-12-31';
@@ -183,7 +192,7 @@ mysql> SELECT * FROM tutorials_tbl WHERE tutorial_author REGEXP "j.*n";
 ```
 
 
-### change / update
+### update / modify
 
 
 ```sql
@@ -195,7 +204,7 @@ mysql> UPDATE tutorials_tbl SET tutorial_title = 'Learning JAVA' WHERE tutorial_
 ```
 
 
-### remove / delete
+### delete / remove
 
 ```sql
 mysql> DELETE FROM table_name

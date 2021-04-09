@@ -155,12 +155,19 @@ sqlite> SELECT sql FROM sqlite_master WHERE type = 'table' AND tbl_name = 'COMPA
 ```sql
 -- arithmetic operator
 sqlite> .mode line
-sqlite> select 10 + 20;
-sqlite> select 10 - 20;
-sqlite> select 10 * 20;
-sqlite> select 10 / 20;
-sqlite> select 10 / 5;
-sqlite> select 12 % 5;
+sqlite> SELECT 10 + 20;
+sqlite> SELECT 10 - 20;
+sqlite> SELECT 10 * 20;
+sqlite> SELECT 10 / 5;
+sqlite> SELECT 12 % 5;
+
+-- bitwise operator
+sqlite> .mode line
+sqlite> SELECT 60 | 13;
+sqlite> SELECT 60 & 13;
+sqlite> SELECT (~60);
+sqlite> SELECT (60 << 2);
+sqlite> SELECT (60 >> 2);
 
 -- comparison operator
 sqlite> .mode column
@@ -172,6 +179,7 @@ sqlite> SELECT * FROM COMPANY WHERE SALARY >= 65000;
 sqlite> SELECT * FROM COMPANY WHERE SALARY !> 65000;
 
 -- logical operator
+sqlite> .mode column
 sqlite> SELECT * FROM COMPANY WHERE AGE >= 25 AND SALARY >= 65000;
 sqlite> SELECT * FROM COMPANY WHERE AGE >= 25 OR SALARY >= 65000;
 sqlite> SELECT * FROM COMPANY WHERE AGE IS NOT NULL;
@@ -184,14 +192,6 @@ sqlite> SELECT AGE FROM COMPANY
    WHERE EXISTS (SELECT AGE FROM COMPANY WHERE SALARY > 65000);
 sqlite> SELECT * FROM COMPANY 
    WHERE AGE > (SELECT AGE FROM COMPANY WHERE SALARY > 65000);
-
--- bitwise operator
-sqlite> .mode line
-sqlite> select 60 | 13;
-sqlite> select 60 & 13;
-sqlite> select (~60);
-sqlite> select (60 << 2);
-sqlite> select (60 >> 2);
 ```
 
 
@@ -225,6 +225,7 @@ sqlite> SELECT * FROM COMPANY WHERE NAME LIKE 'Ki%';
 sqlite> SELECT * FROM COMPANY WHERE AGE LIKE '%2';
 sqlite> SELECT * FROM COMPANY WHERE AGE LIKE '_2';
 sqlite> SELECT * FROM COMPANY WHERE ADDRESS LIKE '%-%';
+sqlite> SELECT * FROM COMPANY WHERE ADDRESS NOT LIKE '%-%';
 sqlite> SELECT * FROM COMPANY WHERE ADDRESS LIKE '____-%';
 
 -- glob
@@ -237,8 +238,8 @@ sqlite> SELECT * FROM COMPANY WHERE ADDRESS GLOB '*-*';
 sqlite> SELECT * FROM COMPANY WHERE ADDRESS GLOB '????-*';
 
 -- in, between
-sqlite> SELECT * FROM COMPANY WHERE AGE IN ( 25, 27 );
-sqlite> SELECT * FROM COMPANY WHERE AGE NOT IN ( 25, 27 );
+sqlite> SELECT * FROM COMPANY WHERE AGE IN (25, 27);
+sqlite> SELECT * FROM COMPANY WHERE AGE NOT IN (25, 27);
 sqlite> SELECT * FROM COMPANY WHERE AGE BETWEEN 25 AND 27;
 
 -- limit, offset
@@ -329,17 +330,17 @@ sqlite> SELECT EMP_ID, NAME, DEPT FROM COMPANY LEFT OUTER JOIN DEPARTMENT
 
 -- union
 sqlite> SELECT EMP_ID, NAME, DEPT FROM COMPANY INNER JOIN DEPARTMENT
-   ON COMPANY.ID = DEPARTMENT.EMP_ID
+     ON COMPANY.ID = DEPARTMENT.EMP_ID
    UNION
    SELECT EMP_ID, NAME, DEPT FROM COMPANY LEFT OUTER JOIN DEPARTMENT
-   ON COMPANY.ID = DEPARTMENT.EMP_ID;
+     ON COMPANY.ID = DEPARTMENT.EMP_ID;
 
 -- union all
 sqlite> SELECT EMP_ID, NAME, DEPT FROM COMPANY INNER JOIN DEPARTMENT
-   ON COMPANY.ID = DEPARTMENT.EMP_ID
+     ON COMPANY.ID = DEPARTMENT.EMP_ID
    UNION ALL
    SELECT EMP_ID, NAME, DEPT FROM COMPANY LEFT OUTER JOIN DEPARTMENT
-   ON COMPANY.ID = DEPARTMENT.EMP_ID;
+     ON COMPANY.ID = DEPARTMENT.EMP_ID;
 ```
 
 
@@ -407,8 +408,8 @@ sqlite> DROP INDEX SALARY_INDEX;
 ```sql
 -- create view
 sqlite> CREATE VIEW COMPANY_VIEW AS
-   ...> SELECT ID, NAME, AGE
-   ...> FROM  COMPANY;
+   SELECT ID, NAME, AGE
+   FROM  COMPANY;
 
 sqlite> SELECT * FROM COMPANY_VIEW;
 
@@ -460,8 +461,8 @@ sqlite> UPDATE COMPANY_BKP SET SALARY = SALARY * 0.50 WHERE AGE
 ### autoincrememt
 
 ```sql
-sqlite: CREATE TABLE COMPANY_NEW(
-   ID INTEGER PRIMARY KEY AUTOINCREMENT,       -- autoincrememt
+sqlite> CREATE TABLE COMPANY_NEW(
+   ID INTEGER PRIMARY KEY AUTOINCREMENT,  -- autoincrememt
    NAME           TEXT     NOT NULL,
    AGE            INT      DEFAULT 20,
    ADDRESS        CHAR(50) NOT NULL,
@@ -482,10 +483,10 @@ sqlite> INSERT INTO COMPANY_NEW (NAME, AGE, ADDRESS, SALARY)
 ### explain
 
 ```sql
-sqlite> SELECT *  FROM COMPANY WHERE SALARY >= 20000;
+sqlite> SELECT * FROM COMPANY WHERE SALARY >= 20000;
 
 -- explain
-sqlite> EXPLAIN SELECT *  FROM COMPANY WHERE SALARY >= 20000;
+sqlite> EXPLAIN SELECT * FROM COMPANY WHERE SALARY >= 20000;
 
 -- explain query plan
 sqlite> EXPLAIN QUERY PLAN SELECT * FROM COMPANY WHERE Salary >= 20000;
