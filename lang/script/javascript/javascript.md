@@ -755,6 +755,15 @@ m2({});
 
 m1({z: 3});
 m2({z: 3});
+
+// arguments
+function noArg(arg0) {
+    console.log(`arguments.length: ${arguments.length}`);
+    console.log(`args0: ${arg0}, arguments[0]: ${arguments[0]}`);
+    console.log(`arguments[1]: ${arguments[1]}`);
+}
+
+noArg('a', 'b');
 ```
 
 
@@ -796,6 +805,95 @@ let msg = o.showMessage;
 msg();                                // Hi global
 ```
 
+```javascript
+// this for function
+function ninja() {
+    return this;
+}
+
+function samurai() {
+    "use strict";
+    return this;
+}
+
+let fExpress = function() {return this};
+
+let fArrow = () => {return this};
+
+// console.log(ninja() === window);  // run on browser
+console.log(ninja() === global);     // run on nodejs, but 14 false, 10 ture
+console.log(samurai() === undefined);
+console.log(fExpress() === global);  // run on nodejs, but 14 false, 10 ture
+console.log(fArrow() === undefined);
+
+// this for object
+const objThis = {
+    ninja: ninja,
+    samurai: samurai
+};
+console.log(objThis.ninja() === objThis);
+console.log(objThis.samurai() === objThis);
+
+// this for constructor function
+function FnThis() {
+    this.ninja = ninja;
+    this.samurai = samurai;
+}
+let fnThis = new FnThis();
+console.log(fnThis.ninja() === fnThis);
+console.log(fnThis.samurai() === fnThis);
+```
+
+
+### apply, call, bind
+
+```javascript
+function addOne(a) {
+    return a + 1;
+}
+console.log(addOne(1));
+
+function add(a, b) {
+    return a + b;
+}
+let add1 = add.bind(null, 1);  // partial function
+console.log(add1(1));
+```
+
+```javascript
+// apply, call ,bind for function without this
+function sum1() {
+    let total = 0;
+    for (let i = 0; i < arguments.length; i++) {
+        total += arguments[i];
+    }
+    return total;
+}
+
+console.log(`fn:       ${sum1(1, 2, 3)}`);                // invoke
+console.log(`fn.apply: ${sum1.apply(null, [1, 2, 3])}`);  // apply
+console.log(`fn.call:  ${sum1.call(null, 1, 2, 3)}`);     // call
+console.log(`fn.bind:  ${sum1.bind(null, 1, 2, 3)()}`);   // bind
+
+// apply, call ,bind for function with this
+function sum2() {
+    let total = 0;
+    for (let i = 0; i < arguments.length; i++) {
+        total += arguments[i];
+    }
+    this.result = total;
+    return total;
+}
+
+let sFn = new sum2(1, 2, 3);
+let oApply = {};
+let oCall = {};
+let oBind = {};
+console.log(`fn:       ${sFn}, ${sFn.result}`);                               // function construtor
+console.log(`fn.apply: ${sum2.apply(oApply, [1, 2, 3])}, ${oApply.result}`);  // apply
+console.log(`fn.call:  ${sum2.call(oCall, 1, 2, 3)}, ${oCall.result}`);       // call
+console.log(`fn.bind:  ${sum2.bind(oBind, 1, 2, 3)()}, ${oBind.result}`);     // bind
+```
 
 ---
 
