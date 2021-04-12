@@ -116,7 +116,39 @@ sle:~ # yast sw_single
 ```bash
 sle:~ # yast lan
 
-sle:~ # ls /etc/sysconfig/network/ifcfg-<nic>
+sle:~ # ls /etc/sysconfig/network/ifcfg-<nic>    # nic ip
+sle:~ # ls /etc/sysconfig/network/ifroute-<nic>  # nic route
+sle:~ # ls /etc/sysconfig/network/route          # default route
+
+sle:~ # vi /etc/sysconfig/network/ifcfg-eth0
+# for dhcp
+NAME=''
+BOOTPROTO='dhcp'
+STARTMODE='auto'
+ZONE=''
+
+# for static
+BOOTPROTO='static'
+STARTMODE='auto'
+IPADDR='192.168.1.1/24'
+MTU='9000'
+ZONE=''
+
+sle:~ # ls /etc/sysconfig/network/route
+# for static
+default 192.168.0.1 - -
+
+
+sle:~ # systemctl status wicked
+sle:~ # systemctl status wickedd
+
+sle:~ # wicked --help
+sle:~ # wicked show all
+sle:~ # wicked ifstatus all
+
+sle:~ # wicked ifup eth0
+sle:~ # wicked ifdown eth0
+sle:~ # wicked show-config eth0
 
 sle:~ # ifup eth0
 sle:~ # ifdown eth0
