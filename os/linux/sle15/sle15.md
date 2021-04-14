@@ -33,7 +33,7 @@ sle:~ # sha256sum SLE-15-SP2-Full-x86_64-GM-Media1.iso
 sle:~ # mount /dev/sr0 /mnt
 sle:~ # zypper rr -a
 sle:~ # zypper ar /mnt/Module-Basesystem Basesystem
-sle:~ # ls -d /mnt/{M,P}* | xarg -i zypper ar {} `basename {}`
+sle:~ # ls -d /mnt/{M,P}* | xargs -i zypper ar {} `basename {}`
 sle:~ # zypper lr
 sle:~ # ls /etc/zypp/repos.d/
 sle:~ # yast repositories
