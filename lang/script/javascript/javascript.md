@@ -1063,8 +1063,155 @@ console.log(car1.getInsurancePolicy());
 ```
 
 
----
+### function map to class
 
+```javascript
+function NinjaFn(name, level) {
+    this.name = name;                            // public field
+    let _level = level;                          // private field
+
+    this.getLevel = function () {
+        return _level;
+    }
+    this.setLevel = function(level) {
+        _level = level;
+    }
+}
+// NinjaFn.prototype.swingSword = function() {      // public method
+//     return true;
+// }
+NinjaFn.prototype = {
+    swingSword: function() {                     // public method
+        return true;
+    }
+}
+NinjaFn.compare = function(ninja1, ninja2) {     // static method
+    return ninja1.getLevel() - ninja2.getLevel();
+}
+
+let ninjaFn1 = new NinjaFn('ninjaFn1', 5);
+let ninjaFn2 = new NinjaFn('ninjaFn2', 1);
+console.log(`${ninjaFn1.name}, ${ninjaFn1._level}, ${ninjaFn1.getLevel()}`);
+console.log(`${ninjaFn2.name}, ${ninjaFn2.swingSword()}`);
+console.log(`NinjaFn.compare:  ninjaFn  - ninjaFn  = ${NinjaFn.compare(ninjaFn1, ninjaFn2)}`);
+
+
+class NinjaCls {
+    constructor(name, level) {
+        this.name = name;                        // public field
+        let _level;                              // private field
+
+        this.getLevel = function () {
+            return _level;
+        }
+        this.setLevel = function(level) {
+            _level = level;
+        }
+
+        this.setLevel(level);
+    }
+
+    swingSword() {                               // public method
+        return true;
+    }
+
+    static compare(ninja1, ninja2) {             // static method
+        return ninja1.getLevel() - ninja2.getLevel();
+    }
+}
+
+let ninjaCls1 = new NinjaCls('ninjaCls1', 5);
+let ninjaCls2 = new NinjaCls('ninjaCls2', 1);
+console.log(`${ninjaCls1.name}, ${ninjaCls1._level}, ${ninjaCls1.getLevel()}`);
+console.log(`${ninjaCls2.name}, ${ninjaCls2.swingSword()}`);
+console.log(`NinjaCls.compare: ninjaCls - ninjaCls = ${NinjaCls.compare(ninjaCls1, ninjaCls2)}`);
+
+
+console.log(`NinjaFn.compare:  ninjaCls - ninjaCls = ${NinjaFn.compare(ninjaCls1, ninjaCls2)}`);
+console.log(`NinjaCls.compare: ninjaFn  - ninjaFn  = ${NinjaCls.compare(ninjaFn1, ninjaFn2)}`);
+```
+
+### function map to extends
+
+```javascript
+function extend(base, sub) {
+    var origProto = sub.prototype;
+    sub.prototype = Object.create(base.prototype);
+    for (var key in origProto)  {
+        sub.prototype[key] = origProto[key];
+    }
+
+    Object.defineProperty(sub.prototype, 'constructor', { 
+        enumerable: false,
+        value: sub
+    });
+}
+
+function PersonFn(name) {
+    this.name = name;
+}
+PersonFn.prototype.dance = function() {
+    return true;
+}
+
+function NinjaFn(name, weapon) {
+    PersonFn.call(this, name);
+    this.weapon = weapon;
+}
+NinjaFn.prototype = {
+    wieldWeapon: function() {
+        return this.weapon;
+    }
+}
+
+extend(PersonFn, NinjaFn);
+
+
+const personFn = new PersonFn('PersonFn');
+const ninjaFn = new NinjaFn('NinjaFn', 'wakizashi');
+
+console.log(`personFn instanceof PersonFn: ${personFn instanceof PersonFn}`);
+console.log(`personFn instanceof NinjaFn:  ${personFn instanceof NinjaFn}`);
+console.log(`ninjaFn  instanceof NinjaFn:  ${ninjaFn instanceof NinjaFn}`);
+console.log(`ninjaFn  instanceof PersonFn: ${ninjaFn instanceof PersonFn}`);
+console.log(ninjaFn.name);
+console.log(ninjaFn.dance())
+
+
+class PersonCls {
+    constructor(name) {
+        this.name = name;
+    }
+
+    dance() {
+        return true;
+    }
+}
+
+class NinjaCls extends PersonCls {
+    constructor(name, weapon) {
+        super(name);
+        this.weapon = weapon;
+    }
+
+    wieldWeapon() {
+        return this.weapon;
+    }
+}
+
+const personCls = new PersonCls('personCls');
+const ninjaCls = new NinjaCls('ninjaCls', 'wakizashi');
+
+console.log(`personCls instanceof PersonCls: ${personCls instanceof PersonCls}`)
+console.log(`personCls instanceof NinjaCls:  ${personCls instanceof NinjaCls}`)
+console.log(`ninjaCls  instanceof NinjaCls:  ${ninjaCls instanceof NinjaCls}`)
+console.log(`ninjaCls  instanceof PersonCls: ${ninjaCls instanceof PersonCls}`)
+console.log(ninjaCls.name);
+console.log(ninjaCls.dance())
+```
+
+
+---
 
 ## Exception
 
