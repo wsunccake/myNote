@@ -755,6 +755,15 @@ m2({});
 
 m1({z: 3});
 m2({z: 3});
+
+// arguments
+function noArg(arg0) {
+    console.log(`arguments.length: ${arguments.length}`);
+    console.log(`args0: ${arg0}, arguments[0]: ${arguments[0]}`);
+    console.log(`arguments[1]: ${arguments[1]}`);
+}
+
+noArg('a', 'b');
 ```
 
 
@@ -796,6 +805,95 @@ let msg = o.showMessage;
 msg();                                // Hi global
 ```
 
+```javascript
+// this for function
+function ninja() {
+    return this;
+}
+
+function samurai() {
+    "use strict";
+    return this;
+}
+
+let fExpress = function() {return this};
+
+let fArrow = () => {return this};
+
+// console.log(ninja() === window);  // run on browser
+console.log(ninja() === global);     // run on nodejs, but 14 false, 10 ture
+console.log(samurai() === undefined);
+console.log(fExpress() === global);  // run on nodejs, but 14 false, 10 ture
+console.log(fArrow() === undefined);
+
+// this for object
+const objThis = {
+    ninja: ninja,
+    samurai: samurai
+};
+console.log(objThis.ninja() === objThis);
+console.log(objThis.samurai() === objThis);
+
+// this for constructor function
+function FnThis() {
+    this.ninja = ninja;
+    this.samurai = samurai;
+}
+let fnThis = new FnThis();
+console.log(fnThis.ninja() === fnThis);
+console.log(fnThis.samurai() === fnThis);
+```
+
+
+### apply, call, bind
+
+```javascript
+function addOne(a) {
+    return a + 1;
+}
+console.log(addOne(1));
+
+function add(a, b) {
+    return a + b;
+}
+let add1 = add.bind(null, 1);  // partial function
+console.log(add1(1));
+```
+
+```javascript
+// apply, call ,bind for function without this
+function sum1() {
+    let total = 0;
+    for (let i = 0; i < arguments.length; i++) {
+        total += arguments[i];
+    }
+    return total;
+}
+
+console.log(`fn:       ${sum1(1, 2, 3)}`);                // invoke
+console.log(`fn.apply: ${sum1.apply(null, [1, 2, 3])}`);  // apply
+console.log(`fn.call:  ${sum1.call(null, 1, 2, 3)}`);     // call
+console.log(`fn.bind:  ${sum1.bind(null, 1, 2, 3)()}`);   // bind
+
+// apply, call ,bind for function with this
+function sum2() {
+    let total = 0;
+    for (let i = 0; i < arguments.length; i++) {
+        total += arguments[i];
+    }
+    this.result = total;
+    return total;
+}
+
+let sFn = new sum2(1, 2, 3);
+let oApply = {};
+let oCall = {};
+let oBind = {};
+console.log(`fn:       ${sFn}, ${sFn.result}`);                               // function construtor
+console.log(`fn.apply: ${sum2.apply(oApply, [1, 2, 3])}, ${oApply.result}`);  // apply
+console.log(`fn.call:  ${sum2.call(oCall, 1, 2, 3)}, ${oCall.result}`);       // call
+console.log(`fn.bind:  ${sum2.bind(oBind, 1, 2, 3)()}, ${oBind.result}`);     // bind
+```
 
 ---
 
@@ -965,8 +1063,155 @@ console.log(car1.getInsurancePolicy());
 ```
 
 
----
+### function map to class
 
+```javascript
+function NinjaFn(name, level) {
+    this.name = name;                            // public field
+    let _level = level;                          // private field
+
+    this.getLevel = function () {
+        return _level;
+    }
+    this.setLevel = function(level) {
+        _level = level;
+    }
+}
+// NinjaFn.prototype.swingSword = function() {      // public method
+//     return true;
+// }
+NinjaFn.prototype = {
+    swingSword: function() {                     // public method
+        return true;
+    }
+}
+NinjaFn.compare = function(ninja1, ninja2) {     // static method
+    return ninja1.getLevel() - ninja2.getLevel();
+}
+
+let ninjaFn1 = new NinjaFn('ninjaFn1', 5);
+let ninjaFn2 = new NinjaFn('ninjaFn2', 1);
+console.log(`${ninjaFn1.name}, ${ninjaFn1._level}, ${ninjaFn1.getLevel()}`);
+console.log(`${ninjaFn2.name}, ${ninjaFn2.swingSword()}`);
+console.log(`NinjaFn.compare:  ninjaFn  - ninjaFn  = ${NinjaFn.compare(ninjaFn1, ninjaFn2)}`);
+
+
+class NinjaCls {
+    constructor(name, level) {
+        this.name = name;                        // public field
+        let _level;                              // private field
+
+        this.getLevel = function () {
+            return _level;
+        }
+        this.setLevel = function(level) {
+            _level = level;
+        }
+
+        this.setLevel(level);
+    }
+
+    swingSword() {                               // public method
+        return true;
+    }
+
+    static compare(ninja1, ninja2) {             // static method
+        return ninja1.getLevel() - ninja2.getLevel();
+    }
+}
+
+let ninjaCls1 = new NinjaCls('ninjaCls1', 5);
+let ninjaCls2 = new NinjaCls('ninjaCls2', 1);
+console.log(`${ninjaCls1.name}, ${ninjaCls1._level}, ${ninjaCls1.getLevel()}`);
+console.log(`${ninjaCls2.name}, ${ninjaCls2.swingSword()}`);
+console.log(`NinjaCls.compare: ninjaCls - ninjaCls = ${NinjaCls.compare(ninjaCls1, ninjaCls2)}`);
+
+
+console.log(`NinjaFn.compare:  ninjaCls - ninjaCls = ${NinjaFn.compare(ninjaCls1, ninjaCls2)}`);
+console.log(`NinjaCls.compare: ninjaFn  - ninjaFn  = ${NinjaCls.compare(ninjaFn1, ninjaFn2)}`);
+```
+
+### function map to extends
+
+```javascript
+function extend(base, sub) {
+    var origProto = sub.prototype;
+    sub.prototype = Object.create(base.prototype);
+    for (var key in origProto)  {
+        sub.prototype[key] = origProto[key];
+    }
+
+    Object.defineProperty(sub.prototype, 'constructor', { 
+        enumerable: false,
+        value: sub
+    });
+}
+
+function PersonFn(name) {
+    this.name = name;
+}
+PersonFn.prototype.dance = function() {
+    return true;
+}
+
+function NinjaFn(name, weapon) {
+    PersonFn.call(this, name);
+    this.weapon = weapon;
+}
+NinjaFn.prototype = {
+    wieldWeapon: function() {
+        return this.weapon;
+    }
+}
+
+extend(PersonFn, NinjaFn);
+
+
+const personFn = new PersonFn('PersonFn');
+const ninjaFn = new NinjaFn('NinjaFn', 'wakizashi');
+
+console.log(`personFn instanceof PersonFn: ${personFn instanceof PersonFn}`);
+console.log(`personFn instanceof NinjaFn:  ${personFn instanceof NinjaFn}`);
+console.log(`ninjaFn  instanceof NinjaFn:  ${ninjaFn instanceof NinjaFn}`);
+console.log(`ninjaFn  instanceof PersonFn: ${ninjaFn instanceof PersonFn}`);
+console.log(ninjaFn.name);
+console.log(ninjaFn.dance())
+
+
+class PersonCls {
+    constructor(name) {
+        this.name = name;
+    }
+
+    dance() {
+        return true;
+    }
+}
+
+class NinjaCls extends PersonCls {
+    constructor(name, weapon) {
+        super(name);
+        this.weapon = weapon;
+    }
+
+    wieldWeapon() {
+        return this.weapon;
+    }
+}
+
+const personCls = new PersonCls('personCls');
+const ninjaCls = new NinjaCls('ninjaCls', 'wakizashi');
+
+console.log(`personCls instanceof PersonCls: ${personCls instanceof PersonCls}`)
+console.log(`personCls instanceof NinjaCls:  ${personCls instanceof NinjaCls}`)
+console.log(`ninjaCls  instanceof NinjaCls:  ${ninjaCls instanceof NinjaCls}`)
+console.log(`ninjaCls  instanceof PersonCls: ${ninjaCls instanceof PersonCls}`)
+console.log(ninjaCls.name);
+console.log(ninjaCls.dance())
+```
+
+
+---
 
 ## Exception
 
@@ -1098,6 +1343,47 @@ for (let entry of log) {
 }
 ```
 
+### get, set
+
+```javascript
+class NinjaClsCollection {
+    constructor() {
+        this.ninjas = ["Yoshi", "Kuma", "Hattori"];
+    }
+
+    get first() {
+        return this.ninjas[0];
+    }
+
+    set first(ninja) {
+        this.ninjas[0] = ninja
+    }
+}
+
+let ninjaClsCollection = new NinjaClsCollection()
+console.log(`cls get: ${ninjaClsCollection.first}`);
+ninjaClsCollection.first = "Hachi";
+console.log(`cls set: ${ninjaClsCollection.first}`);
+
+
+function NinjaFnCollection() {
+    this.ninjas = ["Yoshi", "Kuma", "Hattori"];
+
+    Object.defineProperty(this, "first", {
+        get: () => {
+            return this.ninjas[0];
+        },
+        set: (ninja) => {
+            this.ninjas[0] = ninja;
+        }
+    });
+}
+
+let ninjaFnCollection = new NinjaFnCollection()
+console.log(`fn get: ${ninjaFnCollection.first}`);
+ninjaFnCollection.first = "Hachi";
+console.log(`fn set: ${ninjaFnCollection.first}`);
+```
 
 ---
 

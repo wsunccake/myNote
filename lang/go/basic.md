@@ -96,12 +96,17 @@ func main() {
     hello.Hello()
 }
 
-# run with source
+# set env
 linux:~/project # export GOPATH=~/project
+linux:~/project # export GOBIN=~/project/bin
+
+# download package
+linux:~/project # go get
+
+# run with source
 linux:~/project # go run main.go
 
 # build binary
-linux:~/project # export GOBIN=~/project/bin
 linux:~/project # go install
 linux:~/project # ls $GOBIN
 
