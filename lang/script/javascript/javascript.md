@@ -1343,6 +1343,47 @@ for (let entry of log) {
 }
 ```
 
+### get, set
+
+```javascript
+class NinjaClsCollection {
+    constructor() {
+        this.ninjas = ["Yoshi", "Kuma", "Hattori"];
+    }
+
+    get first() {
+        return this.ninjas[0];
+    }
+
+    set first(ninja) {
+        this.ninjas[0] = ninja
+    }
+}
+
+let ninjaClsCollection = new NinjaClsCollection()
+console.log(`cls get: ${ninjaClsCollection.first}`);
+ninjaClsCollection.first = "Hachi";
+console.log(`cls set: ${ninjaClsCollection.first}`);
+
+
+function NinjaFnCollection() {
+    this.ninjas = ["Yoshi", "Kuma", "Hattori"];
+
+    Object.defineProperty(this, "first", {
+        get: () => {
+            return this.ninjas[0];
+        },
+        set: (ninja) => {
+            this.ninjas[0] = ninja;
+        }
+    });
+}
+
+let ninjaFnCollection = new NinjaFnCollection()
+console.log(`fn get: ${ninjaFnCollection.first}`);
+ninjaFnCollection.first = "Hachi";
+console.log(`fn set: ${ninjaFnCollection.first}`);
+```
 
 ---
 
