@@ -821,9 +821,9 @@ let fExpress = function() {return this};
 let fArrow = () => {return this};
 
 // console.log(ninja() === window);  // run on browser
-console.log(ninja() === global);     // run on nodejs, but 14 false, 10 ture
+console.log(ninja() === global);     // run on nodejs, but es6 module false, common js ture
 console.log(samurai() === undefined);
-console.log(fExpress() === global);  // run on nodejs, but 14 false, 10 ture
+console.log(fExpress() === global);  // run on nodejs, but es6 module false, common js ture
 console.log(fArrow() === undefined);
 
 // this for object
