@@ -33,6 +33,7 @@ network:
 
 [ubuntu:~ ] # netplan try
 [ubuntu:~ ] # netplan apply
+[ubuntu:~ ] # netplan ip leases ens172
 
 [ubuntu:~ ] # ls /run/systemd/network/                  # auto generate systemd script
 [ubuntu:~ ] # ls /usr/share/doc/netplan/examples/       # setup example
