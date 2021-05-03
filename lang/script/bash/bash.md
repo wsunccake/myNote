@@ -180,6 +180,10 @@ for E in `seq 3`; do
   echo "index: $E"
 done
 
+for f in /etc/*.conf; do
+  echo $f
+done
+
 seq 3 | xargs -i echo "{}"
 ```
 
