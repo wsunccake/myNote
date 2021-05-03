@@ -203,6 +203,12 @@ while true; do
     break
   fi
 done
+
+while read -r line; do
+  username=`echo $line | awk -F: '{print $1}'`
+  home=`echo $line | awk -F: '{print $6}'`
+  echo "username: $username, home: $home"
+done < /etc/passwd
 ```
 
 ---
