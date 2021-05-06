@@ -5,6 +5,11 @@ centos:~ # yum install python34 python34-pip   # for centos 7
 centos:~ # dnf module install python36         # for centos 8
 ```
 
+```batch
+C:\Users\user> curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py   # windows 10
+C:\Users\user> py get-pip.py
+```
+
 
 ---
 
@@ -47,10 +52,16 @@ linux:~/myproject3 # deactivate
 ```bash
 linux:~ # python3 -m venv venv
 linux:~ # source venv/bin/activate
-(vevn) linux:~ # deactivate
+(venv) linux:~ # deactivate
 
 linux:~ # cat venv/pyvenv.cfg
 prompt = 
+```
+
+```batch
+C:\Users\user> py -m venv venv
+C:\Users\user> .\venv\Scripts\activate
+(venv) C:\Users\user> deactivate
 ```
 
 
