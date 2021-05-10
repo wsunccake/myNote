@@ -40,6 +40,7 @@ linux:~ # echo '{"user": "jq"}' | jq '. + {"msg": "hello jq"}         # add/writ
 linux:~ # echo '{"user": "jq", "msg": "hello jq"}' | jq 'del(.msg)'   # del
 
 linux:~ # echo '[{"user": "js", "lang": "javascript"}, {"user": "py", "lang": "python3"}]' | jq -r '.[].user, .[].lang' | paste -d, - -
+linux:~ # echo '[{"user": "js", "lang": "javascript"}, {"user": "py", "lang": "python3"}]' | jq -r '.[] | .user, .lang' | paste -d, - -
 
 # list 
 linux:~ # echo '[1, 2, 3]' | jq '. | map(. + 1)'
