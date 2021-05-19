@@ -175,15 +175,26 @@ net.ipv6.conf.default.disable_ipv6 = 1
 [centos:~ ] # vi /etc/tigervnc/vncserver.users
 #:x=<user>
 :1=<vnc_user>
-[centos:~ ] # cat /etc/tigervnc/vncserver-config-defaults
+
+[centos:~ ] # ls /usr/share/xsessions
+[centos:~ ] # vi /etc/tigervnc/vncserver-config-defaults  # for system
+session=gnome
+geometry=1920x1200
+localhost
+alwaysshared
+
 [centos:~ ] # su - <vnc_user>
 [centos:~ ] $ vncpasswd
-[centos:~ ] $ cat $HOME/.vnc/config
+[centos:~ ] $ cat $HOME/.vnc/config                        # for user
 [centos:~ ] $ restorecon -RFv $HOME/.vnc
 [centos:~ ] $ exit
 [centos:~ ] # cat /usr/lib/systemd/system/vncserver@.service
 [centos:~ ] # systemctl enable vncserver@:<display>.service
 [centos:~ ] # systemctl start vncserver@:<display>.service
+
+# firewall
+[centos:~ ] # firewall-cmd --add-port=5901-5905/tcp
+[centos:~ ] # firewall-cmd --add-port=5901-5905/tcp --permanent
 
 # vnc command
 [centos:~ ] # vncserver [:1]
