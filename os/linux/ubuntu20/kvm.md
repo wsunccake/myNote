@@ -4,13 +4,19 @@
 ## virsh
 
 ```bash
-host:~ # grep 'svm|vmx /proc/cpuinfo
+host:~ # grep -E 'svm|vmx' /proc/cpuinfo
 host:~ # apt install qemu-kvm libvirt-daemon
+host:~ # modprobe vhost_net
+host:~ # lsmod | grep vhost
+host:~ # echo "vhost_net" | tee -a /etc/modules
+
+host:~ # systemctl enable libvirtd --enable
 ```
 
 ```bash
 host:~ # virsh
 host:~ # virsh help
+host:~ # virsh nodeinfo
 host:~ # virsh list --all
 host:~ # virsh dumpxml <vm_id>|<vm_name>
 host:~ # virsh create <vm>.xml
@@ -19,6 +25,9 @@ host:~ # virsh edit <vm_id>|<vm_name>
 host:~ # virsh undefine <vm_id>|<vm_name>
 
 host:~ # virsh start <vm_id>|<vm_name>
+host:~ # virsh autostart [--disable] <vm_id>|<vm_name>
+host:~ # virsh dominfo <vm_id>|<vm_name> 
+host:~ # virsh shutdown <vm_id>|<vm_name> 
 host:~ # virsh destroy <vm_id>|<vm_name>
 host:~ # virsh console <vm_id>|<vm_name>     # ctrl + ] to exit
 ```
