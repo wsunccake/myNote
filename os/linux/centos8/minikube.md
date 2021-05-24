@@ -2,7 +2,7 @@
 
 ## install
 
-install kvm
+install [kvm](./kvm.md)]
 
 install [docker](./container/docker.md)
 
