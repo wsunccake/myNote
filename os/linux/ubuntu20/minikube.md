@@ -21,8 +21,16 @@ install [docker-ce](./docker.md)
 [ubuntu:~ ] # curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
 
 [ubuntu:~ ] # chmod +x kubectl
-[ubuntu:~ ] # mv kubectl  /usr/local/bin/
-[ubuntu:~ ] # kubectl version -o json 
+[ubuntu:~ ] # mv kubectl /usr/local/bin/
+[ubuntu:~ ] # kubectl version -o json
+
+[ubuntu:~ ] # apt-get install bash-completion
+[ubuntu:~ ] # kubectl completion bash >/etc/bash_completion.d/kubectl
+
+# for user
+[ubuntu:~ ] $ echo 'source <(kubectl completion bash)' >>~/.bashrc
+[ubuntu:~ ] $ echo 'alias k=kubectl' >>~/.bashrc
+[ubuntu:~ ] $ echo 'complete -F __start_kubectl k' >>~/.bashrc
 ```
 
 
@@ -40,11 +48,10 @@ install [docker-ce](./docker.md)
 
 ```bash
 [ubuntu:~ ] # wget https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+
 [ubuntu:~ ] # chmod +x minikube-linux-amd64
 [ubuntu:~ ] # mv minikube-linux-amd64 /usr/local/bin/minikube
 
-[ubuntu:~ ] # newgrp libvirt
-[ubuntu:~ ] # usermod -aG libvirt <user>
-
 [ubuntu:~ ] # minikube config set vm-driver kvm2
+[ubuntu:~ ] # minikube start
 ```

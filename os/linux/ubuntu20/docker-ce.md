@@ -22,6 +22,7 @@
 ```bash
 [ubuntu:~ ] # systemctl start docker
 [ubuntu:~ ] # systemctl enable docker
+[ubuntu:~ ] # systemctl status docker
 
 [ubuntu:~ ] # vi /etc/docker/daemon.json
 {
