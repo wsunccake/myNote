@@ -334,6 +334,7 @@ master:~ # kubectl -n demo create -f pod.yml
 master:~ # kubectl -n demo get pods
 master:~ # kubectl -n demo describe pods hello
 master:~ # kubectl -n demo exec hello env
+master:~ # kubectl -n demo exec -it hello sh
 master:~ # kubectl -n demo logs hello
 
 # access pod by port-forwad

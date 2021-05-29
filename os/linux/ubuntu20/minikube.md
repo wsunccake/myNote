@@ -54,4 +54,7 @@ install [docker-ce](./docker.md)
 
 [ubuntu:~ ] # minikube config set vm-driver kvm2
 [ubuntu:~ ] # minikube start
+
+# export minikube env to docker
+[ubuntu:~ ] # eval $(minikube -p minikube docker-env)
 ```

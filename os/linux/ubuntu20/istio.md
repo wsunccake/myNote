@@ -58,23 +58,25 @@ install [minikube](./minikube.md)
 [ubuntu:~ ] $ kubectl get virtualservices|vs -A -o wide
 ```
 
+```bash
+istioctl proxy-status
+kubectl get po -n istio-system
+```
 
 ---
 
-## example
+## helloworld
 
-### helloworld
-
-#### without istio
+### without istio
 
 ```bash
 [ubuntu:~ ] $ cd istio-1.10.0/samples/helloworld
-[ubuntu:istio-1.10.0/samples/helloworld ] $ kubectl apply -f helloworld.yaml
+[ubuntu:~ ] $ kubectl apply -f istio-1.10.0/samples/helloworld/helloworld.yaml
 
 # same above 
-[ubuntu:istio-1.10.0/samples/helloworld ] $ kubectl apply -f helloworld.yaml -l service=helloworld
-[ubuntu:istio-1.10.0/samples/helloworld ] $ kubectl apply -f helloworld.yaml -l version=v1
-[ubuntu:istio-1.10.0/samples/helloworld ] $ kubectl apply -f helloworld.yaml -l version=v2
+[ubuntu:~ ] $ kubectl apply -f istio-1.10.0/samples/helloworld/helloworld.yaml -l service=helloworld
+[ubuntu:~ ] $ kubectl apply -f istio-1.10.0/samples/helloworld/helloworld.yaml -l version=v1
+[ubuntu:~ ] $ kubectl apply -f istio-1.10.0/samples/helloworld/helloworld.yaml -l version=v2
 
 # test
 [ubuntu:~ ] $ kubectl get svc helloworld -o wide
@@ -84,10 +86,10 @@ install [minikube](./minikube.md)
 ```
 
 
-#### with istio
+### with istio
 
 ```bash
-[ubuntu:istio-1.10.0/samples/helloworld ] $ kubectl apply -f helloworld-gateway.yaml
+[ubuntu:~ ] $ kubectl apply -f istio-1.10.0/samples/helloworld/helloworld-gateway.yaml
 
 # test
 [ubuntu:~ ] $ kubectl -n istio-system get svc istio-ingressgateway -o wide
@@ -97,10 +99,10 @@ install [minikube](./minikube.md)
 ```
 
 
-#### with istio canary
+### with istio canary
 
 ```bash
-[ubuntu:~ ] $ kubectl delete -f helloworld-gateway.yaml
+[ubuntu:~ ] $ kubectl delete -f istio-1.10.0/samples/helloworld/helloworld-gateway.yaml
 [ubuntu:~ ] $ kubectl apply -f - << EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
@@ -164,11 +166,35 @@ EOF
 ```
 
 
-#### var
+### var
 
 ```bash
 [ubuntu:~ ] $ export INGRESS_HOST=$(kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 [ubuntu:~ ] $ export INGRESS_PORT=$(kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')
 [ubuntu:~ ] $ export SECURE_INGRESS_PORT=$(kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].port}')
 [ubuntu:~ ] $ export TCP_INGRESS_PORT=$(kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="tcp")].port}')
+```
+
+### clean
+
+```bash
+[ubuntu:~ ] $ kubectl delete -f istio-1.10.0/samples/helloworld/helloworld.yaml
+[ubuntu:~ ] $ kubectl delete -f istio-1.10.0/samples/helloworld/helloworld-gateway.yaml
+```
+
+
+---
+
+## bookinfo
+
+```bash
+[ubuntu:~ ] $ kubectl apply -f <(istioctl kube-inject -f istio-1.10.0/samples/bookinfo/platform/kube/bookinfo.yaml)
+
+[ubuntu:~ ] $ kubectl get po
+[ubuntu:~ ] $ kubectl get deploy
+[ubuntu:~ ] $ kubectl get svc
+
+[ubuntu:~ ] $ kubectl get pod -l app=ratings
+[ubuntu:~ ] $ kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}'
+[ubuntu:~ ] $ kubectl exec "$(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}')" -c ratings -- curl -sS productpage:9080/productpage | grep -o "<title>.*</title>"
 ```
