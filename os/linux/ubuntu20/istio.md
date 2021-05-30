@@ -21,7 +21,10 @@ install [minikube](./minikube.md)
 [ubuntu:~ ] $ curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.10.0 TARGET_ARCH=x86_64 sh -
 [ubuntu:~ ] $ export PATH=$HOME/istio-1.10.0/bin:$PATH
 [ubuntu:~ ] $ istioctl install --set profile=demo -y
-[ubuntu:~ ] $ kubectl label namespace default istio-injection=enabled
+
+[ubuntu:~ ] $ kubectl label namespace default istio-injection=enabled   # automatic sidecar injection
+[ubuntu:~ ] $ kubectl describe namespace default
+[ubuntu:~ ] $ kubectl label namespace default istio-injection-          # remove sidecar injection
 ```
 
 
@@ -169,20 +172,27 @@ spec:
     labels:
       version: v2
 EOF
+
 [ubuntu:~ ] $ seq 10 | xargs -i curl http://<cluster ip or external ip of service>:80/hello
 ```
 
 
-### var
+### env var
 
 ```bash
+[ubuntu:~ ] $ kubectl -n istio-system get svc istio-ingressgateway
+
+# for external load balancer
 [ubuntu:~ ] $ export INGRESS_HOST=$(kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 [ubuntu:~ ] $ export INGRESS_PORT=$(kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')
 [ubuntu:~ ] $ export SECURE_INGRESS_PORT=$(kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].port}')
 [ubuntu:~ ] $ export TCP_INGRESS_PORT=$(kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="tcp")].port}')
 
-# only for minikube
+# for minikube
 [ubuntu:~ ] $ minikube service istio-ingressgateway -n istio-system
+[ubuntu:~ ] $ export INGRESS_HOST=$(minikube ip)
+
+
 ```
 
 ### clean
@@ -190,6 +200,25 @@ EOF
 ```bash
 [ubuntu:~ ] $ kubectl delete -f istio-1.10.0/samples/helloworld/helloworld.yaml
 [ubuntu:~ ] $ kubectl delete -f istio-1.10.0/samples/helloworld/helloworld-gateway.yaml
+```
+
+
+---
+
+## httpbin
+
+```bash
+[ubuntu:~ ] $ kubectl apply -f istio-1.10.0/samples/httpbin/httpbin.yaml
+[ubuntu:~ ] $ curl -s -I -HHost:httpbin.example.com http://<cluster ip or external ip of service>:8000/status/200
+[ubuntu:~ ] $ curl -s -I -HHost:httpbin.example.com http://<cluster ip or external ip of service>:8000/headers
+[ubuntu:~ ] $ curl -s http://<cluster ip or external ip of service>:8000/status/200
+[ubuntu:~ ] $ curl -s http://<cluster ip or external ip of service>:8000/headers
+
+[ubuntu:~ ] $ kubectl apply -f istio-1.10.0/samples/httpbin/httpbin-gateway.yaml
+[ubuntu:~ ] $ curl -s -I -HHost:httpbin.example.com http://://$INGRESS_HOST:$INGRESS_PORT/status/200
+[ubuntu:~ ] $ curl -s -I -HHost:httpbin.example.com http://://$INGRESS_HOST:$INGRESS_PORT/headers
+[ubuntu:~ ] $ curl -s http://$INGRESS_HOST:$INGRESS_PORT/status/200
+[ubuntu:~ ] $ curl -s http://://$INGRESS_HOST:$INGRESS_PORT/headers
 ```
 
 
