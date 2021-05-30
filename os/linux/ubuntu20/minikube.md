@@ -67,6 +67,8 @@ install [docker-ce](./docker.md)
 ```
 
 
+---
+
 ## test
 
 ```bash
@@ -80,6 +82,9 @@ install [docker-ce](./docker.md)
 # create service
 [ubuntu:~ ] $ kubectl expose deployment hello-node --type=LoadBalancer --port=8080
 [ubuntu:~ ] $ kubectl get services
+[ubuntu:~ ] $ kubectl get services -o yaml
+[ubuntu:~ ] $ kubectl patch svc/hello-node -p '{"spec": {"type": "LoadBalancer"}}'
+[ubuntu:~ ] $ kubectl edit svc/hello-node
 [ubuntu:~ ] $ minikube service hello-node   # serivce type must be LoadBalancer
 
 # enable addons

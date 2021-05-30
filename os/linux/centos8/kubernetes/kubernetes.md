@@ -509,7 +509,9 @@ master:~ # kubectl scale --replicas=4 -f <deployment>.yml
 
 # rollout
 master:~ # kubectl set image deployment.apps/<deploy> hello=<img>:<tag> --record  # rollup
-master:~ # kubectl edit deployments.apps <deploy>                                 # rollup
+master:~ # kubectl edit deployments.apps <deploy>                                 # rollup, interactive mode
+master:~ # kubectl get deployments.apps -o yaml
+master:~ # kubectl path deployments.apps <deploy> -p <patch>                      # rollup, non-interactive mode
 master:~ # kubectl rollout undo deployment <deploy>                               # rollback
 master:~ # kubectl rollout status deployment <deploy>
 master:~ # kubectl rollout history deployment <deploy>

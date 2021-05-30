@@ -152,7 +152,7 @@ EOF
 
 ---
 
-## dns
+## kube-dns / coredns
 
 only service and pod record on dns, service isn't ping
 
@@ -192,9 +192,19 @@ spec:
   restartPolicy: Always
 EOF
 
-[ubuntu:~ ] $ kubectl exec -it dnsutils -- sh
-
-/ # nslookup hello-node.default.svc.cluster.local
-/ # nslookup 172-17-0-10.default.pod.cluster.local
+[ubuntu:~ ] $ kubectl exec -it dnsutils -- nslookup hello-node.default.svc.cluster.local
+[ubuntu:~ ] $ kubectl exec -it dnsutils -- nslookup 172-17-0-10.default.pod.cluster.local
 ```
 
+
+---
+
+## kube-proxy
+
+```bash
+[ubuntu:~ ] $ kubectl get ds -n kube-system
+[ubuntu:~ ] $ kubectl get ds kube-proxy -n kube-system -o json | jq '.spec.template.spec.volumes[].configMap.name'  # get cm kube-proxy
+
+[ubuntu:~ ] $ kubectl -n kube-system get cm kube-proxy -o json | jq '.data."config.conf"' | sed 's/\\n/\n/g' | grep mode
+[ubuntu:~ ] $ kubectl -n kube-system get cm kube-proxy -o yaml | grep mode
+```
