@@ -79,7 +79,7 @@ minikube config set memory 16384
 
 ## demo
 
-```
+```bash
 [centos:~ ] $ kubectl create ns demo
 [centos:~ ] $ kubectl -n demo create deployment hello-minikube --image=k8s.gcr.io/echoserver:1.4
 [centos:~ ] $ kubectl -n demo expose deployment hello-minikube --type=NodePort --port=8080

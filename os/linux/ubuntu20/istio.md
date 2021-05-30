@@ -59,8 +59,8 @@ install [minikube](./minikube.md)
 ```
 
 ```bash
-istioctl proxy-status
-kubectl get po -n istio-system
+[ubuntu:~ ] $ istioctl proxy-status
+[ubuntu:~ ] $ kubectl get po -n istio-system
 ```
 
 ---
@@ -70,17 +70,24 @@ kubectl get po -n istio-system
 ### without istio
 
 ```bash
+# start service
 [ubuntu:~ ] $ cd istio-1.10.0/samples/helloworld
 [ubuntu:~ ] $ kubectl apply -f istio-1.10.0/samples/helloworld/helloworld.yaml
 
-# same above 
+# start service by lable
 [ubuntu:~ ] $ kubectl apply -f istio-1.10.0/samples/helloworld/helloworld.yaml -l service=helloworld
 [ubuntu:~ ] $ kubectl apply -f istio-1.10.0/samples/helloworld/helloworld.yaml -l version=v1
 [ubuntu:~ ] $ kubectl apply -f istio-1.10.0/samples/helloworld/helloworld.yaml -l version=v2
 
+# hpa
+[ubuntu:~ ] $ kubectl autoscale deployment helloworld-v1 --cpu-percent=50 --min=1 --max=10
+[ubuntu:~ ] $ kubectl autoscale deployment helloworld-v2 --cpu-percent=50 --min=1 --max=10
+[ubuntu:~ ] $ kubectl get hpa
+
 # test
 [ubuntu:~ ] $ kubectl get svc helloworld -o wide
 [ubuntu:~ ] $ kubectl get svc helloworld -o jsonpath='{.spec.clusterIP}'
+[ubuntu:~ ] $ export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT
 [ubuntu:~ ] $ curl http://<cluster ip or external ip of service>:5000/hello
 [ubuntu:~ ] $ seq 10 | xargs -i curl http://<cluster ip or external ip of service>:5000/hello
 ```
@@ -173,6 +180,9 @@ EOF
 [ubuntu:~ ] $ export INGRESS_PORT=$(kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')
 [ubuntu:~ ] $ export SECURE_INGRESS_PORT=$(kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].port}')
 [ubuntu:~ ] $ export TCP_INGRESS_PORT=$(kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="tcp")].port}')
+
+# only for minikube
+[ubuntu:~ ] $ minikube service istio-ingressgateway -n istio-system
 ```
 
 ### clean

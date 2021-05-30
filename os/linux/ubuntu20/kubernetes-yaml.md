@@ -1,4 +1,4 @@
-# container yaml
+# kubernetes yaml
 
 ## basic
 
@@ -58,7 +58,7 @@ services:
 ### kubectl - pod
 
 ```bash
-[ubuntu:~ ] $ vi pod.yaml
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
 apiVersion: v1
 kind: Pod
 metadata:
@@ -72,8 +72,8 @@ spec:
     ports:
     - containerPort: 5000
     imagePullPolicy: Never
+EOF
 
-[ubuntu:~ ] $ kubectl apply -f pod.yaml
 [ubuntu:~ ] $ kubectl exec -it hello-pod -- sh
 ```
 
@@ -81,7 +81,7 @@ spec:
 ### kubectl - depoly
 
 ```bash
-[ubuntu:~ ] $ vi deploy.yaml 
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -102,8 +102,8 @@ spec:
         ports:
         - containerPort: 5000
         imagePullPolicy: Never
+EOF
 
-[ubuntu:~ ] $ kubectl apply -f deploy.yaml
 [ubuntu:~ ] $ kubectl exec -it deploy/hello-deploy -- sh
 ```
 
@@ -111,7 +111,7 @@ spec:
 ### kubectl - service
 
 ```bash
-[ubuntu:~ ] $ vi service.yaml 
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -144,7 +144,57 @@ spec:
     - protocol: TCP
       port: 5000
       targetPort: 9376
+EOF
 
-[ubuntu:~ ] $ kubectl apply -f sevice.yaml
 [ubuntu:~ ] $ kubectl exec -it svc/hello-service -- sh
 ```
+
+
+---
+
+## dns
+
+only service and pod record on dns, service isn't ping
+
+service fqdn: <service>.<namespace>.svc.cluster.local
+
+pod fqdn: <pod ip>.<namespace>.pod.cluster.local
+
+
+```bash
+# create service and deploy
+[ubuntu:~ ] $ kubectl create deployment hello-node --image=k8s.gcr.io/echoserver:1.4
+[ubuntu:~ ] $ kubectl expose deployment hello-node --type=LoadBalancer --port=8080
+[ubuntu:~ ] $ minikube service hello-node   # only for minikube
+
+# hpa
+[ubuntu:~ ] $ kubectl autoscale deployment hello-node --cpu-percent=50 --min=1 --max=10
+[ubuntu:~ ] $ kubectl get hpa
+
+# kube dns server
+[ubuntu:~ ] $ kubectl get svc kube-dns -n kube-system
+
+# kube dns utils
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dnsutils
+  namespace: default
+spec:
+  containers:
+  - name: dnsutils
+    image: gcr.io/kubernetes-e2e-test-images/dnsutils:1.3
+    command:
+      - sleep
+      - "3600"
+    imagePullPolicy: IfNotPresent
+  restartPolicy: Always
+EOF
+
+[ubuntu:~ ] $ kubectl exec -it dnsutils -- sh
+
+/ # nslookup hello-node.default.svc.cluster.local
+/ # nslookup 172-17-0-10.default.pod.cluster.local
+```
+

@@ -51,10 +51,48 @@ install [docker-ce](./docker.md)
 
 [ubuntu:~ ] # chmod +x minikube-linux-amd64
 [ubuntu:~ ] # mv minikube-linux-amd64 /usr/local/bin/minikube
+```
 
-[ubuntu:~ ] # minikube config set vm-driver kvm2
-[ubuntu:~ ] # minikube start
+
+---
+
+## setup
+
+```bash
+[ubuntu:~ ] $ minikube config set vm-driver kvm2
+[ubuntu:~ ] $ minikube start
 
 # export minikube env to docker
-[ubuntu:~ ] # eval $(minikube -p minikube docker-env)
+[ubuntu:~ ] $ eval $(minikube -p minikube docker-env)
+```
+
+
+## test
+
+```bash
+# create deployment
+[ubuntu:~ ] $ kubectl create deployment hello-node --image=k8s.gcr.io/echoserver:1.4
+[ubuntu:~ ] $ kubectl get deployments
+[ubuntu:~ ] $ kubectl get pods
+[ubuntu:~ ] $ kubectl get events
+[ubuntu:~ ] $ kubectl config view
+
+# create service
+[ubuntu:~ ] $ kubectl expose deployment hello-node --type=LoadBalancer --port=8080
+[ubuntu:~ ] $ kubectl get services
+[ubuntu:~ ] $ minikube service hello-node   # serivce type must be LoadBalancer
+
+# enable addons
+[ubuntu:~ ] $ minikube addons list
+[ubuntu:~ ] $ minikube addons enable metrics-server
+[ubuntu:~ ] $ kubectl get pod,svc -n kube-system
+
+# disable addons
+[ubuntu:~ ] $ minikube addons disable metrics-server
+
+# clean up
+[ubuntu:~ ] $ kubectl delete service hello-node
+[ubuntu:~ ] $ kubectl delete deployment hello-node
+[ubuntu:~ ] $ minikube stop
+[ubuntu:~ ] $ minikube delete
 ```
