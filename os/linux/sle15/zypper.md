@@ -5,17 +5,17 @@
 
 ```bash
 # add repo
-suse:~ # zypper ar "dir:///<path>/<folder>" <repo>
-suse:~ # zypper ar "iso:/?iso=/<path>/<img>.iso" <repo>
+sle:~ # zypper ar "dir:///<path>/<folder>" <repo>
+sle:~ # zypper ar "iso:/?iso=/<path>/<img>.iso" <repo>
 
 # list repo
-suse:~ # zypper lr
+sle:~ # zypper lr
 
 # remove repo
-suse:~ # zypper rr <repo>
+sle:~ # zypper rr <repo>
 
 # repo config
-suse:~ # ls /etc/zypp/repos.d
+sle:~ # ls /etc/zypp/repos.d
 ```
 
 
@@ -25,15 +25,15 @@ suse:~ # ls /etc/zypp/repos.d
 
 ```bash
 # search package
-suse:~ # zypper se <pkg>
-suse:~ # zypper pt
+sle:~ # zypper se <pkg>
+sle:~ # zypper pt
 
 # install package
-suse:~ # zypper in <pkg>
-suse:~ # zypper in -t pattern <pattern>
+sle:~ # zypper in <pkg>
+sle:~ # zypper in -t pattern <pattern>
 
 # remove package
-suse:~ # zypper rm <pkg>
+sle:~ # zypper rm <pkg>
 ```
 
 ---

@@ -23,8 +23,8 @@ slurmdbd: 6819/tcp
 
 ```bash
 # firewall config
-linux:~ # firewall-cmd --add-port=6819/tcp --add-port=6818/tcp --add-port=6817/tcp --permanent
-linux:~ # firewall-cmd --reload
+sle:~ # firewall-cmd --add-port=6819/tcp --add-port=6818/tcp --add-port=6817/tcp --permanent
+sle:~ # firewall-cmd --reload
 ```
 
 ---
@@ -34,12 +34,12 @@ linux:~ # firewall-cmd --reload
 setup /etc/hosts or dns
 
 ```bash
-suse:~ # vi /etc/hosts
+sle:~ # vi /etc/hosts
 192.168.0.1      controller  
 192.168.0.101    node1
 ...
 
-suse:~ # hostname -s controller
+sle:~ # hostname -s controller
 ```
 
 setup [ntp](./ntp.md)
