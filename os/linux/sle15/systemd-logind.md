@@ -16,6 +16,7 @@ sle:~ # systemctl daemon-reload
 sle:~ # systemctl restart systemd-logind
 ```
 
+
 ---
 
 ## loginctl
@@ -50,4 +51,18 @@ sle:~ # systemd-inhibit --list --mode=delay
 
 sle:~ # vi /etc/systemd/logind.conf
 HandlePowerKey=ignore
+
+sle:~ # systemctl restart systemd-logind
+
+sle:~ # cat /sys/bus/usb/drivers/usb/1-1/bConfigurationValue
+sle:~ # echo 0 > /sys/bus/usb/drivers/usb/1-1/bConfigurationValue                # disconnect
+sle:~ # echo 1 > /sys/bus/usb/drivers/usb/1-1/bConfigurationValue                # connect
+sle:~ # cat /sys/devices/pci0000:00/0000:00:1a.0/usb1/bConfigurationValue
+sle:~ # echo 0 > /sys/devices/pci0000:00/0000:00:1a.0/usb1/bConfigurationValue   # disconnect
+sle:~ # echo 1 > /sys/devices/pci0000:00/0000:00:1a.0/usb1/bConfigurationValue   # connect
+
+sle:~ # ls -l /sys/bus/acpi/drivers/button
+sle:~ # echo LNXPWRBN:00 > unbind
+sle:~ # echo PNP0C0C:00 >> unbind
+sle:~ # echo > unbind
 ```
