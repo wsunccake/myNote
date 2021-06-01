@@ -180,6 +180,10 @@ for E in `seq 3`; do
   echo "index: $E"
 done
 
+for f in /etc/*.conf; do
+  echo $f
+done
+
 seq 3 | xargs -i echo "{}"
 ```
 
@@ -203,6 +207,12 @@ while true; do
     break
   fi
 done
+
+while read -r line; do
+  username=`echo $line | awk -F: '{print $1}'`
+  home=`echo $line | awk -F: '{print $6}'`
+  echo "username: $username, home: $home"
+done < /etc/passwd
 ```
 
 ---
