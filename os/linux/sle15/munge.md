@@ -56,3 +56,14 @@ server:~ # scp /etc/munge/munge.key root@<client>:/etc/munge/.
 server:~ # systemctl start munge.service
 server:~ # systemctl enable munge.service
 ```
+
+---
+
+## tmpfile
+
+```bash
+sle:~ # cat /usr/lib/tmpfiles.d/munge.conf
+d /var/run/munge 0755 munge munge -
+
+sle:~ # systemd-tmpfiles --create
+```

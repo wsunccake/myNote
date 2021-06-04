@@ -12,7 +12,7 @@ Kubernetes 安裝可使用 source code, binary 或是執行 container 的方式
 
 `install basic package`
 
-```
+```bash
 centos:~ # yum install -y epel-release
 centos:~ # yum install -y bash-completion
 centos:~ # yum install -y ntp
@@ -21,7 +21,7 @@ centos:~ # yum install -y ntp
 
 `resovle host`
 
-```
+```bash
 centos:~ # vi /etc/hosts
 192.168.31.200	master
 192.168.31.201	node1
@@ -32,7 +32,7 @@ centos:~ # vi /etc/hosts
 
 `stop firewall`
 
-```
+```bash
 centos:~ # systemctl stop firewalld
 centos:~ # systemctl disable firewalld
 ```
@@ -40,7 +40,7 @@ centos:~ # systemctl disable firewalld
 
 `enable ntp`
 
-```
+```bash
 centos:~ # systemctl start ntpd
 centos:~ # systemctl enable ntpd
 ```
@@ -48,28 +48,28 @@ centos:~ # systemctl enable ntpd
 
 `disable selinux`
 
-```
+```bash
 centos:~ # vi /etc/selinux/conf
 SELINUX=disabled
 
 centos:~ # reboot
 ```
 
-----
 
+----
 
 #### master
 
 `install package`
 
-```
+```bash
 master:~ # yum -y install etcd kubernetes
 ```
 
 
 `setup etcd`
 
-```
+```bash
 master:~ # vi /etc/etcd/etcd.conf
 ETCD_NAME=default
 ETCD_DATA_DIR="/var/lib/etcd/default.etcd"
@@ -80,7 +80,7 @@ ETCD_ADVERTISE_CLIENT_URLS="http://localhost:2379"
 
 `setup api server`
 
-```
+```bash
 master:~ # vi /etc/kubernetes/apiserver
 KUBE_API_ADDRESS="--address=0.0.0.0"
 KUBE_API_PORT="--port=8080"
@@ -94,7 +94,7 @@ KUBE_API_ARGS=""
 
 `restart service`
 
-```
+```bash
 master:~ # systemctl restart etcd
 master:~ # systemctl enable etcd
 
@@ -111,7 +111,7 @@ master:~ # systemctl enable kube-scheduler
 
 `set kubenetes network`
 
-```
+```bash
 master:~ # etcdctl mkdir /kube-centos/network
 master:~ # etcdctl mk /kube-centos/network/config '{"Network":"172.17.0.0/16"}'
 master:~ # etcdctl mk /kube-centos/network/config '{"Network": "172.30.0.0/16", "SubnetLen": 24, "Backend": {"Type": "vxlan"} }'
@@ -127,14 +127,14 @@ master:~ # etcdctl rm /kube-centos/network/config
 
 `install package`
 
-```
+```bash
 node:~ # yum -y install flannel kubernetes
 ```
 
 
 `setup flannel`
 
-```
+```bash
 node:~ # vi /etc/sysconfig/flanneld
 FLANNEL_ETCD_ENDPOINTS="http://master:2379"
 FLANNEL_ETCD_PREFIX="/kube-centos/network"
@@ -143,7 +143,7 @@ FLANNEL_ETCD_PREFIX="/kube-centos/network"
 
 `setup kubelet`
 
-```
+```bash
 node:~ # vi /etc/kubernetes/config
 KUBE_MASTER="--master=http://master:8080"
 
@@ -159,7 +159,7 @@ KUBELET_ARGS=""
 
 `restart service`
 
-```
+```bash
 node:~ # systemctl restart kube-proxy
 node:~ # systemctl enable kube-proxy
 
@@ -175,7 +175,7 @@ node:~ # systemctl enable flanneld
 
 `check node network`
 
-```
+```bash
 node:~ # ip a | grep flannel | grep inet
 ```
 
@@ -189,7 +189,7 @@ node:~ # ip a | grep flannel | grep inet
 
 `install docker and kubeadm`
 
-```
+```bash
 centos:~ # vi /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
@@ -217,18 +217,17 @@ centos:~ # systemctl enable kubelet
 
 ----
 
-
 #### master
 
 `auto completion`
 
-```
+```bash
 master:~ # echo "source <(kubectl completion bash)" >> ~/.bashrc
 ```
 
 `setup master`
 
-```
+```bash
 master:~ # kubeadm reset
 master:~ # kubeadm init [--token 1234] [--pod-network-cidr 10.244.0.0/16] [--service-cidr 10.96.0.0/12]
 master:~ # kubeadm token list
@@ -238,14 +237,14 @@ network module 使用 flannel, 需要設定 --pod-network-cidr, 否則 kube-dns 
 
 `config file`
 
-```
+```bash
 master:~ # mkdir -p $HOME/.kube
 master:~ # cp /etc/kubernetes/admin.conf $HOME/.kube/config
 ```
 
 `install flannel`
 
-```
+```bash
 master:~ # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 master:~ # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml
 
@@ -256,7 +255,7 @@ master:~ # kubectl get pod --all-namespaces -o wide
 
 `join master`
 
-```
+```bash
 node:~ # echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
 node:~ # kubeadm reset
 node:~ # kubeadm join --token 3a88f0.e98c25d025e85412 masater:6443
@@ -270,7 +269,7 @@ http://labs.play-with-k8s.com/
 
 `master`
 
-```
+```bash
 master:~ # kubeadm init --apiserver-advertise-address $(hostname -i)
 master:~ # kubectl apply -n kube-system -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 master:~ # curl -L -s https://git.io/kube-dashboard  | sed 's/targetPort: 9090/targetPort: 9090\n  type: LoadBalancer/' | kubectl apply -f -
@@ -301,14 +300,14 @@ master:~ # kubectl create -f busybox.yaml
 
 `node`
 
-```
+```bash
 node:~ # kubeadm join --token ba7efe.e1db8bd85e84f340 10.0.32.3:6443
 ```
 
 
 ## Hello World
 
-```
+```bash
 # create app
 master:~ # kubectl run hello-world --image=gcr.io/google-samples/node-hello:1.0 --port=8080
 master:~ # kubectl get node
@@ -344,7 +343,7 @@ master:~ # kubectl delete deployment hello-world
 
 ## Pod
 
-```
+```bash
 master:~ # vi pod.yaml
 apiVersion: v1
 kind: Pod
@@ -366,7 +365,7 @@ master:~ # kubectl delete -f pod.yaml
 
 ## Namespace
 
-```
+```bash
 # 使用 cli
 master:~ # kubectl create namespace new-namespace
 
@@ -386,7 +385,7 @@ master:~ # kubectl delete namespaces new-namespace
 
 ## Deployment
 
-```
+```bash
 # 使用 cli
 master:~ # kubectl run hello-world --image=nginx:1.7.9 --port=80
 
@@ -430,7 +429,7 @@ master:~ # kubectl rollout resume deployment/nginx-deployment
 
 ClusterIP, NodePort, LoadBalancer, ExternalName
 
-```
+```bash
 # 使用 cli
 master:~ # kubectl expose deployment nginx --port 8080 --target-port 80 [--external-ip 10.240.0.9]
 # port: service external port
@@ -494,7 +493,7 @@ mater:~ # iptable -L -nv -t nat
 
 `basic infomation`
 
-```
+```bash
 master:~ # kubectl --help
 master:~ # kubectl options
 master:~ # kubectl version
@@ -506,7 +505,7 @@ master:~ # kubectl cluster-info
 
 `node`
 
-```
+```bash
 master:~ # kubectl get nodes          # list nodes
 master:~ # kubectl delete node node1  # remove node
 

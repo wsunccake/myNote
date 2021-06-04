@@ -2,7 +2,7 @@
 
 ## basic
 
-```bat
+```batch
 C:\Users\user> help
 C:\Users\user> ver
 C:\Users\user> cls
@@ -14,7 +14,9 @@ C:\Users\user> dir
 C:\Users\user> dir /?
 C:\Users\user> cd c:\
 C:\Users\user> mkdir <dir>
+C:\Users\user> md <dir>
 C:\Users\user> rmdir <dir>
+C:\Users\user> rd <dir>
 C:\Users\user> move <old_name> <new_name>
 C:\Users\user> copy <src> <dest>
 C:\Users\user> del <file>
@@ -36,9 +38,11 @@ C:\Users\user> shutdown /s /t 0
 
 ---
 
-## environment variable
+## variable
 
-```bat
+### environment
+
+```batch
 C:\Users\user> echo %HOMEPATH%
 C:\Users\user> set
 
@@ -47,11 +51,37 @@ C:\Users\user> echo %VAR%
 C:\Users\user> set VAR=
 ```
 
+
+### value
+
+```batch
+@echo off
+set message=Hello World
+echo %message%
+
+set /A a = 5
+set /A b = 10
+set /A c = %a% + %b%
+echo %c%
+
+rem global variable
+set globalvar = 5
+
+rem local variable
+SETLOCAL
+set var = 13145
+set /A var = %var% + 5
+echo %var%
+echo %globalvar%
+ENDLOCAL
+```
+
+
 ---
 
 ## script
 
-```bat
+```batch
 @ehco off
 echo "hello windows"
 rem  it is comment
@@ -65,7 +95,7 @@ echo %~n1
 echo %~x1
 ```
 
-```bat
+```batch
 C:\Users\user> hello.bat C:\Windows\notepad.exe
 ```
 

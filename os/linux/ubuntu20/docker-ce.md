@@ -22,6 +22,7 @@
 ```bash
 [ubuntu:~ ] # systemctl start docker
 [ubuntu:~ ] # systemctl enable docker
+[ubuntu:~ ] # systemctl status docker
 
 [ubuntu:~ ] # vi /etc/docker/daemon.json
 {
@@ -32,4 +33,14 @@
 [ubuntu:~ ] # systemctl restart docker
 
 [ubuntu:~ ] # usermod -aG docker <user>
+```
+
+
+---
+
+## docker-compose
+
+```bash
+[ubuntu:~ ] # curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+[ubuntu:~ ] # chmod +x /usr/local/bin/docker-compose
 ```

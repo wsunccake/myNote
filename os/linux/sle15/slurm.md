@@ -23,8 +23,8 @@ slurmdbd: 6819/tcp
 
 ```bash
 # firewall config
-linux:~ # firewall-cmd --add-port=6819/tcp --add-port=6818/tcp --add-port=6817/tcp --permanent
-linux:~ # firewall-cmd --reload
+sle:~ # firewall-cmd --add-port=6819/tcp --add-port=6818/tcp --add-port=6817/tcp --permanent
+sle:~ # firewall-cmd --reload
 ```
 
 ---
@@ -34,12 +34,12 @@ linux:~ # firewall-cmd --reload
 setup /etc/hosts or dns
 
 ```bash
-suse:~ # vi /etc/hosts
+sle:~ # vi /etc/hosts
 192.168.0.1      controller  
 192.168.0.101    node1
 ...
 
-suse:~ # hostname -s controller
+sle:~ # hostname -s controller
 ```
 
 setup [ntp](./ntp.md)
@@ -55,13 +55,14 @@ setup [munge](./munge.md)
 
 ## Controller
 
-`package`
+### package
 
 ```bash
 controller:~ # zypper in slurm
 ```
 
-`config`
+
+### config
 
 ```bash
 controller:~ # vi /etc/slurm/slurm.conf
@@ -69,7 +70,20 @@ controller:~ # vi /etc/slurm/slurm.conf
 ClusterName=<cluster>
 
 # controller
-ControlMachine=<server>
+# ControlMachine=<server> # deprecated, => SlurmctldHost
+SlurmctldHost=contoller(192.168.0.1)
+
+SlurmUser=root    # slurmctld daemon executes as user
+SlurmctldPort=6817
+SlurmctldPidFile=/var/run/slurm/slurmctld.pid
+SlurmctldLogFile=/var/log/slurm/slurmctld.log
+
+SlurmdUser=root   # slurmd daemon executes as user
+SlurmdPort=6818
+SlurmdPidFile=/var/run/slurm/slurmd.pid
+SlurmdLogFile=/var/log/slurm/slurmd.log
+
+AuthType=auth/munge
 
 ReturnToService=2
 # 0: down -> idle*
@@ -81,9 +95,15 @@ SrunPortRange=60001-63000               # listening ports to communicate
 LaunchParameters=use_interactive_step   # interactive mode
 
 # node config
+## cpu
 NodeName=DEFAULT Sockets=2 CoresPerSocket=4 ThreadsPerCore=1
 NodeName=node[1-10]
-NodeName=node[20-30] Sockets=2 CoresPerSocket=4 ThreadsPerCore=2 Feature=HyperThread
+NodeName=node[11-20] Sockets=2 CoresPerSocket=4 ThreadsPerCore=2 Feature=HyperThread
+
+## gpu
+GresTypes=gpu,mps
+NodeName=node[21-30] State=idle Gres=gpu:4,mps:400 Sockets=1 CoresPerSocket=8
+NodeName=node[31-40] State=idle Gres=gpu:4 Sockets=1 CoresPerSocket=8
 
 # partition config
 PartitionName=DEFAULT State=UP
@@ -94,17 +114,34 @@ PartitionName=vip Nodes=node[40-50] State=UP AllowAccounts=VIP
 [Slurm Version 17.11 Configuration Tool](https://slurm.schedmd.com/configurator.html)
 
 
-`daemon`
+### daemon
 
 ```bash
-controller:~ # systemctl start slurmctld.service
-controller:~ # systemctl enable slurmctld.service
+controller:~ # vi /usr/lib/systemd/system/slurmctld.service
+[Service]
+#PIDFile=/var/run/slurm/slurmctld.pid   # comment, SlurmctldPidFile in /etc/slurm/slurm.conf
+#User=slurm                             # comment, SlurmUser in /etc/slurm/slurm.conf
+
+controller:~ # systemctl daemon-reload
+controller:~ # systemctl enable slurmctld.service --now
 ```
 
-`check`
+
+### check
 
 ```bash
 controller:~ # slurmd -C
+```
+
+
+### tmpfile
+
+```bash
+controller:~ # cat /etc/tmpfiles.d/slurm.conf
+d /var/run/slurm 0755 root root -
+d /var/log/slurm 0755 root root -
+
+controller:~ # systemd-tmpfiles --create
 ```
 
 
@@ -112,29 +149,48 @@ controller:~ # slurmd -C
 
 ## Compute Node
 
+### package
 
 ```bash
 node:~ # zypper in slurm-node
 ```
 
-`config`
 
+### config
 
 ```bash
 controller:~ # scp /etc/slurm/slurm.conf root@<client>:/etc/slurm/.
 ```
 
-`daemon`
+
+### daemon
 
 ```bash
-node:~ # systemctl start slurmd.service
-node:~ # systemctl enable slurmd.service
+node:~ # vi /usr/lib/systemd/system/slurmd.service
+[Service]
+#PIDFile=/var/run/slurm/slurmd.pid   # comment, SlurmdPidFile in /etc/slurm/slurm.conf
+#User=slurm                          # comment, SlurmdUser in /etc/slurm/slurm.conf
+
+node:~ # systemctl daemon-reload
+node:~ # systemctl enable slurmd.service --now
 ```
 
-`check`
+
+### check
 
 ```bash
 node:~ # slurmd -C
+```
+
+
+### tmpfile
+
+```bash
+node:~ # cat /etc/tmpfiles.d/slurm.conf
+d /var/run/slurm 0755 root root -
+d /var/log/slurm 0755 root root -
+
+node:~ # systemd-tmpfiles --create
 ```
 
 
@@ -144,7 +200,7 @@ node:~ # slurmd -C
 
 ### list
 
-`squeue`
+#### squeue
 
 ```bash
 controller:~ # squeue
@@ -161,7 +217,7 @@ controller:~ # squeue -O jobid:8,name:8,username:8,account:15,partition:12,timeu
 ```
 
 
-`smap`
+#### smap
 
 ```bash
 controller:~ # smap
@@ -170,7 +226,7 @@ controller:~ # smap
 
 ### submit
 
-`srun`
+#### srun
 
 ```bash
 controller:~ # srun -N 2 hostname
@@ -181,7 +237,7 @@ controller:~ # srun -l -N1 -c2 sh -c "hostname && sleep 10" &
 ```
 
 
-`salloc`
+#### salloc
 
 ```bash
 controller:~ # salloc
@@ -190,7 +246,7 @@ controller:~ # salloc
 ```
 
 
-`sbatch`
+#### sbatch
 
 ```bash
 controller:~ # cat <job>.sh
@@ -215,15 +271,16 @@ controller:~ # sbatch <job>.sh
 
 ### cancal
 
-`scancal`
+#### scancal
 
 ```bash
 controller:~ # scancel <job_id>
 ```
 
+
 ### other
 
-`sstat`
+#### sstat
 
 ```bash
 controller:~ # sstat -e
@@ -231,7 +288,8 @@ controller:~ # sstat <job_id>
 controller:~ # sstat -o JobID,Nodelist,Ntasks <job_id>
 ```
 
-`scontrol`
+
+#### scontrol
 
 ```bash
 controller:~ # scontrol show job
@@ -265,13 +323,14 @@ scontrol shutdown: Admin
 scontrol takeover: Admin
 ```
 
+
 ---
 
 ## Admin
 
 ### partition
 
-`sinfo`
+#### sinfo
 
 ```bash
 controller:~ # sinfo
@@ -282,7 +341,7 @@ controller:~ # sinfo -Nla
 
 ### config
 
-`scontrol`
+#### scontrol
 
 ```bash
 controller:~ # scontrol show <ENTITY> [<ID>]  # ENTITY: config, node, partition, job
@@ -300,7 +359,7 @@ controller:~ # scontrol reconfigure
 
 ## MariaDB
 
-`package`
+### package
 
 ```bash
 controller:~ # zypper in mariadb
@@ -312,7 +371,7 @@ controller:~ # /usr/bin/mysql_secure_installation
 ```
 
 
-`config`
+### config
 
 ```bash
 controller:~ # vi /etc/my.cnf
@@ -320,14 +379,16 @@ controller:~ # vi /etc/my.cnf
 innodb_buffer_pool_size = 128M
 ```
 
-`daemon`
+
+### daemon
 
 ```bash
 controller:~ # systemctl start mariadb.service
 controller:~ # systemctl enable mariadb.service
 ```
 
-`check`
+
+### check
 
 ```bash
 controller:~ # mysql -u root
@@ -340,7 +401,7 @@ MariaDB> show engines;
 MariaDB> quit;
 ```
 
-`db`
+### db
 
 ```sql
 -- create db
@@ -349,7 +410,8 @@ MariaDB> show databases;
 MariaDB> drop database slurm_acct_db;
 ```
 
-`user`
+
+### user
 
 ```sql
 -- create user
@@ -370,7 +432,7 @@ MariaDB> grant all on slurm_acct_db.* TO 'slurm'@'controller';
 MariaDB> show grants for slurm@localhost;
 ```
 
-`test`
+### test
 
 ```bash
 controller:~ # mysql -u slurm
@@ -393,14 +455,14 @@ service: munge          munge
          slurmddb
 ```
 
-`package`
+### package
 
 ```bash
 controller:~ # zypper in slurm-slurmdbd
 ```
 
 
-`slurm config`
+### slurm config
 
 ```bash
 controller:~ # vi /etc/slurm/slurm.conf
@@ -424,7 +486,7 @@ JobCompType: jobcomp/none, jobcomp/elasticsearch, jobcomp/filetxt, jobcomp/mysql
 [slurm.conf](https://slurm.schedmd.com/slurm.conf.html)
 
 
-`slurmdbd config`
+### slurmdbd config
 
 ```bash
 controller:~ # vi /etc/slurm/slurmdbd.conf
@@ -433,13 +495,12 @@ StorageType=accounting_storage/mysql
 StorageUser=slurm
 StoragePass=<password>
 StorageLoc=slurm_acct_db
-
 ```
 
 [slurmdbd.conf](https://slurm.schedmd.com/slurmdbd.conf.html)
 
 
-`daemon`
+### daemon
 
 ```bash
 controller:~ # systemctl restart slurmctld.service
@@ -448,7 +509,8 @@ controller:~ # systemctl start slurmdbd.service
 controller:~ # systemctl enable slurmdbd.service
 ```
 
-`check db`
+
+### check db
 
 ```bash
 controller:~ # mysql -u root
@@ -466,14 +528,14 @@ controller: # sacct
 
 ## Accouting
 
-`sacct`
+### sacct
 
 ```bash
 controller:~ # sacct
 ```
 
 
-`sacctmgr`
+### sacctmgr
 
 ```bash
 controller:~ # sacctmgr show configuration
@@ -507,7 +569,7 @@ controller:~ # sacctmgr modify user set default=none where Account=<account>
 
 ## QoS
 
-`scontrol`
+### scontrol
 
 ```bash
 controller:~ # scontrol show config
@@ -515,7 +577,6 @@ controller:~ # scontrol show config | grep SchedulerType
 controller:~ # scontrol show config | grep PriorityType
 controller:~ # scontrol show config | grep AccountingStorageEnforce
 controller:~ # scontrol show config | grep PriorityWeightQOS
-
 ```
 
 SchedulerType: sched/wiki -> maui, sched/wiki2 -> moab, sched/builtin or sched/backfill -> slurm
@@ -527,7 +588,7 @@ AccountingStorageEnforce: limits
 PriorityWeightQOS: =0 don't use the qos factor, != 0 use the qos factor
 
 
-`sacctmgr`
+### sacctmgr
 
 ```bash
 controller:~ # sacctmgr list qos [format=Name,Priority,GrpCPUs]
@@ -546,7 +607,7 @@ controller:~ # sacctmgr list associations
 
 [Resource Limits](https://slurm.schedmd.com/resource_limits.html)
 
-`sprio`
+### sprio
 
 ```bash
 controller:~ # sprio
@@ -587,6 +648,7 @@ controller:~ # squeue -l
 controller:~ # sinfo
 controller:~ # sinfo -al
 controller:~ # sinfo -Nal
+controller:~ # sinfo -N -o "%.20N %.15C %.10t %.10m %.15P %.15G %.35E"
 
 controller:~ # sprio
 controller:~ # sprio -nl
@@ -607,6 +669,7 @@ controller:~ # sreport cluster UserUtilizationByAccount
 controller:~ # sreport user TopUsage
 ```
 
+
 ---
 
 ## HA
@@ -617,7 +680,6 @@ controller:~ # vi /etc/slurm/slurm.conf
 ClusterName=<cluster>
 
 # controller
-#ControlMachine=<server>
 SlurmctldHost=<server>
 SlurmctldHost=<ha_server>
 
