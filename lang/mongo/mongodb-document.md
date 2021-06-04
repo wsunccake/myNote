@@ -412,4 +412,6 @@
 > db.articles.remove({})
 
 > db.fruit.remove({qty: {$gt: 20}})
+
+> db.fruit.remove({qty: {$gt: 20}}, {justOne: false})
 ```

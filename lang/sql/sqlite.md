@@ -14,6 +14,10 @@ linux:~ # dnf install sqlite
 ```bash
 linux:~ # sqlite3
 linux:~ # sqlite3 db.sqlite3
+
+linux:~ # vi $HOME/.sqliterc
+.headers on
+.mode column
 ```
 
 ```sql
