@@ -22,6 +22,8 @@ centos:~ # ipmitool chassis status
 centos:~ # ipmitool channel info
 centos:~ # ipmitool sel list
 centos:~ # ipmitool power status
+centos:~ # ipmitool bmc info
+centos:~ # ipmitool chassis bootdev
 ```
 
 

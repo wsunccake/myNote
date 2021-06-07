@@ -8,7 +8,7 @@
 
 # run container
 [centos:~ ] # export JENKINS_HOME=<path>
-[centos:~ ] # podman run --detach --volume $JENKINS_HOME:/var/jenkins_home --publish 8080:8080 --publish 50000:50000 --user root --name jenkins jenkins/jenkins:lts
+[centos:~ ] # podman run --detach --volume $JENKINS_HOME:/var/jenkins_home --publish 8080:8080 --publish 50000:50000 --user root --name jenkins --restart always jenkins/jenkins:lts
 
 # install plugin
 [centos:~ ] # podman exec -it jenkins sh -c "echo greenballs:latest | /usr/local/bin/install-plugins.sh"
