@@ -42,7 +42,9 @@
 
 ```bash
 # for systemctl
-[guest:~ ] # systemctl enable serial-getty@ttyS0 --enable
+[guest:~ ] # systemctl enable serial-getty@ttyS0
+[guest:~ ] # systemctl start serial-getty@ttyS0
+[guest:~ ] # systemctl status serial-getty@ttyS0
 ```
 
 
