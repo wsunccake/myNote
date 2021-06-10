@@ -1,6 +1,6 @@
 ＃ elk
 
-install order
+## install order
 
 1. Elasticsearch
 
@@ -13,6 +13,13 @@ install order
 5. APM Server
 
 6. Elasticsearch Hadoop
+
+
+---
+
+## service
+
+beat  -->  logstash  -->  elasticsearch  <-->  kibana
 
 
 ---
