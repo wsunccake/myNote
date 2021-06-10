@@ -1,4 +1,4 @@
-＃ elk
+＃ elk stack
 
 ## install order
 
@@ -19,7 +19,7 @@
 
 ## service
 
-beat  -->  logstash  -->  elasticsearch  <-->  kibana
+beat  -->  logstash  -->  elasticsearch  <--  kibana
 
 
 ---
@@ -90,8 +90,6 @@ path.logs: /var/log/elasticsearch
 
 # test
 [centos:~ ] # curl "localhost:9200/?pretty"
-[centos:~ ] # curl -L http://localhost:9200/_cat/nodes
-[centos:~ ] # curl -L http://localhost:9200/_cat/indices
 ```
 
 
@@ -171,7 +169,7 @@ collects data
 - pipeline.id: main
   path.config: "/etc/logstash/conf.d/*.conf"
 
-[centos:~ ] # cat << EOF > /etc/logstash/beat.conf 
+[centos:~ ] # cat << EOF > /etc/logstash/conf.d/beat.conf 
 input {
   beats {
     port => 5044
