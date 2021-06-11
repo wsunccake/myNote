@@ -34,6 +34,9 @@ sle:~ # zypper in -t pattern <pattern>
 
 # remove package
 sle:~ # zypper rm <pkg>
+
+# download package
+sle:~ # zypper -v in --download-only -f <pkg>
 ```
 
 ---
