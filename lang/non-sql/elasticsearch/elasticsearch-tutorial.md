@@ -203,3 +203,23 @@ action.auto_create_index:+acc*,-bank*
 ---
 
 ## search api
+
+```sh
+# multi index
+GET /_all/_search?q=city:paprola 
+
+GET /schools/_search
+{
+   "query":{
+      "match_all":{}
+   }
+}
+
+GET /schools/_search
+{
+   "query":{
+      "term": {"city": "paprola"}
+   },
+   "fields" : ["name", "city"]
+}
+```
