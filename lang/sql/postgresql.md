@@ -12,7 +12,6 @@ linux:~ # yum install postgresql
 
 ## service
 
-`method 1`
 
 ```bash
 linux:~ # yum install postgresql-server
@@ -20,32 +19,26 @@ linux:~ # yum install postgresql-server
 # initial database
 linux:~ # postgresql-setup initdb
 
+# service
 linux:~ # systemctl enable postgresql.service
 linux:~ # systemctl start postgresql.service
+linux:~ # systemctl status postgresql.service
+
+# control command
+linux:~ # pg_ctl start
+linux:~ # pg_ctl stop
+linux:~ # pg_ctl status
+linux:~ # pg_ctl restart
+linux:~ # pg_ctl reload
 
 # psql default port 5432
 linux:~ # netstat -luntp | grep 5432
 
 # config
-linux:~ # pg_config # show config
-linux:~ # ls /var/lib/pgsql/data # psql config & db folder
-linux:~ # cat /var/lib/pgsql/data/postgresql.conf # default config
-```
-
-
-`method2`
-
-```bash
-linux:~ # docker pull postgres
-linux:~ # docker run -d \
-    --name postgres \
-    -e POSTGRES_PASSWORD=<password> \
-    [-e PGDATA=/var/lib/postgresql/data/pgdata] \
-    [-v /data/db:/var/lib/postgresql/data] \
-    [-p 5432:5432] \
-    postgres
-
-linux:~ # docker exec -it postgres psql -U postgres
+linux:~ # pg_config                                 # show config
+linux:~ # ls /var/lib/pgsql/data                    # psql config & db folder
+linux:~ # cat /var/lib/pgsql/data/postgresql.conf   # default config
+linux:~ # psql -c "SHOW ALL;"
 ```
 
 
@@ -58,14 +51,28 @@ linux:~ # docker exec -it postgres psql -U postgres
 linux:~ # su - postgres
 linux:~ $ psql
 
+# service
+linux:~ # pg_ctl reload
+
 # user
-linux:~ $ createuser -P -d <user>
-linux:~ $ dropuser <user>
+linux:~ $ createuser -P [-c <n>] [-d|-D] [-r|-R] [-s|-S] <new_user>
+# -c: --connection-limit
+# -d: --createdb, -D: --no-createdb
+# -r: --createrole, -R: --no-createrole
+# -s: --superuser, -S: --no-superuser
+linux:~ $ dropuser <user>           # delete user
+linux:~ $ psql -c "\du"             # list user
+
+# password
+linux:~ $ psql -c "\password [<db_user>]"       # change password
+linux:~ $ psql << EOF
+ALTER USER <db_user> WITH PASSWORD '<new_password>';
+EOF
 
 # db
 linux:~ $ createdb -O <db_user> <db>
-linux:~ $ dropdb <db>
-linux:~ $ psql -c "\l"
+linux:~ $ dropdb <db>               # delete db
+linux:~ $ psql -c "\l"              # list db
 linux:~ $ psql << EOF
 \l
 EOF
@@ -74,13 +81,16 @@ EOF
 linux:~ # psql -U <db_user> -d <db> -h <host> -p <port> -W
 
 # remote login config
+linux:~ # grep -Ev '^#|^$|^\s+#' /var/lib/pgsql/data/postgresql.conf
 linux:~ # vi /var/lib/pgsql/data/postgresql.conf
 listen_addresses = '0.0.0.0'
 port = 5432
 ...
 
+linux:~ # psql -c "SHOW hba_file;" -U postgres
 linux:~ # vi /var/lib/pgsql/data/pg_hba.conf
 host    all    all    0.0.0.0/0    md5
+host    all    all    ::0/0        md5
 ...
 
 linux:~ # systemctl restart postgresql.service

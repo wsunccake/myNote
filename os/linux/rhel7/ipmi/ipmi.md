@@ -44,7 +44,7 @@ centos:~ # ipmitool lan set 1 defgw ipaddr <gatewayip>
 ## power control
 
 ```bash
-centos:~ # ipmitool power on|off|reset|cycle
+centos:~ # ipmitool power on|off|reset|cycle|status
 ```
 
 
