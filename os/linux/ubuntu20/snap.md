@@ -4,11 +4,12 @@
 ## install
 
 ```bash
-ubuntu:~ # apt install snap
+[ubuntu:~ ] # apt install snap
 
-ubuntu:~ # snap version
-ubuntu:~ # snap help
+[ubuntu:~ ] # snap version
+[ubuntu:~ ] # snap help
 ```
+
 
 ---
 
