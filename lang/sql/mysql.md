@@ -3,27 +3,8 @@
 
 ## install
 
-`method1`
-
 ```bash
 linux:~ # yum install mariadb
-```
-
-
-`method2`
-
-```bash
-linux:~ # docker pull mysql
-linux:~ # docker run -d \
-    --name mysql \
-    -e MYSQL_ROOT_PASSWORD=<password> \
-    [-v /data/db:/var/lib/mysql] \
-    [-v /data/cnf:/etc/mysql/conf.d] \
-    [-p 3306:3306] \
-    [-p 33060:33060] \
-    mysql
-
-linux:~ # docker exec -it mysql mysql -u root -p
 ```
 
 ```sql
