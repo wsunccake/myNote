@@ -3,7 +3,9 @@
 ## install
 
 ```bash
-linux:~ # pip install sqlalchemy  # 1.4+
+linux:~ # pip install sqlalchemy    # 1.4+
+linux:~ # pip install mysqlclient   # for mysql
+linux:~ # pip install psycopg2      # for postgresql
 ```
 
 
@@ -14,10 +16,17 @@ linux:~ # pip install sqlalchemy  # 1.4+
 ```python
 from sqlalchemy import create_engine
 
-# dialect[+driver]://user:password@host/dbname                            # syntax
-engine = create_engine('sqlite:///college.db', echo=True)                 # for sqlite
-engine = create_engine("mysql://user:pwd@localhost/college", echo=True)   # for mysql
+# dialect[+driver]://user:password@host/dbname                                          # syntax
+engine = create_engine('sqlite:///<database>')                                          # for sqlite
+engine = create_engine("mysql://<user>:<password>@<host>[:<port>]/<database>")          # for mysql
+engine = create_engine('postgresql://<user>:<password>@<host>[:<port>]/<database>')     # for postgresql
+
+engine = create_engine('sqlite:///college.db', echo=True)
+engine = create_engine("mysql://<user>:<pwd>@localhost/colleage", echo=True)
+engine = create_engine('postgresql://<user>:<pwd>@localhost/colleage', echo=True) 
 ```
+
+[Engine Configuration](https://docs.sqlalchemy.org/en/14/core/engines.html)
 
 
 ---
