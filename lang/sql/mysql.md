@@ -60,6 +60,7 @@ mysql> CREATE DATABASE <database_name>;   -- create database
 mysql> DROP DATABASE <database_name>;     -- delete database
 mysql> SHOW DATABASES;                    -- list database
 mysql> USE <database_name>;               -- use database
+mysql> SELECT DATABASE();                 -- show database
 
 -- example
 mysql> CREATE DATABASE tutorials_db;
