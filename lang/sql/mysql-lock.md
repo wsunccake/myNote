@@ -2,7 +2,7 @@
 
 ```sql
 mysql> SELECT version();            -- version
-mysql> STATUS;                      -- rmdbs status
+mysql> STATUS;                      -- rdbms status
 
 mysql> SELECT CONNECTION_ID();      -- show connection id
 
@@ -107,7 +107,7 @@ UNLOCK TABLES;
 
 ---
 
-## lock read
+## row lock
 
 ```sql
 mysql> SELECT ... FOR UPDATE [OF column_list][WAIT n|NOWAIT][SKIP LOCKED]; 
@@ -123,10 +123,10 @@ mysql> SELECT * FROM tutorials_tbl WHERE tutorial_id = 1 FOR UPDATE;        -- r
 mysql> SELECT * FROM tutorials_tbl WHERE tutorial_id = -1 FOR UPDATE;       -- no lock, no find data
 mysql> SELECT * FROM tutorials_tbl WHERE tutorial_id > 3 FOR UPDATE;        -- table lock, no primay key
 
-mysql> SELECT * FROM tutorials_tbl FOR UPDATE
-mysql> SELECT * FROM tutorials_tbl FOR UPDATE NOWAIT
-mysql> SELECT * FROM tutorials_tbl FOR UPDATE WAIT 5
-mysql> SELECT * FROM tutorials_tbl FOR UPDATE SKIP LOCKED
+mysql> SELECT * FROM tutorials_tbl FOR UPDATE;
+mysql> SELECT * FROM tutorials_tbl FOR UPDATE NOWAIT;
+mysql> SELECT * FROM tutorials_tbl FOR UPDATE WAIT 5;
+mysql> SELECT * FROM tutorials_tbl FOR UPDATE SKIP LOCKED;
 
 mysql> COMMIT;
 ```
