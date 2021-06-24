@@ -356,6 +356,203 @@ session.commit()
 
 ---
 
+## common relationship
+
+### join
+
+```python
+for c, i in session.query(Customer, Invoice).filter(Customer.id == Invoice.custid).all():
+    print ("ID: {} Name: {} Invoice No: {} Amount: {}".format(c.id,c.name, i.invno, i.amount))
+
+result = session.query(Customer).join(Invoice).filter(Invoice.amount == 6000)
+for row in result:
+    for inv in row.invoices:
+        print (row.id, row.name, inv.invno, inv.amount)
+```
+
+```python
+from sqlalchemy.sql import func
+
+stmt = session.query(Invoice.custid, func.count('*').label('invoice_count')).group_by(Invoice.custid).subquery()
+for u, count in session.query(Customer, stmt.c.invoice_count).outerjoin(stmt, Customer.id == stmt.c.custid).order_by(Customer.id):
+    print(u.name, count)
+```
+
+
+### __eq__
+
+```python
+s = session.query(Customer).filter(Invoice.invno.__eq__(12))
+```
+
+
+### __ne__
+
+```python
+s = session.query(Customer).filter(Invoice.custid.__ne__(2))
+```
+
+
+### contains
+
+```python
+s = session.query(Invoice).filter(Invoice.invno.contains([3, 4, 5]))
+```
+
+
+### any
+
+```python
+s = session.query(Customer).filter(Customer.invoices.any(Invoice.invno==11))
+```
+
+
+### has
+
+```python
+s = session.query(Invoice).filter(Invoice.customer.has(name='Arjun Pandit'))
+```
+
+
+---
+
+## eager loading
+
+### subquery load
+
+```python
+from sqlalchemy.orm import subqueryload
+
+c1 = session.query(Customer).options(subqueryload(Customer.invoices)).filter_by(name='Govind Pant').one()
+print (c1.name, c1.address, c1.email)
+
+for x in c1.invoices:
+    print ("Invoice no : {}, Amount : {}".format(x.invno, x.amount))
+```
+
+### joined load
+
+```python
+from sqlalchemy.orm import joinedload
+
+c1 = session.query(Customer).options(joinedload(Customer.invoices)).filter_by(name='Govind Pant').one()
+```
+
+
+---
+
+## delete relate object
+
+```python
+x = session.query(Customer).get(2)
+session.delete(x)
+
+session.query(Customer).filter_by(name='Gopal Krishna').count()
+session.query(Invoice).filter(Invoice.invno.in_([10,14])).count()
+```
+
+```python
+class Customer(Base):
+    __tablename__ = 'customers'
+
+    id = Column(Integer, primary_key = True)
+    name = Column(String)
+    address = Column(String)
+    email = Column(String)
+```
+
+-->
+
+```python
+class Customer(Base): 
+    __tablename__ = 'customers'
+
+    id = Column(Integer, primary_key = True) 
+    name = Column(String) 
+    address = Column(String) 
+    email = Column(String) 
+    invoices = relationship(
+        "Invoice", 
+        order_by = Invoice.id, 
+        back_populates = "customer",
+        cascade = "all, 
+        delete, delete-orphan" 
+    )
+```
+
+
+---
+
+## many to many relationship
+
+```python
+from sqlalchemy import create_engine, ForeignKey, Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship, sessionmaker
+
+
+engine = create_engine('sqlite:///mycollege.db', echo = True)
+Base = declarative_base()
+
+class Department(Base):
+    __tablename__ = 'department'
+    id = Column(Integer, primary_key = True)
+    name = Column(String)
+    employees = relationship('Employee', secondary = 'link')
+
+class Employee(Base):
+    __tablename__ = 'employee'
+    id = Column(Integer, primary_key = True)
+    name = Column(String)
+    departments = relationship(Department,secondary='link')
+
+class Link(Base):
+    __tablename__ = 'link'
+    department_id = Column(
+        Integer, 
+        ForeignKey('department.id'), 
+        primary_key = True
+    )
+
+employee_id = Column(
+    Integer, 
+    ForeignKey('employee.id'), 
+    primary_key = True)
+
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind = engine)
+session = Session()
+
+d1 = Department(name = "Accounts")
+d2 = Department(name = "Sales")
+d3 = Department(name = "Marketing")
+
+e1 = Employee(name = "John")
+e2 = Employee(name = "Tony")
+e3 = Employee(name = "Graham")
+
+e1.departments.append(d1)
+e2.departments.append(d3)
+d1.employees.append(e3)
+d2.employees.append(e2)
+d3.employees.append(e1)
+e3.departments.append(d2)
+
+session.add(e1)
+session.add(e2)
+session.add(d1)
+session.add(d2)
+session.add(d3)
+session.add(e3)
+session.commit()
+
+for x in session.query( Department, Employee).filter(Link.department_id == Department.id, Link.employee_id == Employee.id).order_by(Link.department_id).all():
+    print ("Department: {} Name: {}".format(x.Department.name, x.Employee.name))
+
+```
+
+---
+
 ## ref
 
 [Object Relational Tutorial (1.x API)](https://docs.sqlalchemy.org/en/14/orm/tutorial.html)
