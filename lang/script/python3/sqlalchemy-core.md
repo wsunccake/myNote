@@ -58,7 +58,7 @@ CREATE TABLE students (
 ```
 
 ```python
-from sqlalchemy inspect
+from sqlalchemy import inspect
 from sqlalchemy import Table, Column, Integer, String, MetaData
 
 table_name = 'students'
@@ -185,7 +185,7 @@ from sqlalchemy import text
 txt_stmt = text("SELECT * FROM students")
 print(txt_stmt)
 
-for row in connection.execute(txt_stmt):
+for row in conn.execute(txt_stmt):
     print(row)
 ```
 
@@ -463,6 +463,50 @@ intersect_stmt = intersect(
 )
 print(intersect_stmt)
 ```
+
+
+---
+
+## lock
+
+### sqlite
+
+```python
+def lock_update(engine, table_name, table_id, name):
+    is_successful = False
+    result = None
+
+    with engine.connect().execution_options(autocommit=False) as conn:
+        try:
+            stmt = text("BEGIN EXCLUSIVE;")
+            conn.execute(stmt)
+        except Exception as e:
+            return {'is_successful': is_successful, 'q': result}
+
+        try:
+            stmt = text(f"SELECT * FROM {table_name} WHERE id = {table_id};")
+            q = conn.execute(stmt).fetchone()
+            stmt = text(f"UPDATE {table_name} SET name = '{name}' WHERE id = {q.id};")
+            conn.execute(stmt)
+
+            stmt= text(f"SELECT * FROM {table_name} WHERE id = {q.id};")
+            result = conn.execute(stmt).fetchone()
+            stmt = text("COMMIT;")
+            conn.execute(stmt)
+
+            is_successful = True
+        except:
+            stmt = text("ROLLBACK;")
+            conn.execute(stmt)
+
+    return {'is_successful': is_successful, 'q': result}
+```
+
+
+## mysql
+
+
+## postgresql
 
 
 ---
