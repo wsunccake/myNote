@@ -3,9 +3,15 @@
 ## install
 
 ```bash
-linux:~ # pip install sqlalchemy    # 1.4+
-linux:~ # pip install mysqlclient   # for mysql
-linux:~ # pip install psycopg2      # for postgresql
+# sqlalchemy 1.4+
+linux:~ # pip install sqlalchemy
+
+# for mysql
+linux:~ # pip install pymysql
+linux:~ # pip install cryptography
+
+# for postgresql
+linux:~ # pip install psycopg2
 ```
 
 
@@ -22,8 +28,8 @@ engine = create_engine("mysql://<user>:<password>@<host>[:<port>]/<database>")  
 engine = create_engine('postgresql://<user>:<password>@<host>[:<port>]/<database>')     # for postgresql
 
 engine = create_engine('sqlite:///college.db', echo=True)
-engine = create_engine("mysql://<user>:<pwd>@localhost/colleage", echo=True)
-engine = create_engine('postgresql://<user>:<pwd>@localhost/colleage', echo=True) 
+engine = create_engine("mysql+pymysql://<user>:<pwd>@localhost/colleage", echo=True)
+engine = create_engine('postgresql+psycopg2://<user>:<pwd>@localhost/colleage', echo=True) 
 ```
 
 [Engine Configuration](https://docs.sqlalchemy.org/en/14/core/engines.html)
@@ -382,6 +388,7 @@ from sqlalchemy import join
 from sqlalchemy.sql import select
 
 j = students.join(addresses, students.c.id == addresses.c.st_id)
+and_stmt = select([students]).where(and_(students.c.name == 'Ravi', students.c.id <3))
 join_stmt = select([students]).select_from(j)
 print(join_stmt)
 for row in conn.execute(join_stmt):
@@ -395,7 +402,6 @@ for row in conn.execute(join_stmt):
 
 ```python
 from sqlalchemy import and_, or_
-and_stmt = select([students]).where(and_(students.c.name == 'Ravi', students.c.id <3))
 print(and_stmt)
 
 or_stmt = select([students]).where(or_(students.c.name == 'Ravi', students.c.id <3))
@@ -467,6 +473,30 @@ print(intersect_stmt)
 
 ---
 
+## connection pool
+
+```python
+from sqlalchemy import create_engine
+from sqlalchemy.pool import QueuePool
+
+# connection pool
+conn_num = 4
+engine = create_engine('<dialect>+<driver>://<user>:<pwd>@<host>/<database>',
+                       echo=False,
+                       pool_size=conn_num,
+                       max_overflow=0,
+                       poolclass=QueuePool,
+                       pool_pre_ping=True,
+                       pool_use_lifo=True
+                      )
+
+conns = [engine.connect() for _ in range(conn_size)]
+print(conns)
+```
+
+
+---
+
 ## lock
 
 ### sqlite
@@ -503,10 +533,68 @@ def lock_update(engine, table_name, table_id, name):
 ```
 
 
-## mysql
+### mysql
+
+```python
+def lock_update_fof_lock_table(engine, table_name, table_id, name):
+    is_successful = False
+    result = None
+
+    with engine.connect().execution_options(autocommit=False) as conn:
+        try:
+            stmt = text(f'LOCK TABLES {table_name} WRITE;')
+            conn.execute(stmt)
+        except Exception as e:
+            return {'is_successful': is_successful, 'q': result}
+
+        try:
+            stmt = text(f"SELECT * FROM {table_name} WHERE id = {table_id};")
+            q = conn.execute(stmt).fetchone()
+            stmt = text(f"UPDATE {table_name} SET name = '{name}' WHERE id = {q.id};")
+            conn.execute(stmt)
+
+            stmt= text(f"SELECT * FROM {table_name} WHERE id = {q.id};")
+            result = conn.execute(stmt).fetchone()
+            stmt = text("COMMIT;")
+            conn.execute(stmt)
+
+            is_successful = True
+        except:
+            stmt = text("ROLLBACK;")
+            conn.execute(stmt)
+        finally:
+            stmt = text("UNLOCK TABLES;")
+            conn.execute(stmt)
+```
+
+```python
+def lock_update_for_nowait(engine, table_name, table_id, name):
+    is_successful = False
+    result = None
+
+    with engine.connect().execution_options(autocommit=False) as conn:
+        try:
+            stmt = text('BEGIN;')
+            conn.execute(stmt)
+
+            stmt = text(f'SELECT * FROM {table_name} WHERE id = {table_id} FOR UPDATE NOWAIT;')
+            q = conn.execute(stmt).fetchone()
+
+            stmt = text(f"UPDATE {table_name} SET name = '{name}' WHERE id = {q.id};")
+            conn.execute(stmt)
+
+            stmt= text(f"SELECT * FROM {table_name} WHERE id = {q.id};")
+            result = conn.execute(stmt).fetchone()
+
+            stmt = text('COMMIT;')
+            conn.execute(stmt)
+        except Exception as e:
+            print('fail')
+            return {'is_successful': is_successful, 'q': result}
+```
 
 
-## postgresql
+### postgresql
 
 
 ---

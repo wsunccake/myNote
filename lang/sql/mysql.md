@@ -75,6 +75,7 @@ mysql> USE tutorials_db;
 mysql> CREATE TABLE <table_name> (<column_name> <data_type>);        -- create table
 mysql> DROP TABLE <table_name>;                                      -- delete table
 mysql> SHOW TABLES;                                                  -- list table
+mysql> DESCRIBE <table_name>;                                        -- show schema
 
 -- example
 mysql> CREATE TABLE tutorials_tbl(
