@@ -273,3 +273,8 @@ $("#lst-ib").val("python");
 ```
 
 
+### firefox
+
+url 輸入 about:config
+
+搜尋 network.http.max-persistent-connections-per-server 設定下載數量

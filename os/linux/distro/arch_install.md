@@ -1,4 +1,4 @@
-l# Install
+# Install
 
 ## partition
 
@@ -7,7 +7,7 @@ l# Install
 
 ## install package
 
-```
+```bash
 root@arhciso:~ # vi /etc/pacman.d/mirrorlist
 root@arhciso:~ # pacstrap -i /mnt base
 root@arhciso:~ # genfstab -U /mnt >> /mnt/etc/fstab
@@ -15,7 +15,7 @@ root@arhciso:~ # genfstab -U /mnt >> /mnt/etc/fstab
 
 ## chroot
 
-```
+```bash
 root@arhciso:~ # arch-chroot /mnt /bin/bash
 sh-4.3 # echo "LANG=en_US.UTF-8" > /etc/locale.conf
 sh-4.3 # locale-gen
@@ -39,21 +39,21 @@ root@arhciso:~ # reboot
 
 ## Upgrade
 
-```
+```bash
 arch:~ # pacman -Syy
 arch:~ # pacman -Su
 ```
 
 ## Remove package_group
 
-```
+```bash
 arhc:~ # pacman -Qg | awk '/^package_group/{print $2}' | xargs -i pacman -Rs --noconfirm {}
 ```
 
 
 ## Essential Packages
 
-```
+```bash
 arch:~ # pacman -S net-tools pkgfile base-devel
 arch:~ # pacman -S vim emacs
 arch:~ # pacman -S bash-completion
@@ -74,7 +74,7 @@ rpm -ql pkg = pacman -Ql pkg
 
 ## ABS (Arch Build System)
 
-```
+```bash
 # install
 arch:~ # pacman -S abs
 arch:~ # abs   # /var/abs
@@ -95,7 +95,7 @@ https://aur.archlinux.org
 
 ## Yaourt
 
-```
+```bash
 # install
 arch:~ # git clone https://aur.archlinux.org/package-query.git
 arch:~ # cd package-query
@@ -118,7 +118,7 @@ arch:~ # yaourt -Sb pkg # download and compile
 
 ## netctl
 
-```
+```bash
 arch:~ # cp /etc/netctl/examples/connect_profile /etc/netctl/my_interface_profile
 
 arch:~ # netctl list
@@ -133,14 +133,14 @@ arch:~ # netctl disable my_interface_profile
 
 ## ALSA
 
-```
+```bash
 arch:~ # pacman -S alsa-utils 
 arch:~ # alsamixer
 ```
 
 ## PulseAudio
 
-```
+```bash
 arch:~ # pacman -S pulseaudio
 arch:~ # pacman -S pulseaudio-alsa
 ```
@@ -152,7 +152,7 @@ arch:~ # pacman -S pulseaudio-alsa
 
 ## SSH
 
-```
+```bash
 arch:~ # pacman -S openssh
 arch:~ # systemctl enable sshd.service
 ```
@@ -164,7 +164,7 @@ arch:~ # systemctl enable sshd.service
 
 ## gpm
 
-```
+```bash
 arch:~ # pacman -S gpm
 arch:~ # systemctl enable gpm.service
 arch:~ # systemctl start gpm.service
@@ -173,7 +173,7 @@ arch:~ # systemctl start gpm.service
 
 ## zsh
 
-```
+```bash
 arhc:~ # pacman -S zsh zsh-completions
 
 arhc:~ # yaourt oh-my-zsh-git
@@ -191,7 +191,7 @@ ZSH_THEME="powerline"
 
 ## ScreenFetch
 
-```
+```bash
 arch:~ # pacman -S screenfetch
 arch:~ # echo /usr/bin/screenfetch >> /etc/bash.bashrc
 ```
@@ -204,7 +204,7 @@ arch:~ # echo /usr/bin/screenfetch >> /etc/bash.bashrc
 
 ## X window
 
-```
+```bash
 arch:~ # pacman -S xorg-server xorg-xinit xorg-utils xorg-server-utils mesa
 arch:~ # pacman -S xorg-twm xterm xorg-xclock
 arch:~ # pacman -S ttf-dejavu  ttf-droid  ttf-inconsolata
@@ -220,7 +220,7 @@ arch:~ # xrandr --output VGA-0 --mode 1024x768 --rate 60
 
 ## SDDM
 
-```
+```bash
 arch:~ # pacman -S sddm
 arch:~ # sddm --example-config > /etc/sddm.conf
 
@@ -236,14 +236,14 @@ Current=archlinux-soft-grey
 
 ## Xfce
 
-```
+```bash
 arch:~ # pacman -S xfce4 xfce4-goodies
 arch:~ # startxfce4
 ```
 
 ## KDE
 
-```
+```bash
 arch:~ # pacman -S plasma  (DE)
 arch:~ # pacman -R plasma-mediacenter
 arch:~ # pacman -S kde-applications
@@ -265,7 +265,7 @@ arch:~ # echo "startkde" >> .xinitrc
 
 ## Chinese Font
 
-```
+```bash
 arch:~ # locale-gen zh_TW
 arch:~ # yaourt ttf-tw
 ```
@@ -273,7 +273,7 @@ arch:~ # yaourt ttf-tw
 
 ## Chinese Input Method
 
-```
+```bash
 arch:~ # pacman -S ibus
 arch:~ # pacman -S ibus-chewing
 
@@ -296,34 +296,34 @@ export QT_IM_MODULE=ibus
 
 ## Cairo-Dock
 
-```
+```bash
 arch:~ # pacman -S cairo-dock cairo-dock-plug-ins
 ```
 
 
 ## Guake
 
-```
+```bash
 arch:~ # pacman -S guake
 ```
 
 
 ## Sublime Text
 
-```
+```bash
 arch:~ # yaourt sublime-text-dev
 ```
 
 ## IntelliJ
 
-```
+```bash
 arch:~ # yaourt intellij-idea-ultimate-edition
 ```
 
 
 ## VNC
 
-```
+```bash
 arch:~ # yaourt tigervnc
 
 arch:~ # vncserver   # start server

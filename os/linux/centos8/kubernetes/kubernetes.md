@@ -1108,3 +1108,9 @@ master:~ # kubectl -n demo delete service hello-world
 master:~ # kubectl -n demo delete deployment hello-world
 master:~ # kubectl delete namespace demo
 ```
+
+---
+
+## ref
+
+[kubernetes-handbook](https://github.com/rootsongjc/kubernetes-handbook)
