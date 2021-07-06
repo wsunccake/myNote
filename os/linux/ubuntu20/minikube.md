@@ -59,7 +59,15 @@ install [docker-ce](./docker.md)
 ## setup
 
 ```bash
+[ubuntu:~ ] $ virt-host-validate
+
 [ubuntu:~ ] $ minikube config set vm-driver kvm2
+[ubuntu:~ ] $ minikube config set memory 16384
+[ubuntu:~ ] $ minikube config set cpus 2
+[ubuntu:~ ] $ minikube config get vm-driver
+[ubuntu:~ ] $ minikube config get memory 16384
+[ubuntu:~ ] $ minikube config get cpus
+
 [ubuntu:~ ] $ minikube start
 
 # export minikube env to docker

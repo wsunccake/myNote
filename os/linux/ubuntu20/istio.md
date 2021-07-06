@@ -42,7 +42,7 @@ install [minikube](./minikube.md)
 [ubuntu:~ ] $ istioctl profile dump demo
 [ubuntu:~ ] $ istioctl profile dump --config-path components.pilot demo
 [ubuntu:~ ] $ istioctl profile diff default demo
-[ubuntu:~ ] $ istioctl x uninstall --purge
+[ubuntu:~ ] $ istioctl uninstall --purge
 ```
 
 
@@ -60,7 +60,7 @@ install [minikube](./minikube.md)
 [ubuntu:~ ] $ kubectl get services|svc -A -o wide
 [ubuntu:~ ] $ kubectl get all -A -o wide
 
-#  for istio
+# for istio
 [ubuntu:~ ] $ kubectl get gateways|gw -A -o wide
 [ubuntu:~ ] $ kubectl get virtualservices|vs -A -o wide
 ```
