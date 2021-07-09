@@ -498,6 +498,16 @@ END {
   "sum: ", sum
   "average: %f\n", sum/NR
 }
+
+# regrex
+linux:~ # awk '/<pattern>/{print $_}' <file>
+linux:~ # awk '{if ($1 == /<pattern>/) print $_}' <file>
+linux:~ # awk '{if ($1 == "<pattern>") print $_}' <file>
+linux:~ # awk '$1 ~ /<pattern>/{print $_}' <file>
+linux:~ # awk '$1 == "<pattern>"{print $_}' <file>
+
+# if/else
+linux:~ # awk "\$1 == \"<pattern>\" {printf \"$HOME %s\", \$_}" <file>
 ```
 
 
