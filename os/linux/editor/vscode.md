@@ -61,6 +61,10 @@ ext install CoenraadS.bracket-pair-colorizer-2
 [FiraCode](https://github.com/tonsky/FiraCode)
 
 
+[Remote - SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
+
+
+
 ### javascript/node
 
 [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
