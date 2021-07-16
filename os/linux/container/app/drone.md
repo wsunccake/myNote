@@ -91,6 +91,9 @@ create DRONE_RPC_SECRET
   --detach=true \
   --name=drone \
   drone/drone:2
+
+# test
+[linux:~ ] # curl http://localhost
 ```
 
 DRONE_SERVER_HOST: dron server ip or hostname
@@ -229,9 +232,72 @@ steps:
 ```
 
 
+### parallel
+
+```yaml
+kind: pipeline
+type: docker
+name: default
+
+steps:
+- name: en
+  image: alpine
+  commands:
+  - date
+  - echo hello world
+  - sleep 10
+  - date
+
+- name: fr
+  image: alpine
+  commands:
+  - date
+  - echo bonjour monde
+  - sleep 5 
+  - date
+
+- name: hi
+  image: alpine
+  commands:
+  - date
+  depends_on:
+  - en
+  - fr
+```
+
 ---
 
 ## cli
+
+get info from http://localhost/account
+
+
+```bash
+# install
+[linux:~] # curl -L https://github.com/drone/drone-cli/releases/latest/download/drone_linux_amd64.tar.gz | tar zx
+[linux:~] # install -t /usr/local/bin drone
+
+# setup
+[linux:~] # export DRONE_SERVER=http://<drone_host>
+[linux:~] # export DRONE_TOKEN=<drone_token>
+[linux:~] # drone info
+
+# repo
+[linux:~] # drone repo ls
+[linux:~] # drone repo info <repo>
+[linux:~] # drone repo enable <repo>
+[linux:~] # drone repo disable <repo>
+[linux:~] # drone repo update <repo> --config=.drone.yml
+
+# build
+[linux:~] # drone build ls <repo>
+[linux:~] # drone build info <repo> [<build>]
+[linux:~] # drone build create <repo>
+[linux:~] # drone build stop <repo> [<build>]
+[linux:~] # drone log view <repo> <build> <stage> <step>
+[linux:~/demo] # drone exec
+```
+
 
 ---
 
