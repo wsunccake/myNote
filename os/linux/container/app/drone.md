@@ -160,6 +160,7 @@ steps:
 EOF
 [linux:~/demo ] # git add .drone.yml
 [linux:~/demo ] # git commit -m "drone demo"
+[linux:~/demo ] # git push
 ```
 
 
