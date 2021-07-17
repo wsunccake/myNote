@@ -25,7 +25,7 @@ install [docker-ce](./docker.md)
 [ubuntu:~ ] # kubectl version -o json
 
 [ubuntu:~ ] # apt-get install bash-completion
-[ubuntu:~ ] # kubectl completion bash >/etc/bash_completion.d/kubectl
+[ubuntu:~ ] # kubectl completion bash > /etc/bash_completion.d/kubectl
 
 # for user
 [ubuntu:~ ] $ echo 'source <(kubectl completion bash)' >>~/.bashrc
