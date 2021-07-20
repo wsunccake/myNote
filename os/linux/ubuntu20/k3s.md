@@ -45,6 +45,7 @@
 ```bash
 [master:~ ] # kubectl create deployment hello-world --image=gcr.io/google-samples/node-hello:1.0
 [master:~ ] # kubectl expose deployment hello-world --type=LoadBalancer --port=8080
+[master:~ ] # kubectl get svc
 
 [master:~ ] # curl http://<EXTERNAL-IP>:8080
 ```
