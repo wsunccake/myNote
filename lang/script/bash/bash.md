@@ -501,12 +501,12 @@ END {
 
 # regrex
 linux:~ # awk '/<pattern>/{print $_}' <file>
-linux:~ # awk '{if ($1 == /<pattern>/) print $_}' <file>
+linux:~ # awk '{if ($1 ~ /<pattern>/) print $_}' <file>
 linux:~ # awk '{if ($1 == "<pattern>") print $_}' <file>
 linux:~ # awk '$1 ~ /<pattern>/{print $_}' <file>
 linux:~ # awk '$1 == "<pattern>"{print $_}' <file>
 
-# if/else
+# double quote
 linux:~ # awk "\$1 == \"<pattern>\" {printf \"$HOME %s\", \$_}" <file>
 ```
 
