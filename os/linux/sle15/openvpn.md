@@ -63,11 +63,65 @@ sle:~ # mkdir -p demoCA/{private,newcerts}
 sle:~ # touch demoCA/index.txt
 sle:~ # openssl rand -hex -out demoCA/serial 16
 sle:~ # openssl ca [-utf8] [-days 3650] \
-  -in <csr> -out <pem> \
-  -cert <ca crt> -keyfile <ca key>
+  -cert <ca crt> \
+  -keyfile <ca key> \
+  -in <host csr> \
+  -out <host pem>
+
+sle:~ # openssl x509 -req [-utf8] [-days 3650] \
+  -CA <ca crt> \
+  -CAkey <ca key> \
+  -CAcreateserial \
+  -in <host csr> \
+  -out <host crt>
 
 # gen Diffie-Hellman
 sle:~ # openssl dhparam -out dh2048.pem 2048
+```
+
+```
+ca server  --  other machine
+
+step 1.x
+ca server gen root key and crt
+
+step 2.
+other machine gen host key and csr
+
+step 3.
+other machine send host csr to ca server
+
+step 4.
+ca server sign host csr to gen host crt with root key and crt
+
+step 5.
+ca server send host crt to other machine
+```
+
+```bash
+# step 1.
+ca:~ # openssl req \
+  -nodes -utf8 -days 3650 \
+  -subj "/C=TW/ST=Taipei/L=Taipei/O=example/OU=Personal/CN=registry.example" \
+  -newkey rsa:2048 -keyout ca.key \
+  -new -x509 -out ca.crt
+
+# step 2.
+other:~ # openssl req \
+  -nodes -utf8 -days 3650 \
+  -subj "/C=TW/ST=Taipei/L=Taipei/O=company/OU=Personal/CN=company.example" \
+  -newkey rsa:2048 -keyout company.key \
+  -new -out company.csr
+
+# step 3.
+
+# step 4.
+ca:~ # openssl x509 -req -sha512 \
+  -nodes -utf8 -days 3650 \
+  -CA ca.crt -CAkey ca.key -CAcreateserial \
+  -in company.csr -out company.crt
+
+# step 5.
 ```
 
 
