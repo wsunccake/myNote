@@ -13,6 +13,9 @@ osx:~ # networksetup -setairportpower en1 off         # 關裝置
 osx:~ # networksetup -getairportnetwork en1               # 顯示無線網路連線狀態
 osx:~ # networksetup -setairportnetwork en1 ssid passwd   # 無線網路連線
 
+osx:~ # networksetup -removeallpreferredwirelessnetworks en1        # 移除所有 prefer ssid
+osx:~ # networksetup -removeallpreferredwirelessnetwork en1 <ssid>  # 移除特定 prefer ssid
+
 osx:~ # networksetup -setdhcp en1
 
 osx:~ # networksetup -setdnsservers <networkservice> 8.8.8.8 9.9.9.9     # 設定 DNS
@@ -116,4 +119,15 @@ osx:~ # pfctl -F rules  # 清空封包過濾規則
 osx:~ # pfctl -F all    # 清空所有的規則
 osx:~ # pfctl -F info   # 清空計數器
 osx:~ # pfctl -F Tables
+```
+
+
+---
+
+## airport
+
+```bash
+osx:~ # /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport --scan
+osx:~ # /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport --getinfo
+osx:~ # /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport --disassociate
 ```
