@@ -506,10 +506,15 @@ END {
 ## find
 
 ```bash
+# date
 linux:~ # find . -maxdepth 1 -mindepth 1 -type d
 linux:~ # find . -ctime +7 -type f
 linux:~ # find . -ctime -7 -type f
 linux:~ # find . -ctime  7 -type f
+
+# hard link
+linux:~ # find / -samefile <file>
+linux:~ # find / -xdev -samefile <file>
 ```
 
 
