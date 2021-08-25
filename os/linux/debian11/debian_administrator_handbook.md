@@ -48,9 +48,10 @@ debian:~ # apt-cache search <pkg>
 debian:~ # apt-get install <pkg>
 debian:~ # apt-get download <pkg>
 debian:~ # apt-cache show <pkg>
+debian:~ # apt-cache showpkg <pkg>
 
 # repository
-debian:~ # apt-cache policy
+debian:~ # apt-cache policy [<pkg>]
 
 # cd/dvd
 debian:~ # apt-cdrom add
@@ -65,8 +66,8 @@ debian:~ # /etc/apt/sources.list
 deb url distribution component1 component2 component3 [..] componentX
 deb-src url distribution component1 component2 component3 [..] componentX
 ->
-deb http://debian.cs.nctu.edu.tw/debian/ buster main
-deb-src http://debian.cs.nctu.edu.tw/debian/ buster main
+deb http://ftp.tw.debian.org/debian/ bullseye main contrib non-free
+deb-src http://ftp.tw.debian.org/debian/ bullseye main contrib non-free
 
 debian:~ # /etc/apt/sources.list.d/*.list
 ```
@@ -607,6 +608,11 @@ debian:~ # ssh-add -l                      # list private key in ssh-agent
 ----
 
 ## cron, atd, anacron
+
+
+----
+
+## quota
 
 
 
