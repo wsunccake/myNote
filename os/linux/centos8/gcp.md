@@ -42,6 +42,14 @@ web: https://console.cloud.google.com/
 [centos:~ ] # gcloud projects list
 [centos:~ ] # gcloud config set project <PROJECT_ID>
 [centos:~ ] # gcloud config get-value project
+[centos:~ ] # export PROJECT_ID=$(gcloud config get-value project -q)
+[centos:~ ] # gcloud projects get-iam-policy $PROJECT_ID
+
+# zone
+[centos:~ ] # gcloud compute zones list                 # all zone
+[centos:~ ] # gcloud compute instances list             # vm on zone
+[centos:~ ] # gcloud config set compute/zone <ZONE>
+[centos:~ ] # gcloud config get-value compute/zone
 
 [centos:~ ] # gcloud config --help
 [centos:~ ] # gcloud config list [--all]
@@ -49,6 +57,19 @@ web: https://console.cloud.google.com/
 
 [centos:~ ] # gcloud config configurations list
 [centos:~ ] # gcloud config configurations activate <conf>
+```
+
+
+---
+
+## gke
+
+```bash
+[centos:~ ] # gcloud container clusters list
+
+[centos:~ ] # gcloud container images list
+
+[centos:~ ] # gcloud container node-pools list --cluster <cluster>
 ```
 
 ---

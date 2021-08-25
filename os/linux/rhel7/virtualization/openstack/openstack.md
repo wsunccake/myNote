@@ -49,6 +49,11 @@ op:~ # openstack image list
 # flavor
 op:~ # openstack flavor list
 
+# security group
+op:~ # openstack security group list
+op:~ # openstack security group rule list
+
+
 # quota
 op:~ # openstack quota show
 op:~ # openstack quota list
