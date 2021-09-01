@@ -13,6 +13,8 @@ network:
   renderer: networkd
   ethernets:
     ens192:
+      link-local:
+        - ipv4
       dhcp4: no
       addresses:
         - 192.168.1.11/24
@@ -21,6 +23,10 @@ network:
          addresses:
            - 192.168.1.1
            - 8.8.8.8
+      routes:
+        - to: 192.168.2.11 # default or 0.0.0.0/0
+          via: 192.168.1.100
+
     ens172:
       dhcp4: yes
       dhcp4-overrides:

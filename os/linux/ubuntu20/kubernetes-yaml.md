@@ -208,3 +208,18 @@ EOF
 [ubuntu:~ ] $ kubectl -n kube-system get cm kube-proxy -o json | jq '.data."config.conf"' | sed 's/\\n/\n/g' | grep mode
 [ubuntu:~ ] $ kubectl -n kube-system get cm kube-proxy -o yaml | grep mode
 ```
+
+
+---
+
+## kube config
+
+```bash
+[ubuntu:~ ] $ cat /etc/kubernetes/admin.conf
+[ubuntu:~ ] $ cat $HOME/.kube/config
+[ubuntu:~ ] $ export KUBECONFIG=<kube_config>
+
+kubectl config view --minify
+kubectl config get-contexts
+kubectl config set-context <context>
+```
