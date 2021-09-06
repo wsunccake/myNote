@@ -181,3 +181,15 @@ etcd_deployment_type: host
 
 [master01:~ ] # kubectl delete namesapce demo
 ```
+
+
+---
+
+## usage
+
+```bash
+[master01:~ ] $ mkdir -p .kube
+[master01:~ ] $ sudo cp /etc/kubernetes/admin.conf $HOME/.kube/config
+[master01:~ ] $ sudo chown <user>:<group> $HOME/.kube/config 
+[master01:~ ] $ kubectl get nodes
+```

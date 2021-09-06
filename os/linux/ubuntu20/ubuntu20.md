@@ -45,6 +45,12 @@ network:
 [ubuntu:~ ] # ls /usr/share/doc/netplan/examples/       # setup example
 ```
 
+```bash
+[ubuntu:~ ] # systemd-resolve --status
+
+[ubuntu:~ ] # resolvectl status
+[ubuntu:~ ] # resolvectl dns
+```
 
 ---
 
