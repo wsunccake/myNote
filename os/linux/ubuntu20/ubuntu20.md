@@ -54,6 +54,51 @@ network:
 
 ---
 
+## gui
+
+### oxrg
+
+```bash
+[ubuntu:~ ] # apt install xorg
+[ubuntu:~ ] # X -configure
+[ubuntu:~ ] # mv xorg.conf.new /etc/X11/xorg.conf
+```
+
+### lightdm
+
+```bash
+[ubuntu:~ ] # systemctl start lightdm
+[ubuntu:~ ] # systemctl enable lightdm
+[ubuntu:~ ] # systemctl status lightdm
+```
+
+
+### xfce
+
+```bash
+[ubuntu:~ ] # apt install xfce4
+[ubuntu:~ ] # startxfce4
+```
+
+
+### i3wm
+
+```bash
+[ubuntu:~ ] # apt install i3
+[ubuntu:~ ] # startx /usr/bin/i3
+```
+
+$HOME/.config/i3
+
+$mod + ENTER: open terminal
+
+$mod + Shift + q: closing application window
+
+$mod + Shift + e: exit i3
+
+
+---
+
 ## development
 
 ### openjdk
