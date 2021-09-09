@@ -41,12 +41,15 @@
 [linux:~ ] # kubectl config view
 [linux:~ ] # kubectl config current-context
 
-[linux:~ ] # helm search repo|hub <keyword>                        # search chart
-[linux:~ ] # helm pull <chart url>|<repo>/<chart name>             # download chart
-[linux:~ ] # helm install <name> <chart url>|<repo>/<chart name>   # install release from chart
-[linux:~ ] # helm uninstall <name>                                 # uninstall release
-[linux:~ ] # helm list                                             # list all release
-[linux:~ ] # helm status <name>
+[linux:~ ] # helm search repo|hub <keyword>                                 # search chart
+[linux:~ ] # helm pull <chart url>|<repo>/<chart name>                      # download chart
+[linux:~ ] # helm install <release name> <chart url>|<repo>/<chart name>    # install release from chart
+[linux:~ ] # helm uninstall <release name>                                  # uninstall release
+[linux:~ ] # helm list                                                      # list all release
+[linux:~ ] # helm status <relase name>
+
+[linux:~ ] # helm show chart <chart>
+[linux:~ ] # helm show values <chart>
 
 # example
 [linux:~ ] # helm search repo mysql
@@ -55,6 +58,9 @@
 [linux:~ ] # helm install bitnami/mysql -g
 [linux:~ ] # helm uninstall mysql
 [linux:~ ] # helm list
+
+[linux:~ ] # helm show chart bitnami/mysql
+[linux:~ ] # helm show values bitnami/mysql
 ```
 
 
@@ -67,8 +73,8 @@
 [linux:~ ] # tree hello-world
 tree hello-world/
 hello-world/
-├── charts
-├── Chart.yaml
+├── charts                          # chart depends
+├── Chart.yaml                      # about information
 ├── templates
 │   ├── deployment.yaml
 │   ├── _helpers.tpl
@@ -79,7 +85,7 @@ hello-world/
 │   ├── service.yaml
 │   └── tests
 │       └── test-connection.yaml
-└── values.yaml
+└── values.yaml                     # default configuration
 
 [linux:~ ] # cat hello-world/Chart.yaml 
 [linux:~ ] # cat hello-world/values.yaml
@@ -89,7 +95,14 @@ hello-world/
 [linux:~ ] # helm lint ./hello-world
 [linux:~ ] # helm template ./hello-world
 
+# method 1
 [linux:~ ] # helm install hello-world ./hello-world
+
+# method 2
+[linux:~ ] # helm package hello-world
+[linux:~ ] # ls hello-world-0.1.0.tgz
+[linux:~ ] # helm install hello-world hello-world-0.1.0.tgz
+
 [linux:~ ] # helm list
 
 [linux:~ ] # helm upgrade hello-world ./hello-world

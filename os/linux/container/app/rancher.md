@@ -63,7 +63,7 @@ https://<rancher ip>/apikeys to create <token>
 [node:~ ] # docker stop $(docker ps -aq)
 [node:~ ] # docker system prune -f
 [node:~ ] # docker volume rm $(docker volume ls -q)
-[node:~ ] # #docker image rm $(docker image ls -q)
+[node:~ ] # docker image rm $(docker image ls -q)
 [node:~ ] # rm -rf /etc/ceph \
   /etc/cni \
   /etc/kubernetes \
