@@ -29,25 +29,39 @@ alpine:~ # setup-hostname
 ```
 
 
-## xorg
+---
+
+## gui
+
+### xorg
 
 ```bash
 alpine:~ # setup-xorg-base
 
 alpine:~ # X -configure
 alpine:~ # mv xorg.conf.new /etc/X11/xorg.conf
+```
 
-# xfce
+
+### xfce
+
+```bash
 alpine:~ # apk add xfce4 xfce4-terminal xfce4-screensaver lightdm-gtk-greeter 
 alpine:~ # rc-service dbus start
 alpine:~ # rc-update add dbus
 alpine:~ # startx
+```
 
-# dm
+### dm
+
+```bash
 alpine:~ # rc-service lightdm start
 alpine:~ # rc-update add lightdm
+```
 
-# mouse
+### mouse
+
+```bash
 alpine:~ # udevadm info --name=/dev/input/mouse0  --query=path
 alpine:~ # cat /proc/bus/input/devices
 ```
