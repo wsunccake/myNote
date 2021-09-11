@@ -35,6 +35,7 @@ git version 2.18.4
         pushurl = <git uri 2>
 # git uri:
 # ssh://git@<git server>/<repo>.git  # for ssh
+# git@<git server>/<repo>.git  # for ssh
 # https://<git server>/<repo>.git    # for https
 ```
 

@@ -459,3 +459,45 @@ EOF
 [ubuntu:~ ] $ kubectl get pod
 [ubuntu:~ ] $ kubectl logs pi-xg6kh
 ```
+
+
+---
+
+## namespce
+
+```bash
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo-ns
+  labels:
+    name: demo-ns
+EOF
+
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine
+  namespace: demo-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alpine
+  template:
+    metadata:
+      labels:
+        app: alpine
+    spec:
+      containers:
+      - name: alpine
+        image: alpine
+        stdin: true
+        tty: true
+EOF
+
+[ubuntu:~ ] $ kubectl get namespace
+[ubuntu:~ ] $ kubectl -n demo-ns get pods
+```
