@@ -52,12 +52,32 @@ alpine:~ # rc-update add dbus
 alpine:~ # startx
 ```
 
+
 ### dm
 
 ```bash
 alpine:~ # rc-service lightdm start
 alpine:~ # rc-update add lightdm
 ```
+
+
+### awesome
+
+```bash
+alpine:~ # apk add awesome feh lxterminal
+alpine:~ # apk add lua
+alpine:~ # apk add adwaita-gtk2-theme adwaita-icon-theme
+alpine:~ # start /usr/bin/awesome
+```
+
+
+### i3
+
+```bash
+alpine:~ # apk add i3wm i3status i3lock
+alpine:~ # startx /usr/bin/i3
+```
+
 
 ### mouse
 
@@ -78,8 +98,8 @@ alpine:~ # vi /etc/apk/repositories
 
 alpine:~ # apk update
 alpine:~ # apk search <pkg>
-alpine:~ # apk info [-L|-P] [<pkg>]    # installed package
-alpine:~ # apk list [<pkg>]    # available package
+alpine:~ # apk info [-L|-P] [<pkg>]     # installed package
+alpine:~ # apk list [<pkg>]             # available package
 alpine:~ # apk stats
 
 alpine:~ # apk add <pkg>       # install package

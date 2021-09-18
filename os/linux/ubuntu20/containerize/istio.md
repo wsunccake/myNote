@@ -24,8 +24,14 @@ install [minikube](./minikube.md)
 [ubuntu:~ ] $ istioctl install --set profile=demo -y
 
 [ubuntu:~ ] $ kubectl label namespace default istio-injection=enabled   # automatic sidecar injection
-[ubuntu:~ ] $ kubectl describe namespace default
 [ubuntu:~ ] $ kubectl label namespace default istio-injection-          # remove sidecar injection
+
+[ubuntu:~ ] $ kubectl get namespace -L istio-injection                  # verify enable sidecar injection with namespace
+[ubuntu:~ ] $ kubectl describe namespace default
+
+[ubuntu:~ ] $ kubectl get pods --show-labels
+[ubuntu:~ ] $ kubectl describe pod <pod>
+
 ```
 
 

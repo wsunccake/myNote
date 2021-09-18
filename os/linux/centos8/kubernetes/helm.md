@@ -62,7 +62,7 @@ master:~ # kubectl -n kube-system describe pod tiller-deploy
 master:~ # helm search <chart>
 master:~ # helm list
 master:~ # helm install <serivce>
-master:~ #helm delete <serivce>
+master:~ # helm delete <serivce>
 
 ## ie
 master:~ # kubectl create namespace demo
