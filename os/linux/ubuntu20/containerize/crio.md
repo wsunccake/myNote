@@ -105,6 +105,7 @@ insecure_registries = [
 # image
 [ubuntu:~ ] # crictl images
 [ubuntu:~ ] # crictl pull <image>
+[ubuntu:~ ] # crictl pull --creds "oauth2accesstoken:<token>" gcr.io/<project>/<image>:<tag>
 [ubuntu:~ ] # crictl rmi <image>
 
 [ubuntu:~ ] # crictl iamgeinfo <image>

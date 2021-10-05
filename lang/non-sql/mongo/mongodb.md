@@ -7,8 +7,6 @@
 
 ## Install
 
-`method 1`
-
 ```bash
 # install package
 centos:~ # vi /etc/yum.repos.d/mongodb-org.repo
@@ -32,12 +30,6 @@ centos:~ # monogo -version
 centos:~ # monogo
 ```
 
-`method 2`
-
-```bash
-centos:~ # docker pull mongo
-centos:~ # docker run -d --name mongo [-v /path/datadir:/data/db] [-p 27017:27017] mongo
-```
 
 ---
 
