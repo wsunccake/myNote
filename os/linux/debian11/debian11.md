@@ -73,10 +73,25 @@ debian:~ # apt install google-chrome-stable
 
 ## x-window
 
+### i3wm
+
 ```bash
 # i3wm
 debian:~ # apt update
 debian:~ # apt install i3
+```
+
+
+### vnc
+
+```bash
+debian:~ # apt install tigervnc-standalone-server tigervnc-common
+debian:~ # su - <user>
+debian:~ $ vncpasswd
+
+debian:~ $ vncserver -localhost no
+debian:~ $ vncserver -list
+debian:~ $ vncserver -kill :1
 ```
 
 

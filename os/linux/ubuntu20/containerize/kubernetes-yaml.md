@@ -581,6 +581,49 @@ EOF
 
 ---
 
+## configMap
+
+```bash
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env-config
+data:
+  color: red
+EOF
+
+[ubuntu:~ ] $ kubectl get cm
+[ubuntu:~ ] $ kubectl describe cm env-config
+
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine
+  labels:
+    app: alpine
+spec:
+  containers:
+  - name: alpine
+    image: alpine
+    stdin: true
+    tty: true
+    env:
+    - name: COLOR
+      valueFrom:
+        configMapKeyRef:
+          name: env-config
+          key: color
+EOF
+
+[ubuntu:~ ] $ kubectl describe pod alpine
+[ubuntu:~ ] $ kubectl exec -it alpine -- env
+```
+
+
+---
+
 ## secret
 
 ### docker-registry
@@ -596,7 +639,7 @@ gcr
 [ubuntu:~ ] $ kubectl create secret docker-registry gcr-json-key \
   --docker-server=gcr.io \
   --docker-username=_json_key \
-  --docker-password="$(cat ~/key.json)" \
+  --docker-password="$(cat key.json)" \
   --docker-email=user@email.com
 
 [ubuntu:~ ] $ kubectl get secrets
