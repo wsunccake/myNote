@@ -48,6 +48,7 @@ linux:~ # echo '[1, 2, 3]' | jq '.[] | select(. > 1)'
 linux:~ # echo '[1, 2, 3]' | jq '. | map(select(. > 1))'
 linux:~ # echo '["bash", "python", "js"]' | jq '. | map("hello " + .)
 linux:~ # echo '["bash", "python", "js"]' | jq '. | map(select(. == "js"))'
+linux:~ # echo '[1, 2, 3]' | jq '. | max'
 
 # object
 linux:~ # echo '{"a": 1, "b": 2, "c": 3}' | jq '. | map(. + 1)'
@@ -61,6 +62,10 @@ linux:~ # echo '[{"lang": "bash"}, {"lang": "python"}, {"lang": "js"}]' | jq '. 
 linux:~ # echo '[{"lang": "bash"}, {"lang": "python"}, {"lang": "js"}]' | jq '. | map_values(select(. == "js"))'
 linux:~ # echo '[{"lang": "bash"}, {"lang": "python"}, {"lang": "js"}]' | jq '.[] | select(.lang == "js")'
 linux:~ # echo '[{"lang": "bash"}, {"lang": "python"}, {"lang": "js"}]' | jq '.[] | map_values(select(. == "js"))'
+linux:~ # echo '[{"like": 4, "lang": "bash"}, {"like": 9,"lang": "python"}, {"like": 8, "lang": "js"}]' | jq '. | max_by(.like)'
+
+linux:~ # echo '[{"lang": "bash"}, {"lang": "python", "books": ["learn python", "python book"]}, {"lang": "js", "books": ["learn js"]}]' | jq '.[].books' | cat
+linux:~ # echo '[{"lang": "bash"}, {"lang": "python", "books": ["learn python", "python book"]}, {"lang": "js", "books": ["learn js"]}]' | jq '.[].books | .[]'
 ```
 
 ---

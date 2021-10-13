@@ -169,3 +169,18 @@ declare -A API_DATA=([url]=https://api.github.com [method]=GET)
 restful_api API_DATA
 ```
 
+```bash
+random_string() {
+  local len=$1
+  test -n $len && len=6
+
+  echo $(tr -dc a-zA-Z < /dev/urandom | head -c $len)
+}
+
+random_number() {
+  local base
+  test -n $base && base=10    # 0 ~ 9
+
+  echo $(($RANDOM % $base))
+}
+```

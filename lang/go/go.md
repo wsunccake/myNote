@@ -127,7 +127,7 @@ linux:~/gomp $ make
 
 ---
 
-## import
+## import - local path
 
 ```bash
 linux:~/project $ mkdir lib
@@ -153,6 +153,49 @@ package main
 import (
     L "./lib"
     "./lib"
+)
+
+func main() {
+    L.Hi()
+//  L.hello()
+    lib.Hi()
+//  lib.hello()
+}
+EOF
+linux:~/project $ go run main.go
+```
+
+
+---
+
+## import - module
+
+```bash
+linux:~/project $ go mod init my-proj
+
+linux:~/project $ mkdir lib
+linux:~/project $ cat << EOF > lib/msg.go
+package lib
+
+import "fmt"
+
+// func upper name export
+func Hi() {
+    fmt.Println("Hi")
+}
+
+// func lower name unexport or undefine
+func hello() {
+    fmt.Println("hello")
+}
+EOF
+
+linux:~/project $ cat << EOF > main.go
+package main
+
+import (
+    L "my-proj/lib"
+    "my-proj/lib"
 )
 
 func main() {
