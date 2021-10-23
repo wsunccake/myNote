@@ -73,3 +73,20 @@ fmt.Printf("default %T: %d\n", i, i)
 fmt.Printf("default %T: %f\n", f, f)
 fmt.Printf("default %T: %s\n", s, s)
 ```
+
+
+---
+
+## scope
+
+```go
+foo := "go"
+
+fmt.Println("begin outter: ", foo)
+{
+	fmt.Println("begin innter: ", foo)
+	foo := "hello"
+	fmt.Println("begin innter: ", foo)
+}
+fmt.Println("end outter: ", foo)
+```
