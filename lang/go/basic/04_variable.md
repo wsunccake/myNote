@@ -61,3 +61,15 @@ const (
 ---
 
 ## data type
+
+```go
+var b bool
+var i int
+var f float32
+var s string
+
+fmt.Printf("default %T: %t\n", b, b)
+fmt.Printf("default %T: %d\n", i, i)
+fmt.Printf("default %T: %f\n", f, f)
+fmt.Printf("default %T: %s\n", s, s)
+```
