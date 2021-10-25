@@ -41,6 +41,8 @@ bar := 100
 
 ---
 
+## constant
+
 ```go
 //
 const (
@@ -72,6 +74,12 @@ fmt.Printf("default %T: %t\n", b, b)
 fmt.Printf("default %T: %d\n", i, i)
 fmt.Printf("default %T: %f\n", f, f)
 fmt.Printf("default %T: %s\n", s, s)
+
+fmt.Println(reflect.TypeOf(0))
+fmt.Println(reflect.TypeOf(1.0))
+fmt.Println(reflect.TypeOf(true))
+fmt.Println(reflect.TypeOf("go"))
+fmt.Println(reflect.TypeOf('g'))
 ```
 
 
@@ -89,4 +97,15 @@ fmt.Println("begin outter: ", foo)
 	fmt.Println("begin innter: ", foo)
 }
 fmt.Println("end outter: ", foo)
+```
+
+
+---
+
+## convert
+
+```go
+i := 1
+f := 1.5
+fmt.Println(float64(i) + f)
 ```
