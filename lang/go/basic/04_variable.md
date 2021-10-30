@@ -70,16 +70,16 @@ var i int
 var f float32
 var s string
 
-fmt.Printf("default %T: %t\n", b, b)
-fmt.Printf("default %T: %d\n", i, i)
-fmt.Printf("default %T: %f\n", f, f)
-fmt.Printf("default %T: %s\n", s, s)
+fmt.Printf("default %T: %t\n", b, b)    // bool: false
+fmt.Printf("default %T: %d\n", i, i)    // int: 0
+fmt.Printf("default %T: %f\n", f, f)    // float32: 0.000000
+fmt.Printf("default %T: %s\n", s, s)    // string: 
 
-fmt.Println(reflect.TypeOf(0))
-fmt.Println(reflect.TypeOf(1.0))
-fmt.Println(reflect.TypeOf(true))
-fmt.Println(reflect.TypeOf("go"))
-fmt.Println(reflect.TypeOf('g'))
+fmt.Println(reflect.TypeOf(0))          // int
+fmt.Println(reflect.TypeOf(1.0))        // float64
+fmt.Println(reflect.TypeOf(true))       // bool
+fmt.Println(reflect.TypeOf("go"))       // string
+fmt.Println(reflect.TypeOf('g'))        // int32
 ```
 
 
@@ -90,13 +90,26 @@ fmt.Println(reflect.TypeOf('g'))
 ```go
 foo := "go"
 
-fmt.Println("begin outter: ", foo)
+fmt.Println("begin outter: ", foo)          // gp
 {
-	fmt.Println("begin innter: ", foo)
+	fmt.Println("begin innter: ", foo)      // go
 	foo := "hello"
-	fmt.Println("begin innter: ", foo)
+	fmt.Println("begin innter: ", foo)      // hello
 }
-fmt.Println("end outter: ", foo)
+fmt.Println("end outter: ", foo)            // go
+```
+
+
+```go
+foo := "go"
+
+fmt.Println("begin outter: ", foo)          // go
+{
+	fmt.Println("begin innter: ", foo)      // go
+	foo = "hello"
+	fmt.Println("begin innter: ", foo)      // hello
+}
+fmt.Println("end outter: ", foo)            // hello
 ```
 
 

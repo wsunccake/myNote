@@ -79,10 +79,14 @@ debug: true
 conmon_cgroup = "pod"
 cgroup_manager = "cgroupfs"
 
-# private repo
+# private repo no need password/certificate
 insecure_registries = [
  "<private registry ip>:5000"
 ]
+
+# private repo with certificate
+[ubuntu:~ ] # mkdir -p /etc/docker/certs.d/<private_repo>:5000
+[ubuntu:~ ] # mv <file>.crt /etc/docker/certs.d/<private_repo>:5000
 ```
 
 
