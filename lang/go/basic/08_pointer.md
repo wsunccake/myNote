@@ -10,6 +10,7 @@ fmt.Println(ptr)
 fmt.Println(*ptr)
 ```
 
+
 ```go
 v := 1
 val := v
@@ -22,6 +23,16 @@ fmt.Println(*ptr)
 v = 3
 fmt.Println(v)
 fmt.Println(val)
+fmt.Println(ptr)
+fmt.Println(*ptr)
+```
+
+
+```go
+v := 1
+ptr := new(int)
+ptr = &v
+fmt.Println(v)
 fmt.Println(ptr)
 fmt.Println(*ptr)
 ```
