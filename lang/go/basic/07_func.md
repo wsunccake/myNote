@@ -3,23 +3,23 @@
 ## string format
 
 ```go
-fmt.Printf("bool: %t\n", true)
-fmt.Printf("int: %d\n", 123)
-fmt.Printf("bin: %b\n", 14)
-fmt.Printf("char: %c\n", 33)
-fmt.Printf("hex: %x\n", 456)
-fmt.Printf("float1: %f\n", 78.9)
-fmt.Printf("float2: %e\n", 123400000.0)
-fmt.Printf("float3: %E\n", 123400000.0)
-fmt.Printf("str1: %s\n", "\"string\"")
-fmt.Printf("str2: %q\n", "\"string\"")
-fmt.Printf("str3: %x\n", "hex this")
-fmt.Printf("pointer: %p\n", &p)
-fmt.Printf("width1: |%6d|%6d|\n", 12, 345)
-fmt.Printf("width2: |%6.2f|%6.2f|\n", 1.2, 3.45)
-fmt.Printf("width3: |%-6.2f|%-6.2f|\n", 1.2, 3.45)
-fmt.Printf("width4: |%6s|%6s|\n", "foo", "b")
-fmt.Printf("width5: |%-6s|%-6s|\n", "foo", "b")
+fmt.Printf("bool: %t\n", true)                      // true
+fmt.Printf("int: %d\n", 123)                        // 123
+fmt.Printf("bin: %b\n", 14)                         // 1110
+fmt.Printf("char: %c\n", 33)                        // !
+fmt.Printf("hex: %x\n", 456)                        // 1c8
+fmt.Printf("float1: %f\n", 78.9)                    // 78.900000
+fmt.Printf("float2: %e\n", 123400000.0)             // 1.234000e+08
+fmt.Printf("float3: %E\n", 123400000.0)             // 1.234000E+08
+fmt.Printf("str1: %s\n", "\"string\"")              // "string"
+fmt.Printf("str2: %q\n", "\"string\"")              // "\"string\""
+fmt.Printf("str3: %x\n", "hex this")                // 6865782074686973
+
+fmt.Printf("width1: |%6d|%6d|\n", 12, 345)          // |    12|   345|
+fmt.Printf("width2: |%6.2f|%6.2f|\n", 1.2, 3.45)    // |  1.20|  3.45|
+fmt.Printf("width3: |%-6.2f|%-6.2f|\n", 1.2, 3.45)  // |1.20  |3.45  |
+fmt.Printf("width4: |%6s|%6s|\n", "foo", "b")       // |   foo|     b|
+fmt.Printf("width5: |%-6s|%-6s|\n", "foo", "b")     // |foo   |b     |
 
 s := fmt.Sprintf("sprintf: a %s", "string")
 fmt.Println(s)
@@ -29,11 +29,13 @@ type point struct {
 	x, y int
 }
 p := point{1, 2}
-fmt.Printf("struct1: %v\n", p)
-fmt.Printf("struct2: %+v\n", p)
-fmt.Printf("struct3: %#v\n", p)
-fmt.Printf("type: %T\n", p)
+fmt.Printf("struct1: %v\n", p)      // {1 2}
+fmt.Printf("struct2: %+v\n", p)     // {x:1 y:2}
+fmt.Printf("struct3: %#v\n", p)     // main.point{x:1, y:2}
+fmt.Printf("type: %T\n", p)         // main.point
+fmt.Printf("pointer: %p\n", &p)     // 0xc000130010
 ```
+
 
 ---
 
@@ -50,10 +52,10 @@ func plusPlus(a, b, c int) int {
 
 func main() {
     res := plus(1, 2)
-    fmt.Println("1+2 =", res)
+    fmt.Println("1+2 =", res)       // 3
 
 res = plusPlus(1, 2, 3)
-    fmt.Println("1+2+3 =", res)
+    fmt.Println("1+2+3 =", res)     // 6
 }
 ```
 
@@ -69,11 +71,11 @@ func vals() (int, int) {
 
 func main() {
     a, b := vals()
-    fmt.Println(a)
-    fmt.Println(b)
+    fmt.Println(a)      // 3
+    fmt.Println(b)      // 7
 
-_, c := vals()
-    fmt.Println(c)
+    _, c := vals()
+    fmt.Println(c)      // 7
 }
 ```
 
@@ -118,12 +120,12 @@ func intSeq() func() int {
 func main() {
     nextInt := intSeq()
 
-    fmt.Println(nextInt())
-    fmt.Println(nextInt())
-    fmt.Println(nextInt())
+    fmt.Println(nextInt())      // 1
+    fmt.Println(nextInt())      // 2
+    fmt.Println(nextInt())      // 3
 
     newInts := intSeq()
-    fmt.Println(newInts())
+    fmt.Println(newInts())      // 1
 }
 ```
 
