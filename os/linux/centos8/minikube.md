@@ -38,6 +38,7 @@ install [docker](./container/docker.md)
 
 [centos:~ ] # usermod -aG libvirt <user>
 [centos:~ ] # minikube config set vm-driver kvm2
+[centos:~ ] # minikube config set memory 16384
 
 [centos:~ ] # su - <user>
 [centos:~ ] $ minikube start
@@ -58,9 +59,6 @@ install [docker](./container/docker.md)
 [centos:~ ] $ minikube addons list
 [centos:~ ] $ minikube dashboard
 [centos:~ ] $ minikube dashboard --url
-
-minikube config set memory 16384
-
 ```
 
 ```bash

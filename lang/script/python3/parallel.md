@@ -859,3 +859,14 @@ print('end: {}'.format(datetime.datetime.now()))
 ---
 
 # mq
+
+
+---
+
+# ref
+
+[Python Parallel Programming Cookbook - Second Edition](https://github.com/PacktPublishing/Python-Parallel-Programming-Cookbook-Second-Edition)
+
+[python-parallel-programmning-cookbook](https://python-parallel-programmning-cookbook.readthedocs.io/zh_CN/latest/)
+
+[平行處理](https://chenhh.gitbooks.io/parallel_processing/content/)

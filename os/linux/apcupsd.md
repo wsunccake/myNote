@@ -2,7 +2,7 @@
 
 ## install
 
-```
+```bash
 ubuntu:~ # apt-get install apcupsd
 ```
 
@@ -11,7 +11,7 @@ ubuntu:~ # apt-get install apcupsd
 
 ## configure
 
-```
+```bash
 ubuntu:~ # vi /etc/default/apcupsd
 # replace
 ISCONFIGURED=no
@@ -45,7 +45,7 @@ ubuntu:~ # service apcupsd status
 
 ## status
 
-```
+```bash
 ubuntu:~ # apcaccess [ <server_ip>:<port> ]
 APC      : 001,035,0915
 DATE     : 2017-11-18 20:24:51 +0800  
@@ -93,7 +93,7 @@ MBATTCHG, MINTIMEL, MAXTIME are config value
 
 ## test 
 
-```
+```bash
 ubuntu:~ # apcupsd --killpower
 ubuntu:~ # apccontrol killpower
 ubunut:~ # vi /etc/apcupsd/apccontrol
@@ -104,7 +104,7 @@ ubunut:~ # vi /etc/apcupsd/apccontrol
 
 ## log
 
-```
+```bash
 ubuntu:~ # tail /var/log/apcupsd.events
 ```
 
@@ -113,7 +113,7 @@ ubuntu:~ # tail /var/log/apcupsd.events
 
 ## web
 
-```
+```bash
 ubuntu:~ # apt-get install apcupsd-cgi
 ubuntu:~ # apt-get install apache2
 http://localhost/cgi-bin/apcupsd/multimon.cgi

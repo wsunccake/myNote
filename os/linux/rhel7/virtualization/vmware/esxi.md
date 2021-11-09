@@ -73,6 +73,9 @@ ethernet0.checkMACAddress = "FALSE"
 ethernet0.addressType = "static"         # generated, vpx, static
 # ethernet0.generatedAddress
 
+# enable svm or vmx
+vhv.enable = "TRUE"
+
 # lauch vm
 esxi:~ # vim-cmd vmsvc/power.on <vm_id>
 

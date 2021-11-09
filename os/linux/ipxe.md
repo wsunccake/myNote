@@ -1,11 +1,11 @@
-# iPXE #
-
+# ipxe
 
 ## command ##
 
-
-	ipxe> ifconf
-	ipxe> ifstat
-	ipxe> dhcp
-	ipxe> route
-	ipxe> show dns
+```bash
+ipxe> ifconf
+ipxe> ifstat
+ipxe> dhcp
+ipxe> route
+ipxe> show dns
+```

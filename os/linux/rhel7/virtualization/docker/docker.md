@@ -421,6 +421,7 @@ client:~ # docker images
 client:~ # docker pull <registry_ip>:5000/busybox
 ```
 
+
 ## Docker File
 
 Docker File 用來在已建立/存在 image 上, 在建立新的 image
@@ -460,6 +461,43 @@ rhel:~ # docker -t nginx -f nginx/Dockerfiles
 rhel:~ # docker run -itd -v /data:/robot_log --name robot robot
 rhel:~ # docker run -itd -p 80:80 --name nginx nginx
 ```
+
+
+```bash
+# dockerfile
+rhel:~ # cat Dockerfile
+FROM centos
+
+RUN yum install epel
+RUN yum makecache
+RUN yum install -y nginx
+
+CMD ["/bin/bash"]
+
+# dockerfile
+rhel:~ # cat Dockerfile
+FROM centos
+
+RUN yum install epel \
+ && yum makecache \
+ && yum install -y nginx
+
+CMD ["/bin/bash"]
+
+# dockerfile
+rhel:~ # cat Dockerfile
+FROM centos
+
+RUN <<EOF
+yum install epel
+yum makecache
+yum install -y nginx
+EOF
+
+CMD ["/bin/bash"]
+```
+
+
 
 ## Docker Registry
 

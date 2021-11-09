@@ -160,8 +160,31 @@ disable cstf before 2.222
 ---
 
 
-## Plugin
+## init hook
 
+
+```bash
+rhel:~ # mkdir -p $JENKINS_HOME/init.groovy.d
+rhel:~ # cat $JENKINS_HOME/init.groovy.d/csp.groovy
+import jenkins.model.Jenkins
+import java.util.logging.LogManager
+
+def jenkinsHome = Jenkins.instance.getRootDir().absolutePath
+def logger = LogManager.getLogManager().getLogger("")
+
+System.setProperty("hudson.model.DirectoryBrowserSupport.CSP","sandbox allow-scripts; default-src 'none'; img-src 'self' data: ; style-src 'self' 'unsafe-inline' data: ; script-src 'self' 'unsafe-inline' 'unsafe-eval' ;")
+
+logger.info("Jenkins Startup Script: Successfully updated the system properties value for hudson.model.DirectoryBrowserSupport.CSP . Script location : ${jenkinsHome}/init.groovy.d")
+```
+
+[Groovy Hook Scripts](https://www.jenkins.io/doc/book/managing/groovy-hook-scripts/)
+
+[Jenkins Use Case: Jenkins Startup Script to set the System Properties](https://medium.com/the-devops-ship/jenkins-use-case-jenkins-startup-script-to-set-the-system-properties-2de8cd1cbe4d)
+
+
+---
+
+## Plugin
 
 ### Common
 

@@ -3,27 +3,8 @@
 
 ## install
 
-`method1`
-
 ```bash
 linux:~ # yum install mariadb
-```
-
-
-`method2`
-
-```bash
-linux:~ # docker pull mysql
-linux:~ # docker run -d \
-    --name mysql \
-    -e MYSQL_ROOT_PASSWORD=<password> \
-    [-v /data/db:/var/lib/mysql] \
-    [-v /data/cnf:/etc/mysql/conf.d] \
-    [-p 3306:3306] \
-    [-p 33060:33060] \
-    mysql
-
-linux:~ # docker exec -it mysql mysql -u root -p
 ```
 
 ```sql
@@ -79,6 +60,7 @@ mysql> CREATE DATABASE <database_name>;   -- create database
 mysql> DROP DATABASE <database_name>;     -- delete database
 mysql> SHOW DATABASES;                    -- list database
 mysql> USE <database_name>;               -- use database
+mysql> SELECT DATABASE();                 -- show database
 
 -- example
 mysql> CREATE DATABASE tutorials_db;
@@ -94,6 +76,7 @@ mysql> USE tutorials_db;
 mysql> CREATE TABLE <table_name> (<column_name> <data_type>);        -- create table
 mysql> DROP TABLE <table_name>;                                      -- delete table
 mysql> SHOW TABLES;                                                  -- list table
+mysql> DESCRIBE <table_name>;                                        -- show schema
 
 -- example
 mysql> CREATE TABLE tutorials_tbl(
@@ -121,7 +104,7 @@ mysql> INSERT INTO <table_name> (<column1>, <column2>, ... <columnN>)  -- add ro
 mysql> INSERT INTO tutorials_tbl (tutorial_title, tutorial_author, submission_date)
   VALUES ("Learn PHP", "John", NOW()),
   ("Learn MySQL", "Mary", NOW()),
-  ("JAVA Tutorial", "Joe", '2020-01-01');
+  ("JAVA Tutorial", "Joe", '2020-01-01'),
   ("SQL Tutorial", "John", NOW());
 ```
 

@@ -14,6 +14,7 @@ install [minikube](./minikube.md)
 [ubuntu:~ ] $ minikube tunnel --cleanup
 ```
 
+
 ### istio
 
 ```bash
@@ -35,12 +36,15 @@ install [minikube](./minikube.md)
 ### istio
 
 ```bash
+[ubuntu:~ ] $ istioctl --help
+
 [ubuntu:~ ] $ istioctl profile list
 [ubuntu:~ ] $ istioctl profile dump demo
 [ubuntu:~ ] $ istioctl profile dump --config-path components.pilot demo
 [ubuntu:~ ] $ istioctl profile diff default demo
-[ubuntu:~ ] $ istioctl x uninstall --purge
+[ubuntu:~ ] $ istioctl uninstall --purge
 ```
+
 
 ### kubectl
 
@@ -56,15 +60,23 @@ install [minikube](./minikube.md)
 [ubuntu:~ ] $ kubectl get services|svc -A -o wide
 [ubuntu:~ ] $ kubectl get all -A -o wide
 
-#  for istio
+# for istio
 [ubuntu:~ ] $ kubectl get gateways|gw -A -o wide
 [ubuntu:~ ] $ kubectl get virtualservices|vs -A -o wide
 ```
 
 ```bash
-[ubuntu:~ ] $ istioctl proxy-status
+[ubuntu:~ ] $ istioctl proxy-status|ps
+[ubuntu:~ ] $ istioctl proxy-status <pod>
+
+[ubuntu:~ ] $ istioctl proxy-config|pc all <pod>
+[ubuntu:~ ] $ istioctl proxy-config|pc cluster <pod>
+
+[ubuntu:~ ] $ istioctl analyze
+
 [ubuntu:~ ] $ kubectl get po -n istio-system
 ```
+
 
 ---
 
@@ -191,8 +203,6 @@ EOF
 # for minikube
 [ubuntu:~ ] $ minikube service istio-ingressgateway -n istio-system
 [ubuntu:~ ] $ export INGRESS_HOST=$(minikube ip)
-
-
 ```
 
 ### clean
@@ -226,6 +236,8 @@ EOF
 
 ## bookinfo
 
+### without istio
+
 ```bash
 [ubuntu:~ ] $ kubectl apply -f <(istioctl kube-inject -f istio-1.10.0/samples/bookinfo/platform/kube/bookinfo.yaml)
 
@@ -236,4 +248,104 @@ EOF
 [ubuntu:~ ] $ kubectl get pod -l app=ratings
 [ubuntu:~ ] $ kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}'
 [ubuntu:~ ] $ kubectl exec "$(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}')" -c ratings -- curl -sS productpage:9080/productpage | grep -o "<title>.*</title>"
+
+# test
+[ubuntu:~ ] $ curl http://<cluster ip or external ip of productpage>:9080/productpage
+[ubuntu:~ ] $ curl http://<cluster ip or external ip of productpage>:9080
 ```
+
+
+### with istio
+
+```bash
+[ubuntu:~ ] $ kubectl apply -f istio-1.10.0/samples/bookinfo/networking/bookinfo-gateway.yaml
+[ubuntu:~ ] $ kubectl get gw
+
+# test
+[ubuntu:~ ] $ curl http://$INGRESS_HOST:$INGRESS_PORT/productpage
+```
+
+
+### prometheus
+
+```bash
+[ubuntu:~ ] $ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.10/samples/addons/prometheus.yaml
+[ubuntu:~ ] $ kubectl -n istio-system get svc prometheus
+[ubuntu:~ ] $ istioctl dashboard prometheus
+
+# test
+[ubuntu:~ ] $ watch curl http://<cluster ip or external ip of productpage>:9080/productpage
+[ubuntu:~ ] $ curl http://<cluster ip or external ip of prometheus>:9090
+```
+
+istio_requests_total
+
+istio_requests_total{destination_service="productpage.default.svc.cluster.local"}
+
+istio_requests_total{destination_service="reviews.default.svc.cluster.local", destination_version="v3"}
+
+rate(istio_requests_total{destination_service=~"productpage.*", response_code="200"}[5m])
+
+
+### grafana
+
+```bash
+[ubuntu:~ ] $ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.10/samples/addons/grafana.yaml
+[ubuntu:~ ] $ kubectl -n istio-system get svc grafana
+
+# test
+[ubuntu:~ ] $ watch curl http://<cluster ip or external ip of productpage>:9080/productpage
+[ubuntu:~ ] $ curl http://<cluster ip or external ip of service>:3000
+```
+
+
+### jaeger
+
+```bash
+[ubuntu:~ ] $ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.10/samples/addons/jaeger.yaml
+[ubuntu:~ ] $ kubectl -n istio-system get svc tracing zipkin jaeger-collector
+[ubuntu:~ ] $ istioctl dashboard jaeger
+
+# test
+[ubuntu:~ ] $ watch curl http://<cluster ip or external ip of productpage>:9080/productpage
+[ubuntu:~ ] $ curl http://<cluster ip or external ip of tracing>:80
+```
+
+
+### kiali
+
+```bash
+# for bash
+[ubuntu:~ ] $ KIALI_USERNAME=$(read -p 'Kiali Username: ' uval && echo -n $uval | base64)
+[ubuntu:~ ] $ KIALI_PASSPHRASE=$(read -sp 'Kiali Passphrase: ' pval && echo -n $pval | base64)
+
+# for zsh
+[ubuntu:~ ] $ KIALI_USERNAME=$(read '?Kiali Username: ' uval && echo -n $uval | base64)
+[ubuntu:~ ] $ KIALI_PASSPHRASE=$(read -s "?Kiali Passphrase: " pval && echo -n $pval | base64)
+
+[ubuntu:~ ] $ NAMESPACE=istio-system
+[ubuntu:~ ] $ kubectl create namespace $NAMESPACE
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kiali
+  namespace: $NAMESPACE
+  labels:
+    app: kiali
+type: Opaque
+data:
+  username: $KIALI_USERNAME
+  passphrase: $KIALI_PASSPHRASE
+EOF
+
+[ubuntu:~ ] $ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.10/samples/addons/kiali.yaml
+[ubuntu:~ ] $ kubectl -n istio-system get svc kiali
+
+# test
+[ubuntu:~ ] $ watch curl http://<cluster ip or external ip of productpage>:9080/productpage
+[ubuntu:~ ] $ curl http://<cluster ip or external ip of kiali>:20001
+```
+
+
+---

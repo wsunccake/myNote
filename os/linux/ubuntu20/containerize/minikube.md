@@ -25,7 +25,7 @@ install [docker-ce](./docker.md)
 [ubuntu:~ ] # kubectl version -o json
 
 [ubuntu:~ ] # apt-get install bash-completion
-[ubuntu:~ ] # kubectl completion bash >/etc/bash_completion.d/kubectl
+[ubuntu:~ ] # kubectl completion bash > /etc/bash_completion.d/kubectl
 
 # for user
 [ubuntu:~ ] $ echo 'source <(kubectl completion bash)' >>~/.bashrc
@@ -59,7 +59,15 @@ install [docker-ce](./docker.md)
 ## setup
 
 ```bash
+[ubuntu:~ ] $ virt-host-validate
+
 [ubuntu:~ ] $ minikube config set vm-driver kvm2
+[ubuntu:~ ] $ minikube config set memory 16384
+[ubuntu:~ ] $ minikube config set cpus 2
+[ubuntu:~ ] $ minikube config get vm-driver
+[ubuntu:~ ] $ minikube config get memory 16384
+[ubuntu:~ ] $ minikube config get cpus
+
 [ubuntu:~ ] $ minikube start
 
 # export minikube env to docker

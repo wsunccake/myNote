@@ -4,18 +4,18 @@
 ## virsh
 
 ```bash
-host:~ # grep -E 'svm|vmx' /proc/cpuinfo
-host:~ # apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virtinst virt-manager
-host:~ # modprobe vhost_net
-host:~ # lsmod | grep vhost
-host:~ # echo "vhost_net" | tee -a /etc/modules
+[host:~ ] # grep -E 'svm|vmx' /proc/cpuinfo
+[host:~ ] # apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virtinst virt-manager
+[host:~ ] # modprobe vhost_net
+[host:~ ] # lsmod | grep vhost
+[host:~ ] # echo "vhost_net" | tee -a /etc/modules
 
-host:~ # systemctl start libvirtd
-host:~ # systemctl enable libvirtd
-host:~ # systemctl status libvirtd
+[host:~ ] # systemctl start libvirtd
+[host:~ ] # systemctl enable libvirtd
+[host:~ ] # systemctl status libvirtd
 
-host:~ # usermod -aG libvirt <user>
-host:~ # usermod -aG kvm <user>
+[host:~ ] # usermod -aG libvirt <user>
+[host:~ ] # usermod -aG kvm <user>
 ```
 
 ```bash
@@ -42,7 +42,9 @@ host:~ # usermod -aG kvm <user>
 
 ```bash
 # for systemctl
-[guest:~ ] # systemctl enable serial-getty@ttyS0 --enable
+[guest:~ ] # systemctl enable serial-getty@ttyS0
+[guest:~ ] # systemctl start serial-getty@ttyS0
+[guest:~ ] # systemctl status serial-getty@ttyS0
 ```
 
 

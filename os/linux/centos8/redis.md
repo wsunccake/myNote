@@ -12,8 +12,8 @@ centos:~ # dnf install redis
 `method2`
 
 ```bash
-linux:~ # docker pull redis
-linux:~ # docker run -d [-p 6379:6379] \
+centos:~ # docker pull redis
+centos:~ # docker run -d [-p 6379:6379] \
     --name redis \
     [-v /myredis/conf:/usr/local/etc/redis] \
     redis
@@ -24,9 +24,9 @@ linux:~ # docker exec -it redis redis-cli
 `test`
 
 ```bash
-linux:~ # redis-cli -h <host> -p <port> -a <password> [--raw]
+centos:~ # redis-cli -h <host> -p <port> -a <password> [--raw]
 
-linux:~ # redis-cli -h 127.0.0.1
+centos:~ # redis-cli -h 127.0.0.1
 127.0.0.1:6379> PING
 ```
 

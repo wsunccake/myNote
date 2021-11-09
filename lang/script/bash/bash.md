@@ -498,6 +498,16 @@ END {
   "sum: ", sum
   "average: %f\n", sum/NR
 }
+
+# regrex
+linux:~ # awk '/<pattern>/{print $_}' <file>
+linux:~ # awk '{if ($1 ~ /<pattern>/) print $_}' <file>
+linux:~ # awk '{if ($1 == "<pattern>") print $_}' <file>
+linux:~ # awk '$1 ~ /<pattern>/{print $_}' <file>
+linux:~ # awk '$1 == "<pattern>"{print $_}' <file>
+
+# double quote
+linux:~ # awk "\$1 == \"<pattern>\" {printf \"$HOME %s\", \$_}" <file>
 ```
 
 
@@ -506,10 +516,15 @@ END {
 ## find
 
 ```bash
+# date
 linux:~ # find . -maxdepth 1 -mindepth 1 -type d
 linux:~ # find . -ctime +7 -type f
 linux:~ # find . -ctime -7 -type f
 linux:~ # find . -ctime  7 -type f
+
+# hard link
+linux:~ # find / -samefile <file>
+linux:~ # find / -xdev -samefile <file>
 ```
 
 

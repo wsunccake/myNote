@@ -26,6 +26,9 @@ ifconfig [address_family]							ip -f [family] a
 ifconfig [interface] add [address/prefixlength]		ip a add [ip_addr/mask] dev [interface]
 ifconfig [interface] address [address]				ip a add [ip_addr/mask] dev [interface]
 
+ip -br -c addr show
+ip -o -c addr show
+
 
 ifconfig [interface] mtu [n]						ip link set dev [interface] mtu [n]
 ifconfig [interface] multicast						ip link set dev [interface] multicast on|off
@@ -62,7 +65,7 @@ route -e
 route -F
 route [add|del] dev [interface]						ip route [add|chg|repl|del] dev [interface]
 route [add|del] [default] gw [gw]					ip route add default via [gw]
-route [add|del] -host							ip route [add|chg|repl|del] [ip_addr] via [ip_addr]
+route [add|del] -host							    ip route [add|chg|repl|del] [ip_addr] via [ip_addr]
 route [add|del] -net
 
 
