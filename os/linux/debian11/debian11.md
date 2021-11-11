@@ -28,6 +28,7 @@ debian:~ # apt install zsh
 # oh-my-zsh
 debian:~ $ chsh -s /bin/zsh
 debian:~ $ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+debian:~ $ omz update
 
 # fzf
 debian:~ $ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
