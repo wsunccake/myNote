@@ -15,18 +15,18 @@ func newPerson(name string) *person {
 }
 
 func main() {
-	fmt.Println(person{"Bob", 20})
-	fmt.Println(person{name: "Alice", age: 30})
-	fmt.Println(person{name: "Fred"})
-	fmt.Println(&person{name: "Ann", age: 40})
-	fmt.Println(newPerson("Jon"))
+	fmt.Println(person{"Bob", 20})					// {Bob 20}
+	fmt.Println(person{name: "Alice", age: 30})		// {Alice 30}
+	fmt.Println(person{name: "Fred"})				// {Fred 0}
+	fmt.Println(&person{name: "Ann", age: 40})		// &{Ann 40}
+	fmt.Println(newPerson("Jon"))					// &{Jon 42}
 
 	s := person{name: "Sean", age: 50}
-	fmt.Println(s.name)
+	fmt.Println(s.name)						// Sean
 	sp := &s
-	fmt.Println(sp.age)
+	fmt.Println(sp.age)						// 50
 	sp.age = 51
-	fmt.Println(sp.age)
+	fmt.Println(sp.age)						// 51
 }
 ```
 

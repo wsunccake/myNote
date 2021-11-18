@@ -54,12 +54,12 @@ func doublePointer(a *map[string]int) {
 
 func main() {
 	n := map[string]int{"foo": 1, "bar": 2}
-	fmt.Println(n)
+	fmt.Println(n)			// map[bar:2 foo:1]
 
 	doubleValue(n)
-	fmt.Println(n)
+	fmt.Println(n)			// map[bar:4 foo:2]
 
 	doublePointer(&n)
-	fmt.Println(n)
+	fmt.Println(n)			// map[bar:8 foo:4]
 }
 ```
