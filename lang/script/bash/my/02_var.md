@@ -103,3 +103,69 @@ echo "undefine VAR: ${VAR}"
 echo "VAR: ${VAR}"
 echo
 ```
+
+
+---
+
+## array
+
+```bash
+declare -a ARR
+ARR=(eth0 em1)
+ARR+=(en0)
+echo "ARR Length: ${#ARR[@]}"
+
+# loop
+for ITEM in ${ARR[*]}; do
+  echo "ITEM: $ITEM"
+done
+
+for ((i=0; i < ${#ARR[@]}; i++)); do
+  echo "Index: $i, ITEM: ${ARR[$i]}"
+done
+
+# append
+A1=(1 2 3 X)
+A2=(a b c X)
+A3=(${A1[@]} ${A2[*]})
+
+# string to array
+S=1,2,3,4
+A=(`echo $S | sed 's/,/ /g'`)
+
+# function
+show_array() {
+  local -n arr=$1
+
+  for i in "${arr[@]}"; do
+    echo "$i"
+  done
+}
+show_array ARR
+```
+
+
+---
+
+## associative array
+
+```bash
+declare -A MAP
+MAP=([eth0]=192.168.0.1 [em1]=172.16.0.1)
+echo "MAP Length: ${#MAP[@]}"
+
+# loop
+for KEY in ${!MAP[@]}; do
+  echo "KEY: $KEY, VALUE: ${MAP[$KEY]}"
+done
+
+# function
+show_associative_array() {
+  local -n ass_arr=$1
+
+  for k in ${!ass_arr[@]}; do
+    echo "key: $k -> val: ${ass_arr[$k]}"
+  done
+}
+show_associative_array MAP
+```

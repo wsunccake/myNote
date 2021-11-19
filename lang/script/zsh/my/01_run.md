@@ -1,5 +1,14 @@
 # run
 
+## version
+
+```zsh
+linux:~ # zsh --version
+```
+
+
+---
+
 ## script
 
 ```zsh

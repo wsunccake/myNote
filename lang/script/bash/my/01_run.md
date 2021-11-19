@@ -1,5 +1,14 @@
 # run
 
+## version
+
+```bash
+linux:~ # bash --version
+```
+
+
+---
+
 ## script
 
 ```bash
