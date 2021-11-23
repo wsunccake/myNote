@@ -63,3 +63,45 @@ func main() {
 	fmt.Println(n)			// map[bar:8 foo:4]
 }
 ```
+
+
+---
+
+## map to map
+
+```go
+mm0 := make(map[string]map[string]string)
+mm0["one"] = map[string]string{"o": "a"}
+fmt.Println("mm0", mm0)
+mm1 := map[string]map[string]string{"a": {"aa": "aaa"}}
+mm1["b"] = map[string]string{"bb": "bbb"}
+fmt.Println("mm1", mm1)
+```
+
+
+---
+
+## map to slice
+
+```go
+as0 := make(map[string][]string)
+as0["one"] = []string{"o", "a"}
+fmt.Println("am1", as0)
+as1 := map[string][]string{"a": {"a", "1"}}
+as1["b"] = []string{"b", "2"}
+fmt.Println("am1", as1)
+```
+
+
+---
+
+## slice to map
+
+```go
+sm0 := make([]map[string]int, 1)
+sm0[0] = map[string]int{"one": 1}
+fmt.Println("sm0", sm0)
+sm1 := [](map[string]int){map[string]int{"a": 1}}
+sm1 = append(sm1, map[string]int{"b": 2})
+fmt.Println("sm1", sm1)
+```
