@@ -50,6 +50,18 @@ func plusPlus(a, b, c int) int {
     return a + b + c
 }
 
+func gcd(x, y int) int {
+	for x != 0 && y != 0 {
+		t := x % y
+		x, y = y, t
+	}
+	return x
+}
+
+func lcm(x, y int) int {
+	return x * y / gcd(x, y)
+}
+
 func main() {
     res := plus(1, 2)
     fmt.Println("1+2 =", res)       // 3
@@ -140,6 +152,18 @@ func fact(n int) int {
         return 1
     }
     return n * fact(n-1)
+}
+
+func gcd(x, y int) int {
+	if y == 0 {
+		return x
+	}
+
+	if z := x % y; z == 0 {
+		return y
+	} else {
+		return gcd(y, z)
+	}
 }
 
 func main() {
