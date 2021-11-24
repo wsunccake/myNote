@@ -438,6 +438,7 @@ node must install nfs-common to support nfs
 ## persistent volume & persistent volume claim
 
 ```bash
+# nfs
 [ubuntu:~ ] $ cat << EOF | kubectl apply -f -
 apiVersion: v1
 kind: PersistentVolume
@@ -457,6 +458,22 @@ EOF
 
 [ubuntu:~ ] $ kubectl get pv
 [ubuntu:~ ] $ kubectl describe pv nfs-pv
+
+# hostpath
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: hostpath-pv 
+spec:
+  capacity:
+    storage: 100Gi 
+  accessModes:
+    - ReadWriteMany 
+  persistentVolumeReclaimPolicy: Retain 
+  hostPath: 
+    path: /data
+EOF
 
 
 [ubuntu:~ ] $ cat << EOF | kubectl apply -f -
