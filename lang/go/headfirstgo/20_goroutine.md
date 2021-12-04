@@ -144,6 +144,13 @@ time.Sleep(time.Second)
 fmt.Println(total)
 ```
 
+```bash
+linux:~/hello $ go test -race
+linux:~/hello $ go run -race
+linux:~/hello $ go build -race
+linux:~/hello $ go install -race
+```
+
 
 ---
 

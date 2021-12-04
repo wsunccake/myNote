@@ -26,6 +26,16 @@ func main() {
 	hi()
 	goodbye()
 }
+
+// hi1
+// hi3
+// hi2
+// goodbye2
+// goodbye3
+// goodbye1
+// hello1
+// Hello3
+// hello2
 ```
 
 ---

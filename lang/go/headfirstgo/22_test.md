@@ -26,6 +26,20 @@ func Plus(a int, b int) int {
 func Multiply(a int, b int) int {
 	return a * b
 }
+
+func PlusOrMinus(a int) string {
+	res := ""
+	switch {
+	case a > 0:
+		res = "+"
+	case a < 0:
+		res = "-"
+	default:
+		res = "0"
+	}
+
+	return res
+}
 ```
 
 ```go
@@ -66,6 +80,23 @@ func TestMultiply(t *testing.T) {
 	}
 }
 
+func TestPlusOrMinus(t *testing.T) {
+	type data struct {
+		input  int
+		output string
+	}
+	testData := []data{
+		{1, "+"},
+		{-1, "-"},
+	}
+
+	for _, d := range testData {
+		if lib.PlusOrMinus(d.input) != d.output {
+			t.Error("fail")
+		}
+	}
+}
+
 func BenchmarkPlus(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		lib.Plus(1, 2)
@@ -80,14 +111,24 @@ func TestMain(m *testing.M) {
 ```
 
 ```bash
+# test help
+linux:~/hello $ go help testflag
+
+# test
 linux:~/hello $ go test ./...
 linux:~/hello $ go test -v test/lib_test.go
 linux:~/hello $ go test -v --run ^TestPlus$ test/lib_test.go
-
 linux:~/hello $ go test -timeout 30s -run ^TestPlus$ hello/test
 
+# coverage
+linux:~/hello $ go test ./... -v -coverpkg=./...
+linux:~/hello $ go test hello/test -v -coverpkg ./... -coverprofile coverage.out
+linux:~/hello $ go tool cover -html coverage.out
+
+# benchmark
 linux:~/hello $ go test -benchmem -run=^$ -bench BenchmarkPlus hello/test
 linux:~/hello $ go test -v -bench BenchmarkPlus -benchtime=5s hello/test
 
+# other
 linux:~/hello $ go test -timeout 30s -run ^TestMain$ hello/test
 ```

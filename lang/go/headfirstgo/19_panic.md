@@ -3,21 +3,21 @@
 ## defer
 
 ```go
-fmt.Println("a")
-panic("oh no")
+fmt.Println("a")	// a
+panic("oh no")		// panic: oh no
 fmt.Println("b")
 ```
 
 ```go
-fmt.Println("a")
-panic("oh no")
+fmt.Println("a")	// a
+panic("oh no")		// panic: oh no
 defer fmt.Println("b")
 ```
 
 ```go
-fmt.Println("a")
-defer fmt.Println("a1")
-panic("oh no")
+fmt.Println("a")		// a
+defer fmt.Println("a1")	// a1
+panic("oh no")			// panic: oh no
 fmt.Println("b")
 ```
 
@@ -37,6 +37,9 @@ func main() {
 	myFunction()
 	fmt.Println("b")
 }
+
+// a
+// panic: oh no
 ```
 
 
@@ -61,4 +64,8 @@ func main() {
 	myFunction()
 	fmt.Println("b")
 }
+
+// a
+// Recovered: oh no
+// b
 ```
