@@ -1,8 +1,13 @@
 # install
 
 ```bash
-centos:~ # yum install python34 python34-pip   # for centos 7
-centos:~ # dnf module install python36         # for centos 8
+centos:~ # yum install python34 python34-pip            # for centos 7
+centos:~ # dnf module install python36                  # for centos 8
+
+debian:~ # apt install python3-pip                      # for debian 11
+
+linux:~ $ wget https://bootstrap.pypa.io/get-pip.py     # for user
+linux:~ $ python3 get-pip.py --user
 ```
 
 ```batch

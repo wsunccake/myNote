@@ -29,25 +29,59 @@ alpine:~ # setup-hostname
 ```
 
 
-## xorg
+---
+
+## gui
+
+### xorg
 
 ```bash
 alpine:~ # setup-xorg-base
 
 alpine:~ # X -configure
 alpine:~ # mv xorg.conf.new /etc/X11/xorg.conf
+```
 
-# xfce
+
+### xfce
+
+```bash
 alpine:~ # apk add xfce4 xfce4-terminal xfce4-screensaver lightdm-gtk-greeter 
 alpine:~ # rc-service dbus start
 alpine:~ # rc-update add dbus
 alpine:~ # startx
+```
 
-# dm
+
+### dm
+
+```bash
 alpine:~ # rc-service lightdm start
 alpine:~ # rc-update add lightdm
+```
 
-# mouse
+
+### awesome
+
+```bash
+alpine:~ # apk add awesome feh lxterminal
+alpine:~ # apk add lua
+alpine:~ # apk add adwaita-gtk2-theme adwaita-icon-theme
+alpine:~ # start /usr/bin/awesome
+```
+
+
+### i3
+
+```bash
+alpine:~ # apk add i3wm i3status i3lock
+alpine:~ # startx /usr/bin/i3
+```
+
+
+### mouse
+
+```bash
 alpine:~ # udevadm info --name=/dev/input/mouse0  --query=path
 alpine:~ # cat /proc/bus/input/devices
 ```
@@ -64,8 +98,8 @@ alpine:~ # vi /etc/apk/repositories
 
 alpine:~ # apk update
 alpine:~ # apk search <pkg>
-alpine:~ # apk info [-L|-P] [<pkg>]    # installed package
-alpine:~ # apk list [<pkg>]    # available package
+alpine:~ # apk info [-L|-P] [<pkg>]     # installed package
+alpine:~ # apk list [<pkg>]             # available package
 alpine:~ # apk stats
 
 alpine:~ # apk add <pkg>       # install package

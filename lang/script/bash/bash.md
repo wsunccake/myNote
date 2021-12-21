@@ -445,6 +445,8 @@ linux:~ # echo /usr/lib/python/site-package/xxx-1.0/yyy.zz | sed 's/\(.*\)\..*$/
 linux:~ # echo /usr/lib/python/site-package/xxx-1.0/yyy.zz | sed 's/\..*$//'            # /usr/lib/python/site-package/xxx-1
 linux:~ # echo /usr/lib/python/site-package/xxx-1.0/yyy.zz | sed 's/\///'               # usr/lib/python/site-package/xxx-1.0/yyy.zz
 linux:~ # echo /usr/lib/python/site-package/xxx-1.0/yyy.zz | sed 's/.*\///'             # yyy.zz
+
+linux:~ # sed "s/\r//g" <file>    # remove ^M (windows carry return)
 ```
 
 ```bash
@@ -508,6 +510,9 @@ linux:~ # awk '$1 == "<pattern>"{print $_}' <file>
 
 # double quote
 linux:~ # awk "\$1 == \"<pattern>\" {printf \"$HOME %s\", \$_}" <file>
+
+# NF: number fields (column), NR: number record (row), $_
+linux:~ # awk '{if (NF < 3) {printf line %s, %s\n", NR, $_}}' <file>
 ```
 
 

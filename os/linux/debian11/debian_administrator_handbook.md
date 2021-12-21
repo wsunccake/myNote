@@ -461,6 +461,9 @@ debian:~ # locate <pattern>
 ```bash
 debian:~ # diff -u file.old file.new > file.patch       # generat patch
 debian:~ # patch -p0 file.old < file.patch              # patch file
+
+debian:~ # patch -Np0 file.old < file.patch             # forward patch file
+debian:~ # patch -Rp0 file.old < file.patch             # reverse patch file
 ```
 
 

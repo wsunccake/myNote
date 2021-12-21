@@ -257,7 +257,7 @@ master:~ # ip link show
 
 ---
 
-# namespace
+## namespace
 
 ```bash
 master:~ # kubectl get ns                  # namespace
@@ -1050,7 +1050,7 @@ master:~ # kubectl delete ns demo
 ## service discovery
 
 
---
+---
 
 ## health check
 
@@ -1058,6 +1058,16 @@ master:~ # kubectl delete ns demo
 ---
 
 ## volume
+
+
+---
+
+## file
+
+```bash
+master:~ # kubectl cp <src> <pod>:<dest>
+master:~ # kubectl cp <pod>:<src> <dest>
+```
 
 
 ---

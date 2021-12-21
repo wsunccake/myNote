@@ -90,11 +90,27 @@ network:
 
 $HOME/.config/i3
 
-$mod + ENTER: open terminal
+$mod + ENTER          : open terminal
 
-$mod + Shift + q: closing application window
+$mod + Shift + q      : closing application window
 
-$mod + Shift + e: exit i3
+$mod + Shift + e      : exit i3
+
+$mod + Shift + space  : float window
+
+$mod + j              : left
+
+$mod + k              : down
+
+$mod + l              : up
+
+$mod + ;              : right
+
+$mod + e              : split vertical / horizontal
+
+$mod + w              : tab
+
+$mod + s              : stack
 
 
 ---
@@ -118,3 +134,21 @@ $mod + Shift + e: exit i3
 [ubuntu:~ ] # apt install zsh
 ```
 
+
+---
+
+## timedate
+
+```bash
+[ubuntu:~ ] # timedatectl set-ntp true
+[ubuntu:~ ] # timedatectl set-timezone UTC
+[ubuntu:~ ] # vi /etc/systemd/timesyncd.conf
+[Time]
+NTP=clock.stdtime.gov.tw
+FallbackNTP=ntp.ubuntu.com
+RootDistanceMaxSec=5
+PollIntervalMinSec=32
+PollIntervalMaxSec=2048
+
+[ubuntu:~ ] # systemctl restart systemd-timesyncd.service
+```

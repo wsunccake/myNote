@@ -415,6 +415,9 @@ client:~ # docker push <registry_ip>:5000/busybox
 client:~ # curl -X GET http://<registry_ip>:5000/v2/_catalog
 client:~ # curl -X GET http://<registry_ip>:5000/v2/<name>/tags/list
 
+client:~ # curl -k -X GET https://<registry_ip>:5000/v2/_catalog
+client:~ # curl -k -X GET https://<registry_ip>:5000/v2/<name>/tags/list
+
 # download image
 client:~ # docker rmi docker.io/busybox <registry_ip>:5000/busybox
 client:~ # docker images

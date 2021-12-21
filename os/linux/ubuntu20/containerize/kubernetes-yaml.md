@@ -435,6 +435,99 @@ node must install nfs-common to support nfs
 
 ---
 
+## persistent volume & persistent volume claim
+
+```bash
+# nfs
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv 
+spec:
+  capacity:
+    storage: 100Gi 
+  accessModes:
+    - ReadWriteMany 
+  persistentVolumeReclaimPolicy: Retain 
+  nfs: 
+    path: /data
+    server: 192.168.10.1
+    readOnly: fals
+EOF
+
+[ubuntu:~ ] $ kubectl get pv
+[ubuntu:~ ] $ kubectl describe pv nfs-pv
+
+# hostpath
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: hostpath-pv 
+spec:
+  capacity:
+    storage: 100Gi 
+  accessModes:
+    - ReadWriteMany 
+  persistentVolumeReclaimPolicy: Retain 
+  hostPath: 
+    path: /data
+EOF
+
+
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-pvc  
+spec:
+  accessModes:
+  - ReadWriteMany      
+  resources:
+     requests:
+       storage: 100Gi
+EOF
+
+[ubuntu:~ ] $ kubectl get pvc
+[ubuntu:~ ] $ kubectl describe pvc nfs-pvc
+
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alpine
+  template:
+    metadata:
+      labels:
+        app: alpine
+    spec:
+      containers:
+      - name: alpine
+        image: alpine
+        stdin: true
+        tty: true
+        volumeMounts:
+        - name: nfsvol
+          mountPath: /test-data
+      volumes:
+      - name: nfsvol
+        persistentVolumeClaim:
+          claimName: nfs-pvc
+EOF
+
+[ubuntu:~ ] $ kubectl get pod
+[ubuntu:~ ] $ kubectl describe pod alpine-7cf564f7f5-jh48q
+[ubuntu:~ ] $ kubectl exec -it alpine-7cf564f7f5-jh48q [-c <container>] -- ls /test-data
+```
+
+---
+
 ## job
 
 ```bash
@@ -458,4 +551,146 @@ EOF
 [ubuntu:~ ] $ kubectl get jobs.batch
 [ubuntu:~ ] $ kubectl get pod
 [ubuntu:~ ] $ kubectl logs pi-xg6kh
+```
+
+
+---
+
+## namespce
+
+```bash
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo-ns
+  labels:
+    name: demo-ns
+EOF
+
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine
+  namespace: demo-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alpine
+  template:
+    metadata:
+      labels:
+        app: alpine
+    spec:
+      containers:
+      - name: alpine
+        image: alpine
+        stdin: true
+        tty: true
+EOF
+
+[ubuntu:~ ] $ kubectl get namespace
+[ubuntu:~ ] $ kubectl -n demo-ns get pods
+```
+
+
+---
+
+## configMap
+
+```bash
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env-config
+data:
+  color: red
+EOF
+
+[ubuntu:~ ] $ kubectl get cm
+[ubuntu:~ ] $ kubectl describe cm env-config
+
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine
+  labels:
+    app: alpine
+spec:
+  containers:
+  - name: alpine
+    image: alpine
+    stdin: true
+    tty: true
+    env:
+    - name: COLOR
+      valueFrom:
+        configMapKeyRef:
+          name: env-config
+          key: color
+EOF
+
+[ubuntu:~ ] $ kubectl describe pod alpine
+[ubuntu:~ ] $ kubectl exec -it alpine -- env
+```
+
+
+---
+
+## secret
+
+### docker-registry
+
+gcr
+
+```bash
+# activate service account
+[ubuntu:~ ] $ gcloud auth activate-service-account --key-file=key.json
+[ubuntu:~ ] $ gcloud auth print-access-token
+
+# json file
+[ubuntu:~ ] $ kubectl create secret docker-registry gcr-json-key \
+  --docker-server=gcr.io \
+  --docker-username=_json_key \
+  --docker-password="$(cat key.json)" \
+  --docker-email=user@email.com
+
+[ubuntu:~ ] $ kubectl get secrets
+[ubuntu:~ ] $ kubectl describe secrets gcr-json-key
+[ubuntu:~ ] $ kubectl get secret gcr-json-key --output="jsonpath={.data.\.dockerconfigjson}" | base64 --decode
+[ubuntu:~ ] $ kubectl get secret gcr-json-key --output="jsonpath={.data.\.dockerconfigjson}" | base64 --decode | jq -r '.auths."gcr.io".auth' | base64 --decode
+
+# token
+[ubuntu:~ ] $ kubectl create secret docker-registry gcr-access-token \
+  --docker-server=gcr.io \
+  --docker-username=oauth2accesstoken \
+  --docker-password="$(gcloud auth print-access-token)" \
+  --docker-email=user@email.com
+
+[ubuntu:~ ] $ kubectl get secrets
+[ubuntu:~ ] $ kubectl describe secrets gcr-access-token
+[ubuntu:~ ] $ kubectl get secret gcr-access-token --output="jsonpath={.data.\.dockerconfigjson}" | base64 --decode
+[ubuntu:~ ] $ kubectl get secret gcr-access-token --output="jsonpath={.data.\.dockerconfigjson}" | base64 --decode | jq -r '.auths."gcr.io".auth' | base64 --decode
+
+# pod
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-pod
+  labels:
+    app: hello-world
+spec:
+  imagePullSecrets:
+  - name: gcr-access-token
+  containers:
+  - name: flaskapp
+    image: gcr.io/<project>/<images>:latest
+    ports:
+    - containerPort: 5000
+EOF
 ```
