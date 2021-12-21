@@ -115,3 +115,19 @@ debian:~ # apt-get install docker-ce docker-ce-cli containerd.io
 debian:~ # apt-cache madison docker-ce
 debian:~ # apt-get install docker-ce=<VERSION_STRING> docker-ce-cli=<VERSION_STRING> containerd.io
 ```
+
+
+---
+
+## cloud
+
+### gcp
+
+```bash
+debian:~ # apt-get install apt-transport-https ca-certificates gnupg
+debian:~ # echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+debian:~ # curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+debian:~ # apt-get update && apt-get install google-cloud-sdk
+
+debian:~ # gcloud init
+```
