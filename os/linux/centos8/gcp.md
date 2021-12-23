@@ -131,7 +131,7 @@ web: https://console.cloud.google.com/
 [centos:~ ] $ echo 'complete -F __start_kubectl k' >>~/.bashrc
 
 # auto-completetion for user
-[centos:~ ] $ source <(kubectl completion zsh) >>~/.zshrc
+[centos:~ ] $ echo "source <(kubectl completion zsh)" >>~/.zshrc
 [centos:~ ] $ echo 'alias k=kubectl' >>~/.zshrc
 [centos:~ ] $ echo 'complete -F __start_kubectl k' >>~/.zshrc
 
