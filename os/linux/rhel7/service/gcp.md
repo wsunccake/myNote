@@ -226,6 +226,8 @@ linux:~ # gcloud container images describe <gcr>/<project>/<image>
 # install kubectl
 linux:~ # gcloud components install kubectl                        # create $HOME/.kube/config
 
+# import exist gke
+linux:~ #  gcloud container clusters get-credentials <cluster> [--zone <zone>] --project <project>
 
 # create cluster
 linux:~ # gcloud container clusters create <cluster> [--num-nodes=<n>] [--zone <zone>]

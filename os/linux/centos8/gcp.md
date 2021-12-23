@@ -66,10 +66,25 @@ web: https://console.cloud.google.com/
 
 ```bash
 [centos:~ ] # gcloud container clusters list
-
 [centos:~ ] # gcloud container images list
-
 [centos:~ ] # gcloud container node-pools list --cluster <cluster>
+
+# project
+[centos:~ ] # gcloud projects list
+[centos:~ ] # gcloud config get-value project
+[centos:~ ] # gcloud config set project <project>
+
+# zone
+[centos:~ ] # gcloud compute zones list
+[centos:~ ] # gcloud config set compute/zone <zone>
+
+# cluster
+[centos:~ ] # gcloud container clusters list
+[centos:~ ] # gcloud container clusters describe <cluster> [--zone <zone>]
+
+# import gcloud credentials to k8s
+[centos:~ ] # gcloud container clusters get-credentials <cluster> [--zone <zone>] --project <project>
+-> .kube/config
 ```
 
 ---
