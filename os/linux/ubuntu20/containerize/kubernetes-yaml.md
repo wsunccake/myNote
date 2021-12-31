@@ -76,6 +76,8 @@ EOF
 
 [ubuntu:~ ] $ kubectl exec -it hello-pod  [-c <container>] -- sh
 [ubuntu:~ ] $ kubectl logs -f hello-pod
+
+[ubuntu:~ ] $ kubectl wait --for=condition=Ready --timeout=60s pod <pod>
 ```
 
 
