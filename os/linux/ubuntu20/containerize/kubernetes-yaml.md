@@ -447,6 +447,7 @@ kind: PersistentVolume
 metadata:
   name: nfs-pv 
 spec:
+# storageClassName: <storage_class_name>
   capacity:
     storage: 100Gi 
   accessModes:
@@ -468,6 +469,7 @@ kind: PersistentVolume
 metadata:
   name: hostpath-pv 
 spec:
+# storageClassName: <storage_class_name>
   capacity:
     storage: 100Gi 
   accessModes:
@@ -484,6 +486,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: nfs-pvc  
 spec:
+# storageClassName: <storage_class_name>
   accessModes:
   - ReadWriteMany      
   resources:
@@ -491,6 +494,7 @@ spec:
        storage: 100Gi
 EOF
 
+# <pv>.spec.capacity.storage >= <pvc>.spec.resources.requests.storage
 [ubuntu:~ ] $ kubectl get pvc
 [ubuntu:~ ] $ kubectl describe pvc nfs-pvc
 
