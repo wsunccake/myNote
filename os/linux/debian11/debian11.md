@@ -1,5 +1,21 @@
 # debian 11
 
+## system
+
+```bash
+# mount disk by uuid
+debian:~ # lsblk
+debian:~ # lsblk -pt
+debian:~ # lsblk -pl
+debian:~ # blkid
+debian:~ # cat /etc/fstab
+UUID=<disk uuid>   <mount point>   <fs type>  defaults,errors=remount-ro 0  0
+debian:~ # mount -a
+```
+
+
+---
+
 ## develop
 
 ```bash
