@@ -3,7 +3,9 @@
 ## install
 
 ```bash
-linux:~ $ go get -u github.com/spf13/cobra/cobra
+linux:~ $ env GO111MODULE=on go get -u github.com/spf13/cobra/cobra
+# get will be deprecated, install instead of get
+linux:~ $ env GO111MODULE=on go install github.com/spf13/cobra/cobra@latest
 
 linux:~ $ export PATH=$PATH:$(go env GOPATH)/bin
 linux:~ $ which cobra
@@ -23,9 +25,16 @@ linux:~ $ cd hello
 # init project
 linux:~/hello $ go mod init hello
 
-# create exampl
+# create example
 linux:~/hello $ cobra init .
 linux:~/hello $ tree .
+.
+├── cmd
+│   └── root.go
+├── go.mod
+├── go.sum
+├── LICENSE
+└── main.go
 ```
 
 
@@ -87,6 +96,15 @@ func init() {
 }
 ```
 
+```bash
+linux:~/hello $ go build
+
+linux:~/hello $ ./hello
+linux:~/hello $ ./hello -h
+linux:~/hello $ ./hello --help
+linux:~/hello $ ./hello -a
+```
+
 
 ### flag
 
@@ -133,6 +151,15 @@ func init() {
 }
 ```
 
+```bash
+linux:~/hello $  go build
+
+linux:~/hello $ ./hello
+linux:~/hello $ ./hello -h
+linux:~/hello $ ./hello -n go
+linux:~/hello $ ./hello go
+```
+
 
 ### subcommand
 
@@ -141,6 +168,8 @@ linux:~/hello $ cobra add demo
 linux:~/hello $ cat cmd/demo.go
 
 linux:~/hello $ go build
+
 linux:~/hello $ ./hello -h
 linux:~/hello $ ./hello demo
+linux:~/hello $ ./hello demo -h
 ```
