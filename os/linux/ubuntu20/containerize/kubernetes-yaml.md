@@ -55,6 +55,20 @@ services:
 ```
 
 
+### kubectl - node
+
+```bash
+[ubuntu:~ ] $ kubectl get node [--show-label]
+[ubuntu:~ ] $ kubectl label node <node> <key>=<value>
+[ubuntu:~ ] $ kubectl label node <node> <key>-
+
+# example
+[ubuntu:~ ] $ kubectl get node --show-label
+[ubuntu:~ ] $ kubectl label node 192.168.1.1 role=prod
+[ubuntu:~ ] $ kubectl label node 192.168.1.1 role-
+```
+
+
 ### kubectl - pod
 
 ```bash
