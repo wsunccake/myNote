@@ -4,7 +4,7 @@
 
 ```bash
 linux:~ $ env GO111MODULE=on go get -u github.com/spf13/cobra/cobra
-# get will be deprecated, install instead of get
+# or
 linux:~ $ env GO111MODULE=on go install github.com/spf13/cobra/cobra@latest
 
 linux:~ $ export PATH=$PATH:$(go env GOPATH)/bin
