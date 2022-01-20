@@ -46,6 +46,11 @@ debian:~ $ chsh -s /bin/zsh
 debian:~ $ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 debian:~ $ omz update
 
+# oh-my-zsh config
+debian:~ $ vi ~/.zshrc
+ZSH_THEME="robbyrussell"    -> ZSH_THEME="agnoster"
+plugins=()                  -> plugins=(git tmux)
+
 # fzf
 debian:~ $ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 debian:~ $ ~/.fzf/install
