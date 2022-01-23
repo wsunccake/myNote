@@ -50,9 +50,29 @@ opensuse:~ $ source py39/bin/activate
 (<venv>) opensuse:~ $ pip install ipython
 (<venv>) opensuse:~ $ ipython
 
-# run/load python file
-In []: run <file>.py
-In []: %hist
+In []: %run <file>.py               # run/load python file
+In []: %run -d -b <n> <file>.py     # run python with pdb / debug
+ipdb> ?         # help
+ipdb> ll        # list code
+ipdb> b         # list break point
+ipdb> b <n>     # add break point in <n> line
+ipdb> cl        # clear all break point
+ipdb> cl <m>    # clear <m> break point
+ipdb> p <var>   # show var
+ipdb> c         # go to next break point
+ipdb> q         # q
+
+In []: %%time                       # time execution
+...:L = []
+...: for n in range(1000):
+...:     L.append(n ** 2)
+In []: %timeit L = [n ** 2 for n in range(1000)]
+In []: %time?
+
+In []: %hist [-n]                   # history
+In []: %hist <i> [<j> ...]
+In []: %hist <i>-<j>
+In []: %hist -f <file>.py
 ```
 
 
