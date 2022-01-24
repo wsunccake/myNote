@@ -88,7 +88,7 @@ In []: %hist -f <file>.py
 ### tk
 
 ```bash
-opensuse:~ # python39-tk
+opensuse:~ # zypper in python39-tk
 opensuse:~ $ python3.9 -m tkinter
 ```
 
