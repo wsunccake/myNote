@@ -146,9 +146,12 @@ web: https://console.cloud.google.com/
 [centos:~ ] # gcloud container clusters list
 [centos:~ ] # gcloud container clusters get-credentials <cluster> [--zone <zone>]
 
-[centos:~ ] # kubectl config get-contexts
 [centos:~ ] # kubectl config get-cluster
 [centos:~ ] # kubectl config set-cluster <cluster>
+
+[centos:~ ] # kubectl config get-contexts
+[centos:~ ] # kubectl config set-context 
+[centos:~ ] # kubectl config use-context <context>
 [centos:~ ] # kubectl config current-context
 
 [centos:~ ] # kubectl cluster-info
