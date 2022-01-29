@@ -1,4 +1,4 @@
-# opensuse
+# chapter 01
 
 ## network
 
@@ -99,3 +99,12 @@ opensuse:~ $ python3.9 -m tkinter
 (<venv>) opensuse:~ $ pip install pygame
 (<venv>) opensuse:~ $ python -m pygame.examples.aliens
 ```
+
+
+### sample code
+
+http://books.gotop.com.tw/download/ACG006300
+
+[py_samples.zip](http://dlcenter.gotop.com.tw/SampleFiles/ACG006300/download/py_samples.zip)
+
+Pnohtyg
