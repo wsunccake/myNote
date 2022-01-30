@@ -86,13 +86,14 @@ linux:~ # kubectl config view --minify [--kubeconfig <kube config>]
 
 # context
 linux:~ # kubectl config get-contexts
-kubectl config rename-context <old name> <new name>
+linux:~ # kubectl config rename-context <old name> <new name>
 linux:~ # kubectl config use-context <context>
 linux:~ # kubectl config current-context
 linux:~ # kubectl config set-context <context>
 \ [--namespace <namespace>]
 \ [--cluster=<cluster>] 
 \ [--user=user_nickname]
+linux:~ # kubectl config delete-context <context>
 
 # cluster
 linux:~ # kubectl config get-clusters
@@ -115,6 +116,10 @@ linux:~ # kubectl delete namespace <namespace>
 
 ## other
 
-```
+```bash
 linux:~ # kubectl port-forward <type>/<name> [<local port>:]<remote port>
+
+linux:~ # kubectl -n <namespace> cp <file spec src> <file spec dest> [-c <container>]
+remote: [<namespace>/]<pod>:<path>
+local: <path>
 ```
