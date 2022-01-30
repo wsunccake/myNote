@@ -238,13 +238,19 @@ EOF
 ## kube config
 
 ```bash
-[ubuntu:~ ] $ cat /etc/kubernetes/admin.conf                              # system default
-[ubuntu:~ ] $ cat $HOME/.kube/config                                      # user default
-[ubuntu:~ ] $ export KUBECONFIG=<kube_config>                             # environment variable
+[ubuntu:~ ] $ cat /etc/kubernetes/admin.conf                                # system default
+[ubuntu:~ ] $ cat $HOME/.kube/config                                        # user default
+[ubuntu:~ ] $ export KUBECONFIG=<kube_config>                               # environment variable
 
-[ubuntu:~ ] $ kubectl config view --minify [--kubeconfig <kube_config>]   # run command with option
+[ubuntu:~ ] $ kubectl config view [--minify] [--kubeconfig <kube_config>]   # run command with option
 [ubuntu:~ ] $ kubectl config get-contexts
-[ubuntu:~ ] $ kubectl config set-context <context> [--namespace <namespace>]
+[ubuntu:~ ] $ kubectl config rename-context <old name> <new name>
+[ubuntu:~ ] $ kubectl config current-context
+[ubuntu:~ ] $ kubectl config set-context <context> \
+  [--namespace <namespace>] \
+  [--cluster=<cluster>] \
+  [--user=user_nickname]
+
 
 # ie
 [ubuntu:~ ] $ kubectl config get-contexts

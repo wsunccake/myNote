@@ -22,13 +22,23 @@ EOM
 ```
 
 
+### component
+
+```bash
+[centos:~ ] # gcloud components list
+[centos:~ ] # gcloud components install <component id>
+[centos:~ ] # gcloud components remove <component id>
+[centos:~ ] # gcloud components update
+```
+
+
 ### auth
 
 ```bash
 [centos:~ ] # gcloud init [--skip-diagnostics|--console-only]
 ...
+# -> ls $HOME/.boto
 
-[centos:~ ] # ls .boto
 [centos:~ ] # gcloud auth login <account>
 ```
 
@@ -38,25 +48,40 @@ web: https://console.cloud.google.com/
 ### config
 
 ```bash
-# project
-[centos:~ ] # gcloud projects list
-[centos:~ ] # gcloud config set project <PROJECT_ID>
-[centos:~ ] # gcloud config get-value project
-[centos:~ ] # export PROJECT_ID=$(gcloud config get-value project -q)
-[centos:~ ] # gcloud projects get-iam-policy $PROJECT_ID
-
-# zone
-[centos:~ ] # gcloud compute zones list                 # all zone
-[centos:~ ] # gcloud compute instances list             # vm on zone
-[centos:~ ] # gcloud config set compute/zone <ZONE>
-[centos:~ ] # gcloud config get-value compute/zone
-
 [centos:~ ] # gcloud config --help
 [centos:~ ] # gcloud config list [--all]
-[centos:~ ] # gcloud config set core/project <project>
+[centos:~ ] # gcloud config get-value
+[centos:~ ] # gcloud config set <section>/<property> <value>
+[centos:~ ] # gcloud config unset
+
+[centos:~ ] # gcloud config get-value core/project
+[centos:~ ] # gcloud config get-value compute/zone
+
+[centos:~ ] # gcloud config set core/project <project id>
+[centos:~ ] # gcloud config set compute/zone <zone>
 
 [centos:~ ] # gcloud config configurations list
 [centos:~ ] # gcloud config configurations activate <conf>
+```
+
+
+## project
+
+```bash
+[centos:~ ] # gcloud projects list
+[centos:~ ] # export PROJECT_ID=$(gcloud config get-value project -q)
+[centos:~ ] # gcloud projects get-iam-policy $PROJECT_ID
+```
+
+
+---
+
+## gce
+
+```bash
+[centos:~ ] # gcloud compute regions list               # regsion
+[centos:~ ] # gcloud compute zones list                 # all zone
+[centos:~ ] # gcloud compute instances list             # vm on zone
 ```
 
 
@@ -65,26 +90,17 @@ web: https://console.cloud.google.com/
 ## gke
 
 ```bash
-[centos:~ ] # gcloud container clusters list
-[centos:~ ] # gcloud container images list
-[centos:~ ] # gcloud container node-pools list --cluster <cluster>
-
-# project
-[centos:~ ] # gcloud projects list
-[centos:~ ] # gcloud config get-value project
-[centos:~ ] # gcloud config set project <project>
-
-# zone
-[centos:~ ] # gcloud compute zones list
-[centos:~ ] # gcloud config set compute/zone <zone>
-
 # cluster
 [centos:~ ] # gcloud container clusters list
 [centos:~ ] # gcloud container clusters describe <cluster> [--zone <zone>]
+[centos:~ ] # gcloud container clusters get-credentials <cluster> \
+  [--project <project>] \
+  [--region <region>] \
+  [--zone <zone>] # import gcloud credentials to local kubectl
+# -> $HOME/.kube/config
 
-# import gcloud credentials to k8s
-[centos:~ ] # gcloud container clusters get-credentials <cluster> [--zone <zone>] --project <project>
--> .kube/config
+[centos:~ ] # gcloud container images list
+[centos:~ ] # gcloud container node-pools list --cluster <cluster>
 ```
 
 ---
@@ -106,53 +122,44 @@ web: https://console.cloud.google.com/
 ### install
 
 ```bash
-# download and valid
-[centos:~ ] # curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-[centos:~ ] # curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
-[centos:~ ] # echo "$(<kubectl.sha256) kubectl" | sha256sum --check
+[centos:~ ] # gcloud components install kubectl
+```
 
-# install for system
-[centos:~ ] # install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
-# install for user
-[centos:~ ] $ mkdir -p $HOME/.local/bin/kubectl
-[centos:~ ] $ mv ./kubectl $HOME/.local/bin/kubectl
-[centos:~ ] $ export PATH=$HOME/.local/bin/kubectl:$PATH
+### auto-completetion
 
+```bash
 # install bash-completion
 [centos:~ ] # dnf install bash-completion
 
-# auto-completetion for system
-[centos:~ ] # kubectl completion bash >/etc/bash_completion.d/kubectl
-
-# auto-completetion for user
+# auto-completetion for bash user
 [centos:~ ] $ echo "source <(kubectl completion bash)" >> ~/.bashrc
 [centos:~ ] $ echo 'alias k=kubectl' >>~/.bashrc
 [centos:~ ] $ echo 'complete -F __start_kubectl k' >>~/.bashrc
 
-# auto-completetion for user
+# auto-completetion for zsh user
 [centos:~ ] $ echo "source <(kubectl completion zsh)" >>~/.zshrc
 [centos:~ ] $ echo 'alias k=kubectl' >>~/.zshrc
 [centos:~ ] $ echo 'complete -F __start_kubectl k' >>~/.zshrc
-
-# test
-[centos:~ ] # kubectl version --client
 ```
 
 
 ### import gke credentials to kubectl
 
 ```bash
-[centos:~ ] # gcloud container clusters list
-[centos:~ ] # gcloud container clusters get-credentials <cluster> [--zone <zone>]
-
-[centos:~ ] # kubectl config get-cluster
+# cluster
+[centos:~ ] # kubectl config get-clusters
 [centos:~ ] # kubectl config set-cluster <cluster>
 
+# context
 [centos:~ ] # kubectl config get-contexts
-[centos:~ ] # kubectl config set-context 
+kubectl config rename-context <old name> <new name>
 [centos:~ ] # kubectl config use-context <context>
 [centos:~ ] # kubectl config current-context
+[centos:~ ] # kubectl config set-context <context>
+\ [--namespace <namespace>]
+\ [--cluster=<cluster>] 
+\ [--user=user_nickname]
 
 [centos:~ ] # kubectl cluster-info
 ```
