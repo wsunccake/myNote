@@ -27,6 +27,29 @@ add cursor below: Shift + Alt + DownArrow
 ```
 
 
+## setting.json
+
+```
+    "editor.fontSize": 14,
+    "editor.fontFamily": "Fira Code",
+    "editor.rulers": [
+        {
+          "column": 80,
+          "color": "#ff9900"
+        },
+        {
+            "column":100,
+            "color":"#fbff11"
+        },
+        {
+         "column": 120,
+         "color": "#9f0af5"
+        },
+    ],
+    "editor.minimap.enabled": false
+```
+
+
 ---
 
 ## plugin

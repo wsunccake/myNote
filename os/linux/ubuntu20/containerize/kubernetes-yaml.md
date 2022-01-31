@@ -55,6 +55,20 @@ services:
 ```
 
 
+### kubectl - node
+
+```bash
+[ubuntu:~ ] $ kubectl get node [--show-label]
+[ubuntu:~ ] $ kubectl label node <node> <key>=<value>
+[ubuntu:~ ] $ kubectl label node <node> <key>-
+
+# example
+[ubuntu:~ ] $ kubectl get node --show-label
+[ubuntu:~ ] $ kubectl label node 192.168.1.1 role=prod
+[ubuntu:~ ] $ kubectl label node 192.168.1.1 role-
+```
+
+
 ### kubectl - pod
 
 ```bash
@@ -76,6 +90,8 @@ EOF
 
 [ubuntu:~ ] $ kubectl exec -it hello-pod  [-c <container>] -- sh
 [ubuntu:~ ] $ kubectl logs -f hello-pod
+
+[ubuntu:~ ] $ kubectl wait --for=condition=Ready --timeout=60s pod <pod>
 ```
 
 
@@ -222,13 +238,19 @@ EOF
 ## kube config
 
 ```bash
-[ubuntu:~ ] $ cat /etc/kubernetes/admin.conf
-[ubuntu:~ ] $ cat $HOME/.kube/config
-[ubuntu:~ ] $ export KUBECONFIG=<kube_config>
+[ubuntu:~ ] $ cat /etc/kubernetes/admin.conf                                # system default
+[ubuntu:~ ] $ cat $HOME/.kube/config                                        # user default
+[ubuntu:~ ] $ export KUBECONFIG=<kube_config>                               # environment variable
 
-[ubuntu:~ ] $ kubectl config view --minify
+[ubuntu:~ ] $ kubectl config view [--minify] [--kubeconfig <kube_config>]   # run command with option
 [ubuntu:~ ] $ kubectl config get-contexts
-[ubuntu:~ ] $ kubectl config set-context <context> [--namespace <namespace>]
+[ubuntu:~ ] $ kubectl config rename-context <old name> <new name>
+[ubuntu:~ ] $ kubectl config current-context
+[ubuntu:~ ] $ kubectl config set-context <context> \
+  [--namespace <namespace>] \
+  [--cluster=<cluster>] \
+  [--user=user_nickname]
+
 
 # ie
 [ubuntu:~ ] $ kubectl config get-contexts
@@ -445,6 +467,7 @@ kind: PersistentVolume
 metadata:
   name: nfs-pv 
 spec:
+# storageClassName: <storage_class_name>
   capacity:
     storage: 100Gi 
   accessModes:
@@ -466,6 +489,7 @@ kind: PersistentVolume
 metadata:
   name: hostpath-pv 
 spec:
+# storageClassName: <storage_class_name>
   capacity:
     storage: 100Gi 
   accessModes:
@@ -482,6 +506,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: nfs-pvc  
 spec:
+# storageClassName: <storage_class_name>
   accessModes:
   - ReadWriteMany      
   resources:
@@ -489,6 +514,7 @@ spec:
        storage: 100Gi
 EOF
 
+# <pv>.spec.capacity.storage >= <pvc>.spec.resources.requests.storage
 [ubuntu:~ ] $ kubectl get pvc
 [ubuntu:~ ] $ kubectl describe pvc nfs-pvc
 

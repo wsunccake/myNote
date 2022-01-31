@@ -184,3 +184,43 @@ random_number() {
   echo $(($RANDOM % $base))
 }
 ```
+
+
+---
+
+## column field
+
+```bash
+get_col_number() {
+  local col_name=$1
+  local line=$2
+
+  echo "$line" | awk -v col="$col_name" 'NR==1{for (i=1; i<=NF; i++) if ($i==col) {print i;exit}}'
+}
+
+LINE="HOST USERNAME PASSWORD MODEL"
+get_col_number USERNAME "$LINE"
+```
+
+```bash
+get_col_name() {
+  local line=$1
+  
+  local number=$(echo "$line" | awk '{print NF}')
+  local result_array
+  local i
+  for i in $(seq $number); do
+    local col=$(echo "$line" | awk "{print \$$i}")
+    result_array+=($col)
+  done
+  
+  echo ${result_array[@]}
+}
+
+LINE="HOST USERNAME PASSWORD MODEL"
+COL_ARRAY=$(get_col_name "$LINE")
+echo "COL_ARRAY ${COL_ARRAY[@]}, ${#COL_ARRAY[@]}, ${COL_ARRAY[2]}"
+
+NEW_COL_ARRAY=($LINE)
+echo "NEW_COL_ARRAY ${NEW_COL_ARRAY[@]}, ${#NEW_COL_ARRAY[@]}, ${NEW_COL_ARRAY[2]}"
+```

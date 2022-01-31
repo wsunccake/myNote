@@ -56,6 +56,9 @@
 [linux:~ ] # helm pull bitnami/mysql
 [linux:~ ] # helm install mysql bitnami/mysql
 [linux:~ ] # helm install bitnami/mysql -g
+[linux:~ ] # helm install bitnami/mysql --debug
+[linux:~ ] # helm install bitnami/mysql --dry-run
+[linux:~ ] # helm install bitnami/mysql --values <helm values>.yaml
 [linux:~ ] # helm uninstall mysql
 [linux:~ ] # helm list
 

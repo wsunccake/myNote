@@ -224,7 +224,7 @@ i=0
 until [ $i -eq 3 ]; do   
   i=`expr $i + 1`          
   echo "$i"                
-done                                                                                                                                                
+done
 
 i=0
 until false; do

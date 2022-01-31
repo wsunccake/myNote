@@ -1,5 +1,21 @@
 # debian 11
 
+## system
+
+```bash
+# mount disk by uuid
+debian:~ # lsblk
+debian:~ # lsblk -pt
+debian:~ # lsblk -pl
+debian:~ # blkid
+debian:~ # cat /etc/fstab
+UUID=<disk uuid>   <mount point>   <fs type>  defaults,errors=remount-ro 0  0
+debian:~ # mount -a
+```
+
+
+---
+
 ## develop
 
 ```bash
@@ -29,6 +45,11 @@ debian:~ # apt install zsh
 debian:~ $ chsh -s /bin/zsh
 debian:~ $ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 debian:~ $ omz update
+
+# oh-my-zsh config
+debian:~ $ vi ~/.zshrc
+ZSH_THEME="robbyrussell"    -> ZSH_THEME="agnoster"
+plugins=()                  -> plugins=(git tmux)
 
 # fzf
 debian:~ $ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
