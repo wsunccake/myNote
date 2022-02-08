@@ -10,9 +10,29 @@ linux:~ $ wget https://bootstrap.pypa.io/get-pip.py     # for user
 linux:~ $ python3 get-pip.py --user
 ```
 
+
 ```batch
 C:\Users\user> curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py   # windows 10
-C:\Users\user> py get-pip.py
+C:\Users\user> python get-pip.py
+```
+
+
+```bash
+# install python 3.x
+osx:~ # installer -pkg python-3.x-macos11.pkg -target /
+
+# uninstall all python3.x
+osx:~ # rm -rf /Library/Frameworks/Python.framework
+osx:~ # find /usr/local/bin -type l -and -lname "*/Library/Frameworks/Python.framework/*" -delete
+osx:~ # pkgutil --pkgs | grep Python | xarg -I{} pkgutil --forget {}
+
+# uninstall python3.x
+osx:~ # rm -rf /Library/Frameworks/Python.framework/Versions/3.x
+osx:~ # rm find /usr/local/bin -type l -and -lname "*/Library/Frameworks/Python.framework/Versions/3.x*" -delete
+osx:~ # rm pkgutil --forget org.python.Python.PythonFramework-3.x
+osx:~ # rm pkgutil --forget org.python.Python.PythonDocumentation-3.x
+osx:~ # rm pkgutil --forget org.python.Python.PythonApplications-3.x
+osx:~ # rm pkgutil --forget org.python.Python.PythonUnixTools-3.x
 ```
 
 
@@ -60,7 +80,7 @@ linux:~ # source venv/bin/activate
 (venv) linux:~ # deactivate
 
 linux:~ # cat venv/pyvenv.cfg
-prompt = 
+prompt =
 ```
 
 ```batch
@@ -95,7 +115,7 @@ linux:~ # pipenv install -r requirements.txt
 linux:~ # pipenv run python <script.py>
 
 linux:~ # source `pipenv --venv`/bin/activate
-(venv) linux:~ # 
+(venv) linux:~ #
 
 # remove
 linux:~ # pipenv --rm
@@ -106,7 +126,7 @@ linux:~ # pipenv --rm
 
 # read-eval-print loop / repl
 
-## ipython 
+## ipython
 
 ```bash
 linux:~ # pip install ipython
@@ -170,13 +190,13 @@ import sys
 sys.stdout.write('Hello Python\n')
 
 
-linux:~/myproject3/demo # chmod +x src/main/scripts/hello 
+linux:~/myproject3/demo # chmod +x src/main/scripts/hello
 ```
 
 ### unit test
 
 ```bash
-linux:~/myproject3/demo # cat src/unittest/python/hello_tests.py 
+linux:~/myproject3/demo # cat src/unittest/python/hello_tests.py
 from mockito import mock, verify
 import unittest
 
@@ -225,26 +245,26 @@ linux:~/myproject3/demo # pyb
 
 ```bash
 #!/usr/bin/env python3
- 
+
 class First(object):
     def say(self):
         print("from First")
- 
+
 class Second(object):
     def say(self):
         print("from Second")
- 
+
 class Third(object):
     def say(self):
         print("from Third")
- 
+
 class Son(First, Second, Third):
     def say(self):
         #super().say()                     # from First (same as super(Son, self).say())
         super(First, self).say()           # from Second
         #super(Second, self).say()         # from Third
         #super(Third, self).say()          # error
- 
+
 son = Son()
 son.say()
 ```
