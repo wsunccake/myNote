@@ -280,6 +280,8 @@ pipeline {
 
 ## post
 
+### [Robot Framework](https://plugins.jenkins.io/robot/)
+
 ```groovy
 pipeline {
     agent any
@@ -380,7 +382,7 @@ pipeline {
 
 ---
 
-## Example
+## example
 
 ```groovy
 pipeline {
@@ -432,6 +434,122 @@ echo "${version}"
     }
 }
 ```
+
+
+---
+
+## lock
+
+```groovy
+pipeline {
+    agent any
+    // lock resource
+    options {
+        lock (resource: 'lockResource1 lockResource2', quantity: 1)
+    }
+    parameters { 
+        string(name: 'VER', defaultValue: '1.0', description: '') 
+    }
+    stages {
+        stage('Run') {
+            steps { 
+                script {
+                    currentBuild.displayName = "${currentBuild.number} - ${VER}"
+                }
+                echo "$VER" 
+                sleep 10
+            }
+        }
+    }
+}
+```
+
+
+```groovy
+pipeline {
+    agent any
+    // lock resource
+    options {
+        lock (label: 'lockLabel')
+    }
+    parameters { 
+        string(name: 'VER', defaultValue: '1.0', description: '') 
+    }
+    stages {
+        stage('Run') {
+            steps { 
+                script {
+                    currentBuild.displayName = "${currentBuild.number} - ${VER}"
+                }
+                echo "$VER" 
+                sleep 10
+            }
+        }
+    }
+}
+```
+
+```groovy
+pipeline {
+    agent any
+    // lock resource by label
+    options {
+        
+    }
+    parameters { 
+        string(name: 'VER', defaultValue: '1.0', description: '') 
+    }
+    stages {
+        stage('Run') {
+            steps { 
+                script {
+                    currentBuild.displayName = "${currentBuild.number} - ${VER}"
+                }
+                // lock resource
+                lock (resource: 'lockResource') {
+                    echo "$VER" 
+                    sleep 10
+                }
+            }
+        }
+    }
+}
+```
+
+
+---
+
+## plugin
+
+### [Parameterized Scheduler](https://plugins.jenkins.io/parameterized-scheduler/)
+
+```groovy
+pipeline {
+    agent any
+    parameters { 
+        string(name: 'MSG', defaultValue: 'hello', description: '') 
+        string(name: 'NAME', defaultValue: 'world', description: '')
+    }
+    triggers {
+        cron('H/2 * * * *')
+        parameterizedCron('''
+*/2 * * * * %MSG=hi;NAME=jenkins2
+H/2 * * * * %MSG=nice;NAME=pipeline
+        ''')
+
+    }
+    stages {
+        stage('Run') {
+            steps { 
+                script {
+                    currentBuild.displayName = "${currentBuild.number} - ${MSG} ${NAME}"
+                }
+                echo "$MSG $NAME" }
+        }
+    }
+}
+```
+
 
 ---
 
