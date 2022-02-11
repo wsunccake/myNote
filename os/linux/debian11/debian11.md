@@ -30,6 +30,9 @@ debian:~ # apt install python3 python3-pip3 python3-venv
 
 # git
 debian:~ # apt install git
+
+# kernel header
+debian:~ # apt install linux-headers-`uname -r`
 ```
 
 
