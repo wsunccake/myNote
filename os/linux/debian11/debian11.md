@@ -39,6 +39,9 @@ debian:~ # apt search postgresql               # server package
 debian:~ # apt search postgresql-client        # clinet package
 debian:~ # apt install postgresql              # install server
 debian:~ # apt install postgresql-client       # install clinet
+
+# kernel header
+debian:~ # apt install linux-headers-`uname -r`
 ```
 
 
