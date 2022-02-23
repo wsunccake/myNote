@@ -221,9 +221,9 @@ done < /etc/passwd
 
 ```bash
 i=0
-until [ $i -eq 3 ]; do   
-  i=`expr $i + 1`          
-  echo "$i"                
+until [ $i -eq 3 ]; do
+  i=`expr $i + 1`
+  echo "$i"
 done
 
 i=0
@@ -248,7 +248,7 @@ case $SHELL in
   "/bin/tcsh")
     echo "TCSH"
     ;;
-    
+
   *)
     echo "UNKNOWN"
     ;;
@@ -436,84 +436,10 @@ echo "bar"
 
 ## sed
 
-```bash
-linux:~ # echo "Hello BASH script" | sed 's/.//6g'              # Hello
-linux:~ # echo "Hello BASH script" | sed 's/.\{6\}//'           # BASH script
-linux:~ # echo "Hello BASH script" | sed 's/.\{6\}//;s/.//5g'   # BASH
-
-linux:~ # echo /usr/lib/python/site-package/xxx-1.0/yyy.zz | sed 's/\(.*\)\..*$/\1/'    # /usr/lib/python/site-package/xxx-1.0/yyy
-linux:~ # echo /usr/lib/python/site-package/xxx-1.0/yyy.zz | sed 's/\..*$//'            # /usr/lib/python/site-package/xxx-1
-linux:~ # echo /usr/lib/python/site-package/xxx-1.0/yyy.zz | sed 's/\///'               # usr/lib/python/site-package/xxx-1.0/yyy.zz
-linux:~ # echo /usr/lib/python/site-package/xxx-1.0/yyy.zz | sed 's/.*\///'             # yyy.zz
-
-linux:~ # sed "s/\r//g" <file>    # remove ^M (windows carry return)
-```
-
-```bash
-linux:~ # cat data.csv
-Andy Jiang, ACA-4566, 10
-Joe Hwang, M16-1226, 20
-Tim Cheng, YKC-7725, 10
-John Cheng, YKC-7722, 10
-Kevin Lin, NI2-039, 100
-David Lee, 2C-323, 200
-Herry McGray Jr., 3C-123, 500
-LeeLongDa, 3C-123, 500 
-
-linux:~ # sed -n 2,4p data.csv
-linux:~ # sed -n '2p;4p' data.csv
-linux:~ # sed -n '/Joe/,/Cheng/p' data.csv
-linux:~ # sed -n '/Joe/p;/Cheng/p' data.csv
-linux:~ # sed '/Tim/q' data.csv
-```
 
 ---
 
 ## awk
-
-```bash
-linux:~ # seq 5 | awk ' { sum = sum + $1 } END { print sum }'
-
-# awk access shell variable
-linux:~ # awk -v today="`date`" 'BEGIN {print today}'
-
-# awk access environment variable
-linux:~ # awk 'BEGIN {print ENVIRON["HOME"]}'
-
-# awk argument
-linux:~ # awk 'BEGIN {print ARGV[0], ARGV[1]}' "`date`"
-
-# awk script
-linux:~ # cat avg.awk
-#!/usr/bin/awk -f
-
-BEGIN {
-  sum = 0
-}                                                                                                                                                   
-
-{
-  sum = sum + $1
-}
-
-END {
-  "count:", NR
-  "sum: ", sum
-  "average: %f\n", sum/NR
-}
-
-# regrex
-linux:~ # awk '/<pattern>/{print $_}' <file>
-linux:~ # awk '{if ($1 ~ /<pattern>/) print $_}' <file>
-linux:~ # awk '{if ($1 == "<pattern>") print $_}' <file>
-linux:~ # awk '$1 ~ /<pattern>/{print $_}' <file>
-linux:~ # awk '$1 == "<pattern>"{print $_}' <file>
-
-# double quote
-linux:~ # awk "\$1 == \"<pattern>\" {printf \"$HOME %s\", \$_}" <file>
-
-# NF: number fields (column), NR: number record (row), $_
-linux:~ # awk '{if (NF < 3) {printf line %s, %s\n", NR, $_}}' <file>
-```
 
 
 ---
@@ -536,64 +462,6 @@ linux:~ # find / -xdev -samefile <file>
 ---
 
 ## expect
-
-expect [ pattern-string {action} ]
-
-```bash
-linux:~ # cat hello.exp
-#!/bin/expect
-
-send_user "hello expect\n"
-exit
-
-# method 1
-linux:~ # chmod +x hello.exp
-linux:~ # ./hello.exp
-
-# method 2
-linux:~ # expect hello.exp
-
-# method 3
-linux:~ # expect
-expect> send_user "hello expect\n"
-expect> exit
-```
-
-```bash
-#!/bin/expect -f
-
-spawn sh
-
-// regex, regular expression
-expect -re "\\\$|#"
-send "date\n"
-
-// globbing, filename globbing
-expect ".*" { send "hostname\n" }
-
-send_user "\n"
-exit
-```
-
-```bash
-#!/bin/expect -f
-set user <username>
-set pw <password>
-set ip <ssh_server>
-
-spawn ssh -o PubkeyAuthentication=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $user@$ip
-
-expect "password:" {
-    send "$pw\n"
-    sleep 3
-}
-
-expect -re "\\\$|#" {
-    interact
-}
-
-exit
-```
 
 
 ---

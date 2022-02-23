@@ -142,3 +142,15 @@ linux:~ $ sed "s/\r//g" <file>
 ---
 
 ## substitute
+
+
+---
+
+## common
+
+```bash
+sed 's/\x1b\[[0-9;]*m//g' <file>    # remove color code
+
+sed $'s/\r$//' <file>               # dos to unix
+sed $'s/$/\r/' <file>               # unix to dos
+```

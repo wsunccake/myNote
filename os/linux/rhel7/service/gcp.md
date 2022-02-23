@@ -34,6 +34,8 @@ linux:~ # ls .boto
 
 
 linux:~ # gcloud auth login <account>
+linux:~ # gcloud auth login list
+linux:~ # gcloud auth login revoke
 ```
 
 web: https://console.cloud.google.com/
@@ -44,6 +46,7 @@ web: https://console.cloud.google.com/
 ```bash
 linux:~ # gcloud config --help
 linux:~ # gcloud config list [--all]
+linux:~ # gcloud config set account <account>
 linux:~ # gcloud config set core/project <project>
 ```
 
@@ -67,7 +70,7 @@ linux:~ # gsutil mv gs://<src> gs://<dst>
 linux:~ # gsutil cp <src> <dst>
 linux:~ # gsutil cp gs://old.txt gs://new.txt
 linux:~ # gsutil cp file.txt gs://file.txt
-linux:~ # gsutil cp gs://file.txt file.txt 
+linux:~ # gsutil cp gs://file.txt file.txt
 
 linux:~ # gsutil rm gs://<file>
 linux:~ # gsutil cat gs://<file>
@@ -96,7 +99,7 @@ linux:~ # gcloud compute images create <image> --source-uri=gs://<dst>
 
 # machine-type
 ## list
-linux:~ # gcloud compute machine-types list 
+linux:~ # gcloud compute machine-types list
 linux:~ # gcloud compute machine-types list --filter="zone:asia-east"
 linux:~ # gcloud compute machine-types list --filter="name~n1-standard AND zone~asia-east"
 linux:~ # gcloud compute machine-types describe <machine-type>
