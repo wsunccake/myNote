@@ -1,10 +1,10 @@
-# locust
+# locust 0.x
 
 
 ## install
 
 ```bash
-linux:~ # pip install locustio
+linux:~ # pip install locustio==0.14.6
 ```
 
 
