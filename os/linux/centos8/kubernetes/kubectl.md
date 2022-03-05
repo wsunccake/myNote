@@ -27,7 +27,7 @@ linux:~ $ export PATH=$HOME/.local/bin/kubectl:$PATH
 linux:~ # dnf install bash-completion
 
 # auto-completetion for system
-linux:~ # kubectl completion bash >/etc/bash_completion.d/kubectl
+linux:~ # kubectl completion bash > /etc/bash_completion.d/kubectl
 
 # auto-completetion for bash user
 linux:~ # echo "source <(kubectl completion bash)" >> ~/.bashrc
@@ -82,7 +82,7 @@ linux:~ # cat $HOME/.kube/config                                      # user def
 linux:~ # export KUBECONFIG=<kube config>                             # environment variable
 
 # view
-linux:~ # kubectl config view --minify [--kubeconfig <kube config>]   
+linux:~ # kubectl config view --minify [--kubeconfig <kube config>]
 
 # context
 linux:~ # kubectl config get-contexts
@@ -91,7 +91,7 @@ linux:~ # kubectl config use-context <context>
 linux:~ # kubectl config current-context
 linux:~ # kubectl config set-context <context>
 \ [--namespace <namespace>]
-\ [--cluster=<cluster>] 
+\ [--cluster=<cluster>]
 \ [--user=user_nickname]
 linux:~ # kubectl config delete-context <context>
 
