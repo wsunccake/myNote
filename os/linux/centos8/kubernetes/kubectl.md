@@ -12,9 +12,15 @@ linux:~ # echo "$(<kubectl.sha256) kubectl" | sha256sum --check
 linux:~ # install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
 # install for user
-linux:~ $ mkdir -p $HOME/.local/bin/kubectl
+linux:~ $ mkdir -p $HOME/.local/bin
 linux:~ $ mv ./kubectl $HOME/.local/bin/kubectl
 linux:~ $ export PATH=$HOME/.local/bin/kubectl:$PATH
+
+# config for user
+linux:~ $ mkdir -p $HOME/.kube
+linux:~ $ touch $HOME/.kube/config
+linux:~ $ chmod 600 $HOME/.kube/config
+linux:~ $ cat <k8s cluster config> >> $HOME/.kube/config
 ```
 
 
