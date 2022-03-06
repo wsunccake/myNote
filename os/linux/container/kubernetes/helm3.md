@@ -41,7 +41,7 @@
 [linux:~ ] # kubectl config view
 [linux:~ ] # kubectl config current-context
 
-[linux:~ ] # helm search repo|hub <keyword>                                 # search chart
+[linux:~ ] # helm search repo|hub [ --version] <keyword>                    # search chart
 [linux:~ ] # helm pull <chart url>|<repo>/<chart name>                      # download chart
 [linux:~ ] # helm install <release name> <chart url>|<repo>/<chart name>    # install release from chart
 [linux:~ ] # helm uninstall <release name>                                  # uninstall release
@@ -53,6 +53,7 @@
 
 # example
 [linux:~ ] # helm search repo mysql
+[linux:~ ] # helm search repo --version mysql
 [linux:~ ] # helm pull bitnami/mysql
 [linux:~ ] # helm install mysql bitnami/mysql
 [linux:~ ] # helm install bitnami/mysql -g
@@ -90,7 +91,7 @@ hello-world/
 │       └── test-connection.yaml
 └── values.yaml                     # default configuration
 
-[linux:~ ] # cat hello-world/Chart.yaml 
+[linux:~ ] # cat hello-world/Chart.yaml
 [linux:~ ] # cat hello-world/values.yaml
 [linux:~ ] # cat hello-world/templates/deployment.yaml
 [linux:~ ] # cat hello-world/templates/service.yaml
@@ -114,6 +115,19 @@ hello-world/
 [linux:~ ] # helm rollback hello-world 1
 ```
 
+
+---
+
+## auto-completetion
+
+```bash
+# for bash
+[linux:~ ] # helm completion bash > /etc/bash_completion.d/helm     # system
+[linux:~ ] # echo "source <(helm completion bash)" >> ~/.bashrc     # user
+
+# for zsh
+[linux:~ ] # echo "source <(helm completion zsh)" >> ~/.zshrc       # user
+```
 
 ---
 

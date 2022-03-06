@@ -111,6 +111,9 @@ kubernetes 1.23+ 後就不支援 docker
 [ubuntu:~ ] # apt-mark hold kubelet kubeadm kubectl
 
 [ubuntu:~ ] # systemctl status kubelet
+
+[ubuntu:~ ] # kubeadm config print init-defaults
+[ubuntu:~ ] # kubeadm config print join-defaults
 ```
 
 
@@ -139,6 +142,9 @@ kubernetes 1.23+ 後就不支援 docker
 [master:~ ] # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 [master:~ ] # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/k8s-manifests/kube-flannel-rbac.yml
 
+kubectl create -f https://projectcalico.docs.tigera.io/manifests/tigera-operator.yaml
+
+
 # token
 [master:~ ] # kubeadm token list
 [master:~ ] # kubeadm token list -o json
@@ -164,6 +170,7 @@ kubernetes 1.23+ 後就不支援 docker
 ```bash
 [master:~ ] # kubectl version --client
 
+# create
 [master:~ ] # kubectl create deployment hello-node --image=k8s.gcr.io/echoserver:1.4
 [master:~ ] # kubectl get pod,deploy
 [master:~ ] # kubectl scale deployment hello-node --replicas=2
@@ -173,7 +180,12 @@ kubernetes 1.23+ 後就不支援 docker
 [master:~ ] # kubectl get svc -l app=hello-node
 [master:~ ] # kubectl get svc -l app=hello-node -o jsonpath="{$.items[0].spec.ports[0].nodePort}"
 
+# test
 [master:~ ] # curl <node ip>:<node port>
+
+# teardown
+[master:~ ] # kubectl delete service/hello-node
+[master:~ ] # kubectl delete deployment.apps/hello-node
 ```
 
 
