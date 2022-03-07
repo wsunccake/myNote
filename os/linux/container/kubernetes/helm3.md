@@ -41,7 +41,7 @@
 [linux:~ ] # kubectl config view
 [linux:~ ] # kubectl config current-context
 
-[linux:~ ] # helm search repo|hub [ --version] <keyword>                    # search chart
+[linux:~ ] # helm search repo|hub [ --versions ] <keyword>                    # search chart
 [linux:~ ] # helm pull <chart url>|<repo>/<chart name>                      # download chart
 [linux:~ ] # helm install <release name> <chart url>|<repo>/<chart name>    # install release from chart
 [linux:~ ] # helm uninstall <release name>                                  # uninstall release
@@ -53,7 +53,7 @@
 
 # example
 [linux:~ ] # helm search repo mysql
-[linux:~ ] # helm search repo --version mysql
+[linux:~ ] # helm search repo --versions mysql
 [linux:~ ] # helm pull bitnami/mysql
 [linux:~ ] # helm install mysql bitnami/mysql
 [linux:~ ] # helm install bitnami/mysql -g
