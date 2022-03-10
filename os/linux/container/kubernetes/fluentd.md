@@ -178,3 +178,5 @@ minimumMasterNodes: single cluster setup 1
 [Install Elasticsearch on Kubernetes Using Helm Chart](https://phoenixnap.com/kb/elasticsearch-helm-chart)
 
 [How to Setup EFK Stack on Kubernetes: Step by Step Guides](https://devopscube.com/setup-efk-stack-on-kubernetes/)
+
+[Kubernetes Logging with Elasticsearch, Fluentd and Kibana](https://coralogix.com/blog/kubernetes-logging-with-elasticsearch-fluentd-and-kibana/)

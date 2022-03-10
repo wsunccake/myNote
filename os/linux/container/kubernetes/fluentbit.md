@@ -84,16 +84,52 @@ master:~ $ kubectl -n logging get deploy alpine
 master:~ $ kubectl -n logging exec -it <alpine pod> -- sh
 
 # test elasticsearch
-alpine:~ # curl http://elasticsearch-master:9200/
-alpine:~ # curl http://elasticsearch-master:9200/_cluster
-alpine:~ # curl http://elasticsearch-master:9200/_cat/health
-alpine:~ # curl http://elasticsearch-data:9200/
-alpine:~ # curl http://elasticsearch-coordinating-only:9200/
+alpine:~ # curl http://<elasticsearch svc>:9200/
+alpine:~ # curl http://<elasticsearch svc>:9200/_cluster
+alpine:~ # curl http://<elasticsearch svc>:9200/_cat/health
 # test kibana
-alpine:~ # curl http://kibana:5601/app/managemnet
-alpine:~ # curl http://kibana:5601/app/dicover
+alpine:~ # curl http://<kibana svc>:5601/app/managemnet
+alpine:~ # curl http://<kibana svc>:5601/app/dicover
 # test fluent-bit
-alpine:~ # curl http://fluent-bit:2020
+alpine:~ # curl http://<fluent-bit svc>:2020
+
+master:~ $ kubectl run alpine --image=alpine --command -- /bin/sh -c 'i=0; while true; do echo "$i: Hello"; i=$((i+1)); sleep 1; done'
+master:~ $ kubectl logs alpine
+```
+
+
+---
+
+## setup
+
+### kibana
+
+step 1. setup kibana index patterns
+
+http://<kibana svc>:5601/app/management/kibana/indexPatterns
+
+step 2. search by discover page
+
+setup http://<kibana svc>:5601/app/discover
+
+
+---
+
+## problem
+
+```
+elasticsearch
+ERROR - failed to store async-search
+Data too large, data for [<reused_arrays>] would be [...], which is larger than the limit of [...], real usage: [...], new bytes reserved: [...], usages [...]
+
+
+curl -XPOST 'http://<elasticsearch svc>:9200/fdns/_cache/clear?fielddata=true'
+curl -XPUT http://<elasticsearch>:9200/_cluster/settings -H 'Content-Type: application/json' -d '{"persistent" : {"indices.breaker.fielddata.limit" : "40%"} }'
+```
+
+```
+fluent bit
+[2022/03/10 17:52:50] [ warn] [engine] failed to flush chunk '1-1646934524.644358141.flb', retry in 20 seconds: task_id=310, input=tail.0 > output=es.0 (out_id=0)
 ```
 
 
