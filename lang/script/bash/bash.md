@@ -54,6 +54,9 @@ linux:~ # tar cf - *.log | tar xf - -C backup_dir
 
 linux:~ # curl http://download/file.tar.gz -o file.tar.gz && tar zxf file.tar.gz
 linux:~ # curl http://download/file.tar.gz | tar zx
+
+linux:~ # false | tee /dev/null; echo $?
+linux:~ # false | tee /dev/null; echo ${PIPESTATUS[0]}
 ```
 
 
@@ -221,9 +224,9 @@ done < /etc/passwd
 
 ```bash
 i=0
-until [ $i -eq 3 ]; do   
-  i=`expr $i + 1`          
-  echo "$i"                
+until [ $i -eq 3 ]; do
+  i=`expr $i + 1`
+  echo "$i"
 done
 
 i=0
@@ -248,7 +251,7 @@ case $SHELL in
   "/bin/tcsh")
     echo "TCSH"
     ;;
-    
+
   *)
     echo "UNKNOWN"
     ;;
@@ -458,7 +461,7 @@ John Cheng, YKC-7722, 10
 Kevin Lin, NI2-039, 100
 David Lee, 2C-323, 200
 Herry McGray Jr., 3C-123, 500
-LeeLongDa, 3C-123, 500 
+LeeLongDa, 3C-123, 500
 
 linux:~ # sed -n 2,4p data.csv
 linux:~ # sed -n '2p;4p' data.csv
@@ -489,7 +492,7 @@ linux:~ # cat avg.awk
 
 BEGIN {
   sum = 0
-}                                                                                                                                                   
+}
 
 {
   sum = sum + $1

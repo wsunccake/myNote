@@ -75,6 +75,9 @@ debian:~ # apt install tmux
 
 # locate
 debian:~ # apt install mlocate
+
+# lnav
+debian:~ # apt install lnav
 ```
 
 
