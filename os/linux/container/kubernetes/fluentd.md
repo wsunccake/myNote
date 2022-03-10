@@ -1,4 +1,4 @@
-# efk
+# efk stack - elasticsearch fluentd kibana
 
 ## topology
 
@@ -48,6 +48,10 @@ volumeClaimTemplate:
   resources:
     requests:
       storage: 500Mi
+
+# disalbe pv
+#persistence:
+#  enabled: false
 ```
 
 volumeClaimTemplate.resources.requests.storage: 依據需求調整, 一般 production 大概 500 Gb
