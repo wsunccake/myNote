@@ -7,6 +7,25 @@ linux:~ # pip install locustio==2.8.2
 ```
 
 
+```bash
+# sysctl
+linux:~ # cat /proc/sys/fs/file-max
+lixnu:~ # vi /etc/sysctl.cong
+fs.file-max=500000
+...
+
+lixnu:~ # sysctl -w fs.file-max=500000
+
+# hard limit
+linux:~ # ulimit -Hn
+* hard nofile 4096
+
+# soft limit
+linux:~ # ulimit -Sn
+* soft nofile 1024
+```
+
+
 ---
 
 ## usage
