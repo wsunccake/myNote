@@ -30,6 +30,18 @@ debian:~ # apt install python3 python3-pip3 python3-venv
 
 # git
 debian:~ # apt install git
+
+# postgre
+debian:~ # echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+debian:~ # wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+debian:~ # apt update
+debian:~ # apt search postgresql               # server package
+debian:~ # apt search postgresql-client        # clinet package
+debian:~ # apt install postgresql              # install server
+debian:~ # apt install postgresql-client       # install clinet
+
+# kernel header
+debian:~ # apt install linux-headers-`uname -r`
 ```
 
 
@@ -63,6 +75,9 @@ debian:~ # apt install tmux
 
 # locate
 debian:~ # apt install mlocate
+
+# lnav
+debian:~ # apt install lnav
 ```
 
 

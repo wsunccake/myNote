@@ -26,6 +26,10 @@ password   required     /lib/security/$ISA/pam_deny.so
 
 # ssh public key
 esxi: ~ # cat /etc/ssh/keys-root/authorized_keys
+
+# network
+esxi: ~ # esxcli network nic list
+esxi: ~ # esxcli network ip interface ipv4 get
 ```
 
 

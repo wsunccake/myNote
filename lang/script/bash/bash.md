@@ -54,6 +54,9 @@ linux:~ # tar cf - *.log | tar xf - -C backup_dir
 
 linux:~ # curl http://download/file.tar.gz -o file.tar.gz && tar zxf file.tar.gz
 linux:~ # curl http://download/file.tar.gz | tar zx
+
+linux:~ # false | tee /dev/null; echo $?
+linux:~ # false | tee /dev/null; echo ${PIPESTATUS[0]}
 ```
 
 
@@ -436,10 +439,85 @@ echo "bar"
 
 ## sed
 
+```bash
+linux:~ # echo "Hello BASH script" | sed 's/.//6g'              # Hello
+linux:~ # echo "Hello BASH script" | sed 's/.\{6\}//'           # BASH script
+linux:~ # echo "Hello BASH script" | sed 's/.\{6\}//;s/.//5g'   # BASH
+
+linux:~ # echo /usr/lib/python/site-package/xxx-1.0/yyy.zz | sed 's/\(.*\)\..*$/\1/'    # /usr/lib/python/site-package/xxx-1.0/yyy
+linux:~ # echo /usr/lib/python/site-package/xxx-1.0/yyy.zz | sed 's/\..*$//'            # /usr/lib/python/site-package/xxx-1
+linux:~ # echo /usr/lib/python/site-package/xxx-1.0/yyy.zz | sed 's/\///'               # usr/lib/python/site-package/xxx-1.0/yyy.zz
+linux:~ # echo /usr/lib/python/site-package/xxx-1.0/yyy.zz | sed 's/.*\///'             # yyy.zz
+
+linux:~ # sed "s/\r//g" <file>    # remove ^M (windows carry return)
+```
+
+```bash
+linux:~ # cat data.csv
+Andy Jiang, ACA-4566, 10
+Joe Hwang, M16-1226, 20
+Tim Cheng, YKC-7725, 10
+John Cheng, YKC-7722, 10
+Kevin Lin, NI2-039, 100
+David Lee, 2C-323, 200
+Herry McGray Jr., 3C-123, 500
+LeeLongDa, 3C-123, 500
+
+linux:~ # sed -n 2,4p data.csv
+linux:~ # sed -n '2p;4p' data.csv
+linux:~ # sed -n '/Joe/,/Cheng/p' data.csv
+linux:~ # sed -n '/Joe/p;/Cheng/p' data.csv
+linux:~ # sed '/Tim/q' data.csv
+```
+
 
 ---
 
 ## awk
+
+```bash
+linux:~ # seq 5 | awk ' { sum = sum + $1 } END { print sum }'
+
+# awk access shell variable
+linux:~ # awk -v today="`date`" 'BEGIN {print today}'
+
+# awk access environment variable
+linux:~ # awk 'BEGIN {print ENVIRON["HOME"]}'
+
+# awk argument
+linux:~ # awk 'BEGIN {print ARGV[0], ARGV[1]}' "`date`"
+
+# awk script
+linux:~ # cat avg.awk
+#!/usr/bin/awk -f
+
+BEGIN {
+  sum = 0
+}
+
+{
+  sum = sum + $1
+}
+
+END {
+  "count:", NR
+  "sum: ", sum
+  "average: %f\n", sum/NR
+}
+
+# regrex
+linux:~ # awk '/<pattern>/{print $_}' <file>
+linux:~ # awk '{if ($1 ~ /<pattern>/) print $_}' <file>
+linux:~ # awk '{if ($1 == "<pattern>") print $_}' <file>
+linux:~ # awk '$1 ~ /<pattern>/{print $_}' <file>
+linux:~ # awk '$1 == "<pattern>"{print $_}' <file>
+
+# double quote
+linux:~ # awk "\$1 == \"<pattern>\" {printf \"$HOME %s\", \$_}" <file>
+
+# NF: number fields (column), NR: number record (row), $_
+linux:~ # awk '{if (NF < 3) {printf line %s, %s\n", NR, $_}}' <file>
+```
 
 
 ---
