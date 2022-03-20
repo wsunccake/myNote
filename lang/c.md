@@ -9,7 +9,7 @@
 int main() {
    /* my first program in C */
    printf("Hello, World! \n");
-   
+
    return 0;
 }
 ```
@@ -80,7 +80,7 @@ int main () {
    int i5 = 016;
    int i6 = 0x16;
    printf("int i4: %d, i5: %d, i6: %d\n", i4, i5, i6);
-   
+
    int i7 = 2567;
    printf("dec: %d, occ: %o, hex: %x\n", i7, i7, i7);
 
@@ -90,10 +90,10 @@ int main () {
 
 ```c
 #include <stdio.h>
- 
+
 int main () {
     int i, j;
-    
+
     i = 1, j = 0;
     printf("i: %d, j: %d\n", i, j);
     j = i++;
@@ -102,7 +102,7 @@ int main () {
     i = 1, j = 0;
     printf("i: %d, j: %d\n", i, j);
     j = ++i;
-    printf("i: %d, j: %d\n", i, j);    
+    printf("i: %d, j: %d\n", i, j);
     return 0;
 }
 ```
@@ -131,7 +131,7 @@ int main () {
     } else {
         printf("unknown\n");
     }
-    
+
     int i = (sex == 'm' ? 1 : 0);
     printf("%d\n", i);
     return 0;
@@ -177,7 +177,7 @@ int main () {
 
 ```c
 #include <stdio.h>
- 
+
 int main () {
    const int MAX = 5;
 
@@ -191,10 +191,10 @@ int main () {
 
 ```c
 #include <stdio.h>
- 
+
 int main () {
    const int MAX = 5;
-   
+
    int i = 0
    for ( ; ; ) {
         printf("%d\n", i);
@@ -213,10 +213,10 @@ int main () {
 
 ```c
 #include <stdio.h>
- 
+
 int main () {
    const int MAX = 5;
-   
+
    int i = 0
    while (i < MAX) {
       printf("%d\n", i);
@@ -229,10 +229,10 @@ int main () {
 
 ```c
 #include <stdio.h>
- 
+
 int main () {
    const int MAX = 5;
-   
+
    int i = 0;
    do {
       printf("%d\n", i);
@@ -248,7 +248,7 @@ int main () {
 
 ```c
 #include <stdio.h>
- 
+
 int main () {
    const int MAX = 5;
 
@@ -273,21 +273,21 @@ int main () {
 #include <stdio.h>
 
 int max(int num1, int num2);
- 
+
 int main () {
-   printf("max: %d\n", max(5, 10)); 
+   printf("max: %d\n", max(5, 10));
    return 0;
 }
- 
+
 int max(int num1, int num2) {
    int result;
- 
+
    if (num1 > num2)
       result = num1;
    else
       result = num2;
- 
-   return result; 
+
+   return result;
 }
 ```
 
@@ -315,11 +315,11 @@ void swap2(int *x, int *y) {
 int main () {
    int a = 100;
    int b = 200;
- 
+
    printf("before swap, a : %d, b: %d\n", a, b);
    swap1(a, b);
    printf("after swap, a : %d, b: %d\n", a, b);
- 
+
    printf("before swap, a : %d, b: %d\n", a, b);
    swap2(&a, &b);
    printf("after swap, a : %d, b: %d\n", a, b);
@@ -363,7 +363,7 @@ void showArray(int array[], int size) {
 }
 
 int main () {
-   int arr1[]={1, 2, 3};   
+   int arr1[]={1, 2, 3};
    showArray(arr1, 3);
    return 0;
 }
@@ -398,12 +398,16 @@ int main () {
    // int *ptr3;
    // *ptr3 = var;
    printf("&var: %x, ptr1: %x, ptr2: %x\n", &var, ptr1, ptr2);
-   printf("var: %d, *ptr1: %d, *ptr2: %d\n", var, *ptr1, ptr2);
-   *ptr = 1;
-   printf("var: %d, *ptr1: %d, *ptr2: %d\n", var, *ptr1, ptr2);
+   printf("var: %d, *ptr1: %d, *ptr2: %d\n", var, *ptr1, *ptr2);
+   *ptr2 = 1;
+   printf("var: %d, *ptr1: %d, *ptr2: %d\n", var, *ptr1, *ptr2);
 
    return 0;
 }
+
+// &var: e371aa58, ptr1: e371aa58, ptr2: e371aa58
+// var: 20, *ptr1: 20, *ptr2: 20
+// var: 1, *ptr1: 1, *ptr2: 1
 ```
 
 ```c
@@ -466,7 +470,7 @@ int *addArray1(int arr1[], int arr2[], int size) {
         printf("&arr1[%d]: %d, &arr2[%d]: %d, &res[%d]: %d\n", i, &arr1[i], i, &arr2[i], i, &res[i]);
         printf("arr1[%d]: %d, arr2[%d]: %d, res[%d]: %d\n", i, arr1[i], i, arr2[i], i, res[i]);
     }
-    
+
     return res;
 }
 
@@ -478,7 +482,7 @@ int *addArray2(int arr1[], int arr2[], int size) {
         printf("&arr1[%d]: %d, &arr2[%d]: %d, &res[%d]: %d\n", i, &arr1[i], i, &arr2[i], i, &res[i]);
         printf("arr1[%d]: %d, arr2[%d]: %d, res[%d]: %d\n", i, arr1[i], i, arr2[i], i, res[i]);
     }
-    
+
     return res;
 }
 
@@ -543,18 +547,18 @@ int main () {
 ### pointer to array
 
 ```c
-int main() { 
+int main() {
   int arr[] = { 3, 5, 6, 7, 9 };
   int *p = arr;
   int (*ptr)[5] = &arr;
 
   printf("p = %p, ptr = %p\n", p, ptr);
   printf("*p = %d, *ptr = %p\n", *p, *ptr);
-  printf("sizeof(p) = %lu, sizeof(*p) = %lu\n", sizeof(p), sizeof(*p)); 
-  printf("sizeof(ptr) = %lu, sizeof(*ptr) = %lu\n", sizeof(ptr), sizeof(*ptr)); 
+  printf("sizeof(p) = %lu, sizeof(*p) = %lu\n", sizeof(p), sizeof(*p));
+  printf("sizeof(ptr) = %lu, sizeof(*ptr) = %lu\n", sizeof(ptr), sizeof(*ptr));
 
-  return 0; 
-} 
+  return 0;
+}
 ```
 
 
@@ -590,57 +594,72 @@ int main () {
    printf("Before a1 : %d\n", a1);
    change1(a1);
    printf("After a1 : %d\n", a1);
+// Before a1 : 100
+// After a1 : 100
 
    int v1 = 100;
    int *p1 = &v1;
    printf("Before v1: %d, p1: %d, *p1:%d\n", v1, p1, *p1);
    change1(*p1);
    printf("After v1: %d, p1: %d, *p1:%d\n", v1, p1, *p1);
-
+// Before v1: 100, p1: -379057580, *p1:100
+// After v1: 100, p1: -379057580, *p1:100
 
    int a2 = 100;
    printf("Before a2 : %d\n", a2);
    change2(&a2);
    printf("After a2 : %d\n", a2);
+// Before a2 : 100
+// After a2 : 1
 
    int v2 = 100;
    int *p2 = &v2;
    printf("Before v2: %d, p2: %d, *p2:%d\n", v2, p2, *p2);
    change2(p2);
    printf("After v2: %d, p2: %d, *p2:%d\n", v2, p2, *p2);
-
+// Before v2: 100, p2: -379057600, *p2:100
+// After v2: 1, p2: -379057600, *p2:1
 
    int a3 = 100;
    printf("Before a3 : %d\n", a3);
    change3(&a3);
    printf("After a3 : %d\n", a3);
+// Before a3 : 100
+// After a3 : 999
 
    int v3 = 100;
    int *p3 = &v3;
    printf("Before v3: %d, p3: %d, *p3:%d\n", v3, p3, *p3);
    change3(p3);
    printf("After v3: %d, p3: %d, *p3:%d\n", v3, p3, *p3);
-
+// Before v3: 100, p3: -379057616, *p3:100
+// After v3: 999, p3: -379057616, *p3:999
 
    int a4 = 100;
    printf("Before a4 : %d\n", a4);
    change4(&a4);
    printf("After a4 : %d\n", a4);
+// Before a4 : 100
+// After a4 : 100
 
    int v4 = 100;
    int *p4 = &v4;
    printf("Before v4: %d, p4: %d, *p4:%d\n", v4, p4, *p4);
    change4(p4);
    printf("After v4: %d, p4: %d, *p4:%d\n", v4, p4, *p4);
-
+// Before v4: 100, p4: -379057632, *p4:100
+// After v4: 100, p4: -379057632, *p4:100
 
    printf("g: %d, &g: %d\n", g, &g);
-   
+// g: 999, &g: 106459152
+
    int v5 = 100;
    int *p5 = &v5;
    printf("Before v5: %d, p5: %d, *p5:%d\n", v5, p5, *p5);
    change5(&p5);
    printf("After v5: %d, p5: %d, *p5:%d\n", v5, p5, *p5);
+// Before v5: 100, p5: -379057644, *p5:100
+// After v5: 100, p5: 106459152, *p5:999
 
    return 0;
 }
@@ -657,13 +676,13 @@ int sum (int num1, int num2) {
 int main() {
    int (*f2p) (int, int);
    f2p = sum;
-   
+
    int op1 = f2p(10, 13);
    int op2 = sum(10, 13);
-   
+
    printf("function pointer: %d\n",op1);
    printf("function: %d\n", op2);
-   
+
    return 0;
 }
 ```
@@ -680,14 +699,14 @@ int main () {
    char h1[6] = {'h', 'e', 'l', 'l', 'o', '\0'};
    char h2[] = "hello";
    printf("h1: %s, h2: %s\n", h1, h2);
-   
+
    int i;
    for (i = 0; i < 6; i++) {
       if (h1[i] == h2[i]) {
          printf("h1: %x == h2: %x\n", h1[i], h2[i]);
       } else {
-         printf("h1: %x != h2: %x\n", h1[i], h2[i]);    
-      } 
+         printf("h1: %x != h2: %x\n", h1[i], h2[i]);
+      }
    }
 
    return 0;
@@ -725,15 +744,15 @@ int main () {
 ```c
 #include <stdio.h>
 #include <string.h>
- 
+
 struct Employee {
    char name[50];
    float salary;
 };
 
 struct Book {
-   int id;  
-   char name[50];  
+   int id;
+   char name[50];
 } b1, b2;
 
 
@@ -744,17 +763,17 @@ void adjustSalary1(struct Employee e) {
 void adjustSalary2(struct Employee *e) {
    e->salary = 1.1 * e->salary;
 }
- 
+
 int main( ) {
    b1.id = 1;
    strcpy(b1.name, "Learn C");
    printf("book id: %d, name: %s\n", b1.id, b1.name);
-    
+
    struct Employee e1;
    strcpy(e1.name, "LPJ");
    e1.salary = 10;
    printf("name: %s, salary: %f\n", e1.name, e1.salary);
-    
+
    adjustSalary1(e1);
    printf("name: %s, salary: %f\n", e1.name, e1.salary);
 
@@ -773,15 +792,15 @@ int main( ) {
 ```c
 #include <stdio.h>
 #include <string.h>
- 
+
 union Data {
    int i;
    float f;
    char str[20];
 };
- 
+
 int main() {
-   union Data data;        
+   union Data data;
 
    data.i = 10;
    data.f = 220.5;
@@ -793,10 +812,10 @@ int main() {
 
    data.i = 10;
    printf( "data.i : %d\n", data.i);
-   
+
    data.f = 220.5;
    printf( "data.f : %f\n", data.f);
-   
+
    strcpy( data.str, "C Programming");
    printf( "data.str : %s\n", data.str);
    return 0;
@@ -818,15 +837,15 @@ int main () {
 
    FILE * pf;
    pf = fopen ("unexist.txt", "rb");
-	
+
    if (pf == NULL) {
       fprintf(stderr, "Value of errno: %d\n", errno);
       perror("Error printed by perror");
       fprintf(stderr, "Error opening file: %s\n", strerror(errno));
-   } else {   
+   } else {
       fclose (pf);
    }
-   
+
    return 0;
 }
 ```
@@ -839,12 +858,12 @@ int main() {
    int dividend = 20;
    int divisor = 5;
    int quotient;
- 
+
    if( divisor == 0) {
       fprintf(stderr, "Division by zero! Exiting...\n");
       exit(EXIT_FAILURE);
    }
-	
+
    quotient = dividend / divisor;
    fprintf(stderr, "Value of quotient : %d\n", quotient );
 
@@ -872,8 +891,8 @@ int main()
 
    if(fptr == NULL)
    {
-      printf("Error!");   
-      exit(1);             
+      printf("Error!");
+      exit(1);
    }
    printf("Enter num: ");
    scanf("%d",&num);
@@ -903,8 +922,8 @@ int main() {
 
    fscanf(fptr,"%d", &num);
    printf("Value of n=%d", num);
-   fclose(fptr); 
-  
+   fclose(fptr);
+
    return 0;
 }
 ```
@@ -933,10 +952,10 @@ int main() {
       num.n1 = n;
       num.n2 = 5*n;
       num.n3 = 5*n + 1;
-      fwrite(&num, sizeof(struct threeNum), 1, fptr); 
+      fwrite(&num, sizeof(struct threeNum), 1, fptr);
    }
-   fclose(fptr); 
-  
+   fclose(fptr);
+
    return 0;
 }
 ```
@@ -963,11 +982,11 @@ int main() {
    }
 
    for(n = 1; n < 5; ++n) {
-      fread(&num, sizeof(struct threeNum), 1, fptr); 
+      fread(&num, sizeof(struct threeNum), 1, fptr);
       printf("n1: %d\tn2: %d\tn3: %d\n", num.n1, num.n2, num.n3);
    }
-   fclose(fptr); 
-  
+   fclose(fptr);
+
    return 0;
 }
 ```
@@ -992,15 +1011,15 @@ int main() {
        // Program exits if the file pointer returns NULL.
        exit(1);
    }
-   
+
    fseek(fptr, -sizeof(struct threeNum), SEEK_END);
    for(n = 1; n < 5; ++n) {
-      fread(&num, sizeof(struct threeNum), 1, fptr); 
+      fread(&num, sizeof(struct threeNum), 1, fptr);
       printf("n1: %d\tn2: %d\tn3: %d\n", num.n1, num.n2, num.n3);
       fseek(fptr, -2*sizeof(struct threeNum), SEEK_CUR);
    }
-   fclose(fptr); 
-  
+   fclose(fptr);
+
    return 0;
 }
 ```
@@ -1012,21 +1031,21 @@ int main() {
 ```c
 #include <stdio.h>
 #include <string.h>
- 
-#define PI 3.14  
-#define MIN(a,b) ((a)<(b)?(a):(b))    
 
- 
+#define PI 3.14
+#define MIN(a,b) ((a)<(b)?(a):(b))
+
+
 int main( ) {
    float r = 10.0;
    printf("circle area: %f\n", PI * r * r);
    printf("min(1, -1): %d\n", MIN(1, -1));
-    
-   printf("File :%s\n", __FILE__ );    
-   printf("Date :%s\n", __DATE__ );    
-   printf("Time :%s\n", __TIME__ );    
-   printf("Line :%d\n", __LINE__ );    
-   printf("STDC :%d\n", __STDC__ );  
+
+   printf("File :%s\n", __FILE__ );
+   printf("Date :%s\n", __DATE__ );
+   printf("Time :%s\n", __TIME__ );
+   printf("Line :%d\n", __LINE__ );
+   printf("STDC :%d\n", __STDC__ );
 
    return 0;
 }
@@ -1069,7 +1088,7 @@ linux:~ # cat hello/func.h
 
 void hello(char * name);
 
-linux:~ # cat cat hello/func.c 
+linux:~ # cat cat hello/func.c
 void hello(char * name) {
    printf("Hello %s\n", name);
 }
@@ -1083,7 +1102,7 @@ int main() {
    printf("main program\n");
    float r = 10.0;
    printf("circle area: %f\n", PI * r * r);
- 
+
    hello("c");
    return 0;
 }
@@ -1109,13 +1128,13 @@ linux:~ # gcc -o main.exe main.c
 int main()
 {
    int *ptr, i , n1, n2;
- 
+
    printf("Enter size: ");
    scanf("%d", &n1);
 
    // ptr = (int*) calloc(n1, sizeof(int));
    ptr = (int*) malloc(n1 * sizeof(int));
-   printf("Addresses of previously allocated memory: "); 
+   printf("Addresses of previously allocated memory: ");
    for(i = 0; i < n1; ++i)
       printf("%u\n",ptr + i);
 
