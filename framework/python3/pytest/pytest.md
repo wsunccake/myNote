@@ -11,6 +11,31 @@ linux:~ # pytest --help
 
 ---
 
+## editor or ide
+
+### vscode
+
+```json
+// launch.json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "pytest",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "args": ["${file}"],
+            "environment": [{"PYTHONPATH": "${workspaceFolder}"}],
+            "justMyCode": true
+        }
+    ]
+}
+```
+
+
+---
+
 ## sample
 
 ```bash
