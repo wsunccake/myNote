@@ -71,3 +71,48 @@ for k, v in dict(globals()).items():
         print(k)
         print(inspect.getsource(v))
 ```
+
+
+---
+
+## timestamp
+
+```python
+import datetime
+import time
+
+now = datetime.datetime.now()
+now_timestamp = datetime.datetime.timestamp(now)
+print(now, now_timestamp)
+```
+
+
+---
+
+## infinite
+
+```python
+positive_infinity = float('inf')
+negative_infinity = float('-inf')
+```
+
+```python
+import math
+
+positive_infinity = math.inf
+negative_infinity = -math.inf
+```
+
+```python
+from decimal import Decimal
+
+positive_infinity = Decimal('Infinity')
+negative_infinity = Decimal('-Infinity')
+```
+
+```python
+import numpy as np
+
+positive_infinity = np.inf
+negative_infinity = -np.inf
+```

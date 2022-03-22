@@ -387,6 +387,16 @@ int main () {
 
 ## pointer
 
+```
+[]: array subscripting operator
+
+*: value at address operator
+
+&: address of operator
+
+x[i] <- *(x + i) in expression
+```
+
 ```c
 #include <stdio.h>
 
