@@ -31,32 +31,32 @@ linux:~ # ./hello
 #include <float.h>
 
 int main(int argc, char** argv) {
-    printf("CHAR_BIT    :   %d\n", CHAR_BIT);
-    printf("CHAR_MAX    :   %d\n", CHAR_MAX);
-    printf("CHAR_MIN    :   %d\n", CHAR_MIN);
-    printf("INT_MAX     :   %d\n", INT_MAX);
-    printf("INT_MIN     :   %d\n", INT_MIN);
-    printf("LONG_MAX    :   %ld\n", (long) LONG_MAX);
-    printf("LONG_MIN    :   %ld\n", (long) LONG_MIN);
-    printf("SCHAR_MAX   :   %d\n", SCHAR_MAX);
-    printf("SCHAR_MIN   :   %d\n", SCHAR_MIN);
-    printf("SHRT_MAX    :   %d\n", SHRT_MAX);
-    printf("SHRT_MIN    :   %d\n", SHRT_MIN);
-    printf("UCHAR_MAX   :   %d\n", UCHAR_MAX);
-    printf("UINT_MAX    :   %u\n", (unsigned int) UINT_MAX);
-    printf("ULONG_MAX   :   %lu\n", (unsigned long) ULONG_MAX);
-    printf("USHRT_MAX   :   %d\n", (unsigned short) USHRT_MAX);
+   printf("CHAR_BIT    :   %d\n", CHAR_BIT);
+   printf("CHAR_MAX    :   %d\n", CHAR_MAX);
+   printf("CHAR_MIN    :   %d\n", CHAR_MIN);
+   printf("INT_MAX     :   %d\n", INT_MAX);
+   printf("INT_MIN     :   %d\n", INT_MIN);
+   printf("LONG_MAX    :   %ld\n", (long) LONG_MAX);
+   printf("LONG_MIN    :   %ld\n", (long) LONG_MIN);
+   printf("SCHAR_MAX   :   %d\n", SCHAR_MAX);
+   printf("SCHAR_MIN   :   %d\n", SCHAR_MIN);
+   printf("SHRT_MAX    :   %d\n", SHRT_MAX);
+   printf("SHRT_MIN    :   %d\n", SHRT_MIN);
+   printf("UCHAR_MAX   :   %d\n", UCHAR_MAX);
+   printf("UINT_MAX    :   %u\n", (unsigned int) UINT_MAX);
+   printf("ULONG_MAX   :   %lu\n", (unsigned long) ULONG_MAX);
+   printf("USHRT_MAX   :   %d\n", (unsigned short) USHRT_MAX);
 
-    printf("Storage size for float : %d \n", sizeof(float));
-    printf("FLT_MAX     :   %g\n", (float) FLT_MAX);
-    printf("FLT_MIN     :   %g\n", (float) FLT_MIN);
-    printf("-FLT_MAX    :   %g\n", (float) -FLT_MAX);
-    printf("-FLT_MIN    :   %g\n", (float) -FLT_MIN);
-    printf("DBL_MAX     :   %g\n", (double) DBL_MAX);
-    printf("DBL_MIN     :   %g\n", (double) DBL_MIN);
-    printf("-DBL_MAX     :  %g\n", (double) -DBL_MAX);
-    printf("Precision value: %d\n", FLT_DIG );
-    return 0;
+   printf("Storage size for float : %d \n", sizeof(float));
+   printf("FLT_MAX     :   %g\n", (float) FLT_MAX);
+   printf("FLT_MIN     :   %g\n", (float) FLT_MIN);
+   printf("-FLT_MAX    :   %g\n", (float) -FLT_MAX);
+   printf("-FLT_MIN    :   %g\n", (float) -FLT_MIN);
+   printf("DBL_MAX     :   %g\n", (double) DBL_MAX);
+   printf("DBL_MIN     :   %g\n", (double) DBL_MIN);
+   printf("-DBL_MAX     :  %g\n", (double) -DBL_MAX);
+   printf("Precision value: %d\n", FLT_DIG );
+   return 0;
 }
 ```
 
@@ -92,18 +92,18 @@ int main () {
 #include <stdio.h>
 
 int main () {
-    int i, j;
+   int i, j;
 
-    i = 1, j = 0;
-    printf("i: %d, j: %d\n", i, j);
-    j = i++;
-    printf("i: %d, j: %d\n", i, j);
+   i = 1, j = 0;
+   printf("i: %d, j: %d\n", i, j);
+   j = i++;
+   printf("i: %d, j: %d\n", i, j);
 
-    i = 1, j = 0;
-    printf("i: %d, j: %d\n", i, j);
-    j = ++i;
-    printf("i: %d, j: %d\n", i, j);
-    return 0;
+   i = 1, j = 0;
+   printf("i: %d, j: %d\n", i, j);
+   j = ++i;
+   printf("i: %d, j: %d\n", i, j);
+   return 0;
 }
 ```
 
@@ -119,22 +119,22 @@ int main () {
 #include <stdio.h>
 
 int main () {
-    char sex;
-    printf("input m/f:");
-    scanf("%c",&sex);
-    printf("your input: %c\n", sex);
+   char sex;
+   printf("input m/f:");
+   scanf("%c",&sex);
+   printf("your input: %c\n", sex);
 
-    if (sex == 'm') {
-        printf("male\n");
-    } else if (sex == 'f') {
-        printf("female\n");
-    } else {
-        printf("unknown\n");
-    }
+   if (sex == 'm') {
+      printf("male\n");
+   } else if (sex == 'f') {
+      printf("female\n");
+   } else {
+      printf("unknown\n");
+   }
 
-    int i = (sex == 'm' ? 1 : 0);
-    printf("%d\n", i);
-    return 0;
+   int i = (sex == 'm' ? 1 : 0);
+   printf("%d\n", i);
+   return 0;
 }
 ```
 
@@ -145,26 +145,26 @@ int main () {
 #include <stdio.h>
 
 int main () {
-    char sex;
-    printf("input m/f:");
-    scanf("%c",&sex);
-    printf("your input: %c\n", sex);
+   char sex;
+   printf("input m/f:");
+   scanf("%c",&sex);
+   printf("your input: %c\n", sex);
 
-    switch(sex) {
-    case 'm':
-    case 'M':
-        printf("male\n");
-        break;
-    case 'f':
-    case 'F':
-        printf("female\n");
-        break;
-    default:
-        printf("unknown\n");
-        break;
-    }
+   switch(sex) {
+   case 'm':
+   case 'M':
+      printf("male\n");
+      break;
+   case 'f':
+   case 'F':
+      printf("female\n");
+      break;
+   default:
+      printf("unknown\n");
+      break;
+   }
 
-    return 0;
+   return 0;
 }
 ```
 
@@ -197,11 +197,11 @@ int main () {
 
    int i = 0
    for ( ; ; ) {
-        printf("%d\n", i);
-        if (i > MAX) {
-            break;
-        }
-        i++;
+      printf("%d\n", i);
+      if (i > MAX) {
+         break;
+      }
+      i++;
    }
 
    return 0;
@@ -382,6 +382,41 @@ int main () {
 }
 ```
 
+### row-major vs column-major
+
+c 是 row-major order
+
+```c
+#include <stdio.h>
+#include <time.h>
+
+void main() {
+   int const NUM = 999;
+   int m[NUM][NUM];
+	int i, j;
+	clock_t start, stop;
+	double d = 0.0;
+
+	start = clock();
+	for (i = 0; i < NUM; i++)
+		for (j = 0; j < NUM; j++)
+		   m[i][j] = m[i][j] + (m[i][j] * m[i][j]);
+
+	stop = clock();
+	d = (double)(stop - start) / CLOCKS_PER_SEC;
+	printf("The run-time of row major order is %lf\n", d);
+
+	start = clock();
+	for (j = 0; j < NUM; j++)
+		for (i = 0; i < NUM; i++)
+			m[i][j] = m[i][j] + (m[i][j] * m[i][j]);
+
+	stop = clock();
+	d = (double)(stop - start) / CLOCKS_PER_SEC;
+	printf("The run-time of column major order is %lf", d);
+}
+```
+
 
 ---
 
@@ -439,23 +474,31 @@ int **ptr;
 #include <stdio.h>
 
 int main () {
-  int *ptr = NULL;
-  int arr[] = {1, 2, 3};
-  int *ptr1 = arr;
-  int *ptr2;
-  ptr2 = arr;
-  int *ptr3;
-  ptr3 = &arr[0];
+   int *ptr = NULL;
+   int arr[] = {1, 2, 3};
+   int *ptr1 = arr;
+   int *ptr2;
+   ptr2 = arr;
+   int *ptr3;
+   ptr3 = &arr[0];
 
-  int i;
-  for (i = 0; i < 3; i++) {
+   printf("%d %d %d %d\n", arr[2], *(arr + 2), *(2 + arr), 2[arr]);
+   int i;
+   for (i = 0; i < 3; i++) {
       printf("&arr[%d]: %d, ptr1: %d, ptr2: %d, ptr3: %d\n", i, &arr[i], ptr1, ptr2, ptr3);
       printf("arr[%d]: %d, *ptr1: %d, *ptr2: %d, *ptr3: %d\n", i, arr[i], *ptr1, *ptr2, *ptr3);
       ptr1++, ptr2++, ptr3++;
   }
-
   return 0;
 }
+
+// 3, 3, 3, 3
+// &arr[0]: -2110641860, ptr1: -2110641860, ptr2: -2110641860, ptr3: -2110641860
+// arr[0]: 1, *ptr1: 1, *ptr2: 1, *ptr3: 1
+// &arr[1]: -2110641856, ptr1: -2110641856, ptr2: -2110641856, ptr3: -2110641856
+// arr[1]: 2, *ptr1: 2, *ptr2: 2, *ptr3: 2
+// &arr[2]: -2110641852, ptr1: -2110641852, ptr2: -2110641852, ptr3: -2110641852
+// arr[2]: 3, *ptr1: 3, *ptr2: 3, *ptr3: 3
 ```
 
 
@@ -473,27 +516,27 @@ void showPointer(int *ptr, int size) {
 }
 
 int *addArray1(int arr1[], int arr2[], int size) {
-    int i;
-    int res[size];
-    for (i = 0; i < size; i++) {
-        res[i] = arr1[i] + arr2[i];
-        printf("&arr1[%d]: %d, &arr2[%d]: %d, &res[%d]: %d\n", i, &arr1[i], i, &arr2[i], i, &res[i]);
-        printf("arr1[%d]: %d, arr2[%d]: %d, res[%d]: %d\n", i, arr1[i], i, arr2[i], i, res[i]);
-    }
+   int i;
+   int res[size];
+   for (i = 0; i < size; i++) {
+         res[i] = arr1[i] + arr2[i];
+         printf("&arr1[%d]: %d, &arr2[%d]: %d, &res[%d]: %d\n", i, &arr1[i], i, &arr2[i], i, &res[i]);
+         printf("arr1[%d]: %d, arr2[%d]: %d, res[%d]: %d\n", i, arr1[i], i, arr2[i], i, res[i]);
+   }
 
-    return res;
+   return res;
 }
 
 int *addArray2(int arr1[], int arr2[], int size) {
-    int i;
-    int *res = malloc(size);
-    for (i = 0; i < size; i++) {
-        res[i] = arr1[i] + arr2[i];
-        printf("&arr1[%d]: %d, &arr2[%d]: %d, &res[%d]: %d\n", i, &arr1[i], i, &arr2[i], i, &res[i]);
-        printf("arr1[%d]: %d, arr2[%d]: %d, res[%d]: %d\n", i, arr1[i], i, arr2[i], i, res[i]);
-    }
+   int i;
+   int *res = malloc(size);
+   for (i = 0; i < size; i++) {
+      res[i] = arr1[i] + arr2[i];
+      printf("&arr1[%d]: %d, &arr2[%d]: %d, &res[%d]: %d\n", i, &arr1[i], i, &arr2[i], i, &res[i]);
+      printf("arr1[%d]: %d, arr2[%d]: %d, res[%d]: %d\n", i, arr1[i], i, arr2[i], i, res[i]);
+   }
 
-    return res;
+   return res;
 }
 
 int main () {
@@ -558,16 +601,16 @@ int main () {
 
 ```c
 int main() {
-  int arr[] = { 3, 5, 6, 7, 9 };
-  int *p = arr;
-  int (*ptr)[5] = &arr;
+   int arr[] = { 3, 5, 6, 7, 9 };
+   int *p = arr;
+   int (*ptr)[5] = &arr;
 
-  printf("p = %p, ptr = %p\n", p, ptr);
-  printf("*p = %d, *ptr = %p\n", *p, *ptr);
-  printf("sizeof(p) = %lu, sizeof(*p) = %lu\n", sizeof(p), sizeof(*p));
-  printf("sizeof(ptr) = %lu, sizeof(*ptr) = %lu\n", sizeof(ptr), sizeof(*ptr));
+   printf("p = %p, ptr = %p\n", p, ptr);
+   printf("*p = %d, *ptr = %p\n", *p, *ptr);
+   printf("sizeof(p) = %lu, sizeof(*p) = %lu\n", sizeof(p), sizeof(*p));
+   printf("sizeof(ptr) = %lu, sizeof(*ptr) = %lu\n", sizeof(ptr), sizeof(*ptr));
 
-  return 0;
+   return 0;
 }
 ```
 
@@ -580,23 +623,23 @@ int main() {
 int g = 999;
 
 void change1(int a) {
-    a = 1;
+   a = 1;
 }
 
 void change2(int *p) {
-    *p = 1;
+   *p = 1;
 }
 
 void change3(int *p) {
-    *p = g;
+   *p = g;
 }
 
 void change4(int *p) {
-    p = &g;
+   p = &g;
 }
 
 void change5(int **ptp) {
-    *ptp = &g;
+   *ptp = &g;
 }
 
 int main () {
@@ -869,7 +912,7 @@ int main() {
    int divisor = 5;
    int quotient;
 
-   if( divisor == 0) {
+   if ( divisor == 0) {
       fprintf(stderr, "Division by zero! Exiting...\n");
       exit(EXIT_FAILURE);
    }
@@ -926,8 +969,8 @@ int main() {
    FILE *fptr;
 
    if ((fptr = fopen("/tmp/tmp.txt", "r+")) == NULL) {
-       printf("Error! opening file");
-       exit(1);
+      printf("Error! opening file");
+      exit(1);
    }
 
    fscanf(fptr,"%d", &num);
@@ -954,8 +997,8 @@ int main() {
    FILE *fptr;
 
    if ((fptr = fopen("/tmp/tmp.bin","wb")) == NULL) {
-       printf("Error! opening file");
-       exit(1);
+      printf("Error! opening file");
+      exit(1);
    }
 
    for(n = 1; n < 5; ++n) {
@@ -987,8 +1030,8 @@ int main() {
    FILE *fptr;
 
    if ((fptr = fopen("/tmp/tmp.bin","rb")) == NULL){
-       printf("Error! opening file");
-       exit(1);
+      printf("Error! opening file");
+      exit(1);
    }
 
    for(n = 1; n < 5; ++n) {
@@ -1017,9 +1060,9 @@ int main() {
    FILE *fptr;
 
    if ((fptr = fopen("/tmp/tmp.bin","rb")) == NULL){
-       printf("Error! opening file");
-       // Program exits if the file pointer returns NULL.
-       exit(1);
+      printf("Error! opening file");
+      // Program exits if the file pointer returns NULL.
+      exit(1);
    }
 
    fseek(fptr, -sizeof(struct threeNum), SEEK_END);
