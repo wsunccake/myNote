@@ -1204,3 +1204,95 @@ int main()
    return 0;
 }
 ```
+
+
+---
+
+## typedef
+
+```c
+#include <stdio.h>
+
+typedef unsigned int unit;
+
+// typedef with pointer
+typedef int *intptr;
+
+// typedef with strut
+struct employee
+{
+    int salary;
+    int id;
+};
+typedef struct employee Employee;
+
+// typedef with funtion pointer
+typedef int (*sum)(int);
+
+int sum1(int n)
+{
+    int total = 0;
+    int i;
+    for (i = 1; i <= n; i++)
+    {
+        total += i;
+    }
+    return total;
+}
+
+int sum2(int n)
+{
+    int total = 0;
+    return total = (1 + n) * n / 2;
+}
+
+int main()
+{
+    unsigned int i1 = 1;
+    unit i2 = 1;
+
+    if (i1 == i2)
+    {
+        printf("i1 == i2\n");
+    }
+    else
+    {
+        printf("i1 != i2\n");
+    }
+
+    int *p1 = &i1;
+    intptr p2 = &i2;
+
+    printf("%i, %i\n", *p1, *p2);
+
+    struct employee e1 = {.id = 1, .salary = 100};
+    Employee e2 = {.id = 2, .salary = 100};
+
+    printf("%i, %i\n", e1.id, e1.salary);
+    printf("%i, %i\n", e2.id, e2.salary);
+
+    sum sum0 = &sum2;
+    printf("%i, %i, %i\n", sum1(10), sum2(10), sum0(10));
+
+    return 0;
+}
+```
+
+
+---
+
+## const
+
+
+---
+
+## static
+
+
+---
+
+## ref
+
+[C Tutoial](https://www.tutorialspoint.com/cprogramming/index.htm)
+
+[C/C++ 前置處理器參考](https://docs.microsoft.com/zh-tw/cpp/preprocessor/c-cpp-preprocessor-reference?view=msvc-170)
