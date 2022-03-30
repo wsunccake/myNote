@@ -70,11 +70,13 @@ linux:~ # kubectl get pod,deploy,svc
 linux:~ # kubectl apply -f <file>.yaml
 linux:~ # kubectl delete [-f <file>.yaml|<type>/<name>]
 linux:~ # kubectl edit [-f <file>.yaml|<type>/<name>]
-linux:~ # kubectl wait --for=condition=Ready [-f <file>.yaml|<type>/<name>]
 
 linux:~ # kubectl exec [-it] <type>/<name> [-c <container>] -- <command>
 linux:~ # kubectl describe <type>/<name>
 linux:~ # kubectl logs [-f] <type>/<name> [-c <container>]
+
+linux:~ # kubectl wait --for=condition=Ready [-f <file>.yaml|<type>/<name>]
+linux:~ # kubectl describe <type>/<name> | grep Condition -A5       # list all condition
 ```
 
 
