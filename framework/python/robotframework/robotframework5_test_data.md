@@ -319,6 +319,71 @@ Library    SomeLibrary    localhost        1234    WITH NAME    LocalLib
 Library    SomeLibrary    server.domain    8080    WITH NAME    RemoteLib
 ```
 
+
+### example - import library
+
+```bash
+linux:~ $ cat UserDefineRF.robot
+*** Keywords ***
+RobotFramework Say
+    [Arguments]  ${words}
+    Log  hey ${words}
+
+linux:~ $ UserDefinePyFunc.py
+def func_say(msg):
+    print(f'hi {msg}')
+
+linux:~ $ UserDefinePyCls.py
+class ClsSay():
+    def __init__(self, msg) -> None:
+        self.msg = msg
+
+    def hello(self):
+        print(f'hello {self.msg}')
+
+linux:~ $ test.robot
+*** Settings ** *
+Library     OperatingSystem
+Resource    UserDefineRF.robot
+Library     UserDefinePyFunc
+Library     UserDefinePyCls.ClsSay  RobotFramework  WITH NAME  cls_say
+
+*** Test Cases ** *
+Say Somethings
+    Log  Hi RF
+    RobotFramework Say  RobotFramework
+    func_say  RobotFramework
+    cls_say.hello
+
+linux:~ $ robot test.robot
+```
+
+
+### example - import variable
+
+```bash
+linux:~ $ cat var.robot
+*** Variables ***
+${rf_words}=  Hello Robotframework
+
+linux:~ $ cat var.py
+py_words = 'Hello Python'
+
+linux:~ $ cat test.robot
+*** Settings ** *
+Library     OperatingSystem
+Resource    var.robot
+
+*** Test Cases ** *
+Say Somethings
+    Log  ${rf_words}
+    Log  ${py_words}
+    Log  ${words}
+
+linux:~ $ robot -V var.py -v words:"Hello rf" test.robot
+```
+
+
 ---
 
 ## ref
