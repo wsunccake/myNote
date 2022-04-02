@@ -386,6 +386,239 @@ linux:~ $ robot -V var.py -v words:"Hello rf" test.robot
 
 ---
 
+## variable
+
+RF 變數命名是不區分大小寫
+
+### scalar
+
+```robot
+${1}, ${2}, ${3}, ...                   # 整數
+${Null}, ${None}, ${False}, ${True}
+${null}, ${none}, ${false}, ${true}
+${SPACE}, ${SPACE * 4}                  # 空格
+${EMPTY}, ${/}, ${\}, ${\n}
+
+${int1}=  Set Variable  ${1}            # 設定 int1 為 整數 1
+${str1}=  Set Variable  1               # 設定 str1 為 字串 1
+```
+
+
+### list
+
+```robot
+${list1}=  Create List  A  B  C                 # 設定 list
+Log  ${list1[0]}                                # 顯示第一個 element
+Log  ${list1}[0]                                # 顯示第一個 element
+Log  ${list1[-1]}                               # 顯示最後一個 element
+# Log  @{list1[0]}                              # 錯誤
+Append To List  ${list1}  D                     # 新增 element
+Remove From List  ${list1}  0                   # 移除 element
+Log  ${list1}
+Log  ${list1[2:]}
+# Log  @{list1}                                 # 錯誤 無法顯示
+Log Many  ${list1}
+Log Many  @{list1}
+
+${content}=  Catenate  SEPARATOR=\n  @{list1}   # 轉成字串
+
+@{list2}=  Create List  A  B  C                 # 設定 list 使用 @
+${list3}=  Evaluate  ['A', 'B', 'C']            # 設定 list 使用 Evaluate
+
+@{animals}=  Create List  cat  dog
+FOR    ${e}    IN    @{list1}            # loop
+    Log    ${e}
+END
+```
+
+
+### dictionary
+
+```robot
+${dict1}=  Create Dictionary  Jun=1  Feb=2      # 設定 dictionary
+Log  ${dict1['Jun']}
+Set To Dictionary  ${dict1}  Mar  3             # 新增 key / value
+Remove From Dictionary  ${dict1}  Jun           # 移除 key / value
+Log  ${dict1}
+# Log  &{dict1}                                 # 錯誤
+Log Many  ${dict1}
+Log Many  &{dict1}
+
+&{dict2}=  Create Dictionary  Jun=1  Feb=2      # 設定 dictionary 使用 &
+${dict3}=  Evaluate  {'Jun': '1', 'Feb': '2'}   # 設定 dictionary 使用 Evaluate
+
+FOR    ${key}    ${value}    IN    &{dict1}
+    Log    '${key}' -> '${value}'
+END
+```
+
+
+### environment
+
+```robot
+Log  %{HOME}
+```
+
+
+### variables
+
+```robot
+*** Variables ***
+# scalar
+${NAME}         Robot Framework
+${VERSION}      2.0
+${ROBOT}        ${NAME} ${VERSION}
+${EXAMPLE}      This value is joined
+...             together with a space.
+${MULTILINE}    SEPARATOR=\n
+...             First line.
+...             Second line.
+...             Third line.
+
+# list
+@{NAMES}        Matti       Teppo
+@{NAMES2}       @{NAMES}    Seppo
+@{NOTHING}
+@{MANY}         one         two      three      four
+...             five        six      seven
+
+# dictionary
+&{USER 1}       name=Matti    address=xxx         phone=123
+&{USER 2}       name=Teppo    address=yyy         phone=456
+&{EVEN MORE}    &{USER 1}     first=override      empty=
+...             =empty        key\=here=value
+```
+
+
+---
+
+## control structure
+
+### for loop
+
+```robot
+# simple loop
+FOR    ${var}    IN    one    two    thtee    four    five
+...    kuusi    7    eight    nine    last
+    Log    ${var}
+END
+
+FOR    ${key}    ${value}    IN    a=1    d=4    g=7
+        Log    '${key}' -> '${value}'
+END
+
+# multiple nesting loop
+FOR    ${root}    IN    r1    r2
+    FOR    ${child}    IN    c1   c2    c3
+        FOR    ${grandchild}    IN    g1    g2
+            Log Many    ${root}    ${child}    ${grandchild}
+        END
+    END
+    FOR    ${sibling}    IN    s1    s2    s3
+        IF    '${sibling}' != 's2'
+            Log Many    ${root}    ${sibling}
+        END
+    END
+END
+
+# multiple loop variable
+FOR    ${index}    ${english}    ${finnish}    IN
+...    1           cat           kissa
+...    2           dog           koira
+...    3           horse         hevonen
+    Add Translation    ${english}    ${finnish}    ${index}
+END
+
+# FOR - IN RANGE
+FOR    ${index}    IN RANGE    10
+    Log    ${index}
+END
+
+# FOR - IN ENUMERATE
+FOR    ${index}    ${item}    IN ENUMERATE    dog   cat
+    Log    ${index}: ${item}
+END
+
+FOR    ${index}     ${key}    ${value}    IN    a=1    d=4    g=7
+        Log    ${index}: '${key}' -> '${value}'
+END
+
+${NUMBERS}=     Create List     ${1}    ${2}    ${5}
+${NAMES}=       Create List     one     two     five
+# FOR - IN ZIP
+FOR    ${number}    ${name}    IN ZIP    ${NUMBERS}    ${NAMES}
+    Log Many    ${number}    ${name}
+END
+```
+
+
+### while loop
+
+```robot
+# simple
+${rc}=  Set Variable    1
+WHILE    ${rc} != 0
+    ${rc}=  Generate Random String  1  [NUMBERS]
+END
+
+# limit as iteration count
+WHILE    True    limit=100
+    Log    This is run 100 times.
+END
+
+# limit as time
+WHILE    True    limit=10 seconds
+    Log    This is run 10 seconds.
+END
+
+# no limit
+WHILE    True    limit=NONE
+    Log    This must be forcefully stopped.
+END
+
+# nesting WHILE
+${x} =   Set Variable    10
+WHILE    ${x} > 0
+    ${y} =   Set Variable    ${x}
+    WHILE    ${y} > 0
+        ${y} =    Evaluate    ${y} - 1
+    END
+    IF    ${x} > 5
+        ${x} =    Evaluate    ${x} - 1
+    ELSE
+        ${x} =    Evaluate    ${x} - 2
+    END
+END
+```
+
+--removekeywords, --flattenkeywords
+
+
+### break, continue
+
+```robot
+# BREAK with FOR
+${text} =    Set Variable    zero
+FOR    ${var}    IN    one    two    three
+    IF    '${var}' == 'two'    BREAK
+    ${text} =    Set Variable    ${text}-${var}
+END
+Should Be Equal    ${text}    zero-one
+
+# CONTINUE with FOR
+${text} =    Set Variable    zero
+FOR    ${var}    IN    one    two    three
+    IF    '${var}' == 'two'    CONTINUE
+    ${text} =    Set Variable    ${text}-${var}
+END
+Should Be Equal    ${text}    zero-one-three
+```
+
+
+### if
+
+---
+
 ## ref
 
 [Robot Framework User Guide](https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html)
