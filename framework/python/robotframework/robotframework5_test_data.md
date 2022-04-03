@@ -617,6 +617,53 @@ Should Be Equal    ${text}    zero-one-three
 
 ### if
 
+```robot
+# Number Compare
+IF    ${rc > 0}
+    Log  Positive
+ELSE IF    ${rc < 0}
+    Log  Negative
+ELSE IF    ${rc == 0}
+    Log  Zero
+ELSE
+    Fail    Unexpected rc: ${rc}
+END
+
+# String Compare
+Run Keyword If  '${status}' == '${True}'  Log  status is true
+
+# Inline IF/ELSE
+IF    $condition    Keyword    argument    ELSE    Another Keyword
+
+# Inline IF/ELSE IF/ELSE
+IF    $cond1    Keyword 1    ELSE IF    $cond2    Keyword 2    ELSE IF    $cond3    Keyword 3    ELSE    Keyword 4
+
+# Inline IF/ELSE with assignment
+${var} =    IF    $condition    Keyword    argument    ELSE    Another Keyword
+
+# Inline IF/ELSE with assignment having multiple variables
+${host}    ${port} =    IF    $production    Get Production Config    ELSE    Get Testing Config
+
+# Nested IF
+IF    not ${items}
+    Log to console    No items.
+ELSE IF    len(${items}) == 1
+    IF    ${log_values}
+        Log to console    One item: ${items}[0]
+    ELSE
+        Log to console    One item.
+    END
+ELSE
+    Log to console    ${{len(${items})}} items.
+    IF    ${log_values}
+        FOR    ${index}    ${item}    IN ENUMERATE    @{items}    start=1
+            Log to console    Item ${index}: ${item}
+        END
+    END
+END
+```
+
+
 ---
 
 ## ref
@@ -624,4 +671,3 @@ Should Be Equal    ${text}    zero-one-three
 [Robot Framework User Guide](https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html)
 
 [How to write good test cases using Robot Framework](https://github.com/robotframework/HowToWriteGoodTestCases/blob/master/HowToWriteGoodTestCases.rst)
-
