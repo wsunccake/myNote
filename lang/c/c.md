@@ -134,6 +134,15 @@ int main () {
 
    int i = (sex == 'm' ? 1 : 0);
    printf("%d\n", i);
+
+// default 0
+   if (!0)
+      printf("!0 is true\n");
+
+// default NULL
+   if (!NULL)
+      printf("!NULL is true\n");
+
    return 0;
 }
 ```
@@ -622,24 +631,39 @@ int main() {
 
 int g = 999;
 
-void change1(int a) {
+void change1(int a)
+{
    a = 1;
 }
 
-void change2(int *p) {
+void change2(int *p)
+{
    *p = 1;
 }
 
-void change3(int *p) {
+void change3(int *p)
+{
    *p = g;
 }
 
-void change4(int *p) {
+void change4(int *p)
+{
    p = &g;
 }
 
-void change5(int **ptp) {
+void change5(int **ptp)
+{
    *ptp = &g;
+}
+
+void change6(int **ptp, int a)
+{
+   *ptp = &a;
+}
+
+void change7(int **ptp, int *v)
+{
+   *ptp = v;
 }
 
 int main () {
@@ -713,6 +737,24 @@ int main () {
    printf("After v5: %d, p5: %d, *p5:%d\n", v5, p5, *p5);
 // Before v5: 100, p5: -379057644, *p5:100
 // After v5: 100, p5: 106459152, *p5:999
+
+   int a6 = 1;
+   int v6 = 100;
+   int *p6 = &v6;
+   printf("Before v6: %d, p6: %x, *p6: %d, &a6: %x\n", v6, p6, *p6, &a6);
+   change6(&p6, a6);
+   printf("After v6: %d, p6: %x, *p6: %d, &a6: %x\n", v6, p6, *p6, &a6);
+// Before v6: 100, p6: ef4c1758, *p6: 100, &a6: ef4c175c
+// After v6: 100, p6: ef4c1724, *p6: 1, &a6: ef4c175c
+
+   int a7 = 1;
+   int *v7 = 100;
+   int *p7 = &a7;
+   printf("Before v7: %d, p7: %x, *p7: %d, &a7: %x\n", v7, p7, *p7, &a7);
+   change7(&p7, &v7);
+   printf("After v7: %d, p7: %x, *p7: %d, &a7: %x\n", v7, p7, *p7, &a7);
+// Before v7: 100, p7: e3f3375c, *p7: 1, &a7: e3f3375c
+// After v7: 100, p7: e3f33750, *p7: 100, &a7: e3f3375c
 
    return 0;
 }
@@ -1213,10 +1255,12 @@ int main()
 ```c
 #include <stdio.h>
 
+// typedef with alias
 typedef unsigned int unit;
 
 // typedef with pointer
 typedef int *intptr;
+
 
 // typedef with strut
 struct employee
@@ -1225,6 +1269,13 @@ struct employee
     int id;
 };
 typedef struct employee Employee;
+
+// typedef with strut
+// typedef struct {
+//     int salary;
+//     int id;
+// } Employee;
+
 
 // typedef with funtion pointer
 typedef int (*sum)(int);
