@@ -469,6 +469,30 @@ if __name__ == "__main__":
 ```
 
 
+## nest def
+
+```python
+def fn1(m):
+    print(f"{fn1.__name__} {m}")
+
+def fn2(m):
+    print(f"{fn2.__name__} {m}")
+
+    def fn3(n):
+        print(f"{fn3.__name__} {m} -> {n} in {fn2.__name__}")
+
+    return fn3
+
+fn1("aaa")
+ff = fn2("bbb")
+ff('ccc')
+
+gg = fn2("bbb")
+gg.__name__ = "gg"
+gg('ccc')
+```
+
+
 ##  *args, **kwargs
 
 ```python
