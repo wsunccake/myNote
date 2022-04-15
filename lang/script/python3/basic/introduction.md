@@ -909,6 +909,10 @@ class Message:
         # dynamic set method
         setattr(Message, "speak", speak)
 
+    # dynamic set method / member
+    def get_value(self, value):
+        return getattr(self, value)
+
 # dynamic set methed/member
 setattr(Message, "say", say)
 setattr(Message, "hi", "hi")
@@ -919,6 +923,8 @@ m.say()
 m.speak("go python")
 print(m.hello)
 print(m.hi)
+print(m.get_value("hello"))
+print(m.get_value("send")("learning python"))
 
 # dynamic get methed / member
 getattr(m, "send")("learn python")
