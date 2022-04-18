@@ -180,6 +180,77 @@ int main () {
 
 ---
 
+## operator
+
+### ++
+
+```c
+#include <stdio.h>
+
+int main()
+{
+   int c;
+   // c++
+   c = 0;
+   printf("c: %d\n", c);
+   printf("c++: %d\n", c++);
+   printf("c: %d\n", c);
+   // c: 0
+   // c++: 0
+   // c: 1
+
+   // ++c
+   c = 0;
+   printf("c: %d\n", c);
+   printf("++c: %d\n", ++c);
+   printf("c: %d\n", c);
+   // c: 0
+   // ++c: 1
+   // c: 1
+
+   // c+c++
+   c = 0;
+   printf("c: %d\n", c);
+   printf("c+c++: %d\n", c+c++);
+   printf("c: %d\n", c);
+   // c: 0
+   // c+c++: 0
+   // c: 1
+
+   // c+++c
+   c = 0;
+   printf("c: %d\n", c);
+   printf("c+++c: %d\n", c+++c);
+   printf("c: %d\n", c);
+   // c: 0
+   // c+++c: 1
+   // c: 1
+
+   // c+++c++
+   c = 0;
+   printf("c: %d\n", c);
+   printf("c+++c++: %d\n", c+++c++);
+   printf("c: %d\n", c);
+   // c: 0
+   // c+++c++: 1
+   // c: 2
+
+   // c+++c+c+c++;
+   c = 0;
+   printf("c: %d\n", c);
+   printf("c+++c+c+c++: %d\n", c+++c+c+c++);
+   printf("c: %d\n", c);
+   // c: 0
+   // c+++c+c+c++: 3
+   // c: 2
+
+   return 0;
+}
+```
+
+
+---
+
 ## loop
 
 ### for
@@ -332,6 +403,32 @@ int main () {
    printf("before swap, a : %d, b: %d\n", a, b);
    swap2(&a, &b);
    printf("after swap, a : %d, b: %d\n", a, b);
+}
+```
+
+```c
+#include <stdio.h>
+
+int sum_tail_recursive(int n, int total)
+{
+   if (n == 1)
+      return total;
+   return sum(n - 1, total + n);
+}
+
+int sum_recursive(int n)
+{
+   if (n == 1)
+      return 1;
+   return sum(n - 1) + n;
+}
+
+int main()
+{
+   printf("sum: %d\n", sum_recursive(10));
+   printf("sum: %d\n", sum_tail_recursive(10, 1));
+
+   return 0;
 }
 ```
 
