@@ -16,7 +16,7 @@ linux:~ # python
 ## script
 
 ```python
-#!/usr/bin/env python 
+#!/usr/bin/env python
 
 print('Hello, Python')
 ```
@@ -58,8 +58,8 @@ print(not True)
 ## string
 
 ```python
-str1 = 'ABC' 
-str2 = str1 
+str1 = 'ABC'
+str2 = str1
 print("str1: ", str1, ", type: ", type(str1)) 		# string type and content
 print(str1 == str2)
 
@@ -122,21 +122,21 @@ list 像是其他一般語言的陣列 (array) index 是從 0 開始, 但和 arr
 list assign 時, 是 copy by reference 非 copy by value
 
 ```python
-lst1 = [] 
+lst1 = []
 print("LIST : ", lst1, ", LIST type: ", type(lst1))
-lst1 = ["ABC", 'xyz', 123] 
+lst1 = ["ABC", 'xyz', 123]
 
-lst2 = lst1 
-lst3 = lst1[:] 
+lst2 = lst1
+lst3 = lst1[:]
 print("lst1: ", lst1, ", lst2: ", lst2, ", lst3: ", lst3)
 lst1.append(45.7)
 lst1.remove('ABC')
 print("lst1: ", lst1, ", lst2: ", lst2, ", lst3: ", lst3)
 
-for i in range(len(lst1)): 
+for i in range(len(lst1)):
     print("index: ", i, ", value: ", lst1[i])
 
-for l in lst1: 
+for l in lst1:
     print("value: ", l)
 
 
@@ -148,28 +148,28 @@ print('. '.join(['123', "abc", 'XYZ']))
 
 
 # 2D list
-my_list1 = [] 
-for x in range(5): 
-    tmp_list = [] 
-    for y in range(3): 
-        tmp_list.append(None) 
-    my_list1.append(tmp_list) 
+my_list1 = []
+for x in range(5):
+    tmp_list = []
+    for y in range(3):
+        tmp_list.append(None)
+    my_list1.append(tmp_list)
 print(my_list1)
 
-# 使用 List Comprehensions 
-my_list2 = [[None for _ in range(3)] for _ in range(5)] 
+# 使用 List Comprehensions
+my_list2 = [[None for _ in range(3)] for _ in range(5)]
 print(my_list2)
 
-# 設定初始值不一樣的二維陣列 
-my_list3 = [] 
-for x in range(5): 
-    tmp_list = [] 
-    for y in range(3): 
-        tmp_list.append(y + 3 * x) 
-    my_list3.append(tmp_list) 
+# 設定初始值不一樣的二維陣列
+my_list3 = []
+for x in range(5):
+    tmp_list = []
+    for y in range(3):
+        tmp_list.append(y + 3 * x)
+    my_list3.append(tmp_list)
 print(my_list3)
 
-my_list4 = [[x + 3 * y for x in range(3)] for y in range(5)] 
+my_list4 = [[x + 3 * y for x in range(3)] for y in range(5)]
 print(my_list4)
 print(my_list4[3][2])
 
@@ -210,10 +210,10 @@ print(list3)
 ## dictionary
 
 ```python
-dict1 = {} 
+dict1 = {}
 print("DICTIONARY: ", dict1, "DICTIONARY type: ",type(dict1))
 
-dict1 = {'A': 'ABC', "x": "xyz", "0": 123} 
+dict1 = {'A': 'ABC', "x": "xyz", "0": 123}
 dict2 = dict1
 print("dict1: ", dict1, "dict2: ", dict2)
 print(dict1 == dict2)
@@ -235,10 +235,10 @@ dict1.pop('A')
 print("dict1: ", dict1)
 
 
-for key in dict1.keys(): 
+for key in dict1.keys():
     print("key: ", key, "value: ", dict1[key])
 
-for key in dict1.keys(): 
+for key in dict1.keys():
     print("key: ", key, "value: ", dict1[key])
 
 hoilday = {'sat': 'Saturday', 'sun': 'Sunday'}
@@ -252,17 +252,17 @@ print('sun' in hoilday) 		# check Key
 
 ```python
 
-# tuple 的顯示方式 
-tup = (1, "xyz", 'ABC') 
+# tuple 的顯示方式
+tup = (1, "xyz", 'ABC')
 for t in tup:
     print (t)
 
-# net tuple 的使用方式 
-h2o =((0, 0), (0, 1), (1, 0)) 
+# net tuple 的使用方式
+h2o =((0, 0), (0, 1), (1, 0))
 for atom in h2o:
     print (atom)
 
-for x, y in h2o: 
+for x, y in h2o:
     print (x, y)
 ```
 
@@ -299,42 +299,42 @@ print(set1 - set3)
 python 只提供 if else 判斷, 使用方式如下, 但有些時候會想使用 switch case 方式作條件式的判斷, 但 python 本身無此功能, 只能使用 elif 方式
 
 ```bash
-sex = input('input your sex [m/f]: ') 
-if sex == 'm': 
+sex = input('input your sex [m/f]: ')
+if sex == 'm':
     print('Male')
-elif sex == 'f': 
+elif sex == 'f':
     print('Female')
-else: 
+else:
     print('Unknown')
 
-# 使用 dictionary 方法替代 switch/case 
-sex = {'m': 'Male', 'f': 'Female'} 
+# 使用 dictionary 方法替代 switch/case
+sex = {'m': 'Male', 'f': 'Female'}
 print(sex.get('m', 'Unknown'))
 ```
 
 當 statement 只有一行, 可以使用下面方式
 
 ```python
-import platform 
+import platform
 
-if platform.system() == "Linux": 
-    OS = "Linux" 
-else: 
-    OS = "Unknown" 
+if platform.system() == "Linux":
+    OS = "Linux"
+else:
+    OS = "Unknown"
 print(OS)
 
-# 另一種簡單方式的 if else 使用方式 
-OS = "Linux" if platform.system() else "Unknown" 
+# 另一種簡單方式的 if else 使用方式
+OS = "Linux" if platform.system() else "Unknown"
 print (OS)
 ```
 
 and, or, not 的使用
 
 ```python
-import os 
+import os
 
-#兩個condition同時判斷檔案是否存在 
-if os.path.exists(os.path.join(os.getenv('HOME'), '.profile') ) or os.path.exists(os.path.join(os.getenv('HOME'), '.bash_profile') ) : 
+#兩個condition同時判斷檔案是否存在
+if os.path.exists(os.path.join(os.getenv('HOME'), '.profile') ) or os.path.exists(os.path.join(os.getenv('HOME'), '.bash_profile') ) :
     print ".profile or .bashrc_profile exist"
 ```
 
@@ -342,18 +342,18 @@ if os.path.exists(os.path.join(os.getenv('HOME'), '.profile') ) or os.path.exist
 ## for
 
 ```python
-list1 = ["ABC", 'xyz', 123] 
-# 顯示l ist 內容 
-for l in list1: 
+list1 = ["ABC", 'xyz', 123]
+# 顯示l ist 內容
+for l in list1:
     print(l)
 
-dict1 = {"A":"ABC", 'b':"xyz", "0":123} 
-# 顯示dictionary內容 
-for D in dict1.keys(): 
+dict1 = {"A":"ABC", 'b':"xyz", "0":123}
+# 顯示dictionary內容
+for D in dict1.keys():
     print(dict1[D])
 
-# 數值迴圈的使用方式 
-for i in range (5): 
+# 數值迴圈的使用方式
+for i in range (5):
     print(i)
 ```
 
@@ -364,10 +364,10 @@ for i in range (5):
 lines1 = []
 for line in open('/etc/passwd'):
     lines1.append(line.rstrip())
-f.close() 
+f.close()
 print(lines1)
 
-lines2 = [line.rstrip() for line in open('/etc/passwd')] 
+lines2 = [line.rstrip() for line in open('/etc/passwd')]
 print(lines2)
 
 lines1 == lines2
@@ -376,15 +376,15 @@ lines1 == lines2
 配合 if
 
 ```python
-S = [x**2 for x in range(10)] 
-V = [2**i for i in range(13)] 
-M = [x for x in S if x % 2 == 0] 
+S = [x**2 for x in range(10)]
+V = [2**i for i in range(13)]
+M = [x for x in S if x % 2 == 0]
 print(S)
 print(V)
 print(M)
 
-noprimes = [j for i in range(2, 8) for j in range(i*2, 50, i)] 
-primes = [x for x in range(2, 50) if x not in noprimes] 
+noprimes = [j for i in range(2, 8) for j in range(i*2, 50, i)]
+primes = [x for x in range(2, 50) if x not in noprimes]
 print(primes)
 ```
 
@@ -415,12 +415,12 @@ print(dict4)
 ## while
 
 ```
-import sys 
+import sys
 
 print("Input the word, [Quit]")
-input1 = sys.stdin.readline().rstrip() 
+input1 = sys.stdin.readline().rstrip()
 
-while input1 != "Quit": 
+while input1 != "Quit":
     print("Your keyin: ", input1)
     input1 = sys.stdin.readline().rstrip()
 ```
@@ -455,34 +455,58 @@ if __name__ == "__main__":          # define main function
     change("A", "B")
 
 linux:~ # cat mymain01.py
-import sys 
+import sys
 # sys.path.append('modulepath')       # 指定 module path, 定義 sys.path 即可
 import myswap01                     # 載入 myswap01.py, myswap01.py 和 mymain01.py 同資料夾或是定義在 PYTHONPATH 或 sys.path
 
-if __name__ == "__main__": 
-    A = 3 
-    B = 1 
-    print "A: ", A, ", B: ", B 
+if __name__ == "__main__":
+    A = 3
+    B = 1
+    print "A: ", A, ", B: ", B
     (C, D) = myswap01.change(A, B)  # 使用 myswap01.py 裡的 chnage 函式
     print "A: ", A, ", B: ", B
     print "C: ", C, ", D: ", D
 ```
 
 
+## nest def
+
+```python
+def fn1(m):
+    print(f"{fn1.__name__} {m}")
+
+def fn2(m):
+    print(f"{fn2.__name__} {m}")
+
+    def fn3(n):
+        print(f"{fn3.__name__} {m} -> {n} in {fn2.__name__}")
+
+    return fn3
+
+fn1("aaa")
+ff = fn2("bbb")
+ff('ccc')
+
+gg = fn2("bbb")
+gg.__name__ = "gg"
+gg('ccc')
+```
+
+
 ##  *args, **kwargs
 
 ```python
-def person(name = "NoName", *desc , **data):    # name = "NoName" default value, *desc 是傳入 tuple, **data 則是傳入 dict 
-    print ("Name: %s" %name) 
+def person(name = "NoName", *desc , **data):    # name = "NoName" default value, *desc 是傳入 tuple, **data 則是傳入 dict
+    print ("Name: %s" %name)
     for k in data.keys():
         print("%s: %s" %(k, data[k]))
     for s in desc:
         print(s)
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
     myStory='''I'm student.
 I live in Taiei.'''.split('\n')
-    myData = {"sex":"female", "age":"15"} 
+    myData = {"sex":"female", "age":"15"}
 
     person("May", *myStory, **myData)           # 參數使用方式
 ```
@@ -491,10 +515,10 @@ I live in Taiei.'''.split('\n')
 ## lambda
 
 ```python
-my_sum = lambda x, y: x + y 
+my_sum = lambda x, y: x + y
 print(my_sum(1, 3))
 
-my_greater_than = lambda x, y: x if x > y else y 
+my_greater_than = lambda x, y: x if x > y else y
 print(my_greater_than(7, 3))
 
 round_up = lambda x, y: int(x / y) + (x % y > 0)
@@ -526,16 +550,16 @@ b(10)
 `simple decorator`
 
 ```python
-def greet(function): 
+def greet(function):
     print('Hello')
-    return function 
+    return function
 
-def greet_someone1(someone): 
+def greet_someone1(someone):
     print(someone)
-greet_someone1 = greet(greet_someone1) 
+greet_someone1 = greet(greet_someone1)
 
-@greet 
-def greet_someone2(someone): 
+@greet
+def greet_someone2(someone):
     print(someone)
 
 greet_someone1('John')
@@ -547,23 +571,23 @@ print(greet_someone2.__name__)
 `decorator without argument`
 
 ```python
-def greet(function): 
-    def wrapper(name): 
+def greet(function):
+    def wrapper(name):
         print('Hello')
-        return function(name) 
-    return wrapper 
+        return function(name)
+    return wrapper
 
-def greet_someone1(someone): 
+def greet_someone1(someone):
     print(someone)
-greet_someone1 = greet(greet_someone1) 
+greet_someone1 = greet(greet_someone1)
 
-@greet 
-def greet_someone2(someone): 
+@greet
+def greet_someone2(someone):
     print(someone)
 
-greet_someone1('John') 
+greet_someone1('John')
 print(greet_someone1.__name__)
-greet_someone2('Mary') 
+greet_someone2('Mary')
 print(greet_someone2.__name__)
 ```
 
@@ -572,9 +596,9 @@ print(greet_someone2.__name__)
 ```python
 def greet(arg = 'Hello'):
     def decorator(function):
-        def wrapper(name): 
+        def wrapper(name):
             print(arg)
-            return function(name) 
+            return function(name)
         return wrapper
     return decorator
 
@@ -582,9 +606,9 @@ def greet(arg = 'Hello'):
 def greet_someone(someone):
     print(someone)
 
-greet_someone('John') 
+greet_someone('John')
 print(greet_someone.__name__)
-greet_someone('Mary') 
+greet_someone('Mary')
 print(greet_someone.__name__)
 ```
 
@@ -593,7 +617,7 @@ print(greet_someone.__name__)
 ```python
 import functools
 
-def greet(function): 
+def greet(function):
     @functools.wraps(function)
     def wrapper(name):
         print('Hello')
@@ -615,18 +639,18 @@ import functools
 
 def greet(arg = 'Hello'):
     def decorator(function):
-        @functools.wraps(function) 
-        def wrapper(name): 
+        @functools.wraps(function)
+        def wrapper(name):
             print(arg)
-            return function(name) 
+            return function(name)
         return wrapper
     return decorator
 
 @greet()
-def greet_someone(someone): 
+def greet_someone(someone):
     print(someone)
 
-greet_someone('John') 
+greet_someone('John')
 print(greet_someone.__name__)
 ```
 
@@ -862,6 +886,53 @@ print(Date.is_date_valid('11-09-2012'))
 ```
 
 
+## getattr / setattr
+
+```python
+
+def send(msg):
+    print(f"send {msg}")
+
+def speak(l, m):
+    print(f"{l} -> {m}")
+
+def say(l):
+    print(f"hi {l.name}")
+
+class Message:
+    def __init__(self, name):
+        self.name = name
+        # dynamic set member
+        setattr(self, "send", send)                     # assign functuin
+        setattr(self, "hello", f"hello {self.name}")    # assign value
+
+        # dynamic set method
+        setattr(Message, "speak", speak)
+
+    # dynamic set method / member
+    def get_value(self, value):
+        return getattr(self, value)
+
+# dynamic set methed/member
+setattr(Message, "say", say)
+setattr(Message, "hi", "hi")
+
+m = Message("python3")
+m.send("learn python")
+m.say()
+m.speak("go python")
+print(m.hello)
+print(m.hi)
+print(m.get_value("hello"))
+print(m.get_value("send")("learning python"))
+
+# dynamic get methed / member
+getattr(m, "send")("learn python")
+getattr(m, "say")()
+getattr(m, "speak")("go python")
+```
+
+
 ---
 
 # regex
@@ -869,13 +940,13 @@ print(Date.is_date_valid('11-09-2012'))
 ## match
 
 ```python
-import re 
+import re
 
 str = '/usr/lib/python2.6/site-packages/gtk-2.0/gconf.so'
-print str 
+print str
 
 
-# same as sh ${STR%.*} 
+# same as sh ${STR%.*}
 restr = re.compile('(.*)\.(.*?)$').match(str)
 print("%s <=> %s" %(restr.group(1), restr.group(2)))
 print(restr.group(1, 2))                                    # return list
@@ -883,13 +954,13 @@ print(restr.groups())                                       # same as above
 print(re.sub('.[^.]*$', '', str))
 
 
-# same as sh ${STR%%.*} 
+# same as sh ${STR%%.*}
 restr = re.compile('(.*?)\.(.*)').match(str)
 print("%s <=> %s" %(restr.group(1), restr.group(2)))
 print(re.sub('\.(.*)', '', str))
 
 
-# same as sh ${STR#*/} 
+# same as sh ${STR#*/}
 restr = re.compile('(.*?)/(.*)').match(str)
 print("%s <=> %s" %(restr.group(1), restr.group(2)))
 print(re.sub('^(.*?)/', '', str))
@@ -947,18 +1018,18 @@ print(match_all)
 ## try, except, finally
 
 ```python
-try: 
-    a = int(input('input an integer number ')) 
-    b = int(input('input an integer number ')) 
-    if a > b: 
+try:
+    a = int(input('input an integer number '))
+    b = int(input('input an integer number '))
+    if a > b:
         print(n)
-except ValueError: 
+except ValueError:
     print("Value Error, you don't input any character")
-except: 
+except:
     print("Other Error")
-else: 
+else:
     print("Normal finish")
-finally: 
+finally:
     print("force action")
 ```
 
@@ -980,16 +1051,16 @@ else:
 ## defined exception
 
 ```python
-class MyError(Exception): 
-    def __init__(self, value): 
-        self.value = value 
+class MyError(Exception):
+    def __init__(self, value):
+        self.value = value
 
-    def __str__(self): 
-        return repr(self.value) 
+    def __str__(self):
+        return repr(self.value)
 
-try: 
-    raise MyError(input("keyin any one: ")) 
-except MyError as e: 
+try:
+    raise MyError(input("keyin any one: "))
+except MyError as e:
     print('My exception occurred, value:', e.value)
 ```
 
@@ -1034,11 +1105,11 @@ hi python3''')
 # file
 
 ```python
-f = open('/etc/passwd', 'r') 
-lines1 = f.readlines() 
-for line in lines1: 
+f = open('/etc/passwd', 'r')
+lines1 = f.readlines()
+for line in lines1:
     print(lines.rstrip())
-f.close() 
+f.close()
 
 with open('somefile.txt', 'w') as f:
     f.write('hello python')
