@@ -63,7 +63,7 @@ SELECT CURRENT_TIMESTAMP;
 
 * DDL: Data Definition Language
 
-SQL command (一般習慣使用大寫表示), table name 不分大小寫. Column 有分大小寫
+SQL command (一般習慣使用大寫表示), table name 不分大小寫. Column 有分大小寫, char 搜尋比對用 ' / quote / 單引號 不是 " / double quote / 雙引號
 
 
 ---
@@ -131,7 +131,7 @@ CREATE TABLE company(
   name VARCHAR (20)     NOT NULL,
   age  INT              NOT NULL,
   address  CHAR (25) ,
-  salary   DECIMAL (18, 2),       
+  salary   DECIMAL (18, 2),
   PRIMARY KEY (id)
 );
 ```

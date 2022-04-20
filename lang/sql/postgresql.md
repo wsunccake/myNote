@@ -135,6 +135,7 @@ postgres=# CREATE DATABASE <database_name>;  -- create database
 postgres=# DROP DATABASE <database_name>;    -- delete database
 postgres=# \l                                -- list database
 postgres=# \c <database_name>                -- use database
+postgres=# SELECT current_database();        -- show current database
 
 -- example
 postgres=# CREATE DATABASE testdb;
@@ -215,8 +216,8 @@ postgres=# ALTER TABLE COMPANY DROP TMP_COL ;
 
 ```sql
 postgres=# \dt
-postgres=# \d
-postgres=# \d COMPANY
+postgres=# \d           -- list table
+postgres=# \d COMPANY   -- show table schema
 ```
 
 
@@ -313,9 +314,9 @@ postgres=# SELECT * FROM COMPANY WHERE NAME LIKE 'Ki%';
 postgres=# SELECT * FROM COMPANY WHERE AGE IN ( 25, 27 );
 postgres=# SELECT * FROM COMPANY WHERE AGE NOT IN ( 25, 27 );
 postgres=# SELECT * FROM COMPANY WHERE AGE BETWEEN 25 AND 27;
-postgres=# SELECT AGE FROM COMPANY 
+postgres=# SELECT AGE FROM COMPANY
    WHERE EXISTS (SELECT AGE FROM COMPANY WHERE SALARY > 65000);
-postgres=#  SELECT * FROM COMPANY 
+postgres=#  SELECT * FROM COMPANY
    WHERE AGE > (SELECT AGE FROM COMPANY WHERE SALARY > 65000);
 ```
 
@@ -375,9 +376,9 @@ postgres=# SELECT name FROM COMPANY;
 postgres=# SELECT DISTINCT name FROM COMPANY;
 
 -- sub-where
-postgres=# SELECT AGE FROM COMPANY 
+postgres=# SELECT AGE FROM COMPANY
    WHERE EXISTS (SELECT AGE FROM COMPANY WHERE SALARY > 65000);
-postgres=# SELECT * FROM COMPANY 
+postgres=# SELECT * FROM COMPANY
    WHERE AGE > (SELECT AGE FROM COMPANY WHERE SALARY > 65000);
 ```
 
@@ -469,7 +470,7 @@ postgres=# CREATE TABLE DEPARTMENT_CONSTRAINT(
 
 ```sql
 postgres=# CREATE TABLE COMPANY_CONSTRAINT(
-   ID        INT, 
+   ID        INT,
    NAME      TEXT,
    AGE       INT,
    ADDRESS   CHAR(50),
@@ -499,7 +500,7 @@ postgres=# CREATE TABLE DEPARTMENT_CONSTRAINT(
 postgres=# ALTER TABLE DEPARTMENT_CONSTRAINT ALTER COLUMN DEPT DROP NOT NULL;
 postgres=# ALTER TABLE DEPARTMENT_CONSTRAINT ALTER COLUMN DEPT SET NOT NULL;
 
--- unique 
+-- unique
 postgres=# ALTER TABLE DEPARTMENT_CONSTRAINT ADD CONSTRAINT UNIQUE_CONSTRAINT UNIQUE(ID);
 postgres=# ALTER TABLE DEPARTMENT_CONSTRAINT DROP CONSTRAINT UNIQUE_CONSTRAINT;
 
@@ -612,7 +613,7 @@ postgres=# DROP TRIGGER trigger_name;
 -- create index
 postgres=# CREATE INDEX SALARY_INDEX ON COMPANY (SALARY);
 
--- list index 
+-- list index
 postgres=# \di
 postgres=# \d COMPANY
 
