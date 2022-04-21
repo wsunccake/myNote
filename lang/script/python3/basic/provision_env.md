@@ -45,16 +45,28 @@ osx:~ # rm pkgutil --forget org.python.Python.PythonUnixTools-3.x
 安裝 virtualenv, pybuilder 為例子
 
 ```bash
+linux:~ # pip -V
 linux:~ # pip list
 linux:~ # pip help
-linux:~ # pip search virtualenv
-linux:~ # pip install virtualenv
-linux:~ # python -m pip install requests
-linux:~ # pip install --upgrade pip
+
+# package
+linux:~ # pip search virtualenv             # search package
+
+linux:~ # pip install virtualenv            # install package
 linux:~ # cat requirements.txt
 pybuilder
-linux:~ # pip install -r requirements.txt
-linux:~ # pip uninstall requests
+linux:~ # pip install -r requirements.txt   # install package from requirements file
+linux:~ # python -m pip install requests    # install package by module
+
+linux:~ # pip install --upgrade pip         # upgrade package
+linux:~ # pip uninstall requests            # remove package
+
+# show package avaible version
+linux:~ # pip index versions pylibmc                                  # pip >= 21.2
+linux:~ # pip install pylibmc==                                       # pip >= 21.1
+linux:~ # pip install --use-deprecated=legacy-resolver pylibmc==      # pip >= 20.3
+linux:~ # pip install pylibmc==                                       # pip >= 9.0
+linux:~ # pip install pylibmc==blork                                  # pip < 9.0
 ```
 
 
