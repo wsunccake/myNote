@@ -409,24 +409,71 @@ int main () {
 ```c
 #include <stdio.h>
 
+// tail recursive
 int sum_tail_recursive(int n, int total)
 {
    if (n == 1)
       return total;
-   return sum(n - 1, total + n);
+   return sum_tail_recursive(n - 1, total + n);
 }
 
+// recursive
 int sum_recursive(int n)
 {
    if (n == 1)
       return 1;
-   return sum(n - 1) + n;
+   return sum_recursive(n - 1) + n;
 }
 
 int main()
 {
    printf("sum: %d\n", sum_recursive(10));
    printf("sum: %d\n", sum_tail_recursive(10, 1));
+
+   return 0;
+}
+```
+
+```c
+#include <stdio.h>
+
+void swap(int x, int y)
+{
+   printf("swap -> begin: x: %d, y: %d\n", x, y);
+   int t = x;
+   x = y;
+   y = t;
+   printf("swap -> finish: x: %d, y: %d\n", x, y);
+}
+
+void SWAP(int *x, int *y)
+{
+   printf("in swap begin: x: %d, y: %d\n", *x, *y);
+   int t = *x;
+   *x = *y;
+   *y = t;
+   printf("in swap finish: x: %d, y: %d\n", *x, *y);
+}
+
+int main()
+{
+   int x = 100, y = 200;
+
+   printf("local -> begin x: %d, y: %d\n", x, y);
+   swap(x, y);
+   printf("local -> finish x: %d, y: %d\n", x, y);
+   // local -> begin x: 100, y: 200
+   // swap -> begin: x: 100, y: 200
+   // swap -> finish: x: 200, y: 100
+   // local -> finish x: 100, y: 200
+
+   printf("local -> begin x: %d, y: %d\n", x, y);
+   SWAP(&x, &y);
+   printf("local -> finish x: %d, y: %d\n", x, y);
+   // local -> begin x: 100, y: 200
+   // SWAP -> begin: x: 100, y: 200
+   // SWAP -> finish: x: 200, y: 100
+   // local -> finish x: 200, y: 100
 
    return 0;
 }

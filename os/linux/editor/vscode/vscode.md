@@ -26,7 +26,9 @@ add cursor below: Shift + Alt + DownArrow
 ```
 
 
-## setting.json
+---
+
+## settings.json
 
 ```
     "editor.fontSize": 14,
@@ -46,6 +48,36 @@ add cursor below: Shift + Alt + DownArrow
         },
     ],
     "editor.minimap.enabled": false
+```
+
+
+---
+
+## launch.json
+
+
+---
+
+## tasks.json
+
+```json
+{
+    "tasks": [
+        {
+            "label": "Hello",
+            "type": "shell",
+            "command": "echo hello",
+            "problemMatcher": []
+        },
+        {
+            "label": "My Task",
+            "type": "shell",
+            "command": "${file}",
+            "problemMatcher": []
+        }
+    ],
+    "version": "2.0.0"
+}
 ```
 
 
