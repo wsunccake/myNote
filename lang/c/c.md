@@ -452,6 +452,12 @@ int main () {
       printf("arr2[%d]: %d\n", i, arr2[i]);
    }
 
+   size_t n1 = sizeof(arr1) / sizeof(arr1[0]);
+   printf("array size: %lu\n", n1);
+
+   size_t n2 = sizeof(arr1) / sizeof(*arr1);
+   printf("array size: %lu\n", n2);
+
    return 0;
 }
 ```
@@ -928,6 +934,43 @@ int main () {
 }
 ```
 
+```c
+#include <stdio.h>
+
+char *f1()
+{
+   printf ("f1: %s\n", "123abc");
+   return "123abc";
+}
+
+char *f2()
+{
+   char c2[]="123abc";
+   printf ("f2: %s\n", c2);
+   return c2;
+}
+
+char *f3()
+{
+   char *c3="123abc";
+   printf ("f3: %s\n", c3);
+   return c3;
+}
+
+int main()
+{
+   char *c1 = f1();
+   char *c2 = f2();
+   char *c3 = f3();
+
+   printf ("c1: %s\n", c1);
+   printf ("c2: %s\n", c2);
+   printf ("c3: %s\n", c3);
+
+   return 0;
+}
+```
+
 
 ---
 
@@ -1379,50 +1422,50 @@ typedef int (*sum)(int);
 
 int sum1(int n)
 {
-    int total = 0;
-    int i;
-    for (i = 1; i <= n; i++)
-    {
-        total += i;
-    }
-    return total;
+   int total = 0;
+   int i;
+   for (i = 1; i <= n; i++)
+   {
+      total += i;
+   }
+   return total;
 }
 
 int sum2(int n)
 {
-    int total = 0;
-    return total = (1 + n) * n / 2;
-}
+   int total = 0;
+   return total = (1 + n) * n / 2;
+
 
 int main()
 {
-    unsigned int i1 = 1;
-    unit i2 = 1;
+   unsigned int i1 = 1;
+   unit i2 = 1;
 
-    if (i1 == i2)
-    {
-        printf("i1 == i2\n");
-    }
-    else
-    {
-        printf("i1 != i2\n");
-    }
+   if (i1 == i2)
+   {
+      printf("i1 == i2\n");
+   }
+   else
+   {
+      printf("i1 != i2\n");
+   }
 
-    int *p1 = &i1;
-    intptr p2 = &i2;
+   int *p1 = &i1;
+   intptr p2 = &i2;
 
-    printf("%i, %i\n", *p1, *p2);
+   printf("%i, %i\n", *p1, *p2);
 
-    struct employee e1 = {.id = 1, .salary = 100};
-    Employee e2 = {.id = 2, .salary = 100};
+   struct employee e1 = {.id = 1, .salary = 100};
+   Employee e2 = {.id = 2, .salary = 100};
 
-    printf("%i, %i\n", e1.id, e1.salary);
-    printf("%i, %i\n", e2.id, e2.salary);
+   printf("%i, %i\n", e1.id, e1.salary);
+   printf("%i, %i\n", e2.id, e2.salary);
 
-    sum sum0 = &sum2;
-    printf("%i, %i, %i\n", sum1(10), sum2(10), sum0(10));
+   sum sum0 = &sum2;
+   printf("%i, %i, %i\n", sum1(10), sum2(10), sum0(10));
 
-    return 0;
+   return 0;
 }
 ```
 
@@ -1439,8 +1482,49 @@ int main()
 
 ---
 
+## bitwise
+
+```c
+#include <stdio.h>
+
+char *char2Bin(unsigned char value)
+{
+   char *c = malloc(sizeof(char) * 8);
+   int a;
+   for (int i = sizeof(char) * 7; i >= 0; i--)
+   {
+      a = (value & (1 << i)) >> i;
+      *(c + i) = a + '0';
+   }
+   return c;
+}
+
+int main() {
+   char *a = char2Bin('a');
+   char *A = char2Bin('A');
+   printf("a: %s\nA: %s\n", a, A);
+
+   char c = 'A';
+   printf("to lower : %c -> %c\n", c, c | ' ');
+   printf("to upper : %c -> %c\n", c, c & '_');
+   printf("to switch: %c -> %c\n", c, c ^ ' ');
+
+   int x = 2147483646;
+   int y = 2147483644;
+   int z = (x&y)+((x^y) >> 1);
+   printf("(%d + %d ) / 2 = %d\n", x, y, z);
+
+   return 0;
+}
+```
+
+
+---
+
 ## ref
 
 [C Tutoial](https://www.tutorialspoint.com/cprogramming/index.htm)
 
 [C/C++ 前置處理器參考](https://docs.microsoft.com/zh-tw/cpp/preprocessor/c-cpp-preprocessor-reference?view=msvc-170)
+
+[Two's complement](https://en.wikipedia.org/wiki/Two%27s_complement)
