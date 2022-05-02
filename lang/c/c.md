@@ -937,6 +937,51 @@ int main () {
 ```c
 #include <stdio.h>
 
+int main()
+{
+   char c1 = 'a';
+   char c2 = "a";
+
+   if (c1 == c2)
+      printf("c1 == c2");
+   else
+      printf("c1 != c2");
+   // c1 != c2
+
+   // char str1[3];
+   // strcpy(str1, str);
+   // printf("strcpy( str1, str) :  %s\n", str1);
+   // run time error, illegal hardware instruction
+
+   // char str2[];
+   // strcpy(str2, str);
+   // printf("strcpy( str2, str) :  %s\n", str2);
+   // compile time error, error: implicitly declaring library function
+
+   // char *str3;
+   // strcpy(str3, str);
+   // printf("strcpy( str3, str) :  %s\n", str3);
+   // run time error, illegal hardware instruction
+
+   char str4[10];
+   strcpy(str4, str);
+   printf("strcpy( str4, str) :  %s\n", str4);
+
+   char str5[20];
+   strcpy(str5, str);
+   printf("strcpy( str5, str) :  %s\n", str5);
+
+   char str6[15];
+   strcpy(str6, str);
+   printf("strcpy( str6, str) :  %s\n", str6);
+
+   return 0;
+}
+```
+
+```c
+#include <stdio.h>
+
 char *f1()
 {
    printf ("f1: %s\n", "123abc");
@@ -1015,10 +1060,84 @@ int main( ) {
    adjustSalary2(&e1);
    printf("name: %s, salary: %f\n", e1.name, e1.salary);
 
+   struct Employee e2 = {.name = "Allen", .salary = 20.0};
+   printf("name: %s, salary: %f\n", e2.name, e2.salary);
+
+   struct Employee e3 = {"Apple", 30.0};
+   printf("name: %s, salary: %f\n", e3.name, e3.salary);
+
    return 0;
 }
 ```
 
+```c
+#include <stdio.h>
+
+struct point
+{
+   int x;
+   int y;
+};
+typedef struct point Point;
+
+struct dot1
+{
+   int x;
+   int y;
+};
+typedef struct dot1 Dot1;
+
+struct dot2
+{
+   int y;
+   int x;
+};
+typedef struct dot2 Dot2;
+
+struct dot3
+{
+   int x;
+   int y;
+   int z;
+};
+typedef struct dot3 Dot3;
+
+struct dot4
+{
+   int x;
+};
+typedef struct dot4 Dot4;
+
+int main()
+{
+   Point p1 = {1, 2};
+   Point p2 = p1;
+
+   printf("p1: %d, %d\n", p1.x, p1.y);
+   printf("p2: %d, %d\n", p2.x, p2.y);
+
+   // Dot1 d10 = (Dot1)p1;
+   // printf("d10: %d, %d\n", d10.x, d10.y);
+   // compile error, used type 'Dot' (aka 'struct dot') where arithmetic or pointer type is required
+
+   Dot1 *d11 = (Dot1 *)&p1;
+   printf("d2: %d, %d\n", d11->x, d11->y);
+
+   Dot2 *d21 = (Dot2 *)&p1;
+   printf("d21: %d, %d\n", d21->x, d21->y);
+
+   Dot3 *d31 = (Dot3 *)&p1;
+   printf("d31: %d, %d, %d\n", d31->x, d31->y, d31->z);
+
+   Dot4 *d41 = (Dot4 *)&p1;
+   printf("d41: %d\n", d41->x);
+
+   Dot1 d12 = *((Dot1 *)&p1);
+   printf("d12: %d, %d\n", d12.x, d12.y);
+
+   return 0;
+}
+```
 
 ---
 
@@ -1513,6 +1632,28 @@ int main() {
    int y = 2147483644;
    int z = (x&y)+((x^y) >> 1);
    printf("(%d + %d ) / 2 = %d\n", x, y, z);
+
+   return 0;
+}
+```
+
+
+---
+
+## void
+
+```c
+#inculde <stdio.h>
+
+int main()
+{
+   void *vptr = &v;
+   int *iptr = vptr;
+
+   // printf("%d\n", *vptr);
+   // printf("%d\n", (int) * vptr);
+   printf("%d\n", (int *) vptr);
+   printf("%d\n", *iptr);
 
    return 0;
 }
