@@ -43,4 +43,5 @@ linux:~ # awk "\$1 == \"<pattern>\" {printf \"$HOME %s\", \$_}" <file>
 
 # NF: number fields (column), NR: number record (row), $_
 linux:~ # awk '{if (NF < 3) {printf line %s, %s\n", NR, $_}}' <file>
+linux:~ # ps aux | awk '{for (i = 11; i <= NF; i++) printf $i" "; print ""}'
 ```

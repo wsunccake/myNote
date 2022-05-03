@@ -732,6 +732,41 @@ int main() {
 ```c
 #include <stdio.h>
 
+int main()
+{
+   int i = 0;
+   printf("i           = %d\n", i);
+   printf("i + 1       = %d\n", i + 1);
+
+   int a[] = {0, 10, 100};
+   printf("a[i]        = %d\n", a[i]);
+   printf("a[i + 1]    = %d\n", a[i + 1]);
+
+   int *p = a;
+   printf("*p          = %d\n", *p);
+   printf("*p + 1      = %d\n", *p + 1);
+   printf("(*p)        = %d\n", (*p));
+   printf("(*p + 1)    = %d\n", (*p + 1));
+   printf("*(p)        = %d\n", *(p));
+   printf("*(p + 1)    = %d\n", *(p + 1));
+
+   int **ptp = &p;
+   printf("**ptp       = %d\n", **ptp);
+   printf("**ptp + 1   = %d\n", **ptp + 1);
+   printf("(**ptp)     = %d\n", (**ptp));
+   printf("(**ptp + 1) = %d\n", (**ptp + 1));
+   printf("*(*ptp)     = %d\n", *(*ptp));
+   printf("*(*ptp + 1) = %d\n", *(*ptp + 1));
+   printf("**(ptp)     = %d\n", **(ptp));
+   // printf("**(ptp + 1) = %d\n", **(ptp + 1)); // segmentation fault
+
+   return 0;
+}
+```
+
+```c
+#include <stdio.h>
+
 int g = 999;
 
 void change1(int a)
@@ -990,14 +1025,14 @@ char *f1()
 
 char *f2()
 {
-   char c2[]="123abc";
+   char c2[] = "123abc";
    printf ("f2: %s\n", c2);
    return c2;
 }
 
 char *f3()
 {
-   char *c3="123abc";
+   char *c3 = "123abc";
    printf ("f3: %s\n", c3);
    return c3;
 }
@@ -1605,6 +1640,7 @@ int main()
 
 ```c
 #include <stdio.h>
+#include <stdlib.h>
 
 char *char2Bin(unsigned char value)
 {
@@ -1669,3 +1705,5 @@ int main()
 [C/C++ 前置處理器參考](https://docs.microsoft.com/zh-tw/cpp/preprocessor/c-cpp-preprocessor-reference?view=msvc-170)
 
 [Two's complement](https://en.wikipedia.org/wiki/Two%27s_complement)
+
+[latency.txt](https://gist.github.com/jboner/2841832#file-latency-txt)
