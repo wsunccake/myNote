@@ -1051,6 +1051,41 @@ int main()
 }
 ```
 
+```c
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+   char *s1 = "abc";
+   char *s2 = "abc";
+   char *s3 = "ABC";
+
+   if (*s1 == "abc")
+      printf("*s1 == abc\n");
+
+   if (*s1 == *s2)
+      printf("*s1 == *s2\n");
+
+   if (*s1 != *s3)
+      printf("*s1 != *s3\n");
+
+   if (*s1 == 'a')
+      printf("*s1 == a\n");
+
+   if (strcmp(s1, "abc") == 0)
+      printf("strcmp(s1, \"abc\") == 0\n");
+
+   if (strcmp(s1, s2) == 0)
+      printf("strcmp(s1, s2) == 0\n");
+
+   if (strcmp(s1, s3) != 0)
+      printf("strcmp(s1, s3) != 0\n");
+
+   return 0;
+}
+```
+
 
 ---
 
@@ -1554,6 +1589,7 @@ typedef unsigned int unit;
 
 // typedef with pointer
 typedef int *intptr;
+typedef char *string;
 
 
 // typedef with strut
@@ -1593,6 +1629,8 @@ int sum2(int n)
 
 int main()
 {
+   string hello = "Hello C!";
+   printf("%s\n", hello);
    unsigned int i1 = 1;
    unit i2 = 1;
 
@@ -1640,6 +1678,32 @@ int main()
 
 ```c
 #include <stdio.h>
+
+int main()
+{
+   unsigned int a = 60; /* 60 = 0011 1100 */
+   unsigned int b = 13; /* 13 = 0000 1101 */
+
+   printf("a & b = %d\n", a & b); // 12 = 0000 1100
+   printf("a & a = %d\n", a & a); // 60 = 0011 1100
+
+   printf("a | b = %d\n", a | b); // 61 = 0011 1101
+   printf("a | a = %d\n", a | a); // 60 = 0011 1100
+
+   printf("a ^ b = %d\n", a ^ b);        // 49 = 0011 0001
+   printf("a ^ a = %d\n", a ^ a);        // 0  = 0000 0000
+   printf("a ^ a ^ a= %d\n", a ^ a ^ a); // 60 = 0011 1100
+
+   printf("~a = %d\n", ~a);         // -61 = 1100 0011
+   printf("a << 2 = %d\n", a << 2); // 240 = 1111 0000
+   printf("a >> 2 = %d\n", a >> 2); // 15 = 0000 1111
+
+   return 0;
+}
+```
+
+```c
+#include <stdio.h>
 #include <stdlib.h>
 
 char *char2Bin(unsigned char value)
@@ -1649,12 +1713,13 @@ char *char2Bin(unsigned char value)
    for (int i = sizeof(char) * 7; i >= 0; i--)
    {
       a = (value & (1 << i)) >> i;
-      *(c + i) = a + '0';
+      *(c + i) = a + '0'; // int to char
    }
    return c;
 }
 
-int main() {
+int main()
+{
    char *a = char2Bin('a');
    char *A = char2Bin('A');
    printf("a: %s\nA: %s\n", a, A);
@@ -1668,6 +1733,41 @@ int main() {
    int y = 2147483644;
    int z = (x&y)+((x^y) >> 1);
    printf("(%d + %d ) / 2 = %d\n", x, y, z);
+
+   return 0;
+}
+```
+
+```c
+#include <stdio.h>
+
+int main()
+{
+   char a[] = "abc";
+   printf("a                    = %s\n", a);
+   printf("a[1]                 = %c\n", a[1]);
+
+   char *p1 = "abc";
+   printf("(char *)p1           = %s\n", (char *)p1);
+
+   char *p2 = a;
+   printf("p2                   = %s\n", p2);
+   printf("*p2                  = %c\n", *p2);
+   // printf("*p2                  = %s\n", *p2);  // run time error, segmentation fault
+   printf("(char *)p2           = %s\n", (char *)p2);
+
+   char *pta[] = {"abcd", "XYZ"};
+   // printf("pta                  = %s\n", pta);  // run time error, garbled
+   printf("*pta                 = %s\n", *pta);
+   printf("*(pta + 1)           = %s\n", *(pta + 1));
+   printf("pta[1]               = %s\n", pta[1]);
+   printf("(char *)pta[1]       = %s\n", (char *)pta[1]);
+
+   char **ptp = &pta;
+   // printf("ptp                  = %s\n", ptp);    // run time error, garbled
+   printf("*ptp                 = %s\n", *ptp);
+   // printf("ptp                  = %s\n", **ptp);  // run time error, segmentation fault
+   printf("ptp[0]               = %s\n", ptp[0]);
 
    return 0;
 }
