@@ -53,23 +53,27 @@ node1 ansible_connection=ssh ansible_ssh_host=192.168.0.11 ansible_ssh_port=22 a
 node2 ansible_connection=ssh ansible_ssh_host=192.168.0.12 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_private_key_file=private_file
 
 # 已指令模式執行 ansible 稱為 Ad-Hoc
-control:~ # ansible all -i hosts -m ping  -vvv
-control:~ # ansible node1 -i hosts -m command -s -a uptime
+control:~ # ansible all -i hosts -m ping -vvv
+control:~ # ansible node1 -i hosts -m command -b -a uptime
 control:~ # ansible all -i hosts -m copy -a "src=/etc/hosts dest=/tmp/hosts"
 control:~ # ansible all -i hosts -m setup
 control:~ # ansible all -i <host>, -m ping
 control:~ # ansible all -i <ip>, -m ping
+
+# example
+control:~ # ansible all -i [<user>@]<ip>, -m command -a "uptime"
+control:~ # ansible all -i [<user>@]<ip>, -m shell -b -a "reboot"
 ```
 
--i: host file
+-i: inventory / host file
 -m: moudle
 -a: argument
--s: sudo root
+-s: become other user / sudo root
 
 ----
 
 
-## Config 
+## Config
 
 ansible 設定檔讀取順序
 
@@ -215,15 +219,15 @@ control:~/project # tree
 ├── site.yml
 └── staging
 
-control:~/project # cat ansible.cfg 
+control:~/project # cat ansible.cfg
 [defaults]
 hostfile = staging
 host_key_checking = False
 
-control:~/project # staging 
+control:~/project # staging
 192.168.0.10 ansible_ssh_user=root ansible_ssh_pass=password ansible_become_pass=password
 
-control:~/project # cat site.yml 
+control:~/project # cat site.yml
 ---
 - hosts: all
   become: yes
@@ -231,7 +235,7 @@ control:~/project # cat site.yml
   roles:
     - docker
 
-control:~/project # cat roles/docker/vars/main.yml 
+control:~/project # cat roles/docker/vars/main.yml
 ---
 os_distro: CentOS
 os_version: 7
@@ -239,9 +243,9 @@ docker_bip: 10.253.0.1/24
 private_registry: registry
 private_dns: 192.168.0.1
 
-control:~/project # cat roles/docker/tasks/main.yml 
+control:~/project # cat roles/docker/tasks/main.yml
 ---
-- fail: 
+- fail:
     msg: OS don't support
   when:
     - ansible_distribution != '{{ os_distro }}'
@@ -255,7 +259,7 @@ control:~/project # cat roles/docker/tasks/main.yml
     name: docker
     state: installed
 
-- replace: 
+- replace:
     dest: /etc/sysconfig/docker
     regexp: OPTIONS=.*
     replace: OPTIONS="--selinux-enabled --log-driver=journald --signature-verification=false --bip={{ docker_bip }}"
@@ -291,10 +295,10 @@ control:~/project # cat roles/docker/tasks/main.yml
 
 - shell: sed -i 1a'nameserver {{ private_dns }}' /etc/resolv.conf
 
-control:~/project # cat roles/docker/handlers/main.yml 
+control:~/project # cat roles/docker/handlers/main.yml
 ---
 - name: restart service
-  service: 
+  service:
     name: docker
     state: restarted
     enabled: yes

@@ -559,6 +559,16 @@ int main () {
    *ptr2 = 1;
    printf("var: %d, *ptr1: %d, *ptr2: %d\n", var, *ptr1, *ptr2);
 
+// NULL pointer
+   int *iptr = NULL;
+   printf("*iptr %p", iptr);
+   char *s = (iptr == NULL ? "is NULL\n" : "not NULL\n");
+   printf("%s", s);
+   if (!iptr)
+      printf("is NULL\n");
+   else
+      printf("not NULL\n");
+
    return 0;
 }
 
