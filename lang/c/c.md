@@ -722,6 +722,19 @@ int main () {
 ### pointer to array
 
 ```c
+// method 1
+int arr[] = {1, 2, 3};
+int *intPtr = arr;
+
+// method 2
+int *intPtr;
+intPtr = arr;
+
+// method 3
+int *intPtr = (int[]){1, 2, 3};
+```
+
+```c
 int main() {
    int arr[] = { 3, 5, 6, 7, 9 };
    int *p = arr;
@@ -1511,6 +1524,99 @@ linux:~ # gcc -Dx86_64 -E test.c > _test.c
 linux:~ # gcc -o x86_64.exe _test.c
 ```
 
+```c
+#include <stdio.h>
+
+// variable 需要加 ()
+#define TWICE(x) 2 * x
+#define DOUBLE(x) 2 * (x)
+
+int main()
+{
+   printf("TWICE(1): %d\n", TWICE(1));
+   printf("TWICE(1+1): %d\n", TWICE(1 + 1));
+// TWICE(1): 2
+// TWICE(1+1): 3
+
+   printf("DOUBLE(1+1): %d\n", DOUBLE(1 + 1));
+// DOUBLE(1+1): 4
+
+   return 0;
+}
+```
+
+```c
+#include <stdio.h>
+
+// variable 要避免重複使用
+#define max(a, b) ((a) > (b) ? (a) : (b))
+
+int main()
+{
+   int x = 1, y = 2;
+   printf("x = %d, y: %d\n", x, y);
+   int m = max(x, y++);
+   printf("m = max(x, y++) = %d, y = %d\n", m, y);
+// x = 1, y: 2
+// m = max(x, y++) = 3, y = 4
+
+   return 0;
+}
+```
+
+```c
+#include <stdio.h>
+
+// multi line marco 需要加 {}
+#define increse(a, b) \
+    (a)++;            \
+    (b)++;
+
+#define expand(a, b) \
+   {                \
+      (a)++;       \
+      (b)++;       \
+   }
+
+int main()
+{
+   int a, b;
+
+   a = 1, b = 2;
+   printf("before a: %d, b: %d\n", a, b);
+   increse(a, b);
+   printf("after a: %d, b: %d\n", a, b);
+// before a: 1, b: 2
+// after a: 2, b: 3
+
+   a = 1, b = 2;
+   printf("before a: %d, b: %d\n", a, b);
+   if (a < b)
+      increse(a, b);
+   printf("after a: %d, b: %d\n", a, b);
+// before a: 1, b: 2
+// after a: 2, b: 3
+
+   a = 1, b = 2;
+   printf("before a: %d, b: %d\n", a, b);
+   if (a > b)
+      increse(a, b);
+   printf("after a: %d, b: %d\n", a, b);
+// before a: 1, b: 2
+// after a: 1, b: 3
+
+   a = 1, b = 2;
+   printf("before a: %d, b: %d\n", a, b);
+   if (a > b)
+      expand(a, b);
+   printf("after a: %d, b: %d\n", a, b);
+// before a: 1, b: 2
+// after a: 1, b: 2
+
+   return 0;
+}
+```
+
 
 ---
 
@@ -1817,3 +1923,5 @@ int main()
 [Two's complement](https://en.wikipedia.org/wiki/Two%27s_complement)
 
 [latency.txt](https://gist.github.com/jboner/2841832#file-latency-txt)
+
+[高等C語言](https://shengwen1997.gitbooks.io/program_with_c/content/index.html)

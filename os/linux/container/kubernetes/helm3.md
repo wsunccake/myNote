@@ -16,6 +16,20 @@
 
 ---
 
+## auto-completetion
+
+```bash
+# for bash
+[linux:~ ] # helm completion bash > /etc/bash_completion.d/helm     # system
+[linux:~ ] # echo "source <(helm completion bash)" >> ~/.bashrc     # user
+
+# for zsh
+[linux:~ ] # echo "source <(helm completion zsh)" >> ~/.zshrc       # user
+```
+
+
+---
+
 ## repo
 
 ```bash
@@ -115,19 +129,6 @@ hello-world/
 [linux:~ ] # helm rollback hello-world 1
 ```
 
-
----
-
-## auto-completetion
-
-```bash
-# for bash
-[linux:~ ] # helm completion bash > /etc/bash_completion.d/helm     # system
-[linux:~ ] # echo "source <(helm completion bash)" >> ~/.bashrc     # user
-
-# for zsh
-[linux:~ ] # echo "source <(helm completion zsh)" >> ~/.zshrc       # user
-```
 
 ---
 
