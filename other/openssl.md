@@ -12,10 +12,15 @@ X.509 是 ITU-T 制定的公開憑證標準，其定義了憑證的架構與規�
 
 
 DER/Distinguished Encoding Rules
+
 PEM/Privacy Enhanced Mail
+
 CER/CRT/Certificate
+
 CSR/Certificate Signing Request
+
 PFX/P12/Predecessor of PKCS#12
+
 JKS/Java Key Storage
 
 
