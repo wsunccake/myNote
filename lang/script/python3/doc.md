@@ -1,3 +1,7 @@
+＃ docstring & doctest
+
+```python
+# ex.py
 def recurrent_sum(l):
     """recurrence / recurrent
     Args:
@@ -35,3 +39,8 @@ if __name__ == "__main__":
     # doctest
     import doctest
     doctest.testmod()
+```
+
+```bash
+linux:~ $ python -v ex.py
+```
