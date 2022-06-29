@@ -7,11 +7,16 @@ osx:~ $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/in
 ```
 
 
+---
+
 ## uninstall
 
 ```bash
 osx:~ $ uninstall ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"
 ```
+
+
+---
 
 ## usage
 

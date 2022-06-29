@@ -207,3 +207,132 @@ func main() {
 EOF
 linux:~/project $ go run main.go
 ```
+
+
+---
+
+## multi binary
+
+### go run pass, go build fail
+
+```bash
+linux:~/project $ go mod init <module>
+linux:~/project $ go mod tiny
+
+linux:~/project $ cat << EOF > hello.go
+package main
+import "fmt"
+func main() {
+  fmt.Println("hello")
+}
+EOF
+
+linux:~/project $ cat << EOF > hi.go
+package main
+import "fmt"
+func main() {
+  fmt.Println("hi")
+}
+EOF
+
+linux:~/project $ tree
+.
+├── go.mod
+├── hello.go
+└── hi.go
+
+linux:~/project $ go fmt hello.go
+linux:~/project $ go fmt hi.go
+
+linux:~/project $ go run hello.go       # hello
+linux:~/project $ go run hi.go          # hi
+
+linux:~/project $ go build
+# ./hi.go:5:6: main redeclared in this block
+#   ./hello.go:5:6: previous declaration
+linux:~/project $ go build ./...
+# ./hi.go:5:6: main redeclared in this block
+#   ./hello.go:5:6: previous declaration
+```
+
+
+### go run fail, go build fail
+
+```bash
+linux:~/project $ go mod init <module>
+linux:~/project $ go mod tiny
+
+linux:~/project $ cat << EOF > hello.go
+package hello
+import "fmt"
+func main() {
+  fmt.Println("hello")
+}
+EOF
+
+linux:~/project $ cat << EOF > hi.go
+package hi
+import "fmt"
+func main() {
+  fmt.Println("hi")
+}
+EOF
+
+linux:~/project $ go fmt hello.go
+linux:~/project $ go fmt hi.go
+
+linux:~/project $ go run hello.go       # package command-line-arguments is not a main package
+linux:~/project $ go run hi.go          # package command-line-arguments is not a main package
+
+linux:~/project $ go build hello.go
+linux:~/project $ go build hi.go
+linux:~/project $ go build              # found packages hello (hello.go) and hi (hi.go) in <module>
+linux:~/project $ go build ./...        # found packages hello (hello.go) and hi (hi.go) in <module>
+```
+
+
+### go run pass, go build pass
+
+```bash
+linux:~/project $ go mod init <module>
+linux:~/project $ go mod tiny
+
+linux:~/project $ mkdir -p cmd/{hi/hello}
+
+linux:~/project $ cat << EOF > cmd/hello/hello.go
+package main
+import "fmt"
+func main() {
+  fmt.Println("hello")
+}
+EOF
+
+linux:~/project $ cat << EOF > cmd/hi/hi.go
+package main
+import "fmt"
+func main() {
+  fmt.Println("hi")
+}
+EOF
+
+linux:~/project $ tree
+.
+├── cmd
+│   ├── hello
+│   │   └── hello.go
+│   └── hi
+│       └── hi.go
+└── go.mod
+
+linux:~/project $ go fmt cmd/hello/hello.go
+linux:~/project $ go fmt cmd/hi/hi.go
+
+linux:~/project $ go run cmd/hello/hello.go         # hello
+linux:~/project $ go run cmd/hi/hi.go               # hi
+
+linux:~/project $ go build                          # no Go files in <module>
+linux:~/project $ go build ./...
+
+linux:~/project $ go build -o hello cmd/hello/hello.go
+linux:~/project $ go build -o hi cmd/hi/hi.go
+```

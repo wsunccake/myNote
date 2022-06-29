@@ -195,7 +195,7 @@ example:
 [ubuntu:~ ] $ kubectl get hpa
 
 # kube dns server
-[ubuntu:~ ] $ kubectl get svc kube-dns -n kube-system
+[ubuntu:~ ] $ kubectl -n kube-system get svc kube-dns
 
 # kube dns utils
 [ubuntu:~ ] $ cat << EOF | kubectl apply -f -
@@ -217,6 +217,25 @@ EOF
 
 [ubuntu:~ ] $ kubectl exec -it dnsutils -- nslookup hello-node.default.svc.cluster.local
 [ubuntu:~ ] $ kubectl exec -it dnsutils -- nslookup 172-17-0-10.default.pod.cluster.local
+
+# check resolve
+[ubuntu:~ ] $ kubectl apply -f https://k8s.io/examples/admin/dns/dnsutils.yaml
+[ubuntu:~ ] $ kubectl exec -ti dnsutils -- cat /etc/resolv.conf
+[ubuntu:~ ] $ kubectl exec -it dnsutils -- nslookup kubernetes.default
+[ubuntu:~ ] $ kubectl exec -it dnsutils -- nslookup <svc>[.<namespace>]
+
+# check pod
+[ubuntu:~ ] $ kubectl -n kube-system -l k8s-app=kube-dns get pods
+[ubuntu:~ ] $ kubectl -n kube-system -l k8s-app=kube-dns logs
+
+# check svc
+[ubuntu:~ ] $ kubectl -n kube-system get svc
+
+# check ep
+[ubuntu:~ ] $ kubectl -n kube-system get ep kube-dns
+
+# check cm
+[ubuntu:~ ] $ kubectl -n kube-system edit cm coredns
 ```
 
 
@@ -465,15 +484,15 @@ node must install nfs-common to support nfs
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: nfs-pv 
+  name: nfs-pv
 spec:
 # storageClassName: <storage_class_name>
   capacity:
-    storage: 100Gi 
+    storage: 100Gi
   accessModes:
-    - ReadWriteMany 
-  persistentVolumeReclaimPolicy: Retain 
-  nfs: 
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
     path: /data
     server: 192.168.10.1
     readOnly: fals
@@ -487,15 +506,15 @@ EOF
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: hostpath-pv 
+  name: hostpath-pv
 spec:
 # storageClassName: <storage_class_name>
   capacity:
-    storage: 100Gi 
+    storage: 100Gi
   accessModes:
-    - ReadWriteMany 
-  persistentVolumeReclaimPolicy: Retain 
-  hostPath: 
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
     path: /data
 EOF
 
@@ -504,11 +523,11 @@ EOF
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: nfs-pvc  
+  name: nfs-pvc
 spec:
 # storageClassName: <storage_class_name>
   accessModes:
-  - ReadWriteMany      
+  - ReadWriteMany
   resources:
      requests:
        storage: 100Gi
@@ -551,6 +570,8 @@ EOF
 [ubuntu:~ ] $ kubectl describe pod alpine-7cf564f7f5-jh48q
 [ubuntu:~ ] $ kubectl exec -it alpine-7cf564f7f5-jh48q [-c <container>] -- ls /test-data
 ```
+
+ps, pv 可不綁 ns, pvc 可綁 ns
 
 ---
 

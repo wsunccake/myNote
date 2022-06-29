@@ -109,3 +109,41 @@ install [docker-ce](./docker.md)
 [ubuntu:~ ] $ minikube stop
 [ubuntu:~ ] $ minikube delete
 ```
+
+
+---
+
+## addons
+
+### dashboard
+
+```bash
+[ubuntu:~ ] $ minikube addons enable dashboard
+[ubuntu:~ ] $ minikube dashboard [--url]
+```
+
+
+### ingress
+
+```bash
+[ubuntu:~ ] $ minikube addons enable ingress
+[ubuntu:~ ] $ cat << EOF | kubectl apply -f -
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: example
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+  - host: <host name>
+    http:
+      paths:
+      - path: /(.*|$)
+        backend:
+          serviceName: <service name>
+          servicePort: 80
+EOF
+[ubuntu:~ ] $ kubectl get ing
+
+```

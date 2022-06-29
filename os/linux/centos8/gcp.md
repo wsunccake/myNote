@@ -55,9 +55,11 @@ web: https://console.cloud.google.com/
 [centos:~ ] # gcloud config unset
 
 [centos:~ ] # gcloud config get-value core/project
+[centos:~ ] # gcloud config get-value compute/region
 [centos:~ ] # gcloud config get-value compute/zone
 
 [centos:~ ] # gcloud config set core/project <project id>
+[centos:~ ] # gcloud config set compute/region <region>
 [centos:~ ] # gcloud config set compute/zone <zone>
 
 [centos:~ ] # gcloud config configurations list
@@ -158,7 +160,7 @@ kubectl config rename-context <old name> <new name>
 [centos:~ ] # kubectl config current-context
 [centos:~ ] # kubectl config set-context <context>
 \ [--namespace <namespace>]
-\ [--cluster=<cluster>] 
+\ [--cluster=<cluster>]
 \ [--user=user_nickname]
 
 [centos:~ ] # kubectl cluster-info

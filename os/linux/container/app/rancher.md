@@ -85,6 +85,18 @@ https://<rancher ip>/apikeys to create <token>
 
 ---
 
+## other
+
+```bash
+# get default pasword
+[linux:~ ] # docker logs <rancher container id> 2>&1 | grep "Bootstrap Password:"
+
+# reset password
+[linux:~ ] # docker exec -it <rancher container id> reset-password
+```
+
+---
+
 ## ref
 
 [Rancher 2.5.7-2.5.9](https://rancher.com/docs/rancher/v2.5/en/)

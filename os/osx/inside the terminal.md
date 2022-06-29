@@ -1,23 +1,36 @@
-`open`
+# inside the termianl
+
+## open
 
 開啟檔案或目錄
 
-	osx:~ $ open . # 使用 Finder 開啟當前目錄
-	osx:~ $ open -a TextEdit # 開啟 TextEdit
-	osx:~ $ open -a Xcode xx.html # 使用 Xcode 開啟 xx.html
-	osx:~ $ open -a -n Firefox #
+```bash
+osx:~ $ open . # 使用 Finder 開啟當前目錄
+osx:~ $ open -a TextEdit # 開啟 TextEdit
+osx:~ $ open -a Xcode xx.html # 使用 Xcode 開啟 xx.html
+osx:~ $ open -a -n Firefox #
+```
 
-`sudo`
+
+---
+
+## sudo
 
 使用 root 執行程式
 
-	osx:~ $ sudo su - # 切換成 root
+```bash
+osx:~ $ sudo su - # 切換成 root
+```
 
-`su`
+---
+
+## su
 
 切換使用者
 
-	osx:~ $ su - user # 切換成 user
+```bash
+osx:~ $ su - user # 切換成 user
+```
 
 
 Bourne Again SHell (bash)

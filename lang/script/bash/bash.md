@@ -470,6 +470,7 @@ linux:~ # sed -n '/Joe/p;/Cheng/p' data.csv
 linux:~ # sed '/Tim/q' data.csv
 ```
 
+
 ---
 
 ## awk
@@ -539,64 +540,6 @@ linux:~ # find / -xdev -samefile <file>
 ---
 
 ## expect
-
-expect [ pattern-string {action} ]
-
-```bash
-linux:~ # cat hello.exp
-#!/bin/expect
-
-send_user "hello expect\n"
-exit
-
-# method 1
-linux:~ # chmod +x hello.exp
-linux:~ # ./hello.exp
-
-# method 2
-linux:~ # expect hello.exp
-
-# method 3
-linux:~ # expect
-expect> send_user "hello expect\n"
-expect> exit
-```
-
-```bash
-#!/bin/expect -f
-
-spawn sh
-
-// regex, regular expression
-expect -re "\\\$|#"
-send "date\n"
-
-// globbing, filename globbing
-expect ".*" { send "hostname\n" }
-
-send_user "\n"
-exit
-```
-
-```bash
-#!/bin/expect -f
-set user <username>
-set pw <password>
-set ip <ssh_server>
-
-spawn ssh -o PubkeyAuthentication=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $user@$ip
-
-expect "password:" {
-    send "$pw\n"
-    sleep 3
-}
-
-expect -re "\\\$|#" {
-    interact
-}
-
-exit
-```
 
 
 ---

@@ -36,17 +36,17 @@ EOF
 # repo
 [ubuntu:~ ] # echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/ /" > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
 [ubuntu:~ ] # echo "deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/$CRIO_VERSION/$OS/ /" > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable:cri-o:$CRIO_VERSION.list
-[ubuntu:~ ] # curl -L https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$CRIO_VERSION/$OS/Release.key | apt-key add -
-[ubuntu:~ ] # curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/Release.key | apt-key add -
+[ubuntu:~ ] # curl -sL https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$CRIO_VERSION/$OS/Release.key | apt-key add -
+[ubuntu:~ ] # curl -sL https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/Release.key | apt-key add -
 
 # package
-[ubuntu:~ ] # apt-get update
-[ubuntu:~ ] # apt-get install cri-o cri-o-runc cri-tools
+[ubuntu:~ ] # apt update
+[ubuntu:~ ] # apt install cri-o cri-o-runc cri-tools
 
 # service
 [ubuntu:~ ] # systemctl daemon-reload
 [ubuntu:~ ] # systemctl start crio
-[ubuntu:~ ] # systemctl enable crio
+[ubuntu:~ ] # systemctl enable crio --now
 [ubuntu:~ ] # systemctl status crio
 ```
 
@@ -62,13 +62,13 @@ EOF
 └── crio.conf.d
     └── 01-crio-runc.conf
 
-[ubuntu:~ ] # cat /etc/crictl.yaml 
+[ubuntu:~ ] # cat /etc/crictl.yaml
 runtime-endpoint: "unix:///var/run/crio/crio.sock"
 timeout: 0
 debug: false
 
 # for debug
-[ubuntu:~ ] # cat /etc/crictl.yaml 
+[ubuntu:~ ] # cat /etc/crictl.yaml
 runtime-endpoint: "unix:///var/run/crio/crio.sock"
 timeout: 10
 debug: true
@@ -128,7 +128,7 @@ insecure_registries = [
 [ubuntu:~ ] # crictl inspect <container>
 
 # ie
-[ubuntu:~ ] # cat > pod-config.json <<EOF 
+[ubuntu:~ ] # cat > pod-config.json <<EOF
 {
   "metadata": {
     "name": "networking",
