@@ -35,7 +35,7 @@ post-order:  DEBFGCA
 
 ---
 
-## add / insert
+## insert
 
 [3, 1, 2, 4, -1]
 
@@ -76,7 +76,7 @@ post-order:  DEBFGCA
 
 ---
 
-## delete / remove
+## delete
 
 [3, 1, 2, 4, -1] - 4 - 1
 
