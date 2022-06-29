@@ -16,6 +16,20 @@
 
 ---
 
+## auto-completetion
+
+```bash
+# for bash
+[linux:~ ] # helm completion bash > /etc/bash_completion.d/helm     # system
+[linux:~ ] # echo "source <(helm completion bash)" >> ~/.bashrc     # user
+
+# for zsh
+[linux:~ ] # echo "source <(helm completion zsh)" >> ~/.zshrc       # user
+```
+
+
+---
+
 ## repo
 
 ```bash
@@ -56,10 +70,10 @@
 [linux:~ ] # helm search repo --versions mysql
 [linux:~ ] # helm pull bitnami/mysql
 [linux:~ ] # helm install mysql bitnami/mysql
-[linux:~ ] # helm install bitnami/mysql -g
-[linux:~ ] # helm install bitnami/mysql --debug
-[linux:~ ] # helm install bitnami/mysql --dry-run
-[linux:~ ] # helm install bitnami/mysql --values <helm values>.yaml
+[linux:~ ] # helm install mysql bitnami/mysql -g
+[linux:~ ] # helm install mysql bitnami/mysql --debug
+[linux:~ ] # helm install mysql bitnami/mysql --dry-run
+[linux:~ ] # helm install mysql bitnami/mysql --values <helm values>.yaml
 [linux:~ ] # helm uninstall mysql
 [linux:~ ] # helm list
 
@@ -115,19 +129,6 @@ hello-world/
 [linux:~ ] # helm rollback hello-world 1
 ```
 
-
----
-
-## auto-completetion
-
-```bash
-# for bash
-[linux:~ ] # helm completion bash > /etc/bash_completion.d/helm     # system
-[linux:~ ] # echo "source <(helm completion bash)" >> ~/.bashrc     # user
-
-# for zsh
-[linux:~ ] # echo "source <(helm completion zsh)" >> ~/.zshrc       # user
-```
 
 ---
 

@@ -4,27 +4,27 @@
 ## Environment
 
 ```bash
-linux:~ $ git config --global user.name 'owner'            # 設定使用者名稱 
-linux:~ $ git config --global user.email 'owner@localhost' # 設定email 
-linux:~ $ git config --global core.editor vim              # 設定文字編輯器 
-linux:~ $ git config --global merge.tool vimdiff           # 設定比較工具 
-linux:~ $ git config --global color.ui true                # 設定顯示顏色 
-linux:~ $ git config --global apply.whitespace nowarn      # 忽略空白的變化, 空白對有些語言是有影響的 (像是 Ruby) 
+linux:~ $ git config --global user.name 'owner'            # 設定使用者名稱
+linux:~ $ git config --global user.email 'owner@localhost' # 設定email
+linux:~ $ git config --global core.editor vim              # 設定文字編輯器
+linux:~ $ git config --global merge.tool vimdiff           # 設定比較工具
+linux:~ $ git config --global color.ui true                # 設定顯示顏色
+linux:~ $ git config --global apply.whitespace nowarn      # 忽略空白的變化, 空白對有些語言是有影響的 (像是 Ruby)
 linux:~ $ git config --global alias.log-pretty 'log --graph --oneline --decorate --date-order' # 設定別名
 linux:~ $ git config --list                                # 顯示當前設定
 
-linux:~ $ cat ~/.gitconfig 
-[user] 
-    name = owner 
-    email = owner@localhost 
-[core] 
-    editor = vim 
+linux:~ $ cat ~/.gitconfig
+[user]
+    name = owner
+    email = owner@localhost
+[core]
+    editor = vim
     pager =
-[merge] 
-    tool = vimdiff 
-[color] 
-    ui = true 
-[alias] 
+[merge]
+    tool = vimdiff
+[color]
+    ui = true
+[alias]
     commit-show = commit -v -uno
     branch-all = branch -avv
 
@@ -40,29 +40,29 @@ linux:~ $ cat ~/.gitconfig
 
 ```bash
 # download project
-linux:~ $ git clone git@github.com:user/sandbox.git            # download project 
-linux:~ $ git clone git@github.com:user/sandbox.git newproejct # download project to rename newproject 
-linux:~ $ ssh-agent bash -c 'ssh-add <private key>; git clone <ssh-repo>'   # use other private to download project 
+linux:~ $ git clone git@github.com:user/sandbox.git            # download project
+linux:~ $ git clone git@github.com:user/sandbox.git newproejct # download project to rename newproject
+linux:~ $ ssh-agent bash -c 'ssh-add <private key>; git clone <ssh-repo>'   # use other private to download project
 
 # file status
-linux:~/project $ git add file                    # 檔案納入控制系統 
+linux:~/project $ git add file                    # 檔案納入控制系統
 linux:~/project $ git rm [--cache|-f] file        # 檔案移出制系統
 linux:~/project $ git mv src_file des_file        # 檔案移出制系統
 
-linux:~/project $ git commit -m '<my_comment>'    # 提交到控制系統 
-linux:~/project $ git commit -m                   # 提交到控制系統 
+linux:~/project $ git commit -m '<my_comment>'    # 提交到控制系統
+linux:~/project $ git commit -m                   # 提交到控制系統
 linux:~/project $ git commit --amend              # 修改/編輯 commit
 
 # rollback, 狀態改成前一次 commit
 linux:~/project $ git reset HEAD^           # no record, only revert commit and keep change file
 linux:~/project $ git reset HEAD^ --hard    # no record, revert commit and file
 
-linux:~/project $ git status # version記錄 
+linux:~/project $ git status # version記錄
 
-linux:~/project $ git log                     # commit記錄 
+linux:~/project $ git log                     # commit記錄
 linux:~/project $ git log -1                  # show HEAD
-linux:~/project $ git log --graph --oneline --all --decorate 
-linux:~/project $ git log --graph --oneline --all --decorate --boundary --date-order 
+linux:~/project $ git log --graph --oneline --all --decorate
+linux:~/project $ git log --graph --oneline --all --decorate --boundary --date-order
 linux:~/project $ git log --graph --oneline --decorate=full --date-order --all
 linux:~/project $ git log --graph --decorate=full --date-order --stat
 
@@ -97,13 +97,13 @@ linux:~/project # git push -u origin master
 ## Merge
 
 ```bash
-   b1              b1 
-   /     =>      /    \ 
+   b1              b1
+   /     =>      /    \
 m1 - m2       m1 - m2 - m3
 ```
 
 ```bash
-linux:~/project $ git checkout m2 
+linux:~/project $ git checkout m2
 linux:~/project $ git merge b1
 ```
 
@@ -123,13 +123,13 @@ linux:~/project $ git merge [--ff] b1
 
 
 ```bash
-   b1              b1 
-   /     =>      /    \ 
+   b1              b1
+   /     =>      /    \
 m1 - m2       m1  ---  m2
 ```
 
 ```bash
-linux:~/project $ git checkout m2 
+linux:~/project $ git checkout m2
 linux:~/project $ git merge --no-ff b1
 ```
 
@@ -138,13 +138,13 @@ linux:~/project $ git merge --no-ff b1
 ## Rebase
 
 ```bash
-   b1 
-   /     => 
+   b1
+   /     =>
 v1 - v2       v1 - v2 - v3
 ```
 
 ```bash
-linux:~/project $ git checkout v2 
+linux:~/project $ git checkout v2
 linux:~/project $ git rebase b1
 ```
 
@@ -319,35 +319,55 @@ linux:~/project # git push -d origin <tag_name>
 
 ```bash
 # add sub repo to repo
-[linux:repo] $ git submodule add <sub-repo> <sub-path>
-[linux:repo] $ cat .gitmodules
+linux:~/repo $ git submodule add <sub-repo> <sub-path>
+linux:~/repo $ cat .gitmodules
 [submodule "<sub>"]
         path = <sub-path>
         url = <sub-repo>
-[linux:repo] $ cat .git/config
-[linux:repo] $ git commit -m "add sub repo"
-[linux:repo] $ git push
+linux:~/repo $ cat .git/config
+linux:~/repo $ git commit -m "add sub repo"
+linux:~/repo $ git push
 
 # clone repo
-[linux:~] $ git clone <repo>
-[linux:~] $ cd repo
+linux:~ $ git clone <repo>
+linux:~ $ cd repo
 
 # clone sub repo
-[linux:repo] $ git submodule status
-[linux:repo] $ git submodule init <sub-path>
-[linux:repo] $ git submodule update [--remote] <sub-path>
-[linux:repo] $ ls <sub-path>
+linux:~/repo $ git submodule status
+linux:~/repo $ git submodule init <sub-path>
+linux:~/repo $ git submodule update [--remote] <sub-path>
+linux:~/repo $ ls <sub-path>
 
-# pull latest sub repo 
-[linux:repo] $ cd <sub-path>
-[linux:<sub-path>] $ git pull <remote> <branch>
-[linux:<sub-path>] $ git pull origin master
+# pull latest sub repo
+linux:~/repo $ cd <sub-path>
+linux:~/repo/<sub-path> $ git pull <remote> <branch>
+linux:~/repo/<sub-path> $ git pull origin master
 
 # remove sub repo
-[linux:repo] $ git rm [--cached] <sub-path>
-[linux:repo] $ vi .gitmodules
-[linux:repo] $ vi .git/config
-[linux:repo] $ git submodule sync
-[linux:repo] $ git commit -m "remove sub repo"
+linux:~/repo $ git rm [--cached] <sub-path>
+linux:~/repo $ vi .gitmodules
+linux:~/repo $ vi .git/config
+linux:~/repo $ git submodule sync
+linux:~/repo $ git commit -m "remove sub repo"
+
+# example
+## add submodule
+linux:~/repo $  git submodule add https://github.com/wsunccake/sub_repo.git sub
+linux:~/repo $  git commit -m "add sub_repo to be submodule"
+linux:~/repo $  git push
+
+## clone repo and submodule
+linux:~ $ git clone https://github.com/wsunccake/repo
+linux:~ $ cd repo
+linux:~/repo $ ls sub
+linux:~/repo $ git submodule status
+linux:~/repo $ git submodule update --init --remote sub
+
+## pull sub_repo / submodule update
+linux:~/repo $ git submodule update --remote sub
+linux:~/repo $ git submodule status
+linux:~/repo $ git add sub
+linux:~/repo $ git commit "update sub_repo"
+linux:~/repo $ git push
 ```
 

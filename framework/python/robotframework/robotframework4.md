@@ -1,13 +1,23 @@
-# robotframework 4
+# robotframework 4.x
+
+
+## instsall
+
+```bash
+linux:~ $ pip install robotframework
+```
+
+
+---
 
 ## run
 
-```
-linux:~ # robot <file>.robot
+```bash
+linux:~ $ robot <file>.robot
 
-linux:~ # robot -V <var>.yaml -v <var>:<val> <file>.robot
-linux:~ # robot -t <test_name> -d <output_dir> <file>.robot
-linux:~ # robot -o <output>.xml -l <log>.html -r <report>.html <file>.robot
+linux:~ $ robot -V <var>.yaml -v <var>:<val> <file>.robot
+linux:~ $ robot -t <test_name> -d <output_dir> <file>.robot
+linux:~ $ robot -o <output>.xml -l <log>.html -r <report>.html <file>.robot
 ```
 
 
@@ -19,10 +29,8 @@ linux:~ # robot -o <output>.xml -l <log>.html -r <report>.html <file>.robot
 *** Settings ***
 Library     OperatingSystem
 
-
 *** Variables ***
 @{langs}=  C  C++  Java  C#
-
 
 *** Keywords ***
 My List Keyword
@@ -52,7 +60,6 @@ My List Keyword
     FOR  ${script}  IN  ${scripts}
       Log  ${script}
     END
-
 
 *** Test Cases ***
 Test List

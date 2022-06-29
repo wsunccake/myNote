@@ -1,6 +1,5 @@
 # vscode
 
-
 ## shortcut
 
 ```
@@ -27,26 +26,58 @@ add cursor below: Shift + Alt + DownArrow
 ```
 
 
-## setting.json
+---
+
+## settings.json
 
 ```
     "editor.fontSize": 14,
     "editor.fontFamily": "Fira Code",
     "editor.rulers": [
         {
-          "column": 80,
-          "color": "#ff9900"
+            "column": 80,
+            "color": "#ff9900"
         },
         {
             "column":100,
             "color":"#fbff11"
         },
         {
-         "column": 120,
-         "color": "#9f0af5"
+            "column": 120,
+            "color": "#9f0af5"
         },
     ],
     "editor.minimap.enabled": false
+```
+
+
+---
+
+## launch.json
+
+
+---
+
+## tasks.json
+
+```json
+{
+    "tasks": [
+        {
+            "label": "Hello",
+            "type": "shell",
+            "command": "echo hello",
+            "problemMatcher": []
+        },
+        {
+            "label": "My Task",
+            "type": "shell",
+            "command": "${file}",
+            "problemMatcher": []
+        }
+    ],
+    "version": "2.0.0"
+}
 ```
 
 

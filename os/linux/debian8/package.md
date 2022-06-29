@@ -77,6 +77,7 @@ debian8:~ # apt-cache pkgnames <pkg>
 debian8:~ # apt-cache show <pkg>
 debian8:~ # apt-cache showpkg <pkg>
 debian8:~ # apt-cache depends <pkg>
+debian8:~ # apt-cache madison <pkg>
 
 debina8:~ # apt-cache policy
 debina8:~ # apt-cache dumpavail

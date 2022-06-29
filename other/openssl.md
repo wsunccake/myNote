@@ -12,14 +12,19 @@ X.509 是 ITU-T 制定的公開憑證標準，其定義了憑證的架構與規�
 
 
 DER/Distinguished Encoding Rules
+
 PEM/Privacy Enhanced Mail
+
 CER/CRT/Certificate
+
 CSR/Certificate Signing Request
+
 PFX/P12/Predecessor of PKCS#12
+
 JKS/Java Key Storage
 
 
-```
+```bash
 # show pem/der text
 linux:~ # openssl x509 -in cert.pem -text -noout
 linux:~ # openssl x509 -in cert.der -inform der -text -noout
@@ -36,7 +41,7 @@ linux:~ # openssl x509 -in cert.crt -inform der -outform pem -out cert.pem
     * KEY: 常用於公鑰與私鑰
 
 
-```
+```bash
 linux:~ # openssl x509 -in cert.cer -text -noout
 linux:~ # openssl x509 -in cert.crt -text -noout
 ```
@@ -49,7 +54,7 @@ linux:~ # openssl x509 -in cert.crt -text -noout
 
 產生 CA
 
-```
+```bash
 # create CA (Private Key & PEM)
 ca:~ # openssl req -new -x509 -keyout ca.key -out ca.pem
 ca:~ # openssl req -new -x509 -keyout ca.key -out ca.pem -config /etc/raddb/certs/ca.cnf
@@ -57,7 +62,7 @@ ca:~ # openssl req -new -x509 -keyout ca.key -out ca.pem -config /etc/raddb/cert
 
 簽核 CSR
 
-```
+```bash
 # sign CSR
 ca:~ # openssl ca -in server.csr -out server.pem -cert ca.pem -keyfile ca.key
 ca:~ # openssl ca -in server.csr -out server.pem -cert ca.pem -keyfile ca.key -config /etc/raddb/certs/ca.cnf
@@ -73,10 +78,10 @@ ca:~ # openssl ca -in server.csr -out server.pem -cert ca.pem -keyfile ca.key -c
 
 產生 CSR
 
-```
+```bash
 # create Private Key & CSR
 linux:~ # openssl req -new -key server.key -out server.csr
-linux:~ # openssl req -new -key server.key -out server.csr -config /etc/raddb/certs/server.cnf 
+linux:~ # openssl req -new -key server.key -out server.csr -config /etc/raddb/certs/server.cnf
 ```
 
 將 CSR 傳給 ca, 待 ca sign CSR 後會發 PEM, 收到 PEM 表示簽核完成
@@ -87,16 +92,13 @@ linux:~ # openssl req -new -key server.key -out server.csr -config /etc/raddb/ce
 
 self-signed CA/自我簽核
 
-```
+```bash
 openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout privateKey.key -out certificate.crt
 openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.pem
 ```
 
 
-
-
-
-```
+```bash
 linux:~ # openssl req -newkey rsa:2048 -new -nodes -keyout my.key -out my.csr
 linux:~ # openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem
 ```

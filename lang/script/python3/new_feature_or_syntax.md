@@ -117,6 +117,11 @@ width = 10
 precision = 4
 value = decimal.Decimal("12.34567")
 f"result: {value:{width}.{precision}}"  # nested fields  'result:      12.35'
+
+# binary
+f"{0x3:b}"          # '11'
+f"{0x3:8b}"         # '      11'
+f"{0x3:08b}"        # '00000011'
 ```
 
 

@@ -99,3 +99,26 @@ linux:~ # allure generate result --clean
 # start server
 linux:~ # allure open
 ```
+
+
+---
+
+## ref
+
+[allure pytest](https://docs.qameta.io/allure/#_pytest)
+
+
+---
+
+# allure-pytest-bdd
+
+allure-pytest-bdd 是給 pytest-bdd
+
+
+## install
+
+```bash
+linux:~ # pip install allure-pytest-bdd
+```
+
+ps, allure-pytest-bdd 不可和 allure-pytest 一起安裝, 要不然使用上會有問題
