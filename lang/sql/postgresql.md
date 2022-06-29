@@ -111,6 +111,29 @@ EOF
 linux:~ # psql -U <db_user> -d <db> -h <host> -p <port> -W -f create_users.sql
 linux:~ # psql -U <db_user> -d <db> -h <host> -p <port> -W -f insert_users.sql
 linux:~ # psql -U <db_user> -d <db> -h <host> -p <port> -W -c "select * from users;"
+linux:~ # psql -U <db_user> -d <db> -h <host> -p <port> << EOF
+\l
+select * from users;
+EOF
+```
+
+```bash
+# password file
+linux:~ # cat $HOME/.pgpass
+<host>:<port>:<db>:<db_user>:<db_password>
+...
+
+linux:~ # chmod 0600 $HOME/.pgpass
+linux:~ # psql -c "select * from users;"
+
+# environment variable
+linux:~ # export PGHOST=<host>
+linux:~ # export PGPORT=<port>
+linux:~ # export PGUSER=<db_user>
+linux:~ # export PGPASSWORD=<db_password>
+linux:~ # psql -c "select * from users;"
+
+# uri -> postgresql://[<db_user>[:<db_password>]@][<host>[:<port>]][/dbname][?params]
 ```
 
 ```sql

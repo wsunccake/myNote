@@ -92,6 +92,10 @@ linux:~ # export KUBECONFIG=<kube config>                             # environm
 # view
 linux:~ # kubectl config view --minify [--kubeconfig <kube config>]
 
+# combine multi config
+linux:~ # env KUBECONFIG=<config 1>:<config 2>:... kubectl config view --flatten > $HOME/.kube/config
+linux:~ # chmod 600 $HOME/.kube/config
+
 # context
 linux:~ # kubectl config get-contexts
 linux:~ # kubectl config rename-context <old name> <new name>

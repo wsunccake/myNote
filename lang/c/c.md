@@ -499,6 +499,12 @@ int main () {
       printf("arr2[%d]: %d\n", i, arr2[i]);
    }
 
+   size_t n1 = sizeof(arr1) / sizeof(arr1[0]);
+   printf("array size: %lu\n", n1);
+
+   size_t n2 = sizeof(arr1) / sizeof(*arr1);
+   printf("array size: %lu\n", n2);
+
    return 0;
 }
 ```
@@ -599,6 +605,16 @@ int main () {
    printf("var: %d, *ptr1: %d, *ptr2: %d\n", var, *ptr1, *ptr2);
    *ptr2 = 1;
    printf("var: %d, *ptr1: %d, *ptr2: %d\n", var, *ptr1, *ptr2);
+
+// NULL pointer
+   int *iptr = NULL;
+   printf("*iptr %p", iptr);
+   char *s = (iptr == NULL ? "is NULL\n" : "not NULL\n");
+   printf("%s", s);
+   if (!iptr)
+      printf("is NULL\n");
+   else
+      printf("not NULL\n");
 
    return 0;
 }
@@ -753,6 +769,19 @@ int main () {
 ### pointer to array
 
 ```c
+// method 1
+int arr[] = {1, 2, 3};
+int *intPtr = arr;
+
+// method 2
+int *intPtr;
+intPtr = arr;
+
+// method 3
+int *intPtr = (int[]){1, 2, 3};
+```
+
+```c
 int main() {
    int arr[] = { 3, 5, 6, 7, 9 };
    int *p = arr;
@@ -769,6 +798,41 @@ int main() {
 
 
 ### pointer to pointer
+
+```c
+#include <stdio.h>
+
+int main()
+{
+   int i = 0;
+   printf("i           = %d\n", i);
+   printf("i + 1       = %d\n", i + 1);
+
+   int a[] = {0, 10, 100};
+   printf("a[i]        = %d\n", a[i]);
+   printf("a[i + 1]    = %d\n", a[i + 1]);
+
+   int *p = a;
+   printf("*p          = %d\n", *p);
+   printf("*p + 1      = %d\n", *p + 1);
+   printf("(*p)        = %d\n", (*p));
+   printf("(*p + 1)    = %d\n", (*p + 1));
+   printf("*(p)        = %d\n", *(p));
+   printf("*(p + 1)    = %d\n", *(p + 1));
+
+   int **ptp = &p;
+   printf("**ptp       = %d\n", **ptp);
+   printf("**ptp + 1   = %d\n", **ptp + 1);
+   printf("(**ptp)     = %d\n", (**ptp));
+   printf("(**ptp + 1) = %d\n", (**ptp + 1));
+   printf("*(*ptp)     = %d\n", *(*ptp));
+   printf("*(*ptp + 1) = %d\n", *(*ptp + 1));
+   printf("**(ptp)     = %d\n", **(ptp));
+   // printf("**(ptp + 1) = %d\n", **(ptp + 1)); // segmentation fault
+
+   return 0;
+}
+```
 
 ```c
 #include <stdio.h>
@@ -975,6 +1039,123 @@ int main () {
 }
 ```
 
+```c
+#include <stdio.h>
+
+int main()
+{
+   char c1 = 'a';
+   char c2 = "a";
+
+   if (c1 == c2)
+      printf("c1 == c2");
+   else
+      printf("c1 != c2");
+   // c1 != c2
+
+   // char str1[3];
+   // strcpy(str1, str);
+   // printf("strcpy( str1, str) :  %s\n", str1);
+   // run time error, illegal hardware instruction
+
+   // char str2[];
+   // strcpy(str2, str);
+   // printf("strcpy( str2, str) :  %s\n", str2);
+   // compile time error, error: implicitly declaring library function
+
+   // char *str3;
+   // strcpy(str3, str);
+   // printf("strcpy( str3, str) :  %s\n", str3);
+   // run time error, illegal hardware instruction
+
+   char str4[10];
+   strcpy(str4, str);
+   printf("strcpy( str4, str) :  %s\n", str4);
+
+   char str5[20];
+   strcpy(str5, str);
+   printf("strcpy( str5, str) :  %s\n", str5);
+
+   char str6[15];
+   strcpy(str6, str);
+   printf("strcpy( str6, str) :  %s\n", str6);
+
+   return 0;
+}
+```
+
+```c
+#include <stdio.h>
+
+char *f1()
+{
+   printf ("f1: %s\n", "123abc");
+   return "123abc";
+}
+
+char *f2()
+{
+   char c2[] = "123abc";
+   printf ("f2: %s\n", c2);
+   return c2;
+}
+
+char *f3()
+{
+   char *c3 = "123abc";
+   printf ("f3: %s\n", c3);
+   return c3;
+}
+
+int main()
+{
+   char *c1 = f1();
+   char *c2 = f2();
+   char *c3 = f3();
+
+   printf ("c1: %s\n", c1);
+   printf ("c2: %s\n", c2);
+   printf ("c3: %s\n", c3);
+
+   return 0;
+}
+```
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+   char *s1 = "abc";
+   char *s2 = "abc";
+   char *s3 = "ABC";
+
+   if (*s1 == "abc")
+      printf("*s1 == abc\n");
+
+   if (*s1 == *s2)
+      printf("*s1 == *s2\n");
+
+   if (*s1 != *s3)
+      printf("*s1 != *s3\n");
+
+   if (*s1 == 'a')
+      printf("*s1 == a\n");
+
+   if (strcmp(s1, "abc") == 0)
+      printf("strcmp(s1, \"abc\") == 0\n");
+
+   if (strcmp(s1, s2) == 0)
+      printf("strcmp(s1, s2) == 0\n");
+
+   if (strcmp(s1, s3) != 0)
+      printf("strcmp(s1, s3) != 0\n");
+
+   return 0;
+}
+```
+
 
 ---
 
@@ -1019,10 +1200,84 @@ int main( ) {
    adjustSalary2(&e1);
    printf("name: %s, salary: %f\n", e1.name, e1.salary);
 
+   struct Employee e2 = {.name = "Allen", .salary = 20.0};
+   printf("name: %s, salary: %f\n", e2.name, e2.salary);
+
+   struct Employee e3 = {"Apple", 30.0};
+   printf("name: %s, salary: %f\n", e3.name, e3.salary);
+
    return 0;
 }
 ```
 
+```c
+#include <stdio.h>
+
+struct point
+{
+   int x;
+   int y;
+};
+typedef struct point Point;
+
+struct dot1
+{
+   int x;
+   int y;
+};
+typedef struct dot1 Dot1;
+
+struct dot2
+{
+   int y;
+   int x;
+};
+typedef struct dot2 Dot2;
+
+struct dot3
+{
+   int x;
+   int y;
+   int z;
+};
+typedef struct dot3 Dot3;
+
+struct dot4
+{
+   int x;
+};
+typedef struct dot4 Dot4;
+
+int main()
+{
+   Point p1 = {1, 2};
+   Point p2 = p1;
+
+   printf("p1: %d, %d\n", p1.x, p1.y);
+   printf("p2: %d, %d\n", p2.x, p2.y);
+
+   // Dot1 d10 = (Dot1)p1;
+   // printf("d10: %d, %d\n", d10.x, d10.y);
+   // compile error, used type 'Dot' (aka 'struct dot') where arithmetic or pointer type is required
+
+   Dot1 *d11 = (Dot1 *)&p1;
+   printf("d2: %d, %d\n", d11->x, d11->y);
+
+   Dot2 *d21 = (Dot2 *)&p1;
+   printf("d21: %d, %d\n", d21->x, d21->y);
+
+   Dot3 *d31 = (Dot3 *)&p1;
+   printf("d31: %d, %d, %d\n", d31->x, d31->y, d31->z);
+
+   Dot4 *d41 = (Dot4 *)&p1;
+   printf("d41: %d\n", d41->x);
+
+   Dot1 d12 = *((Dot1 *)&p1);
+   printf("d12: %d, %d\n", d12.x, d12.y);
+
+   return 0;
+}
+```
 
 ---
 
@@ -1316,6 +1571,99 @@ linux:~ # gcc -Dx86_64 -E test.c > _test.c
 linux:~ # gcc -o x86_64.exe _test.c
 ```
 
+```c
+#include <stdio.h>
+
+// variable 需要加 ()
+#define TWICE(x) 2 * x
+#define DOUBLE(x) 2 * (x)
+
+int main()
+{
+   printf("TWICE(1): %d\n", TWICE(1));
+   printf("TWICE(1+1): %d\n", TWICE(1 + 1));
+// TWICE(1): 2
+// TWICE(1+1): 3
+
+   printf("DOUBLE(1+1): %d\n", DOUBLE(1 + 1));
+// DOUBLE(1+1): 4
+
+   return 0;
+}
+```
+
+```c
+#include <stdio.h>
+
+// variable 要避免重複使用
+#define max(a, b) ((a) > (b) ? (a) : (b))
+
+int main()
+{
+   int x = 1, y = 2;
+   printf("x = %d, y: %d\n", x, y);
+   int m = max(x, y++);
+   printf("m = max(x, y++) = %d, y = %d\n", m, y);
+// x = 1, y: 2
+// m = max(x, y++) = 3, y = 4
+
+   return 0;
+}
+```
+
+```c
+#include <stdio.h>
+
+// multi line marco 需要加 {}
+#define increse(a, b) \
+    (a)++;            \
+    (b)++;
+
+#define expand(a, b) \
+   {                \
+      (a)++;       \
+      (b)++;       \
+   }
+
+int main()
+{
+   int a, b;
+
+   a = 1, b = 2;
+   printf("before a: %d, b: %d\n", a, b);
+   increse(a, b);
+   printf("after a: %d, b: %d\n", a, b);
+// before a: 1, b: 2
+// after a: 2, b: 3
+
+   a = 1, b = 2;
+   printf("before a: %d, b: %d\n", a, b);
+   if (a < b)
+      increse(a, b);
+   printf("after a: %d, b: %d\n", a, b);
+// before a: 1, b: 2
+// after a: 2, b: 3
+
+   a = 1, b = 2;
+   printf("before a: %d, b: %d\n", a, b);
+   if (a > b)
+      increse(a, b);
+   printf("after a: %d, b: %d\n", a, b);
+// before a: 1, b: 2
+// after a: 1, b: 3
+
+   a = 1, b = 2;
+   printf("before a: %d, b: %d\n", a, b);
+   if (a > b)
+      expand(a, b);
+   printf("after a: %d, b: %d\n", a, b);
+// before a: 1, b: 2
+// after a: 1, b: 2
+
+   return 0;
+}
+```
+
 
 ---
 
@@ -1404,6 +1752,7 @@ typedef unsigned int unit;
 
 // typedef with pointer
 typedef int *intptr;
+typedef char *string;
 
 
 // typedef with strut
@@ -1426,50 +1775,52 @@ typedef int (*sum)(int);
 
 int sum1(int n)
 {
-    int total = 0;
-    int i;
-    for (i = 1; i <= n; i++)
-    {
-        total += i;
-    }
-    return total;
+   int total = 0;
+   int i;
+   for (i = 1; i <= n; i++)
+   {
+      total += i;
+   }
+   return total;
 }
 
 int sum2(int n)
 {
-    int total = 0;
-    return total = (1 + n) * n / 2;
-}
+   int total = 0;
+   return total = (1 + n) * n / 2;
+
 
 int main()
 {
-    unsigned int i1 = 1;
-    unit i2 = 1;
+   string hello = "Hello C!";
+   printf("%s\n", hello);
+   unsigned int i1 = 1;
+   unit i2 = 1;
 
-    if (i1 == i2)
-    {
-        printf("i1 == i2\n");
-    }
-    else
-    {
-        printf("i1 != i2\n");
-    }
+   if (i1 == i2)
+   {
+      printf("i1 == i2\n");
+   }
+   else
+   {
+      printf("i1 != i2\n");
+   }
 
-    int *p1 = &i1;
-    intptr p2 = &i2;
+   int *p1 = &i1;
+   intptr p2 = &i2;
 
-    printf("%i, %i\n", *p1, *p2);
+   printf("%i, %i\n", *p1, *p2);
 
-    struct employee e1 = {.id = 1, .salary = 100};
-    Employee e2 = {.id = 2, .salary = 100};
+   struct employee e1 = {.id = 1, .salary = 100};
+   Employee e2 = {.id = 2, .salary = 100};
 
-    printf("%i, %i\n", e1.id, e1.salary);
-    printf("%i, %i\n", e2.id, e2.salary);
+   printf("%i, %i\n", e1.id, e1.salary);
+   printf("%i, %i\n", e2.id, e2.salary);
 
-    sum sum0 = &sum2;
-    printf("%i, %i, %i\n", sum1(10), sum2(10), sum0(10));
+   sum sum0 = &sum2;
+   printf("%i, %i, %i\n", sum1(10), sum2(10), sum0(10));
 
-    return 0;
+   return 0;
 }
 ```
 
@@ -1486,8 +1837,138 @@ int main()
 
 ---
 
+## bitwise
+
+```c
+#include <stdio.h>
+
+int main()
+{
+   unsigned int a = 60; /* 60 = 0011 1100 */
+   unsigned int b = 13; /* 13 = 0000 1101 */
+
+   printf("a & b = %d\n", a & b); // 12 = 0000 1100
+   printf("a & a = %d\n", a & a); // 60 = 0011 1100
+
+   printf("a | b = %d\n", a | b); // 61 = 0011 1101
+   printf("a | a = %d\n", a | a); // 60 = 0011 1100
+
+   printf("a ^ b = %d\n", a ^ b);        // 49 = 0011 0001
+   printf("a ^ a = %d\n", a ^ a);        // 0  = 0000 0000
+   printf("a ^ a ^ a= %d\n", a ^ a ^ a); // 60 = 0011 1100
+
+   printf("~a = %d\n", ~a);         // -61 = 1100 0011
+   printf("a << 2 = %d\n", a << 2); // 240 = 1111 0000
+   printf("a >> 2 = %d\n", a >> 2); // 15 = 0000 1111
+
+   return 0;
+}
+```
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+char *char2Bin(unsigned char value)
+{
+   char *c = malloc(sizeof(char) * 8);
+   int a;
+   for (int i = sizeof(char) * 7; i >= 0; i--)
+   {
+      a = (value & (1 << i)) >> i;
+      *(c + i) = a + '0'; // int to char
+   }
+   return c;
+}
+
+int main()
+{
+   char *a = char2Bin('a');
+   char *A = char2Bin('A');
+   printf("a: %s\nA: %s\n", a, A);
+
+   char c = 'A';
+   printf("to lower : %c -> %c\n", c, c | ' ');
+   printf("to upper : %c -> %c\n", c, c & '_');
+   printf("to switch: %c -> %c\n", c, c ^ ' ');
+
+   int x = 2147483646;
+   int y = 2147483644;
+   int z = (x&y)+((x^y) >> 1);
+   printf("(%d + %d ) / 2 = %d\n", x, y, z);
+
+   return 0;
+}
+```
+
+```c
+#include <stdio.h>
+
+int main()
+{
+   char a[] = "abc";
+   printf("a                    = %s\n", a);
+   printf("a[1]                 = %c\n", a[1]);
+
+   char *p1 = "abc";
+   printf("(char *)p1           = %s\n", (char *)p1);
+
+   char *p2 = a;
+   printf("p2                   = %s\n", p2);
+   printf("*p2                  = %c\n", *p2);
+   // printf("*p2                  = %s\n", *p2);  // run time error, segmentation fault
+   printf("(char *)p2           = %s\n", (char *)p2);
+
+   char *pta[] = {"abcd", "XYZ"};
+   // printf("pta                  = %s\n", pta);  // run time error, garbled
+   printf("*pta                 = %s\n", *pta);
+   printf("*(pta + 1)           = %s\n", *(pta + 1));
+   printf("pta[1]               = %s\n", pta[1]);
+   printf("(char *)pta[1]       = %s\n", (char *)pta[1]);
+
+   char **ptp = &pta;
+   // printf("ptp                  = %s\n", ptp);    // run time error, garbled
+   printf("*ptp                 = %s\n", *ptp);
+   // printf("ptp                  = %s\n", **ptp);  // run time error, segmentation fault
+   printf("ptp[0]               = %s\n", ptp[0]);
+
+   return 0;
+}
+```
+
+
+---
+
+## void
+
+```c
+#inculde <stdio.h>
+
+int main()
+{
+   void *vptr = &v;
+   int *iptr = vptr;
+
+   // printf("%d\n", *vptr);
+   // printf("%d\n", (int) * vptr);
+   printf("%d\n", (int *) vptr);
+   printf("%d\n", *iptr);
+
+   return 0;
+}
+```
+
+
+---
+
 ## ref
 
 [C Tutoial](https://www.tutorialspoint.com/cprogramming/index.htm)
 
 [C/C++ 前置處理器參考](https://docs.microsoft.com/zh-tw/cpp/preprocessor/c-cpp-preprocessor-reference?view=msvc-170)
+
+[Two's complement](https://en.wikipedia.org/wiki/Two%27s_complement)
+
+[latency.txt](https://gist.github.com/jboner/2841832#file-latency-txt)
+
+[高等C語言](https://shengwen1997.gitbooks.io/program_with_c/content/index.html)
