@@ -10,7 +10,83 @@
 
 3. red node does not have a red child / 每個紅色節點必須有兩個黑色的子節點
 
+   => red node 的父節點為 black
+
+   => red node 的子節點為 black
+
 4. every path from a given node to any of its descendant NIL nodes goes through the same number of black nodes / 從任一節點到其每個葉子的所有簡單路徑都包含相同數目的黑色節點
+
+   ＝> 最常路徑 >= 2 * 最短路徑
+
+
+red node   : 被填滿
+
+black node : 未填滿
+
+
+---
+
+## root
+
+```
+N*  ->  N
+```
+
+
+---
+
+## LL
+
+```
+       G                       G*                      P
+     /   \     re-color      /    \      rotate      /   \
+    P*    U   --------->    P      U   --------->   N*    G*
+   /                       /                               \
+  N*                      N*                                U
+```
+
+
+---
+
+## RR
+
+```
+       G                       G*                      P
+     /   \     re-color      /    \      rotate      /   \
+    U     P*  --------->    U      P   --------->   G*    N*
+           \                        \              /
+            N*                       N*           U
+```
+
+
+---
+
+## LR
+
+```
+       G                       G
+     /   \     rotate        /    \
+    P*    U   --------->    N*     U
+     \                     /
+      N*                  P*
+
+      LR                       LL
+```
+
+
+---
+
+## RL
+
+```
+       G                       G
+     /   \     rotate        /    \
+    U     P*   --------->   U      N*
+         /                          \
+        N*                           P*
+
+      RL                       RR
+```
 
 
 ---
@@ -99,4 +175,3 @@ insert mus be red
         /  \
        7*   14*
 ```
-
