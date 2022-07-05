@@ -77,6 +77,14 @@ configure system console
     set output standard|more
     set baudrate 9600|19200|38400|57600|115200
 end
+
+
+# shutdown
+execute shutdown
+
+
+# reboot
+execute reboot
 ```
 
 
