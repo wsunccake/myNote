@@ -296,7 +296,7 @@ func main() {
 			break
 		}
     }
-    
+
     for i, v := range [MAX]int{1, 4, 5, 9} {
 		fmt.Println(i, v)
 	}
@@ -342,7 +342,7 @@ func max(x, y int) int{
 	} else {
 		temp = y
 	}
-	
+
 	return temp
 }
 
@@ -554,7 +554,7 @@ func main() {
     arr3[1] = 8
     arr3[2] = 9
     var i int
-    
+
     for i, e := range(arr1) {
         println(i, e)
     }
@@ -776,7 +776,10 @@ func main() {
 ```go
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+)
 
 type Person struct {
 	name string
@@ -785,7 +788,7 @@ type Person struct {
 
 type Employee struct {
 	Person
-	int
+	salary int
 }
 
 func main() {
@@ -798,7 +801,27 @@ func main() {
 
 	e1 := Employee{Person{"yoyo", 21}, 1}
 	fmt.Printf("e1: %+v\n", e1)
-	fmt.Println(e1.name, e1.age, e1.int)
+	fmt.Println(e1.name, e1.age, e1.salary)
+
+	p1TypeOf := reflect.TypeOf(p1)
+	p1ValueOf := reflect.ValueOf(p1)
+	fmt.Printf("p1 TypeOf: %v, ValueOf: %v\n", p1TypeOf, p1ValueOf)
+
+	for i := 0; i < p1TypeOf.NumField(); i++ {
+		fmt.Println(p1TypeOf.Field(i))
+	}
+
+	switch p1TypeOf.Kind() {
+	case reflect.Int:
+		fmt.Println("int:")
+	case reflect.String:
+		fmt.Println("string:")
+	case reflect.Struct:
+		fmt.Println("struct:")
+	default:
+		fmt.Println("no match")
+	}
+	fmt.Println(p1TypeOf.Kind() == reflect.Struct)
 }
 ```
 
@@ -1307,6 +1330,54 @@ func main() {
 	go increment3("bar: ")
 	wait.Wait()
 	fmt.Println("Last Count:", count)
+}
+```
+
+
+---
+
+## reflect
+
+```go
+package main
+
+import (
+	"fmt"
+	"reflect"
+)
+
+type Person struct {
+	Name string
+	Age  int `json:"type" id:"100"`
+}
+
+func main() {
+	var i int = 1
+	typeOfI := reflect.TypeOf(i)
+	fmt.Printf("TypeOf i %v\n", typeOfI)
+	fmt.Printf("TypeOf i Kind: %v, Name: %v\n", typeOfI.Kind(), typeOfI.Name())
+
+	var p Person = Person{"jo", 10}
+	typeOfP := reflect.TypeOf(p)
+	fmt.Printf("TypeOf p %v\n", typeOfP)
+	fmt.Printf("TypeOf p Kind: %v, Name: %v\n", typeOfP.Kind(), typeOfP.Name())
+	if name, ok := typeOfP.FieldByName("Name"); ok {
+		fmt.Printf("name: %v, .Name: %v, .Type: %v\n", name, name.Name, name.Type)
+	}
+	if age, ok := typeOfP.FieldByName("Age"); ok {
+		fmt.Printf("age.Tag.Get json: %v, id: %v\n", age.Tag.Get("json"), age.Tag.Get("id"))
+	}
+	for i := 0; i < typeOfP.NumField(); i++ {
+		fmt.Printf("Field %v: %v\n", i, typeOfP.Field(i))
+	}
+
+	var ptrI *int
+	typeOfPtrI := reflect.TypeOf(ptrI)
+	fmt.Printf("TypeOf ptrI %v\n", typeOfPtrI)
+	fmt.Printf("TypeOf ptrI Kind: %v, Name: %v\n", typeOfPtrI.Kind(), typeOfPtrI.Name())
+	typeOfPtrIElem := reflect.TypeOf(ptrI).Elem()
+	fmt.Printf("TypeOf ptrI Elem %v\n", typeOfPtrIElem)
+	fmt.Printf("TypeOf ptrI Elem Kind: %v, Name: %v\n", typeOfPtrIElem.Kind(), typeOfPtrIElem.Name())
 }
 ```
 
