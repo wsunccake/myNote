@@ -11,7 +11,7 @@
 [linux:~ ] # mkdir -p JENKINS_HOME
 [linux:~ ] # docker run -d \
   -v $JENKINS_HOME:/var/jenkins_home \
-  -v 8080:8080 \
+  -p 8080:8080 \
   -p 50000:50000 \
   [-u <uid>[:<gid>]] \
   --name jenkins \
