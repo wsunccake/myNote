@@ -32,6 +32,8 @@ add cursor below: Shift + Alt + DownArrow
 ```
     "editor.fontSize": 14,
     "editor.fontFamily": "Fira Code",
+    "editor.formatOnType": true,
+    "editor.insertSpaces": true,
     "editor.rulers": [
         {
           "column": 80,
@@ -46,7 +48,14 @@ add cursor below: Shift + Alt + DownArrow
          "color": "#9f0af5"
         },
     ],
-    "editor.minimap.enabled": false
+    "editor.minimap.enabled": false,
+    "editor.wordWrap": "on",
+
+    "files.autoSave": "afterDelay",
+    "files.eol": "\n",
+    "files.trimTrailingWhitespace": true,
+
+    "terminal.integrated.fontSize": 14,
 ```
 
 
