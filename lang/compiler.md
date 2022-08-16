@@ -17,7 +17,7 @@ lex, flex
 
 ## syntactic analysis / parser
 
-bison, antlr
+yacc, bison, antlr
 
 ```
             =
