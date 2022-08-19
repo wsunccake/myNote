@@ -7,11 +7,11 @@ package main
 
 import "fmt"
 
-type vehicle interface {
+type Vehicle interface {
 	accelerate()
 }
 
-func describe(v vehicle)  {
+func describe(v Vehicle)  {
 	fmt.Printf("%+v\n", v)
 	v.accelerate()
 }
@@ -39,6 +39,11 @@ func (b BMW) accelerate() {
 	fmt.Println("100 m/s")
 }
 
+type Bicycle struct {
+	vendor string
+	color  string
+}
+
 func main() {
 	c := Car{"unknown", "black"}
 	describe(c)
@@ -48,7 +53,41 @@ func main() {
 
 	b := BMW{Car{"bmw", "white"}, "m3"}
 	describe(b)
+
+	bi := Bicycle{"unknown", "black"}
+	fmt.Printf("bicycle color: %s\n", bi.color)
 }
+```
+
+
+---
+
+## type assertion
+
+```go
+	var b0 interface{} = new(BMW)
+	// b0.accelerate()
+	// describe(b0)
+
+	// 轉型 interface
+	b0.(Vehicle).accelerate()
+	describe(b0.(Vehicle))
+
+	var b1 interface{ Vehicle } = new(BMW)
+	b1.accelerate()
+	describe(b1)
+	b1.(Vehicle).accelerate()
+	describe(b1.(Vehicle))
+
+	// var b2 interface{} = new(Bicycle)
+	// b2.accelerate()
+	// describe(b2)
+	// b2.(Vehicle).accelerate()
+	// describe(b2.(Vehicle))
+
+	// 判斷 type 是否包括 interface 需要的 method
+	var _ Vehicle = (*BMW)(nil)
+	// var _ Vehicle = (*Bicycle)(nil)
 ```
 
 
