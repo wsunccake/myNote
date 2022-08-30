@@ -213,4 +213,31 @@ tasks = [event_loop.create_task(hello('python', random.randint(0, 9))), event_lo
 event_loop.run_until_complete(asyncio.wait(tasks))
 event_loop.close()
 print('end: {}'.format(datetime.datetime.now()))
+
+# event loop with future
+async def hello_future(name, n, fut):
+    print(f'start to hello {name}, {n}')
+    await asyncio.sleep(n)
+    print(f'finsh to hello {name}, {n}')
+    fut.set_result('stop hello')
+
+async def run():
+    loop = asyncio.get_running_loop()
+    fut1 = loop.create_future()
+    fut2 = loop.create_future()
+    loop.create_task(hello_future('python', random.randint(0, 9), fut1))
+    loop.create_task(hello_future('async', random.randint(0, 9), fut2))
+    await fut1
+    await fut2
+    fut1.result()
+    fut2.result()
+
+asyncio.run(run())
 ```
+
+
+---
+
+# ref
+
+[Python asyncio 從不會到上路](https://myapollo.com.tw/zh-tw/begin-to-asyncio/  # Coroutines-%EF%BC%88%E6%88%96%E7%A8%B1%E5%8D%94%E7%A8%8B%EF%BC%89)
