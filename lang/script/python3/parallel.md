@@ -262,7 +262,7 @@ class Consumer(threading.Thread):
         print("Consumer: {}, {}".format(threading.currentThread().getName(), datetime.datetime.now()))
         time.sleep(item)
         print("Consumer: {}, sleep: {}, {}".format(threading.currentThread().getName(), item, datetime.datetime.now()))
-        
+
 
 workers = []
 
@@ -474,7 +474,7 @@ class Consumer(threading.Thread):
             if len(items) <= 0:
                 condition.wait()
                 condition.notify()
-            
+
         item = items.pop()
         print("Consumer: {}, {}".format(threading.currentThread().getName(), datetime.datetime.now()))
         time.sleep(item)
@@ -702,6 +702,8 @@ def fun1():
 
 print(fun1)
 print(fun1())
+# <function fun1 at ...>
+# 1
 
 # generator
 def fun2():
@@ -709,6 +711,8 @@ def fun2():
 
 print(fun2)
 print(fun2())
+# <function fun2 at ...>
+# <generator object fun2 at ...>
 
 # generator
 def fun3():
@@ -716,6 +720,8 @@ def fun3():
 
 print(fun3)
 print(fun3())
+# <function fun3 at ...>
+# <generator object fun3 at ...>
 
 # await
 def fun4():

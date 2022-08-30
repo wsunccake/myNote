@@ -40,6 +40,12 @@ linux:~ # locust -H https://<ip>:<port> -f locustfile.py --autostart -u<n> -r<m>
 # -u: NUM_USERS
 # -r: SPAWN_RATE
 # -t: RUN_TIME
+
+# other
+linux:~ # locust -H https://<ip>:<port> -f locustfile.py --headless -u<n> -r<m> -t<time> \
+  --html <html file> \
+  --loglevel DEBUG \
+  --logfile <log file>
 ```
 
 
@@ -94,6 +100,27 @@ class WebsiteUser(HttpUser):
     tasks = [UserTasks]
 ```
 
+
+---
+
+## master - slave
+
+```bash
+master:~ $ locust -f locustfile.py \
+  -H https://<ip>:<port> \
+  -u<n> -r<m> -t<time> \
+  --autostart --autoquit 0 \
+  --headless \
+  --master \
+  --master-bind-port <master port>
+```
+
+```bash
+slave:~ $ locust -f locustfile.py \
+  --headless \
+  --worker \
+  --master-host <master host> --master-port <master port>
+```
 
 ---
 

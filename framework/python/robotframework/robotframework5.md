@@ -98,6 +98,14 @@ linux:~ $ rebot --name example output.xml
 
 ### argument file
 
+### stop
+
+```bash
+linux:~ $ kill -9 <robot pid> # force terminal, no report
+linux:~ $ kill -2 <robot pid> # grace terminal, gen report
+```
+
+
 ---
 
 ## ref

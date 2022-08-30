@@ -49,6 +49,13 @@ linux:~ $ pabot -i sleep sleep*.robot       # run all testcase with 3 process , 
 linux:~ $ pabot --processes <n> -i sleep sleep*.robot       # run all testcase with n process
 linux:~ $ pabot --testlevelsplit -i sleep sleep*.robot      # run all testcase with n process, total sleep 1, 2,  3,  5
                                                             # test level parallel
+
+linux:~ $ pabot --pabotlib --testlevelsplit \
+  [--pabotlibhost 127.0.0.1] \
+  [--pabotlibport 8270] \
+  [--processes <n>] \
+  [-d <output dir>] \
+  sleep*.robot
 ```
 
 

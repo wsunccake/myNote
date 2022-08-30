@@ -22,6 +22,7 @@ Library         DataDriver  file=data.csv  dialect=unix
 Expect Exactly Two Args
     [Arguments]  ${a1}  ${a2}
     Run Keyword and Continue on Failure  Should Be Equal  ${a1}  ${a2}
+    Sleep  15s
 
 *** Test Cases ***
 Two Args ${a1} ${a2}
