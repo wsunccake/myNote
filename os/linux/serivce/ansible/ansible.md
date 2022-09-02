@@ -47,27 +47,29 @@ control: ~ # pip install ansible
 ## Ad-Hoc
 
 ```bash
-control:~ # cat playbooks/hosts
+control:~ $ cat playbooks/hosts
 [test_node]
 node1 ansible_connection=ssh ansible_ssh_host=192.168.0.11 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_pass=password ansible_become_pass=password
 node2 ansible_connection=ssh ansible_ssh_host=192.168.0.12 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_private_key_file=private_file
 
 # 已指令模式執行 ansible 稱為 Ad-Hoc
-control:~ # ansible all -i hosts -m ping -vvv
-control:~ # ansible node1 -i hosts -m command -b -a uptime
-control:~ # ansible all -i hosts -m copy -a "src=/etc/hosts dest=/tmp/hosts"
-control:~ # ansible all -i hosts -m setup
-control:~ # ansible all -i <host>, -m ping
-control:~ # ansible all -i <ip>, -m ping
+control:~ $ ansible all -i hosts -m ping -vvv
+control:~ $ ansible node1 -i hosts -m command -b -a uptime
+control:~ $ ansible all -i hosts -m copy -a "src=/etc/hosts dest=/tmp/hosts"
+control:~ $ ansible all -i <host>, -m ping
+control:~ $ ansible all -i <ip>, -m ping
 
 # example
-control:~ # ansible all -i [<user>@]<ip>, -m command -a "uptime"
-control:~ # ansible all -i [<user>@]<ip>, -m shell -b -a "reboot"
+control:~ $ ansible all -i [<user>@]<ip>, -m command -a "uptime"
+control:~ $ ansible all -i [<user>@]<ip>, -m shell -b -a "reboot"
 ```
 
 -i: inventory / host file
+
 -m: moudle
+
 -a: argument
+
 -s: become other user / sudo root
 
 ----
@@ -85,15 +87,16 @@ ansible 設定檔讀取順序
 
 4. /etc/ansible/ansible.cfg 系統預設檔案
 
-```
-control:~ # cat /etc/ansible/ansible.cfg
+
+```bash
+control:~ $ cat /etc/ansible/ansible.cfg
 [defaults]
 ansible_python_interpreter = /usr/bin/python2
 nocows = 1
 
-control:~ # ansible-config view
-control:~ # ansible-config list
-control:~ # ansible-config dump
+control:~ $ ansible-config view
+control:~ $ ansible-config list
+control:~ $ ansible-config dump
 ```
 
 ----
@@ -102,8 +105,7 @@ control:~ # ansible-config dump
 
 PlayBook 是 YAML 格式, yaml 其實可以轉成對應的 json, 範例如下
 
-```bash
-yml/yaml
+```yaml
 ---
 - hosts: all
   tasks:
@@ -112,9 +114,9 @@ yml/yaml
 
     - name: Show Hostname
       shell: hostname
+```
 
-
-json
+```json
 [
   {
      host: "all"
@@ -148,12 +150,12 @@ json
 簡單的 ansible-playbook 測試如下
 
 ```bash
-control:~/playbooks # cat ansible.cfg
+control:~/playbooks $ cat ansible.cfg
 [defaults]
 hostfile = hosts
 host_key_checking = False
 
-control:~/playbooks # cat hello.yml
+control:~/playbooks $ cat hello.yml
 ---
 - hosts: all
   gather_facts: False
@@ -161,22 +163,22 @@ control:~/playbooks # cat hello.yml
     - name: Hello World
       shell: echo "hello world"
 
-control:~/playbooks # ansible-playbook hello.yml  # 執行 playbook
+control:~/playbooks $ ansible-playbook hello.yml  # 執行 playbook
 
 # ansible module help
 control:~ # ansible-doc -l      # 顯示所有 action module
 control:~ # ansible-doc shell
 
 # playbook task
-control:~/playbooks # ansible-playbook --list-tasks
-control:~/playbooks # ansible-playbook site.yml --start-at-task "Hello World"
+control:~/playbooks $ ansible-playbook --list-tasks
+control:~/playbooks $ ansible-playbook site.yml --start-at-task "Hello World"
 ```
 
 一個 playbook 內容需要有 host 和 task 組成. task 內除了 name 之外, 皆由 action module 組成.
 
 ```bash
 # 使用變數的方式
-control:~/playbooks # cat say_hello.yml
+control:~/playbooks $ cat say_hello.yml
 ---
 - hosts: all
   gather_facts: False
@@ -188,22 +190,22 @@ control:~/playbooks # cat say_hello.yml
     - name: Hello World
       shell: echo "hello {{ user }}"
 
-control:~/playbooks # cat user_vars.yml
+control:~/playbooks $ cat user_vars.yml
 ---
 user: zzz
 
-control:~/playbooks/ # ansible-playbook -e 'user=xyz' say_hello.yml
+control:~/playbooks $ ansible-playbook -e 'user=xyz' say_hello.yml
 
-control:~/playbooks # cat ext_vars.yml
+control:~/playbooks $ cat ext_vars.yml
 user: ijk
 
-control:~/playbooks/ # ansible-playbook -e '@ext_vars.yml' say_hello.yml
+control:~/playbooks $ ansible-playbook -e '@ext_vars.yml' say_hello.yml
 ```
 
 範例 [docker_install.yml](./docker_install.yml)
 
 ```bash
-control:~/project # tree
+control:~/project $ tree
 .
 ├── ansible.cfg
 ├── roles
@@ -219,15 +221,15 @@ control:~/project # tree
 ├── site.yml
 └── staging
 
-control:~/project # cat ansible.cfg
+control:~/project $ cat ansible.cfg
 [defaults]
 hostfile = staging
 host_key_checking = False
 
-control:~/project # staging
+control:~/project $ staging
 192.168.0.10 ansible_ssh_user=root ansible_ssh_pass=password ansible_become_pass=password
 
-control:~/project # cat site.yml
+control:~/project $ cat site.yml
 ---
 - hosts: all
   become: yes
@@ -235,7 +237,7 @@ control:~/project # cat site.yml
   roles:
     - docker
 
-control:~/project # cat roles/docker/vars/main.yml
+control:~/project $ cat roles/docker/vars/main.yml
 ---
 os_distro: CentOS
 os_version: 7
@@ -243,7 +245,7 @@ docker_bip: 10.253.0.1/24
 private_registry: registry
 private_dns: 192.168.0.1
 
-control:~/project # cat roles/docker/tasks/main.yml
+control:~/project $ cat roles/docker/tasks/main.yml
 ---
 - fail:
     msg: OS don't support
@@ -295,7 +297,7 @@ control:~/project # cat roles/docker/tasks/main.yml
 
 - shell: sed -i 1a'nameserver {{ private_dns }}' /etc/resolv.conf
 
-control:~/project # cat roles/docker/handlers/main.yml
+control:~/project $ cat roles/docker/handlers/main.yml
 ---
 - name: restart service
   service:
@@ -305,12 +307,52 @@ control:~/project # cat roles/docker/handlers/main.yml
 ```
 
 
+### dump all variable
+
+```bash
+control:~ $ ansible all -i hosts -m setup
+
+control:~ $ cat dump.yaml
+---
+- name: dump all
+  hosts: all
+  tasks:
+    - name: Print some debug information
+      tags: debug_info
+      debug:
+        msg: "{{ msg.split('\n') }}"
+      vars:
+        msg: |
+          Module Variables ("vars"):
+          --------------------------------
+          {{ vars | to_nice_json }}
+
+          Environment Variables ("environment"):
+          --------------------------------
+          {{ environment | to_nice_json }}
+
+          GROUP NAMES Variables ("group_names"):
+          --------------------------------
+          {{ group_names | to_nice_json }}
+
+          GROUPS Variables ("groups"):
+          --------------------------------
+          {{ groups | to_nice_json }}
+
+          HOST Variables ("hostvars"):
+          --------------------------------
+          {{ hostvars | to_nice_json }}
+
+control:~ $ ansible-playbook -i hosts dump.yaml
+```
+
+
 ----
 
 ## Inventory
 
 ```bash
-control:~ # cat inventory
+control:~ $ cat inventory
 [atlanta]
 host1   http_port=80    maxRequestsPerChild=808
 host2   http_port=303   maxRequestsPerChild=909
@@ -346,11 +388,11 @@ northwest
 ## Galaxy
 
 ```bash
-control:~/project # ansible-galaxy init -p roles abc
-control:~/project # cat roles/abc/meta/main.yml
-control:~/project # ansible-galaxy list -p roles
+control:~/project $ ansible-galaxy init -p roles abc
+control:~/project $ cat roles/abc/meta/main.yml
+control:~/project $ ansible-galaxy list -p roles
 
-control:~/project # ansible-galaxy search search ntp
-control:~/project # ansible-galaxy install -p roles bennojoy.ntp
-control:~/project # ansible-galaxy remove -p roles bennojoy.ntp
+control:~/project $ ansible-galaxy search search ntp
+control:~/project $ ansible-galaxy install -p roles bennojoy.ntp
+control:~/project $ ansible-galaxy remove -p roles bennojoy.ntp
 ```
