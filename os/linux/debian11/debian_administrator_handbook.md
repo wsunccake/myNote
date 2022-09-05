@@ -56,6 +56,12 @@ debian:~ # apt-cache policy [<pkg>]
 # cd/dvd
 debian:~ # apt-cdrom add
 
+# check sum
+debian:~ # sha256sum <image>.iso
+debian:~ # cat SHA256SUMS.txt
+<sha256sum> <image>.iso
+debian:~ # sha256sum -c SHA256SUMS.txt
+
 # iso
 debian:~ # mkdir <mount_point>
 debian:~ # mount -oloop <image>.iso <mount_point>
@@ -354,6 +360,8 @@ debian:~ # update-alternatives --get-selections
 debian:~ # update-alternatives --list editor
 debian:~ # update-alternatives --display editor
 debian:~ # update-alternatives --config editor
+
+debian:~ # ls /var/lib/dpkg/alternatives
 ```
 
 
@@ -558,7 +566,7 @@ debian:~ # systemctl enable <service>
 debian:~ # systemctl disable <service>
 debian:~ # systemctl is-active <service>
 debian:~ # systemctl is-enabled <service>
-debian:~ # systemctl is-failed <service>   
+debian:~ # systemctl is-failed <service>
 debian:~ # systemctl daemon-reload <service>
 debian:~ # systemctl cat <service>
 debian:~ # systemctl edit [--full] <service>
