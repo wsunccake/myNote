@@ -11,6 +11,29 @@ debian:~ # blkid
 debian:~ # cat /etc/fstab
 UUID=<disk uuid>   <mount point>   <fs type>  defaults,errors=remount-ro 0  0
 debian:~ # mount -a
+
+# intel wifi drvier
+debian:~ # apt update
+debian:~ # apt install firmware-iwlwifi
+
+# repo
+debian:~ # cat /etc/apt/sources.list
+deb http://deb.debian.org/debian bullseye main contrib non-free
+deb-src http://deb.debian.org/debian bullseye main contrib non-free
+
+deb http://deb.debian.org/debian-security/ bullseye-security main contrib non-free
+deb-src http://deb.debian.org/debian-security/ bullseye-security main contrib non-free
+
+deb http://deb.debian.org/debian bullseye-updates main contrib non-free
+deb-src http://deb.debian.org/debian bullseye-updates main contrib non-free
+
+deb http://deb.debian.org/debian bullseye-backports main contrib non-free
+deb-src http://deb.debian.org/debian bullseye-backports main contrib non-free
+
+deb http://deb.debian.org/debian/ unstable main
+deb-src http://deb.debian.org/debian/ unstable main
+
+debian:~ # apt update
 ```
 
 
@@ -78,6 +101,10 @@ debian:~ # apt install mlocate
 
 # lnav
 debian:~ # apt install lnav
+
+# wodim
+debian:~ # apt install wodim
+debian:~ # wodim -v -dao dev=/dev/cdrw <image>.iso
 ```
 
 

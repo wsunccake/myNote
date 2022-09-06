@@ -29,8 +29,7 @@ linux:~ $ jmeter
 # cli
 linux:~ $ export HEAP="-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m"
 linux:~ $ jmeter -n -t <jmx file> \
-  [-l <results file>] \
-  [-e -o <path to web report folder>]
+  [-l <results file> -e -o <path to web report folder>]
 ```
 
 
@@ -54,6 +53,10 @@ Test Plan
         +-- JSR223 PreProcessor     Pre Processors
         +-- JSON Extractor          Listener
         +-- JSR223 PostProcessor    Post Processors
+    +-- While Controller
+        +-- HTTP Request
+            +-- JSR223 PreProcessor
+            +-- JSR223 PostProcessor
     ...
 ```
 
@@ -96,6 +99,16 @@ vars.put("data", json)
 // get variable
 def name = vars.get("name")
 log.info(name)
+```
+
+
+## While Controller
+
+```
+Condition (function or variable)        ${__groovy(
+	!(vars.get("STATUS").equals("SUCCESS")) && (${RETRY}.toInteger() < ${LIMIT}.toInteger())
+)}
+
 ```
 
 
