@@ -40,12 +40,12 @@ linux:~ $ jmeter -n -t <jmx file> \
 ```
 Test Plan
 +-- Thread Group                    Threads (Users)
-    +-- User Defined Variables
-    +-- CSV Data Set Config
-    +-- HTTP Request Defaults
-    +-- HTTP Header Manager
-    +-- HTTP Cookie Manager
-    +-- HTTP Request                Simpler
+    +-- User Defined Variables      Config Element
+    +-- CSV Data Set Config         Config Element
+    +-- HTTP Request Defaults       Config Element
+    +-- HTTP Header Manager         Config Element
+    +-- HTTP Cookie Manager         Config Element
+    +-- HTTP Request                Sampler
         +-- View Results Tree       Listener
         +-- View Results in Table   Listener
         +-- Summary Report          Listener
@@ -53,13 +53,19 @@ Test Plan
         +-- JSR223 PreProcessor     Pre Processors
         +-- JSON Extractor          Listener
         +-- JSR223 PostProcessor    Post Processors
-    +-- While Controller
+    +-- While Controller            Logical Controller
         +-- HTTP Request
             +-- JSR223 PreProcessor
             +-- JSR223 PostProcessor
+    +-- OS Prcoess Sampler          Sampler
+        +-- View Results Tree
     ...
 ```
 
+
+---
+
+## Config Element
 
 ### CSV Data Set Config
 
@@ -70,15 +76,43 @@ Variable Names (comma-delimited):       USERNAME,PASSWORD
 ```
 
 
-### JSON Extractor
+---
+
+## Logical Controller
+
+## While Controller
 
 ```
-Names of created variables:             name; url
-JSON Path expressions:                  $.name; $.url
-
-Default Values:                         name; url
+Condition (function or variable)        ${__groovy(
+	!(vars.get("STATUS").equals("SUCCESS")) && (${RETRY}.toInteger() < ${LIMIT}.toInteger())
+)}
 ```
 
+
+---
+
+## Sampler
+
+### HTTP Request
+
+```
+Protocol [http]:                        http
+Server Name or IP:                      www.google.com
+```
+
+
+### OS Prcoess Sampler
+
+```
+Command:                                ls
+Working directory:
+Command parameters:
+```
+
+
+---
+
+## PreProcessor / PostProcessor
 
 ### JSR223 PreProcessor / PostProcessor
 
@@ -102,13 +136,13 @@ log.info(name)
 ```
 
 
-## While Controller
+### JSON Extractor
 
 ```
-Condition (function or variable)        ${__groovy(
-	!(vars.get("STATUS").equals("SUCCESS")) && (${RETRY}.toInteger() < ${LIMIT}.toInteger())
-)}
+Names of created variables:             name; url
+JSON Path expressions:                  $.name; $.url
 
+Default Values:                         name; url
 ```
 
 
