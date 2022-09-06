@@ -40,9 +40,9 @@
 
 ## prividge mode
 
-```
+```bash
 # prividge mode
-vSZ-D> enable 
+vSZ-D> enable
 vSZ-D#
 
 # config mode
@@ -57,7 +57,7 @@ vSZ-D# !v54!
 
 ## save passphrase
 
-```
+```bash
 SCG(debug)# save passphrase
 ```
 
@@ -66,20 +66,20 @@ SCG(debug)# save passphrase
 
 ### method 1.
 
-```
+```bash
 SCG# debug
 SCG(debug)# web-debug
 ```
 
 ### method 2.
 
-```
+```bash
 -bash-4.1$ sudo /opt/ruckuswireless/wsg/cli/bin/tomcat.py -D start
 ```
 
 https://scg_manamgement_ip:8443/CassandraWeb/
 
-```
+```bash
 # CLI
 -bash-4.1$ sudo /opt/ruckuswireless/wsg/cli/bin/cassandra.py --cli
 
@@ -90,7 +90,7 @@ https://scg_manamgement_ip:8443/CassandraWeb/
 
 ## setup and initial
 
-```
+```bash
 SCG# rbd SCG200 SCG200 00001 11:22:33:44:55:66 32 ruckus
 #       <board>  <model> <sn> <mac> <mac-count> <customer>
 # board/model: SZ104, SZ124, SCG200
@@ -103,7 +103,7 @@ vSZ-D#
 
 ## list info ##
 
-```
+```bash
 vSZ-D# show version
 vSZ-D# show interface
 vSZ-D# show status
@@ -114,7 +114,7 @@ vSZ-D# show controller
 
 ## vSZ approve vDP ##
 
-```
+```bash
 vSZ# show data-plane
 
 vSZ(config)# data-plane <dp_name>@<dp_mac> approve
@@ -124,7 +124,7 @@ vSZ(config)# no data-plane <dp_name>@<dp_mac>
 
 ## AP join vSZ with vDP (tunnel mode) ##
 
-```
+```bash
 rkscli: get tunnelmgr
 
 rkscli: set scg ip <scg_control_ip>
@@ -142,7 +142,7 @@ rkscli: set scg getconf
 
 check public api version in control package
 
-```
+```bash
 -bash-4.1$ rpm -ql control-3.4.0.0-196.x86_64 | grep json-schema | grep json
 ```
 
@@ -179,7 +179,7 @@ SCG/vSZ
 
 vDP
 
-```
+```bash
 vSZ-D(debug)# save-log ftp <ftp_ip> <path> <user> <password>
 ```
 
@@ -190,18 +190,18 @@ SCG/vSZ
 
 SCG Enable Console CLI Debug
 
-```
+```bash
 SCG# debug
 SCG(debug)#  all-log-level
 
 SCG# config
-SCG(config)#  logging console cli debug 
+SCG(config)#  logging console cli debug
 ```
 
 vDP
 
-```
-vDP> enable 
+```bash
+vDP> enable
 vDP# show running-confing dhcp all
 vDP# debug
 vDP(debug)# diag dp_comm zone wlan show

@@ -315,3 +315,13 @@ linux:~ # ldconfig -v
 linux:~ # cat /etc/ld.so.conf
 linux:~ # ldconfig
 ```
+
+
+---
+
+[Makefile 語法簡介](https://sites.google.com/site/mymakefile/makefile-yu-fa-jian-jie)
+
+[Learn Makefiles With the tastiest examples](https://makefiletutorial.com/)
+
+[GNU make](https://www.gnu.org/software/make/manual/make.html)
+

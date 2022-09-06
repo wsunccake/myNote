@@ -158,6 +158,7 @@ postgres=# CREATE DATABASE <database_name>;  -- create database
 postgres=# DROP DATABASE <database_name>;    -- delete database
 postgres=# \l                                -- list database
 postgres=# \c <database_name>                -- use database
+postgres=# SELECT current_database();        -- show current database
 
 -- example
 postgres=# CREATE DATABASE testdb;
@@ -238,8 +239,8 @@ postgres=# ALTER TABLE COMPANY DROP TMP_COL ;
 
 ```sql
 postgres=# \dt
-postgres=# \d
-postgres=# \d COMPANY
+postgres=# \d           -- list table
+postgres=# \d COMPANY   -- show table schema
 ```
 
 
