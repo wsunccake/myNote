@@ -143,3 +143,19 @@ ext install leizongmin.node-module-intellisense
 [Visual Studio IntelliCode](https://marketplace.visualstudio.com/items?itemName=VisualStudioExptTeam.vscodeintellicode)
 
 ext install VisualStudioExptTeam.vscodeintellicode
+
+
+---
+
+## other
+
+"Visual Studio Code is unable to watch for file changes in this large workspace" (error ENOSPC
+
+```bash
+linux:~ # cat /proc/sys/fs/inotify/max_user_watches
+linux:~ # sysctl fs.inotify.max_user_watches
+
+linux:~ # sysctl -w fs.inotify.max_user_watches=524288
+linux:~ # echo "fs.inotify.max_user_watches=524288" >> /etc/sysctl.conf
+linux:~ # sysctl -p /etc/sysctl.conf
+```
