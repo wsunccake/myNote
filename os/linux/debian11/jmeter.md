@@ -11,8 +11,8 @@
 ## install
 
 ```bash
-linux:~ # https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.5.tgz
-linux:~ # tar zxf apache-jmeter-5.5.tgz
+linux:~ # curl -OL https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.5.tgz
+linux:~ # tar zxf apache-jmeter-5.5.tgz -C /usr/local
 linux:~ # ls /usr/local/apache-jmeter-5.5
 linux:~ # ln -s /usr/local/apache-jmeter-5.5/bin/jmeter /usr/local/bin/jmeter
 ```
@@ -27,9 +27,21 @@ linux:~ # ln -s /usr/local/apache-jmeter-5.5/bin/jmeter /usr/local/bin/jmeter
 linux:~ $ jmeter
 
 # cli
+linux:~ $ jmeter -n
+linux:~ $ jmeter -n -h
 linux:~ $ export HEAP="-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m"
 linux:~ $ jmeter -n -t <jmx file> \
-  [-l <results file> -e -o <path to web report folder>]
+  [-l <results file> -e -o <web report folder>] \
+  [-D <argument>=<value>] \     # java system property
+  [-J <argument>=<value>] \     # local JMeter propert
+  [-G <argument>=<value>]       # JMeter property sent to all remote servers
+
+# other command
+linux:~ $ stoptest.sh
+linux:~ $ shutdown.sh
+
+# config
+linux:~ $ cat $JMETER_HOME/bin/jmeter.properties
 ```
 
 
@@ -72,7 +84,7 @@ Test Plan
 ```
 Filename:                               user.csv
 
-Variable Names (comma-delimited):       USERNAME,PASSWORD
+Variable Names (comma-delimited):       USERNAME, PASSWORD
 ```
 
 
@@ -145,6 +157,35 @@ JSON Path expressions:                  $.name; $.url
 Default Values:                         name; url
 ```
 
+
+---
+
+## master - slave
+
+```
+           + --- slave1
+           |
+master --- + --- slave2
+           |
+           + --- slave3
+           ...
+```
+
+```bash
+master:~ $ jmeter -n -t <jmx file> \
+  [-R <slave ip>:<slave port>,... | -r ]
+
+master:~ $ cat $JMETER_HOME/bin/jmeter.properties
+remote_hosts=127.0.0.1
+->
+remote_hosts=192.168.0.11,192.168.0.12
+# -R run special remote host
+# -r run all remote host in jmeter.properties
+```
+
+```bash
+slave:~ $ jmeter-server -Djava.rmi.server.hostname=<master ip>
+```
 
 ---
 
