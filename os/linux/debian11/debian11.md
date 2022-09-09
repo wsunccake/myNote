@@ -73,6 +73,9 @@ debian:~ # apt install linux-headers-`uname -r`
 ## cli
 
 ```bash
+# curl
+debian:~ # apt install curl
+
 # zsh
 debian:~ # apt install zsh
 
