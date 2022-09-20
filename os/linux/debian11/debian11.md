@@ -73,6 +73,9 @@ debian:~ # apt install linux-headers-`uname -r`
 ## cli
 
 ```bash
+# curl
+debian:~ # apt install curl
+
 # zsh
 debian:~ # apt install zsh
 
@@ -200,4 +203,46 @@ debian:~ # curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key 
 debian:~ # apt-get update && apt-get install google-cloud-sdk
 
 debian:~ # gcloud init
+```
+
+
+---
+
+## vpn
+
+### global protect
+
+```bash
+# install
+debian:~ # tar zxf PanGPLinux-5.2.4-c14.tgz
+debian:~ # dpkg -i GlobalProtect_deb-5.2.4.0-14.deb
+
+# setup
+debian:~ # vi /opt/paloaltonetworks/globalprotect/pangps.xml
+<GlobalProtect>
+    ...
+	<Settings>
+		<default-browser>yes</default-browser>
+        ...
+	</Settings>
+</GlobalProtect>
+debian:~ # update-alternatives --config x-www-browser
+debian:~ # export BROWSER=<browser path>
+
+debian:~ # reboot
+
+# run
+debian:~ $ globalprotect -p <vpn server> -u <user>
+debian:~ $ globalprotect
+>> show --details
+>> show --status
+>> show --manual-gateway
+
+>> disconnect
+>> quit
+
+# check network device
+debian:~ $ ip link show dev gpd0
+debian:~ $ ip addr show dev gpd0
+debian:~ $ ip route
 ```
