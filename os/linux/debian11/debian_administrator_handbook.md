@@ -21,6 +21,7 @@ debian:~ # dpkg -S <path>      # search package by <path>
 
 # ie
 debian:~ # dpkg -l curl
+debian:~ # dpkg -l | grep curl
 debian:~ # dpkg -i curl_7.64.0-4+deb10u2_amd64.deb
 debian:~ # dpkg -r curl
 debian:~ # dpkg -P curl
@@ -28,6 +29,7 @@ debian:~ # dpkg -P curl
 debian:~ # dpkg -L curl
 debian:~ # dpkg -s curl
 debian:~ # dpkg -S /usr/bin/curl
+debian:~ # dpkg -S $(which curl)
 debian:~ # dpkg -c curl_7.64.0-4+deb10u2_amd64.deb
 
 # ar

@@ -591,7 +591,11 @@ WHILE    ${x} > 0
 END
 ```
 
---removekeywords, --flattenkeywords
+--expandkeywords name:<pattern>|tag:<pattern> *
+
+--removekeywords all|passed|for|wuks|name:<pattern>|tag:<pattern> *
+
+--flattenkeywords for|while|iteration|name:<pattern>|tag:<pattern> *
 
 
 ### break, continue

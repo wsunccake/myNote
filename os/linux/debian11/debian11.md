@@ -105,6 +105,9 @@ debian:~ # apt install lnav
 # wodim
 debian:~ # apt install wodim
 debian:~ # wodim -v -dao dev=/dev/cdrw <image>.iso
+
+# rpm2cpio
+debian:~ # apt install rpm2cpio
 ```
 
 
@@ -164,6 +167,10 @@ debian:~ $ vncserver -kill :1
 ## vm / container
 
 ```bash
+### libvirt
+debian:~ # apt install libvirt-clients
+debian:~ # apt install virt-manager
+
 ### docker
 debian:~ # apt-get remove docker docker-engine docker.io containerd runc
 debian:~ # apt-get update
