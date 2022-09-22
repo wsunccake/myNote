@@ -210,39 +210,17 @@ debian:~ # gcloud init
 
 ## vpn
 
-### global protect
+[global protect](./global_protect.md)
+
+
+---
+
+## im
+
+### skype
+
 
 ```bash
-# install
-debian:~ # tar zxf PanGPLinux-5.2.4-c14.tgz
-debian:~ # dpkg -i GlobalProtect_deb-5.2.4.0-14.deb
-
-# setup
-debian:~ # vi /opt/paloaltonetworks/globalprotect/pangps.xml
-<GlobalProtect>
-    ...
-	<Settings>
-		<default-browser>yes</default-browser>
-        ...
-	</Settings>
-</GlobalProtect>
-debian:~ # update-alternatives --config x-www-browser
-debian:~ # export BROWSER=<browser path>
-
-debian:~ # reboot
-
-# run
-debian:~ $ globalprotect -p <vpn server> -u <user>
-debian:~ $ globalprotect
->> show --details
->> show --status
->> show --manual-gateway
-
->> disconnect
->> quit
-
-# check network device
-debian:~ $ ip link show dev gpd0
-debian:~ $ ip addr show dev gpd0
-debian:~ $ ip route
+debian:~ # wget https://go.skype.com/skypeforlinux-64.deb
+debian:~ # dpkg -i skypeforlinux-64.deb
 ```
