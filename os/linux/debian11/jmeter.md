@@ -11,6 +11,11 @@
 ## install
 
 ```bash
+# require java
+linux:~ # apt intall openjdk-17-jdk
+linux:~ # apt intall openjdk-11-jdk
+
+# install
 linux:~ # curl -OL https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.5.tgz
 linux:~ # tar zxf apache-jmeter-5.5.tgz -C /usr/local
 linux:~ # ls /usr/local/apache-jmeter-5.5
