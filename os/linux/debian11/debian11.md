@@ -155,6 +155,7 @@ debian:~ # apt install i3
 ### vnc
 
 ```bash
+# server
 debian:~ # apt install tigervnc-standalone-server tigervnc-common
 debian:~ # su - <user>
 debian:~ $ vncpasswd
@@ -162,6 +163,10 @@ debian:~ $ vncpasswd
 debian:~ $ vncserver -localhost no
 debian:~ $ vncserver -list
 debian:~ $ vncserver -kill :1
+
+
+# client
+debian:~ $ apt install tigervnc-viewer
 ```
 
 
@@ -219,8 +224,53 @@ debian:~ # gcloud init
 
 ### skype
 
-
 ```bash
 debian:~ # wget https://go.skype.com/skypeforlinux-64.deb
 debian:~ # dpkg -i skypeforlinux-64.deb
+```
+
+
+---
+
+## input / keyin
+
+### locale
+
+```bash
+debian:~ # dpkg-reconfigure locales
+->
+select
+zh_TW.UTF-8     (required)
+zh_TW BIG5      (optional)
+
+# locale
+debian:~ # localectl list-locales
+debian:~ # localectl set-locale en_US.UTF-8
+```
+
+
+### font
+
+```bash
+## 文泉驛 字體
+xfonts-wqy fonts-wqy-zenhei fonts-wqy-microhei
+
+## 文鼎楷 字體
+fonts-arphic-ukai fonts-arphic-uming
+
+## 思源 字體
+fonts-noto
+```
+
+
+### ibus
+
+```bash
+# install
+debian:~ # apt install ibus
+debian:~ # apt install ibus-chewing ibus-zhuyin
+
+# setting gnome 3.x
+debian:~ $ gnome-control-center
+Region & Language -> Input Sources
 ```
