@@ -111,6 +111,10 @@ debian:~ # wodim -v -dao dev=/dev/cdrw <image>.iso
 
 # rpm2cpio
 debian:~ # apt install rpm2cpio
+
+# freeradius-utils
+debian:~ # apt install freeradius-utils
+debian:~ $ radtest <radius server>:<port> <user> <pw> <nas number> <secret>
 ```
 
 
