@@ -32,13 +32,16 @@ linux:~ # ln -s /usr/local/apache-jmeter-5.5/bin/jmeter /usr/local/bin/jmeter
 linux:~ $ jmeter
 
 # cli
+linux:~ $ jmeter '-?'
+linux:~ $ jmeter -v
+
 linux:~ $ jmeter -n
 linux:~ $ jmeter -n -h
 linux:~ $ export HEAP="-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m"
 linux:~ $ jmeter -n -t <jmx file> \
   [-l <results file> -e -o <web report folder>] \
   [-D <argument>=<value>] \     # java system property
-  [-J <argument>=<value>] \     # local JMeter propert
+  [-J <argument>=<value>] \     # local JMeter propert, ie threads=200
   [-G <argument>=<value>]       # JMeter property sent to all remote servers
 
 # other command
