@@ -15,6 +15,11 @@ func main() {
 	countryCapitalMap["Italy"] = "Rome"
 	countryCapitalMap["Japan"] = "Tokyo"
 
+	// check key exist
+	if _, ok := countryCapitalMap["Taiwan"]; !ok {
+		fmt.Println("no found Taiwan")
+	}
+
 	weekDay := map[string]string{
 		"sun": "Sunday",
 		"mon": "Monday",
@@ -41,5 +46,7 @@ func main() {
 
 	// emptyMap1 := make(map[string]int)
 	// emptyMap2 := map[string]int{}
+
+	// var nilMap map[string]int
 }
 ```
