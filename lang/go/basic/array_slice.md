@@ -103,6 +103,12 @@ func main() {
 	names := []string{"Finn", "LPJ", "Tino"}
 	n1 := names[0]
 	fmt.Println(n1, n1[2:], n1[:], n1[1:3])
+
+	// emptySlice1 = make([]int, 0)
+	// emptySlice2 = []int{}
+
+	// var nilSlice []int
+}
 ```
 
 

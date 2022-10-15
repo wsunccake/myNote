@@ -38,5 +38,8 @@ func main() {
 	} else {
 		fmt.Println("no found", k)
 	}
+
+	// emptyMap1 := make(map[string]int)
+	// emptyMap2 := map[string]int{}
 }
 ```
