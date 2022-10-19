@@ -26,9 +26,9 @@ BEGIN {
 }
 
 END {
-  "count:", NR
-  "sum: ", sum
-  "average: %f\n", sum/NR
+  print("count:", NR)
+  print "sum: ", sum
+  printf "average: %f\n", sum / NR
 }
 
 # regrex
