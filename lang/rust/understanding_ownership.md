@@ -285,3 +285,48 @@ fn no_dangle() -> String {
 ---
 
 # the slice type
+
+```rust
+fn first_word(s: &String) -> usize {
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return i;
+        }
+    }
+
+    s.len()
+}
+
+fn main() {}
+
+// -->
+// string slice
+fn first_word(s: &String) -> &str {
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[0..i];
+        }
+    }
+
+    &s[..]
+}
+
+fn main() {}
+```
+
+```rust
+// string literal are slice
+let s = "Hello, world!";
+
+// string slice as parameter
+fn first_word(s: &String) -> &str {
+...
+
+fn first_word(s: &str) -> &str {
+...
+
+```
