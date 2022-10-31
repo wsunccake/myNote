@@ -11,8 +11,13 @@
 ## install
 
 ```bash
-linux:~ # https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.5.tgz
-linux:~ # tar zxf apache-jmeter-5.5.tgz
+# require java
+linux:~ # apt intall openjdk-17-jdk
+linux:~ # apt intall openjdk-11-jdk
+
+# install
+linux:~ # curl -OL https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.5.tgz
+linux:~ # tar zxf apache-jmeter-5.5.tgz -C /usr/local
 linux:~ # ls /usr/local/apache-jmeter-5.5
 linux:~ # ln -s /usr/local/apache-jmeter-5.5/bin/jmeter /usr/local/bin/jmeter
 ```
@@ -27,9 +32,24 @@ linux:~ # ln -s /usr/local/apache-jmeter-5.5/bin/jmeter /usr/local/bin/jmeter
 linux:~ $ jmeter
 
 # cli
+linux:~ $ jmeter '-?'
+linux:~ $ jmeter -v
+
+linux:~ $ jmeter -n
+linux:~ $ jmeter -n -h
 linux:~ $ export HEAP="-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m"
 linux:~ $ jmeter -n -t <jmx file> \
-  [-l <results file> -e -o <path to web report folder>]
+  [-l <results file> -e -o <web report folder>] \
+  [-D <argument>=<value>] \     # java system property
+  [-J <argument>=<value>] \     # local JMeter propert, ie threads=200
+  [-G <argument>=<value>]       # JMeter property sent to all remote servers
+
+# other command
+linux:~ $ stoptest.sh
+linux:~ $ shutdown.sh
+
+# config
+linux:~ $ cat $JMETER_HOME/bin/jmeter.properties
 ```
 
 
@@ -40,12 +60,12 @@ linux:~ $ jmeter -n -t <jmx file> \
 ```
 Test Plan
 +-- Thread Group                    Threads (Users)
-    +-- User Defined Variables
-    +-- CSV Data Set Config
-    +-- HTTP Request Defaults
-    +-- HTTP Header Manager
-    +-- HTTP Cookie Manager
-    +-- HTTP Request                Simpler
+    +-- User Defined Variables      Config Element
+    +-- CSV Data Set Config         Config Element
+    +-- HTTP Request Defaults       Config Element
+    +-- HTTP Header Manager         Config Element
+    +-- HTTP Cookie Manager         Config Element
+    +-- HTTP Request                Sampler
         +-- View Results Tree       Listener
         +-- View Results in Table   Listener
         +-- Summary Report          Listener
@@ -53,32 +73,66 @@ Test Plan
         +-- JSR223 PreProcessor     Pre Processors
         +-- JSON Extractor          Listener
         +-- JSR223 PostProcessor    Post Processors
-    +-- While Controller
+    +-- While Controller            Logical Controller
         +-- HTTP Request
             +-- JSR223 PreProcessor
             +-- JSR223 PostProcessor
+    +-- OS Prcoess Sampler          Sampler
+        +-- View Results Tree
     ...
 ```
 
+
+---
+
+## Config Element
 
 ### CSV Data Set Config
 
 ```
 Filename:                               user.csv
 
-Variable Names (comma-delimited):       USERNAME,PASSWORD
+Variable Names (comma-delimited):       USERNAME, PASSWORD
 ```
 
 
-### JSON Extractor
+---
+
+## Logical Controller
+
+## While Controller
 
 ```
-Names of created variables:             name; url
-JSON Path expressions:                  $.name; $.url
-
-Default Values:                         name; url
+Condition (function or variable)        ${__groovy(
+	!(vars.get("STATUS").equals("SUCCESS")) && (${RETRY}.toInteger() < ${LIMIT}.toInteger())
+)}
 ```
 
+
+---
+
+## Sampler
+
+### HTTP Request
+
+```
+Protocol [http]:                        http
+Server Name or IP:                      www.google.com
+```
+
+
+### OS Prcoess Sampler
+
+```
+Command:                                ls
+Working directory:
+Command parameters:
+```
+
+
+---
+
+## PreProcessor / PostProcessor
 
 ### JSR223 PreProcessor / PostProcessor
 
@@ -102,15 +156,44 @@ log.info(name)
 ```
 
 
-## While Controller
+### JSON Extractor
 
 ```
-Condition (function or variable)        ${__groovy(
-	!(vars.get("STATUS").equals("SUCCESS")) && (${RETRY}.toInteger() < ${LIMIT}.toInteger())
-)}
+Names of created variables:             name; url
+JSON Path expressions:                  $.name; $.url
 
+Default Values:                         name; url
 ```
 
+
+---
+
+## master - slave
+
+```
+           + --- slave1
+           |
+master --- + --- slave2
+           |
+           + --- slave3
+           ...
+```
+
+```bash
+master:~ $ jmeter -n -t <jmx file> \
+  [-R <slave ip>:<slave port>,... | -r ]
+
+master:~ $ cat $JMETER_HOME/bin/jmeter.properties
+remote_hosts=127.0.0.1
+->
+remote_hosts=192.168.0.11,192.168.0.12
+# -R run special remote host
+# -r run all remote host in jmeter.properties
+```
+
+```bash
+slave:~ $ jmeter-server -Djava.rmi.server.hostname=<master ip>
+```
 
 ---
 

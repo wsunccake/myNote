@@ -105,6 +105,15 @@ class WebsiteUser(HttpUser):
 
 ## master - slave
 
+```
+           + --- slave1
+           |
+master --- + --- slave2
+           |
+           + --- slave3
+           ...
+```
+
 ```bash
 master:~ $ locust -f locustfile.py \
   -H https://<ip>:<port> \
@@ -121,6 +130,16 @@ slave:~ $ locust -f locustfile.py \
   --worker \
   --master-host <master host> --master-port <master port>
 ```
+
+method 1
+
+先將所有 slave 執行 locust command, 在 master 執行 locust command
+
+
+method 2
+
+先在 master 執行 locust command (最好加上 --expect-workers 或 --expect-workers-max-wait), 要不然只有要一台 slave 執行 locust command, 就開始跑 test
+
 
 ---
 
