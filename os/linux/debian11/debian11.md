@@ -73,6 +73,9 @@ debian:~ # apt install linux-headers-`uname -r`
 ## cli
 
 ```bash
+# curl
+debian:~ # apt install curl
+
 # zsh
 debian:~ # apt install zsh
 
@@ -105,6 +108,13 @@ debian:~ # apt install lnav
 # wodim
 debian:~ # apt install wodim
 debian:~ # wodim -v -dao dev=/dev/cdrw <image>.iso
+
+# rpm2cpio
+debian:~ # apt install rpm2cpio
+
+# freeradius-utils
+debian:~ # apt install freeradius-utils
+debian:~ $ radtest <radius server>:<port> <user> <pw> <nas number> <secret>
 ```
 
 
@@ -149,6 +159,7 @@ debian:~ # apt install i3
 ### vnc
 
 ```bash
+# server
 debian:~ # apt install tigervnc-standalone-server tigervnc-common
 debian:~ # su - <user>
 debian:~ $ vncpasswd
@@ -156,6 +167,10 @@ debian:~ $ vncpasswd
 debian:~ $ vncserver -localhost no
 debian:~ $ vncserver -list
 debian:~ $ vncserver -kill :1
+
+
+# client
+debian:~ $ apt install tigervnc-viewer
 ```
 
 
@@ -164,6 +179,10 @@ debian:~ $ vncserver -kill :1
 ## vm / container
 
 ```bash
+### libvirt
+debian:~ # apt install libvirt-clients
+debian:~ # apt install virt-manager
+
 ### docker
 debian:~ # apt-get remove docker docker-engine docker.io containerd runc
 debian:~ # apt-get update
@@ -193,4 +212,69 @@ debian:~ # curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key 
 debian:~ # apt-get update && apt-get install google-cloud-sdk
 
 debian:~ # gcloud init
+```
+
+
+---
+
+## vpn
+
+[global protect](./global_protect.md)
+
+
+---
+
+## im
+
+### skype
+
+```bash
+debian:~ # wget https://go.skype.com/skypeforlinux-64.deb
+debian:~ # dpkg -i skypeforlinux-64.deb
+```
+
+
+---
+
+## input / keyin
+
+### locale
+
+```bash
+debian:~ # dpkg-reconfigure locales
+->
+select
+zh_TW.UTF-8     (required)
+zh_TW BIG5      (optional)
+
+# locale
+debian:~ # localectl list-locales
+debian:~ # localectl set-locale en_US.UTF-8
+```
+
+
+### font
+
+```bash
+## 文泉驛 字體
+xfonts-wqy fonts-wqy-zenhei fonts-wqy-microhei
+
+## 文鼎楷 字體
+fonts-arphic-ukai fonts-arphic-uming
+
+## 思源 字體
+fonts-noto
+```
+
+
+### ibus
+
+```bash
+# install
+debian:~ # apt install ibus
+debian:~ # apt install ibus-chewing ibus-zhuyin
+
+# setting gnome 3.x
+debian:~ $ gnome-control-center
+Region & Language -> Input Sources
 ```
