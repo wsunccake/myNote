@@ -6,6 +6,7 @@
 linux:~ # xz -dc node-v18.12.0-linux-x64.tar.xz | tar xf - -C /usr/local
 linux:~ # ln -s /usr/local/node-v18.12.0-linux-x64/bin/node /usr/local/bin/.
 linux:~ # ln -s /usr/local/node-v18.12.0-linux-x64/bin/npm /usr/local/bin/.
+linux:~ # ln -s /usr/local/node-v18.12.0-linux-x64/bin/npx /usr/local/bin/.
 ```
 
 
