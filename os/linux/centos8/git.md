@@ -56,6 +56,7 @@ git version 2.18.4
 
 # example
 [linux:~/repo ] $ git remote set-url origin <git uri>
+[linux:~/repo ] $ git remote set-url --add --push origin <git uri>
 [linux:~/repo ] $ git remote set-url --add --push origin <git mirror uri>
 [linux:~/repo ] $ git branch -M master
 [linux:~/repo ] $ git push -u origin --all
