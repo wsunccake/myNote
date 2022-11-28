@@ -63,8 +63,8 @@ cannot connect to local gpd service.
 
 ```bash
 debian:~ # systemctl restart gpd.service
-debian:~ #systemctl status gpd.service
-debian:~ #ps aux | grep Pan
+debian:~ # systemctl status gpd.service
+debian:~ # ps aux | grep Pan
 ```
 
 

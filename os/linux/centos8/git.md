@@ -10,6 +10,21 @@ git version 2.18.4
 
 ---
 
+## remote branch
+
+```bash
+# create
+[linux:~ ] # git branch <branch>
+[linux:~ ] # git push origin <branch>
+
+# delete
+[linux:~ ] # git branch -d <branch>
+[linux:~ ] # git push origin -d <branch>
+```
+
+
+---
+
 ## multi repo
 
 ```bash
