@@ -6,17 +6,17 @@ download from https://github.com/goharbor/harbor/releases
 
 ```bash
 # for online
-[linux:~ ] # curl -LO https://github.com/goharbor/harbor/releases/download/v2.3.1/harbor-online-installer-v2.3.1.tgz
-[linux:~ ] # tar zxf harbor-online-installer-v2.3.1.tgz -C /opt
-[linux:~ ] # cd /opt/harbor
+harbor:~ # curl -LO https://github.com/goharbor/harbor/releases/download/v2.3.1/harbor-online-installer-v2.3.1.tgz
+harbor:~ # tar zxf harbor-online-installer-v2.3.1.tgz -C /opt
+harbor:~ # cd /opt/harbor
 
 # for offline
-[linux:~ ] # curl -LO https://github.com/goharbor/harbor/releases/download/v2.6.2/harbor-offline-installer-v2.6.2.tgz
-[linux:~ ] # tar zxf harbor-offline-installer-v2.6.2.tgz -C /opt
-[linux:~ ] # cd /opt/harbor
+harbor:~ # curl -LO https://github.com/goharbor/harbor/releases/download/v2.6.2/harbor-offline-installer-v2.6.2.tgz
+harbor:~ # tar zxf harbor-offline-installer-v2.6.2.tgz -C /opt
+harbor:~ # cd /opt/harbor
 
-[linux:/opt/harbor ] # cp harbor.yml.tmpl harbor.yml
-[linux:/opt/harbor ] # vi harbor.yml
+harbor:/opt/harbor # cp harbor.yml.tmpl harbor.yml
+harbor:/opt/harbor # vi harbor.yml
 # setup host
  hostname: reg.mydomain.com
 ->
@@ -39,11 +39,11 @@ download from https://github.com/goharbor/harbor/releases
 #   certificate: /your/certificate/path
 #   private_key: /your/private/key/path
 
-[linux:/opt/harbor ] # ./prepare
-[linux:/opt/harbor ] # ./install.sh
+harbor:/opt/harbor # ./prepare
+harbor:/opt/harbor # ./install.sh
 
 # web ui password
-[linux:/opt/harbor ] # grep harbor_admin_password harbor.yml
+harbor:/opt/harbor # grep harbor_admin_password harbor.yml
 ```
 
 web ui -> http://<ip>
@@ -58,11 +58,11 @@ default image folder: /data
 ## manage
 
 ```bash
-[linux:/opt/harbor ] # docker-compose -f docker-compose.yml ps
-[linux:/opt/harbor ] # docker-compose -f docker-compose.yml start
-[linux:/opt/harbor ] # docker-compose -f docker-compose.yml stop
-[linux:/opt/harbor ] # docker-compose -f docker-compose.yml rm
-[linux:/opt/harbor ] # docker-compose -f docker-compose.yml up -dv
+harbor:/opt/harbor # docker-compose -f docker-compose.yml ps
+harbor:/opt/harbor # docker-compose -f docker-compose.yml start
+harbor:/opt/harbor # docker-compose -f docker-compose.yml stop
+harbor:/opt/harbor # docker-compose -f docker-compose.yml rm
+harbor:/opt/harbor # docker-compose -f docker-compose.yml up -dv
 ```
 
 Projects \ New Project
@@ -76,39 +76,95 @@ format: <harbor_ip or harbor_hostname>[:<harbor_port>]/<project>/<REPOSITORY>[:T
 
 ```bash
 # add privte registry
-[linux:~ ] # vi  /etc/docker/daemon.json
+client:~ # vi  /etc/docker/daemon.json
 {
   "insecure-registries": [ "<harbor_ip or harbor_hostname>:<harbor_port>" ]
 }
-[linux:~ ] # systemctl restart docker.service
+client:~ # systemctl restart docker.service
 
-[linux:~ ] # docker login <harbor_ip or harbor_hostname>:<harbor_port>    # $HOME/.docker/config.json
-[linux:~ ] # docker logout
+client:~ # docker login <harbor_ip or harbor_hostname>:<harbor_port>    # $HOME/.docker/config.json
+client:~ # docker logout
 ```
 
 ```bash
 # push image
-[linux:~ ] # docker pull <image>
-[linux:~ ] # docker images <image>
-[linux:~ ] # docker tag <image> <harbor_ip or harbor_hostname>:<harbor_port>/<project>/<image>
-[linux:~ ] # docker push <harbor_ip or harbor_hostname>:<harbor_port>/<project>/<image>
+client:~ # docker pull <image>
+client:~ # docker images <image>
+client:~ # docker tag <image> <harbor_ip or harbor_hostname>:<harbor_port>/<project>/<image>
+client:~ # docker push <harbor_ip or harbor_hostname>:<harbor_port>/<project>/<image>
 
 # ie
-[linux:~ ] # docker tag alpine 192.168.0.1:80/test/apline
-[linux:~ ] # docker login -u admin -p Harbor12345 192.168.0.1:80
-[linux:~ ] # docker push 192.168.0.1:80/test/apline
-[linux:~ ] # docker logout
+client:~ # docker tag alpine 192.168.0.1:80/test/apline
+client:~ # docker login -u admin -p Harbor12345 192.168.0.1:80
+client:~ # docker push 192.168.0.1:80/test/apline
+client:~ # docker logout
 ```
 
 ```bash
 # pull image
-[linux:~ ] # docker pull <harbor_ip or harbor_hostname>:<harbor_port>/<project>/<image>
+client:~ # docker pull <harbor_ip or harbor_hostname>:<harbor_port>/<project>/<image>
 
 # ie
-[linux:~ ] # docker login -u admin -p Harbor12345 192.168.0.1:80
-[linux:~ ] # docker pull 192.168.0.1:80/test/apline
-[linux:~ ] # docker logout
+client:~ # docker login -u admin -p Harbor12345 192.168.0.1:80
+client:~ # docker pull 192.168.0.1:80/test/apline
+client:~ # docker logout
 ```
 
 
 ---
+
+## example
+
+```
+harbor             ---   client
+192.168.10.10            192.168.10.x
+```
+
+```bash
+harbor:~ # echo "192.168.10.10  harbor" >> /etc/hosts
+
+harbor:~ # curl -LO https://github.com/goharbor/harbor/releases/download/v2.6.2/harbor-offline-installer-v2.6.2.tgz
+harbor:~ # tar zxf harbor-offline-installer-v2.6.2.tgz -C /opt
+harbor:~ # cd /opt/harbor
+
+harbor:/opt/harbor # cp harbor.yml.tmpl harbor.yml
+harbor:/opt/harbor # vi harbor.yml
+# setup host
+hostname: harbor
+http:
+  port: 5000
+...
+
+# disable https
+ https:
+   port: 443
+   certificate: /your/certificate/path
+   private_key: /your/private/key/path
+->
+# https:
+#   port: 443
+#   certificate: /your/certificate/path
+#   private_key: /your/private/key/path
+
+harbor:/opt/harbor # ./prepare
+harbor:/opt/harbor # ./install.sh
+```
+
+```bash
+client:~ # echo "192.168.10.10  harbor" >> /etc/hosts
+
+client:~ # vi /etc/docker/daemon.json 
+{
+  "insecure-registries": ["192.168.10.10:5000", "harbor:5000", "0.0.0.0"]
+}
+client:~ # systemctl restart docker 
+client:~ # systemctl status docker
+
+client:~ # docker login --username admin --password Harbor12345 http://harbor:5000
+```
+
+---
+
+## ref
+
+Harbor 2.6 Documentation](https://goharbor.io/docs/2.6.0/)

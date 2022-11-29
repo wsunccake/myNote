@@ -369,6 +369,8 @@ centos:~ # ip link set <eth> master <br>
 rhel:~ # docker login # 登入 Docker Hub, 設定在 $HOME/.dockercfg
 rhel:~ # docker logout
 
+rhel:~ # cat ~/.docker/config.json
+
 rhel:~ # docker tag
 rhel:~ # docker push
 rhel:~ # docker pull
