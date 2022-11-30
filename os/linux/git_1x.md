@@ -371,3 +371,16 @@ linux:~/repo $ git commit "update sub_repo"
 linux:~/repo $ git push
 ```
 
+
+---
+
+## othert
+
+```bash
+# certificate issue
+linux:~/repo $ git clone <git url>
+fatal: unable to access '<git url>': Peer's certificate issuer has been marked as not trusted by the user.
+
+# disable http.sslVerify
+linux:~/repo $ git config --global http.sslVerify false
+```
