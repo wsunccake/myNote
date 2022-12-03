@@ -1,4 +1,37 @@
-# Docker CE
+# Docker CE 20.x
+
+## install
+
+```bash
+# remove old version
+centos:~ # yum remove docker \
+  docker-client \
+  docker-client-latest \
+  docker-common \
+  docker-latest \
+  docker-latest-logrotate \
+  docker-logrotate \
+  docker-engine
+
+# install
+centos:~ # yum install -y yum-utils
+centos:~ # yum-config-manager \
+  --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+centos:~ # yum install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+# docker version
+centos:~ # yum list docker-ce --showduplicates | sort -r
+centos:~ # yum install docker-ce-<VERSION> docker-ce-cli-<VERSION> containerd.io docker-compose-plugin
+
+# service
+centos:~ # systemctl start docker
+centos:~ # systemctl enable docker.service
+```
+
+
+---
+
+# Docker CE 1.7
 
 ## install
 
