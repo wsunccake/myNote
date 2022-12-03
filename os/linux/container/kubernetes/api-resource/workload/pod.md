@@ -1,4 +1,4 @@
-# [pod]](https://kubernetes.io/docs/concepts/workloads/pods/)
+# [pod](https://kubernetes.io/docs/concepts/workloads/pods/)
 
 ## command
 
