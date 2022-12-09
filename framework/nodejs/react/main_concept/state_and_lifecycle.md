@@ -4,7 +4,7 @@
 
 ```js
 // index.js
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
 function tick() {
   const element = (
@@ -24,7 +24,7 @@ setInterval(tick, 1000);
 function component
 
 ```js
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
 function Clock(props) {
   return (
@@ -47,12 +47,12 @@ setInterval(tick, 1000);
 class component
 
 ```js
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
 class Clock extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {date: new Date()};
+    this.state = { date: new Date() };
   }
 
   render() {
@@ -72,7 +72,6 @@ function tick() {
 setInterval(tick, 1000);
 ```
 
-
 ---
 
 ## adding lifecycle methods to class
@@ -83,23 +82,22 @@ class Clock extends React.Component {
   constructor(props) {
     super(props);
     // this.state.comment = 'Hello';        // wrong, not re-render a component
-    this.state = {date: new Date()};        // correct
+    this.state = { date: new Date() }; // correct
   }
 
-  componentDidMount() {                     // lifecycle
-    this.timerID = setInterval(
-      () => this.tick(),
-      1000
-    );
+  componentDidMount() {
+    // lifecycle
+    this.timerID = setInterval(() => this.tick(), 1000);
   }
 
-  componentWillUnmount() {                  // lifecycle
+  componentWillUnmount() {
+    // lifecycle
     clearInterval(this.timerID);
   }
 
   tick() {
     this.setState({
-      date: new Date()
+      date: new Date(),
     });
 
     // wrong, state update may be asynchronous
@@ -129,5 +127,4 @@ class Clock extends React.Component {
     );
   }
 }
-
 ```

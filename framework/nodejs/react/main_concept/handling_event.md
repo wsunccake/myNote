@@ -1,12 +1,9 @@
-# event
-
+# handling event
 
 in html
 
 ```html
-<button onclick="activateLasers()">
-  Activate Lasers
-</button>
+<button onclick="activateLasers()">Activate Lasers</button>
 ```
 
 ->
@@ -14,11 +11,8 @@ in html
 in react
 
 ```js
-<button onClick={activateLasers}>
-  Activate Lasers
-</button>
+<button onClick={activateLasers}>Activate Lasers</button>
 ```
-
 
 ---
 
@@ -38,7 +32,7 @@ in react
 function Form() {
   function handleSubmit(e) {
     e.preventDefault();
-    console.log('You clicked submit.');
+    console.log("You clicked submit.");
   }
 
   return (
@@ -48,7 +42,6 @@ function Form() {
   );
 }
 ```
-
 
 ---
 
@@ -68,7 +61,7 @@ in react
 function Form() {
   function handleSubmit(e) {
     e.preventDefault();
-    console.log('You clicked submit.');
+    console.log("You clicked submit.");
   }
 
   return (
@@ -78,7 +71,6 @@ function Form() {
   );
 }
 ```
-
 
 ---
 
@@ -86,28 +78,27 @@ function Form() {
 class Toggle extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {isToggleOn: true};
+    this.state = { isToggleOn: true };
 
     // This binding is necessary to make `this` work in the callback
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick() {
-    this.setState(prevState => ({
-      isToggleOn: !prevState.isToggleOn
+    this.setState((prevState) => ({
+      isToggleOn: !prevState.isToggleOn,
     }));
   }
 
   render() {
     return (
       <button onClick={this.handleClick}>
-        {this.state.isToggleOn ? 'ON' : 'OFF'}
+        {this.state.isToggleOn ? "ON" : "OFF"}
       </button>
     );
   }
 }
 ```
-
 
 ---
 
@@ -115,14 +106,10 @@ class Toggle extends React.Component {
 // wrong
 class LoggingButton extends React.Component {
   handleClick = function () {
-    console.log('this is:', this);
+    console.log("this is:", this);
   };
   render() {
-    return (
-      <button onClick={this.handleClick}>
-        Click me
-      </button>
-    );
+    return <button onClick={this.handleClick}>Click me</button>;
   }
 }
 
@@ -132,14 +119,10 @@ class LoggingButton extends React.Component {
 class LoggingButton extends React.Component {
   // This syntax ensures `this` is bound within handleClick.
   handleClick = () => {
-    console.log('this is:', this);
+    console.log("this is:", this);
   };
   render() {
-    return (
-      <button onClick={this.handleClick}>
-        Click me
-      </button>
-    );
+    return <button onClick={this.handleClick}>Click me</button>;
   }
 }
 
@@ -148,20 +131,15 @@ class LoggingButton extends React.Component {
 // right
 class LoggingButton extends React.Component {
   handleClick() {
-    console.log('this is:', this);
+    console.log("this is:", this);
   }
 
   render() {
     // This syntax ensures `this` is bound within handleClick
-    return (
-      <button onClick={() => this.handleClick()}>
-        Click me
-      </button>
-    );
+    return <button onClick={() => this.handleClick()}>Click me</button>;
   }
 }
 ```
-
 
 ---
 

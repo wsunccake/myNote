@@ -8,7 +8,6 @@ linux:~ $ create-react-app hello-world
 linux:~ $ cd hello-world
 ```
 
-
 ---
 
 ## run
@@ -19,7 +18,6 @@ linux:~/hello-world $ npm run build
 
 linux:~ $ curl http://localhost:3000
 ```
-
 
 ---
 
@@ -61,7 +59,6 @@ hello-world/public
 
 0 directories, 6 files
 ```
-
 
 ---
 

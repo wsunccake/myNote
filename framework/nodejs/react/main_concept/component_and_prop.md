@@ -18,7 +18,6 @@ class Welcome extends React.Component {
 }
 ```
 
-
 ---
 
 ## rendering a component
@@ -29,11 +28,10 @@ function Welcome(props) {
   return <h1>Hello, {props.name}</h1>;
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-const element = <Welcome name="Sara" />;        // <Welcome > = call js function Welcome
+const root = ReactDOM.createRoot(document.getElementById("root"));
+const element = <Welcome name="Sara" />; // <Welcome > = call js function Welcome
 root.render(element);
 ```
-
 
 ---
 
@@ -54,7 +52,6 @@ function App() {
   );
 }
 ```
-
 
 ---
 
@@ -139,7 +136,6 @@ function Comment(props) {
   );
 }
 ```
-
 
 ---
 

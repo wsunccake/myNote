@@ -1,4 +1,4 @@
-# element
+# rendering element
 
 ## rendering an element into the dom
 
@@ -9,13 +9,10 @@
 
 ```js
 // index.js
-const root = ReactDOM.createRoot(
-  document.getElementById('root')
-);
+const root = ReactDOM.createRoot(document.getElementById("root"));
 const element = <h1>Hello, world</h1>;
 root.render(element);
 ```
-
 
 ---
 
@@ -23,9 +20,7 @@ root.render(element);
 
 ```js
 // index.js
-const root = ReactDOM.createRoot(
-  document.getElementById('root')
-);
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
 function tick() {
   const element = (

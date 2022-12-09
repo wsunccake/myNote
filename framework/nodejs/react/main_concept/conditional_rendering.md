@@ -9,15 +9,15 @@ class LoginControl extends React.Component {
     super(props);
     this.handleLoginClick = this.handleLoginClick.bind(this);
     this.handleLogoutClick = this.handleLogoutClick.bind(this);
-    this.state = {isLoggedIn: false};
+    this.state = { isLoggedIn: false };
   }
 
   handleLoginClick() {
-    this.setState({isLoggedIn: true});
+    this.setState({ isLoggedIn: true });
   }
 
   handleLogoutClick() {
-    this.setState({isLoggedIn: false});
+    this.setState({ isLoggedIn: false });
   }
 
   render() {
@@ -56,22 +56,13 @@ function Greeting(props) {
 }
 
 function LoginButton(props) {
-  return (
-    <button onClick={props.onClick}>
-      Login
-    </button>
-  );
+  return <button onClick={props.onClick}>Login</button>;
 }
 
 function LogoutButton(props) {
-  return (
-    <button onClick={props.onClick}>
-      Logout
-    </button>
-  );
+  return <button onClick={props.onClick}>Logout</button>;
 }
 ```
-
 
 ---
 
@@ -138,7 +129,6 @@ render() {
 }
 ```
 
-
 ### preventing component from rendering
 
 ```js
@@ -147,23 +137,19 @@ function WarningBanner(props) {
     return null;
   }
 
-  return (
-    <div className="warning">
-      Warning!
-    </div>
-  );
+  return <div className="warning">Warning!</div>;
 }
 
 class Page extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {showWarning: true};
+    this.state = { showWarning: true };
     this.handleToggleClick = this.handleToggleClick.bind(this);
   }
 
   handleToggleClick() {
-    this.setState(state => ({
-      showWarning: !state.showWarning
+    this.setState((state) => ({
+      showWarning: !state.showWarning,
     }));
   }
 
@@ -172,7 +158,7 @@ class Page extends React.Component {
       <div>
         <WarningBanner warn={this.state.showWarning} />
         <button onClick={this.handleToggleClick}>
-          {this.state.showWarning ? 'Hide' : 'Show'}
+          {this.state.showWarning ? "Hide" : "Show"}
         </button>
       </div>
     );
