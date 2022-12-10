@@ -16,42 +16,78 @@ http://localhost:3000/about
 ### static generation with data
 
 ```js
-// scenario 1: page content depends on external data
-export default function Home({ allPokemons }) {
+// pages/posts/index.js
+export default function Home({ allPosts }) {
   return (
     <ul>
-      {allPokemons.map((poke) => (
-        <li key={poke.url}>{poke.name}</li>
+      {allPosts.map((post) => (
+        <li>{post.title}</li>
       ))}
     </ul>
   );
 }
 
-// getStaticProps
+// by getStaticProps
 export async function getStaticProps() {
-  //   const response = await fetch("https://pokeapi.co/api/v2/pokemon/");
-  //   const data = await response.json();
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts/");
+  const posts = await res.json();
+  //   const posts = [
+  //     {
+  //       id: 1,
+  //       title: "google",
+  //     },
+  //     {
+  //       id: 2,
+  //       title: "facebook",
+  //     },
+  //   ];
+  return { props: { allPosts: posts } };
+}
+```
 
-  const data = {
-    results: [
-      {
-        name: "bulbasaur",
-        url: "https://pokeapi.co/api/v2/pokemon/1/",
-      },
-      {
-        name: "ivysaur",
-        url: "https://pokeapi.co/api/v2/pokemon/2/",
-      },
-      {
-        name: "venusaur",
-        url: "https://pokeapi.co/api/v2/pokemon/3/",
-      },
-    ],
-  };
+```js
+// pages/posts/[id].js
+export default function Post({ post }) {
+  return <h1>{post.title}</h1>;
+}
 
-  return {
-    props: { allPokemons: data.results },
-  };
+// by getStaticProps
+export async function getStaticPaths() {
+  // const res = await fetch("https://jsonplaceholder.typicode.com/posts/");
+  // const posts = await res.json();
+
+  // const paths = posts.map((post) => ({
+  //   params: { id: post.id.toString() },
+  // }));
+  const paths = [{ params: { id: "1" } }, { params: { id: "2" } }];
+
+  // console.log(`paths: ${paths}`);
+  // console.log(paths);
+
+  return { paths, fallback: false };
+}
+
+// by getStaticProps
+export async function getStaticProps(context) {
+  // console.log(`context: ${context}`);
+  // console.log(context);
+
+  // const res = await fetch(
+  //   `https://jsonplaceholder.typicode.com/posts/${context.params.id}`
+  // );
+
+  // const post = await res.json();
+  const post = [
+    {
+      id: 1,
+      title: "google",
+    },
+    {
+      id: 2,
+      title: "facebook",
+    },
+  ][context.params.id];
+  return { props: { post } };
 }
 ```
 
