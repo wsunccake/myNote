@@ -15,6 +15,8 @@ http://localhost:3000/about
 
 ### static generation with data
 
+Scenario 1: Your page content depends on external data
+
 ```js
 // pages/posts/index.js
 export default function Home({ allPosts }) {
@@ -44,6 +46,8 @@ export async function getStaticProps() {
   return { props: { allPosts: posts } };
 }
 ```
+
+Scenario 2: Your page paths depend on external data
 
 ```js
 // pages/posts/[id].js
@@ -91,6 +95,35 @@ export async function getStaticProps(context) {
 }
 ```
 
-### page with dynamic route
-
 ---
+
+## server-side rendering
+
+```js
+export default function Home({ allPosts }) {
+  return (
+    <ul>
+      {allPosts.map((post) => (
+        <li>{post.title}</li>
+      ))}
+    </ul>
+  );
+}
+
+export async function getServerSideProps() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts/");
+  const posts = await res.json();
+
+  //   const posts = [
+  //     {
+  //       id: 1,
+  //       title: "google",
+  //     },
+  //     {
+  //       id: 2,
+  //       title: "facebook",
+  //     },
+  //   ];
+  return { props: { allPosts: posts } };
+}
+```
