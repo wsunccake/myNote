@@ -17,6 +17,26 @@ alma:~ # reboot
 
 ---
 
+## develop
+
+```bash
+# zsh
+alma:~ # dnf install zsh -y
+
+# java
+alma:~ # dnf -y install java-1.8.0-openjdk-devel
+alma:~ # dnf -y install java-11-openjdk-devel
+alma:~ # dnf -y install java-17-openjdk-devel
+
+# sdk
+alma:~ # curl -s "https://get.sdkman.io" | bash
+
+sdk install groovy 4.0.6
+sdk install gradle 7.6
+```
+
+---
+
 ## vm / container
 
 ```bash
