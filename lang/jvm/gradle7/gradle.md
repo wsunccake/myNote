@@ -39,6 +39,7 @@ linux:~/demo $ gradle help --task init
 
 # task
 linux:~/demo $ gradle init [--dsl groovy] [--type groovy-application]
+linux:~/demo $ gradle tasks [--all] [-b <build file>]
 linux:~/demo $ gradle run
 linux:~/demo $ gradle test
 linux:~/demo $ gradle build
@@ -47,3 +48,9 @@ linux:~/demo $ gradle distTar
 linux:~/demo $ gradle distZip
 linux:~/demo $ gradle clean
 ```
+
+---
+
+[build environment](./build_environment.md)
+
+[build script basic](./build_script_basic.md)
