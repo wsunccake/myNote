@@ -54,3 +54,7 @@ linux:~/demo $ gradle clean
 [build environment](./build_environment.md)
 
 [build script basic](./build_script_basic.md)
+
+[basic groovy](./basic-groovy.md)
+
+[application groovy](./application-groovy.md)

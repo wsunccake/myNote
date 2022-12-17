@@ -25,9 +25,6 @@ rootProject.name = 'demo'
 
 ```groovy
 // build.gradle
-```
-
-```groovy
 plugins {
     id 'groovy'
     id 'application'
@@ -59,31 +56,20 @@ task runScript (dependsOn: 'classes', type: JavaExec) {
 ```bash
 linux:~/demo $ tree
 .
-├── bin
-│   └── main
-│       └── hi.groovy
 ├── build.gradle
-├── gggg
-│   ├── bin
-│   │   ├── gggg
-│   │   └── gggg.bat
-│   └── lib
-│       ├── gggg.jar
-│       └── groovy-4.0.6.jar
 ├── gradle
 │   └── wrapper
 │       ├── gradle-wrapper.jar
 │       └── gradle-wrapper.properties
 ├── gradlew
 ├── gradlew.bat
-├── README.md
 ├── settings.gradle
 └── src
     └── main
         └── groovy
             └── hi.groovy
 
-10 directories, 13 files
+5 directories, 7 files
 ```
 
 ---
@@ -108,4 +94,24 @@ linux:~/demo $ ls build/distributions/
 # execute
 linux:~/demo $ tar build/distributions/demo.tar -C /tmp
 linux:~/demo $ /tmp/demo/bin/demo
+```
+
+---
+
+## other
+
+```groovy
+// build.gradle
+configurations {
+  groovy
+}
+
+task downloadGroovy(type: Copy) {
+  from configurations.groovy
+  into file('groovy-jars')
+}
+
+dependencies {
+    // implementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.6'
+    groovy 'org.apache.groovy:groovy-all:4.0.6'
 ```

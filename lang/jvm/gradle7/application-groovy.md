@@ -74,6 +74,55 @@ linux:~/demo $ tree
 12 directories, 8 files
 ```
 
+```groovy
+// setting.gradle
+rootProject.name = 'demo'
+include('app')
+```
+
+```groovy
+// app/build.gradle
+plugins {
+    id 'groovy'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.codehaus.groovy:groovy-all:3.0.10'
+    implementation 'com.google.guava:guava:31.0.1-jre'
+
+    testImplementation 'org.spockframework:spock-core:2.1-groovy-3.0'
+    testImplementation 'junit:junit:4.13.2'
+}
+
+application {
+    mainClass = 'demo.App'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+```
+
+```groovy
+// app/src/main/groovy/demo/App.groovy
+package demo
+
+class App {
+    String getGreeting() {
+        return 'Hello World!'
+    }
+
+    static void main(String[] args) {
+        println new App().greeting
+    }
+}
+```
+
 ---
 
 ## task
