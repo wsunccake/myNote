@@ -1,6 +1,5 @@
 # C
 
-
 ## hello
 
 ```c
@@ -18,7 +17,6 @@ int main() {
 linux:~ # gcc hello.c -o hello
 linux:~ # ./hello
 ```
-
 
 ---
 
@@ -107,11 +105,9 @@ int main () {
 }
 ```
 
-
 ---
 
 ## condition
-
 
 ### if
 
@@ -147,7 +143,6 @@ int main () {
 }
 ```
 
-
 ### switch
 
 ```c
@@ -176,7 +171,6 @@ int main () {
    return 0;
 }
 ```
-
 
 ---
 
@@ -248,7 +242,6 @@ int main()
 }
 ```
 
-
 ---
 
 ## loop
@@ -288,7 +281,6 @@ int main () {
 }
 ```
 
-
 ### while
 
 ```c
@@ -323,7 +315,6 @@ int main () {
 }
 ```
 
-
 ### goto
 
 ```c
@@ -343,7 +334,6 @@ int main () {
    return 0;
 }
 ```
-
 
 ---
 
@@ -479,7 +469,6 @@ int main()
 }
 ```
 
-
 ---
 
 ## array
@@ -509,7 +498,6 @@ int main () {
 }
 ```
 
-
 ### function
 
 ```c
@@ -527,7 +515,6 @@ int main () {
    return 0;
 }
 ```
-
 
 ### 2d
 
@@ -575,7 +562,6 @@ void main() {
 	printf("The run-time of column major order is %lf", d);
 }
 ```
-
 
 ---
 
@@ -636,7 +622,6 @@ int (* ptr)[5] = NULL;
 int **ptr;
 ```
 
-
 ### array
 
 ```c
@@ -669,7 +654,6 @@ int main () {
 // &arr[2]: -2110641852, ptr1: -2110641852, ptr2: -2110641852, ptr3: -2110641852
 // arr[2]: 3, *ptr1: 3, *ptr2: 3, *ptr3: 3
 ```
-
 
 ### function
 
@@ -729,7 +713,6 @@ int main () {
 }
 ```
 
-
 ### array of pointer
 
 ```c
@@ -765,7 +748,6 @@ int main () {
 }
 ```
 
-
 ### pointer to array
 
 ```c
@@ -795,7 +777,6 @@ int main() {
    return 0;
 }
 ```
-
 
 ### pointer to pointer
 
@@ -968,28 +949,47 @@ int main () {
 }
 ```
 
-
 ### function pointer
 
 ```c
+typedef int (*fp) (int, int);
+
 int sum (int num1, int num2) {
    return num1+num2;
 }
 
+int op1 (int num1, int num2, int (*func) (int, int)) {
+   return func(num1, num2);
+}
+
+int op2 (int num1, int num2, fp func) {
+   return func(num1, num2);
+}
+
 int main() {
+
+   int val0 = sum(10, 13);
+   printf("function: %d\n", val0);
+
    int (*f2p) (int, int);
    f2p = sum;
+   int val1 = f2p(10, 13);
+   printf("function pointer: %d\n",val1);
 
-   int op1 = f2p(10, 13);
-   int op2 = sum(10, 13);
+   fp total;
+   total = sum;
+   int val2 = total(10, 13);
+   printf("function pointer: %d\n",val2);
 
-   printf("function pointer: %d\n",op1);
-   printf("function: %d\n", op2);
+   int val4 = op1(10, 13, sum);
+   printf("function: %d\n", val4);
+
+   int val5 = op2(10, 13, sum);
+   printf("function: %d\n", val5);
 
    return 0;
 }
 ```
-
 
 ---
 
@@ -1155,7 +1155,6 @@ int main()
    return 0;
 }
 ```
-
 
 ---
 
@@ -1371,7 +1370,6 @@ int main() {
 
 ## file
 
-
 ### write text
 
 ```c
@@ -1397,7 +1395,6 @@ int main()
    return 0;
 }
 ```
-
 
 ### read text
 
@@ -1455,7 +1452,6 @@ int main() {
 ```
 
 ### read binary
-
 
 ```c
 #include <stdio.h>
@@ -1664,7 +1660,6 @@ int main()
 }
 ```
 
-
 ---
 
 ## header
@@ -1704,7 +1699,6 @@ linux:~ # tree
 linux:~ # gcc -o main.exe main.c
 ```
 
-
 ---
 
 ## memory
@@ -1738,7 +1732,6 @@ int main()
    return 0;
 }
 ```
-
 
 ---
 
@@ -1824,16 +1817,13 @@ int main()
 }
 ```
 
-
 ---
 
 ## const
 
-
 ---
 
 ## static
-
 
 ---
 
@@ -1936,7 +1926,6 @@ int main()
 }
 ```
 
-
 ---
 
 ## void
@@ -1958,7 +1947,6 @@ int main()
 }
 ```
 
-
 ---
 
 ## ref
@@ -1971,4 +1959,4 @@ int main()
 
 [latency.txt](https://gist.github.com/jboner/2841832#file-latency-txt)
 
-[高等C語言](https://shengwen1997.gitbooks.io/program_with_c/content/index.html)
+[高等 C 語言](https://shengwen1997.gitbooks.io/program_with_c/content/index.html)
