@@ -1,4 +1,4 @@
-# go kit
+# string service
 
 ## net/http
 
@@ -57,7 +57,9 @@ linux:~ $ curl -X POST -d '{"s": "aaA"}' localhost:8080/uppercase
 
 ---
 
-## go-kit - v1
+## service, endpoint, transport
+
+### v1
 
 ```bash
 # init repo
@@ -205,9 +207,7 @@ linux:~/demo $ go run main.go
 linux:~ $ curl -X POST -d '{"s": "aaA"}' localhost:8080/uppercase
 ```
 
----
-
-## go-kit - v2
+### v2
 
 ```bash
 # init repo
@@ -376,6 +376,194 @@ func main() {
 # run service
 linux:~/demo $ go run main.go service.go endpoint.go transport.go
 linux:~/demo $ go run *.go
+linux:~/demo $ go run .
+```
+
+```bash
+# test
+linux:~ $ curl -X POST -d '{"s": "aaA"}' localhost:8080/uppercase
+```
+
+---
+
+## middleware
+
+```bash
+# init repo
+linux:~/demo $ go mod init example.com/m
+linux:~/demo $ go mod tidy
+
+# write code
+linux:~/demo $ vi service.go
+linux:~/demo $ vi endpoit.go
+linux:~/demo $ vi trasnport.go
+
+linux:~/demo $ vi instrumenting.go
+linux:~/demo $ vi logging.go
+linux:~/demo $ vi main.go
+
+linux:~/demo $ go get example.com/m
+```
+
+```go
+// instrumenting.go
+package main
+
+import (
+	"fmt"
+	"time"
+
+	"github.com/go-kit/kit/metrics"
+)
+
+type instrumentingMiddleware struct {
+	requestCount   metrics.Counter
+	requestLatency metrics.Histogram
+	countResult    metrics.Histogram
+	next           StringService
+}
+
+func (mw instrumentingMiddleware) Uppercase(s string) (output string, err error) {
+	defer func(begin time.Time) {
+		lvs := []string{"method", "uppercase", "error", fmt.Sprint(err != nil)}
+		mw.requestCount.With(lvs...).Add(1)
+		mw.requestLatency.With(lvs...).Observe(time.Since(begin).Seconds())
+	}(time.Now())
+
+	output, err = mw.next.Uppercase(s)
+	return
+}
+
+func (mw instrumentingMiddleware) Count(s string) (n int) {
+	defer func(begin time.Time) {
+		lvs := []string{"method", "count", "error", "false"}
+		mw.requestCount.With(lvs...).Add(1)
+		mw.requestLatency.With(lvs...).Observe(time.Since(begin).Seconds())
+		mw.countResult.Observe(float64(n))
+	}(time.Now())
+
+	n = mw.next.Count(s)
+	return
+}
+```
+
+```go
+// logging.go
+package main
+
+import (
+	"time"
+
+	"github.com/go-kit/kit/log"
+)
+
+type loggingMiddleware struct {
+	logger log.Logger
+	next   StringService
+}
+
+func (mw loggingMiddleware) Uppercase(s string) (output string, err error) {
+	defer func(begin time.Time) {
+		_ = mw.logger.Log(
+			"method", "uppercase",
+			"input", s,
+			"output", output,
+			"err", err,
+			"took", time.Since(begin),
+		)
+	}(time.Now())
+
+	output, err = mw.next.Uppercase(s)
+	return
+}
+
+func (mw loggingMiddleware) Count(s string) (n int) {
+	defer func(begin time.Time) {
+		_ = mw.logger.Log(
+			"method", "count",
+			"input", s,
+			"n", n,
+			"took", time.Since(begin),
+		)
+	}(time.Now())
+
+	n = mw.next.Count(s)
+	return
+}
+```
+
+```go
+// main.go
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"os"
+
+	stdprometheus "github.com/prometheus/client_golang/prometheus"
+
+	"github.com/go-kit/kit/log"
+	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
+	httptransport "github.com/go-kit/kit/transport/http"
+)
+
+func main() {
+	logger := log.NewLogfmtLogger(os.Stderr)
+
+	fieldKeys := []string{"method", "error"}
+	requestCount := kitprometheus.NewCounterFrom(stdprometheus.CounterOpts{
+		Namespace: "my_group",
+		Subsystem: "string_service",
+		Name:      "request_count",
+		Help:      "Number of requests received.",
+	}, fieldKeys)
+	requestLatency := kitprometheus.NewSummaryFrom(stdprometheus.SummaryOpts{
+		Namespace: "my_group",
+		Subsystem: "string_service",
+		Name:      "request_latency_microseconds",
+		Help:      "Total duration of requests in microseconds.",
+	}, fieldKeys)
+	countResult := kitprometheus.NewSummaryFrom(stdprometheus.SummaryOpts{
+		Namespace: "my_group",
+		Subsystem: "string_service",
+		Name:      "count_result",
+		Help:      "The result of each count method.",
+	}, []string{})
+
+	var svc StringService
+	svc = stringService{}
+	svc = loggingMiddleware{logger, svc}
+	svc = instrumentingMiddleware{requestCount, requestLatency, countResult, svc}
+
+	uppercaseHandler := httptransport.NewServer(
+		makeUppercaseEndpoint(svc),
+		decodeUppercaseRequest,
+		encodeResponse,
+	)
+
+	countHandler := httptransport.NewServer(
+		makeCountEndpoint(svc),
+		decodeCountRequest,
+		encodeResponse,
+	)
+
+	http.Handle("/uppercase", uppercaseHandler)
+	http.Handle("/count", countHandler)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+		logger.Log("msg", fmt.Sprintf("Defaulting to port %s", port))
+	}
+
+	logger.Log("msg", fmt.Sprintf("Listening on port %s", port))
+	logger.Log("err", http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
+}
+```
+
+```bash
+# run service
 linux:~/demo $ go run .
 ```
 
