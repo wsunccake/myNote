@@ -190,6 +190,12 @@ debian:~ # apt-get update
 debian:~ # apt-get install docker-ce docker-ce-cli containerd.io
 debian:~ # apt-cache madison docker-ce
 debian:~ # apt-get install docker-ce=<VERSION_STRING> docker-ce-cli=<VERSION_STRING> containerd.io
+
+### minikube
+debian:~ # curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+debian:~ # install minikube-linux-amd64 /usr/local/bin/minikube
+debian:~ # minikube start --driver=docker --force
+debian:~ # minikube kubectl <kube cmd>
 ```
 
 ---

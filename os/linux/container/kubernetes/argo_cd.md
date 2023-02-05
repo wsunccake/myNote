@@ -20,7 +20,6 @@
 [linux:~ ] # kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ```
 
-
 ### client cli
 
 ```bash
@@ -28,7 +27,6 @@
 [linux:~ ] # curl -L -O https://github.com/argoproj/argo-cd/releases/download/v2.0.4/argocd-linux-amd64
 [linux:~ ] # install -m 755 argocd-linux-amd64 /usr/local/bin/argocd
 ```
-
 
 ---
 
@@ -40,7 +38,7 @@
 [linux:~ ] # argocd cluster list
 
 # login / logout
-[linux:~ ] # argocd login <ip>:<port> [--username <username> --password <password>]
+[linux:~ ] # argocd login [<ip>]:<port> [--username <username> --password <password>] [--insecure]
 [linux:~ ] # argocd logout
 
 # account
@@ -51,8 +49,9 @@
 
 # app
 [linux:~ ] # argocd repo list
-[linux:~ ] # argocd app create <app> --repo <repo url> --path guestbook --dest-server https://kubernetes.default.svc --dest-namespace default
+[linux:~ ] # argocd app create <app> --repo <repo url> --path <yaml path> --dest-server https://kubernetes.default.svc --dest-namespace default [--revision <branch / tag>]
 [linux:~ ] # argocd app get <app>
+[linux:~ ] # argocd app set <app>  --revision <branch / tag>
 [linux:~ ] # argocd app sync <app>
 [linux:~ ] # argocd app delete <app>
 
@@ -78,7 +77,6 @@
 default account admin
 
 private repo must add repo then create app
-
 
 ---
 
@@ -132,7 +130,6 @@ EOF
 
 [linux:~ ] # argocd app create demo --repo <git url> --path . --dest-server https://kubernetes.default.svc --dest-namespace default
 ```
-
 
 ---
 
