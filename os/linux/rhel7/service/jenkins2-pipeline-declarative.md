@@ -18,7 +18,6 @@ pipeline {
 
 ![pipeline section](./pic/pipeline_section.png)
 
-
 ---
 
 ## script
@@ -38,7 +37,6 @@ pipeline {
     }
 }
 ```
-
 
 ---
 
@@ -60,7 +58,6 @@ pipeline {
 }
 ```
 
-
 `upstream`
 
 ```groovy
@@ -77,7 +74,6 @@ pipeline {
     }
 }
 ```
-
 
 ---
 
@@ -101,7 +97,6 @@ pipeline {
 }
 ```
 
-
 ---
 
 ## opt
@@ -118,7 +113,6 @@ pipeline {
 }
 ```
 
-
 ---
 
 ## param
@@ -134,7 +128,6 @@ pipeline {
     }
 }
 ```
-
 
 ---
 
@@ -157,7 +150,6 @@ pipeline {
     }
 }
 ```
-
 
 ---
 
@@ -202,7 +194,6 @@ pipeline {
 }
 ```
 
-
 ---
 
 ## parallel
@@ -234,7 +225,6 @@ pipeline {
     }
 }
 ```
-
 
 ---
 
@@ -275,7 +265,6 @@ pipeline {
 }
 ```
 
-
 ---
 
 ## post
@@ -310,7 +299,6 @@ pipeline {
     }
 }
 ```
-
 
 ---
 
@@ -379,7 +367,6 @@ pipeline {
 }
 ```
 
-
 ---
 
 ## example
@@ -435,7 +422,6 @@ echo "${version}"
 }
 ```
 
-
 ---
 
 ## lock
@@ -463,7 +449,6 @@ pipeline {
     }
 }
 ```
-
 
 ```groovy
 pipeline {
@@ -516,7 +501,6 @@ pipeline {
 }
 ```
 
-
 ---
 
 ## plugin
@@ -549,7 +533,6 @@ H/2 * * * * %MSG=nice;NAME=pipeline
     }
 }
 ```
-
 
 ---
 
@@ -587,10 +570,10 @@ pwd
 '''
             }
         }
+    }
 
 }
 ```
-
 
 ```groovy
 pipeline {
@@ -624,9 +607,25 @@ pipeline {
                 script {
                     currentBuild.displayName = "#${currentBuild.number} - ${TAG}"
                 }
+                script {
+                    def cmds =["ls", "pwd", "whoami", "hostname"]
+                    cmds.each {
+                    println it.execute().text
+                    }
+                }
+                script {
+                    String cmd1 = 'println InetAddress.localHost.hostAddress'
+                    String cmd2 = 'println InetAddress.localHost.canonicalHostName'
+                    String cmd3 = 'def proc = "uname -a".execute(); proc.waitFor(); println proc.in.text'
+                    def cmds = [cmd1, cmd2, cmd3]
 
+                    hudson.model.Hudson.instance.slaves.each { slave ->
+                        println hudson.util.RemotingDiagnostics.executeGroovy(print_ip, slave.getChannel());
+                        println hudson.util.RemotingDiagnostics.executeGroovy(print_hostname, slave.getChannel());
+                        println hudson.util.RemotingDiagnostics.executeGroovy(uname, slave.getChannel());
+                    }
+                }
             }
-        }
 
         stage('run') {
             steps {
@@ -635,10 +634,10 @@ pwd
 '''
             }
         }
+    }
 
 }
 ```
-
 
 ---
 

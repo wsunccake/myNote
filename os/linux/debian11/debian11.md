@@ -36,7 +36,6 @@ deb-src http://deb.debian.org/debian/ unstable main
 debian:~ # apt update
 ```
 
-
 ---
 
 ## develop
@@ -54,7 +53,7 @@ debian:~ # apt install python3 python3-pip3 python3-venv
 # git
 debian:~ # apt install git
 
-# postgre
+# postgres
 debian:~ # echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 debian:~ # wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 debian:~ # apt update
@@ -66,7 +65,6 @@ debian:~ # apt install postgresql-client       # install clinet
 # kernel header
 debian:~ # apt install linux-headers-`uname -r`
 ```
-
 
 ---
 
@@ -117,7 +115,6 @@ debian:~ # apt install freeradius-utils
 debian:~ $ radtest <radius server>:<port> <user> <pw> <nas number> <secret>
 ```
 
-
 ---
 
 ## gui
@@ -142,7 +139,6 @@ debian:~ # apt update
 debian:~ # apt install google-chrome-stable
 ```
 
-
 ---
 
 ## x-window
@@ -154,7 +150,6 @@ debian:~ # apt install google-chrome-stable
 debian:~ # apt update
 debian:~ # apt install i3
 ```
-
 
 ### vnc
 
@@ -172,7 +167,6 @@ debian:~ $ vncserver -kill :1
 # client
 debian:~ $ apt install tigervnc-viewer
 ```
-
 
 ---
 
@@ -196,8 +190,13 @@ debian:~ # apt-get update
 debian:~ # apt-get install docker-ce docker-ce-cli containerd.io
 debian:~ # apt-cache madison docker-ce
 debian:~ # apt-get install docker-ce=<VERSION_STRING> docker-ce-cli=<VERSION_STRING> containerd.io
-```
 
+### minikube
+debian:~ # curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+debian:~ # install minikube-linux-amd64 /usr/local/bin/minikube
+debian:~ # minikube start --driver=docker --force
+debian:~ # minikube kubectl <kube cmd>
+```
 
 ---
 
@@ -214,13 +213,11 @@ debian:~ # apt-get update && apt-get install google-cloud-sdk
 debian:~ # gcloud init
 ```
 
-
 ---
 
 ## vpn
 
 [global protect](./global_protect.md)
-
 
 ---
 
@@ -232,7 +229,6 @@ debian:~ # gcloud init
 debian:~ # wget https://go.skype.com/skypeforlinux-64.deb
 debian:~ # dpkg -i skypeforlinux-64.deb
 ```
-
 
 ---
 
@@ -252,7 +248,6 @@ debian:~ # localectl list-locales
 debian:~ # localectl set-locale en_US.UTF-8
 ```
 
-
 ### font
 
 ```bash
@@ -265,7 +260,6 @@ fonts-arphic-ukai fonts-arphic-uming
 ## 思源 字體
 fonts-noto
 ```
-
 
 ### ibus
 
