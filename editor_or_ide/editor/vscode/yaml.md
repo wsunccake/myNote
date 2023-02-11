@@ -4,11 +4,10 @@
 
 ```json
 {
-    "[yaml]":  {
-        "editor.insertSpaces": true,
-        "editor.tabSize": 2,
-        "editor.autoIndent": "advanced"
-    }
+  "[yaml]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced"
+  }
 }
 ```
-

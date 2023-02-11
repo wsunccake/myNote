@@ -1,14 +1,12 @@
 # CISCO
 
-
 ## Basic
 
 baud rate: 9600
 
-
 ### Enable Privilege
 
-```
+```bash
 # privilege mode
 CISCO> enable
 CISCO#
@@ -20,7 +18,7 @@ CISCO(config)#
 
 ### Common
 
-```
+```bash
 # 設定 hostname
 CISCO(config)# hostname <hostname>
 
@@ -34,7 +32,7 @@ CISCO(config)# no ip domain-lookup
 
 ### NVRAM & Flash
 
-```
+```bash
 CISCO# dir nvram:   # startup-config 存放位置
 CISCO# dir flash:   # config.text 存放位置
 CISCO# rename flash:config.text flash:config.text.old   # 移動檔案
@@ -42,14 +40,13 @@ CISCO# delete flash:config.text                         # 刪除檔案
 CISCO# copy flash:config.text.old flash:config.text     # 複製檔案
 ```
 
-
 ### Set Factory
 
 1. 拔掉電源線，並長按 "mode" button, 然後開機
 
 2.
 
-```
+```bash
 The system has been interrupted prior to initializing the
 flash filesystem.  The following commands will initialize
 the flash filesystem, and finish loading the operating
@@ -66,10 +63,9 @@ switch: delete flash:config.text                       # 移除設定檔, 系統
 switch: boot                                           # 重開機
 ```
 
-
 ### Setup Login
 
-```
+```bash
 # 設定 console login 帳號密碼
 CISCO(config) # username <account> password <password>  # 設定登入的帳號密碼 (明碼)
 CISCO(config) # username <account> secret   <password>  # 設定登入的帳號密碼 (暗碼)
@@ -101,10 +97,9 @@ CISCO(config-line) # login local          # 啟用 login check, 使用帳號密�
 CISCO(config-line) # transport input ssh  # 僅 ssh 登入
 ```
 
-
 ### Setup IP
 
-```
+```bash
 # for router
 CISCO(config) # interface FastEthernet 0/1
 CISCO(config-if)# ip address <ip> <netmask> # static IP
@@ -118,10 +113,9 @@ CISCO(config-if)# ip address dhcp           # DHCP / dynamic IP
 CISCO(config-if)# no shutdown               # 開啟 interface
 ```
 
+### List
 
-### List ###
-
-```
+```bash
 CISCO# show users
 CISCO# show runnung-config
 CISCO# show startup-config
@@ -138,16 +132,14 @@ CISCO# show spanning-tree interface TenGigabitEthernet 1/1
 CISCO# show loggin | include
 ```
 
-----
-
+---
 
 ## Switch
 
-
 ### MAC table
 
-```
-SWITCH# 
+```bash
+SWITCH#
 SWITCH(config)# mac-address-table static 1122.3344.5566 vlan 1 interface FastEthernet 0/1
 SWITCH(config)# no mac-address-table static 1122.3344.5566 vlan 1 interface [FastEthernet 0/1]
 
@@ -164,10 +156,9 @@ CISCO(config)# system mtu 1500
 CISCO# show system mtu
 ```
 
-
 ### Port Monitor
 
-```
+```bash
 CISCO(config)# monitor session 1 source interface FastEthernet 0/1
 CISCO(config)# monitor session 1 destination interface FastEthernet 0/11
 
@@ -176,14 +167,13 @@ CISCO(config)# no monitor session 1
 CISCO# show monitor
 ```
 
-----
-
+---
 
 ## VLAN
 
 vlan 1 為預設的 native vlan (不帶任何 vlan tag)
 
-```
+```bash
 # enable vlan for interface
 CISCO# configure terminal
 CISCO(config)# interface <interface>
