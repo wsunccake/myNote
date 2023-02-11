@@ -12,7 +12,6 @@ HD: 40GB
 
 NIC: 2
 
-
 ---
 
 ## nic topology
@@ -58,7 +57,6 @@ centos8:~ # echo "<openstack management ip>  <hostname>" >> /etc/hosts
 centos8:~ # reboot
 ```
 
-
 ---
 
 ## install
@@ -82,11 +80,10 @@ centos8:~ # pip3 install ./kolla-ansible
 # config
 centos8:~ # mkdir -p /etc/kolla
 centos8:~ # cp -r /usr/local/share/kolla-ansible/etc_examples/kolla/* /etc/kolla/.
-# globals.yml, passwords.yml 
+# globals.yml, passwords.yml
 centos8:~ # cp -r /usr/local/share/kolla-ansible/ansible/inventory/* /etc/kolla/.
 # all-in-one, multinode
 ```
-
 
 ### ansible config
 
@@ -124,7 +121,6 @@ centos8:~ # kolla-ansible -i /etc/kolla/all-in-one pull
 centos8:~ # kolla-ansible -i /etc/kolla/all-in-one deploy
 ```
 
-
 ---
 
 ## usage
@@ -145,9 +141,8 @@ centos8:~ # openstack service list
 
 # create example
 centos8:~ # /usr/local/share/kolla-ansible/init-runonce
-centos8:~ # openstack server create --image cirros --flavor m1.tiny --key-name mykey --network demo-net demo1 
+centos8:~ # openstack server create --image cirros --flavor m1.tiny --key-name mykey --network demo-net demo1
 ```
-
 
 ---
 

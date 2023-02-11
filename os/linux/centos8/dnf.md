@@ -1,6 +1,5 @@
 # dnf
 
-
 ## module
 
 ```bash
@@ -9,7 +8,6 @@
 [centos:~ ] # dnf module info --profile <module>[:<stream>]
 [centos:~ ] # dnf module install <module>
 ```
-
 
 ---
 
@@ -23,7 +21,6 @@
 [centos:~ ] # dnf module provides <package>
 ```
 
-
 ---
 
 ## install
@@ -35,7 +32,6 @@
 [centos:~ ] # dnf install @<module>[:<stream>][/<profile>]
 ```
 
-
 ---
 
 ## remove
@@ -45,7 +41,6 @@
 [centos:~ ] # dnf module disable <module>:<stream>
 [centos:~ ] # dnf module remove [--all] <module>[:<stream>][/<profile>]
 ```
-
 
 ---
 

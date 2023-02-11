@@ -7,7 +7,6 @@
 git version 2.18.4
 ```
 
-
 ---
 
 ## remote branch
@@ -21,7 +20,6 @@ git version 2.18.4
 [linux:~ ] # git branch -d <branch>
 [linux:~ ] # git push origin -d <branch>
 ```
-
 
 ---
 
@@ -62,7 +60,6 @@ git version 2.18.4
 [linux:~/repo ] $ git push -u origin --all
 [linux:~/repo ] $ git push origin --tags
 ```
-
 
 ---
 

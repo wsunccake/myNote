@@ -8,6 +8,7 @@
 [centos:~ ] # systemctl status tuned
 ```
 
+---
 
 ## setup
 

@@ -9,7 +9,6 @@ https://www.docker.elastic.co/
 [linux:~ ] # docker network create elk
 ```
 
-
 ---
 
 ## elasticsearch
@@ -30,7 +29,6 @@ https://www.docker.elastic.co/
   -v $ELASTICSEARCH_DATA:/usr/share/elasticsearch/data \
   docker.elastic.co/elasticsearch/elasticsearch:7.13.1
 ```
-
 
 ---
 
@@ -58,7 +56,6 @@ SERVER_BASEPATH           server.basePath
 MONITORING_ENABLED        monitoring.enabled
 ```
 
-
 ---
 
 ## logstash
@@ -70,7 +67,7 @@ MONITORING_ENABLED        monitoring.enabled
 # setup config
 [linux:~ ] # export LOGSTASH_PIPELINE=<path>
 [linux:~ ] # mkdir -p $LOGSTASH_PIPELINE
-[linux:~ ] # cat << EOF > $LOGSTASH_PIPELINE/beat.conf 
+[linux:~ ] # cat << EOF > $LOGSTASH_PIPELINE/beat.conf
 input {
   beats {
     port => 5044
@@ -112,7 +109,6 @@ PIPELINE_WORKERS          pipeline.workers
 LOG_LEVEL                 log.level
 MONITORING_ENABLED        monitoring.enabled
 ```
-
 
 ---
 

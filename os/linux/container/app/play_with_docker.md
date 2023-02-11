@@ -2,11 +2,9 @@
 
 ## [play with docker](https://labs.play-with-docker.com/)
 
-
 ```bash
 node:~ # docker run -dp 80:80 docker/getting-started:pwd
 ```
-
 
 ---
 

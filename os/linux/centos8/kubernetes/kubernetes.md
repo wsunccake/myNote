@@ -1,6 +1,5 @@
 # kubernetes 1.17
 
-
 ## prepare
 
 ### selinux
@@ -9,7 +8,6 @@
 centos:~ # sed -i 's/SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
 centos:~ # reboot
 ```
-
 
 ### hosts
 
@@ -22,14 +20,12 @@ centos:~ # vi /etc/hosts
 ...
 ```
 
-
 ### ntp / chronyc
 
 ```bash
 centos:~ # chronyc -a makestep
 centos:~ # chronyc -a 'burst 4/4'
 ```
-
 
 ### firewall
 
@@ -42,7 +38,6 @@ centos:~ # firewall-cmd --permanent --add-port=10252/tcp
 centos:~ # firewall-cmd --permanent --add-port=10255/tcp
 centos:~ # firewall-cmd --reload
 ```
-
 
 ### docker
 
@@ -60,7 +55,6 @@ ExecStartPost=/sbin/iptables -I FORWARD -s 0.0.0.0/0 -j ACCEPT
 centos:~ # systemctl daemon-reload
 centos:~ # systemctl restart docker
 ```
-
 
 ### kubernetes
 
@@ -94,7 +88,6 @@ centos:~ # vi /etc/fstab
 # remove swap
 ```
 
-
 ---
 
 ## config
@@ -127,7 +120,6 @@ master:~ # kubectl -n kube-system get cm kubeadm-config -o yaml
 master:~ # kubectl config view
 ```
 
-
 ### network
 
 [Installing Addons](https://kubernetes.io/docs/concepts/cluster-administration/addons/)
@@ -141,12 +133,12 @@ master:~ # kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/mas
 ## nic: flannel
 
 master:~ # wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-master:~ # 
+master:~ #
 kind: ConfigMap
 apiVersion: v1
 ...
   net-conf.json: |
-    { 
+    {
       "Network": "10.244.0.0/16",  # 可成自訂的 --pod-network-cidr
       "Backend": {
         "Type": "vxlan"
@@ -168,7 +160,6 @@ master:~ # iptables -P FORWARD ACCEPT
 node:~ # iptables -P FORWARD ACCEPT
 ```
 
-
 `calico`
 
 ```bash
@@ -179,7 +170,6 @@ master:~ # kubectl apply -f calico.yaml
 ## container: calico
 ```
 
-
 ### node
 
 node 必須做過 prepare 步驟
@@ -187,7 +177,6 @@ node 必須做過 prepare 步驟
 ```bash
 node:~ # kubeadm join <master_ip>:6443 --token <token_id> --discovery-token-ca-cert-hash sha256:<ca_hash>
 ```
-
 
 ### tip
 
@@ -216,10 +205,9 @@ master:~ # kubectl exec <pod> [-c <container>] -it <cmd>
 master:~ # kubectl run -it alpine --image=alpine --restart=Never -- sh
 ```
 
-
 ### question
 
-1. coredns READY,  是因為有可能是因為網路尚未設定, 只要將 network plugin 裝起來即可
+1. coredns READY, 是因為有可能是因為網路尚未設定, 只要將 network plugin 裝起來即可
 
 ```bash
 master:~ # kubectl get pods --all-namespaces -o wide
@@ -237,7 +225,6 @@ Container runtime network not ready: NetworkReady=false reason:NetworkPluginNotR
 Unable to update cni config: no networks found in /etc/cni/net.d
 ```
 
-
 2. network plugin 會產生新的 nic, 所以在 reset 或 apple/delete 要去注意
 
 ```bash
@@ -251,9 +238,8 @@ master:~ # ip link show
 1: lo: <LOOPBACK,UP,LOWER_UP>
 2: ens192: <BROADCAST,MULTICAST,UP,LOWER_UP>
 3: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP>
-4. flannel.1: <BROADCAST,MULTICAST,UP,LOWER_UP> 
+4. flannel.1: <BROADCAST,MULTICAST,UP,LOWER_UP>
 ```
-
 
 ---
 
@@ -279,7 +265,6 @@ metadata:
 mater:~ # kubectl create -f namespace.yaml
 mater:~ # kubectl delete -f namespace.yaml
 ```
-
 
 ---
 
@@ -312,7 +297,7 @@ master:~ # kubectl expose pod <pod> --type=NodePort
 `ie`
 
 ```yml
-# pod.yml 
+# pod.yml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -321,10 +306,10 @@ metadata:
     app: hello-world
 spec:
   containers:
-  - name: hello
-    image: gcr.io/google-samples/node-hello:1.0
-    ports:
-    - containerPort: 8080
+    - name: hello
+      image: gcr.io/google-samples/node-hello:1.0
+      ports:
+        - containerPort: 8080
 ```
 
 ```bash
@@ -352,16 +337,14 @@ master:~ # curl <node_ip>:<node_port>
 master:~ # kubectl delete namespace demo
 ```
 
-
 ---
 
 ## node
 
 ```bash
-master:~ # kubectl get nodes 
+master:~ # kubectl get nodes
 master:~ # kubectl describe node <node>
 ```
-
 
 ---
 
@@ -395,10 +378,10 @@ spec:
         app: hello-world
     spec:
       containers:
-      - name: hello
-        image: gcr.io/google-samples/node-hello:1.0
-        ports:
-        - containerPort: 8080
+        - name: hello
+          image: gcr.io/google-samples/node-hello:1.0
+          ports:
+            - containerPort: 8080
 ```
 
 ```bash
@@ -450,8 +433,8 @@ spec:
     matchLabels:
       env: dev
     matchExpressions:
-      - {key: env, operator: In, values: [dev]}
-      - {key: env, operator: NotIn, values: [prod]}
+      - { key: env, operator: In, values: [dev] }
+      - { key: env, operator: NotIn, values: [prod] }
   template:
     metadata:
       labels:
@@ -460,10 +443,10 @@ spec:
         version: v1
     spec:
       containers:
-      - name: hello
-        image: gcr.io/google-samples/node-hello:1.0
-        ports:
-        - containerPort: 8080
+        - name: hello
+          image: gcr.io/google-samples/node-hello:1.0
+          ports:
+            - containerPort: 8080
 ```
 
 ```bash
@@ -486,7 +469,6 @@ master:~ # kubectl -n demo scale --replicas=4 -f repica-set.yml
 master:~ # kubectl -n demo delete -f repica-set.yml
 master:~ # kubectl delete nss demo
 ```
-
 
 ---
 
@@ -536,10 +518,10 @@ spec:
         app: hello-world
     spec:
       containers:
-      - name: hello
-        image: wsunccake/hello-go:v1
-        ports:
-        - containerPort: 8080
+        - name: hello
+          image: wsunccake/hello-go:v1
+          ports:
+            - containerPort: 8080
 ```
 
 ```bash
@@ -578,7 +560,6 @@ master:~ # kubectl -n demo delete service hello
 master:~ # kubectl delete ns demo
 ```
 
-
 ---
 
 ## service
@@ -596,7 +577,7 @@ master:~ # kubectl describe svc <svc>
 `ie`
 
 ```yml
-# service.yml 
+# service.yml
 apiVersion: v1
 kind: Service
 metadata:
@@ -652,7 +633,6 @@ master:~ # kubectl -n demo delete -f service.yml
 master:~ # kubectl delete ns demo
 ```
 
-
 ---
 
 ## label
@@ -676,7 +656,6 @@ metadata:
     tier: frontend
     ver: v1.0
 ---
-
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -686,7 +665,6 @@ metadata:
     tier: frontend
     ver: v2.0
 ---
-
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -696,7 +674,6 @@ metadata:
     tier: backend
     ver: v1.0
 ---
-
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -706,7 +683,6 @@ metadata:
     tier: backend
     ver: v2.0
 ---
-
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -716,7 +692,6 @@ metadata:
     tier: frontend
     ver: v1.0
 ---
-
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -726,7 +701,6 @@ metadata:
     tier: frontend
     ver: v2.0
 ---
-
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -736,7 +710,6 @@ metadata:
     tier: backend
     ver: v1.0
 ---
-
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -746,7 +719,6 @@ metadata:
     tier: backend
     ver: v2.0
 ---
-
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -756,7 +728,6 @@ metadata:
     tier: frontend
     ver: v1.0
 ---
-
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -766,7 +737,6 @@ metadata:
     tier: frontend
     ver: v2.0
 ---
-
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -776,7 +746,6 @@ metadata:
     tier: backend
     ver: v1.0
 ---
-
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -789,7 +758,7 @@ metadata:
 ```
 
 ```bash
-master:~ # kubectl create -f label.yml 
+master:~ # kubectl create -f label.yml
 
 master:~ # kubectl get ns --show-labels
 master:~ # kubectl get ns --show-labels -l 'env = prod'                        # equal
@@ -797,9 +766,9 @@ master:~ # kubectl get ns --show-labels -l 'env != prod'                       #
 master:~ # kubectl get ns --show-labels -l 'env = prod, ver != v1.0'           # (env=prod) and (ver!=v1.0)
 master:~ # kubectl get ns --show-labels -l 'env in (qa, dev)'                  # in
 master:~ # kubectl get ns --show-labels -l 'env notin (qa, dev)'               # not in
-master:~ # kubectl get ns --show-labels -l 'env in (qa, dev), tier = frontend' 
+master:~ # kubectl get ns --show-labels -l 'env in (qa, dev), tier = frontend'
 
-master:~ # kubectl delete -f label.yml 
+master:~ # kubectl delete -f label.yml
 ```
 
 ---
@@ -832,17 +801,17 @@ spec:
         version: v1
     spec:
       containers:
-      - name: hello
-        image: gcr.io/google-samples/node-hello:1.0
-        ports:
-        - containerPort: 8080
-        env:
-        - name: DEMO_MESSAGE
-          value: "Hello from the environment"
-        - name: DEMO_APP_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
+        - name: hello
+          image: gcr.io/google-samples/node-hello:1.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DEMO_MESSAGE
+              value: "Hello from the environment"
+            - name: DEMO_APP_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
 ```
 
 ```bash
@@ -857,7 +826,6 @@ master:~ # kubectl -n demo set env deployment.apps/hello --all MY_ENV=my_val
 master:~ # kubectl -n demo delete -f envar.yml
 master:~ # kubectl delete ns demo
 ```
-
 
 ---
 
@@ -880,7 +848,6 @@ type: Opaque
 data:
   passphrase: cGhyYXNl
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -898,30 +865,30 @@ spec:
         version: v1
     spec:
       containers:
-      - name: hello
-        image: gcr.io/google-samples/node-hello:1.0
-        ports:
-        - containerPort: 8080
-        env:
-        - name: SECRET_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: db-secret
-              key: username
-        - name: SECRET_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: db-secret
-              key: password
-        - name: SECRET_PASSPHRASE
-          valueFrom:
-            secretKeyRef:
-              name: demo-secret
-              key: passphrase
-        volumeMounts:
-          - name: secret-volume
-            mountPath: /tmp
-            readOnly: true
+        - name: hello
+          image: gcr.io/google-samples/node-hello:1.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SECRET_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: username
+            - name: SECRET_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: password
+            - name: SECRET_PASSPHRASE
+              valueFrom:
+                secretKeyRef:
+                  name: demo-secret
+                  key: passphrase
+          volumeMounts:
+            - name: secret-volume
+              mountPath: /tmp
+              readOnly: true
       volumes:
         - name: secret-volume
           secret:
@@ -949,7 +916,6 @@ master:~ # kubectl -n demo delete secret db-secret
 master:~ # kubectl delete ns demo
 ```
 
-
 ---
 
 ## config map
@@ -973,14 +939,13 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 80
-    nodePort: 30080
-    protocol: TCP
-    targetPort: 80
+    - port: 80
+      nodePort: 30080
+      protocol: TCP
+      targetPort: 80
   selector:
     app: nginx
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -996,35 +961,33 @@ spec:
         app: nginx
     spec:
       containers:
-      - name: hello
-        image: nginx:alpine
-        ports:
-        - containerPort: 80
-        volumeMounts:
-        - name: conf-volume
-          mountPath: /usr/share/nginx/html
+        - name: hello
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: conf-volume
+              mountPath: /usr/share/nginx/html
       volumes:
-      - name: conf-volume
-        configMap:
-          name: configmap-html
-          items:
-          - key: test.html
-            path: test.html
+        - name: conf-volume
+          configMap:
+            name: configmap-html
+            items:
+              - key: test.html
+                path: test.html
 ```
 
 ```html
 <!-- test.html -->
 <!DOCTYPE html>
 <html>
-<head>
-<title>title</title>
-</head>
-<body>
-
-<h1>test</h1>
-<p>configMap</p>
-
-</body>
+  <head>
+    <title>title</title>
+  </head>
+  <body>
+    <h1>test</h1>
+    <p>configMap</p>
+  </body>
 </html>
 ```
 
@@ -1044,21 +1007,17 @@ master:~ # kubectl -n demo delete configmap configmap-html
 master:~ # kubectl delete ns demo
 ```
 
-
 ---
 
 ## service discovery
-
 
 ---
 
 ## health check
 
-
 ---
 
 ## volume
-
 
 ---
 
@@ -1068,7 +1027,6 @@ master:~ # kubectl delete ns demo
 master:~ # kubectl cp <src> <pod>:<dest>
 master:~ # kubectl cp <pod>:<src> <dest>
 ```
-
 
 ---
 
@@ -1100,7 +1058,6 @@ master:~ # kubectl expose deployment hello-world --external-ip=<mater_ip>|<node_
 master:~ # kubectl delete service hello-world
 master:~ # kubectl delete deployment hello-world
 ```
-
 
 ### example
 

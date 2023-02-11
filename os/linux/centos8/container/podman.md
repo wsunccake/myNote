@@ -1,6 +1,5 @@
 # podman
 
-
 ## install
 
 ```bash
@@ -13,7 +12,6 @@
 
 $HOME/.local/share/containers
 
-
 ---
 
 ## info
@@ -23,7 +21,6 @@ $HOME/.local/share/containers
 [centos:~] # podman info [--debug]
 [centos:~] # podman help
 ```
-
 
 ---
 
@@ -38,7 +35,6 @@ centos:~ # podman info
 centos:~ # cat /etc/subuid
 centos:~ # cat /etc/subgid
 ```
-
 
 ---
 
@@ -58,7 +54,6 @@ image: host/repository/image:tag
 
 $HOME/.config/containers/registries.conf
 
-
 ---
 
 ## container
@@ -77,7 +72,6 @@ $HOME/.config/containers/registries.conf
 [centos:~] # podman top <container>
 [centos:~] # podman stats <container>
 ```
-
 
 ---
 
@@ -100,7 +94,6 @@ $HOME/.config/containers/registries.conf
 [centos:~] # podman pod top <pod>
 [centos:~] # podman pod stats <pod>
 ```
-
 
 ---
 
@@ -158,7 +151,6 @@ ENTRYPOINT ./app
 [centos:~] # curl http://127.0.0.1:8080
 ```
 
-
 ---
 
 ## service
@@ -195,7 +187,6 @@ ENTRYPOINT ./app
 [centos:~] # podman port <container>
 ```
 
-
 ---
 
 ## volume
@@ -206,7 +197,6 @@ ENTRYPOINT ./app
 [centos:~] # podman volume create <volume>
 [centos:~] # podman volume rm <volume>
 ```
-
 
 ---
 

@@ -1,6 +1,5 @@
 # efk stask - elasticsaerch fluent-bit kinbana
 
-
 ## topology
 
 ```
@@ -16,7 +15,6 @@ pod             x           x                   x               x
 serviceaccount  x                               x
 configmap       x                               x
 ```
-
 
 ---
 
@@ -42,7 +40,6 @@ EOF
 master:~ $ helm -n logging install -f values.yaml elasticsearch bitnami/elasticsearch
 ```
 
-
 ---
 
 ## kibana
@@ -59,7 +56,6 @@ master:~ $ helm -n logging install kibana bitnami/kibana
 master:~ $ helm -n logging upgrade --set elasticsearch.hosts[0]=elasticsearch-master,elasticsearch.port=9200,persistence.enabled=false,service.type=LoadBalancer kibana bitnami/kibana
 ```
 
-
 ---
 
 ## fluent-bit
@@ -71,7 +67,6 @@ master:~ $ helm repo add fluent https://fluent.github.io/helm-charts
 # create app
 master:~ $ helm -n logging install fluent-bit fluent/fluent-bit
 ```
-
 
 ---
 
@@ -97,7 +92,6 @@ master:~ $ kubectl run alpine --image=alpine --command -- /bin/sh -c 'i=0; while
 master:~ $ kubectl logs alpine
 ```
 
-
 ---
 
 ## setup
@@ -111,7 +105,6 @@ http://<kibana svc>:5601/app/management/kibana/indexPatterns
 step 2. search by discover page
 
 setup http://<kibana svc>:5601/app/discover
-
 
 ---
 
@@ -131,7 +124,6 @@ curl -XPUT http://<elasticsearch>:9200/_cluster/settings -H 'Content-Type: appli
 fluent bit
 [2022/03/10 17:52:50] [ warn] [engine] failed to flush chunk '1-1646934524.644358141.flb', retry in 20 seconds: task_id=310, input=tail.0 > output=es.0 (out_id=0)
 ```
-
 
 ---
 

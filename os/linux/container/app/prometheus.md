@@ -4,7 +4,6 @@
 
 prometheus + node_export + grafana
 
-
 ---
 
 ## prometheus
@@ -45,7 +44,6 @@ scrape_configs:
     prom/prometheus
 ```
 
-
 ---
 
 ## node_exporter
@@ -60,7 +58,6 @@ scrape_configs:
   --name node-exporter \
   prom/node-exporter
 ```
-
 
 ---
 

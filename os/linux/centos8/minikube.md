@@ -6,7 +6,6 @@ install [kvm](./kvm.md)]
 
 install [docker](./container/docker.md)
 
-
 ### kubectl
 
 ```bash
@@ -14,9 +13,8 @@ install [docker](./container/docker.md)
 
 [centos:~ ] # chmod +x kubectl
 [centos:~ ] # mv kubectl  /usr/local/bin/
-[centos:~ ] # kubectl version -o json 
+[centos:~ ] # kubectl version -o json
 ```
-
 
 ### docker-machine
 
@@ -27,7 +25,6 @@ install [docker](./container/docker.md)
 [centos:~ ] # mv docker-machine-driver-kvm2 /usr/local/bin/
 [centos:~ ] # docker-machine-driver-kvm2 version
 ```
-
 
 ### minikube
 
@@ -43,7 +40,6 @@ install [docker](./container/docker.md)
 [centos:~ ] # su - <user>
 [centos:~ ] $ minikube start
 ```
-
 
 ---
 
@@ -71,7 +67,6 @@ install [docker](./container/docker.md)
 [centos:~ ] $ kubectl get events
 [centos:~ ] $ kubectl config view
 ```
-
 
 ---
 

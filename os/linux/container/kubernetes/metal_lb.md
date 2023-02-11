@@ -9,7 +9,6 @@
 [master:~ ] # kubectl -n metallb-system get all
 ```
 
-
 ---
 
 ## config
@@ -33,7 +32,6 @@ EOF
 [master:~ ] # kubectl -n metallb-system get cm
 [master:~ ] # kubectl -n metallb-system describe cm/config
 ```
-
 
 ---
 

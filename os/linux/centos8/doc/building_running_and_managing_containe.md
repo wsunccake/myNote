@@ -12,7 +12,6 @@ buildah - Client tool for building OCI-compliant container images.
 skopeo - Client tool for copying container images to and from container registries. Includes features for signing and authenticating images as well.
 runc - Container runtime client for running and working with Open Container Initiative (OCI) format containers.
 
-
 ```bash
 centos:~ # dnf module install container-tools
 centos:~ # dnf install podman-docker
@@ -22,9 +21,7 @@ centos:~ # touch /etc/containers/nodocker
 /var/lib/containers
 $HOME/.local/share/containers
 
-
 ### set up for rootless container
-
 
 ```bash
 centos:~ # dnf install slirp4netns podman
@@ -42,7 +39,6 @@ centos:~ $ podman run registry.access.redhat.com/ubi8-minimal cat /etc/os-releas
 centos:~ # cat /etc/subuid
 centos:~ # cat /etc/subgid
 ```
-
 
 ---
 
@@ -65,7 +61,6 @@ centos:~ # podman search registry.redhat.io/postgresql-10
 /etc/containers/registries.conf
 $HOME/.config/containers/registries.conf
 
-
 ### inspecting local image
 
 ```bash
@@ -81,14 +76,12 @@ centos:~ # skopeo inspect docker://registry.redhat.io/ubi8/ubi-init
 centos:~ # podman tag <image_id> <registry>[:<port>]/[<namespace>/]<name>:<tag>
 ```
 
-
 ### saving and loading image
 
 ```bash
 centos:~ # podman save -o myrsyslog.tar registry.redhat.io/rhel8/rsyslog:latest
 centos:~ # podman load -i myrsyslog.tar
 ```
-
 
 ### removing image
 
@@ -97,7 +90,6 @@ centos:~ # podman rmi ubi8-init
 centos:~ # podman rmi -a
 centos:~ # podman rmi -f <image_id>
 ```
-
 
 ---
 
@@ -120,7 +112,6 @@ centos:~ # podman inspect mylog
 centos:~ # podman inspect --format='{{.NetworkSettings.IPAddress}}' mylog
 ```
 
-
 ### investigating running and stopped container
 
 ```bash
@@ -130,7 +121,6 @@ centos:~ # podman start -a -i agitated_hopper
 centos:~ # podman stop 74b1da000a11
 centos:~ # podman kill --signal="SIGHUP" 74b1da000a11
 ```
-
 
 ### sharing files between two container
 
@@ -148,7 +138,6 @@ centos:~ # podman volume ls
 centos:~ # podman volume rm hostvolume
 ```
 
-
 ### removing container
 
 ```bash
@@ -156,7 +145,6 @@ centos:~ # podman rm goofy_wozniak
 centos:~ # podman rm clever_yonath furious_shockley drunk_newton
 centos:~ # podman rm -a
 ```
-
 
 ### creating pod
 
@@ -170,7 +158,6 @@ centos:~ # podman pod ps
 centos:~ # podman ps -a --pod
 ```
 
-
 ### displaying pod information
 
 ```bash
@@ -179,14 +166,12 @@ centos:~ # podman pod stats -a --no-stream
 centos:~ # podman pod inspect mypod
 ```
 
-
 ### stopping pod
 
 ```bash
 centos:~ # podman pod stop mypod
 centos:~ # podman ps -a --pod
 ```
-
 
 ### removing pod
 
@@ -196,11 +181,9 @@ centos:~ # podman ps
 centos:~ # podman pod ps
 ```
 
-
 ---
 
 ## adding software to a running ubi container
-
 
 ### adding software inside the standard UBI container
 
@@ -210,7 +193,6 @@ centos:~ # podman pod ps
 # dnf install --enablerepo=rhel-7-server-optional-rpms zsh-html
 ```
 
-
 ### adding software inside the minimal UBI container
 
 ```bash
@@ -218,7 +200,6 @@ centos:~ # podman pod ps
 # microdnf install --enablerepo=rhel-7-server-rpms zsh
 # microdnf install --enablerepo=rhel-7-server-rpms --enablerepo=rhel-7-server-optional-rpms zsh-html
 ```
-
 
 ```bash
 centos:~ # vi dockerfile

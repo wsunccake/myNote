@@ -9,7 +9,6 @@ git server  ---   drone server   ---  drone runner/agent
                                         ...
 ```
 
-
 ---
 
 ## git server
@@ -23,9 +22,8 @@ create DRONE_GIT_CLIENT_ID and DRONE_GIT_CLIENT_SECRET
 Settings / Developer settings / OAuth Apps
 
 # gitlab
-Settings / Applications 
+Settings / Applications
 ```
-
 
 ### shared secret
 
@@ -34,7 +32,6 @@ create DRONE_RPC_SECRET
 ```bash
 [linux:~ ] # openssl rand -hex 16
 ```
-
 
 ---
 
@@ -100,7 +97,6 @@ DRONE_SERVER_HOST: dron server ip or hostname
 
 DRONE_SERVER_PROTO: http or https
 
-
 ---
 
 ## drone runner
@@ -137,7 +133,6 @@ DRONE_SERVER_PROTO: http or https
   drone/drone-runner-docker:1
 ```
 
-
 ---
 
 ## pipeline
@@ -163,7 +158,6 @@ EOF
 [linux:~/demo ] # git push
 ```
 
-
 ### multiple step
 
 ```yaml
@@ -172,20 +166,19 @@ type: docker
 name: greeting
 
 steps:
-- name: en
-  image: alpine
-  commands:
-  - echo hello world
+  - name: en
+    image: alpine
+    commands:
+      - echo hello world
 
-- name: fr
-  image: alpine
-  commands:
-  - echo bonjour monde
-  when:
-    branch:
-    - develop
+  - name: fr
+    image: alpine
+    commands:
+      - echo bonjour monde
+    when:
+      branch:
+        - develop
 ```
-
 
 ### multiple pipeline
 
@@ -195,14 +188,14 @@ type: docker
 name: en
 
 steps:
-- name: greeting
-  image: alpine
-  commands:
-  - echo hello world
+  - name: greeting
+    image: alpine
+    commands:
+      - echo hello world
 
 trigger:
   event:
-  - push
+    - push
 
 ---
 kind: pipeline
@@ -210,14 +203,14 @@ type: docker
 name: fr
 
 steps:
-- name: greeting
-  image: alpine
-  commands:
-  - echo bonjour monde
-  
+  - name: greeting
+    image: alpine
+    commands:
+      - echo bonjour monde
+
 trigger:
   event:
-  - pull_request
+    - pull_request
 
 ---
 kind: pipeline
@@ -225,13 +218,12 @@ type: docker
 name: build
 
 steps:
-- name: test
-  image: gcr.io/library/golang
-  commands:
-  - go build
-  - go test -v
+  - name: test
+    image: gcr.io/library/golang
+    commands:
+      - go build
+      - go test -v
 ```
-
 
 ### parallel
 
@@ -241,29 +233,29 @@ type: docker
 name: default
 
 steps:
-- name: en
-  image: alpine
-  commands:
-  - date
-  - echo hello world
-  - sleep 10
-  - date
+  - name: en
+    image: alpine
+    commands:
+      - date
+      - echo hello world
+      - sleep 10
+      - date
 
-- name: fr
-  image: alpine
-  commands:
-  - date
-  - echo bonjour monde
-  - sleep 5 
-  - date
+  - name: fr
+    image: alpine
+    commands:
+      - date
+      - echo bonjour monde
+      - sleep 5
+      - date
 
-- name: hi
-  image: alpine
-  commands:
-  - date
-  depends_on:
-  - en
-  - fr
+  - name: hi
+    image: alpine
+    commands:
+      - date
+    depends_on:
+      - en
+      - fr
 ```
 
 ---
@@ -271,7 +263,6 @@ steps:
 ## cli
 
 get info from http://localhost/account
-
 
 ```bash
 # install
@@ -298,7 +289,6 @@ get info from http://localhost/account
 [linux:~] # drone log view <repo> <build> <stage> <step>
 [linux:~/demo] # drone exec
 ```
-
 
 ---
 

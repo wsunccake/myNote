@@ -13,7 +13,6 @@
 [linux:~ ] # helm version
 ```
 
-
 ---
 
 ## auto-completetion
@@ -26,7 +25,6 @@
 # for zsh
 [linux:~ ] # echo "source <(helm completion zsh)" >> ~/.zshrc       # user
 ```
-
 
 ---
 
@@ -45,7 +43,6 @@
 [linux:~ ] # helm repo list
 [linux:~ ] # helm repo update
 ```
-
 
 ---
 
@@ -80,7 +77,6 @@
 [linux:~ ] # helm show chart bitnami/mysql
 [linux:~ ] # helm show values bitnami/mysql
 ```
-
 
 ---
 
@@ -128,7 +124,6 @@ hello-world/
 [linux:~ ] # helm status hello-world
 [linux:~ ] # helm rollback hello-world 1
 ```
-
 
 ---
 

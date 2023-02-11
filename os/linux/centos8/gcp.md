@@ -1,8 +1,6 @@
 # Google Cloud Platform
 
-
 ## google cloud sdk
-
 
 ### install
 
@@ -21,7 +19,6 @@ EOM
 [centos:~ ] # dnf install google-cloud-sdk
 ```
 
-
 ### component
 
 ```bash
@@ -30,7 +27,6 @@ EOM
 [centos:~ ] # gcloud components remove <component id>
 [centos:~ ] # gcloud components update
 ```
-
 
 ### auth
 
@@ -43,7 +39,6 @@ EOM
 ```
 
 web: https://console.cloud.google.com/
-
 
 ### config
 
@@ -66,7 +61,6 @@ web: https://console.cloud.google.com/
 [centos:~ ] # gcloud config configurations activate <conf>
 ```
 
-
 ## project
 
 ```bash
@@ -74,7 +68,6 @@ web: https://console.cloud.google.com/
 [centos:~ ] # export PROJECT_ID=$(gcloud config get-value project -q)
 [centos:~ ] # gcloud projects get-iam-policy $PROJECT_ID
 ```
-
 
 ---
 
@@ -85,7 +78,6 @@ web: https://console.cloud.google.com/
 [centos:~ ] # gcloud compute zones list                 # all zone
 [centos:~ ] # gcloud compute instances list             # vm on zone
 ```
-
 
 ---
 
@@ -116,7 +108,6 @@ web: https://console.cloud.google.com/
 [centos:~ ] # gcloud sql users list -i <instance>        # user
 ```
 
-
 ---
 
 ## kubectl
@@ -126,7 +117,6 @@ web: https://console.cloud.google.com/
 ```bash
 [centos:~ ] # gcloud components install kubectl
 ```
-
 
 ### auto-completetion
 
@@ -144,7 +134,6 @@ web: https://console.cloud.google.com/
 [centos:~ ] $ echo 'alias k=kubectl' >>~/.zshrc
 [centos:~ ] $ echo 'complete -F __start_kubectl k' >>~/.zshrc
 ```
-
 
 ### import gke credentials to kubectl
 

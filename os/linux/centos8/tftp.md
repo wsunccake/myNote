@@ -15,7 +15,6 @@ server:~ # systemctl start tftp
 client:~ # dnf install tftp
 ```
 
-
 ---
 
 ## config
@@ -23,7 +22,6 @@ client:~ # dnf install tftp
 ```bash
 server:~ # cat /lib/systemd/system/tftp.service
 ```
-
 
 ---
 
@@ -33,7 +31,6 @@ server:~ # cat /lib/systemd/system/tftp.service
 server:~ # firewall-cmd --add-service=tftp --permanent
 server:~ # firewall-cmd --reload
 ```
-
 
 ---
 

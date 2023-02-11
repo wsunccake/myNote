@@ -52,7 +52,6 @@ default: admin/Harbor12345
 
 default image folder: /data
 
-
 ---
 
 ## manage
@@ -68,7 +67,6 @@ harbor:/opt/harbor # docker-compose -f docker-compose.yml up -dv
 Projects \ New Project
 
 format: <harbor_ip or harbor_hostname>[:<harbor_port>]/<project>/<REPOSITORY>[:TAG]
-
 
 ---
 
@@ -109,7 +107,6 @@ client:~ # docker login -u admin -p Harbor12345 192.168.0.1:80
 client:~ # docker pull 192.168.0.1:80/test/apline
 client:~ # docker logout
 ```
-
 
 ---
 
@@ -153,11 +150,11 @@ harbor:/opt/harbor # ./install.sh
 ```bash
 client:~ # echo "192.168.10.10  harbor" >> /etc/hosts
 
-client:~ # vi /etc/docker/daemon.json 
+client:~ # vi /etc/docker/daemon.json
 {
   "insecure-registries": ["192.168.10.10:5000", "harbor:5000", "0.0.0.0"]
 }
-client:~ # systemctl restart docker 
+client:~ # systemctl restart docker
 client:~ # systemctl status docker
 
 client:~ # docker login --username admin --password Harbor12345 http://harbor:5000

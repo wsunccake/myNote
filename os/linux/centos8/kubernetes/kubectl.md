@@ -23,7 +23,6 @@ linux:~ $ chmod 600 $HOME/.kube/config
 linux:~ $ cat <k8s cluster config> >> $HOME/.kube/config
 ```
 
-
 ---
 
 ## auto-completetion
@@ -46,7 +45,6 @@ linux:~ # echo 'alias k=kubectl' >>~/.zshrc
 linux:~ # echo 'complete -F __start_kubectl k' >>~/.zshrc
 ```
 
-
 ---
 
 ## test
@@ -54,7 +52,6 @@ linux:~ # echo 'complete -F __start_kubectl k' >>~/.zshrc
 ```bash
 linux:~ # kubectl version --client
 ```
-
 
 ---
 
@@ -78,7 +75,6 @@ linux:~ # kubectl logs [-f] <type>/<name> [-c <container>]
 linux:~ # kubectl wait --for=condition=Ready [-f <file>.yaml|<type>/<name>]
 linux:~ # kubectl describe <type>/<name> | grep Condition -A5       # list all condition
 ```
-
 
 ---
 
@@ -112,7 +108,6 @@ linux:~ # kubectl config get-clusters
 linux:~ # kubectl config set-cluster <cluster>
 ```
 
-
 ---
 
 ## namespace
@@ -122,7 +117,6 @@ linux:~ # kubectl get namespace
 linux:~ # kubectl create namespace <namespace>
 linux:~ # kubectl delete namespace <namespace>
 ```
-
 
 ---
 
