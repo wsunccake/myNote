@@ -7,7 +7,6 @@ ruckus(config)# system
 ruckus(config-sys)# show support-entitle
 ```
 
-
 ```bash
 ruckus> enable
 ruckus# show sysinfo

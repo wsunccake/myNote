@@ -1,6 +1,5 @@
 # Perforce
 
-
 ![perforce](https://www.perforce.com/perforce/doc.current/manuals/p4v-gs/images/01_p4v-gs.2.1.1.jpg)
 
 ## Client Configure
@@ -17,18 +16,15 @@ P4ROOT=/$HOME/Perforce/user_host
 P4CLIENT=user_host
 ```
 
-
 ---
 
 ## Client Command
-
 
 ### syntax
 
 ```bash
 rhel:~ # p4 [-u <user>] [-P <password>] [-p perforce:1666] <command>
 ```
-
 
 ### help
 
@@ -40,14 +36,12 @@ rhel:~ # p4 help <command>
 rhel:~ # p4 info
 ```
 
-
 ### login / logout
 
 ```bash
 rhel:~ # p4 login
 rhel:~ # p4 logout
 ```
-
 
 ### workspace / client
 
@@ -96,7 +90,6 @@ View:
 ./p4 client -o | sed 's"//depot/tools/app/config/... //my-workspace/tools/app/config/..."-//depot/tools/app/config/... //my-workspace/tools/app/config/..."' | ./p4 client -i
 ```
 
-
 ### change list
 
 ```bash
@@ -108,7 +101,6 @@ rhel:~ # p4 change [-o <CL>]                    # create change list
 rhel:~ # p4 change -d <CL>                      # delte change list
 ```
 
-
 ### file/dir
 
 ```bash
@@ -117,7 +109,6 @@ rhel:~ # p4 have //depot/*                      # show file on client
 
 rhel:~ # p4 dirs //depot/*                      # show dir
 ```
-
 
 ### sync code
 

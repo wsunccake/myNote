@@ -37,7 +37,6 @@ linux:~/hello $ tree .
 └── main.go
 ```
 
-
 ### build command
 
 ```bash
@@ -48,7 +47,6 @@ linux:~/hello $ go build
 linux:~/hello $ ./hello --help
 linux:~/hello $ ./hello
 ```
-
 
 ### source code
 
@@ -105,7 +103,6 @@ linux:~/hello $ ./hello --help
 linux:~/hello $ ./hello -a
 ```
 
-
 ### flag
 
 ```go
@@ -159,7 +156,6 @@ linux:~/hello $ ./hello -h
 linux:~/hello $ ./hello -n go
 linux:~/hello $ ./hello go
 ```
-
 
 ### subcommand
 

@@ -1,7 +1,6 @@
-# switch #
+# switch
 
-
-## Basic ##
+## Basic
 
 baud rate: 38400
 
@@ -11,33 +10,31 @@ ctrl^h: delete
 
 default password: 512900
 
-### enable privilege ###
+### enable privilege
 
-```
+```bash
 <HP> _cmdline-mode on
 <HP> system-view
 [HP]
 ```
 
+### common
 
-### common ###
-
-```
+```bash
 <HP> quit
 ```
 
+### list
 
-### list ###
-
-```
+```bash
 [HP] summary
 [HP] display logbuffer [reverse] | incliude DOWN   # 顯示 log
 [HP] display current-configuration
 ```
 
-### setup IP ###
+### setup IP
 
-```
+```bash
 # for DHCP / dynamic IP
 [HP] ipsetup dhcp
 [HP] ipsetup ipv6 auto
@@ -51,10 +48,9 @@ default password: 512900
 [HP] ping ipv6 <ip>
 ```
 
+### interface config
 
-### interface config ###
-
-```
+```bash
 [HP] display interface [brief]   # 顯示 interface
 
 [HP] interface <interface>       # 進入 interface 設定

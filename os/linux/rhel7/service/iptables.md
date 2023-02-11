@@ -1,36 +1,61 @@
 # iptables #
 
 
-## Package ##
+## package
 
-	rhel:~ # yum install iptables
-
-
-## Configuration ##
-
-	rhel:~ # ls /usr/lib/systemd/system/iptables.service
-
-	rhel:~ # cat /etc/sysconfig/iptables
-	*filter
-	:INPUT ACCEPT [0:0]
-	:FORWARD ACCEPT [0:0]
-	:OUTPUT ACCEPT [0:0]
-	COMMIT
-
-	*nat
-	:PREROUTING ACCEPT [0:0]
-	:INPUT ACCEPT [0:0]
-	:OUTPUT ACCEPT [0:0]
-	:POSTROUTING ACCEPT [0:0]
-	-A POSTROUTING -j MASQUERADE
-	COMMIT
+```bash
+rhel:~ # yum install iptables
+```
 
 
-## Serivce ##
+---
 
-	rhel:~ # systemctl start iptables.service
-	rhel:~ # systemctl enable iptables.service
-	rhel:~ # systemctl status iptables.service
+## configuration
 
-	rhel:~ # iptables -S
-	rhel:~ # iptables -L -nv
+```bash
+rhel:~ # ls /usr/lib/systemd/system/iptables.service
+
+rhel:~ # cat /etc/sysconfig/iptables
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+COMMIT
+
+*nat
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+-A POSTROUTING -j MASQUERADE
+COMMIT
+```
+
+
+---
+
+## serivce
+
+```bash
+rhel:~ # systemctl start iptables.service
+rhel:~ # systemctl enable iptables.service
+rhel:~ # systemctl status iptables.service
+
+rhel:~ # iptables -S
+rhel:~ # iptables -L -nv
+```
+
+
+---
+
+## advance
+
+```bash
+# ssh ddos
+rhel:~ # iptables -I INPUT -p tcp --dport 22 -m connlimit --connlimit-above 3 -j DROP
+rhel:~ # iptables -I INPUT -p tcp --dport 22 -m state --state NEW -m recent --set --name SSH
+rhel:~ # iptables -I INPUT -p tcp --dport 22 -m state --state NEW -m recent --update --seconds  300 --hitcount 3 --name SSH -j DROP
+
+# drop
+rhel:~ # iptables -I OUTPUT -p udp --dport 53 -m string --string example.com -j DROP
+```

@@ -50,7 +50,6 @@ show | grep -A|-B|-C <n> <pattern>
 fortios # show | grep -C 5 port1
 ```
 
-
 ---
 
 ## info
@@ -86,7 +85,6 @@ execute shutdown
 # reboot
 execute reboot
 ```
-
 
 ---
 
@@ -137,7 +135,6 @@ fortios (vlan123) # next
 fortios (interface) #end
 ```
 
-
 ---
 
 ## dns
@@ -157,7 +154,6 @@ fortios (dns) # end
 fortios # show system dns
 fortios # get system dns
 ```
-
 
 ---
 
@@ -184,7 +180,6 @@ config router policy
 end
 ```
 
-
 ---
 
 # ntp
@@ -204,7 +199,6 @@ fortios # end
 fortios # show system ntp
 fortios # get system ntp
 ```
-
 
 ---
 
@@ -244,7 +238,6 @@ fortios (1) # set timezone-option default
 fortios (1) # next
 fortios # end
 ```
-
 
 ---
 
@@ -331,4 +324,3 @@ config firewall policy
     next
 end
 ```
-

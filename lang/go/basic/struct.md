@@ -54,7 +54,6 @@ func main() {
 }
 ```
 
-
 ---
 
 ## method
@@ -84,5 +83,39 @@ func main() {
 	fmt.Printf("p: %+v\n", p)
 	p.grow2()
 	fmt.Printf("p: %+v\n", p)
+}
+```
+
+---
+
+## struct tag
+
+```go
+package main
+
+import (
+	"fmt"
+	"reflect"
+)
+
+type User struct {
+	id   int
+	name string `max:"10"`
+}
+
+func main() {
+	u := User{1, "Jane Doe"}
+	t := reflect.TypeOf(u)
+	for i := 0; i < t.NumField(); i++ {
+		f := t.Field(i)
+		if _, ok := f.Tag.Lookup("max"); ok {
+			fmt.Println("Tag found")
+		} else {
+			fmt.Println("Tag not found")
+		}
+
+		fmt.Println(t.Field(i).Name)
+		fmt.Println(t.Field(i).Tag.Get("max"))
+	}
 }
 ```

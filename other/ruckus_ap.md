@@ -1,16 +1,14 @@
-# Ruckus AP #
-
+# Ruckus AP
 
 ## vAP on KVM
 
-* Processor: 1+
+- Processor: 1+
 
-* Memory: 1+ GB
+- Memory: 1+ GB
 
-* NIC: 1, virtio
+- NIC: 1, virtio
 
-* Disk: 1GB+, virtio
-
+- Disk: 1GB+, virtio
 
 ## list info
 
@@ -25,7 +23,6 @@ rkscli: get tunnelmgr
 rkscli: fw show all
 ```
 
-
 ---
 
 ## reboot & set factory
@@ -34,7 +31,6 @@ rkscli: fw show all
 rkscli: reboot
 rkscli: set factory
 ```
-
 
 ---
 
@@ -46,7 +42,6 @@ rkscli: set scg config interval 30
 rkscli: set scg status interval 30
 rkscli: set scg getconf
 ```
-
 
 ---
 
