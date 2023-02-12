@@ -6,7 +6,6 @@
 sle:~ # systemctl status apparmor
 ```
 
-
 ---
 
 ## profile

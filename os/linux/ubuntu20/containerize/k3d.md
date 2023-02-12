@@ -2,7 +2,7 @@
 
 ## prepare
 
-[docker-ce][./docker-ce.md]
+[docker-ce](./docker-ce.md)
 
 ---
 

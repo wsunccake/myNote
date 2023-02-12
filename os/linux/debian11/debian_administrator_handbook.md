@@ -1,10 +1,8 @@
 # debian 11
 
-
 ---
 
 # package manager
-
 
 ## dpkg
 
@@ -38,8 +36,7 @@ debian:~ # ar x <pkg>.deb               # extract package
 debian:~ # ar r <pkg>.deb <file>...     # create package
 ```
 
-
-----
+---
 
 ## apt
 
@@ -80,7 +77,6 @@ deb-src http://ftp.tw.debian.org/debian/ bullseye main contrib non-free
 debian:~ # /etc/apt/sources.list.d/*.list
 ```
 
-
 ### other tool
 
 ```bash
@@ -89,8 +85,7 @@ debian:~ # apt install software-properties-common
 debian:~ # apt install debconf-utils
 ```
 
-
-----
+---
 
 ## debconf
 
@@ -111,7 +106,6 @@ debian:~ # debconf-set-selections << EOF
 debconf	debconf/frontend	select	Noninteractive
 debconf	debconf/priority	select	high
 ```
-
 
 ---
 
@@ -140,24 +134,22 @@ debian:~ # dmesg
 debian:~ # sensors
 ```
 
-
 ---
 
 # network
 
-*   en  -- ethernet
-*   sl  -- serial line IP (slip)
-*   wl  -- wlan
-*   ww  -- wwan
+- en -- ethernet
+- sl -- serial line IP (slip)
+- wl -- wlan
+- ww -- wwan
 
-*   b<number>                                                                       -- BCMA bus core number
-*   ccw<name>                                                                       -- CCW bus group name
-*   o<index>                                                                        -- on-board device index number
-*   s<slot>[f<function>][d<dev_port>]                                               -- hotplug slot index number
-*   x<MAC>                                                                          -- MAC address
-*   [P<domain>]p<bus>s<slot>[f<function>][d<dev_port>]                              -- PCI geographical location
-*   [P<domain>]p<bus>s<slot>[f<function>][u<port>][..][c<config>][i<interface>]     -- USB port number chain
-
+- b<number> -- BCMA bus core number
+- ccw<name> -- CCW bus group name
+- o<index> -- on-board device index number
+- s<slot>[f<function>][d<dev_port>] -- hotplug slot index number
+- x<MAC> -- MAC address
+- [P<domain>]p<bus>s<slot>[f<function>][d<dev_port>] -- PCI geographical location
+- [P<domain>]p<bus>s<slot>[f<function>][u<port>][..][c<config>][i<interface>] -- USB port number chain
 
 ## NetworkManager
 
@@ -187,8 +179,7 @@ debian:~ # nmcli device show <nic>
 debian:~ # nmtui
 ```
 
-
-----
+---
 
 ## networking
 
@@ -214,8 +205,7 @@ debian:~ # ifdown <nic>
 debian:~ # ifup <nic>
 ```
 
-
-----
+---
 
 ## systemd-networkd
 
@@ -232,11 +222,9 @@ debian:~ # networkctl up <device>
 debian:~ # networkctl down <device>
 ```
 
-
 ---
 
 # date time
-
 
 ## timezone
 
@@ -265,8 +253,7 @@ debian:~ # timedatectl show-timesync --all
 debian:~ # timedatectl timesync-status
 ```
 
-
-----
+---
 
 ## ntp
 
@@ -274,11 +261,9 @@ debian:~ # timedatectl timesync-status
 debian:~ # vi /etc/default/ntpdate
 ```
 
-
 ---
 
 # env
-
 
 ## locale
 
@@ -297,8 +282,7 @@ debian:~ # cat /etc/locale.gen
 debian:~ # cat /etc/default/locale
 ```
 
-
-----
+---
 
 ## hostname
 
@@ -321,8 +305,7 @@ debian:~ # cat /etc/nsswitch.conf
 host:   ...
 ```
 
-
-----
+---
 
 ## shell
 
@@ -346,8 +329,7 @@ debian:~ # cat /etc/zshrc
 debian:~ # cat /etc/zshenv
 ```
 
-
-----
+---
 
 ## update-alternatives
 
@@ -366,11 +348,9 @@ debian:~ # update-alternatives --config editor
 debian:~ # ls /var/lib/dpkg/alternatives
 ```
 
-
 ---
 
 # account
-
 
 ## user and group
 
@@ -423,7 +403,6 @@ debian:~ # addgroup <group>
 debian:~ # delgroup
 ```
 
-
 ---
 
 ## permission
@@ -436,7 +415,7 @@ debian:~ # chgrp <group> <file>
 debian:~ # umask
 ```
 
-----
+---
 
 ## sudo
 
@@ -446,7 +425,6 @@ debian:~ # visudo
 debian:~ # vi /etc/sudoers
 debian:~ # usermod -aG sudo <user>
 ```
-
 
 ---
 
@@ -462,11 +440,9 @@ debian:~ # updatedb
 debian:~ # locate <pattern>
 ```
 
-
-----
+---
 
 ## fix bug
-
 
 ```bash
 debian:~ # diff -u file.old file.new > file.patch       # generat patch
@@ -475,7 +451,6 @@ debian:~ # patch -p0 file.old < file.patch              # patch file
 debian:~ # patch -Np0 file.old < file.patch             # forward patch file
 debian:~ # patch -Rp0 file.old < file.patch             # reverse patch file
 ```
-
 
 ---
 
@@ -489,7 +464,6 @@ debian:~ # vi xorg.conf.new
 debian:~ # cp xorg.conf.nen /etc/X11/xorg.conf
 debian:~ # xdpyinfo
 ```
-
 
 ---
 
@@ -525,8 +499,7 @@ debian:~ # mount --bind /sys /sys
 debian:~ # mount --bind /proc /proc
 ```
 
-
-----
+---
 
 ## lograte
 
@@ -536,8 +509,7 @@ debian:~ # cat /etc/logrotate.conf
 debian:~ # ls /etc/logrotate.d/
 ```
 
-
-----
+---
 
 ## kerenl
 
@@ -552,8 +524,7 @@ debian:~ # modprobe <module>
 debian:~ # modprobe -r <module>
 ```
 
-
-----
+---
 
 ## systemd
 
@@ -591,7 +562,6 @@ debian:~ # runlevel
 debian:~ # who
 ```
 
-
 ---
 
 # service
@@ -617,21 +587,15 @@ debian:~ # ssh-add -d $HOME/.ssh/id_rsa    # del private key to ssh-agent
 debian:~ # ssh-add -l                      # list private key in ssh-agent
 ```
 
-
-----
+---
 
 ## cron, atd, anacron
 
-
-----
+---
 
 ## quota
 
-
-
 ---
-
-
 
 ```bash
 debian-installer
@@ -639,4 +603,3 @@ debian-installer
 # sdb is usb flash
 cat debian-10.0.0-amd64-netinst.iso >/dev/sdb; sync
 ```
-

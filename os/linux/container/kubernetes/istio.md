@@ -6,9 +6,8 @@
 [linux:~ ] # curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.10.2 TARGET_ARCH=x86_64 sh -
 [linux:~ ] # install -m 755 istio-1.10.2/bin/istioctl /usr/local/bin/.
 [linux:~ ] # istioctl install --set profile=demo -y
-[linux:~ ] # kubectl label namespace default istio-injection=enabled 
+[linux:~ ] # kubectl label namespace default istio-injection=enabled
 ```
-
 
 ---
 
@@ -29,7 +28,6 @@
 
 [linux:~ ] # istioctl analyze
 ```
-
 
 ---
 

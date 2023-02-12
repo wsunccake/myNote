@@ -9,7 +9,6 @@
   rancher/rancher:latest
 ```
 
-
 ---
 
 ## cli
@@ -52,7 +51,6 @@
 
 https://<rancher ip>/apikeys to create <token>
 
-
 ---
 
 ## deploy issue
@@ -81,7 +79,6 @@ https://<rancher ip>/apikeys to create <token>
   /var/log/pods \
   /var/run/calico
 ```
-
 
 ---
 

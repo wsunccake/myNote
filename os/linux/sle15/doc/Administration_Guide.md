@@ -1,6 +1,5 @@
 # Bash and Bash Scripts
 
-
 ## What is “The Shell”
 
 `BASH CONFIGURATION FILES FOR LOGIN SHELLS`
@@ -15,7 +14,6 @@
 ~/.profile
 ```
 
-
 `BASH CONFIGURATION FILES FOR NON-LOGIN SHELLS`
 
 ```
@@ -25,7 +23,6 @@
 
 ~/.bashrc
 ```
-
 
 `SPECIAL FILES FOR BASH`
 
@@ -37,18 +34,15 @@
 ~/.alias
 ```
 
-
 ## Writing Shell Scripts
-
 
 ```bash
 sle:~ $ vi hello.sh
-#!/bin/sh 
+#!/bin/sh
 echo "Hello World"
 
 sle:~ $ chmod +x ./hello.sh
 ```
-
 
 ## Redirecting Command Events
 
@@ -60,13 +54,11 @@ sle:~ $ cat /proc/cpuinfo | grep cpu
 sle:~ $ find / -name "foo*" 2>/dev/null
 ```
 
-
 ## Using Aliases
 
 ```bssh
 sle:~ $ alias lt='ls -ltr'
 ```
-
 
 ## Using Variables in Bash
 
@@ -98,7 +90,6 @@ PWD
 USER
 ```
 
-
 ## Using Argument Variables
 
 ```bash
@@ -129,7 +120,6 @@ sle:~ $ file=/home/tux/book/book.tar.bz2
 sle:~ $ echo ${file/tux/wilber}
 ```
 
-
 ## Grouping and Combining Commands
 
 ```bash
@@ -147,7 +137,6 @@ sle:~ $ hello() { echo "Hello $1"; }
 sle:~ $ hello Tux
 sle:~ $ Hello Tux
 ```
-
 
 ### Working with Common Flow Constructs
 
@@ -173,7 +162,6 @@ for i in *.png; do
 done
 ```
 
-
 ---
 
 # sudo Basics
@@ -190,7 +178,6 @@ sle:~ $ sudo -s
 # sudo -i (<command>)
 sle:~ $ sudo -i
 ```
-
 
 ## Configuring sudo
 
@@ -209,7 +196,7 @@ Defaults targetpw
 # prompts for the root password
 Defaults !rootpw
 
-# constructs a minimal environment 
+# constructs a minimal environment
 Defaults env_reset
 
 # environment variables to keep when the env_reset on
@@ -218,7 +205,7 @@ Defaults env_keep += "JRE_HOME" # Add JRE_HOME
 
 # environment variables to remove when the env_reset flag OFF
 Defaults env_delete = "EDITOR PROMPT"
-Defaults env_delete += "JRE_HOME" 
+Defaults env_delete += "JRE_HOME"
 
 
 # Who      Where         As whom      Tag                What
@@ -229,7 +216,6 @@ Defaults env_delete += "JRE_HOME"
 <user> ALL = (admin) /usr/bin/wall ""
 ```
 
-
 ### Using sudo with X.Org Applications
 
 ```bash
@@ -239,16 +225,13 @@ sle:~ $ xhost si:localuser:root   # allow the root user to access the local user
 sle:~ $ xhost -si:localuser:root  # removes the granted access
 ```
 
-
 ---
 
 # YaST
 
-
 ---
 
 # YaST in Text Mode
-
 
 ## YaST Command Line Options
 
@@ -261,7 +244,6 @@ sle:~ # yast -l                 # list module
 sle:~ # yast <module>      # work moudle
 sle:~ # yast <module> help
 ```
-
 
 ## YaST Command Line Options
 
@@ -495,11 +477,9 @@ sle:~ # yast users show help
 sle:~ # yast users show username=wwwrun
 ```
 
-
 ---
 
 # YaST Online Update
-
 
 ---
 
@@ -617,11 +597,10 @@ sle:~ # zypper refresh
 sle:~ # zypper refresh -fdb
 ```
 
-
 ## RPM — the Package Manager
 
 ```bash
-sle:~ # rpm --checksig <PACKAGE>-x.y.z.rpm 
+sle:~ # rpm --checksig <PACKAGE>-x.y.z.rpm
 sle:~ # rpm --import /usr/share/doc/packages/suse-build-key/suse_ptf_key.asc
 sle:~ # rpm -i <PACKAGE>.rpm
 sle:~ # rpm -e <PACKAGE>
@@ -648,7 +627,6 @@ sle:~ # rpm -V wget
 --scripts         Installation scripts (preinstall, postinstall, uninstall)
 ```
 
-
 ### Installing and Compiling Source Packages
 
 ```bash
@@ -666,7 +644,6 @@ sle:~ # build --rpms /media/dvd/suse/ wget.spec
 -bb   same -bi, additional creation of the binary package. binary should be in /usr/src/packages/RPMS.
 -ba   same -bb, additional creation of source RPM, binary should be in /usr/src/packages/SRPMS.
 ```
-
 
 ---
 

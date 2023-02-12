@@ -14,7 +14,6 @@ master:~ # for psp in $(kubectl get psp -o jsonpath="{range .items[*]}{@.metadat
 done
 ```
 
-
 ---
 
 ## usage

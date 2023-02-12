@@ -16,7 +16,6 @@ sle:~ # systemctl daemon-reload
 sle:~ # systemctl restart systemd-logind
 ```
 
-
 ---
 
 ## loginctl
@@ -34,7 +33,6 @@ sle:~ # loginctl list-seats
 sle:~ # loginctl seat-status <seat>
 sle:~ # loginctl show-seat <seat>
 ```
-
 
 ---
 

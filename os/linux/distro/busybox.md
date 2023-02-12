@@ -1,14 +1,12 @@
-# BusyBox #
+# BusyBox
 
-
-### ftpget ###
+## ftpget
 
 ```bash
 ftpget -u user -p passwd remote_ip local_file remote_file
 ```
 
-
-### ftpput ###
+## ftpput
 
 ```bash
 ftpput -u user -p passwd remote_ip remote_file local_file

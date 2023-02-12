@@ -40,14 +40,12 @@ This is an example banner for the RHEL web console login page.
 centos:~ # systemctl try-restart cockpit
 ```
 
-
 ### time
 
 ```bash
 centos:~ # timedatectl
 centos:~ # date
 ```
-
 
 ### local
 
@@ -88,7 +86,6 @@ centos:~ # nmcli device status
 centos:~ # nmtui
 ```
 
-
 ## systemd
 
 ```bash
@@ -111,7 +108,6 @@ centos:~ # setenforce Permissive
 centos:~ # cat /etc/selinux/config
 ```
 
-
 ### account
 
 ```bash
@@ -120,7 +116,6 @@ centos:~ # useradd <user>
 centos:~ # passwd <user>
 centos:~ # usermod -aG <group> <user>
 ```
-
 
 ### recove and restore
 
@@ -134,7 +129,6 @@ NETFS_KEEP_OLD_BACKUP_COPY=y
 BACKUP_TYPE=incremental
 ```
 
-
 ### log file
 
 /var/log/messages - all syslog messages except the following
@@ -147,7 +141,6 @@ BACKUP_TYPE=incremental
 centos:~ # journalctl -b
 centos:~ # journalctl -k -b -1
 ```
-
 
 ---
 
@@ -182,7 +175,6 @@ centos:~ # yum provides "*/<file-name>"
 centos:~ # yum provides \*/<ile-name>
 ```
 
-
 ### install
 
 ```bash
@@ -203,7 +195,6 @@ centos:~ # yum install-na <name>.<architecture>
 centos:~ # yum install-nevra <name-epoch>:<version-release>.<architecture>
 ```
 
-
 ### update
 
 ```bash
@@ -214,7 +205,6 @@ centos:~ # yum update
 centos:~ # yum update --security
 centos:~ # yum update-minimal --security
 ```
-
 
 ### auto update
 
@@ -233,7 +223,6 @@ centos:~ # systemctl enable dnf-automatic.timer
 centos:~ # systemctl start dnf-automatic.timer
 ```
 
-
 ### remove
 
 ```bash
@@ -248,7 +237,6 @@ centos:~ # yum remove-na <name>.<architecture>
 centos:~ # yum remove-nevra <name-epoch>:<version-release>.<architecture>
 ```
 
-
 ### history
 
 ```bash
@@ -261,7 +249,6 @@ centos:~ # yum history redo <transactionID>
 centos:~ # yum history redo last
 ```
 
-
 ### repository
 
 ```bash
@@ -269,7 +256,6 @@ centos:~ # yum-config-manager --add-repo <repository_URL>
 centos:~ # yum-config-manager --enable <repositoryID>
 centos:~ # yum-config-manager --disable <repositoryID>
 ```
-
 
 ### configure
 
@@ -279,16 +265,13 @@ centos:~ # yum --noplugins update
 centos:~ # yum update --disableplugin=<plugin-name>
 ```
 
-
 ---
 
 ## managing services with systemd
 
-
 /usr/lib/systemd/system/ - Systemd unit files distributed with installed RPM packages.
 /run/systemd/system/ - Systemd unit files created at run time. This directory takes precedence over the directory with installed service unit files.
 /etc/systemd/system/ - Systemd unit files created by systemctl enable as well as unit files added for extending a service. This directory takes precedence over the directory with runtime unit files.
-
 
 `service mapping systemctl`
 
@@ -303,7 +286,6 @@ service <name> status               systemctl status <name>.service
 service --status-all                systemctl list-units --type service --all
 ```
 
-
 `chkconfig mapping systemctl`
 
 ```
@@ -315,7 +297,6 @@ chkconfig --list                    systemctl list-unit-files --type service
 chkconfig --list                    systemctl list-dependencies --after
 chkconfig --list                    systemctl list-dependencies --before
 ```
-
 
 `sysv mapping systemctl`
 
@@ -332,7 +313,6 @@ runlevel                            systemctl list-units --type target
 telinit runlevel                    systemctl isolate name.target
 ```
 
-
 `shutting down, suspending, and hibernating mapping systemctl`
 
 ```
@@ -343,7 +323,6 @@ pm-suspend                          systemctl suspend
 pm-hibernate                        systemctl hibernate
 pm-suspend-hybrid                   systemctl hybrid-sleep
 ```
-
 
 ```bash
 centos:~ # systemctl stop nfs-server.service
@@ -382,7 +361,7 @@ centos:~ # systemctl set-default multi-user.target
 centos:~ # systemctl isolate multi-user.target
 
 centos:~ # ls -l /lib/systemd/system/default.target
-centos:~ # ln -sf /lib/systemd/system/graphical.target 
+centos:~ # ln -sf /lib/systemd/system/graphical.target
 
 centos:~ # systemctl rescue
 centos:~ # systemctl emergency
@@ -401,7 +380,6 @@ centos:~ # systemctl suspend
 centos:~ # systemctl hibernate
 centos:~ # systemctl hybrid-sleep
 ```
-
 
 ### custom unit file
 
@@ -426,7 +404,6 @@ centos:~ # systemctl daemon-reload
 centos:~ # systemctl start <name>.service
 ```
 
-
 ### optimizing systemd to boot time
 
 ```bash
@@ -439,7 +416,6 @@ centos:~ # systemctl cat <service_name>
 centos:~ # systemctl help <service_name>
 ```
 
-
 ---
 
 ## introduction to managing user and group accounts
@@ -450,7 +426,6 @@ centos:~ # cat /etc/login.defs
 UID_MIN
 GID_MIN
 ```
-
 
 ---
 
@@ -470,7 +445,6 @@ centos:~ # chown :<group-name> <directory-name>
 centos:~ # chmod g+rwxs <directory-name>
 ```
 
-
 ---
 
 ## removing a user from a group from the command line
@@ -483,7 +457,6 @@ centos:~ # usermod -G developer sarah
 centos:~ # groups sarah
 ```
 
-
 ---
 
 ## managing sudo access
@@ -494,7 +467,6 @@ centos:~ # visudo
 centos:~ # usermod --append -G wheel sarah
 centos:~ # id sarah
 ```
-
 
 ---
 
@@ -540,7 +512,6 @@ sh:~ $ exit
 sh:~ $ exit
 ```
 
-
 ---
 
 ## managing file permissions
@@ -574,7 +545,6 @@ centos:~ # setfacl -m u:susan:--- group-project
 centos:~ # getfacl group-project
 ```
 
-
 ---
 
 ## using the chrony suite to configure ntp
@@ -605,7 +575,6 @@ centos:~ # chronyc makestep        # manually adjusting the system clock
 centos:~ # chronyc ntpdata         # reporting the transmit, receive timestamping and interleaved mode for each NTP source
 ```
 
-
 ---
 
 ## using secure communications between two systems with openssh
@@ -627,7 +596,6 @@ centos:~ # systemctl status sshd
 centos:~ # ssh <user>@<ssh-server-example.com>
 ```
 
-
 ### using key pairs instead of passwords for ssh authentication
 
 ```bash
@@ -637,7 +605,6 @@ PasswordAuthentication no
 centos:~ # setsebool -P use_nfs_home_dirs 1   # NFS-mounted home dir for SELinux
 centos:~ # systemctl reload sshd
 ```
-
 
 ### generating ssh key pairs
 
@@ -650,7 +617,6 @@ centos:~ # ssh <user>@<ssh-server-example.com>
 centos:~ # ls ~/.ssh/
 ```
 
-
 ### using ssh keys stored on a smart card
 
 ```bash
@@ -658,7 +624,6 @@ centos:~ # ssh-keygen -D pkcs11: > keys.pub
 centos:~ # ssh-keygen -D pkcs11:
 centos:~ # ssh-copy-id -f -i keys.pub <user>@<example.com>
 ```
-
 
 ---
 
@@ -684,7 +649,6 @@ centos:~ # alternatives --config python
 centos:~ # alternatives --auto python
 ```
 
-
 ---
 
 ## using the php scripting language
@@ -693,7 +657,6 @@ centos:~ # alternatives --auto python
 centos:~ # dnf module install php:7.4
 centos:~ # dnf module install php:7.4/minimal
 ```
-
 
 ### using php with the apache http Server
 
@@ -708,7 +671,6 @@ centos:~ # echo '<?php phpinfo(); ?>' > /var/www/html/index.php
 centos:~ # curl http://127.0.0.1
 ```
 
-
 ### using php with the apache nginx Server
 
 ```bash
@@ -722,7 +684,6 @@ centos:~ # echo '<?php phpinfo(); ?>' > /usr/share/nginx/html/index.php
 centos:~ # curl http://127.0.0.1
 ```
 
-
 ### running a php script using the command-line interface
 
 ```bash
@@ -733,7 +694,6 @@ centos:~ # vi hello.php
 
 centos:~ # php hello.php
 ```
-
 
 ---
 

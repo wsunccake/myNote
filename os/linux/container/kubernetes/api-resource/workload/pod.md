@@ -18,7 +18,6 @@ master:~ $ kubectl logs -f <pod>
 master:~ $ kubectl port-forward <pod> [<host_port>:]<container_port>
 ```
 
-
 ---
 
 ## demo
@@ -30,7 +29,6 @@ master:~ $ curl http://localhost:8080
 
 master:~ $ kubectl run alpine --image=alpine --command -- hostname
 ```
-
 
 ---
 

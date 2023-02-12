@@ -139,5 +139,12 @@ spec:
           servicePort: 80
 EOF
 [ubuntu:~ ] $ kubectl get ing
+```
 
+### dns
+
+```bash
+[ubuntu:~ ] $ minikube addons enable ingress
+[ubuntu:~ ] $ minikube addons enable ingress-dns
+[ubuntu:~ ] $ kubectl edit configmap coredns -n kube-system
 ```

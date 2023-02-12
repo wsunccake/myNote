@@ -35,7 +35,7 @@ setup /etc/hosts or dns
 
 ```bash
 sle:~ # vi /etc/hosts
-192.168.0.1      controller  
+192.168.0.1      controller
 192.168.0.101    node1
 ...
 
@@ -50,7 +50,6 @@ setup nfs or [chrony](./chrony.md)
 
 setup [munge](./munge.md)
 
-
 ---
 
 ## Controller
@@ -60,7 +59,6 @@ setup [munge](./munge.md)
 ```bash
 controller:~ # zypper in slurm
 ```
-
 
 ### config
 
@@ -113,7 +111,6 @@ PartitionName=vip Nodes=node[40-50] State=UP AllowAccounts=VIP
 
 [Slurm Version 17.11 Configuration Tool](https://slurm.schedmd.com/configurator.html)
 
-
 ### daemon
 
 ```bash
@@ -126,13 +123,11 @@ controller:~ # systemctl daemon-reload
 controller:~ # systemctl enable slurmctld.service --now
 ```
 
-
 ### check
 
 ```bash
 controller:~ # slurmd -C
 ```
-
 
 ### tmpfile
 
@@ -144,7 +139,6 @@ d /var/log/slurm 0755 root root -
 controller:~ # systemd-tmpfiles --create
 ```
 
-
 ---
 
 ## Compute Node
@@ -155,13 +149,11 @@ controller:~ # systemd-tmpfiles --create
 node:~ # zypper in slurm-node
 ```
 
-
 ### config
 
 ```bash
 controller:~ # scp /etc/slurm/slurm.conf root@<client>:/etc/slurm/.
 ```
-
 
 ### daemon
 
@@ -175,13 +167,11 @@ node:~ # systemctl daemon-reload
 node:~ # systemctl enable slurmd.service --now
 ```
 
-
 ### check
 
 ```bash
 node:~ # slurmd -C
 ```
-
 
 ### tmpfile
 
@@ -192,7 +182,6 @@ d /var/log/slurm 0755 root root -
 
 node:~ # systemd-tmpfiles --create
 ```
-
 
 ---
 
@@ -216,13 +205,11 @@ controller:~ # squeue -o "%8i %8u %15a %.10r %.10L %.5D %.10Q"
 controller:~ # squeue -O jobid:8,name:8,username:8,account:15,partition:12,timeused:15,qos:8,prioritylong:.10
 ```
 
-
 #### smap
 
 ```bash
 controller:~ # smap
 ```
-
 
 ### submit
 
@@ -236,7 +223,6 @@ controller:~ # srun -N 1 –pty bash -i  # interactive mode
 controller:~ # srun -l -N1 -c2 sh -c "hostname && sleep 10" &
 ```
 
-
 #### salloc
 
 ```bash
@@ -244,7 +230,6 @@ controller:~ # salloc
 > srun <cmd>
 > exit
 ```
-
 
 #### sbatch
 
@@ -268,7 +253,6 @@ mpiexec.hydra -hosts-group $SLURM_JOB_NODELIST -n $SLURM_NTASKS -ppn $SLURM_NTAS
 controller:~ # sbatch <job>.sh
 ```
 
-
 ### cancal
 
 #### scancal
@@ -276,7 +260,6 @@ controller:~ # sbatch <job>.sh
 ```bash
 controller:~ # scancel <job_id>
 ```
-
 
 ### other
 
@@ -287,7 +270,6 @@ controller:~ # sstat -e
 controller:~ # sstat <job_id>
 controller:~ # sstat -o JobID,Nodelist,Ntasks <job_id>
 ```
-
 
 #### scontrol
 
@@ -323,7 +305,6 @@ scontrol shutdown: Admin
 scontrol takeover: Admin
 ```
 
-
 ---
 
 ## Admin
@@ -337,7 +318,6 @@ controller:~ # sinfo
 controller:~ # sinfo -la
 controller:~ # sinfo -Nla
 ```
-
 
 ### config
 
@@ -354,7 +334,6 @@ controller:~ # vi /etc/slurm/slurm.conf
 controller:~ # scontrol reconfigure
 ```
 
-
 ---
 
 ## MariaDB
@@ -370,7 +349,6 @@ controller:~ # /usr/bin/mysqladmin -u root -h <hostname> password <new-password>
 controller:~ # /usr/bin/mysql_secure_installation
 ```
 
-
 ### config
 
 ```bash
@@ -379,14 +357,12 @@ controller:~ # vi /etc/my.cnf
 innodb_buffer_pool_size = 128M
 ```
 
-
 ### daemon
 
 ```bash
 controller:~ # systemctl start mariadb.service
 controller:~ # systemctl enable mariadb.service
 ```
-
 
 ### check
 
@@ -409,7 +385,6 @@ MariaDB> create database slurm_acct_db;
 MariaDB> show databases;
 MariaDB> drop database slurm_acct_db;
 ```
-
 
 ### user
 
@@ -439,7 +414,6 @@ controller:~ # mysql -u slurm
 MariaDB> use slurm_acct_db;
 ```
 
-
 ---
 
 ## SlurmDB Daemon
@@ -460,7 +434,6 @@ service: munge          munge
 ```bash
 controller:~ # zypper in slurm-slurmdbd
 ```
-
 
 ### slurm config
 
@@ -485,7 +458,6 @@ JobCompType: jobcomp/none, jobcomp/elasticsearch, jobcomp/filetxt, jobcomp/mysql
 
 [slurm.conf](https://slurm.schedmd.com/slurm.conf.html)
 
-
 ### slurmdbd config
 
 ```bash
@@ -499,7 +471,6 @@ StorageLoc=slurm_acct_db
 
 [slurmdbd.conf](https://slurm.schedmd.com/slurmdbd.conf.html)
 
-
 ### daemon
 
 ```bash
@@ -508,7 +479,6 @@ controller:~ # systemctl restart slurmctld.service
 controller:~ # systemctl start slurmdbd.service
 controller:~ # systemctl enable slurmdbd.service
 ```
-
 
 ### check db
 
@@ -523,7 +493,6 @@ MariaDB> show tables;
 controller: # sacct
 ```
 
-
 ---
 
 ## Accouting
@@ -533,7 +502,6 @@ controller: # sacct
 ```bash
 controller:~ # sacct
 ```
-
 
 ### sacctmgr
 
@@ -553,7 +521,7 @@ controller:~ # sacctmgr delete cluster <cluster>
 # account
 controller:~ # sacctmgr list account
 controller:~ # sacctmgr add account <account> [Clusters=<cluster>] [Description="none"] [Organization="none"]
-controller:~ # sacctmgr remove account <account> 
+controller:~ # sacctmgr remove account <account>
 
 # user
 controller:~ # sacctmgr list user
@@ -563,7 +531,6 @@ controller:~ # sacctmgr modify user set default=none where Account=<account>
 ```
 
 [Accounting and Resource Limits](https://slurm.schedmd.com/accounting.html)
-
 
 ---
 
@@ -586,7 +553,6 @@ PriorityType: priority/basic -> fifo, priority/multifactor -> job priority facto
 AccountingStorageEnforce: limits
 
 PriorityWeightQOS: =0 don't use the qos factor, != 0 use the qos factor
-
 
 ### sacctmgr
 
@@ -613,7 +579,6 @@ controller:~ # sacctmgr list associations
 controller:~ # sprio
 controller:~ # sprio -l
 ```
-
 
 ### example
 
@@ -669,7 +634,6 @@ controller:~ # sreport cluster UserUtilizationByAccount
 controller:~ # sreport user TopUsage
 ```
 
-
 ---
 
 ## HA
@@ -686,7 +650,6 @@ SlurmctldHost=<ha_server>
 controller:~ # scontrol ping
 ```
 
-
 ---
 
 ## Question
@@ -696,7 +659,6 @@ controller:~ # scontrol ping
 ```bash
 controller:~ # rm /var/lib/slurm/clustername
 ```
-
 
 2. munge didn't start when boot
 
@@ -711,7 +673,6 @@ node:~ # zypepr in -f munge
 node:~ # reboot
 ```
 
-
 3. slurm didn't start when boot
 
 ```bash
@@ -724,7 +685,6 @@ node:~ # systemctld stop ypbind
 node:~ # zypper in -f slurm-config
 node:~ # reboot
 ```
-
 
 4. job priority
 

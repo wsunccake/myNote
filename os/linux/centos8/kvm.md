@@ -6,7 +6,7 @@
 [centos:~ ] # grep -E 'svm|vmx' /proc/cpuinfo
 [centos:~ ] # lsmod | grep kvm
 
-[centos:~ ] # dnf module install virt 
+[centos:~ ] # dnf module install virt
 [centos:~ ] # dnf install virt-install virt-viewer
 [centos:~ ] # virt-host-validate
 
@@ -14,7 +14,6 @@
 [centos:~ ] # systemctl restart libvirtd
 [centos:~ ] # systemctl status libvirtd
 ```
-
 
 ---
 
@@ -32,7 +31,6 @@
 ```
 
 https://<host>:9090/
-
 
 ---
 

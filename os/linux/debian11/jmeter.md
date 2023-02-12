@@ -1,10 +1,8 @@
 # jmeter
 
-
 ## web
 
 [Download Apache JMeter](https://jmeter.apache.org/download_jmeter.cgi)
-
 
 ---
 
@@ -21,7 +19,6 @@ linux:~ # tar zxf apache-jmeter-5.5.tgz -C /usr/local
 linux:~ # ls /usr/local/apache-jmeter-5.5
 linux:~ # ln -s /usr/local/apache-jmeter-5.5/bin/jmeter /usr/local/bin/jmeter
 ```
-
 
 ---
 
@@ -52,7 +49,6 @@ linux:~ $ shutdown.sh
 linux:~ $ cat $JMETER_HOME/bin/jmeter.properties
 ```
 
-
 ---
 
 ## test
@@ -82,7 +78,6 @@ Test Plan
     ...
 ```
 
-
 ---
 
 ## Config Element
@@ -94,7 +89,6 @@ Filename:                               user.csv
 
 Variable Names (comma-delimited):       USERNAME, PASSWORD
 ```
-
 
 ---
 
@@ -108,7 +102,6 @@ Condition (function or variable)        ${__groovy(
 )}
 ```
 
-
 ---
 
 ## Sampler
@@ -120,7 +113,6 @@ Protocol [http]:                        http
 Server Name or IP:                      www.google.com
 ```
 
-
 ### OS Prcoess Sampler
 
 ```
@@ -128,7 +120,6 @@ Command:                                ls
 Working directory:
 Command parameters:
 ```
-
 
 ---
 
@@ -155,7 +146,6 @@ def name = vars.get("name")
 log.info(name)
 ```
 
-
 ### JSON Extractor
 
 ```
@@ -164,7 +154,6 @@ JSON Path expressions:                  $.name; $.url
 
 Default Values:                         name; url
 ```
-
 
 ---
 

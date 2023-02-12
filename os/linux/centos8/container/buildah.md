@@ -9,7 +9,6 @@
 [centos:~] # buildah info
 ```
 
-
 ---
 
 ## build by dockerfile
@@ -34,7 +33,6 @@ ENTRYPOINT ["/usr/sbin/httpd"]
 [centos:~] # podman run -d -p 8080:80 webserver
 [centos:~] # curl http://localhost:8080/index.html
 ```
-
 
 ---
 

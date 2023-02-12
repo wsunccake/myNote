@@ -11,6 +11,6 @@
     [-v /data/db:/var/lib/postgresql/data] \
     --name postgres \
     postgres
- 
+
 [linux:~ ] # docker exec -it postgres psql -U postgres
 ```

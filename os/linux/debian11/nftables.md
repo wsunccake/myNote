@@ -4,17 +4,17 @@
 
 family
 
-ip      iptables
+ip iptables
 
-ip6     ip6tables
+ip6 ip6tables
 
-inet	iptables and ip6tables
+inet iptables and ip6tables
 
-arp	    arptables
+arp arptables
 
-bridge	ebtables
+bridge ebtables
 
-netdev	Netdev address family, handling packets from ingress.
+netdev Netdev address family, handling packets from ingress.
 
 ```bash
 debian:~ # nft list tables [<family>]
@@ -26,12 +26,11 @@ debian:~ # nft flush table <family> <table_name>
 debian:~ # nft create table inet firewall
 ```
 
-
 ---
 
 ## chain
 
-base chain  type, hook, priority, policy
+base chain type, hook, priority, policy
 
 regular chain
 
@@ -47,7 +46,6 @@ debian:~ # nft add chain inet firewall incoming                                 
 debian:~ # nft 'add chain inet firewall {type filter hook input priority 0; policy drop; }'     # base chain
 ```
 
-
 ---
 
 ## rule
@@ -60,7 +58,6 @@ debian:~ # nft replace rule [<family>] <table_name> <chain_name> [handle <handle
 debian:~ # nft delete rule [<family>] <table_name> <chain_name> [handle <handle>]
 debian:~ # nft flush ruleset
 ```
-
 
 ---
 
@@ -81,5 +78,3 @@ debian:~ # nft add table nat
 debian:~ # nft 'add chain nat postrouting { type nat hook postrouting priority 100 ; }'
 debian:~ # nft add rule nat postrouting ip saddr 192.168.1.0/24 oif eth0
 ```
-
-

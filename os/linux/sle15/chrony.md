@@ -7,14 +7,12 @@ sle:~ # systemctl enable chronyd
 sle:~ # systemctl start chronyd
 ```
 
-
 ## config
 
 ```bash
 sle:~ # vi /etc/chrony.conf
 sle:~ # ls /etc/chrony.d
 ```
-
 
 ## command
 

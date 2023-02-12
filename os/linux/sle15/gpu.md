@@ -14,7 +14,6 @@ sle:~ # lspci | grep -i nvidia
 sle:~ # rpm -ivh nvhpc-2021-21.3-1.suse.x86_64.rpm nvhpc-21-3-21.3-1.suse.x86_64.rpm
 ```
 
-
 ## diable Nouveau
 
 ```bash
@@ -57,7 +56,6 @@ else
 fi
 ```
 
-
 ---
 
 ## env
@@ -77,7 +75,6 @@ sle:~ # export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CUDA_PATH/lib:$CUDA_MATH/lib
 sle:~ # cat /proc/driver/nvidia/version
 ```
 
-
 ---
 
 ## test
@@ -88,42 +85,42 @@ sle:~ # cat hello.cu
 // It takes the string "Hello ", prints it, then passes it to CUDA with an array
 // of offsets. Then the offsets are added in parallel to produce the string "World!"
 // By Ingemar Ragnemalm 2010
- 
+
 #include <stdio.h>
- 
-const int N = 16; 
-const int blocksize = 16; 
- 
-__global__ 
-void hello(char *a, int *b) 
+
+const int N = 16;
+const int blocksize = 16;
+
+__global__
+void hello(char *a, int *b)
 {
 	a[threadIdx.x] += b[threadIdx.x];
 }
- 
+
 int main()
 {
 	char a[N] = "Hello \0\0\0\0\0\0";
 	int b[N] = {15, 10, 6, 0, -11, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
- 
+
 	char *ad;
 	int *bd;
 	const int csize = N*sizeof(char);
 	const int isize = N*sizeof(int);
- 
+
 	printf("%s", a);
- 
-	cudaMalloc( (void**)&ad, csize ); 
-	cudaMalloc( (void**)&bd, isize ); 
-	cudaMemcpy( ad, a, csize, cudaMemcpyHostToDevice ); 
-	cudaMemcpy( bd, b, isize, cudaMemcpyHostToDevice ); 
-	
+
+	cudaMalloc( (void**)&ad, csize );
+	cudaMalloc( (void**)&bd, isize );
+	cudaMemcpy( ad, a, csize, cudaMemcpyHostToDevice );
+	cudaMemcpy( bd, b, isize, cudaMemcpyHostToDevice );
+
 	dim3 dimBlock( blocksize, 1 );
 	dim3 dimGrid( 1, 1 );
 	hello<<<dimGrid, dimBlock>>>(ad, bd);
-	cudaMemcpy( a, ad, csize, cudaMemcpyDeviceToHost ); 
+	cudaMemcpy( a, ad, csize, cudaMemcpyDeviceToHost );
 	cudaFree( ad );
 	cudaFree( bd );
-	
+
 	printf("%s\n", a);
 	return EXIT_SUCCESS;
 }
@@ -135,7 +132,6 @@ sle:~ # ./hello.exe
 ---
 
 ## MPS / MULTI-PROCESS SERVICE
-
 
 ```bash
 sle:~ # nvidia-smi -c 3
@@ -149,8 +145,7 @@ set compute mode:
 
 2: PROHIBITED
 
-3: EXCLUSIVE_PROCESS   # deprecated
-
+3: EXCLUSIVE_PROCESS # deprecated
 
 ```bash
 # start MPS
@@ -165,7 +160,7 @@ sle:~ # echo quit | nvidia-cuda-mps-control
 # show gpu info
 sle:~ # nvidia-smi -q -d CLOCK
 sle:~ # nvidia-smi -q -d SUPPORTED_CLOCKS
-sle:~ # nvidia-smi -q -d compute 
+sle:~ # nvidia-smi -q -d compute
 
 # monitor gpu
 sle:~ # nvidia-smi -l

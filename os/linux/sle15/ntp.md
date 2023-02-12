@@ -12,7 +12,6 @@ sle:~ # hwclock -s
 sle:~ # hwclock -w
 ```
 
-
 ---
 
 # timedatectl
@@ -36,12 +35,9 @@ sle:~ # systemctl enable systemd-timesyncd
 sle:~ # systemctl start systemd-timesyncd
 ```
 
-
-
 ---
 
 # ntp
-
 
 ## Server
 
@@ -50,7 +46,6 @@ sle:~ # systemctl start systemd-timesyncd
 ```bash
 server:~ # zypper install ntp
 ```
-
 
 `config`
 
@@ -68,14 +63,12 @@ restrict 192.168.0.0 mask 255.255.255.0 nomodify
 ...
 ```
 
-
 `service`
 
 ```bash
 server:~ # systemctl enable ntpd
 server:~ # systemctl start ntpd
 ```
-
 
 ---
 
@@ -96,14 +89,12 @@ server <ntp_server>
 ...
 ```
 
-
 `service`
 
 ```bash
 client:~ # systemctl enable ntpd
 client:~ # systemctl start ntpd
 ```
-
 
 `usage`
 
@@ -112,11 +103,9 @@ client:~ # ntpq -p
 client:~ # ntpdate -uv <ntp_server>
 ```
 
-
 ---
 
 # chrony
-
 
 ## Server
 
@@ -125,7 +114,6 @@ client:~ # ntpdate -uv <ntp_server>
 ```bash
 server:~ # zypper install chrony
 ```
-
 
 `config`
 
@@ -139,15 +127,12 @@ allow 192.168.0/24
 deny  192.168.0.254
 ```
 
-
 `service`
 
 ```bash
 server:~ # systemctl enable chronyd
 server:~ # systemctl start chronyd
 ```
-
-
 
 ## Client
 
@@ -170,14 +155,12 @@ server <ntp_server>
 ...
 ```
 
-
 `service`
 
 ```bash
 client:~ # systemctl enable chronyd
 client:~ # systemctl start chronyd
 ```
-
 
 `usage`
 

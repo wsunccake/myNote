@@ -13,18 +13,15 @@ sle:~ # sha256sum -c sle15sp2_sha256.txt
 sle:~ # sha256sum SLE-15-SP2-Full-x86_64-GM-Media1.iso
 ```
 
-
 ---
 
 ## Install
 
 安裝時, 預設 filesystem 為 btrfs, 建議使用 xfs (效能較佳)
 
-
 ---
 
 ## Setup
-
 
 `repository`
 
@@ -88,7 +85,6 @@ sle:~ # zypper ar http://127.0.0.1/Module-Basesystem/ Module-Basesystem
 # on nfs
 ```
 
-
 `firewall`
 
 ```bash
@@ -99,7 +95,6 @@ sle:~ # firewall-cmd --reload
 sle:~ # yast firewall
 ```
 
-
 `package`
 
 ```bash
@@ -109,7 +104,6 @@ sle:~ # zypper in -t pattern yast2_basis
 
 sle:~ # yast sw_single
 ```
-
 
 `network`
 
@@ -155,7 +149,6 @@ sle:~ # ifdown eth0
 sle:~ # ifstatus eth0
 sle:~ # ifprobe eth0
 ```
-
 
 `sys log`
 
@@ -210,7 +203,6 @@ sle:~ # mkfs -t xfs /dev/sda1
 sle:~ # mkfs.xfs /dev/sda1
 sle:~ # mkswap  /dev/sda2
 ```
-
 
 ---
 

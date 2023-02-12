@@ -21,7 +21,6 @@ debian:~ # vi /etc/apt/sources.list
 deb [trusted=yes] file:/opt/repo/deb ./
 ```
 
-
 ---
 
 ## mirror repo - debmirror
@@ -52,7 +51,6 @@ debian:/opt/mirror # debmirror \
   --ignore-release-gpg /opt/mirror/debian
 ```
 
-
 ---
 
 ## mirror repo - apt-mirror
@@ -70,4 +68,3 @@ deb-amd64 http://opensource.nchc.org.tw/debian bullseye main contrib non-free
 
 debian:~ # apt-mirror
 ```
-

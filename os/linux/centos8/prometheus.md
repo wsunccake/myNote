@@ -2,14 +2,14 @@
 
 port: 9090
 
-
 ## service
 
+```
 node_export  <--  prometheus  <--  grafana
                       |
                       |
                       + -->  alertmangager
-
+```
 
 ## install
 
@@ -42,7 +42,6 @@ EOF
 # test
 [centos:~ ] # curl http://localhost:9090
 ```
-
 
 ## config
 
@@ -77,13 +76,11 @@ scrape_configs:
 [centos:~ ] # systemctl restart prometheus
 ```
 
-
 ---
 
 # node_exporter
 
 port: 9100
-
 
 ## install
 
@@ -103,13 +100,11 @@ port: 9100
 [centos:~ ] # curl http://localhost:9100/metrics
 ```
 
-
 ---
 
 # grafana
 
 port: 3000
-
 
 ## install
 
@@ -135,10 +130,9 @@ default account and password: admin/admin
 
 import https://grafana.com/grafana/dashboards/1860 dashboard template
 
-
 ---
 
-## alertmanager
+# alertmanager
 
 port: 9093, 9094
 
@@ -156,7 +150,6 @@ port: 9093, 9094
 [centos:~ ] # firewall-cmd --permanent --add-port=9093/tcp --add-port=9094/tcp
 [centos:~ ] # firewall-cmd --reload
 ```
-
 
 ## config - alertmanager
 
@@ -205,7 +198,6 @@ receivers:
 [centos:~ ] # systemctl restart alertmanager
 ```
 
-
 ## config - promethues
 
 ```bash
@@ -235,5 +227,5 @@ rule_files:
   # - "second_rules.yml"
   - "alert_rules.yml"
 
-[centos:~ ] # systemctl restart prometheus 
+[centos:~ ] # systemctl restart prometheus
 ```

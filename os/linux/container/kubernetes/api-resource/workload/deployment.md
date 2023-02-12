@@ -18,7 +18,6 @@ master:~ $ kubectl set image deploy <deploy> <container>=<img>:<tag>
 master:~ $ kubectl rollout undo|status|history deploy <deploy>
 ```
 
-
 ---
 
 ## demo
@@ -61,7 +60,6 @@ master:~ $ kubectl rollout undo deployment nginx
     <name>-xxxx-yyyy
 ```
 
-
 ---
 
 ## yaml
@@ -82,9 +80,9 @@ spec:
         app: hello
     spec:
       containers:
-      - name: hello
-        image: gcr.io/google-samples/node-hello:1.0
-        ports:
-        - containerPort: 5000
-        imagePullPolicy: Never
+        - name: hello
+          image: gcr.io/google-samples/node-hello:1.0
+          ports:
+            - containerPort: 5000
+          imagePullPolicy: Never
 ```

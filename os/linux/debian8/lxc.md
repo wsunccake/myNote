@@ -1,9 +1,8 @@
-lxc:
-
+# lxc
 
 ## Create/Delete
 
-```
+```bash
 debian:~ # ls /usr/share/lxc/templates
 
 debian:~ # lxc-create -n container_name -t template
@@ -11,7 +10,7 @@ debian:~ # lxc-create -t download -n container_name
 
 debian:~ # lxc-destroy -n container_name
 
-debian:~ # lxc-ls 
+debian:~ # lxc-ls
 debian:~ # lxc-ls -f
 
 debian:~ # lxc-info -n container_name
@@ -19,10 +18,11 @@ debian:~ # lxc-info -n container_name
 debian:~ # ls /var/lib/lxc
 ```
 
+---
 
 ## Start/Stop
 
-```
+```bash
 debian:~ # lxc-start -n container_name
 debian:~ # lxc-start -n container_name -d
 
@@ -34,11 +34,13 @@ debian:~ # lxc-console -n container_name
 debian:~ # lxc-attach -n u1 -- lsb_release -a
 ```
 
+---
+
 ## Networking
 
 ### Bridge
 
-```
+```bash
 debian:~ # cat /etc/network/interfaces.d/ifcfg-br0
 auto br0
 iface br0 inet dhcp
@@ -65,11 +67,10 @@ lxc.network.hwaddr = 00:16:3e:11:22:33
 debian:~ # lxc-start -n container_name -d
 ```
 
-
 ### NAT
 
-```
-debian:~ # vi /etc/dnsmasq.d/lxc 
+```bash
+debian:~ # vi /etc/dnsmasq.d/lxc
 bind-interfaces
 except-interface=lxcbr0
 
@@ -92,9 +93,11 @@ debian:~ # sysctl -p
 
 ```
 
+---
+
 ## Resource
 
-```
+```bash
 debian:~ # lxc-checkconfig
 
 debian:~ # lxc-cgroup -n container_name memroy.limit_in_bytes 256M

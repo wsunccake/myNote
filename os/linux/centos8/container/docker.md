@@ -14,7 +14,6 @@
 [centos:~ ] # usermod -aG docker <user>
 ```
 
-
 ---
 
 ## config
@@ -34,7 +33,6 @@
 //      "storage-opts":["dm.basesize=50G", "dm.loopdatasize=200G", "dm.loopmetadatasize=10G"],
 }
 ```
-
 
 ---
 
@@ -71,7 +69,7 @@ FirewallBackend=iptables
 [centos:~ ] # systemctl restart docker
 
 # if docker service start to fail, then firewall issue
-[centos:~ ] # firewall-cmd --zone=trusted --change-interface=docker0 --permanent 
+[centos:~ ] # firewall-cmd --zone=trusted --change-interface=docker0 --permanent
 [centos:~ ] # firewall-cmd --zone=trusted --add-masquerade --permanent
 [centos:~ ] # firewall-cmd --zone=docker --remove-interface=docker0
 ```

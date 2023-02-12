@@ -1,6 +1,6 @@
 # VMWare Tools
 
-```
+```bash
 # require gcc
 debian8:~ # apt-get install gcc
 
@@ -13,6 +13,7 @@ debian8:~ # /tmp/vmware-tools-distrib/vmware-install.pl
 debian8:~ # vmware-hgfsclient
 ```
 
+---
 
 # dpkg
 
@@ -27,12 +28,13 @@ rpm -qlp <pkg>.rpm     dpkg -c <pkg>.deb
 rpm -qiR <pkg>         dpkg -s <pkg>, dpkg -p <pkg>
 ```
 
+---
 
 # apt
 
 ## config
 
-```
+```bash
 debian8:~ # cat /etc/apt/sources.list
 # deb cdrom:[Debian GNU/Linux 8.7.1 _Jessie_ - Official amd64 DVD Binary-1 20170116-11:01]/ jessie contrib main
 deb http://ftp.debian.org/debian/ jessie-updates main contrib
@@ -50,7 +52,7 @@ deb file:///media/dvd1 jessie contrib main
 
 ## apt-get
 
-```
+```bash
 debian8:~ # apt-get update
 debian8:~ # apt-get install <pkg>
 debian8:~ # apt-get remove <pkg>
@@ -65,10 +67,9 @@ debina8:~ # apt-get clean
 debina8:~ # apt-get autoclean
 ```
 
-
 ## apt-cache
 
-```
+```bash
 # search package
 debian8:~ # apt-cache search <pkg>
 debian8:~ # apt-cache pkgnames <pkg>
@@ -85,7 +86,7 @@ debina8:~ # apt-cache dumpavail
 
 ## apt
 
-```
+```bash
 debian8:~ # apt update
 debian8:~ # apt install <pkg>
 debian8:~ # apt remove <pkg>
@@ -94,20 +95,20 @@ debian8:~ # apt install <pkg1> <pkg2>-  # 安裝 <pkg1>, 移除 <pkg2>
 debian8:~ # apt remove <pkg1> <pkg2>    # 移除 <pkg1>, 安裝 <pkg2>
 ```
 
-
 ## apt-key
 
-```
+```bash
 debian8:~ # apt-key list
 debian8:~ # apt-key finger
 debian8:~ # apt-key add <file>
 debian8:~ # apt-key del <keyid>
 ```
 
+---
 
 # aptitude
 
-```
+```bash
 debian8:~ # aptitude install <pkg>
 debian8:~ # aptitude remove <pkg>
 debian8:~ # aptitude purge <pkg>
@@ -116,26 +117,27 @@ debian8:~ # aptitude show <pkg>
 debian8:~ # aptitude update
 debian8:~ # aptitude upgrade
 debian8:~ # aptitude dist-upgrade
-debian8:~ # aptitude 
+debian8:~ # aptitude
 ```
 
+---
 
 # tasksel
 
-```
+```bash
 debian8:~ # tasksel --list-tasks
 debian8:~ # tasksel install desktop
 ```
 
-
+---
 
 # dpkg-reconfigure
 
-```
+```bash
 debian8:~ # dpkg-query -l
 
 debian8:~ # dpkg-reconfigure <pkg>
-debian8:~ # dpkg-reconfigure locales  # /etc/default/ 
+debian8:~ # dpkg-reconfigure locales  # /etc/default/
 debian8:~ # dpkg-reconfigure tzdata
 
 debian8:~ # debconf-show <pkg>
