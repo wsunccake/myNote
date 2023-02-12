@@ -1,91 +1,12 @@
-# gradle 7.x
+# application - groovy
 
-## install
-
-```bash
-linux:~ # curl -OL https://services.gradle.org/distributions/gradle-7.5.1-all.zip
-linux:~ # unzip -d /usr/local gradle-7.5.1-all.zip
-linux:~ # ln -s /usr/local/gradle-7.5.1/bin/gradle /usr/local/bin/.
-
-linux:~ $ gradle -h
-linux:~ $ gradle -v
-linux:~ $ gradle <task>
-```
-
-
----
-
-## groovy script on gradle
+## init
 
 ```bash
 linux:~ $ mkdir demo
 linux:~ $ cd demo
-linux:~/demo $ gradle init
 
-Select type of project to generate:
-  1: basic
-  2: application
-  3: library
-  4: Gradle plugin
-Enter selection (default: basic) [1..4] 1
-
-Select build script DSL:
-  1: Groovy
-  2: Kotlin
-Enter selection (default: Groovy) [1..2] 1
-
-Generate build using new APIs and behavior (some features may change in the next minor release)? (default: no) [yes, no]
-Project name (default: demo):
-
-> Task :init
-Get more help with your project: Learn more about Gradle by exploring our samples at https://docs.gradle.org/7.5.1/samples
-
-BUILD SUCCESSFUL in 10s
-2 actionable tasks: 2 executed
-
-linux:~/demo $ tree
-.
-├── build.gradle
-├── gradle
-│   └── wrapper
-│       ├── gradle-wrapper.jar
-│       └── gradle-wrapper.properties
-├── gradlew
-├── gradlew.bat
-└── settings.gradle
-
-2 directories, 6 files
-
-linux:~/demo $ mkdir -p src/main/groovy
-linux:~/demo $ echo 'println("Hi Groovy")' > src/main/groovy/hi.groovy
-linux:~/demo $ cat << EOF > build.gradle
-apply plugin: 'groovy'
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.5'
-}
-
-task runScript (dependsOn: 'classes', type: JavaExec) {
-    main = 'hi'
-    classpath = sourceSets.main.runtimeClasspath
-}
-EOF
-
-linux:~/demo $ gradle run
-```
-
-
----
-
-## groovy application on gradle
-
-```bash
-linux:~ $ mkdir demo
-linux:~ $ cd demo
+# init
 linux:~/demo $ gradle init
 
 Select type of project to generate:
@@ -120,7 +41,13 @@ Source package (default: demo):
 
 > Task :init
 Get more help with your project: https://docs.gradle.org/7.5.1/samples/sample_building_groovy_applications.html
+```
 
+---
+
+## folder
+
+```bash
 linux:~/demo $ tree
 .
 ├── app
@@ -145,20 +72,80 @@ linux:~/demo $ tree
 └── settings.gradle
 
 12 directories, 8 files
+```
 
-linux:~/demo $ gradle tasks
-linux:~/demo $ gradle help --task init
-linux:~/demo $ gradle init [--dsl groovy] [--type groovy-application]
+```groovy
+// setting.gradle
+rootProject.name = 'demo'
+include('app')
+```
 
+```groovy
+// app/build.gradle
+plugins {
+    id 'groovy'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.codehaus.groovy:groovy-all:3.0.10'
+    implementation 'com.google.guava:guava:31.0.1-jre'
+
+    testImplementation 'org.spockframework:spock-core:2.1-groovy-3.0'
+    testImplementation 'junit:junit:4.13.2'
+}
+
+application {
+    mainClass = 'demo.App'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+```
+
+```groovy
+// app/src/main/groovy/demo/App.groovy
+package demo
+
+class App {
+    String getGreeting() {
+        return 'Hello World!'
+    }
+
+    static void main(String[] args) {
+        println new App().greeting
+    }
+}
+```
+
+---
+
+## task
+
+```bash
+# run
 linux:~/demo $ gradle run
+
+# test
 linux:~/demo $ gradle test
+
+# build
 linux:~/demo $ gradle build
 linux:~/demo $ ls app/build
 
+# jar
 linux:~/demo $ gradle jar
 linux:~/demo $ ls app/build/libs
+
+# zip
 linux:~/demo $ gradle distZip
 linux:~/demo $ ls app/build/distributions
 
+# clean
 linux:~/demo $ gradle clean
 ```

@@ -5,6 +5,7 @@
 ```bash
 [linux:~ ] # docker pull postgres
 [linux:~ ] # docker run -d \
+    -e POSTGRES_USER=<username> \
     -e POSTGRES_PASSWORD=<password> \
     -p 5432:5432 \
     [-e PGDATA=/var/lib/postgresql/data/pgdata] \

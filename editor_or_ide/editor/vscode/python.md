@@ -13,6 +13,7 @@
   "python.linting.mypyEnabled": true,
   // formater option: 'autopep8', 'black', 'yapf'
   "python.formatting.provider": "autopep8",
+  "python.envFile": "${workspaceFolder}/.env",
   "[python]": {
     "editor.formatOnType": true,
     "editor.formatOnSave": true,
@@ -61,6 +62,14 @@
     }
   ]
 }
+```
+
+---
+
+## .env
+
+```json
+PYTHONPATH=$HOME/$WORKSPACE/lib:$PYTHONPATH
 ```
 
 ---

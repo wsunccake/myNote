@@ -34,14 +34,14 @@ linux:~ $ sudo pip install [--install-option="--prefix=/path"] pkg[==ver]* [--us
 
 linux:~ $ cat requirement.txt # 將欲安裝 module 寫在檔案裡
 Django==1.6
-selenium==2.39 
+selenium==2.39
 linux:~ $ sudo pip install -r requirement.txt # 安裝檔案內的 module
 
 # uninstall module
 linux:~ $ pip uninstall pkg # 移除 module
 
 #upgrade module
-linux:~ $ linux:~ $ pip install -U pkg # 升級 module
+linux:~ $ pip install -U pkg # 升級 module
 windows:~ $ pip -m pip install -U pkg
 
 # list & show
@@ -85,12 +85,12 @@ linux:~ # pip install -r /root/requirements.txt
 linux:~ # cat $HOME/.pypirc
 [distutils]
 index-servers =
-    dev 
+    dev
 
 [dev]
 repository: http://192.168.0.1:3141/root/public/
-username: user 
-password: password 
+username: user
+password: password
 
 
 linux:~ # python setup.py register -r dev

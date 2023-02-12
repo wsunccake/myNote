@@ -18,7 +18,6 @@ pipeline {
 
 ![pipeline section](./pic/pipeline_section.png)
 
-
 ---
 
 ## script
@@ -38,7 +37,6 @@ pipeline {
     }
 }
 ```
-
 
 ---
 
@@ -60,7 +58,6 @@ pipeline {
 }
 ```
 
-
 `upstream`
 
 ```groovy
@@ -78,7 +75,6 @@ pipeline {
 }
 ```
 
-
 ---
 
 ## input
@@ -93,14 +89,13 @@ pipeline {
                 parameters {
                     string(name: 'version', defaultValue: '1.0.0.0', description: '')
                 }
- 
+
             }
             steps { echo "Current Version: ${version}" }
         }
     }
 }
 ```
-
 
 ---
 
@@ -118,7 +113,6 @@ pipeline {
 }
 ```
 
-
 ---
 
 ## param
@@ -134,7 +128,6 @@ pipeline {
     }
 }
 ```
-
 
 ---
 
@@ -157,7 +150,6 @@ pipeline {
     }
 }
 ```
-
 
 ---
 
@@ -202,7 +194,6 @@ pipeline {
 }
 ```
 
-
 ---
 
 ## parallel
@@ -214,11 +205,11 @@ pipeline {
         stage('task1') {
             steps { echo 'task1' }
         }
-                
+
         stage('task2') {
             steps { echo 'task2' }
         }
-        
+
         stage('parallel') {
             parallel {
                 stage('task3') {
@@ -235,7 +226,6 @@ pipeline {
 }
 ```
 
-
 ---
 
 ## when
@@ -250,7 +240,7 @@ pipeline {
         stage('Sync') {
             steps { echo 'SYNC CODE' }
         }
-        
+
         stage('Build') {
             when {
                 anyOf {
@@ -261,12 +251,12 @@ pipeline {
             }
             steps { echo 'BUILD PROJECT' }
         }
-        
+
         stage('Deploy') {
             when { expression { params.stage ==~ /DEPLOY|TEST/} }
             steps { echo 'DEPLOY PACKAGE' }
         }
-        
+
         stage('Test') {
             when { expression { params.stage ==~ /TEST/} }
             steps { echo 'TEST CASE' }
@@ -274,7 +264,6 @@ pipeline {
     }
 }
 ```
-
 
 ---
 
@@ -310,7 +299,6 @@ pipeline {
     }
 }
 ```
-
 
 ---
 
@@ -379,7 +367,6 @@ pipeline {
 }
 ```
 
-
 ---
 
 ## example
@@ -408,20 +395,20 @@ echo "${version}"
                 build job: 'any_job'
             }
         }
-        
+
         stage('S2') {
             steps {
                 build job: 'always_false', propagate: false
                 // build job: 'always_false'
             }
         }
-        
+
         stage('S3') {
             steps {
                 catchError {
                     build job: 'always_false'
                 }
-                echo "Stage ${currentBuild.result}, but we continue"  
+                echo "Stage ${currentBuild.result}, but we continue"
             }
         }
 
@@ -435,7 +422,6 @@ echo "${version}"
 }
 ```
 
-
 ---
 
 ## lock
@@ -447,23 +433,22 @@ pipeline {
     options {
         lock (resource: 'lockResource1 lockResource2', quantity: 1)
     }
-    parameters { 
-        string(name: 'VER', defaultValue: '1.0', description: '') 
+    parameters {
+        string(name: 'VER', defaultValue: '1.0', description: '')
     }
     stages {
         stage('Run') {
-            steps { 
+            steps {
                 script {
                     currentBuild.displayName = "${currentBuild.number} - ${VER}"
                 }
-                echo "$VER" 
+                echo "$VER"
                 sleep 10
             }
         }
     }
 }
 ```
-
 
 ```groovy
 pipeline {
@@ -472,16 +457,16 @@ pipeline {
     options {
         lock (label: 'lockLabel')
     }
-    parameters { 
-        string(name: 'VER', defaultValue: '1.0', description: '') 
+    parameters {
+        string(name: 'VER', defaultValue: '1.0', description: '')
     }
     stages {
         stage('Run') {
-            steps { 
+            steps {
                 script {
                     currentBuild.displayName = "${currentBuild.number} - ${VER}"
                 }
-                echo "$VER" 
+                echo "$VER"
                 sleep 10
             }
         }
@@ -494,20 +479,20 @@ pipeline {
     agent any
     // lock resource by label
     options {
-        
+
     }
-    parameters { 
-        string(name: 'VER', defaultValue: '1.0', description: '') 
+    parameters {
+        string(name: 'VER', defaultValue: '1.0', description: '')
     }
     stages {
         stage('Run') {
-            steps { 
+            steps {
                 script {
                     currentBuild.displayName = "${currentBuild.number} - ${VER}"
                 }
                 // lock resource
                 lock (resource: 'lockResource') {
-                    echo "$VER" 
+                    echo "$VER"
                     sleep 10
                 }
             }
@@ -515,7 +500,6 @@ pipeline {
     }
 }
 ```
-
 
 ---
 
@@ -526,8 +510,8 @@ pipeline {
 ```groovy
 pipeline {
     agent any
-    parameters { 
-        string(name: 'MSG', defaultValue: 'hello', description: '') 
+    parameters {
+        string(name: 'MSG', defaultValue: 'hello', description: '')
         string(name: 'NAME', defaultValue: 'world', description: '')
     }
     triggers {
@@ -540,7 +524,7 @@ H/2 * * * * %MSG=nice;NAME=pipeline
     }
     stages {
         stage('Run') {
-            steps { 
+            steps {
                 script {
                     currentBuild.displayName = "${currentBuild.number} - ${MSG} ${NAME}"
                 }
@@ -550,6 +534,110 @@ H/2 * * * * %MSG=nice;NAME=pipeline
 }
 ```
 
+---
+
+## git
+
+```groovy
+pipeline {
+    agent {
+        node { label 'node' }
+    }
+    options {
+        lock (resource: 'spTestjob')
+    }
+    parameters {
+        string(name: 'TAG',                  defaultValue: 'master--latest', description: 'Service image version')
+    }
+
+    stages {
+        stage('sync code') {
+            steps {
+                git branch: 'master',
+                    credentialsId: 'abcd1234-abcd-1234-ab12-abcdef123456',
+                    url: 'ssh://git@myrepo.git'
+                script {
+                    currentBuild.displayName = "#${currentBuild.number} - ${TAG}"
+                }
+
+            }
+        }
+
+        stage('run') {
+            steps {
+                sh '''#!/bin/bash
+pwd
+'''
+            }
+        }
+    }
+
+}
+```
+
+```groovy
+pipeline {
+    agent {
+        node { label 'node' }
+    }
+    options {
+        lock (resource: 'spTestjob')
+    }
+    parameters {
+        string(name: 'TAG',                     defaultValue: 'master--latest', description: 'Service image version')
+    }
+
+    stages {
+        stage('sync code') {
+            steps {
+// https://plugins.jenkins.io/git/
+// https://www.jenkins.io/doc/pipeline/steps/git/
+// https://www.jenkins.io/doc/pipeline/steps/params/gitscm/
+                checkout([$class: 'GitSCM',
+                    branches: [[name: "master"]],
+                    doGenerateSubmoduleConfigurations: false,
+                    extensions: [[$class: 'CloneOption', timeout: 30]],
+                    gitTool: 'Default',
+                    submoduleCfg: [],
+                    userRemoteConfigs: [[
+                        credentialsId: 'abcd1234-abcd-1234-ab12-abcdef123456',
+                        url: 'ssh://git@myrepo.git'
+                    ]]
+                ])
+                script {
+                    currentBuild.displayName = "#${currentBuild.number} - ${TAG}"
+                }
+                script {
+                    def cmds =["ls", "pwd", "whoami", "hostname"]
+                    cmds.each {
+                    println it.execute().text
+                    }
+                }
+                script {
+                    String cmd1 = 'println InetAddress.localHost.hostAddress'
+                    String cmd2 = 'println InetAddress.localHost.canonicalHostName'
+                    String cmd3 = 'def proc = "uname -a".execute(); proc.waitFor(); println proc.in.text'
+                    def cmds = [cmd1, cmd2, cmd3]
+
+                    hudson.model.Hudson.instance.slaves.each { slave ->
+                        println hudson.util.RemotingDiagnostics.executeGroovy(print_ip, slave.getChannel());
+                        println hudson.util.RemotingDiagnostics.executeGroovy(print_hostname, slave.getChannel());
+                        println hudson.util.RemotingDiagnostics.executeGroovy(uname, slave.getChannel());
+                    }
+                }
+            }
+
+        stage('run') {
+            steps {
+                sh '''#!/bin/bash
+pwd
+'''
+            }
+        }
+    }
+
+}
+```
 
 ---
 

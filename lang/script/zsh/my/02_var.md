@@ -16,7 +16,6 @@ echo ${FILE_PATH#*/}     # usr/lib/python/site-package/xxx-1.0/yyy.zz
 echo ${FILE_PATH##*/}    # yyy.zz
 ```
 
-
 ---
 
 ## define var operation
@@ -49,29 +48,28 @@ echo "\${VAR:?value}: ${VAR:?value}"    # ${VAR:?value}: Hello Zsh
 echo "VAR: ${VAR}"                      # VAR: Hello Zsh
 ```
 
-
 ---
 
 ## undefine var operation
 
 ```zsh
 unset VAR
-echo "undefine VAR: ${VAR}"             # undefine VAR: 
+echo "undefine VAR: ${VAR}"             # undefine VAR:
 echo "\${VAR:=value}: ${VAR:=value}"    # ${VAR:=value}: value
 echo "VAR: ${VAR}"                      # VAR: value
 ```
 
 ```zsh
 unset VAR
-echo "undefine VAR: ${VAR}"             # undefine VAR: 
+echo "undefine VAR: ${VAR}"             # undefine VAR:
 echo "\${VAR:-value}: ${VAR:-value}"    # ${VAR:-value}: value
 echo "VAR: ${VAR}"                      # VAR:
 ```
 
 ```zsh
 unset VAR
-echo "undefine VAR: ${VAR}"             # undefine VAR: 
-echo "\${VAR:+value}: ${VAR:+value}"    # ${VAR:+value}: 
+echo "undefine VAR: ${VAR}"             # undefine VAR:
+echo "\${VAR:+value}: ${VAR:+value}"    # ${VAR:+value}:
 echo "VAR: ${VAR}"                      # VAR:
 ```
 
@@ -82,7 +80,6 @@ echo "undefine VAR: ${VAR}"
 echo "VAR: ${VAR}"
 echo
 ```
-
 
 ---
 
@@ -133,7 +130,6 @@ show_array() {
 show_array ARR
 ```
 
-
 ---
 
 ## associative array
@@ -167,4 +163,18 @@ show_assoc() {
   done
 }
 show_assoc ASSOC
+```
+
+## compare
+
+```zsh
+# number
+num=123
+((num == 123)) && echo good
+((num == 1 || num == 2)) && echo good
+
+# string
+str=abc
+[[ $str == abc ]] && echo good
+[[ $str == "" || $str == 123 ]] && echo good
 ```

@@ -1,26 +1,36 @@
 # React
 
-
 ## Hello
 
 ```html
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8" />
-    <title>Hello React!</title>
-    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
-</head>
-<body>
-<div id="root"></div>
-    <script>
-        ReactDOM.render(React.createElement("h1", null, "Hello React"), document.getElementById('root'));
-    </script>
-</body>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>React App</title>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+  <script type="text/babel" src="index.js"></script>
 </html>
 ```
 
+```js
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<h1>hello</h1>);
+```
 
 ---
 
@@ -59,7 +69,6 @@ var el = React.createElement("ul", null, items.map( i =>
 ));
 ```
 
-
 ---
 
 ## React Component
@@ -69,14 +78,17 @@ var el = React.createElement("ul", null, items.map( i =>
 在 15 之前才有支援, 16 之後不支援
 
 ```javascript
-const cl = React.createClass({displayName: "intg",
+const cl = React.createClass({
+  displayName: "intg",
   render() {
-    return React.createElement("ul", null,
+    return React.createElement(
+      "ul",
+      null,
       React.createElement("li", null, "React"),
       React.createElement("li", null, "AngularJS"),
-      React.createElement("li", null, "Vue.JS"),
-    )
-  }
+      React.createElement("li", null, "Vue.JS")
+    );
+  },
 });
 
 ReactDOM.render(
@@ -87,9 +99,7 @@ ReactDOM.render(
 
 `createComponent`
 
-
 `ES6 class`
-
 
 ---
 

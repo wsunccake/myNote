@@ -295,6 +295,9 @@ centos:~/project $ git push
 ## Tag
 
 ```bash
+# list tag
+linux:~/project # git tag [-l]
+
 # add tag
 linux:~/project # git tag <tag_name>
 
@@ -307,6 +310,9 @@ linux:~/project # git push origin --tags        # all tag
 
 # remove tag to remote
 linux:~/project # git push -d origin <tag_name>
+
+# checkout tag
+linux:~/project # git checkout <tag_name>
 ```
 
 ---
@@ -365,4 +371,17 @@ linux:~/repo $ git submodule status
 linux:~/repo $ git add sub
 linux:~/repo $ git commit "update sub_repo"
 linux:~/repo $ git push
+```
+
+---
+
+## othert
+
+```bash
+# certificate issue
+linux:~/repo $ git clone <git url>
+fatal: unable to access '<git url>': Peer's certificate issuer has been marked as not trusted by the user.
+
+# disable http.sslVerify
+linux:~/repo $ git config --global http.sslVerify false
 ```
