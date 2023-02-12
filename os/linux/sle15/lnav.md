@@ -8,7 +8,6 @@ sle:~ # zypper refresh
 sle:~ # zypper install lnav
 ```
 
-
 ---
 
 ## usage

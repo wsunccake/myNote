@@ -10,7 +10,6 @@
 [ubuntu:~ ] # apt-get install helm
 ```
 
-
 ---
 
 ## hello
@@ -48,7 +47,6 @@ EOF
 [ubuntu:~ ] # kubectl describe cm demo-configmap
 ```
 
-
 ---
 
 ## deploy to chart
@@ -75,7 +73,6 @@ spec:
         stdin: true
         tty: true
 ```
-
 
 ### from tempalte
 
@@ -231,7 +228,6 @@ spec:
 #              port: http
 ```
 
-
 ### simple
 
 ```bash
@@ -243,7 +239,7 @@ chart/
 │   └── _helpers.tpl
 └── values.yaml
 
-[ubuntu:~ ] # grep -Ev '^$|^\s+?#' chart/Chart.yaml 
+[ubuntu:~ ] # grep -Ev '^$|^\s+?#' chart/Chart.yaml
 apiVersion: v2
 name: chart
 description: A Helm chart for Kubernetes
@@ -251,7 +247,7 @@ type: application
 version: 0.1.0
 appVersion: "0.1.0"
 
-[ubuntu:~ ] # grep -Ev '^$|^\s+?#' chart/values.yaml 
+[ubuntu:~ ] # grep -Ev '^$|^\s+?#' chart/values.yaml
 alpine:
   replicas: 1
 image:
@@ -259,7 +255,7 @@ image:
     repository: alpine
     tag: "3.13"
 
-[ubuntu:~ ] # grep -Ev '^$|^\s+?#' chart/templates/deployment.yaml 
+[ubuntu:~ ] # grep -Ev '^$|^\s+?#' chart/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:

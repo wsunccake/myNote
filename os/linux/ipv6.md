@@ -1,6 +1,5 @@
 # IPv6
 
-
 ## Status
 
 ```
@@ -8,7 +7,6 @@
   RA                  DHCPv6                   Client
 eth0 ipv6 2001::1/64  eth0 ipv6 2001::2/64     eth0 ipv6
 ```
-
 
 ## port
 
@@ -31,7 +29,6 @@ ra:~ # yum install radvd
 ```bash
 dhcp:~ # yum install dhcp
 ```
-
 
 ## Only RA
 
@@ -79,7 +76,6 @@ client:~ # ping6 2001::1            # check traffic
 
 prefix mask must be /64, prefix:host_mac
 
-
 ---
 
 ## Stateless DHCPv6
@@ -120,7 +116,6 @@ option dhcp6.name-servers 2001::a;
 dhcp:~ # systemctl start dhcpd6.service
 dhcp:~ # systemctl enable dhcpd6.service
 ```
-
 
 ## Stateful DHCPv6
 
@@ -167,6 +162,4 @@ dhcp:~ # systemctl start dhcpd6.service
 dhcp:~ # systemctl enable dhcpd6.service
 ```
 
-
 ---
-

@@ -34,7 +34,6 @@ CMD ["python", "app.py"]
 [ubuntu:~ ] $ curl localhost:5000
 ```
 
-
 ### docker-compose
 
 ```bash
@@ -54,7 +53,6 @@ services:
 [ubuntu:~ ] $ curl localhost:5000
 ```
 
-
 ### kubectl - node
 
 ```bash
@@ -67,7 +65,6 @@ services:
 [ubuntu:~ ] $ kubectl label node 192.168.1.1 role=prod
 [ubuntu:~ ] $ kubectl label node 192.168.1.1 role-
 ```
-
 
 ### kubectl - pod
 
@@ -92,8 +89,17 @@ EOF
 [ubuntu:~ ] $ kubectl logs -f hello-pod
 
 [ubuntu:~ ] $ kubectl wait --for=condition=Ready --timeout=60s pod <pod>
-```
 
+# environment variable for container
+[ubuntu:~ ] $ kubectl exec -it <pod>  [-c <container>] -- env
+HOSTNAME=<pod-xxxxxx>
+SHLVL=1
+HOME=/root
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+KUBERNETES_SERVICE_PORT_HTTPS=443
+KUBERNETES_SERVICE_HOST=x.x.x.x
+PWD=/
+```
 
 ### kubectl - depoly
 
@@ -123,7 +129,6 @@ EOF
 
 [ubuntu:~ ] $ kubectl exec -it deploy/hello-deploy -- sh
 ```
-
 
 ### kubectl - service
 
@@ -166,8 +171,17 @@ spec:
 EOF
 
 [ubuntu:~ ] $ kubectl exec -it svc/hello-service -- sh
-```
 
+# environment variable for cluster / service
+[ubuntu:~ ] $ kubectl exec -it <pod>  [-c <container>] -- env
+<svc>_SERVICE_HOST=10.0.0.11
+<svc>_SERVICE_PORT=6379
+<svc>_PORT=tcp://10.0.0.11:6379
+<svc>_PORT_<number>_protocol=tcp://10.0.0.11:6379
+<svc>_PORT_<number>_protocol_PROTO=tcp
+<svc>_PORT_<number>_protocol_PORT=6379
+<svc>_PORT_<number>_protocol_ADDR=10.0.0.11
+```
 
 ---
 
@@ -182,7 +196,6 @@ pod fqdn: <pod ip>.<namespace>.pod.cluster.local
 example:
 
 <pod ip>: 192.168.30.11 -> 192-168-30-11
-
 
 ```bash
 # create service and deploy
@@ -238,7 +251,6 @@ EOF
 [ubuntu:~ ] $ kubectl -n kube-system edit cm coredns
 ```
 
-
 ---
 
 ## kube-proxy
@@ -250,7 +262,6 @@ EOF
 [ubuntu:~ ] $ kubectl -n kube-system get cm kube-proxy -o json | jq '.data."config.conf"' | sed 's/\\n/\n/g' | grep mode
 [ubuntu:~ ] $ kubectl -n kube-system get cm kube-proxy -o yaml | grep mode
 ```
-
 
 ---
 
@@ -277,8 +288,13 @@ EOF
 [ubuntu:~ ] $ kubectl config set-context kubernetes-admin@cluster.local --namespace demo
 [ubuntu:~ ] $ kubectl config set-context kubernetes-admin@cluster.local --namespace ""
 
+# create cluster, context, credential / user
+[ubuntu:~ ] $ kubectl config set-cluster <cluster> --server=https://<k8s host>:<k8s port> --certificate-authority <ca crt file>
+[ubuntu:~ ] $ kubectl config set-context <context> --cluster=<cluster>
+[ubuntu:~ ] $ kubectl config set-credentials <user> --token <token>
+[ubuntu:~ ] $ kubectl config set-context <context> --user=<user>
+[ubuntu:~ ] $ kubectl config use-context <context>
 ```
-
 
 ---
 
@@ -360,7 +376,6 @@ EOF
 [ubuntu:~ ] $ kubectl exec -it dapi-envars-fieldref [-c <container>] -- printenv
 ```
 
-
 ---
 
 ## alpine
@@ -390,7 +405,6 @@ EOF
 
 [ubuntu:~ ] $ kubectl exec -it alpine-7cf564f7f5-jh48q [-c <container>] -- sh
 ```
-
 
 ---
 
@@ -472,7 +486,6 @@ EOF
 ```
 
 node must install nfs-common to support nfs
-
 
 ---
 
@@ -600,7 +613,6 @@ EOF
 [ubuntu:~ ] $ kubectl logs pi-xg6kh
 ```
 
-
 ---
 
 ## namespce
@@ -641,7 +653,6 @@ EOF
 [ubuntu:~ ] $ kubectl get namespace
 [ubuntu:~ ] $ kubectl -n demo-ns get pods
 ```
-
 
 ---
 
@@ -684,7 +695,6 @@ EOF
 [ubuntu:~ ] $ kubectl describe pod alpine
 [ubuntu:~ ] $ kubectl exec -it alpine -- env
 ```
-
 
 ---
 

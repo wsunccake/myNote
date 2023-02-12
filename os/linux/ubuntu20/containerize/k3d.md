@@ -2,8 +2,7 @@
 
 ## prepare
 
-[docker-ce][./docker-ce.md]
-
+[docker-ce](./docker-ce.md)
 
 ---
 
@@ -18,7 +17,6 @@
 [ubunut:~ ] # curl -sLf https://raw.githubusercontent.com/rancher/k3d/main/install.sh | TAG=v4.4.7 bash
 ```
 
-
 ---
 
 ## kubectl
@@ -27,7 +25,6 @@
 [ubunut:~ ] # curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 [ubunut:~ ] # install -m 755 kubectl /usr/local/bin/.
 ```
-
 
 ---
 
@@ -59,7 +56,6 @@
 [ubunut:~ ] # kubectl expose deployment hello-world --type=LoadBalancer --port=8080
 [ubunut:~ ] # kubectl get svc
 ```
-
 
 ---
 

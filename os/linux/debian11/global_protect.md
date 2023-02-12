@@ -7,7 +7,6 @@ debian:~ # tar zxf PanGPLinux-6.0.1-c6.tgz
 debian:~ # dpkg -i GlobalProtect_deb-6.0.1.1-6.deb
 ```
 
-
 ---
 
 ## usage
@@ -31,9 +30,7 @@ debian:~ $ globalprotect
 >> quit
 ```
 
-
 ---
-
 
 ## ui
 
@@ -54,7 +51,6 @@ debian:~ $ ip addr show dev gpd0
 debian:~ $ ip route
 ```
 
-
 ---
 
 ## question
@@ -63,10 +59,9 @@ cannot connect to local gpd service.
 
 ```bash
 debian:~ # systemctl restart gpd.service
-debian:~ #systemctl status gpd.service
-debian:~ #ps aux | grep Pan
+debian:~ # systemctl status gpd.service
+debian:~ # ps aux | grep Pan
 ```
-
 
 error: default browser is not enabled
 

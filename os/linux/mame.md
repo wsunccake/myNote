@@ -1,12 +1,10 @@
 # mame
 
-
 ## help
 
 ```bash
 linux:~ # mame -help
 ```
-
 
 ---
 
@@ -22,7 +20,6 @@ rompath                   "roms;$HOME/ROMs"
 cheatpath                 "cheat;$HOME/cheat"
 ...
 ```
-
 
 ---
 

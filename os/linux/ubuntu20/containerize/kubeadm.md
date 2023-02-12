@@ -24,7 +24,6 @@ master      worker
 ...
 ```
 
-
 ### swap
 
 ```bash
@@ -34,7 +33,6 @@ master      worker
 [ubuntu:~ ] # swapon
 ```
 
-
 ### firewall
 
 ```bash
@@ -42,7 +40,6 @@ master      worker
 [ubuntu:~ ] # ufw disable
 [ubuntu:~ ] # systemctl disable ufw
 ```
-
 
 ### bridge traffic
 
@@ -73,7 +70,6 @@ EOF
 [ubuntu:~ ] # sysctl --values net.ipv4.ip_forward
 ```
 
-
 ### container runtime interface
 
 ```
@@ -85,19 +81,15 @@ CRI-O	          /var/run/crio/crio.sock
 
 cri 選一種安裝
 
-
 [docker](./docker-ce.md)
 
 kubernetes 1.23+ 後就不支援 docker
 
-
 [cri-o](./crio.md)
 
-* cri-o version 必須配合 kubeadm 版本
-
+- cri-o version 必須配合 kubeadm 版本
 
 [containerd]
-
 
 ### kubeadm kubelet kubectl
 
@@ -115,7 +107,6 @@ kubernetes 1.23+ 後就不支援 docker
 [ubuntu:~ ] # kubeadm config print init-defaults
 [ubuntu:~ ] # kubeadm config print join-defaults
 ```
-
 
 ---
 
@@ -155,13 +146,11 @@ kubectl create -f https://projectcalico.docs.tigera.io/manifests/tigera-operator
 [master:~ ] # openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
 ```
 
-
 ### worker
 
 ```bash
 [woker:~ ] # kubeadm join <master ip>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<ca-cert-hash>
 ```
-
 
 ---
 
@@ -187,7 +176,6 @@ kubectl create -f https://projectcalico.docs.tigera.io/manifests/tigera-operator
 [master:~ ] # kubectl delete service/hello-node
 [master:~ ] # kubectl delete deployment.apps/hello-node
 ```
-
 
 ---
 

@@ -1,6 +1,5 @@
 # mosquitto
 
-
 ## install
 
 ```bash
@@ -17,7 +16,6 @@
 ```bash
 [centos:~ ] # mosquitto_sub -h <mosquitto_ip> -t test
 ```
-
 
 ---
 

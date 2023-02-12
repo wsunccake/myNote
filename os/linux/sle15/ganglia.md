@@ -1,12 +1,10 @@
 # Ganglia
 
-
 ```
 gweb  --- gmetad ---  gmond1
                       gmond2
                       ...
 ```
-
 
 ## gmetad
 
@@ -28,7 +26,6 @@ data_source "my cluster" localhost <gmond_ip> ...
 # command
 gmetad:~ # gstat -a
 ```
-
 
 ---
 
@@ -55,7 +52,6 @@ $conf['ganglia_ip'] = "127.0.0.1";
 $conf['ganglia_port'] = 8652;
 
 ```
-
 
 ---
 
@@ -91,7 +87,7 @@ udp_send_channel {
   host = <gmetad_ip>
   port = 8649
   ttl = 1
-} 
+}
 
 udp_recv_channel {
 #  mcast_join = 239.2.11.71

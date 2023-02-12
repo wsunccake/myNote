@@ -14,7 +14,6 @@ install [kvm](./kvm.md)
 
 install [docker-ce](./docker.md)
 
-
 ### kubectl
 
 ```bash
@@ -32,7 +31,6 @@ install [docker-ce](./docker.md)
 [ubuntu:~ ] $ echo 'alias k=kubectl' >>~/.bashrc
 [ubuntu:~ ] $ echo 'complete -F __start_kubectl k' >>~/.bashrc
 ```
-
 
 ### docker-machine
 
@@ -53,7 +51,6 @@ install [docker-ce](./docker.md)
 [ubuntu:~ ] # mv minikube-linux-amd64 /usr/local/bin/minikube
 ```
 
-
 ---
 
 ## setup
@@ -73,7 +70,6 @@ install [docker-ce](./docker.md)
 # export minikube env to docker
 [ubuntu:~ ] $ eval $(minikube -p minikube docker-env)
 ```
-
 
 ---
 
@@ -110,7 +106,6 @@ install [docker-ce](./docker.md)
 [ubuntu:~ ] $ minikube delete
 ```
 
-
 ---
 
 ## addons
@@ -121,7 +116,6 @@ install [docker-ce](./docker.md)
 [ubuntu:~ ] $ minikube addons enable dashboard
 [ubuntu:~ ] $ minikube dashboard [--url]
 ```
-
 
 ### ingress
 
@@ -145,5 +139,12 @@ spec:
           servicePort: 80
 EOF
 [ubuntu:~ ] $ kubectl get ing
+```
 
+### dns
+
+```bash
+[ubuntu:~ ] $ minikube addons enable ingress
+[ubuntu:~ ] $ minikube addons enable ingress-dns
+[ubuntu:~ ] $ kubectl edit configmap coredns -n kube-system
 ```

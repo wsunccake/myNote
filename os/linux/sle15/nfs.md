@@ -1,6 +1,5 @@
 # NFS
 
-
 ## Server
 
 `package`
@@ -9,7 +8,6 @@
 nfs:~ # zypper in nfs-kernel-server
 nfs:~ # zypper in yast2-nfs-server
 ```
-
 
 `config`
 
@@ -25,7 +23,6 @@ nfs:~ # vi /etc/export
 
 ro/rw, sync/async, root_squash/no_root_squash, all_squash
 
-
 `daemon`
 
 ```bash
@@ -35,7 +32,6 @@ nfs:~ # systemctl enable nfs-server
 # test
 nfs:~ # showmount -e <nfs_ip>
 ```
-
 
 ---
 
@@ -47,7 +43,6 @@ nfs:~ # showmount -e <nfs_ip>
 fs:~ # zypper in nfs-client
 fs:~ # zypper in yast2-nfs-client
 ```
-
 
 `config`
 

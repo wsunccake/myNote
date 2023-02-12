@@ -8,7 +8,6 @@
 centos:~ # dnf install redis
 ```
 
-
 `method2`
 
 ```bash
@@ -19,7 +18,6 @@ centos:~ # docker run -d [-p 6379:6379] \
     redis
 linux:~ # docker exec -it redis redis-cli
 ```
-
 
 `test`
 
@@ -33,7 +31,6 @@ centos:~ # redis-cli -h 127.0.0.1
 default host: 127.0.0.1
 
 default port: 6379
-
 
 ---
 
@@ -59,7 +56,6 @@ default port: 6379
 127.0.0.1:6379> AUTH <password>
 ```
 
-
 ---
 
 ## keysapce / database
@@ -70,11 +66,9 @@ default port: 6379
 127.0.0.1:6379> SELECT <database>
 ```
 
-
 ---
 
 ## key
-
 
 ```bash
 127.0.0.1:6379> SET <KEY> <VALUE>
@@ -126,7 +120,6 @@ default port: 6379
 127.0.0.1:6379> GET name
 ```
 
-
 ---
 
 ## data
@@ -150,7 +143,7 @@ default port: 6379
 
 127.0.0.1:6379> GETBIT <KEY> <OFFSET>
 127.0.0.1:6379> SETBIT <KEY> <OFFSET> <VALUE>
- 
+
 127.0.0.1:6379> STRLEN <KEY>
 127.0.0.1:6379> SETRANGE <KEY> <OFFSET> <VALUE>
 
@@ -215,7 +208,6 @@ default port: 6379
 127.0.0.1:6379> GET myphone
 ```
 
-
 ### hash
 
 ```bash
@@ -250,7 +242,6 @@ default port: 6379
 127.0.0.1:6379> HSETNX myhash nosql "non-sql"
 127.0.0.1:6379> HSETNX myhash nosql "Cassandra"
 ```
-
 
 ### list
 
@@ -294,6 +285,4 @@ default port: 6379
 127.0.0.1:6379> RPUSHX mylist2 redis
 ```
 
-
 ### set
-

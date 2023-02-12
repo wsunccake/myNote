@@ -1,6 +1,5 @@
 # Munge
 
-
 ## Server
 
 `package`
@@ -32,7 +31,6 @@ server:~ # munge -n
 server:~ # munge -n | unmunge
 server:~ # munge -n | ssh <remote_ip> unmunge
 ```
-
 
 ---
 

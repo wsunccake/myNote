@@ -6,7 +6,6 @@
 linux:~ # lspci | grep -i nvidia
 ```
 
-
 ---
 
 # install cuda
@@ -16,16 +15,13 @@ linux:~ # sh cuda_<version>_linux.run
 linux:~ # nvidia-uninstall
 ```
 
-
 ---
 
 ## diable nouveau
 
-
 ```bash
 linux:~ # lsmod | grep nouveau
 ```
-
 
 ### rhel/centos
 
@@ -36,7 +32,6 @@ options nouveau modeset=0
 
 rhel:~ # dracut --force
 ```
-
 
 ## opensuse
 
@@ -94,7 +89,6 @@ linux:~ $ cuda-install-samples-7.5.sh
 linux:~ $ cat /proc/driver/nvidia/version
 ```
 
-
 ---
 
 ## test
@@ -105,18 +99,18 @@ linux:~ # cat hello.cu
 // It takes the string "Hello ", prints it, then passes it to CUDA with an array
 // of offsets. Then the offsets are added in parallel to produce the string "World!"
 // By Ingemar Ragnemalm 2010
- 
+
 #include <stdio.h>
- 
-const int N = 16; 
-const int blocksize = 16; 
- 
-__global__ 
-void hello(char *a, int *b) 
+
+const int N = 16;
+const int blocksize = 16;
+
+__global__
+void hello(char *a, int *b)
 {
 	a[threadIdx.x] += b[threadIdx.x];
 }
- 
+
 int main()
 {
 	char a[N] = "Hello \0\0\0\0\0\0";
@@ -129,18 +123,18 @@ int main()
 
 	printf("%s", a);
 
-	cudaMalloc( (void**)&ad, csize ); 
-	cudaMalloc( (void**)&bd, isize ); 
-	cudaMemcpy( ad, a, csize, cudaMemcpyHostToDevice ); 
-	cudaMemcpy( bd, b, isize, cudaMemcpyHostToDevice ); 
-	
+	cudaMalloc( (void**)&ad, csize );
+	cudaMalloc( (void**)&bd, isize );
+	cudaMemcpy( ad, a, csize, cudaMemcpyHostToDevice );
+	cudaMemcpy( bd, b, isize, cudaMemcpyHostToDevice );
+
 	dim3 dimBlock( blocksize, 1 );
 	dim3 dimGrid( 1, 1 );
 	hello<<<dimGrid, dimBlock>>>(ad, bd);
-	cudaMemcpy( a, ad, csize, cudaMemcpyDeviceToHost ); 
+	cudaMemcpy( a, ad, csize, cudaMemcpyDeviceToHost );
 	cudaFree( ad );
 	cudaFree( bd );
-	
+
 	printf("%s\n", a);
 	return EXIT_SUCCESS;
 }
@@ -148,7 +142,6 @@ int main()
 linux:~ # nvcc hello.cu -o hello.exe
 linux:~ # ./hello.exe
 ```
-
 
 ---
 
@@ -168,7 +161,6 @@ set compute mode:
 
 3: EXCLUSIVE_PROCESS
 
-
 ```bash
 # start MPS
 linux:~ # nvidia-smi -c EXCLUSIVE_PROCESS
@@ -182,12 +174,11 @@ linux:~ # echo quit | nvidia-cuda-mps-control
 # show gpu info
 linux:~ # nvidia-smi -q -d CLOCK
 linux:~ # nvidia-smi -q -d SUPPORTED_CLOCKS
-linux:~ # nvidia-smi -q -d compute 
+linux:~ # nvidia-smi -q -d compute
 
 # monitor gpu
 linux:~ # nvidia-smi -l
 ```
-
 
 ---
 

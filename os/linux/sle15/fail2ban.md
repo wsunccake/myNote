@@ -68,7 +68,6 @@ sle:~ # grep -Ev '^$|^#' jail.conf         # show config
 sle:~ # grep '^\[.*\]' jail.conf           # list all jail
 ```
 
-
 ---
 
 ## command

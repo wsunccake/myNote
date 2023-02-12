@@ -1,14 +1,12 @@
 # SaltStack
 
-
 ```
 master ---  minion1
             minion2
             ...
 ```
 
-master port: 4505 (publish_port), 4506(ret_port) 
-
+master port: 4505 (publish_port), 4506(ret_port)
 
 ---
 
@@ -69,7 +67,6 @@ master:~ # salt-run manage.status
 
 [EXECUTION MODULES](https://docs.saltstack.com/en/latest/ref/modules/all/index.html)
 
-
 ---
 
 ## minion
@@ -91,7 +88,6 @@ master: <master>
 
 minion:~ # systemctl restart salt-minion
 ```
-
 
 ---
 
@@ -130,13 +126,11 @@ master:~ # salt '*' state.sls base.vim [saltenv='base']
 
 [HOW DO I USE SALT STATES?](https://docs.saltstack.com/en/latest/topics/tutorials/starting_states.html)
 
-
 ---
 
 ## grains
 
 attribute on minion
-
 
 ### config minion
 
@@ -152,7 +146,6 @@ grains:
 minion:~ # systemctl restart salt-minion
 ```
 
-
 ### usage master
 
 ```bash
@@ -166,13 +159,11 @@ master:~ # salt '*' grains.item dc_localtion
 
 [GRAINS](https://docs.saltstack.com/en/latest/topics/grains/)
 
-
 ---
 
 ## pillar
 
 attribute on master
-
 
 ### config master
 
@@ -214,7 +205,6 @@ master:~ # systemctl restart salt-master
 master:~ # salt '*' saltutil.refresh_pillar
 ```
 
-
 ### usage master
 
 ```bash
@@ -226,7 +216,6 @@ master:~ # salt '*' pillar.items
 ```
 
 [STORING STATIC DATA IN THE PILLAR](https://docs.saltstack.com/en/latest/topics/pillar/)
-
 
 ---
 

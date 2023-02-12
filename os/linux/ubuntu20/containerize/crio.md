@@ -22,7 +22,6 @@ EOF
 [ubuntu:~ ] # sysctl --system
 ```
 
-
 ---
 
 ## install
@@ -49,7 +48,6 @@ EOF
 [ubuntu:~ ] # systemctl enable crio --now
 [ubuntu:~ ] # systemctl status crio
 ```
-
 
 ---
 
@@ -88,7 +86,6 @@ insecure_registries = [
 [ubuntu:~ ] # mkdir -p /etc/docker/certs.d/<private_repo>:5000
 [ubuntu:~ ] # mv <file>.crt /etc/docker/certs.d/<private_repo>:5000
 ```
-
 
 ---
 

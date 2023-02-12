@@ -34,7 +34,6 @@ EOF
 
 {{ <var> }}: inject variable
 
-
 ---
 
 ## built-in object
@@ -61,7 +60,6 @@ Capabilities
 Template
 ```
 
-
 ---
 
 ## values file
@@ -84,7 +82,6 @@ EOF
 [linux:~ ] $ helm install --generate-name --dry-run --debug [--set favoriteDrink=slurm] ./mychart
 ```
 
-
 ```bash
 [linux:~ ] $ cat << EOF > mychart/values.yaml
 favorite:
@@ -105,7 +102,6 @@ EOF
 
 [linux:~ ] $ helm install --generate-name --dry-run --debug [--set favorite.drink=slurm] [--set favorite.food=steak] ./mychart
 ```
-
 
 ---
 
@@ -156,7 +152,6 @@ data:
 
 ```
 
-
 ```yaml
 # mychart/templates/configmap.yaml
 apiVersion: v1
@@ -174,7 +169,6 @@ data:
 # helm install --generate-name --dry-run ./mychart
 YAML parse error
 ```
-
 
 ```yaml
 # mychart/templates/configmap.yaml
@@ -199,11 +193,10 @@ data:
   myvalue: "Hello World"
   drink: "coffee"
   food: "PIZZA"
-  
+
   mug: "true"
 
 ```
-
 
 ```yaml
 # mychart/templates/configmap.yaml
@@ -245,7 +238,6 @@ data:
 
 -}} 刪掉右邊的 space
 
-
 ### with
 
 ```yaml
@@ -280,7 +272,6 @@ data:
   myvalue: "Hello World"
 ```
 
-
 ### range
 
 ```bash
@@ -309,7 +300,7 @@ data:
   toppings: |-
     {{- range .Values.pizzaToppings }}
     - {{ . | title | quote }}
-    {{- end }}  
+    {{- end }}
 EOF
 
 [linux:~ ] $ helm install --generate-name --dry-run ./mychart
@@ -328,7 +319,6 @@ data:
     - "Onions"
 ```
 
-
 ```yaml
 # mychart/templates/configmap.yaml
 apiVersion: v1
@@ -343,7 +333,7 @@ data:
   toppings: |-
     {{- range $.Values.pizzaToppings }}
     - {{ . | title | quote }}
-    {{- end }}    
+    {{- end }}
   {{- end }}
 ---
 # helm install --generate-name --dry-run ./mychart
@@ -376,7 +366,6 @@ data:
     - "Cheese"
 
 ```
-
 
 ---
 
@@ -428,7 +417,6 @@ data:
 
 ```
 
-
 ```yaml
 # mychart/templates/configmap.yaml
 apiVersion: v1
@@ -467,7 +455,6 @@ data:
   fruit: "apple"
 
 ```
-
 
 ---
 

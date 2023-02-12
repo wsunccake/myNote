@@ -1,6 +1,5 @@
 # ubuntu 18 lts
 
-
 ## apt
 
 ```bash
@@ -11,7 +10,6 @@ ubuntu:~ # apt install <pkg>
 ubuntu:~ # apt install vim curl
 ubuntu:~ # apt install python3-pip
 ```
-
 
 ---
 
@@ -38,7 +36,6 @@ ubuntu:~ # systemctl show -a | grep -i task
 ubuntu:~ # systemctl status ssh  |grep -e Tasks
 ```
 
-
 ---
 
 ## nginx
@@ -64,7 +61,6 @@ server {
 
 ubuntu:~ # curl http://localhost:8080/
 ```
-
 
 ---
 

@@ -1,6 +1,5 @@
 # zypper
 
-
 ## repository
 
 ```bash
@@ -17,7 +16,6 @@ sle:~ # zypper rr <repo>
 # repo config
 sle:~ # ls /etc/zypp/repos.d
 ```
-
 
 ---
 

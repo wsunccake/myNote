@@ -1,7 +1,6 @@
 # Installation Quick Start
 
-
-##  Installation on AMD64 and Intel 64
+## Installation on AMD64 and Intel 64
 
 ### Copying the Installation Media Image to a Removable Flash Disk
 
@@ -13,20 +12,17 @@ sle:~ # fdisk -l /dev/sdc | grep -e "^/dev"
 sle:~ # dd if=SLE-15-SP2-Full-ARCH-GM-media1.iso of=/dev/sdc1 bs=4M && sync
 ```
 
-
 ### Hardware Requirements
 
 `CPU Requirement`
 
 max: 8192
 
-
 `Memory Requirement`
 
 min: 1024 MB
 
 when two cpu, 512 MB/CPU
-
 
 `Hard Disk Requirement`
 
@@ -39,7 +35,6 @@ when two cpu, 512 MB/CPU
 | Recommended Minimum (no Btrfs snapshots)   | 10 GB                          |
 | Required Minimum (with Btrfs snapshots)    | 16 GB                          |
 | Recommended Minimum (with Btrfs snapshots) | 32 GB                          |
-
 
 ---
 
@@ -56,7 +51,6 @@ setparams 'Installation'
    echo 'Loading initial ramdisk ...'
    initrdefi /boot/x86_64/loader/initrd
 ```
-
 
 ### General Boot Parameters
 
@@ -86,7 +80,6 @@ textmode=1
 
 console=SERIAL_DEVICE[,MODE]
 
-
 ### Configuring the Network Interface
 
 netsetup=<VALUE>
@@ -113,7 +106,6 @@ nameserver=192.168.1.4
 
 domain=example.com
 
-
 ### Specifying the Installation Source
 
 install=<SOURCE>
@@ -128,7 +120,6 @@ install=hd:/?device=sda/PATH_TO_ISO
 install=slp:/
 ```
 
-
 ### Specifying Remote Access
 
 display_ip=<IP_ADDRESS>
@@ -140,7 +131,6 @@ vncpassword=<PASSWORD>
 ssh=1
 
 ssh.password=<PASSWORD>
-
 
 ### Advanced Setups
 
@@ -162,9 +152,7 @@ regcert=ask
 regcert=done
 ```
 
-
 ### Using IPv6 for the Installation
-
 
 `Accept IPv4 and IPv6`
 
@@ -172,13 +160,11 @@ regcert=done
 ipv6=1
 ```
 
-
 `Accept IPv6 only`
 
 ```
 ipv6only=1
 ```
-
 
 ### Using a Proxy for the Installation
 
@@ -187,7 +173,6 @@ proxy=http://USER:PASSWORD@proxy.example.com:POR
 
 http://proxy.example.com:PORT
 ```
-
 
 ---
 
@@ -198,7 +183,6 @@ http://proxy.example.com:PORT
 ```bash
 sle15:~ # parted <DEVICE> set <PARTITION_NUMBER> msftdata off
 ```
-
 
 ### Expert Options
 

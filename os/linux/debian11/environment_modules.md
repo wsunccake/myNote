@@ -6,7 +6,6 @@
 debian:~ # apt install environment-modules
 ```
 
-
 ---
 
 ## usage
@@ -24,7 +23,6 @@ linux:~ $ module path <modulefile>
 linux:~ $ module show <modulefile>
 ```
 
-
 ---
 
 ## environment variable
@@ -37,7 +35,6 @@ linux:~ $ echo $MODULES_CMD
 ```
 
 default path: /usr/share/modules/modulefiles
-
 
 ---
 
@@ -70,10 +67,8 @@ append-path     PATH                ${foo_home}/bin
 prepend-path    LD_LIBRARY_PATH     ${foo_home}/lib
 ```
 
-
 ---
 
 ## ref
 
 [Environment Modules](http://modules.sourceforge.net/)
-

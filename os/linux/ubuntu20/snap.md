@@ -1,6 +1,5 @@
 # snap
 
-
 ## install
 
 ```bash
@@ -9,7 +8,6 @@
 [ubuntu:~ ] # snap version
 [ubuntu:~ ] # snap help
 ```
-
 
 ---
 
@@ -24,7 +22,6 @@
 [ubuntu:~ ] # snap refresh <snap>
 [ubuntu:~ ] # snap refresh all
 ```
-
 
 ---
 

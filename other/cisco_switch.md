@@ -1,14 +1,12 @@
 # CISCO Switch
 
-
 ## Basic
 
 baud rate: 9600
 
-
 ### Enable Privilege
 
-```
+```bash
 # privilege mode
 SWITCH> enable
 SWITCH#
@@ -20,7 +18,7 @@ SWITCH(config)#
 
 ### Common
 
-```
+```bash
 # 設定 hostname
 SWITCH(config)# hostname <hostname>
 
@@ -34,7 +32,7 @@ SWITCH(config)# no ip domain-lookup
 
 ### NVRAM & Flash
 
-```
+```bash
 SWITCH# dir nvram:   # startup-config 存放位置
 SWITCH# dir flash:   # config.text 存放位置
 SWITCH# rename flash:config.text flash:config.text.old   # 移動檔案
@@ -45,14 +43,13 @@ SWITCH# more flash:config.text                           # 讀取檔案
 SWTICH# copy running-config startup-config               # 複製當前設定到啟動設定
 ```
 
-
 ### Set Factory
 
 1. 拔掉電源線，並長按 "mode" button, 然後開機
 
 2.
 
-```
+```bash
 The system has been interrupted prior to initializing the
 flash filesystem.  The following commands will initialize
 the flash filesystem, and finish loading the operating
@@ -69,10 +66,9 @@ switch: delete flash:config.text                       # 移除設定檔, 系統
 switch: boot                                           # 重開機
 ```
 
-
 ### Setup Login
 
-```
+```bash
 # 設定 console login 帳號密碼
 SWITCH(config) # username <account> password <password>  # 設定登入的帳號密碼 (明碼)
 SWITCH(config) # username <account> secret   <password>  # 設定登入的帳號密碼 (暗碼)
@@ -104,10 +100,9 @@ SWITCH(config-line) # login local          # 啟用 login check, 使用帳號密
 SWITCH(config-line) # transport input ssh  # 僅 ssh 登入
 ```
 
-
 ### Setup IP
 
-```
+```bash
 SWITCH(config)# ip name-server <ip>            # 設定 DNS
 SWTICH(config)#ip default-gateway <ip>         # 設定 default gateway
 SWITCH(config)# interface Vlan 1
@@ -123,10 +118,9 @@ SWITCH(config-if)# ip dhcp                     # 設定 dynamic ip
 SWITCH(config-if)# no shutdown                 # 當 interface 設定完後, 要重啟設定才會套用
 ```
 
+### List
 
-### List ###
-
-```
+```bash
 SWITCH# show users
 SWITCH# show runnung-config
 SWITCH# show startup-config
@@ -144,12 +138,11 @@ SWITCH# show spanning-tree interface <interface>
 SWITCH# show loggin | include
 ```
 
-----
-
+---
 
 ## Interface
 
-```
+```bash
 # 設定 interface (單個 port)
 SWTICH(config)# interface FastEthernet 0/1
 SWTICH(config-if)# shutdown
@@ -161,7 +154,7 @@ SWTICH(config-if-range)# shutdown
 SWTICH(config-if-range)# no shutdown
 ```
 
-----
+---
 
 ## MAC table
 
@@ -173,7 +166,7 @@ SWTICH(config-if-range)# no shutdown
 
 當起用 port-security, switch 會針對不同的 MAC 連上 port 有所不同的動作
 
-```
+```bash
 # 設定 static mac table
 SWITCH(config)# mac-address-table static <mac> vlan <vlan_id> interface <interface>         # 設定 static mac table
 SWITCH(config)# no mac-address-table static <mac> vlan <vlan_id> interface [<interface>]    # 移除 static mac table
@@ -193,21 +186,17 @@ SWTICH(config-if)# switchport port-security mac-address sticky
 SWTICH(config-if)# switchport port-security violation shutdown
 ```
 
-----
-
+---
 
 ## System
 
-
 ### Clock
-
 
 ### NTP
 
 ```
 
 ```
-
 
 ### MTU
 
@@ -219,14 +208,13 @@ SWITCH(config)# system mtu 1500
 SWITCH# show system mtu
 ```
 
-
 ### Port Monitor
 
 <src_interfce>: FastEthernet 0/1, 被監控的 port
 
 <des_interfce>: FastEthernet 0/9, 送出資料的 port
 
-```
+```bash
 SWITCH(config)# monitor session 1 source interface <src_interfce>
 SWITCH(config)# monitor session 1 destination interface <des_interfce>
 
@@ -235,8 +223,7 @@ SWITCH(config)# no monitor session 1
 SWITCH# show monitor
 ```
 
-----
-
+---
 
 ## VLAN
 
@@ -246,8 +233,7 @@ trunk 是不移除任何 tag
 
 access 只
 
-
-```
+```bash
 # 設定 vlan 資訊
 SWTICH(config)# vlan <vlan_id>
 SWTICH(config-vlan)# name <vlan_name>
@@ -277,7 +263,7 @@ SWITCH# show spanning-tree interface <interface>
 
 ### DTP (Dynamic Trunking Protocol)
 
-```
+```bash
 SWTICH(config-if)# switchport mode dynamic auto
 SWTICH(config-if)# switchport mode dynamic desirable
 
@@ -290,7 +276,7 @@ SWTICH# show interfaces switchport
 
 <password>
 
-```
+```bash
 # 設定 vtp server
 VTP-SERVER(config)# vtp mode server
 VTP-SERVER(config)# vtp mode domain <domain>
@@ -310,6 +296,4 @@ VTP-transparent(config)# vtp mode password <password>
 VTP# show vtp status
 ```
 
-----
-
-
+---

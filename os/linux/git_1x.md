@@ -91,6 +91,8 @@ linux:~/project # git remote set-url origin <url>
 linux:~/project # git push -u origin master
 ```
 
+---
+
 ## Merge
 
 ```bash
@@ -127,6 +129,8 @@ m1 - m2       m1  ---  m2
 linux:~/project $ git checkout m2
 linux:~/project $ git merge --no-ff b1
 ```
+
+---
 
 ## Rebase
 
@@ -165,6 +169,8 @@ linux:~/project $ git log --graph --oneline
 * c28beea c1
 ```
 
+---
+
 ## Stash
 
 ```bash
@@ -190,6 +196,8 @@ linux:~/project $ git push
 linux:~/project $ git log
 linux:~/project $ git stash pop
 ```
+
+---
 
 ## Reset
 

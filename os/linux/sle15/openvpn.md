@@ -6,7 +6,6 @@
 server:~ # zypper in openvpn
 ```
 
-
 ---
 
 ## openssl
@@ -124,7 +123,6 @@ ca:~ # openssl x509 -req -sha512 \
 # step 5.
 ```
 
-
 ---
 
 ## easy-rsa
@@ -207,11 +205,9 @@ pki/
 └── serial.old
 ```
 
-
 ---
 
 ## server
-
 
 ```bash
 # gen cert
@@ -259,12 +255,12 @@ ca ca.crt
 cert server.crt
 key server.key
 
-# ns-cert-type server 
-remote-cert-tls client 
+# ns-cert-type server
+remote-cert-tls client
 dh   server/dh.pem
 
 # ns-cert-type server
-server 192.168.1.0 255.255.255.0 
+server 192.168.1.0 255.255.255.0
 ifconfig-pool-persist /var/run/openvpn/ipp.txt
 
 # privilege
@@ -276,8 +272,8 @@ keepalive 10 120
 comp-lzo
 persist-key
 persist-tun
-status      /var/log/openvpn-status.tun0.log 
-log-append  /var/log/openvpn-server.log 
+status      /var/log/openvpn-status.tun0.log
+log-append  /var/log/openvpn-server.log
 verb 4
 
 # service
@@ -295,8 +291,6 @@ server:~ # firewall-cmd --add-service openvpn
 server:~ # firewall-cmd --permanent --add-service openvpn
 ```
 
-
 ---
 
 ## client
-

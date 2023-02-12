@@ -116,6 +116,10 @@ ext install CoenraadS.bracket-pair-colorizer-2
 
 [Remote - SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
 
+[Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+
+ext install esbenp.prettier-vscode
+
 ### javascript/node
 
 [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)

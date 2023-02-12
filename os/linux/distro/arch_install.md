@@ -4,7 +4,6 @@
 
 使用 fdisk/parted 分割硬碟
 
-
 ## install package
 
 ```bash
@@ -32,8 +31,7 @@ sh-4.3 # exit
 root@arhciso:~ # reboot
 ```
 
-----
-
+---
 
 # Pakcage
 
@@ -50,7 +48,6 @@ arch:~ # pacman -Su
 arhc:~ # pacman -Qg | awk '/^package_group/{print $2}' | xargs -i pacman -Rs --noconfirm {}
 ```
 
-
 ## Essential Packages
 
 ```bash
@@ -59,18 +56,17 @@ arch:~ # pacman -S vim emacs
 arch:~ # pacman -S bash-completion
 ```
 
-|function 		| 	yum 		| 	pacman 	|
-|---------------| --------------| ----------|
-|install 		| install pkg 	| -S pkg 	|
-|search remote 	| search pkg 	| -Ss pkg 	|
-|group list 	| grouplist 	| -Sg 		|
-|uninstall 		| remove 		| -R pkg 	|
-|installed 		| 				| -Qs 		|
+| function      | yum         | pacman  |
+| ------------- | ----------- | ------- |
+| install       | install pkg | -S pkg  |
+| search remote | search pkg  | -Ss pkg |
+| group list    | grouplist   | -Sg     |
+| uninstall     | remove      | -R pkg  |
+| installed     |             | -Qs     |
 
 rpm -ivh pkg = pacman -U pkg
 
 rpm -ql pkg = pacman -Ql pkg
-
 
 ## ABS (Arch Build System)
 
@@ -92,7 +88,6 @@ arch:~ # pacman -U pkg.tar.xz
 
 https://aur.archlinux.org
 
-
 ## Yaourt
 
 ```bash
@@ -111,8 +106,7 @@ arch:~ # yaourt -G pkg  # download PKGBUILD
 arch:~ # yaourt -Sb pkg # download and compile
 ```
 
-----
-
+---
 
 # Network
 
@@ -134,7 +128,7 @@ arch:~ # netctl disable my_interface_profile
 ## ALSA
 
 ```bash
-arch:~ # pacman -S alsa-utils 
+arch:~ # pacman -S alsa-utils
 arch:~ # alsamixer
 ```
 
@@ -145,8 +139,7 @@ arch:~ # pacman -S pulseaudio
 arch:~ # pacman -S pulseaudio-alsa
 ```
 
-----
-
+---
 
 # Service
 
@@ -157,8 +150,7 @@ arch:~ # pacman -S openssh
 arch:~ # systemctl enable sshd.service
 ```
 
-----
-
+---
 
 # CLI
 
@@ -169,7 +161,6 @@ arch:~ # pacman -S gpm
 arch:~ # systemctl enable gpm.service
 arch:~ # systemctl start gpm.service
 ```
-
 
 ## zsh
 
@@ -185,7 +176,7 @@ arhc:~ # vi ~/.zshrc
 ZSH_THEME="powerline"
 ```
 
-----
+---
 
 # CLI Application
 
@@ -196,9 +187,7 @@ arch:~ # pacman -S screenfetch
 arch:~ # echo /usr/bin/screenfetch >> /etc/bash.bashrc
 ```
 
-
-----
-
+---
 
 # GUI
 
@@ -217,7 +206,6 @@ arch:~ # xdpyinfo
 arch:~ # xrandr --output VGA-0 --mode 1024x768 --rate 60
 ```
 
-
 ## SDDM
 
 ```bash
@@ -232,7 +220,6 @@ arch:~ # vi /etc/sddm.conf
 #Current=maui
 Current=archlinux-soft-grey
 ```
-
 
 ## Xfce
 
@@ -270,7 +257,6 @@ arch:~ # locale-gen zh_TW
 arch:~ # yaourt ttf-tw
 ```
 
-
 ## Chinese Input Method
 
 ```bash
@@ -288,11 +274,9 @@ export XMODIFIERS=@im=ibus
 export QT_IM_MODULE=ibus
 ```
 
-----
-
+---
 
 # GUI Application
-
 
 ## Cairo-Dock
 
@@ -300,13 +284,11 @@ export QT_IM_MODULE=ibus
 arch:~ # pacman -S cairo-dock cairo-dock-plug-ins
 ```
 
-
 ## Guake
 
 ```bash
 arch:~ # pacman -S guake
 ```
-
 
 ## Sublime Text
 
@@ -319,7 +301,6 @@ arch:~ # yaourt sublime-text-dev
 ```bash
 arch:~ # yaourt intellij-idea-ultimate-edition
 ```
-
 
 ## VNC
 
@@ -335,14 +316,11 @@ arch:~ # cat ~/.vnc/xstartup
 exec startxfce4
 ```
 
-----
-
+---
 
 # VM
 
 virtualbox-guest-utils:
 pacman -S virtualbox-guest-utils virtualbox-guest-modules virtualbox-guest-modules-lts virtualbox-guest-dkms
-
-
 
 http://www.cs.columbia.edu/~jae/4118-LAST/arch-setup-2015-1.html

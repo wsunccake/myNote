@@ -32,7 +32,6 @@ master:~ # helm init --history-max 200
 master:~ # helm reset
 ```
 
-
 ---
 
 ## repo
@@ -50,9 +49,8 @@ master:~ # helm repo add stable https://kubernetes-charts.storage.googleapis.com
 # environment variable
 master:~ # kubectl -n kube-system describe pod tiller-deploy
 # get the <helm_ip>, <helm_port>
-# [env HELM_HOST=<helm_ip>:<helm_port>] 
+# [env HELM_HOST=<helm_ip>:<helm_port>]
 ```
-
 
 ---
 

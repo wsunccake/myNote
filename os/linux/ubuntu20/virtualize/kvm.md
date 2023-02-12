@@ -1,6 +1,5 @@
 # kvm
 
-
 ## virsh
 
 ```bash
@@ -31,12 +30,11 @@
 
 [host:~ ] # virsh start <vm_id>|<vm_name>
 [host:~ ] # virsh autostart [--disable] <vm_id>|<vm_name>
-[host:~ ] # virsh dominfo <vm_id>|<vm_name> 
-[host:~ ] # virsh shutdown <vm_id>|<vm_name> 
+[host:~ ] # virsh dominfo <vm_id>|<vm_name>
+[host:~ ] # virsh shutdown <vm_id>|<vm_name>
 [host:~ ] # virsh destroy <vm_id>|<vm_name>
 [host:~ ] # virsh console <vm_id>|<vm_name>     # ctrl + ] to exit
 ```
-
 
 ### setup serial console
 
@@ -46,7 +44,6 @@
 [guest:~ ] # systemctl start serial-getty@ttyS0
 [guest:~ ] # systemctl status serial-getty@ttyS0
 ```
-
 
 ---
 

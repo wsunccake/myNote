@@ -14,7 +14,6 @@ daemonset   statefulset         deployment
 
 /var/log/pods/<namespace>_<pod_name>_<pod_id>/<container_name>/
 
-
 ---
 
 ## elasticsearch
@@ -26,7 +25,7 @@ kind: PersistentVolume
 metadata:
   name: pv-data-0
 spec:
-# storageClassName: <storage_class_name>
+  # storageClassName: <storage_class_name>
   capacity:
     storage: 1Gi
   accessModes:
@@ -38,17 +37,15 @@ spec:
 
 spec.capacitystorage: 依據需求調整
 
-
 ```yaml
 # values.yaml
 replicas: 1
 minimumMasterNodes: 1
-clusterHealthCheckParams: 'wait_for_status=yellow&timeout=1s'
+clusterHealthCheckParams: "wait_for_status=yellow&timeout=1s"
 volumeClaimTemplate:
   resources:
     requests:
       storage: 500Mi
-
 # disalbe pv
 #persistence:
 #  enabled: false
@@ -59,7 +56,6 @@ volumeClaimTemplate.resources.requests.storage: 依據需求調整, 一般 produ
 replicas: single cluster setup 1
 
 minimumMasterNodes: single cluster setup 1
-
 
 ```bash
 # create naemspace
@@ -92,7 +88,6 @@ minimumMasterNodes: single cluster setup 1
 [master:~ ] $ curl http://localhost:9200/_cat/health
 ```
 
-
 ---
 
 ## kibana
@@ -124,7 +119,6 @@ minimumMasterNodes: single cluster setup 1
 [master:~ ] $ curl http://localhost:5601
 ```
 
-
 ---
 
 ## metricbeat
@@ -153,7 +147,6 @@ minimumMasterNodes: single cluster setup 1
 [master:~ ] $ curl http://localhost:9200/_cat/indices
 ```
 
-
 ---
 
 ## fluentd
@@ -169,7 +162,6 @@ minimumMasterNodes: single cluster setup 1
 [master:~ ] $ kubectl -n kube-logging get pod,deploy,sts,svc,pv,pvc
 [master:~ ] $ kubectl -n kube-logging get all,pv,pvc
 ```
-
 
 ---
 

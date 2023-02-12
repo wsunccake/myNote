@@ -6,7 +6,6 @@
 server:~ # sudo apt-get install dnsmasq
 ```
 
-
 ---
 
 ## configuaration
@@ -45,7 +44,6 @@ address=/node11.com/192.168.0.11
 server:~ # service dnsmasq start
 ```
 
-
 ---
 
 ## dns
@@ -53,7 +51,6 @@ server:~ # service dnsmasq start
 ```bash
 server:~ # cat /etc/hosts
 ```
-
 
 ---
 
@@ -71,7 +68,6 @@ LABEL Ubuntu
   append initrd=initrd.gz netboot=nfs splash=silent showopts ramdisk_size=65536 install=nfs://192.168.0.1/ubuntu14
 ```
 
-
 ---
 
 ## nfs
@@ -84,7 +80,6 @@ server:~ # cat /etc/exports
 server:~ # cp -r /media/ubuntu14.04_tls/* /ubuntu14
 server:~ # service nfs-kernel-server restart
 ```
-
 
 ---
 

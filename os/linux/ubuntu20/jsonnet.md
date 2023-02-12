@@ -9,7 +9,6 @@
 [ubunut:~ ] # install -m 755 go/bin/jsonnet /usr/local/bin/.
 ```
 
-
 ---
 
 ## run
@@ -17,12 +16,11 @@
 ```bash
 # method 1
 [ubunut:~ ] # echo "{key: 1+2}" > test.jsonnet
-[ubunut:~ ] # jsonnet test.jsonnet 
+[ubunut:~ ] # jsonnet test.jsonnet
 
 # method 2
 [ubunut:~ ] # jsonnet -e '{key: 1+2}'
 ```
-
 
 ---
 
@@ -120,7 +118,6 @@
 }
 ```
 
-
 ### variable
 
 ```jsonnet
@@ -209,7 +206,6 @@ local house_rum = 'Banks Rum';
   }
 }
 ```
-
 
 ### reference
 
@@ -305,7 +301,6 @@ local house_rum = 'Banks Rum';
 }
 ```
 
-
 ### inner-reference
 
 ```jsonnet
@@ -345,7 +340,6 @@ local house_rum = 'Banks Rum';
   }
 }
 ```
-
 
 ### arithmetic
 
@@ -390,12 +384,7 @@ local house_rum = 'Banks Rum';
 
 ```json
 {
-  "concat_array": [
-    1,
-    2,
-    3,
-    4
-  ],
+  "concat_array": [1, 2, 3, 4],
   "concat_string": "1234",
   "equality1": false,
   "equality2": true,
@@ -416,7 +405,6 @@ local house_rum = 'Banks Rum';
   "str5": "ex1=1.67\nex2=3.00\n"
 }
 ```
-
 
 ### function
 
@@ -475,16 +463,12 @@ local object = {
   "call_inline_function": 25,
   "call_method1": 9,
   "call_multiline_function": [8, 9],
-  "len": [
-    5,
-    3
-  ],
+  "len": [5, 3],
   "named_params": 12,
   "named_params2": 5,
   "standard_lib": "foo bar"
 }
 ```
-
 
 ```jsonnet
 // This function returns an object. Although
@@ -560,7 +544,6 @@ local Sour(spirit, garnish='Lemon twist') = {
   }
 }
 ```
-
 
 ---
 

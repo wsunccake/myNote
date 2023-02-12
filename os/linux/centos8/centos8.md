@@ -1,6 +1,5 @@
 # centos 8
 
-
 ## gui
 
 ### gnome3
@@ -35,8 +34,7 @@ baseurl=file:///mnt/BaseOS
 [centos:~ ] # systemctl isolate graphical
 ```
 
-
-### gnome3 tweak 
+### gnome3 tweak
 
 ```bash
 [centos:~ ] # dnf install gnome-tweaks
@@ -45,7 +43,6 @@ baseurl=file:///mnt/BaseOS
 [Tweaking GNOME Desktop Environment on CentOS 8](https://linuxhint.com/tweaking_gnome_desktop_centos8/)
 
 [How to Show Desktop in GNOME](https://itsfoss.com/show-desktop-gnome-3/)
-
 
 ---
 
@@ -57,11 +54,9 @@ baseurl=file:///mnt/BaseOS
 [centos:~ ] # dnf install epel-release
 ```
 
-
 ---
 
 ## develop
-
 
 ### openjdk
 
@@ -81,13 +76,11 @@ baseurl=file:///mnt/BaseOS
 [centos:~ ] # alternatives --config javac
 ```
 
-
 ### git
 
 ```bash
 [centos:~ ] # dnf install git
 ```
-
 
 ### robo 3t
 
@@ -98,7 +91,6 @@ baseurl=file:///mnt/BaseOS
 [centos:~ ] # wget https://download.studio3t.com/robomongo/linux/robo3t-1.4.2-linux-x86_64-8650949.tar.gz
 [centos:~ ] # tar zxf robo3t-1.4.2-linux-x86_64-8650949.tar.gz -C /opt
 ```
-
 
 ---
 
@@ -112,7 +104,6 @@ baseurl=file:///mnt/BaseOS
 [centos:~ ] # dnf install sublime-text
 ```
 
-
 ### vscode
 
 ```bash
@@ -121,7 +112,6 @@ baseurl=file:///mnt/BaseOS
 [centos:~ ] # dnf check-update
 [centos:~ ] # dnf install code
 ```
-
 
 ### intellij idea
 
@@ -144,7 +134,6 @@ StartupWMClass=jetbrains-idea
 # ~/.local/share/applications
 ```
 
-
 ---
 
 ## network
@@ -161,7 +150,6 @@ net.ipv6.conf.default.disable_ipv6 = 1
 
 [centos:~ ] # reboot
 ```
-
 
 ---
 
@@ -215,7 +203,6 @@ alwaysshared
 [centos:~ ] # dnf install google-chrome-stable_current_x86_64.rpm
 ```
 
-
 ---
 
 ## terminal
@@ -226,13 +213,11 @@ alwaysshared
 [centos:~ ] # dnf install zsh
 ```
 
-
 ### oh-my-zsh
 
 ```bash
 [centos:~ ] # sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
-
 
 ### fzf
 
@@ -279,7 +264,6 @@ fi
 # ------------
 source "$HOME/.fzf/shell/key-bindings.zsh"
 ```
-
 
 ---
 

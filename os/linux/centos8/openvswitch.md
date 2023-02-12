@@ -1,8 +1,6 @@
 # openvswitch
 
-
 ## install
-
 
 ```bash
 [centos:~ ] # dnf install epel-release
@@ -10,7 +8,6 @@
 [centos:~ ] # dnf install openvswitch
 [centos:~ ] # systemctl enable openvswitch --now
 ```
-
 
 ---
 
@@ -37,7 +34,6 @@
 [centos:~ ] # ip addr add 192.168.0.10/24 dev br0
 ```
 
-
 ---
 
 ## config
@@ -50,7 +46,6 @@
 ```
 
 network manager don't support openvswitch config, network-script support.
-
 
 ### dhcp
 
@@ -75,7 +70,6 @@ OVS_BRIDGE=br0
 ONBOOT=yes
 #NM_CONTROLLED=no
 ```
-
 
 ### static
 
@@ -102,7 +96,6 @@ ONBOOT=yes
 #NM_CONTROLLED=no
 ```
 
-
 ### none
 
 ```bash
@@ -126,10 +119,8 @@ ONBOOT=yes
 #NM_CONTROLLED=no
 ```
 
-
 ---
 
 ## ref
 
 [Red Hat network scripts integration](https://github.com/openvswitch/ovs/blob/master/rhel/README.RHEL.rst)
-

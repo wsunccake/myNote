@@ -15,7 +15,6 @@ sle:~ # systemctl enable dnsmasq
 sle:~ # systemctl start dnsmasq
 ```
 
-
 ---
 
 ## dhcp
@@ -40,7 +39,6 @@ sle:~ # firewall-cmd --add-service=dhcp
 sle:~ # ss -lutnp | grep 67
 ```
 
-
 ---
 
 ## dns
@@ -58,7 +56,6 @@ sle:~ # firewall-cmd --add-service=dns
 
 sle:~ # ss -lutnp | grep 53
 ```
-
 
 ---
 

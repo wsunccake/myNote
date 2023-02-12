@@ -1,6 +1,6 @@
 # udevadm
 
-## sr-iov 
+## sr-iov
 
 ### nic
 

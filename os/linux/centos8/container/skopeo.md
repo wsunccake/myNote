@@ -9,7 +9,6 @@
 [centos:~] # skopeo --help
 ```
 
-
 ---
 
 ## usage

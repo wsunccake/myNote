@@ -8,7 +8,6 @@
 target:~ # zypper in yast2-iscsi-lio-server
 ```
 
-
 `device`
 
 ```bash
@@ -18,7 +17,6 @@ target:~ # dd if=/dev/zero of=/iscsi/lun.img bs=500M count=1
 # real disk
 target:~ # lsblk /dev/vda
 ```
-
 
 `config`
 
@@ -64,10 +62,10 @@ target:~ # targetcli
 /> /iscsi/<iqn>/tpg1/acls create iqn.2019-09.com.example:server1
 ## set acl with password
 # authentication by target
-/> /iscsi/<iqn>/tpg1/acls/<wwn> set auth userid=<user>        
+/> /iscsi/<iqn>/tpg1/acls/<wwn> set auth userid=<user>
 /> /iscsi/<iqn>/tpg1/acls/<wwn> set auth password=<password>
 # authentication by initiator
-/> /iscsi/<iqn>/tpg1/acls/<wwn> set auth mutual_userid=<user>        
+/> /iscsi/<iqn>/tpg1/acls/<wwn> set auth mutual_userid=<user>
 /> /iscsi/<iqn>/tpg1/acls/<wwn> set auth mutual_password=<password>
 
 # save & exit
@@ -78,14 +76,12 @@ target:~ # targetcli
 target:~ # vi /etc/target/saveconfig.json
 ```
 
-
 `daemon`
 
 ```bash
 target:~ # systemctl enable targetcli
 target:~ # systemctl start targetcli
 ```
-
 
 ---
 
@@ -98,13 +94,11 @@ initiator:~ # zypper in open-iscsi
 initiator:~ # zypper in yast2-iscsi-client
 ```
 
-
 `config`
 
 ```bash
 initiator:~ # yast iscsi-client
 ```
-
 
 `usage`
 

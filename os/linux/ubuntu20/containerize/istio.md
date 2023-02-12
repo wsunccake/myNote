@@ -14,7 +14,6 @@ install [minikube](./minikube.md)
 [ubuntu:~ ] $ minikube tunnel --cleanup
 ```
 
-
 ### istio
 
 ```bash
@@ -34,7 +33,6 @@ install [minikube](./minikube.md)
 
 ```
 
-
 ---
 
 ## command
@@ -50,7 +48,6 @@ install [minikube](./minikube.md)
 [ubuntu:~ ] $ istioctl profile diff default demo
 [ubuntu:~ ] $ istioctl uninstall --purge
 ```
-
 
 ### kubectl
 
@@ -83,7 +80,6 @@ install [minikube](./minikube.md)
 [ubuntu:~ ] $ kubectl get po -n istio-system
 ```
 
-
 ---
 
 ## helloworld
@@ -113,7 +109,6 @@ install [minikube](./minikube.md)
 [ubuntu:~ ] $ seq 10 | xargs -i curl http://<cluster ip or external ip of service>:5000/hello
 ```
 
-
 ### with istio
 
 ```bash
@@ -125,7 +120,6 @@ install [minikube](./minikube.md)
 [ubuntu:~ ] $ curl http://<cluster ip or external ip of service>:80/hello
 [ubuntu:~ ] $ seq 10 | xargs -i curl http://<cluster ip or external ip of service>:80/hello
 ```
-
 
 ### with istio canary
 
@@ -194,7 +188,6 @@ EOF
 [ubuntu:~ ] $ seq 10 | xargs -i curl http://<cluster ip or external ip of service>:80/hello
 ```
 
-
 ### env var
 
 ```bash
@@ -218,7 +211,6 @@ EOF
 [ubuntu:~ ] $ kubectl delete -f istio-1.10.0/samples/helloworld/helloworld-gateway.yaml
 ```
 
-
 ---
 
 ## httpbin
@@ -236,7 +228,6 @@ EOF
 [ubuntu:~ ] $ curl -s http://$INGRESS_HOST:$INGRESS_PORT/status/200
 [ubuntu:~ ] $ curl -s http://://$INGRESS_HOST:$INGRESS_PORT/headers
 ```
-
 
 ---
 
@@ -260,7 +251,6 @@ EOF
 [ubuntu:~ ] $ curl http://<cluster ip or external ip of productpage>:9080
 ```
 
-
 ### with istio
 
 ```bash
@@ -270,7 +260,6 @@ EOF
 # test
 [ubuntu:~ ] $ curl http://$INGRESS_HOST:$INGRESS_PORT/productpage
 ```
-
 
 ### prometheus
 
@@ -290,8 +279,7 @@ istio_requests_total{destination_service="productpage.default.svc.cluster.local"
 
 istio_requests_total{destination_service="reviews.default.svc.cluster.local", destination_version="v3"}
 
-rate(istio_requests_total{destination_service=~"productpage.*", response_code="200"}[5m])
-
+rate(istio_requests_total{destination_service=~"productpage.\*", response_code="200"}[5m])
 
 ### grafana
 
@@ -304,7 +292,6 @@ rate(istio_requests_total{destination_service=~"productpage.*", response_code="2
 [ubuntu:~ ] $ curl http://<cluster ip or external ip of service>:3000
 ```
 
-
 ### jaeger
 
 ```bash
@@ -316,7 +303,6 @@ rate(istio_requests_total{destination_service=~"productpage.*", response_code="2
 [ubuntu:~ ] $ watch curl http://<cluster ip or external ip of productpage>:9080/productpage
 [ubuntu:~ ] $ curl http://<cluster ip or external ip of tracing>:80
 ```
-
 
 ### kiali
 
@@ -352,6 +338,5 @@ EOF
 [ubuntu:~ ] $ watch curl http://<cluster ip or external ip of productpage>:9080/productpage
 [ubuntu:~ ] $ curl http://<cluster ip or external ip of kiali>:20001
 ```
-
 
 ---

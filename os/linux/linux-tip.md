@@ -36,13 +36,13 @@ sh-4.2# /sbin/reboot -f
 
 ### HD
 
-使用  smartctl 確認 SSD 使用狀況, Raw_Read_Error_Rate, Read_Soft_Error_Rate, Soft_Read_Error_Rate
+使用 smartctl 確認 SSD 使用狀況, Raw_Read_Error_Rate, Read_Soft_Error_Rate, Soft_Read_Error_Rate
 
 ```bash
 linux:~ # smartctl -i /dev/sda
 linux:~ # smartctl -s on|off /dev/sd
 linux:~ # smartctl -x|-a /dev/sda
-linux:~ # smartctl -d sat+megaraid,0 -x /dev/sda 
+linux:~ # smartctl -d sat+megaraid,0 -x /dev/sda
 ```
 
 MegaCli
@@ -84,14 +84,13 @@ linux:~ # wodim -prcap
 
 #### 建立 image/iso
 
-genisoimage -> mkisofs (symbol  link)
+genisoimage -> mkisofs (symbol link)
 
 ```bash
 linux:~ # genisoimage -r -joliet-long -V "cd_name" -o image.iso dir
 ```
 
 ### Desktop
-
 
 #### GNOME 3 Menu 設定
 
@@ -112,7 +111,6 @@ StartupWMClass=jetbrains-idea
 ```
 
 #### GNOME 3 Startup 設定
-
 
 ```bash
 linux:~ # gnome-session-properties
@@ -139,7 +137,6 @@ linux:~ # stty -a
 linux:~ # stty columns 200
 ```
 
-
 complete 自動補齊
 
 ```bash
@@ -147,7 +144,7 @@ complete 自動補齊
 linux:~ # complete -p
 
 # completion all command
-linux:~ # complete -c which == complete -A command which 
+linux:~ # complete -c which == complete -A command which
 linux:~ # which [TAB] [TAB]
 # completion all command
 # completion
@@ -157,13 +154,11 @@ linux:~ # complete -W 'host1' ssh
 linux:~ # ssh [TAB] [TAB]
 ```
 
-
-----
+---
 
 ## Network
 
-
-----
+---
 
 ## Service
 
@@ -172,8 +167,7 @@ ubuntu:~ $ sudo service avahi-daemon stop
 ubuntu:~ $ sudo sh -c "echo manual > /etc/init/avahi-daemon.override"
 ```
 
-
-----
+---
 
 ## Regex
 
@@ -206,11 +200,9 @@ linux:~ # sed -n "/<\!--/,/-->/p" index.html
 linux:~ # sed  "/<\!--/,/-->/d" index.html
 ```
 
-
 ---
 
 ## Compile
-
 
 ### make
 
@@ -226,11 +218,9 @@ Linux:~/pkg # make
 Linux:~/pkg # make install DESTDIR=/install_dir
 ```
 
-
 ---
 
 ## Ineternet
-
 
 ### SSH
 
@@ -259,19 +249,17 @@ sftp> put -ar <local_file>
 sftp> reput <local_file>
 ```
 
-
 ### Chrome
 
 在 Chrome Dev Tool 中, 輸入以下程式碼, 可直接 import javascript
 
 ```javascript
-var jq = document.createElement('script');
+var jq = document.createElement("script");
 jq.src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js";
-document.getElementsByTagName('head')[0].appendChild(jq);
+document.getElementsByTagName("head")[0].appendChild(jq);
 
 $("#lst-ib").val("python");
 ```
-
 
 ### firefox
 

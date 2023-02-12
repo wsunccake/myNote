@@ -6,7 +6,6 @@
 debian:~ # apt install nav
 ```
 
-
 ---
 
 ## usage
@@ -27,7 +26,6 @@ w/W         next/previous warning
 n/N         next/previous search
 ```
 
-
 ---
 
 ## config
@@ -35,7 +33,6 @@ n/N         next/previous search
 ```bash
 debian:~ $ ls $HOME/.config/lnav
 ```
-
 
 ---
 
@@ -49,7 +46,7 @@ debian:~ $ ls $HOME/.config/lnav
     "url": "",
     "regex": {
       "main": {
-        "pattern": "^\\[(?<timestamp>\\d{4}\\-\\d{2}\\-\\d{2} \\d{2}:\\d{2}:\\d{2},\\d{3})] (?<host>(\\S+))\/(?<level>(\\w+))\/(?<module>(\\S+)): (?<body>.*)"
+        "pattern": "^\\[(?<timestamp>\\d{4}\\-\\d{2}\\-\\d{2} \\d{2}:\\d{2}:\\d{2},\\d{3})] (?<host>(\\S+))/(?<level>(\\w+))/(?<module>(\\S+)): (?<body>.*)"
       }
     },
     "timestamp-format": ["%Y-%m-%d %H:%M:%S,%L"],

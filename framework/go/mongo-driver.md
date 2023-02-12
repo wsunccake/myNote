@@ -3,7 +3,7 @@
 ## crud example
 
 ```bash
-tree 
+tree
 .
 ├── main.go
 ├── makefile
@@ -210,7 +210,7 @@ build: fmt
 
 .PHONY: clean
 clean:
-	rm animal	
+	rm animal
 
 .PHONY: run
 run: build
