@@ -72,14 +72,12 @@ network:
 [ubuntu:~ ] # systemctl status lightdm
 ```
 
-
 ### xfce
 
 ```bash
 [ubuntu:~ ] # apt install xfce4
 [ubuntu:~ ] # startxfce4
 ```
-
 
 ### i3wm
 
@@ -90,28 +88,27 @@ network:
 
 $HOME/.config/i3
 
-$mod + ENTER          : open terminal
+$mod + ENTER : open terminal
 
-$mod + Shift + q      : closing application window
+$mod + Shift + q : closing application window
 
-$mod + Shift + e      : exit i3
+$mod + Shift + e : exit i3
 
-$mod + Shift + space  : float window
+$mod + Shift + space : float window
 
-$mod + j              : left
+$mod + j : left
 
-$mod + k              : down
+$mod + k : down
 
-$mod + l              : up
+$mod + l : up
 
-$mod + ;              : right
+$mod + ; : right
 
-$mod + e              : split vertical / horizontal
+$mod + e : split vertical / horizontal
 
-$mod + w              : tab
+$mod + w : tab
 
-$mod + s              : stack
-
+$mod + s : stack
 
 ---
 
@@ -123,7 +120,6 @@ $mod + s              : stack
 [ubuntu:~ ] # apt install openjdk-11-jdk
 ```
 
-
 ---
 
 ## terminal
@@ -133,7 +129,6 @@ $mod + s              : stack
 ```bash
 [ubuntu:~ ] # apt install zsh
 ```
-
 
 ---
 

@@ -13,7 +13,6 @@ SLES:/etc/ssl # openssl req -new -nodes -out /etc/ssl/servercerts/servercert.csr
 SLES:/etc/ssl # openssl ca -cert /etc/ssl/cacert.pem -keyfile /etc/ssl/private/cakey.pem -out /etc/ssl/servercerts/servercert.pem -outdir /etc/ssl/servercerts -infiles /etc/ssl/servercerts/servercert.csr
 ```
 
-
 ## certificate
 
 ```bash

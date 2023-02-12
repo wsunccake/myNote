@@ -12,7 +12,6 @@ HW:
   40GB disk space
 ```
 
-
 ---
 
 ## network topology
@@ -43,7 +42,6 @@ neutron external                    eth1        eth1
 provider network                    eth2
 ```
 
-
 ---
 
 ## deploy node
@@ -62,7 +60,6 @@ deploy01:~ $ ssh-keygen
 deploy01:~ $ ssh-copy-id control01
 deploy01:~ $ ssh-copy-id computer01
 ```
-
 
 ### install
 
@@ -86,7 +83,6 @@ forks=100
 # kolla-ansible
 deploy01:~ # pip3 install kolla-ansible
 ```
-
 
 ### config
 
@@ -128,7 +124,6 @@ control01 network_interface=eth1 tunnel_interface=eth1 neutron_external_interfac
 ...
 ```
 
-
 ### deploy
 
 ```bash
@@ -143,7 +138,6 @@ control01 network_interface=eth1 tunnel_interface=eth1 neutron_external_interfac
 # destroy
 [deploy01:~ ] $ kolla-ansible -i /etc/kolla/multinode --yes-i-really-really-mean-it destroy
 ```
-
 
 ### usage
 
@@ -173,7 +167,6 @@ control01 network_interface=eth1 tunnel_interface=eth1 neutron_external_interfac
 [deploy01:~ ] $ openstack server delete demo1
 ```
 
-
 ---
 
 ## provider network
@@ -185,14 +178,13 @@ control01 network_interface=eth1 tunnel_interface=eth1 neutron_external_interfac
 [ubuntu:~ ] # docker exec -it openvswitch_vswitchd ovs-vsctl show
 [ubuntu:~ ] # docker exec -it openvswitch_vswitchd ovs-vsctl add-br br0
 [ubuntu:~ ] # docker exec -it openvswitch_vswitchd ovs-vsctl add-port br0 eth2
- 
+
 # list bridge and port
 [ubuntu:~ ] # ip addr show dev br0
 [ubuntu:~ ] # ip addr show dev eth2
 [ubuntu:~ ] # docker exec -it openvswitch_vswitchd ovs-vsctl show
 [ubuntu:~ ] # docker exec -it openvswitch_vswitchd ovs-vsctl list-ports br0
 ```
-
 
 ### control node
 
@@ -203,7 +195,7 @@ control01 network_interface=eth1 tunnel_interface=eth1 neutron_external_interfac
 [ovs]
 bridge_mappings = physnet1:br-ex,physnet3:br0
 ...
- 
+
 # setup neutron-server
 [control01:~  ] # vi /etc/kolla/neutron-server/ml2_conf.ini
 ...
@@ -220,7 +212,6 @@ flat_networks = physnet1,physnet3
 [control01:~  ] # docker exec -it openvswitch_vswitchd ovs-vsctl list-ports br0
 ```
 
-
 ### compute node
 
 ```bash
@@ -230,14 +221,13 @@ flat_networks = physnet1,physnet3
 [ovs]
 bridge_mappings = physnet3:br0
 ...
- 
+
 [compute01:~ ] # reboot
 
 # list bridge and port
 [compute01:~ ] # docker exec -it openvswitch_vswitchd ovs-vsctl show
 [compute01:~ ] # docker exec -it openvswitch_vswitchd ovs-vsctl list-ports br0
 ```
-
 
 ### deploy node
 
@@ -271,11 +261,9 @@ bridge_mappings = physnet3:br0
   provider_subnet_v6
 ```
 
-
 ---
 
 ## other
-
 
 ### quota port number
 
@@ -284,7 +272,6 @@ bridge_mappings = physnet3:br0
 [deploy01:~ ] # openstack quota list --network
 [deploy01:~ ] # openstack quota set --ports 5000 <project>
 ```
-
 
 ### resource overcommitting
 
@@ -299,7 +286,6 @@ disk_allocation_ratio=1.0
 
 [control01:~ ] # docker restart nova_scheduler
 ```
-
 
 ### glance image space
 

@@ -14,7 +14,6 @@
 [ubuntu:~ ] # apt install docker-ce docker-ce-cli containerd.io
 ```
 
-
 ---
 
 ## service
@@ -34,7 +33,6 @@
 
 [ubuntu:~ ] # usermod -aG docker <user>
 ```
-
 
 ---
 

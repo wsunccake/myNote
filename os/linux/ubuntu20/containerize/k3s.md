@@ -9,7 +9,6 @@
 192.168.0.13   node2
 ```
 
-
 ---
 
 ## install
@@ -37,7 +36,6 @@
 [master:~ ] # kubectl get pods -n kube-system
 ```
 
-
 ---
 
 ## test
@@ -49,7 +47,6 @@
 
 [master:~ ] # curl http://<EXTERNAL-IP>:8080
 ```
-
 
 ---
 
@@ -73,7 +70,6 @@ ctr task ls                             docker ps
 [ubunut:~ ] # ip -d link show flannel.1
 ```
 
-
 ---
 
 ## uninstall
@@ -83,7 +79,6 @@ ctr task ls                             docker ps
 
 [node:~ ] # /usr/local/bin/k3s-agent-uninstall.sh
 ```
-
 
 ---
 
@@ -99,7 +94,6 @@ klipper is k3s default Service LB
 [master:~ ] # kubectl get all -n kube-system | grep svclb
 # no kube-system/svclb-traefik
 ```
-
 
 ---
 

@@ -14,7 +14,6 @@ HW:
 
 ```
 
-
 ---
 
 ## network topology
@@ -26,13 +25,11 @@ deploy      master      worker
 +-----------+-----------+
 ```
 
-
 ---
 
 ## prepare
 
 ### deploy node
-
 
 ```bash
 [deploy01:~ ] # apt update
@@ -50,7 +47,6 @@ deploy      master      worker
 192.168.10.101  master01
 192.168.10.102  worker01
 ```
-
 
 ### k8s node
 
@@ -73,7 +69,6 @@ net.ipv4.ip_forward=1
 
 [node:~ ] # sysctl -w net.ipv4.ip_forward=1
 ```
-
 
 ---
 
@@ -140,7 +135,7 @@ ingress_nginx_enabled: true
 ...
 # change container runtime to use cri-o
 container_manager: crio
- 
+
 # change value to match the environment if want to use MetaLB as loadbalancer
 kube_proxy_strict_arp: true
 ...
@@ -157,7 +152,6 @@ etcd_deployment_type: host
 # start to deploy
 [deploy01:~/kubespray ] $ ansible-playbook -i inventory/mycluster/hosts.yaml --become --become-user=root cluster.yml
 ```
-
 
 ---
 
@@ -182,7 +176,6 @@ etcd_deployment_type: host
 [master01:~ ] # kubectl delete namesapce demo
 ```
 
-
 ---
 
 ## usage
@@ -190,6 +183,6 @@ etcd_deployment_type: host
 ```bash
 [master01:~ ] $ mkdir -p .kube
 [master01:~ ] $ sudo cp /etc/kubernetes/admin.conf $HOME/.kube/config
-[master01:~ ] $ sudo chown <user>:<group> $HOME/.kube/config 
+[master01:~ ] $ sudo chown <user>:<group> $HOME/.kube/config
 [master01:~ ] $ kubectl get nodes
 ```

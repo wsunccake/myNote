@@ -6,8 +6,7 @@
 ubuntu:~ # apt-get install apcupsd
 ```
 
-
-----
+---
 
 ## configure
 
@@ -40,24 +39,23 @@ ubuntu:~ # service apcupsd stop
 ubuntu:~ # service apcupsd status
 ```
 
-
-----
+---
 
 ## status
 
 ```bash
 ubuntu:~ # apcaccess [ <server_ip>:<port> ]
 APC      : 001,035,0915
-DATE     : 2017-11-18 20:24:51 +0800  
+DATE     : 2017-11-18 20:24:51 +0800
 HOSTNAME : u1
 VERSION  : 3.14.10 (13 September 2011) debian
 UPSNAME  : u1
 CABLE    : USB Cable
 DRIVER   : USB UPS Driver
 UPSMODE  : Stand Alone
-STARTTIME: 2017-11-18 17:44:20 +0800  
-MODEL    : Back-UPS ES 500 
-STATUS   : ONLINE 
+STARTTIME: 2017-11-18 17:44:20 +0800
+MODEL    : Back-UPS ES 500
+STATUS   : ONLINE
 LINEV    : 110.0 Volts
 LOADPCT  :   0.0 Percent Load Capacity
 BCHARGE  : 100.0 Percent
@@ -72,26 +70,26 @@ ALARMDEL : 30 seconds
 BATTV    : 13.3 Volts
 LASTXFER : No transfers since turnon
 NUMXFERS : 1
-XONBATT  : 2017-11-18 17:44:23 +0800  
+XONBATT  : 2017-11-18 17:44:23 +0800
 TONBATT  : 0 seconds
 CUMONBATT: 9 seconds
-XOFFBATT : 2017-11-18 17:44:32 +0800  
+XOFFBATT : 2017-11-18 17:44:32 +0800
 STATFLAG : 0x07000008 Status Flag
-SERIALNO : 4B1250P23673  
+SERIALNO : 4B1250P23673
 BATTDATE : 2012-12-14
 NOMINV   : 120 Volts
 NOMBATTV :  12.0 Volts
 FIRMWARE : 801.e6.D USB FW:e6
-END APC  : 2017-11-18 20:25:09 +0800  
+END APC  : 2017-11-18 20:25:09 +0800
 ```
+
 LINEV, LOADPCT, BCHARGE, TIMELEFT are in-time value
 
 MBATTCHG, MINTIMEL, MAXTIME are config value
 
+---
 
-----
-
-## test 
+## test
 
 ```bash
 ubuntu:~ # apcupsd --killpower
@@ -99,8 +97,7 @@ ubuntu:~ # apccontrol killpower
 ubunut:~ # vi /etc/apcupsd/apccontrol
 ```
 
-
-----
+---
 
 ## log
 
@@ -108,8 +105,7 @@ ubunut:~ # vi /etc/apcupsd/apccontrol
 ubuntu:~ # tail /var/log/apcupsd.events
 ```
 
-
-----
+---
 
 ## web
 
@@ -119,7 +115,7 @@ ubuntu:~ # apt-get install apache2
 http://localhost/cgi-bin/apcupsd/multimon.cgi
 ```
 
-----
+---
 
 ## ref
 

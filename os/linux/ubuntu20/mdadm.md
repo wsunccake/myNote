@@ -7,7 +7,6 @@
 [ubuntu:~ ] # apt list mdadm
 ```
 
-
 ---
 
 ## raid
@@ -56,38 +55,37 @@
 [ubuntu:~ ] # mdadm --manage /dev/md0 --add /dev/vdd
 ```
 
-
 ---
 
 ## format disk to softraid
 
 ```bash
-[ubuntu:~ ] # lsblk 
+[ubuntu:~ ] # lsblk
 NAME                 MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
-vda                  252:0    0  100G  0 disk 
-├─vda1               252:1    0    1M  0 part 
+vda                  252:0    0  100G  0 disk
+├─vda1               252:1    0    1M  0 part
 ├─vda2               252:2    0    1G  0 part /boot
-└─vda3               252:3    0   99G  0 part 
+└─vda3               252:3    0   99G  0 part
   └─ubuntu--vg-lv--0 253:0    0   99G  0 lvm  /
-vdb                  252:16   0  100G  0 disk 
-vdc                  252:32   0  100G  0 disk 
-vdd                  252:16   0  100G  0 disk 
-vde                  252:32   0  100G  0 disk 
+vdb                  252:16   0  100G  0 disk
+vdc                  252:32   0  100G  0 disk
+vdd                  252:16   0  100G  0 disk
+vde                  252:32   0  100G  0 disk
 
 [ubuntu:~ ] # parted /dev/vdb
 (parted) mklabel gpt
 (parted) mkpart primary 0% 100%
 (parted) set 1 raid on
-(parted) align-check 
-alignment type(min/opt)  [optimal]/minimal? optimal                       
-Partition number? 1                                                       
+(parted) align-check
+alignment type(min/opt)  [optimal]/minimal? optimal
+Partition number? 1
 1 aligned
-(parted) print                                                            
+(parted) print
 Model: Virtio Block Device (virtblk)
 Disk /dev/vdb: 107GB
 Sector size (logical/physical): 512B/512B
 Partition Table: gpt
-Disk Flags: 
+Disk Flags:
 
 Number  Start   End    Size   File system  Name     Flags
  1      1049kB  107GB  107GB               primary  raid

@@ -10,7 +10,6 @@ server          client
    +------------+                192.168.10.0/24
 ```
 
-
 ---
 
 ## server
@@ -27,14 +26,12 @@ server          client
 [server:~ ] # systemctl status nfs-kernel-server
 ```
 
-
 ### config
 
 ```bash
 [server:~ ] # cat /etc/default/nfs-kernel-server
 [server:~ ] # cat /etc/default/nfs-common
 ```
-
 
 ### export fs
 
@@ -49,7 +46,6 @@ server          client
 [server:~ ] # showmount -e 192.168.10.1
 ```
 
-
 ---
 
 ## client
@@ -61,7 +57,6 @@ server          client
 [client:~ ] # apt install nfs-common
 ```
 
-
 ### mount
 
 ```bash
@@ -69,7 +64,6 @@ server          client
 [client:~ ] # showmount -e 192.168.10.1
 [client:~ ] # mount -t nfs 192.168.10.1:/data /data
 ```
-
 
 ### fstab
 
