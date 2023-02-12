@@ -1,6 +1,5 @@
 # Git
 
-
 ## Environment
 
 ```bash
@@ -32,7 +31,6 @@ linux:~ $ cat ~/.gitconfig
 #    log-pretty = log --graph --oneline --boundary --decorate --all --date-order
     log-full= log -C --stat --decorate
 ```
-
 
 ---
 
@@ -93,6 +91,7 @@ linux:~/project # git remote set-url origin <url>
 linux:~/project # git push -u origin master
 ```
 
+---
 
 ## Merge
 
@@ -107,7 +106,6 @@ linux:~/project $ git checkout m2
 linux:~/project $ git merge b1
 ```
 
-
 ### fast-forward
 
 ```bash
@@ -121,7 +119,6 @@ linux:~/project $ git checkout m1
 linux:~/project $ git merge [--ff] b1
 ```
 
-
 ```bash
    b1              b1
    /     =>      /    \
@@ -133,7 +130,7 @@ linux:~/project $ git checkout m2
 linux:~/project $ git merge --no-ff b1
 ```
 
-
+---
 
 ## Rebase
 
@@ -172,6 +169,7 @@ linux:~/project $ git log --graph --oneline
 * c28beea c1
 ```
 
+---
 
 ## Stash
 
@@ -199,14 +197,15 @@ linux:~/project $ git log
 linux:~/project $ git stash pop
 ```
 
+---
 
 ## Reset
 
-| option 	 | HEAD 	 | index | workdir 	 |
-| ---------- | --------- | ----- | --------- |
-| --soft 	 | Y		 | 		 | 			 |
-| --mixed 	 | Y 		 | Y 	 | 			 |
-| --hard 	 | Y 		 | Y 	 | Y 		 |
+| option  | HEAD | index | workdir |
+| ------- | ---- | ----- | ------- |
+| --soft  | Y    |       |         |
+| --mixed | Y    | Y     |         |
+| --hard  | Y    | Y     | Y       |
 
 ```bash
 linux:~/project $ git reset HEAD
@@ -214,7 +213,6 @@ linux:~/project $ git reset --mixed HEAD # 同上
 linux:~/project $ git reset --soft HEAD
 linux:~/project $ git reset --hard HEAD
 ```
-
 
 ---
 
@@ -292,7 +290,6 @@ centos:~/project $ git commit "Add file2"
 centos:~/project $ git push
 ```
 
-
 ---
 
 ## Tag
@@ -311,7 +308,6 @@ linux:~/project # git push origin --tags        # all tag
 # remove tag to remote
 linux:~/project # git push -d origin <tag_name>
 ```
-
 
 ---
 
@@ -370,4 +366,3 @@ linux:~/repo $ git add sub
 linux:~/repo $ git commit "update sub_repo"
 linux:~/repo $ git push
 ```
-

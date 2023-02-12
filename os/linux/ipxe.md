@@ -1,6 +1,6 @@
 # ipxe
 
-## command ##
+## command
 
 ```bash
 ipxe> ifconf

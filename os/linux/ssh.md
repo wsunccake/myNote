@@ -1,8 +1,6 @@
 # ssh
 
-
 ## login with identity file / private key
-
 
 ```bash
 # keygen
@@ -17,16 +15,13 @@
 [server:~ ] $ cat <public key> >> ~/.ssh/authorized_keys
 ```
 
-
 ---
 
 ## forwarding
 
-
 ```bash
 [client:~ ] $ ssh -D<port> <server>
 ```
-
 
 ---
 
@@ -47,7 +42,6 @@ cat <private key>
 -----END RSA PRIVATE KEY-----
 ```
 
-
 ---
 
 ## other
@@ -61,7 +55,6 @@ Disconnected from <server_ip> port 22
 
 [client:~ ] $ ssh -o IdentitiesOnly=yes <server_ip>
 ```
-
 
 ### Specified Configuration File
 
