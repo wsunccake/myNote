@@ -42,7 +42,6 @@ linux:~ # sh -xv script.sh
 | Pipe stdout and stderr to prog2       | prog |& prog2   |  prog 2>&1 | prog2
 ```
 
-
 ---
 
 ## pipe example
@@ -58,7 +57,6 @@ linux:~ # curl http://download/file.tar.gz | tar zx
 linux:~ # false | tee /dev/null; echo $?
 linux:~ # false | tee /dev/null; echo ${PIPESTATUS[0]}
 ```
-
 
 ---
 
@@ -142,7 +140,6 @@ echo "VAR: ${VAR}"
 echo
 ```
 
-
 ---
 
 ## if
@@ -156,7 +153,6 @@ fi
 
 [ "x$SEX" == "xmale" ] && echo "Hi male" || echo "Hi Female"
 ```
-
 
 ---
 
@@ -189,7 +185,6 @@ done
 
 seq 3 | xargs -i echo "{}"
 ```
-
 
 ---
 
@@ -237,7 +232,6 @@ until false; do
 done
 ```
 
-
 ---
 
 ## case
@@ -269,7 +263,6 @@ select V in a b q; do
 done
 ```
 
-
 ---
 
 ## heredoc
@@ -291,7 +284,6 @@ print("$COLLECTION")
 db.getCollection("$COLLECTION").findOne()
 EOF
 ```
-
 
 ---
 
@@ -402,7 +394,6 @@ shift
 echo "#: $#, @: $@, *: $*, 1: $1"
 ```
 
-
 ---
 
 ## set
@@ -433,7 +424,6 @@ echo "bar"
 ---
 
 ## grep
-
 
 ---
 
@@ -469,7 +459,6 @@ linux:~ # sed -n '/Joe/,/Cheng/p' data.csv
 linux:~ # sed -n '/Joe/p;/Cheng/p' data.csv
 linux:~ # sed '/Tim/q' data.csv
 ```
-
 
 ---
 
@@ -519,7 +508,6 @@ linux:~ # awk "\$1 == \"<pattern>\" {printf \"$HOME %s\", \$_}" <file>
 linux:~ # awk '{if (NF < 3) {printf line %s, %s\n", NR, $_}}' <file>
 ```
 
-
 ---
 
 ## find
@@ -536,11 +524,9 @@ linux:~ # find / -samefile <file>
 linux:~ # find / -xdev -samefile <file>
 ```
 
-
 ---
 
 ## expect
-
 
 ---
 
@@ -564,7 +550,6 @@ linux:~ # export -f hi
 linux:~ # awk -F: '{print $1}' /etc/passwd | xargs -i sh -c 'hi {}'
 ```
 
-
 ---
 
 ## parallel
@@ -574,7 +559,6 @@ linux:~ # date && seq 5 | xargs -i sh -c "echo {} && sleep {}" && date
 linux:~ # date && seq 5 | xargs -P 5 -i sh -c "echo {} && sleep {}" && date
 linux:~ # date && seq 5 | parallel -j 5 "echo {} && sleep {}" && date
 ```
-
 
 ---
 
@@ -601,7 +585,6 @@ linux:~ # compgen -g  # group
 # wild list
 linux:~ # compgen -W "aa ab Aa xyz abc123" -- a
 ```
-
 
 ---
 
@@ -645,7 +628,6 @@ linux:~ # function _foo_complete_() {
 linux:~ # complete -F _foo_complete_ foo
 linux:~ # ./foo <TAB><TAB>
 ```
-
 
 ---
 

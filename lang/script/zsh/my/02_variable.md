@@ -1,4 +1,4 @@
-# var
+# variable
 
 ## prefix and suffix
 

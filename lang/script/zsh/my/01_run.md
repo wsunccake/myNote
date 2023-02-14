@@ -6,7 +6,6 @@
 linux:~ # zsh --version
 ```
 
-
 ---
 
 ## script
@@ -18,7 +17,6 @@ echo "hello zsh"
 print "hello zsh"
 ```
 
-
 ---
 
 ## execute by change mode
@@ -28,7 +26,6 @@ linux:~ # chmod +x script.zsh
 linux:~ # ./script.zsh
 ```
 
-
 ---
 
 ## execute by zsh command
@@ -37,24 +34,18 @@ linux:~ # ./script.zsh
 linux:~ # zsh script.zsh
 ```
 
-
 ---
 
 ## execute with environment variable
 
 ```zsh
+# method 1
 linux:~ # export VAR=value
 linux:~ # ./script.sh
-```
 
----
-
-## execute with environment variable
-
-```zsh
+# method 2
 linux:~ # env VAR=value ./script.sh
 ```
-
 
 ---
 
