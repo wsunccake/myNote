@@ -97,7 +97,7 @@ debian:~ # debconf-set-selections < <pkg>.conf
 
 # ie.
 debian:~ # export DEBIAN_FRONTEND=noninteractive
-debian:~ # dpkg-reconfigure debconf
+debian:~ # dpkg-reconfigure debconf     # interactive
 debian:~ # debconf-show debconf
 debian:~ # debconf-get-selections | grep ^debconf
 debconf	debconf/frontend	select	Dialog

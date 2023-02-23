@@ -1,15 +1,15 @@
-# nginx #
+# nginx
 
+## Package
 
-## Package ##
+```bash
+RHEL:~ # yum install epel-release
+RHEL:~ # yum install nginx
+RHEL:~ # systemctl start nginx
+RHEL:~ # systemctl enable nginx
+```
 
-	RHEL:~# yum install epel-release
-	RHEL:~# yum install nginx
-	RHEL:~# systemctl start nginx
-	RHEL:~# systemctl enable nginx
-
-
-## Configuration ##
+## Configuration
 
 ```bash
 RHEL:~ # vi /etc/nginx/nginx.conf
@@ -22,7 +22,7 @@ http {
 		listen       [::]:80 default_server;
 		server_name  _;
 		root         /usr/share/nginx/html;
-	
+
 		...
 
 		location / {
