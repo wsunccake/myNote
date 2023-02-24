@@ -33,7 +33,7 @@ debian:~ # file hello-aarch64
 
 ---
 
-## debian arm - netboot install
+## debian arm64 - netboot install
 
 ```bash
 debian:~ # IMG_REPO=https://deb.debian.org/debian/dists/bullseye/main/installer-arm64/current/images/netboot
@@ -42,7 +42,7 @@ debian:~ # VM_DISK=debian-aarch64.qcow2
 # download
 debian:~ # wget $IMG_REPO/debian-installer/arm64/initrd.gz
 debian:~ # wget $IMG_REPO/debian-installer/arm64/linux
-debian:~ # curl -k -LO $IMG_REPO/mini.iso
+debian:~ # wget $IMG_REPO/mini.iso
 
 # create disk
 debian:~ # qemu-img create -f qcow2 $VM_DISK 32G
@@ -65,6 +65,19 @@ debian:~ # qemu-system-aarch64 -M virt -cpu cortex-a53 -m 1G -initrd initrd.img 
   -device intel-hda -device hda-duplex -nographic
 ```
 
+ps $VM_DISK 可以用 virt-manager 直接使用
+
+---
+
+## alpine arm - iso
+
+```bash
+debian:~ # IMG_REPO=https://dl-cdn.alpinelinux.org/alpine/v3.17/releases
+debian:~ # curl -k -LO $IMG_REPO/aarch64/alpine-standard-3.17.2-aarch64.iso
+```
+
+使用 virt-manager 安裝, 選用 local install media (ISO image or CDROM), architecture 選用 aarch64, machine 選用 virt
+
 ---
 
 ## other
@@ -80,7 +93,8 @@ debian:~ # lsblk
 debian:~ # kpartx -av /dev/loop0
 debian:~ # ls /dev/mapper/loop0*
 debian:~ # mount /dev/loop0p1 /mnt
-...
+
+# umount qemu image
 debian:~ # umount /mnt
 debian:~ # kpart -dv /dev/loop0
 debian:~ # losetup -d /dev/loop0
