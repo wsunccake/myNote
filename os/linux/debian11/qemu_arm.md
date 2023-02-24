@@ -37,6 +37,7 @@ debian:~ # file hello-aarch64
 
 ```bash
 debian:~ # IMG_REPO=https://deb.debian.org/debian/dists/bullseye/main/installer-arm64/current/images/netboot
+debian:~ # VM_DISK=debian-aarch64.qcow2
 
 # download
 debian:~ # wget $IMG_REPO/debian-installer/arm64/initrd.gz
@@ -44,7 +45,6 @@ debian:~ # wget $IMG_REPO/debian-installer/arm64/linux
 debian:~ # curl -k -LO $IMG_REPO/mini.iso
 
 # create disk
-debian:~ # VM_DISK=debian-3607-aarch64.qcow2
 debian:~ # qemu-img create -f qcow2 $VM_DISK 32G
 
 # install
@@ -63,6 +63,31 @@ debian:~ # qemu-system-aarch64 -M virt -cpu cortex-a53 -m 1G -initrd initrd.img 
   -drive if=virtio,file=$VM_DISK,format=qcow2,id=hd \
   -net user,hostfwd=tcp::10022-:22 -net nic \
   -device intel-hda -device hda-duplex -nographic
+```
+
+---
+
+## other
+
+```bash
+# list qemu support
+debian:~ # qemu-system-aarch64 -machine help
+debian:~ # qemu-system-aarch64 -cpu help
+
+# mount qemu image
+debian:~ # losetup /dev/loop0 $VM_DISK
+debian:~ # lsblk
+debian:~ # kpartx -av /dev/loop0
+debian:~ # ls /dev/mapper/loop0*
+debian:~ # mount /dev/loop0p1 /mnt
+...
+debian:~ # umount /mnt
+debian:~ # kpart -dv /dev/loop0
+debian:~ # losetup -d /dev/loop0
+
+# nbd
+debian:~ # modprobe nbd max_part=8
+debian:~ # lsmod nbd
 ```
 
 ---
