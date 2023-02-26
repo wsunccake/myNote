@@ -69,14 +69,46 @@ ps $VM_DISK 可以用 virt-manager 直接使用
 
 ---
 
-## alpine arm - iso
+## sd card
 
 ```bash
-debian:~ # IMG_REPO=https://dl-cdn.alpinelinux.org/alpine/v3.17/releases
-debian:~ # curl -k -LO $IMG_REPO/aarch64/alpine-standard-3.17.2-aarch64.iso
-```
+debian:~ # SD_DISK=sd.img
+debian:~ # LOOP_DEVICE=/dev/loop0
+debian:~ # MAP_LOOP_DEVICE=/dev/map/loop0
 
-使用 virt-manager 安裝, 選用 local install media (ISO image or CDROM), architecture 選用 aarch64, machine 選用 virt
+# create virtual sd card
+debian:~ # dd if=/dev/zero of=$SD_DISK bs=1G count=2
+debian:~ # file $SD_DISK
+debian:~ # hexdump $SD_DISK
+
+# partition device
+debian:~ # losetup $LOOP_DEVICE $SD_DISK
+debian:~ # parted -s $LOOP_DEVICE mklabel msdos
+debian:~ # parted -s $LOOP_DEVICE mkpart primary fat32 0% 128MiB   # 0% -> 512 * 2048 = 1049kB = 1047552
+debian:~ # parted -s $LOOP_DEVICE set 1 lba off
+# debian:~ # parted -s $LOOP_DEVICE mkpart primary ext4 128MiB 100%
+debian:~ # parted -s $LOOP_DEVICE print
+debian:~ # fdisk -l $LOOP_DEVICE
+
+# load partition table
+debian:~ # kpart -av $LOOP_DEVICE
+debian:~ # kpart -lv $LOOP_DEVICE
+
+# format file system
+debian:~ # mkfs -t msdos ${MAP_LOOP_DEVICE}p1
+debian:~ # mkfs -t ext4 ${MAP_LOOP_DEVICE}p2
+
+# mount device
+debian:~ # mkdir -p /sd1 /sd2
+debian:~ # mount ${MAP_LOOP_DEVICE}p1 /sd1
+debian:~ # mount ${MAP_LOOP_DEVICE}p2 /sd2
+
+## clean
+debian:~ # umount /sd1
+debian:~ # umount /sd1
+debian:~ # kpart -dv $LOOP_DEIVCE
+debian:~ # losetup -d $LOOP_DEVICE
+```
 
 ---
 
@@ -86,18 +118,6 @@ debian:~ # curl -k -LO $IMG_REPO/aarch64/alpine-standard-3.17.2-aarch64.iso
 # list qemu support
 debian:~ # qemu-system-aarch64 -machine help
 debian:~ # qemu-system-aarch64 -cpu help
-
-# mount qemu image
-debian:~ # losetup /dev/loop0 $VM_DISK
-debian:~ # lsblk
-debian:~ # kpartx -av /dev/loop0
-debian:~ # ls /dev/mapper/loop0*
-debian:~ # mount /dev/loop0p1 /mnt
-
-# umount qemu image
-debian:~ # umount /mnt
-debian:~ # kpart -dv /dev/loop0
-debian:~ # losetup -d /dev/loop0
 
 # nbd
 debian:~ # modprobe nbd max_part=8
