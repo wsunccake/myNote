@@ -43,6 +43,12 @@ debian:~ # VM_NAME=fedora-37-aarch64
 debian:~ # VM_DISK=$VM_DISK-vm.qcow2
 debian:~ # ISO_FILE=Fedora-Server-dvd-aarch64-37-1.7.iso
 debian:~ # ISO_URL=https://download.fedoraproject.org/pub/fedora/linux/releases/37/Server/aarch64/iso/$ISO_FILE
+
+# for ubuntu 22.04
+debian:~ # VM_NAME=ubuntu-22.04-aarch64
+debian:~ # VM_DISK=$VM_DISK-vm.qcow2
+debian:~ # ISO_FILE=ubuntu-22.04.2-live-server-arm64.iso
+debian:~ # ISO_URL=https://cdimage.ubuntu.com/releases/22.04/release/$ISO_FILE
 ```
 
 ```bash
@@ -72,6 +78,13 @@ debian:~ # ISO_URL=https://download.fedoraproject.org/pub/fedora/linux/releases/
 
 debian:~ # wget $ISO_URL
 debian:~ # xz -d $VM_DISK.xz
+
+# for ubuntu 22.04
+debian:~ # VM_NAME=ubuntu-22.04-aarch64
+debian:~ # VM_DISK=jammy-server-cloudimg-arm64.img
+debian:~ # ISO_URL=http://cloud-images.ubuntu.com/jammy/current/$VM_DISK
+
+debian:~ # wget $ISO_URL
 ```
 
 ```bash
@@ -120,4 +133,19 @@ debian:~ # virt-install -v --name $VM_NAME \
   --boot uefi,kernel=$KERNEL,initrd=$INITRD,kernel_args="$KERNEL_ARG" \
   --import \
   --nographics
+```
+
+---
+
+## other command
+
+```bash
+# list folder
+debian:~ # virt-ls -l -a $VM_DISK /boot/
+
+# copy file
+debian:~ # virt-copy-out -a $VM_DISK /boot/vmlinuz /boot/initrd.img .
+
+# set password
+debian:~ # virt-customize -a $VM_DISK --root-password password:
 ```
