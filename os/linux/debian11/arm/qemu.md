@@ -12,27 +12,6 @@ debian:~ # virt-ls --version
 
 ---
 
-## cross-build toolchain
-
-```bash
-debian:~ # apt install crossbuild-essential-arm64   # for arm64
-debian:~ # apt install crossbuild-essential-armel   # for arm32
-debian:~ # apt install crossbuild-essential-armhf
-
-debian:~ # cat << EOF >> hello.c
-#include <stdio.h>
-
-int main() {
-  printf("hello\n");
-}
-EOF
-
-debian:~ # aarch64-linux-gnu-gcc -c hello.c -o hello-aarch64
-debian:~ # file hello-aarch64
-```
-
----
-
 ## debian arm64 - netboot install
 
 ```bash
@@ -86,7 +65,7 @@ debian:~ # losetup $LOOP_DEVICE $SD_DISK
 debian:~ # parted -s $LOOP_DEVICE mklabel msdos
 debian:~ # parted -s $LOOP_DEVICE mkpart primary fat32 0% 128MiB   # 0% -> 512 * 2048 = 1049kB = 1047552
 debian:~ # parted -s $LOOP_DEVICE set 1 lba off
-# debian:~ # parted -s $LOOP_DEVICE mkpart primary ext4 128MiB 100%
+debian:~ # parted -s $LOOP_DEVICE mkpart primary ext4 128MiB 100%
 debian:~ # parted -s $LOOP_DEVICE print
 debian:~ # fdisk -l $LOOP_DEVICE
 

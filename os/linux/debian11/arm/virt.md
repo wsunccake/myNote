@@ -4,7 +4,7 @@
 
 ```bash
 debian:~ # apt intall libvirt-clients
-debian:~ # apt intall apt install virt-manager virtinst
+debian:~ # apt intall virt-manager virtinst
 debian:~ # apt intall libguestfs-tools
 ```
 

@@ -2,9 +2,9 @@
 
 ---
 
-# package manager
+## package manager
 
-## dpkg
+### dpkg
 
 ```bash
 debian:~ # dpkg -i <pkg>.deb   # install package
@@ -30,6 +30,13 @@ debian:~ # dpkg -S /usr/bin/curl
 debian:~ # dpkg -S $(which curl)
 debian:~ # dpkg -c curl_7.64.0-4+deb10u2_amd64.deb
 
+# arch
+debian:~ # dpkg-architecture –L
+debian:~ # dpkg --print-architecture
+debian:~ # dpkg --print-foreign-architectures
+debian:~ # dpkg --add-architecture <arch>
+debian:~ # dpkg --remove-architecture <arch>
+
 # ar
 debian:~ # ar t <pkg>.deb               # list package
 debian:~ # ar x <pkg>.deb               # extract package
@@ -38,7 +45,7 @@ debian:~ # ar r <pkg>.deb <file>...     # create package
 
 ---
 
-## apt
+### apt
 
 ```bash
 # package
@@ -77,7 +84,7 @@ deb-src http://ftp.tw.debian.org/debian/ bullseye main contrib non-free
 debian:~ # /etc/apt/sources.list.d/*.list
 ```
 
-### other tool
+#### other tool
 
 ```bash
 debian:~ # apt install aptitude synaptic
@@ -87,7 +94,7 @@ debian:~ # apt install debconf-utils
 
 ---
 
-## debconf
+### debconf
 
 ```bash
 debian:~ # debconf-show --listowners                           # -> /var/cache/debconf
@@ -109,7 +116,7 @@ debconf	debconf/priority	select	high
 
 ---
 
-# haredware
+## haredware
 
 ```bash
 # cpu
@@ -136,7 +143,7 @@ debian:~ # sensors
 
 ---
 
-# network
+## network
 
 - en -- ethernet
 - sl -- serial line IP (slip)
@@ -151,7 +158,7 @@ debian:~ # sensors
 - [P<domain>]p<bus>s<slot>[f<function>][d<dev_port>] -- PCI geographical location
 - [P<domain>]p<bus>s<slot>[f<function>][u<port>][..][c<config>][i<interface>] -- USB port number chain
 
-## NetworkManager
+### NetworkManager
 
 ```bash
 debian:~ # systemctl start NetworkManager
@@ -181,7 +188,7 @@ debian:~ # nmtui
 
 ---
 
-## networking
+### networking
 
 ```bash
 debian:~ # systemctl start networking
@@ -207,7 +214,7 @@ debian:~ # ifup <nic>
 
 ---
 
-## systemd-networkd
+### systemd-networkd
 
 ```bash
 debian:~ # systemctl enable systemd-networkd
@@ -224,9 +231,9 @@ debian:~ # networkctl down <device>
 
 ---
 
-# date time
+## date time
 
-## timezone
+### timezone
 
 ```bash
 debian:~ # date
@@ -255,7 +262,7 @@ debian:~ # timedatectl timesync-status
 
 ---
 
-## ntp
+### ntp
 
 ```bash
 debian:~ # vi /etc/default/ntpdate
@@ -263,9 +270,9 @@ debian:~ # vi /etc/default/ntpdate
 
 ---
 
-# env
+## env
 
-## locale
+### locale
 
 ```bash
 debian:~ # locale
@@ -284,7 +291,7 @@ debian:~ # cat /etc/default/locale
 
 ---
 
-## hostname
+### hostname
 
 ```bash
 debian:~ # systemctl enable systemd-hostnamed
@@ -307,7 +314,7 @@ host:   ...
 
 ---
 
-## shell
+### shell
 
 ```bash
 # bash
@@ -331,7 +338,7 @@ debian:~ # cat /etc/zshenv
 
 ---
 
-## update-alternatives
+### update-alternatives
 
 ```bash
 debian:~ # update-alternatives --get-selections
@@ -350,9 +357,9 @@ debian:~ # ls /var/lib/dpkg/alternatives
 
 ---
 
-# account
+## account
 
-## user and group
+### user and group
 
 ```bash
 # user
@@ -405,7 +412,7 @@ debian:~ # delgroup
 
 ---
 
-## permission
+### permission
 
 ```bash
 debian:~ # chmod <right> <file>
@@ -417,7 +424,7 @@ debian:~ # umask
 
 ---
 
-## sudo
+### sudo
 
 ```bash
 debian:~ # sudo
@@ -428,9 +435,9 @@ debian:~ # usermod -aG sudo <user>
 
 ---
 
-# tool
+## tool
 
-## mlocate
+### mlocate
 
 ```bash
 debian:~ # apt install mlocate
@@ -442,7 +449,7 @@ debian:~ # locate <pattern>
 
 ---
 
-## fix bug
+### fix bug
 
 ```bash
 debian:~ # diff -u file.old file.new > file.patch       # generat patch
@@ -454,9 +461,9 @@ debian:~ # patch -Rp0 file.old < file.patch             # reverse patch file
 
 ---
 
-# gui
+## gui
 
-## xorg
+### xorg
 
 ```bash
 debian:~ # X -configure        # -> $HOME/xorg.conf.new
@@ -467,9 +474,9 @@ debian:~ # xdpyinfo
 
 ---
 
-# system
+## system
 
-## boot loader
+### boot loader
 
 ```bash
 # lilo
@@ -484,7 +491,7 @@ debian:~ # grub-install /dev/vda
 debian:~ # grub-install --efi-directory=/mnt/efi
 ```
 
-## mount
+### mount
 
 ```bash
 # mount
@@ -501,7 +508,7 @@ debian:~ # mount --bind /proc /proc
 
 ---
 
-## lograte
+### lograte
 
 ```bash
 debian:~ # logrotate
@@ -511,7 +518,7 @@ debian:~ # ls /etc/logrotate.d/
 
 ---
 
-## kerenl
+### kerenl
 
 ```bash
 debian:~ # uname -a
@@ -526,7 +533,7 @@ debian:~ # modprobe -r <module>
 
 ---
 
-## systemd
+### systemd
 
 ```bash
 debian:~ # ls /lib/systemd/system/
@@ -564,9 +571,9 @@ debian:~ # who
 
 ---
 
-# service
+## service
 
-## sshd
+### sshd
 
 ```bash
 debian:~ # systemctl start sshd
@@ -589,11 +596,11 @@ debian:~ # ssh-add -l                      # list private key in ssh-agent
 
 ---
 
-## cron, atd, anacron
+### cron, atd, anacron
 
 ---
 
-## quota
+### quota
 
 ---
 
