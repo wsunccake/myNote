@@ -9,6 +9,7 @@ debian:~ # apt install libssl-dev bc dwarves
 debian:~ # ROOTFS_DIR=/home/x64/rootfs
 debian:~ # BZ_IMAGE=/home/x64/bzImage
 debian:~ # INIT_RD=/home/x64/initrd.cpio
+debian:~ # ROOTFS_IMG=/home/x64/rootfs.img
 ```
 
 ---
@@ -138,22 +139,46 @@ echo 'Enjoy your Linux system!'
 exec /bin/sh
 EOF
 debian:~ # chmod 755 init
-
-# create initrd
-debian:~ # $ROOTFS_DIR
-debian:/home/x64/rootfs # find . -print0 | cpio --null -ov --format=newc > $INIT_RD
 ```
 
 ---
 
 ## qemu
 
+`cpio`
+
 ```bash
+debian:~ # $ROOTFS_DIR
+debian:/home/x64/rootfs # find . -print0 | cpio --null -ov --format=newc > $INIT_RD
+
 debian:~ # qemu-system-x86_64 \
   -smp 2 \
   -m 2G \
   -kernel $BZ_IMAGE \
   -initrd $INIT_RD \
   -append "root=/dev/ram0 init=init console=ttyS0 rootfstype=ramfs" \
+  -nographic
+```
+
+`img`
+
+```bash
+debian:~ # dd if=/dev/zero of=$ROOTFS_IMG bs=1M count=16
+debian:~ # mkfs -t ext4 -F $ROOTFS_IMG
+debian:~ # mount -oloop $ROOTFS_IMG /mnt
+
+# create initrd by img
+debian:~ # $ROOTFS_DIR
+debian:/home/x64/rootfs # tar cf - * | tar xf - -C /mnt
+
+debian:~ # umount /mnt
+debian:~ # gzip --best -c $ROOTFS_IMG > $ROOTFS_IMG.gz
+
+debian:~ # qemu-system-x86_64 \
+  -smp 2 \
+  -m 2G \
+  -kernel $BZ_IMAGE \
+  -initrd $ROOTFS_IMG.gz \
+  -append "root=/dev/rmmcblk0 rw console=ttyS0" \
   -nographic
 ```
