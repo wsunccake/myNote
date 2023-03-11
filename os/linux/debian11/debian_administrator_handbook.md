@@ -31,7 +31,7 @@ debian:~ # dpkg -S $(which curl)
 debian:~ # dpkg -c curl_7.64.0-4+deb10u2_amd64.deb
 
 # arch
-debian:~ # dpkg-architecture –L
+debian:~ # dpkg-architecture -L
 debian:~ # dpkg --print-architecture
 debian:~ # dpkg --print-foreign-architectures
 debian:~ # dpkg --add-architecture <arch>

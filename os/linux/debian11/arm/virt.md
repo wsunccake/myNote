@@ -88,8 +88,6 @@ debian:~ # wget $ISO_URL
 ```
 
 ```bash
-debian:~ # qemu-img create -f qcow2 $VM_DISK 20G
-
 debian:~ # virt-install -v --name $VM_NAME \
   --arch aarch64 \
   --machine virt \
