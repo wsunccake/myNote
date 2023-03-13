@@ -8,7 +8,6 @@ centos:~ # dnf install make
 ubuntu:~ # apt install make
 ```
 
-
 ---
 
 ## hello
@@ -32,7 +31,6 @@ EOF
 linux:~/proj # sed -i 's/    /\t/g' makefile
 ```
 
-
 ### with command
 
 ```bash
@@ -40,14 +38,12 @@ linux:~/proj # gcc -o main.exe main.c
 linux:~/proj # ./main.exe
 ```
 
-
 ### with make
 
 ```bash
 linux:~/proj # make
 linux:~/proj # ./main.exe
 ```
-
 
 ---
 
@@ -88,15 +84,14 @@ clean:
 EOF
 linux:~/proj # sed -i 's/    /\t/g' makefile
 
-linux:~/proj # make -DARCH=ia32
+linux:~/proj # ARCH=ia32 make
 linux:~/proj # ./main.exe
 
 linux:~/proj # make clean
 
-linux:~/proj # make -DARCH=x86_64
+linux:~/proj # ARCH=x86_64 make
 linux:~/proj # ./main.exe
 ```
-
 
 ---
 
@@ -130,7 +125,6 @@ void hi () ;
 }
 ```
 
-
 ### explicit
 
 ```makefile
@@ -150,7 +144,6 @@ clean :
     -rm *.o *.exe
 ```
 
-
 ### implicit
 
 ```makefile
@@ -168,7 +161,6 @@ main.o : main.c
 clean :
     -rm *.o *.exe
 ```
-
 
 ### variable
 
@@ -233,7 +225,6 @@ clean:
     -rm *.o *.exe
 ```
 
-
 ---
 
 ## libaray
@@ -256,7 +247,6 @@ void hi ()
     printf ("library") ;
 }
 ```
-
 
 ### static link
 
@@ -281,7 +271,6 @@ libhi.a: hi.o
 clean:
     -rm *.o *.a *.exe
 ```
-
 
 ### shared link
 
@@ -316,7 +305,6 @@ linux:~ # cat /etc/ld.so.conf
 linux:~ # ldconfig
 ```
 
-
 ---
 
 [Makefile 語法簡介](https://sites.google.com/site/mymakefile/makefile-yu-fa-jian-jie)
@@ -324,4 +312,3 @@ linux:~ # ldconfig
 [Learn Makefiles With the tastiest examples](https://makefiletutorial.com/)
 
 [GNU make](https://www.gnu.org/software/make/manual/make.html)
-
