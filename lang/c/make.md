@@ -3,8 +3,10 @@
 ## install
 
 ```bash
+# for rhel / centos
 centos:~ # dnf install make
 
+# for debian / ubuntu
 ubuntu:~ # apt install make
 ```
 
@@ -12,8 +14,8 @@ ubuntu:~ # apt install make
 
 ## hello
 
-```bash
-linux:~/proj # cat << EOF > main.c
+```c
+// main.c
 #include <stdio.h>
 
 int main ()
@@ -21,26 +23,23 @@ int main ()
     printf ("hello make");
     return 1;
 }
-EOF
+```
 
-linux:~/proj # cat << EOF > makefile
+```makefile
+# Makefile
 main.exe : main.c
     @echo "compile..."
     gcc -o main.exe main.c
-EOF
-linux:~/proj # sed -i 's/    /\t/g' makefile
 ```
 
-### with command
-
 ```bash
+linux:~/proj # sed -i 's/    /\t/g' Makefile
+
+# with command
 linux:~/proj # gcc -o main.exe main.c
 linux:~/proj # ./main.exe
-```
 
-### with make
-
-```bash
+# with make
 linux:~/proj # make
 linux:~/proj # ./main.exe
 ```
@@ -49,8 +48,8 @@ linux:~/proj # ./main.exe
 
 ## macro
 
-```bash
-linux:~/proj # cat << EOF > main.c
+```c
+// main.c
 #include <stdio.h>
 
 int main()
@@ -67,10 +66,16 @@ int main()
   printf("architecture: %s\n", Arch);
   return 1;
 }
-EOF
+```
 
-linux:~/proj # cat << EOF > makefile
+```makefile
+# Makefile.inc
 ARCH=x86_64
+```
+
+```makefile
+# Makefile
+include Makefile.inc
 
 main.exe : main.c
     @echo "compile..."
@@ -81,9 +86,9 @@ main.exe : main.c
 clean:
     @echo "clean..."
     -rm main.exe
-EOF
-linux:~/proj # sed -i 's/    /\t/g' makefile
+```
 
+```bash
 linux:~/proj # ARCH=ia32 make
 linux:~/proj # ./main.exe
 
@@ -95,7 +100,7 @@ linux:~/proj # ./main.exe
 
 ---
 
-## include
+## depend
 
 ```c
 // main.c
@@ -125,10 +130,8 @@ void hi () ;
 }
 ```
 
-### explicit
-
 ```makefile
-# makefile
+# Makefile.exp
 CC=gcc
 
 .PHONY: all
@@ -144,10 +147,8 @@ clean :
     -rm *.o *.exe
 ```
 
-### implicit
-
 ```makefile
-# makefile
+# Makefile.imp
 CC=gcc
 
 .PHONY: all
@@ -165,7 +166,7 @@ clean :
 ### variable
 
 ```makefile
-# makefile
+# Makefile
 CC =/usr/bin/gcc
 
 .SUFFIX : .c .o
@@ -208,7 +209,7 @@ CFLAGS += -O2
 ### wild card
 
 ```makefile
-# makefile
+# Makefile
 CC=/usr/bin/gcc
 
 .SUFFIX : .c .o
@@ -248,9 +249,8 @@ void hi ()
 }
 ```
 
-### static link
-
 ```makefile
+# Makefile.static
 CC=/usr/bin/gcc
 
 .SUFFIX: .c .o
@@ -272,9 +272,8 @@ clean:
     -rm *.o *.a *.exe
 ```
 
-### shared link
-
 ```makefile
+# Makefile.symbolic
 CC=/usr/bin/gcc
 
 .SUFFIX: .c .o
@@ -299,6 +298,11 @@ clean:
 ```
 
 ```bash
+# static link
+linux:~ # make -f Makefile.static
+
+# shared link
+linux:~ # make -f Makefile.symbolic
 linux:~ # echo $LD_LIBRARY_PATH
 linux:~ # ldconfig -v
 linux:~ # cat /etc/ld.so.conf
@@ -307,7 +311,76 @@ linux:~ # ldconfig
 
 ---
 
+## work directory
+
+```makefile
+# Makefile
+include Makefile.inc
+
+try:
+	@echo "change directory"; cd src; pwd
+	@echo "current directory"; pwd
+
+# make by change directory
+all:
+    cd src; make
+
+# make by -C
+hi:
+    make -C src hi
+```
+
+```makefile
+# Makefile.inc
+export ARCH=x86_64
+NAME=linux
+```
+
+```makefile
+# src/Makefile
+main.exe : main.c
+    @echo "compile..."
+    gcc -E -D${ARCH} main.c > _main.c
+    gcc -o main.exe _main.c
+
+hi:
+    echo "hi $(ARCH)"
+    echo "hi $(NAME)"
+```
+
+```c
+// main.c
+#include <stdio.h>
+
+int main()
+{
+
+#ifdef x86_64
+  char Arch[]="x86_64";
+#elif ia32
+  char Arch[]="ia32";
+#else
+  char Arch[]="Unknown";
+#endif
+
+  printf("architecture: %s\n", Arch);
+  return 1;
+}
+```
+
+```bash
+linux:~/pro $ make try
+linux:~/pro $ make all
+linux:~/pro $ make hi
+```
+
+---
+
+## ref
+
 [Makefile 語法簡介](https://sites.google.com/site/mymakefile/makefile-yu-fa-jian-jie)
+
+[跟我一起写 Makefile](https://seisman.github.io/how-to-write-makefile/overview.html)
 
 [Learn Makefiles With the tastiest examples](https://makefiletutorial.com/)
 
