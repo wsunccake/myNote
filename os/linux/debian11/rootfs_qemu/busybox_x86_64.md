@@ -1,4 +1,4 @@
-# busybox to rootfs on qemu
+# busybox to rootfs on x86_64
 
 ## prepare
 

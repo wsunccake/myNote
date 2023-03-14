@@ -1,4 +1,4 @@
-# debian arm
+# deboostrap to rootfs on arm
 
 ## toolchain
 
