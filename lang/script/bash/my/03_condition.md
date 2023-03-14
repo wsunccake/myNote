@@ -13,7 +13,6 @@ fi
 test "x$SEX" == "xmale" && echo "Hi male" || echo "Hi Female"
 ```
 
-
 ---
 
 ## case

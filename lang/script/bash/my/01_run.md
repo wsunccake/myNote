@@ -6,7 +6,6 @@
 linux:~ # bash --version
 ```
 
-
 ---
 
 ## script
@@ -18,7 +17,6 @@ echo "hello bash"
 print "hello bash"
 ```
 
-
 ---
 
 ## execute by change mode
@@ -28,7 +26,6 @@ linux:~ # chmod +x script.sh
 linux:~ # ./script.sh
 ```
 
-
 ---
 
 ## execute by bash command
@@ -36,7 +33,6 @@ linux:~ # ./script.sh
 ```bash
 linux:~ # bash script.sh
 ```
-
 
 ---
 
@@ -54,7 +50,6 @@ linux:~ # ./script.sh
 ```bash
 linux:~ # env VAR=value ./script.sh
 ```
-
 
 ---
 

@@ -16,7 +16,6 @@ echo ${FILE_PATH#*/}     # usr/lib/python/site-package/xxx-1.0/yyy.zz
 echo ${FILE_PATH##*/}    # yyy.zz
 ```
 
-
 ---
 
 ## sentence and word
@@ -36,7 +35,6 @@ echo "${SENTENCE^^}"        # THAT IS A TEST.
 echo "lower:"
 echo "${SENTENCE,,}"        # that is a test.
 ```
-
 
 ---
 
@@ -70,29 +68,28 @@ echo "\${VAR:?value}: ${VAR:?value}"    # ${VAR:?value}: Hello Bash
 echo "VAR: ${VAR}"                      # VAR: Hello Bash
 ```
 
-
 ---
 
 ## undefine var operation
 
 ```bash
 unset VAR
-echo "undefine VAR: ${VAR}"             # undefine VAR: 
+echo "undefine VAR: ${VAR}"             # undefine VAR:
 echo "\${VAR:=value}: ${VAR:=value}"    # ${VAR:=value}: value
 echo "VAR: ${VAR}"                      # VAR: value
 ```
 
 ```bash
 unset VAR
-echo "undefine VAR: ${VAR}"             # undefine VAR: 
+echo "undefine VAR: ${VAR}"             # undefine VAR:
 echo "\${VAR:-value}: ${VAR:-value}"    # ${VAR:-value}: value
 echo "VAR: ${VAR}"                      # VAR:
 ```
 
 ```bash
 unset VAR
-echo "undefine VAR: ${VAR}"             # undefine VAR: 
-echo "\${VAR:+value}: ${VAR:+value}"    # ${VAR:+value}: 
+echo "undefine VAR: ${VAR}"             # undefine VAR:
+echo "\${VAR:+value}: ${VAR:+value}"    # ${VAR:+value}:
 echo "VAR: ${VAR}"                      # VAR:
 ```
 
@@ -103,7 +100,6 @@ echo "undefine VAR: ${VAR}"
 echo "VAR: ${VAR}"
 echo
 ```
-
 
 ---
 
@@ -143,7 +139,6 @@ show_array() {
 }
 show_array ARR
 ```
-
 
 ---
 
