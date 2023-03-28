@@ -31,14 +31,14 @@ debian:~ # kpart -av /dev/$LOOP
 debian:~ # kpart -lv /dev/$LOOP
 
 # format
-debian:~ # mkfs -t msdos /dev/${LOOP}p1
-debian:~ # mkfs -t ext4 -F /dev/${LOOP}p2
+debian:~ # mkfs -t msdos /dev/mapper/${LOOP}p1
+debian:~ # mkfs -t ext4 -F /dev/mapper/${LOOP}p2
 
 # mount
 debian:~ # mkdir -p $SD1
 debian:~ # mkdir -p $SD2
-debian:~ # mount /dev/${LOOP}p1 $SD1
-debian:~ # mount /dev/${LOOP}p2 $SD2
+debian:~ # mount /dev/mapper/${LOOP}p1 $SD1
+debian:~ # mount /dev/mapper/${LOOP}p2 $SD2
 debian:~ # lsblk
 
 # umount
@@ -82,15 +82,15 @@ attach() {
 }
 
 format() {
-  mkfs -t msdos /dev/${LOOP}p1
-  mkfs -t ext4 -F /dev/${LOOP}p2
+  mkfs -t msdos /dev/mapper/${LOOP}p1
+  mkfs -t ext4 -F /dev/mapper/${LOOP}p2
 }
 
 mount() {
   mkdir -p $SD1
   mkdir -p $SD2
-  mount /dev/mapper/${LOOP}p1 $SD1
-  mount /dev/mapper/${LOOP}p2 $SD2
+  mount /dev/mapper/mapper/${LOOP}p1 $SD1
+  mount /dev/mapper/mapper/${LOOP}p2 $SD2
   lsblk
 }
 
