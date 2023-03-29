@@ -12,6 +12,47 @@ debian:~ # virt-ls --version
 
 ---
 
+## key
+
+### graphic frontend
+
+```
+Ctrl-Alt-f    Toggle full screen
+
+Ctrl-Alt-+    Enlarge the screen
+
+Ctrl-Alt--    Shrink the screen
+
+Ctrl-Alt-u    Restore the screen’s un-scaled dimensions
+
+Ctrl-Alt-n    Switch to virtual console ‘n’. Standard console mappings are:
+         1    Target system display
+         2    Monitor
+         3    Serial port
+
+Ctrl-Alt      Toggle mouse and keyboard grab.
+```
+
+### nographic backend
+
+```
+Ctrl-a h      Print this help
+
+Ctrl-a x      Exit emulator
+
+Ctrl-a s      Save disk data back to file (if -snapshot)
+
+Ctrl-a t      Toggle console timestamps
+
+Ctrl-a b      Send break (magic sysrq in Linux)
+
+Ctrl-a c      Rotate between the frontends connected to the multiplexer (usually this switches between the monitor and the console)
+
+Ctrl-a Ctrl-a Send the escape character to the frontend
+```
+
+---
+
 ## debian arm64 - netboot install
 
 ```bash
@@ -48,45 +89,19 @@ ps $VM_DISK 可以用 virt-manager 直接使用
 
 ---
 
-## sd card
+## ms-dos
+
+download Microsoft MS-DOS 6.0 (Full) from [WinWorld MS-DOS 6.0](https://winworldpc.com/product/ms-dos/6x)
 
 ```bash
-debian:~ # SD_DISK=sd.img
-debian:~ # LOOP_DEVICE=/dev/loop0
-debian:~ # MAP_LOOP_DEVICE=/dev/map/loop0
+# create disk
+debian:~ # qemu-img create -f qcow msdos.disk 2G
 
-# create virtual sd card
-debian:~ # dd if=/dev/zero of=$SD_DISK bs=1G count=2
-debian:~ # file $SD_DISK
-debian:~ # hexdump $SD_DISK
+# install
+debian:~ # qemu-system-i386 -hda msdos.disk -m 64 -L . -fda Disk1.img -boot a
 
-# partition device
-debian:~ # losetup $LOOP_DEVICE $SD_DISK
-debian:~ # parted -s $LOOP_DEVICE mklabel msdos
-debian:~ # parted -s $LOOP_DEVICE mkpart primary fat32 0% 128MiB   # 0% -> 512 * 2048 = 1049kB = 1047552
-debian:~ # parted -s $LOOP_DEVICE set 1 lba off
-debian:~ # parted -s $LOOP_DEVICE mkpart primary ext4 128MiB 100%
-debian:~ # parted -s $LOOP_DEVICE print
-debian:~ # fdisk -l $LOOP_DEVICE
-
-# load partition table
-debian:~ # kpart -av $LOOP_DEVICE
-debian:~ # kpart -lv $LOOP_DEVICE
-
-# format file system
-debian:~ # mkfs -t msdos ${MAP_LOOP_DEVICE}p1
-debian:~ # mkfs -t ext4 ${MAP_LOOP_DEVICE}p2
-
-# mount device
-debian:~ # mkdir -p /sd1 /sd2
-debian:~ # mount ${MAP_LOOP_DEVICE}p1 /sd1
-debian:~ # mount ${MAP_LOOP_DEVICE}p2 /sd2
-
-## clean
-debian:~ # umount /sd1
-debian:~ # umount /sd1
-debian:~ # kpart -dv $LOOP_DEIVCE
-debian:~ # losetup -d $LOOP_DEVICE
+# run
+debian:~ # qemu-system-i386 -hda msdos.disk -boot c
 ```
 
 ---
@@ -108,3 +123,7 @@ debian:~ # lsmod nbd
 ## ref
 
 [Debian on QEMU-emulated ARM-64 aarch64](https://phwl.org/2022/qemu-aarch64-debian/)
+
+[Keys in the graphical frontends](https://www.qemu.org/docs/master/system/keys.html)
+
+[Keys in the character backend multiplexer](https://www.qemu.org/docs/master/system/mux-chardev.html)
