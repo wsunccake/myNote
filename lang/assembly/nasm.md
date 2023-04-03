@@ -45,9 +45,9 @@ test: test.o
 
 ---
 
-## print hello world
+## hello world
 
-### sstem call
+### system call - 64 bit
 
 ```asm
 ; test.asm
@@ -137,4 +137,49 @@ clean:
 	-@rm *.o
 	-@rm test
 	@echo "clean workspace"
+```
+
+### system call - 32 bit
+
+```asm
+; test.asm
+section .data
+    msg: db  "Hello World!", 10 ; '10' at end is line feed
+    len: equ $-msg
+
+section .text
+    global _start
+
+    _start:
+        mov edx, len            ; length of string is 13 bytes
+        mov ecx, dword msg      ; set rsi to pointer to string
+        mov ebx, 0x1            ; file descriptor of 1
+        mov eax, 0x4            ; sys_writer = 4
+        int 0x80                ; make the system call
+
+        mov eax, 1              ; sys_exit = 1
+        xor ebx, ebx
+        int 0x80
+```
+
+```makefile
+# Makefile
+ASM_FLAG = -f elf32
+LD_FLAG = -m elf_i386 -s
+
+.PHONY: run
+run: test
+	./test
+
+.PHONY: clean
+clean:
+	-@rm *.o
+	-@rm test
+	@echo "clean workspace"
+
+%.o : %.asm
+	nasm ${ASM_FLAG} -o $@ $<
+
+test: test.o
+	ld ${LD_FLAG} -o test test.o
 ```
