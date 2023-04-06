@@ -274,3 +274,46 @@ section .text
         xor rdi, rdi
         syscall
 ```
+
+```asm
+; if / else
+; if( condition )
+;    then_block;
+; else
+;    else_block;
+
+        cmp  xx, xx
+        jxx     else_block  ; false condition
+        ;; true condition statement
+        jmp     end_if
+
+    else_block:
+        ;; true condition statement
+
+    end_if:
+```
+
+```asm
+; while loops
+; while( condition ) {
+;    statement;
+; }
+
+    while:
+        cmp  xx, xx
+        jxx end_while   ; false condition
+        ...             ; loop statement
+        jmp while
+    end_while:
+```
+
+```asm
+; do while loops
+; do {
+;   statement
+; } while( condition );
+
+    do:
+        cmp xx, xx
+        jxx do ; true condition
+```
