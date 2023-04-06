@@ -183,3 +183,94 @@ clean:
 test: test.o
 	ld ${LD_FLAG} -o test test.o
 ```
+
+---
+
+## jump
+
+```asm
+; if (rax == 0) {
+;     printf("rax == 0");
+; } else {
+;     printf("rax != 0");
+; }
+
+section .data
+    msg1 db "rax == 0", 10
+    len1 equ $-msg1
+
+    msg2 db "rax != 0", 10
+    len2 equ $-msg2
+
+section .text
+    global _start
+
+    _start:
+        cmp rax, 1
+
+        jz thenblock            ; ZF=0
+        mov rdx, len2
+        mov rsi, dword msg2
+
+        jmp endif
+
+    thenblock:
+        mov rdx, len1
+        mov rsi, dword msg1
+
+    endif:
+        mov rax, 0x1
+        mov rdi, 0x1
+        syscall
+
+        mov rax, 0x3c
+        xor rdi, rdi
+        syscall
+```
+
+```asm
+; if (rax >= 0) {
+;     printf("rax >= 0");
+; } else {
+;     printf("rax < 0");
+; }
+
+section .data
+    msg1 db "rax >= 0", 10
+    len1 equ $-msg1
+
+    msg2 db "rax < 0", 10
+    len2 equ $-msg2
+
+section .text
+    global _start
+
+    _start:
+        cmp rax, 0
+
+        js singon       ; SF=1
+        jo elseblock    ; SF=0, OF=1 => RAX<5
+        jmp thenblock   ; SF=0, OF=0 => RAX>= 5
+
+
+    singon:
+        jo thenblock    ; SF=0, OF=0 => RAX>=0
+
+    elseblock:
+        mov rdx, len2
+        mov rsi, dword msg2
+        jmp endif
+
+    thenblock:
+        mov rdx, len1
+        mov rsi, dword msg1
+
+    endif:
+        mov rax, 0x1
+        mov rdi, 0x1
+        syscall
+
+        mov rax, 0x3c
+        xor rdi, rdi
+        syscall
+```
