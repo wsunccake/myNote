@@ -317,3 +317,37 @@ section .text
         cmp xx, xx
         jxx do ; true condition
 ```
+
+---
+
+## gdb
+
+```asm
+; example.asm
+section .text
+  global _start
+_start:
+  mov rax, 60
+  mov rdi, 0
+  syscall
+```
+
+```bash
+linux:~ $ nasm -f elf64 -y
+linux:~ $ nasm -f elf64 -g -F dwarf -o example.o example.asm
+linux:~ $ ld -o example example.o
+linux:~ $ gdb -tui example
+```
+
+```bash
+(gdb) set disassembly-flavor intel
+(gdb) layout split
+(gdb) break _start
+(gdb) run
+(gdb) backtrace
+(gdb) step
+(gdb) info all-registers
+(gdb) info registers eax
+(gdb) print/x $eax
+(gdb) quit
+```

@@ -6,7 +6,6 @@
 ubuntu:~ # apt install gdb
 ```
 
-
 ---
 
 ## usage
@@ -32,10 +31,10 @@ linux:~ $ gdb minimal.exe
 (gdb) quit
 ```
 
-
 ```bash
 (gdb) help
 (gdb) help all
+(gdb) set language
 
 (gdb) set print pretty
 (gdb) print 1 + 2
@@ -73,7 +72,6 @@ linux:~ $ gdb minimal.exe
 # quit
 (gdb) quit
 ```
-
 
 ---
 
