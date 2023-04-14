@@ -109,7 +109,7 @@ linux:~ $ cat hello/Cargo.toml
 linux:~ $ cargo build --manifest-path ./hello/Cargo.toml
 
 # usage
-linux:~/project $ cargo build
+linux:~/project $ cargo build [--release]
 linux:~/project $ cargo run
 linux:~/project $ cargo clean
 linux:~/project $ cargo fmt
