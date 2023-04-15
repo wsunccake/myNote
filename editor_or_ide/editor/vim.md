@@ -1,5 +1,15 @@
 # VIM
 
+## Level 0
+
+- command mode
+
+  :help <cmd>
+
+  :set
+
+  :set all
+
 ## Level 1
 
 ### Mode / 模式
