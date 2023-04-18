@@ -6,4 +6,6 @@
 
 [Rust 中文文档](https://rustwiki.org/docs/)
 
-[Rust入门秘籍](https://rust-book.junmajinlong.com/about.html)
+[Rust 入门秘籍](https://rust-book.junmajinlong.com/about.html)
+
+[Rust 语言圣经(Rust Course)](https://course.rs/about-book.html)
