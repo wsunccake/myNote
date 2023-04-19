@@ -135,6 +135,7 @@ stty 設定終端機顯示行列字數
 linux:~ # stty
 linux:~ # stty -a
 linux:~ # stty columns 200
+linux:~ # stty sane
 ```
 
 complete 自動補齊
