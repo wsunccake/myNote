@@ -116,6 +116,14 @@ linux:~/project $ cargo fmt
 linux:~/project $ cargo test
 ```
 
+```toml
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+opt-level = 3
+```
+
 ---
 
 ## uninstall
