@@ -1,11 +1,18 @@
 # kernel 5.x
 
 ```bash
-linux:~ # apt install build-essential kmod
+# for debian / ubuntu
+linux:~ # apt install build-essential
+linux:~ # apt install kmod
+linux:~ # apt install linux-headers-`uname -r`
+
+# for rhel / fedora
+linux:~ # yum groupinstall 'Development Tools'
+linux:~ # yum install kmod
+linux:~ # yum install kernel-devel-`uname -r`
+
 linux:~ # lsmod
 linux:~ # cat /proc/modules
-
-linux:~ # apt install linux-headers-`uname -r`
 ```
 
 ---
