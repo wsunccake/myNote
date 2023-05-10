@@ -343,6 +343,9 @@ sle:~ $ source /opt/intel/oneapi/setvars.sh
 sle:~ $ source /opt/intel/oneapi/compiler/latest/env/vars.sh
 sle:~ $ source /opt/intel/oneapi/mpi/latest/env/vars.sh
 sle:~ $ source /opt/intel/oneapi/mkl/latest/env/vars.sh
+
+# create module file
+sle:~ $ /opt/intel/oneapi/modulefiles-setup.sh
 ```
 
 `c compiler`
@@ -403,4 +406,8 @@ MPI_Init(NULL, NULL);
 EOF
 sle:~ $ mpicc -o hello_mpi hello_mpi.c
 sle:~ $ mpirun -np 2 ./hello_mpi
+
+# other command
+sle:~ $ cpuinfo
+sle:~ $ impi_info -a
 ```
