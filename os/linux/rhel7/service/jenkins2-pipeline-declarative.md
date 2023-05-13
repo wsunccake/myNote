@@ -534,6 +534,42 @@ H/2 * * * * %MSG=nice;NAME=pipeline
 }
 ```
 
+### [HTML Publisher](https://plugins.jenkins.io/htmlpublisher/)
+
+```groovy
+pipeline {
+    agent any
+    parameters {
+        string(name: 'VERSION', defaultValue: '1.0', description: '')
+    }
+
+    stages {
+        stage('update build name') {
+            steps {
+                sh '''#!/bin/bash
+echo "version: $VERSION" > index.html
+'''
+            }
+        }
+    }
+
+    post {
+        always {
+            publishHTML([
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: "${JOB_DIR}",
+                    reportFiles: 'report.html',
+                    reportName: 'Locust Report', reportTitles: '',
+                    includes: '**/*.html'
+            ])
+        }
+    }
+
+}
+```
+
 ---
 
 ## git
