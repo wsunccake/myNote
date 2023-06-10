@@ -4,7 +4,7 @@
 # GET method
 centos:~ # curl "http://localhost/get.php?name_php=aaa&age_php=12"
 
-# POST method    
+# POST method
 centos:~ # curl -X POST -d "NAME_PHP=aaa&AGE_PHP=12" "http://localhost/post.php"
 # POST method with json data
 centos:~ # curl -X POST -d '{"name": "abc", "age": 123}' http://localhost/json.php
@@ -31,25 +31,28 @@ centos:~ # curl ftp://user:password@host/download_file -o filename
 centos:~ # curl --ftp-create-dirs -T upload_file ftp://user:password@host/file
 ```
 
-
 ---
 
 ## loop device
 
 ```bash
-centos:~ # losetup -a
-centos:~ # losetup -d /dev/loop0
-centos:~ # losetup -D
+# loop file: /dev/loop0
+# image file: sd.img
+
+centos:~ # losetup -al                          # list loop device
+centos:~ # losetup <loop device> <image file>   # attach image file to loop device
+centos:~ # losetup -d <loop device>             # deattch loop device
+centos:~ # losetup -D                           # deattch all loop device
 centos:~ # losetup -f
 
-centos:~ # kpartx -av loop_file
-centos:~ # kpartx -d loop_file
+centos:~ # kpartx -lv <loop device>             # list partition table map
+centos:~ # kpartx -av <loop device>             # add partition table map
+centos:~ # kpartx -dv <loop device>             # del partition table map
 
 centos:~ # dmsetup info
 centos:~ # dmsetup ls
 centos:~ # dmsetup remove /dev/loop0
 ```
-
 
 ---
 
@@ -63,7 +66,6 @@ EOF
 centos:~ # echo "message body" | mail -s "title" someone@example.com [-aFrom:sender@exmaple.com]
 ```
 
-
 ---
 
 ## usb
@@ -71,7 +73,6 @@ centos:~ # echo "message body" | mail -s "title" someone@example.com [-aFrom:sen
 ```bash
 centos:~ # echo "blacklist usb-storage" >> /etc/modprobe.d/blacklist.conf
 ```
-
 
 ---
 
@@ -83,13 +84,12 @@ centos:~ # cp /usr/local/screenfetch/screenfetch-dev /usr/bin/screenfetch
 centos:~ # chmod +x /usr/bin/screenfetch
 centos:~ # screenfetch
 
-# anyone alway show info when login 
+# anyone alway show info when login
 centos:~ # echo /usr/bin/screenfetch >> /etc/profile
 
 # myself alway show info when login
 centos:~ # echo /usr/bin/screenfetch >> ~/.bashrc
 ```
-
 
 ---
 
@@ -101,7 +101,7 @@ centos:~ # fortune | cowsay -pn
 centos:~ # cowsay -l
 centos:~ # fortune | cowsay -pn -f stegosaurus
 
-# anyone alway show info when login 
+# anyone alway show info when login
 centos:~ # echo "fortune | cowsay -pn" >> /etc/profile
 
 # myself alway show info when login

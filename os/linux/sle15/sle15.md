@@ -1,6 +1,6 @@
-# SLE15
+# SLE 15
 
-## Validate
+## validate
 
 ```bash
 sle:~ # ls SLE-15-SP2-Full-x86_64-GM-Media1.iso SLE-15-SP2-Full-x86_64-GM-Media2.iso
@@ -15,13 +15,13 @@ sle:~ # sha256sum SLE-15-SP2-Full-x86_64-GM-Media1.iso
 
 ---
 
-## Install
+## install
 
 安裝時, 預設 filesystem 為 btrfs, 建議使用 xfs (效能較佳)
 
 ---
 
-## Setup
+## setup
 
 `repository`
 
@@ -220,4 +220,217 @@ sle:~ # zypper refresh
 sle:~ # zypper install fail2ban
 
 sle:~ # systemctl enable fail2ban --now
+```
+
+---
+
+## hardware
+
+### intel cpu
+
+`cpu`
+
+P-States: Performance States
+
+T-States: Throttling States
+
+S-States: Sleeping States
+
+G-States: Global States
+
+C-States: CPU States
+
+```bash
+# package
+sle:~ # zypper in util-linux
+sle:~ # zypper in cpupower
+
+# command
+## cpu state
+sle:~ # cat /proc/cpuinfo
+sle:~ # lscpu
+sle:~ # lscpu -ae
+
+## cpu frequency governor
+sle:~ # cpupower frequency-info
+sle:~ # cpupower frequency-info --governors
+sle:~ # cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+sle:~ # cpupower frequency-set -g performance
+
+## cpu frequency set
+sle:~ # dmesg|grep 'MHz processor'
+
+sle:~ # cat /sys/devices/system/cpu/cpufreq/policy*/scaling_available_frequencies
+sle:~ # cat /sys/devices/system/cpu/cpufreq/policy*/scaling_available_governors
+sle:~ # cat /sys/devices/system/cpu/cpufreq/policy*/scaling_cur_freq
+sle:~ # cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_max_freq
+
+sle:~ # cpupower frequency-info --driver
+sle:~ # cpupower frequency-info --governors
+
+sle:~ # cpupower [-c all|0|0-2|0,2] frequency-info
+sle:~ # cpupower frequency-set -f 2.1GHz
+sle:~ # cpupower monitor -m Mperf
+sle:~ # cpupower monitor -l
+sle:~ # turbostat
+
+# intel p_state
+sle:~ # grep CONFIG_X86_AMD_PSTATE=y /boot/config-*
+sle:~ # grep CONFIG_X86_INTEL_PSTATE=y /boot/config-*
+sle:~ # dmesg | grep pstate
+sle:~ # lsmod | grep -E 'intel_pstate|acpi_cpufreq'
+sle:~ # lsmod | grep -E 'rapl|powerclamp|cpufreq'
+
+## enable pstate when boot (grub2)
+sle:~ # vi /etc/default/grub
+GRUB_CMDLINE_LINUX="intel_idle.max_cstate=1 intel_pstate=enable processor.max_cstate=1"
+sle:~ # grub2-mkconfig -o > /boot/grub2/grub.cfg
+sle:~ # reboot
+
+## intel p_state - performance
+sle:~ # cat /sys/devices/system/cpu/intel_pstate/status
+sle:~ # echo active > /sys/devices/system/cpu/intel_pstate/status
+sle:~ # cat /sys/devices/system/cpu/intel_pstate/no_turbo
+sle:~ # echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo
+
+sle:~ # x86_energy_perf_policy
+sle:~ # x86_energy_perf_policy performance
+
+# enable when booting
+sle:~ # cat << EOF >> /etc/init.d/boot.local
+sleep 60
+cpupower frequency-set -g performance
+EOF
+
+sle:~ # chmod +x /etc/init.d/boot.local
+sle:~ # reboot
+```
+
+---
+
+## compiler
+
+### gnu
+
+```bash
+sle:~ # zypper se -t pattern devel_basis
+sle:~ # zypper info -t pattern devel_basis
+sle:~ # zypper in -t pattern devel_basis
+```
+
+### intel
+
+```bash
+# intel oneAPI Base Toolkit
+sle:~ # sh l_BaseKit_p_2023.1.0.46401_offline.sh
+# -> Math Kernel Library / MKL
+
+# intel oneAPI HPC Toolkit
+sle:~ # sh l_HPCKit_p_2023.1.0.46346_offline.sh
+# -> intel C++ Compiler Classic
+# -> intel Fortran Compiler
+# -> intel Fortran Compiler Classic
+# -> intel MPI Library
+```
+
+```bash
+# usage
+sle:~ $ ls /opt/intel/oneapi
+
+# set variable
+sle:~ $ source /opt/intel/oneapi/setvars.sh
+
+sle:~ $ source /opt/intel/oneapi/compiler/latest/env/vars.sh
+sle:~ $ source /opt/intel/oneapi/mpi/latest/env/vars.sh
+sle:~ $ source /opt/intel/oneapi/mkl/latest/env/vars.sh
+
+# create module file
+sle:~ $ /opt/intel/oneapi/modulefiles-setup.sh
+```
+
+`c compiler`
+
+```bash
+sle:~ $ cat << EOF >> hello.c
+#include <stdio.h>
+
+int main() {
+printf("hello\n");
+return 0;
+}
+EOF
+sle:~ $ icc -o hello hello.c
+sle:~ $ ./hello
+```
+
+`fortran compiler`
+
+```bash
+sle:~ $ cat << EOF >> hello.f
+write ( \*, '(a)' ) 'hello'
+
+      stop
+      end
+
+EOF
+sle:~ $ ifort -o hello hello.f
+sle:~ $ ./hello
+```
+
+`mpi`
+
+```bash
+sle:~ $ cat << EOF >> hello_mpi.c
+#include <mpi.h>
+#include <stdio.h>
+
+int main(int argc, char\*\* argv) {
+MPI_Init(NULL, NULL);
+
+    int world_size;
+    MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+
+    int world_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+
+    char processor_name[MPI_MAX_PROCESSOR_NAME];
+    int name_len;
+    MPI_Get_processor_name(processor_name, &name_len);
+
+    printf("Hello world from processor %s, rank %d out of %d processors\n",
+           processor_name, world_rank, world_size);
+
+    MPI_Finalize();
+
+}
+EOF
+sle:~ $ mpicc -o hello_mpi hello_mpi.c
+sle:~ $ mpirun -np 2 ./hello_mpi
+
+# other command
+sle:~ $ cpuinfo
+sle:~ $ impi_info -a
+```
+
+---
+
+## other
+
+### term
+
+```bash
+sle:~ # infocmp -D
+/etc/terminfo
+/usr/share/terminfo
+
+sle:~ # ls /etc/terminfo
+sle:~ # ls /usr/share/terminfo/*
+
+# garbled character
+# method 1. setup TERM
+sle:~ # env TERM=vt100|xterm yast
+
+# method 2. setup NCURSES
+sle:~ # export NCURSES_NO_UTF8_ACS=1
+sle:~ # yast
 ```

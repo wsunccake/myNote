@@ -6,7 +6,6 @@
 ubuntu:~ # apt install gdb
 ```
 
-
 ---
 
 ## usage
@@ -32,10 +31,10 @@ linux:~ $ gdb minimal.exe
 (gdb) quit
 ```
 
-
 ```bash
 (gdb) help
 (gdb) help all
+(gdb) set language
 
 (gdb) set print pretty
 (gdb) print 1 + 2
@@ -51,6 +50,9 @@ linux:~ $ gdb minimal.exe
 (gdb) delete breakpoints 1  # delete breakpoint
 
 (gdb) info breakpoints      # list breakpoint
+(gdb) info variables
+(gdb) info locals
+(gdb) info args
 
 (gdb) enable                # enable breakpoint
 (gdb) disable               # disable breakpoint
@@ -73,7 +75,6 @@ linux:~ $ gdb minimal.exe
 # quit
 (gdb) quit
 ```
-
 
 ---
 
@@ -124,4 +125,138 @@ linux:~ # gdb -s arr
 (gdb) p (int *) &(&b[0])->v[0]      # -> (int *) 0x555555558640 <b>
 (gdb) p *(int *) &(&b[0])->v[0]     # -> 0
 (gdb) x/4 (int *) &(&b[0])->v[0]    # -> 0x555555558640 <b>:	0	1072693248	0	1073741824
+```
+
+---
+
+## config
+
+/etc/gdb/gdbinit -> ~/.gdbinit -> ./.gdbinit
+
+```bash
+linux:~ $ gdb [-n] [-x <gdbinit>] [<file>]
+# -n: not execute .gdbinit
+# -x: execute <gdbinit>
+```
+
+```bash
+# .gdbinit
+layout split
+# layout src
+# layout asm
+set disassembly-flavor intel
+set print pretty
+```
+
+---
+
+## script
+
+```bash
+linux:~ $ gdb -n <file> << EOF
+list 1
+break main
+info breakpoints
+run
+frame
+info locals
+quit
+EOF
+```
+
+---
+
+## tui
+
+```makefile
+CC =
+ifndef CC
+  CC = gcc
+endif
+
+ifndef CFLAGS
+  ifeq ($(TARGET), debug)
+    CFLAGS=-Wall -Wextra -g -std=c99
+  else
+    CFLAGS=-Wall -O2 -std=c99
+  endif
+endif
+
+
+hello: hello.o
+   ${CC} ${CFLAGS} -o hello $?
+
+%.o: %.c
+   ${CC} ${CFLAGS} -c $<
+
+.PHONY: clean
+clean:
+   -@test -f hello && rm -fv hello || true
+   -@rm -fv *.o 2> /dev/null || true
+```
+
+```c
+#include <stdio.h>
+
+#define MAX	5
+
+int main() {
+  printf("hello\n");
+
+  int x = 0, sum = 0;
+  for (int i = 0; i < MAX; i++) {
+    x = x * sum;
+    sum += i;
+  }
+  printf("sum %i\n", sum);
+
+  return 0;
+}
+```
+
+```bash
+linux:~/demo $ tree
+.
+├── hello.c
+└── Makefile
+
+0 directories, 2 files
+
+linux:~/demo $ make TARGET=debug
+linux:~/demo $ gdb -tui hello
+(gdb) layout split
+# ctrl-x a: enter or leave the tui mode
+# ctrl-x 1: use a tui layout with only one window
+# ctrl-x 2: use a tui layout at least two windows
+# ctrl-x o: change the active window
+# ctrl-l  : refresh screen
+(gdb) layout asm
+(gdb) layout src
+(gdb) list
+(gdb) break main
+(gdb) info break
+(gdb) run
+(gdb) frame
+(gdb) info locals
+(gdb) quit
+```
+
+[TUI Key Bindings](https://sourceware.org/gdb/onlinedocs/gdb/TUI-Keys.html)
+
+---
+
+## remote
+
+```bash
+# client
+client:~ $ scp server:~/<file>
+
+# server
+server:~ # apt install gdbserver
+server:~ $ gdbserver :1234 <file>
+
+# client
+client:~ $ gdb <file>
+(gdb) target remote <server>:1234
+...
 ```

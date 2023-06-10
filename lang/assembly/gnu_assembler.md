@@ -1,9 +1,8 @@
-# assembler
-
+# gnu assembler
 
 ## hello
 
-```
+```asm
 .text
 
     .global _start

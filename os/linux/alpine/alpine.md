@@ -6,8 +6,6 @@
 ~ # setup-alpine
 ```
 
-
-
 ---
 
 ## network
@@ -28,7 +26,6 @@ alpine:~ # setup-dns
 alpine:~ # setup-hostname
 ```
 
-
 ---
 
 ## gui
@@ -42,16 +39,14 @@ alpine:~ # X -configure
 alpine:~ # mv xorg.conf.new /etc/X11/xorg.conf
 ```
 
-
 ### xfce
 
 ```bash
-alpine:~ # apk add xfce4 xfce4-terminal xfce4-screensaver lightdm-gtk-greeter 
+alpine:~ # apk add xfce4 xfce4-terminal xfce4-screensaver lightdm-gtk-greeter
 alpine:~ # rc-service dbus start
 alpine:~ # rc-update add dbus
 alpine:~ # startx
 ```
-
 
 ### dm
 
@@ -59,7 +54,6 @@ alpine:~ # startx
 alpine:~ # rc-service lightdm start
 alpine:~ # rc-update add lightdm
 ```
-
 
 ### awesome
 
@@ -70,7 +64,6 @@ alpine:~ # apk add adwaita-gtk2-theme adwaita-icon-theme
 alpine:~ # start /usr/bin/awesome
 ```
 
-
 ### i3
 
 ```bash
@@ -78,14 +71,12 @@ alpine:~ # apk add i3wm i3status i3lock
 alpine:~ # startx /usr/bin/i3
 ```
 
-
 ### mouse
 
 ```bash
 alpine:~ # udevadm info --name=/dev/input/mouse0  --query=path
 alpine:~ # cat /proc/bus/input/devices
 ```
-
 
 ---
 
@@ -112,7 +103,6 @@ alpine:~ # apk search mlocate
 alpine:~ # apk add mlocate
 alpine:~ # apk del mlocate
 ```
-
 
 ---
 

@@ -84,6 +84,8 @@ debina8:~ # apt-cache policy
 debina8:~ # apt-cache dumpavail
 ```
 
+---
+
 ## apt
 
 ```bash

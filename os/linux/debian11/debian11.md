@@ -176,6 +176,8 @@ debian:~ $ apt install tigervnc-viewer
 ### libvirt
 debian:~ # apt install libvirt-clients
 debian:~ # apt install virt-manager
+debian:~ # apt install qemu-system
+debian:~ # apt install libvirt-daemon-system
 
 ### docker
 debian:~ # apt-get remove docker docker-engine docker.io containerd runc
