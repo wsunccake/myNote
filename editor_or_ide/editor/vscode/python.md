@@ -59,6 +59,32 @@
         }
       ],
       "justMyCode": true
+    },
+    {
+      "name": "locust",
+      "type": "python",
+      "request": "launch",
+      "module": "locust",
+      "console": "integratedTerminal",
+      "args": [
+        "--loglevel",
+        "DEBUG",
+        "-f",
+        "${file}",
+        "--headless",
+        "--print-stats",
+        "--html",
+        "result.html",
+        "-t",
+        "5m",
+        "--host",
+        "https://api.server.com",
+        "--username",
+        "user@email.com",
+        "--password",
+        "abc123"
+      ],
+      "justMyCode": true
     }
   ]
 }
@@ -69,7 +95,7 @@
 ## .env
 
 ```json
-PYTHONPATH=$HOME/$WORKSPACE/lib:$PYTHONPATH
+PYTHONPATH=${HOME}/${WORKSPACE}/lib:${PYTHONPATH}
 ```
 
 ---

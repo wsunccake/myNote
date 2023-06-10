@@ -1,4 +1,4 @@
-# SLE15
+# SLE 15
 
 ## validate
 
@@ -410,4 +410,27 @@ sle:~ $ mpirun -np 2 ./hello_mpi
 # other command
 sle:~ $ cpuinfo
 sle:~ $ impi_info -a
+```
+
+---
+
+## other
+
+### term
+
+```bash
+sle:~ # infocmp -D
+/etc/terminfo
+/usr/share/terminfo
+
+sle:~ # ls /etc/terminfo
+sle:~ # ls /usr/share/terminfo/*
+
+# garbled character
+# method 1. setup TERM
+sle:~ # env TERM=vt100|xterm yast
+
+# method 2. setup NCURSES
+sle:~ # export NCURSES_NO_UTF8_ACS=1
+sle:~ # yast
 ```
