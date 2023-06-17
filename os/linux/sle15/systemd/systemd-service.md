@@ -27,7 +27,23 @@ sle:~ # systemd-analyze plot > boot_analysis.svg
 ## resolve
 
 ```bash
+# comamnd
 sle:~ # systemd-resolve --status
+sle:~ # systemd-resolve --interface <nic> --set-dns <dns_ip> --set-domain <domain name>
 sle:~ # resolcectl status
-sle:~ # /run/systemd/resolve/resolv.conf
+
+# config
+sle:~ # ls -l /etc/resolv.conf # -> /run/systemd/resolve/stub-resolv.conf
+sle:~ # cat /run/systemd/resolve/resolv.conf
+
+sle:~ # cat /etc/systemd/resolved.conf
+[Resolve]
+#DNS=
+
+# service
+sle:~ # systemctl status systemd-resolved
+sle:~ # systemctl restart systemd-resolved
+
+# log
+sle:~ # journalctl -u systemd-resolved -f
 ```
