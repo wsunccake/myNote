@@ -16,7 +16,7 @@ debian:~ # virt-ls --version
 
 ### graphic frontend
 
-```
+```text
 Ctrl-Alt-f    Toggle full screen
 
 Ctrl-Alt-+    Enlarge the screen
@@ -35,7 +35,7 @@ Ctrl-Alt      Toggle mouse and keyboard grab.
 
 ### nographic backend
 
-```
+```text
 Ctrl-a h      Print this help
 
 Ctrl-a x      Exit emulator
@@ -98,10 +98,10 @@ download Microsoft MS-DOS 6.0 (Full) from [WinWorld MS-DOS 6.0](https://winworld
 debian:~ # qemu-img create -f qcow msdos.disk 2G
 
 # install
-debian:~ # qemu-system-i386 -hda msdos.disk -m 64 -L . -fda Disk1.img -boot a
+debian:~ # qemu-system-i386 -hda msdos.disk -smp 1 -m 64M -fda Disk1.img -boot a [-L .]
 
 # run
-debian:~ # qemu-system-i386 -hda msdos.disk -boot c
+debian:~ # qemu-system-i386 -hda msdos.disk -smp 1 -m 64M -fda Disk1.img -boot c [-nographic]
 ```
 
 ---
