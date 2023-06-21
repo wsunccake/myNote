@@ -1,5 +1,75 @@
 # systemd-service
 
+## timer
+
+```bash
+sle:~ # systemctl list-timers --all
+
+sle:~ # systemctl start <TIMER>.timer
+sle:~ # systemctl restart <TIMER>.timer
+sle:~ # systemctl stop <TIMER>.timer
+
+sle:~ # systemctl enable <TIMER>.timer
+sle:~ # systemctl disable <TIMER>.timer
+
+sle:~ # systemctl cat <TIMER>.timer
+sle:~ # systemctl status <TIMER>.timer
+```
+
+`example`
+
+```bash
+# /usr/local/bin/helloworld.sh
+echo "hello world"
+```
+
+```bash
+# /etc/systemd/system/helloworld.service
+[Unit]
+Description="Hello World script"
+
+[Service]
+ExecStart=/usr/local/bin/helloworld.sh
+```
+
+```bash
+# /etc/systemd/system/helloworld.timer
+[Unit]
+Description="Run helloworld.service 5min after boot and every 24 hours relative to activation time"
+
+[Timer]
+OnBootSec=5min                      # monotonic timer
+OnUnitActiveSec=24h                 # real-time timer
+OnCalendar=Mon..Fri *-*-* 10:00:*   # real-time timer, DayOfWeek Year-Month-Day Hour:Minute:Second
+Unit=helloworld.service
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```bash
+# service
+sle:~ # systemd-analyze verify /etc/systemd/system/helloworld.*
+sle:~ # systemctl start helloworld.timer
+sle:~ # systemctl enable helloworld.timer
+
+# log
+sle:~ # journalctl -u  helloworld.timer -u helloworld.service
+sle:~ # journalctl -u  helloworld.*
+
+# transient timer
+sle:~ # man 1 systemd-run
+sle:~ # systemd-run --on-active="2hours" --unit="helloworld.service"
+sle:~ # systemd-run --on-active="2hours" /usr/local/bin/helloworld.sh
+
+#
+sle:~ # systemd-analyze calendar "Tue,Sun *-*-* 01,03:00:00"
+sle:~ # systemd-analyze calendar "Mon..Fri *-*-* 10:00" "Sat,Sun *-*-* 22:00"
+sle:~ # systemd-analyze calendar --iterations 5 "Sun *-*-* 0/08:00:00"
+```
+
+---
+
 ## rc-local
 
 ```bash
@@ -10,6 +80,28 @@ sle:~ # chmod +x /etc/init.d/boot.local
 sle:~ # systemctl enable rc-local --runtime
 sle:~ # systemctl status rc-local
 sle:~ # systemctl is-enabled rc-local
+```
+
+---
+
+## systemd-tmpfiles
+
+```bash
+# config
+sle:~ # ls /etc/tmpfiles.d/*.conf
+sle:~ # ls /usr/lib/tmpfiles.d/*.conf
+sle:~ # ls /run/tmpfiles.d/*.conf
+
+# man
+sle:~ # man 5 tmpfiles.d
+
+# command
+sle:~ # systemd-tmpfiles --create|--clean|--remove
+
+# service
+sle:~ # systemctl status systemd-tmpfiles-setup
+sle:~ # systemctl status systemd-tmpfiles-setup-dev
+sle:~ # systemctl status systemd-tmpfiles-clean
 ```
 
 ---
