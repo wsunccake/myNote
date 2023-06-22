@@ -61,6 +61,9 @@ debian:~ # dpkg -i code_1.79.2-1686734195_amd64.deb
 
 # chrome
 debian:~ # dpkg -i google-chrome-stable_current_amd64.deb
+
+# ibus
+debian:~ # apt install ibus
 ```
 
 ---
