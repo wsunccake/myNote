@@ -112,10 +112,6 @@ debian:~ # qemu-system-i386 -hda msdos.disk -smp 1 -m 64M -fda Disk1.img -boot c
 # list qemu support
 debian:~ # qemu-system-aarch64 -machine help
 debian:~ # qemu-system-aarch64 -cpu help
-
-# nbd
-debian:~ # modprobe nbd max_part=8
-debian:~ # lsmod nbd
 ```
 
 ---
@@ -163,6 +159,19 @@ FS0:\> EFI\debian\grubaa64.efi
 
 # bcfg boot
 Shell> bcfg boot add 0 FS0:\EFI\debian\grubaa64.efi debian
+```
+
+---
+
+## gdb
+
+```bash
+debian:~ # qemu-system-aarch64 \
+  ... -nographic \
+  -S -s
+
+# -s: -gdb tcp::1234
+# -S: do start
 ```
 
 ---

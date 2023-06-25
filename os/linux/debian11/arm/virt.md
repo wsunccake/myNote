@@ -163,8 +163,9 @@ debian:~ # virsh-edit <domain>
 ...
   <qemu:commandline>
     <qemu:arg value='-gdb'/>
-    <qemu:arg value='tcp::1235'/>
+    <qemu:arg value='tcp::1234'/>
   </qemu:commandline>
 </domain>
 
+# -s: -gdb tcp::1234
 ```
