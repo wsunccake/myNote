@@ -13,6 +13,22 @@
 # copy public key by
 [server:~ ] $ mkdir -p ~/.ssh
 [server:~ ] $ cat <public key> >> ~/.ssh/authorized_keys
+
+# sshd config
+[server:~ ] # cat /etc/ssh/sshd_config
+#LoginGraceTime 2m
+PermitRootLogin no
+
+# To disable tunneled clear text passwords, change to no here!
+#PermitEmptyPasswords no
+PasswordAuthentication no
+
+# Change to no to disable s/key passwords
+ChallengeResponseAuthentication no
+...
+
+# sshd service
+[server:~ ] # systemctl restart sshd
 ```
 
 ---

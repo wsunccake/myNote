@@ -10,6 +10,8 @@
 
 - Disk: 1GB+, virtio
 
+---
+
 ## list info
 
 ```bash
@@ -101,9 +103,19 @@ rkscli: get version
 # cat /etc/version
 ```
 
+---
+
 ## shell
 
 ```bash
 rkscli: !v54!
 rkscli: ruckus
+```
+
+---
+
+## console
+
+```bash
+linux:~ # screen /dev/usb-serial 115200
 ```

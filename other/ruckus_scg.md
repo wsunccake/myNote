@@ -22,6 +22,8 @@
 
 - Disk: 50+ GB, IDE
 
+---
+
 ## vDP on KVM
 
 - Processor: 4+
@@ -32,6 +34,8 @@
   1, dpdk (data plane)
 
 - Disk: 50GB+, IDE
+
+---
 
 ## prividge mode
 
@@ -50,11 +54,15 @@ vSZ-D# !v54!
 [root@vSZ-D ~]#
 ```
 
+---
+
 ## save passphrase
 
 ```bash
 SCG(debug)# save passphrase
 ```
+
+---
 
 ## SCG Cassandra Web
 
@@ -81,6 +89,8 @@ https://scg_manamgement_ip:8443/CassandraWeb/
 -bash-4.1$ sudo /opt/ruckuswireless/3rdparty/cassandra/bin/cqlsh
 ```
 
+---
+
 ## setup and initial
 
 ```bash
@@ -93,6 +103,8 @@ vSZ-D# set-factory
 vSZ-D#
 ```
 
+---
+
 ## list info
 
 ```bash
@@ -103,6 +115,8 @@ vSZ-D# show ip
 vSZ-D# show controller
 ```
 
+---
+
 ## vSZ approve vDP
 
 ```bash
@@ -111,6 +125,8 @@ vSZ# show data-plane
 vSZ(config)# data-plane <dp_name>@<dp_mac> approve
 vSZ(config)# no data-plane <dp_name>@<dp_mac>
 ```
+
+---
 
 ## AP join vSZ with vDP (tunnel mode)
 
@@ -126,6 +142,8 @@ rkscli: set scg getconf
 [root@vSZ-D ~]# tunnelmgr_cli -s all
 [root@vSZ-D ~]# datacore arp
 ```
+
+---
 
 ## public api
 
@@ -159,6 +177,8 @@ vSZ# copy ftp://<username>:<password>@<ftp-host>[/<dir-path>] backup
 vSZ# restore
 ```
 
+---
+
 ## snapshot
 
 SCG/vSZ
@@ -169,7 +189,9 @@ vDP
 vSZ-D(debug)# save-log ftp <ftp_ip> <path> <user> <password>
 ```
 
-### debug
+---
+
+## debug
 
 SCG/vSZ
 
@@ -191,4 +213,16 @@ vDP# show running-confing dhcp all
 vDP# debug
 vDP(debug)# diag dp_comm zone wlan show
 vDP(debug)# diag tbldump -rn 27
+```
+
+---
+
+## ap cert
+
+```bash
+SCG(config)# no ap-cert-check
+SCG(config)# no ap-cert-expired-check
+
+SCG# show running-config ap-cert-check
+SCG# show running-config ap-cert-expired-check
 ```
