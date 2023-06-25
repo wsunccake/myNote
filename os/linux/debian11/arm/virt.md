@@ -147,3 +147,24 @@ debian:~ # virt-copy-out -a $VM_DISK /boot/vmlinuz /boot/initrd.img .
 # set password
 debian:~ # virt-customize -a $VM_DISK --root-password password:
 ```
+
+---
+
+## gdb
+
+```bash
+debian:~ # virsh-edit <domain>
+<domain type='qemu'>
+...
+</domain>
+
+-->
+<domain type='qemu' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
+...
+  <qemu:commandline>
+    <qemu:arg value='-gdb'/>
+    <qemu:arg value='tcp::1235'/>
+  </qemu:commandline>
+</domain>
+
+```

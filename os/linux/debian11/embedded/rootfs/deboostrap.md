@@ -50,7 +50,7 @@ debian:~ # debootstrap \
   $ROOTFS \
   $MIRROR
 
-debian:~ # cp /usr/bin/qemu-arm-static $ROOTFS/usr/bin/       # for armhf ->arm
+debian:~ # cp /usr/bin/qemu-arm-static $ROOTFS/usr/bin/       # for armhf -> arm
 debian:~ # cp /usr/bin/qemu-aarch64-static $ROOTFS/usr/bin/   # for arm64 -> aarch64
 debian:~ # cp /usr/bin/qemu-x86_64-static $ROOTFS/usr/bin/    # for amd64 -> x86_64
 
