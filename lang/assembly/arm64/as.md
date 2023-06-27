@@ -11,6 +11,25 @@ _start:
     svc #0
 ```
 
+```makefile
+TEST= test
+CC = aarch64-linux-gnu-gcc
+
+${TEST}.exe : ${TEST}.s
+    @echo "compile..."
+    ${CC} -g -nostartfiles -o ${TEST}.exe ${TEST}.s
+
+.PHONY: run
+run: ${TEST}.exe
+    @echo "run..."
+    ./${TEST}.exe
+
+.PHONY: clean
+clean:
+    @echo "clean..."
+    -rm ${TEST}.exe
+```
+
 ```bash
 # build 1
 arm64:~ $ as -o test.o test.s
@@ -18,6 +37,9 @@ arm64:~ $ ld -o test test.o
 
 # build 2
 arm64:~ $ gcc -g -nostartfiles -o test test.s
+
+# build 3
+arm64:~ $ make
 
 # run
 arm64:~ $ ./test
@@ -91,11 +113,42 @@ _start:
 // move inverse of shifted 16-bit immediate to register.
     MOVN    W1, #45
 
-// Example of a MOV that the Assembler will change to MVN
-    MOV	W1, #0xFFFFFFFE         // (-2)
+// change to MVN
+    MOV     W1, #0xFFFFFFFE     // (-2)
 
 // exit
     MOV     X0, #0
     MOV     X8, #93
     SVC     0
+```
+
+---
+
+## ldr
+
+```s
+.global _start
+
+_start:
+//    MOV X0, #12       // X0 assign 12
+//    LDR X0, =12       // X0 assign 12
+
+// ldr: loads a word or doubleword from memory and writes it to a register
+    LDR X1, num         // X1 assign 12
+    LDR X0, [X1]        // X0 assign value of X1 address
+
+// add: adds a register value
+    ADD X0, X0, 2       // X0 = X0 + 2
+    MOV x8, #93
+    SVC #0
+
+.data
+    num: .word  12
+```
+
+```text
+.byte: 1 byte
+.hword: 2 byte
+.word: 4 byte
+.quad: 8 byte
 ```
