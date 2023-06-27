@@ -42,11 +42,9 @@ sle:~ # vi /etc/hosts
 sle:~ # hostname -s controller
 ```
 
-setup [ntp](./ntp.md)
+setup [nis](./nis.md) and [nfs](./nfs.md)
 
-setup [nis](./nis.md)
-
-setup nfs or [chrony](./chrony.md)
+setup [ntp](./ntp.md) or [chrony](./chrony.md)
 
 setup [munge](./munge.md)
 

@@ -72,22 +72,22 @@ echo ${FILE_PATH%.*}     # /usr/lib/python/site-package/xxx-1.0/yyy
 echo ${FILE_PATH%%.*}    # /usr/lib/python/site-package/xxx-1
 
 echo "suffix:"
-echo ${FILE_PATH#*/}     # usr/lib/python/site-package/xxx-1.0/yyy.zz
-echo ${FILE_PATH##*/}    # yyy.zz
+echo ${FILE_PATH#*/}      # usr/lib/python/site-package/xxx-1.0/yyy.zz
+echo ${FILE_PATH##*/}     # yyy.zz
 
 # For bash 4.x
 SENTENCE="That is a test."
 echo "sentence:"
-echo "${SENTENCE}"
+echo "${SENTENCE}"        # That is a test.
 
 echo "reverse:"
-echo "${SENTENCE~~}"
+echo "${SENTENCE~~}"      # tHAT IS A TEST.
 
 echo "upper:"
-echo "${SENTENCE^^}"
+echo "${SENTENCE^^}"      # THAT IS A TEST.
 
 echo "lower:"
-echo "${SENTENCE,,}"
+echo "${SENTENCE,,}"      # that is a test.
 
 # define var operation
 VAR="Hello Bash"
@@ -104,7 +104,7 @@ echo
 
 VAR="Hello Bash"
 echo "define VAR: ${VAR}"
-echo "VAR:+value ${VAR:+value}"
+echo "\${VAR:+value}: ${VAR:+value}"
 echo "VAR: ${VAR}"
 echo
 
@@ -270,6 +270,10 @@ done
 ```bash
 cat > tmp.txt << EOF
 echo "hello bash"
+EOF
+
+cat >> tmp.txt << EOF
+echo "hi bash"
 EOF
 
 mysql -u root << EOF
