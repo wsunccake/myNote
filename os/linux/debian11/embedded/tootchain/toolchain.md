@@ -47,7 +47,7 @@ debian:~ # apt install crossbuild-essential-armhf   # for armhf
 
 ---
 
-## c example
+## c
 
 ```c
 // hello.c
@@ -55,6 +55,12 @@ debian:~ # apt install crossbuild-essential-armhf   # for armhf
 
 int main() {
   printf("hello\n");
+
+  for (int i =0; i< 10; i++) {
+	  x += 1 ;
+	  printf("x: %d\n", x);
+  }
+
   return 0;
 }
 ```
@@ -75,7 +81,7 @@ debian:~ # hello.aarch64
 
 ---
 
-## armhf asm
+## asm - armhf
 
 ```s
 .global _start
@@ -106,7 +112,7 @@ debian:~ # arm-linux-gnueabihf-gcc -nostartfiles -o hello.armhf hello.s   # gcc
 
 ---
 
-## aarch64 asm
+## asm - aarch64
 
 ```s
 .globl _start
@@ -139,3 +145,65 @@ debian:~ # aarch64-linux-gnu-gcc -nostartfiles -o hello.aarch64 hello.s   # gcc
 ```
 
 ---
+
+## gdb
+
+```text
+host                ---         target
+x86_64                          arm / arm64
+debian                          debian
+192.168.10.1                    192.168.10.10
+```
+
+```bash
+# prepare
+host:~ # apt install gdb-multiarch
+target:~ # apt install gdbserver
+
+# application
+## target side
+target:~/test $ ls hello.c
+target:~/test $ gcc -g -o hello hello.c
+target:~/test $ file hello | grep debug_info
+target:~/test $ gdbserver :1234 ./hello
+
+## host side
+host:~ $ scp -r 192.168.10.1:~/test .
+host:~ $ cd test
+host:~/test $ gdb-multiarch
+(gdb) file hello
+
+(gdb) layout split
+
+(gdb) show architecture
+(gdb) show sysroot
+(gdb) show solib-search-path
+
+(gdb) set architecture aarch64
+(gdb) set sysroot ~/test
+(gdb) set solib-search-path /usr/lib/aarch64-linux-gnu/
+
+(gdb) target remote 192.168.10.10:1234
+
+(gdb) hbreak
+(gdb) info break
+(gdb) break *0xfffff7fcd150
+
+(gdb) contiune
+(gdb) info all-registers
+(gdb) info registers x1
+(gdb) p/x $x1
+(gdb) x/i $x1
+(gdb) set $x1 =
+
+(gdb) quit
+
+## multi
+target:~/test $ gdbserver --multi :1234
+
+host:~/test $ gdb-multiarch
+(gdb) target extended-remote 192.168.10.10:1234
+(gdb) set remote exec-file ./a.out
+(gdb) run
+(gdb) monitor exit
+```

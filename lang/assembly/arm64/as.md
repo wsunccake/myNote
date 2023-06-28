@@ -130,16 +130,16 @@ _start:
 .global _start
 
 _start:
-//    MOV X0, #12       // X0 assign 12
-//    LDR X0, =12       // X0 assign 12
+//    MOV X0, #12       // X0 = 12
+//    LDR X0, =12       // X0 = 12
 
 // ldr: loads a word or doubleword from memory and writes it to a register
-    LDR X1, num         // X1 assign 12
-    LDR X0, [X1]        // X0 assign value of X1 address
+    LDR X1, num         // X1 = num = 12
+    LDR X0, [X1]        // X0 = X1
 
 // add: adds a register value
     ADD X0, X0, 2       // X0 = X0 + 2
-    MOV x8, #93
+    MOV X8, #93
     SVC #0
 
 .data

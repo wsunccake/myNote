@@ -47,12 +47,15 @@ linux:~ $ gdb minimal.exe
 # breakpoint
 (gdb) break main            # add breakpoint by function
 (gdb) break 4               # add breakpoint by line
+(gdb) break *0xfffff7fcd148 # add breakpoint by address
 (gdb) delete breakpoints 1  # delete breakpoint
 
 (gdb) info breakpoints      # list breakpoint
 (gdb) info variables
 (gdb) info locals
 (gdb) info args
+(gdb) info registers
+(gdb) info all-registers
 
 (gdb) enable                # enable breakpoint
 (gdb) disable               # disable breakpoint
@@ -62,6 +65,14 @@ linux:~ $ gdb minimal.exe
 # 顯示 variable
 (gdb) print i
 (gdb) print &i
+(gdb) p/x i
+# /d decimal
+# /u unsigned
+# /x hex
+# /t binary
+# /i instruction
+# /s string (displays ascii values until a NUL is encounte
+# /c char
 
 # 顯示 cache size of type
 (gdb) print sizeof(i)
@@ -232,9 +243,15 @@ linux:~/demo $ gdb -tui hello
 # ctrl-l  : refresh screen
 (gdb) layout asm
 (gdb) layout src
+
+(gdb) tui disable
+(gdb) tui enable
+
 (gdb) list
+
 (gdb) break main
 (gdb) info break
+
 (gdb) run
 (gdb) frame
 (gdb) info locals
