@@ -12,8 +12,11 @@ _start:
 ```
 
 ```makefile
-TEST= test
-CC = aarch64-linux-gnu-gcc
+TEST = test
+CC   = aarch64-linux-gnu-gcc
+GDB  = gdb-multiarch
+DEBUG= qemu-aarch64-static
+DEBUG_PORT = 1234
 
 ${TEST}.exe : ${TEST}.s
     @echo "compile..."
@@ -24,10 +27,24 @@ run: ${TEST}.exe
     @echo "run..."
     ./${TEST}.exe
 
+.PHONY: debug
+debug: ${TEST}.exe
+    @echo "debug..."
+    ${DEBUG} -g ${DEBUG_PORT} ${TEST}.exe
+
 .PHONY: clean
 clean:
     @echo "clean..."
     -rm ${TEST}.exe
+
+.PHONY: gdb
+gdb:
+    @echo "gdb..."
+    ${GDB} -ex "layout asm" \
+        ${GDB} -ex "layout asm" \
+  -ex "target remote :${DEBUG_PORT}" \
+  -ex "set disassembly-flavor intel" \
+  -ex "set print pretty"
 ```
 
 ```bash
