@@ -101,6 +101,8 @@ W: 32 bit register
 
 // load X2 with 0x1234FEDC4F5D6E3A first using MOV and MOVK
 _start:
+// dec number: #8
+// hex number: #0x8
 // mov: move 16-bit immediate to register
 // movk: move 16-bit immediate into register, keeping other bits unchanged
     MOV     X2, #0x6E3A

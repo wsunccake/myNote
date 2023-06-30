@@ -60,7 +60,12 @@ linux:~ $ gdb minimal.exe
 (gdb) enable                # enable breakpoint
 (gdb) disable               # disable breakpoint
 
-(gdb) run
+(gdb) run                   # r
+(gdb) next                  # n  : next by line (no goto function)
+(gdb) nexti                 # ni : next by instruction (no goto function)
+(gdb) step                  # s  : step by line
+(gdb) stepi                 # si : step by instruction
+(gdb) continue              # c
 
 # 顯示 variable
 (gdb) print i
@@ -193,7 +198,6 @@ ifndef CFLAGS
   endif
 endif
 
-
 hello: hello.o
    ${CC} ${CFLAGS} -o hello $?
 
@@ -259,6 +263,42 @@ linux:~/demo $ gdb -tui hello
 ```
 
 [TUI Key Bindings](https://sourceware.org/gdb/onlinedocs/gdb/TUI-Keys.html)
+
+```text
+# tui mode
+C-x a: enter / leave tui
+C-x 1: layout one window
+C-x 2: layout two window
+C-x o: change active window
+C-x s: switch single key mode
+
+C-L: refresh screen
+
+C-p: up
+C-n: down
+C-b: move back
+C-f: move forward
+```
+
+```
+# tui single key mode
+q: exit single key mode
+
+r: run
+c: continue
+
+n: next
+o: nexti
+s: step
+i: stepi
+
+u: up
+d: down
+
+f: finish
+v: info locals
+w: where
+```
 
 ---
 
