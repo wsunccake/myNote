@@ -328,10 +328,11 @@ debian:~ # qemu-system-arm \
   -kernel u-boot \
   -drive file=$SD_IMG,if=sd,format=raw,index=0 \
   -nographic
-u-boor ==> load mmc 0:1 0x60008000 zImage
-u-boor ==> load mmc 0:1 0x61000000 vexpress-v2p-ca9.dtb
-u-boor ==> setenv bootargs "root=/dev/mmcblk0p2 rw console=ttyAMA0"
-u-boor ==> bootz 0x60008000 - 0x61000000
+
+u-boot ==> load mmc 0:1 0x60008000 zImage
+u-boot ==> load mmc 0:1 0x61000000 vexpress-v2p-ca9.dtb
+u-boot ==> setenv bootargs "root=/dev/mmcblk0p2 rw console=ttyAMA0"
+u-boot ==> bootz 0x60008000 - 0x61000000
 
 # for u-boot + sd card + kernel + boot script
 debian:~ # cat << EOF >> boot.cmd
@@ -350,6 +351,7 @@ debian:~ # qemu-system-arm \
   -kernel u-boot \
   -drive file=$SD_IMG,if=sd,format=raw,index=0 \
   -nographic
-u-boor ==> load mmc 0:1 0x62000000 boot.scr
-u-boor ==> source 0x62000000
+
+u-boot ==> load mmc 0:1 0x62000000 boot.scr
+u-boot ==> source 0x62000000
 ```
