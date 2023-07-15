@@ -240,30 +240,77 @@ vim -d file1 file2 ...
 
 #### word
 
-`ciw`, change a word
+```text
+ciw           : change inner word
+ciw  +  ()    : change inner word in ()
+ciw  +  []    : change inner word in []
+ciw  +  {}    : change inner word in {}
+ciw  +  "'`   : change inner word in "" or ''
 
-`caw`, change a word
+caw           : change a word
+caw  +  ()    : change a word in ()
+caw  +  []    : change a word in []
+caw  +  {}    : change a word in {}
+caw  +  "'`   : change a word in "" or ''
 
-`gUaw`, a word to upper case
-
-`guaw`, a word to lower case
+gUaw          : a word to upper case
+guaw          : a word to lower case
+```
 
 #### sentence
 
-`cis`, change a sentence
-
-`cas`, change a sentence
-
-`gUas`, a sentence to upper case
-
-`guas`, a sentence to lower case
+```text
+cis         : change inner sentence
+cis         : change inner sentence
+gUas        : a sentence to upper case
+guas        : a sentence to lower case
+```
 
 #### paragraph
 
-`cip`, change a paragraph
+```text
+cip         : change inner paragraph
+cap         : change a paragraph
+gUap        : a paragraph to upper case
+guap        : a paragraph to lower case
+```
 
-`cap`, change a paragraph
+---
 
-`gUap`, a paragraph to upper case
+## mark
 
-`guap`, a paragraph to lower case
+normal mode
+
+```text
+m{a-zA-Z}           : set mark {a-zA-Z} at cursor position
+`{a-zA-Z}           : jump to mark
+```
+
+command mode
+
+```text
+:marks
+:ma[rk] {a-zA-Z}
+:delm[arks] {mark}
+```
+
+---
+
+## recording
+
+normal mode
+
+```text
+q{a-zA-Z} ...  ESC q    : record typed characters into register
+@{a-zA-Z}               : execute the contents of register
+```
+
+command mode
+
+```text
+:reg[isters]            : display the type and contents of all  register
+    type can be one of:
+    "c"     for |characterwise| text
+    "l"     for |linewise| text
+    "b"     for |blockwise-visual| text
+```

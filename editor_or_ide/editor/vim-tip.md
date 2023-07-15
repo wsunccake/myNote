@@ -1,5 +1,18 @@
 # vim tip
 
+## content
+
+- [motion](#motion)
+- [open file](#open-file)
+- [copy and move text](#copy-and-move-text)
+- [window](#window)
+- [tab page](#tab-page)
+- [select all](#select-all)
+- [search and replace pattern](#search-and-replace-pattern)
+- [search from select mode](#search-from-select-mode)
+
+---
+
 ## motion
 
 - goto char on line (){char}
@@ -12,6 +25,8 @@
   - left / backward: (b), (B)
 - goto file head (gg)
 - goto file end (G)
+
+---
 
 ## open file
 

@@ -1,12 +1,10 @@
 # robotframework 4.x
 
-
 ## instsall
 
 ```bash
 linux:~ $ pip install robotframework
 ```
-
 
 ---
 
@@ -19,7 +17,6 @@ linux:~ $ robot -V <var>.yaml -v <var>:<val> <file>.robot
 linux:~ $ robot -t <test_name> -d <output_dir> <file>.robot
 linux:~ $ robot -o <output>.xml -l <log>.html -r <report>.html <file>.robot
 ```
-
 
 ---
 
