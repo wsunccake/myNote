@@ -1278,6 +1278,37 @@ int main()
 }
 ```
 
+### pointer
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+struct student
+{
+   unsigned int id;
+   unsigned int score;
+};
+typedef struct student Student;
+
+int main()
+{
+   Student s1 = {.id = 0, .score = 100};
+   printf("id: %d, score: %d\n", s1.id, s1.score);
+
+   Student *s2 = &s1;
+   printf("id: %d, score: %d\n", s2->id, s2->score);
+
+   Student *s3 = (Student *)malloc(sizeof(Student));
+   s3->id = 2;
+   s3->score = 60;
+   printf("id: %d, score: %d\n", s3->id, s3->score);
+   printf("id: %u, score: %u\n", &(s3->id), &(s3->score));
+   printf("student: %u, size: %u\n", s3, sizeof(s3));   free(s3);
+   return 0;
+}
+```
+
 ---
 
 ## union
