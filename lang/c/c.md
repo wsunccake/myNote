@@ -1,5 +1,54 @@
 # C
 
+---
+
+## content
+
+- [hello](#hello)
+- [data type](#data-type)
+- [condition](#condition)
+  - [if](#if)
+  - [switch](#switch)
+- [operator](#operator)
+  - [++]
+- [loop](#loop)
+  - [for](#for)
+  - [while](#while)
+  - [goto](#goto)
+- [function](#function)
+- [array](#array)
+  - [function - array](#function---array)
+  - [2d array](#2d-array)
+  - [row-major vs column-major](#row-major-vs-column-major)
+- [pointer](#pointer)
+  - [pointer - array](#pointer---array)
+  - [pointer - function](#pointer---function)
+  - [array of pointer](#array-of-pointer)
+  - [pointer to array](#pointer-to-array)
+  - [pointer to pointer](#pointer-to-pointer)
+  - [function pointer](#function-pointer)
+- [string](#string)
+- [struct](#struct)
+  - [struct - pointer](#struct---pointer)
+  - [union](#union)
+- [file](#file)
+  - [write text](#write-text)
+  - [read text](#read-text)
+  - [write binary](#write-binary)
+  - [read binary](#read-binary)
+  - [seek](#seek)
+- [preprocessor](#preprocessor)
+- [header](#header)
+- [memory](#memory)
+- [typedef](#typedef)
+- [const](#const)
+- [static](#static)
+- [bitwise](#bitwise)
+- [void](#void)
+- [ref](#ref)
+
+---
+
 ## hello
 
 ```c
@@ -104,6 +153,8 @@ int main () {
    return 0;
 }
 ```
+
+[64-bit data models](https://en.wikipedia.org/wiki/64-bit_computing#64-bit_data_models)
 
 ---
 
@@ -498,7 +549,7 @@ int main () {
 }
 ```
 
-### function
+### function - array
 
 ```c
 #include <stdio.h>
@@ -516,7 +567,7 @@ int main () {
 }
 ```
 
-### 2d
+### 2d array
 
 ```c
 #include <stdio.h>
@@ -622,7 +673,7 @@ int (* ptr)[5] = NULL;
 int **ptr;
 ```
 
-### array
+### pointer - array
 
 ```c
 #include <stdio.h>
@@ -655,7 +706,7 @@ int main () {
 // arr[2]: 3, *ptr1: 3, *ptr2: 3, *ptr3: 3
 ```
 
-### function
+### pointer - function
 
 ```c
 #include <stdio.h>
@@ -1278,7 +1329,7 @@ int main()
 }
 ```
 
-### pointer
+### struct - pointer
 
 ```c
 #include <stdio.h>
