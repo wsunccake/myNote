@@ -3,10 +3,7 @@
 ```bash
 ubuntu:~ # apt update
 
-ubuntu:~ # apt install
-curl
-git
-vim
+ubuntu:~ # apt install curl git vim-nox
 ```
 
 ---
@@ -43,7 +40,9 @@ plugins=()                  -> plugins=(git tmux)
 # sshd
 ubuntu:~ # apt install openssh-server
 
-ubuntu:~ # systemctl enable sshd
-ubuntu:~ # systemctl start sshd
-ubuntu:~ # systemctl status sshd
+ubuntu:~ # systemctl enable|disable sshd
+ubuntu:~ # systemctl start|stop     sshd
+ubuntu:~ # systemctl status         sshd
 ```
+
+[ufw](../ubuntu20/ufw.md)
