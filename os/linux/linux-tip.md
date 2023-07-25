@@ -47,7 +47,7 @@ linux:~ # smartctl -d sat+megaraid,0 -x /dev/sda
 
 MegaCli
 
-```
+```bash
 linux:~ # rpm -ivh MegaCli-8.07.14-1.noarch.rpm
 linux:~ # alias megacli='/opt/MegaRAID/MegaCli/MegaCli64'
 linux:~ # megacli -AdpAllInfo -aALL | grep Disks

@@ -13,6 +13,10 @@ linux:~ # yum install kernel-devel-`uname -r`
 
 linux:~ # lsmod
 linux:~ # cat /proc/modules
+
+# kernel source
+linux:~ # ls /lib/modules/`uname -r`/source/include/linux           # debian
+linux:~ # ls /lib/modules/`uname -r`/build/include/linux            # ubuntu
 ```
 
 ---
@@ -250,10 +254,27 @@ tree
 
 linux:~/hello $ make
 
-linux:~/hello # modinfo hello-1.ko
-linux:~/hello # insmod hello-1.ko
-linux:~/hello # lsmode | grep hello-1
-linux:~/hello # rmmod hello-1
+# insert module
+linux:~/hello # modinfo <module>.ko
+linux:~/hello # insmod <module>.ko
+
+# remove module
+linux:~/hello # rmmod <module>
+
+# list module
+linux:~/hello # lsmod | grep <module>
+
+# update module dependcy
+linux:~/hello # ln -s `readfile -f <module>.ko` /lib/modules/`uname -r`/misc
+linux:~/hello # depmod
+linux:~/hello # cat /lib/modules/`uname -r`/modules.dep
+
+# add / remove module
+linux:~ # modprobe <moudle>
+linux:~ # modprobe -r <moudle>
+
+# log / message
+linux:~/hello # dmesg
 linux:~/hello # journalctl --since "1 hour ago" | grep kernel
 ```
 

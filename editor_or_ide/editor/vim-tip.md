@@ -103,3 +103,13 @@
 3. search mode (/)
 4. select register (ctrl + r)
 5. select the unnamed register (")
+
+---
+
+## previous postion when open file
+
+```vim
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+endif
+```

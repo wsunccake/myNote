@@ -11,6 +11,8 @@
   - [ip](#ip)
   - [app](#app)
 - [logging](#logging)
+- [limit](#limit)
+- [config](#config)
 
 ## daemon
 
@@ -27,7 +29,7 @@
 
 ```bash
 # status
-[ubuntu:~ ] # ufw status
+[ubuntu:~ ] # ufw status [numbered|verbose]
 [ubuntu:~ ] # ufw enable|disable
 [ubuntu:~ ] # ufw show raw
 ```
@@ -85,4 +87,21 @@
 ```bash
 [ubuntu:~ ] # ufw logging on
 [ubuntu:~ ] # ufw logging off
+```
+
+---
+
+## limit
+
+```bash
+[ubuntu:~ ] # ufw limit ssh/tcp
+[ubuntu:~ ] # ufw limit in on eth0 proto tcp from 192.168.11.0/24 port 22
+```
+
+---
+
+## config
+
+```bash
+[ubuntu:~ ] # cat /etc/default/ufw
 ```
