@@ -16,7 +16,7 @@ debian:~ # virt-ls --version
 
 ### graphic frontend
 
-```
+```text
 Ctrl-Alt-f    Toggle full screen
 
 Ctrl-Alt-+    Enlarge the screen
@@ -35,7 +35,7 @@ Ctrl-Alt      Toggle mouse and keyboard grab.
 
 ### nographic backend
 
-```
+```text
 Ctrl-a h      Print this help
 
 Ctrl-a x      Exit emulator
@@ -98,10 +98,10 @@ download Microsoft MS-DOS 6.0 (Full) from [WinWorld MS-DOS 6.0](https://winworld
 debian:~ # qemu-img create -f qcow msdos.disk 2G
 
 # install
-debian:~ # qemu-system-i386 -hda msdos.disk -m 64 -L . -fda Disk1.img -boot a
+debian:~ # qemu-system-i386 -hda msdos.disk -smp 1 -m 64M -fda Disk1.img -boot a [-L .]
 
 # run
-debian:~ # qemu-system-i386 -hda msdos.disk -boot c
+debian:~ # qemu-system-i386 -hda msdos.disk -smp 1 -m 64M -fda Disk1.img -boot c [-nographic]
 ```
 
 ---
@@ -112,57 +112,19 @@ debian:~ # qemu-system-i386 -hda msdos.disk -boot c
 # list qemu support
 debian:~ # qemu-system-aarch64 -machine help
 debian:~ # qemu-system-aarch64 -cpu help
-
-# nbd
-debian:~ # modprobe nbd max_part=8
-debian:~ # lsmod nbd
 ```
 
 ---
 
-## efi shell
+## gdb
 
 ```bash
-# help
-Shell> help
-Shell> help <cmd>
+debian:~ # qemu-system-aarch64 \
+  ... -nographic \
+  -S -s
 
-Shell> cls              # clean screen
-Shell> map              # map table
-Shell> reset [-s|-c|-w] # shutdown / reboot
-                        # -s: shutdown
-                        # -c: cool boot
-                        # -w: warm boot
-
-# common command
-Shell> ls
-Shell> mv
-Shell> cp
-Shell> rm
-Shell> edit
-
-Shell> alias
-Shell> alias [-v] hi "echo hello"
-Shell> alias -d hi
-
-Shell> set
-Shell> set [-v] var=val
-Shell> set -d var
-
-Shell> bcfg driver dump [-v]
-Shell> bcfg boot dump [-v]
-Shell> bcfg boot add <boot order> <efi image> <boot name>
-Shell> bcfg boot mv <boot order> <new boot order>
-Shell> bcfg boot rm <boot order>
-```
-
-```bash
-# manual boot
-Shell> FS0:
-FS0:\> EFI\debian\grubaa64.efi
-
-# bcfg boot
-Shell> bcfg boot add 0 FS0:\EFI\debian\grubaa64.efi debian
+# -s: -gdb tcp::1234
+# -S: do start
 ```
 
 ---

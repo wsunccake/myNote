@@ -91,11 +91,8 @@ plugins=()                  -> plugins=(git tmux)
 debian:~ $ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 debian:~ $ ~/.fzf/install
 
-# screen
+# screen and tmux
 debian:~ # apt install screen tmux
-
-# tmux
-debian:~ # apt install tmux
 
 # locate
 debian:~ # apt install mlocate

@@ -147,3 +147,72 @@ debian:~ # virt-copy-out -a $VM_DISK /boot/vmlinuz /boot/initrd.img .
 # set password
 debian:~ # virt-customize -a $VM_DISK --root-password password:
 ```
+
+---
+
+## efi shell
+
+```bash
+# help
+Shell> help
+Shell> help <cmd>
+
+Shell> cls              # clean screen
+Shell> map              # map table
+Shell> reset [-s|-c|-w] # shutdown / reboot
+                        # -s: shutdown
+                        # -c: cool boot
+                        # -w: warm boot
+
+# common command
+Shell> ls
+Shell> mv
+Shell> cp
+Shell> rm
+Shell> edit
+
+Shell> alias
+Shell> alias [-v] hi "echo hello"
+Shell> alias -d hi
+
+Shell> set
+Shell> set [-v] var=val
+Shell> set -d var
+
+Shell> bcfg driver dump [-v]
+Shell> bcfg boot dump [-v]
+Shell> bcfg boot add <boot order> <efi image> <boot name>
+Shell> bcfg boot mv <boot order> <new boot order>
+Shell> bcfg boot rm <boot order>
+```
+
+```bash
+# manual boot
+Shell> FS0:
+FS0:\> EFI\debian\grubaa64.efi
+
+# bcfg boot
+Shell> bcfg boot add 0 FS0:\EFI\debian\grubaa64.efi debian
+```
+
+---
+
+## gdb
+
+```bash
+debian:~ # virsh-edit <domain>
+<domain type='qemu'>
+...
+</domain>
+
+-->
+<domain type='qemu' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
+...
+  <qemu:commandline>
+    <qemu:arg value='-gdb'/>
+    <qemu:arg value='tcp::1234'/>
+  </qemu:commandline>
+</domain>
+
+# -s: -gdb tcp::1234
+```

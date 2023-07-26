@@ -47,21 +47,37 @@ linux:~ $ gdb minimal.exe
 # breakpoint
 (gdb) break main            # add breakpoint by function
 (gdb) break 4               # add breakpoint by line
+(gdb) break *0xfffff7fcd148 # add breakpoint by address
 (gdb) delete breakpoints 1  # delete breakpoint
 
 (gdb) info breakpoints      # list breakpoint
 (gdb) info variables
 (gdb) info locals
 (gdb) info args
+(gdb) info registers
+(gdb) info all-registers
 
 (gdb) enable                # enable breakpoint
 (gdb) disable               # disable breakpoint
 
-(gdb) run
+(gdb) run                   # r
+(gdb) next                  # n  : next by line (no goto function)
+(gdb) nexti                 # ni : next by instruction (no goto function)
+(gdb) step                  # s  : step by line
+(gdb) stepi                 # si : step by instruction
+(gdb) continue              # c
 
 # 顯示 variable
 (gdb) print i
 (gdb) print &i
+(gdb) p/x i
+# /d decimal
+# /u unsigned
+# /x hex
+# /t binary
+# /i instruction
+# /s string (displays ascii values until a NUL is encounte
+# /c char
 
 # 顯示 cache size of type
 (gdb) print sizeof(i)
@@ -182,7 +198,6 @@ ifndef CFLAGS
   endif
 endif
 
-
 hello: hello.o
    ${CC} ${CFLAGS} -o hello $?
 
@@ -232,9 +247,15 @@ linux:~/demo $ gdb -tui hello
 # ctrl-l  : refresh screen
 (gdb) layout asm
 (gdb) layout src
+
+(gdb) tui disable
+(gdb) tui enable
+
 (gdb) list
+
 (gdb) break main
 (gdb) info break
+
 (gdb) run
 (gdb) frame
 (gdb) info locals
@@ -242,6 +263,42 @@ linux:~/demo $ gdb -tui hello
 ```
 
 [TUI Key Bindings](https://sourceware.org/gdb/onlinedocs/gdb/TUI-Keys.html)
+
+```text
+# tui mode
+C-x a: enter / leave tui
+C-x 1: layout one window
+C-x 2: layout two window
+C-x o: change active window
+C-x s: switch single key mode
+
+C-L: refresh screen
+
+C-p: up
+C-n: down
+C-b: move back
+C-f: move forward
+```
+
+```
+# tui single key mode
+q: exit single key mode
+
+r: run
+c: continue
+
+n: next
+o: nexti
+s: step
+i: stepi
+
+u: up
+d: down
+
+f: finish
+v: info locals
+w: where
+```
 
 ---
 

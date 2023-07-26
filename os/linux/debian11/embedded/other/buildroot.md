@@ -7,29 +7,33 @@ debian:~ # apt install rsync
 
 debian:~ $ tar zxf buildroot-2023.02.tar.gz
 debian:~ $ cd buildroot-2023.02
-debian:~/buildroot-2023.02 $ ls configs
+debian:~/buildroot-2023.02 $ ls configs/qemu_*
 ```
 
 ---
 
-## arm
+## qemu
 
 ```bash
-debian:~/buildroot-2023.02 $ make qemu_arm_vexpress_defconfig
+# arch
+debian:~/buildroot-2023.02 $ make qemu_arm_vexpress_defconfig		# for arm
+debian:~/buildroot-2023.02 $ make qemu_aarch64_virt_defconfig		# for arm64
+debian:~/buildroot-2023.02 $ make qemu_x86_64_defconfig				# for x86_64
+
+# package config
 debian:~/buildroot-2023.02 $ make menuconfig
-debian:~/buildroot-2023.02 $ make [-j <cpu number>]
 
-# exec
-debian:~/buildroot-2023.02 $ ./output/images/start-qemu.sh
-```
+# kernel config
+debian:~/buildroot-2023.02 $ make linux-menuconfig
+Kernel hacking  --->
+  Compile-time checks and compiler options  --->
+    [*] Compile the kernel with debug info
 
----
+# enable kernel debug
+debian:~/buildroot-2023.02 $ grep CONFIG_DEBUG_KERNEL=y output/build/linux-5.15.18/.config
+debian:~/buildroot-2023.02 $ grep CONFIG_DEBUG_INFO=y output/build/linux-5.15.18/.config
 
-## arm64
-
-```bash
-debian:~/buildroot-2023.02 $ qemu_aarch64_virt_defconfig
-debian:~/buildroot-2023.02 $ make menuconfig
+# build
 debian:~/buildroot-2023.02 $ make [-j <cpu number>]
 
 # exec
