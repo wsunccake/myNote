@@ -1,5 +1,18 @@
 # vim tip
 
+## content
+
+- [motion](#motion)
+- [open file](#open-file)
+- [copy and move text](#copy-and-move-text)
+- [window](#window)
+- [tab page](#tab-page)
+- [select all](#select-all)
+- [search and replace pattern](#search-and-replace-pattern)
+- [search from select mode](#search-from-select-mode)
+
+---
+
 ## motion
 
 - goto char on line (){char}
@@ -12,6 +25,8 @@
   - left / backward: (b), (B)
 - goto file head (gg)
 - goto file end (G)
+
+---
 
 ## open file
 
@@ -88,3 +103,13 @@
 3. search mode (/)
 4. select register (ctrl + r)
 5. select the unnamed register (")
+
+---
+
+## previous postion when open file
+
+```vim
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+endif
+```

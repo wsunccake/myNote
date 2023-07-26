@@ -1,10 +1,23 @@
 # deboostrap
 
+---
+
+## content
+
+- [package](#package)
+- [prepare](#prepare)
+- [usage](#usage)
+  - [for debian](#for-debian)
+  - [for ubuntu](#for-ubuntu)
+
+---
+
 ## package
 
 ```bash
 # install
 debian:~ # apt install debootstrap
+debian:~ # apt install qemu-user-static
 ```
 
 ---
@@ -28,6 +41,8 @@ debian:~ # apt install qemu-system:arm64 qemu-user:arm64 qemu-user-static   # fo
 ---
 
 ## usage
+
+### for debian
 
 ```bash
 debian:~ # debootstrap --arch <ARCH> <DISTRO> <DIRECTORY> <MIRROR>
@@ -57,5 +72,24 @@ debian:~ # cp /usr/bin/qemu-x86_64-static $ROOTFS/usr/bin/    # for amd64 -> x86
 # chroot
 debian:~ # chroot $ROOTFS /bin/bash
 ~ # /debootstrap/debootstrap --second-stage
+~ # password
+```
+
+### for ubuntu
+
+```bash
+ubuntu:~ # ROOTFS=/home/rootfs
+
+ubuntu:~ # debootstrap \
+  --arch arm64 \
+  focal \
+  $ROOTFS \
+  http://ports.ubuntu.com/ubuntu-ports
+
+ubuntu:~ # cp /usr/bin/qemu-aarch64-static $ROOTFS/usr/bin/
+ubuntu:~ # echo -e "deb http://ports.ubuntu.com/ubuntu-ports/ focal main restricted\ndeb http://ports.ubuntu.com/ubuntu-ports/ focal multiverse\ndeb http://ports.ubuntu.com/ubuntu-ports/ focal universe\ndeb http://ports.ubuntu.com/ubuntu-ports/ focal-backports main restricted universe multiverse\ndeb http://ports.ubuntu.com/ubuntu-ports/ focal-security main restricted\ndeb http://ports.ubuntu.com/ubuntu-ports/ focal-security multiverse\ndeb http://ports.ubuntu.com/ubuntu-ports/ focal-security universe\ndeb http://ports.ubuntu.com/ubuntu-ports/ focal-updates main restricted\ndeb http://ports.ubuntu.com/ubuntu-ports/ focal-updates multiverse\ndeb http://ports.ubuntu.com/ubuntu-ports/ focal-updates universe" >> $ROOTFS/etc/apt/sources.list
+
+# chroot
+ubuntu:~ # chroot $ROOTFS /bin/bash
 ~ # password
 ```

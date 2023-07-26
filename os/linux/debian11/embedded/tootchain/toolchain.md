@@ -1,5 +1,17 @@
 # toolchain
 
+---
+
+## content
+
+- [concept](#concept)
+- [prepare](#prepare)
+- [c](#c)
+- [asm](#asm)
+  - [armhf](#armhf)
+  - [aarch64](#aarch64)
+  - [gdb](#gdb)
+
 ## concept
 
 ```text
@@ -81,7 +93,9 @@ debian:~ # hello.aarch64
 
 ---
 
-## asm - armhf
+## asm
+
+### armhf
 
 ```s
 .global _start
@@ -110,9 +124,7 @@ debian:~ # arm-linux-gnueabihf-ld -o hello.armhf hello.o                  # ld
 debian:~ # arm-linux-gnueabihf-gcc -nostartfiles -o hello.armhf hello.s   # gcc
 ```
 
----
-
-## asm - aarch64
+### aarch64
 
 ```s
 .globl _start
