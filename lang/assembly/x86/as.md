@@ -55,3 +55,18 @@ section .text
         xor ebx, ebx
         int 0x80
 ```
+
+---
+
+## generate asm from c
+
+```bash
+linux:~ # gcc -masm=att -S -o hello.s hello.c           # at&t syntax
+linux:~ # gcc -masm=intel -S -o hello.s hello.c         # intel syntax
+```
+
+---
+
+## ref
+
+[GNU Assembler Examples](https://cs.lmu.edu/~ray/notes/gasexamples/)
