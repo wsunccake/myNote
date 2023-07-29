@@ -120,8 +120,8 @@ EOF
 debian:~/linux # chmod +x rootfs/init.sh
 
 # build module
-debian:~/linux # make ARCH=um SUBARCH=x86_64 modules -j `proc`
-debian:~/linux # make modules_install MODLIB=../rootfs/lib/modules/VER ARCH=um
+debian:~/linux # make ARCH=um SUBARCH=x86_64 modules -j `nproc`
+debian:~/linux # make ARCH=um MODLIB=../rootfs/lib/modules/VER modules_install
 
 debian:~/linux # ./run_uml.sh
 

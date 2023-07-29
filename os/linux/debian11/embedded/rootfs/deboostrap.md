@@ -52,6 +52,8 @@ debian:~ # debootstrap --arch <ARCH> <DISTRO> <DIRECTORY> <MIRROR>
 # <DIRECTORY>
 # <MIRROR>    : http://ftp.tw.debian.org/debian
 
+debian:~ # ls /usr/share/debootstrap/scripts
+
 debian:~ # ROOTFS=/home/rootfs
 debian:~ # ARCH=armhf             # amd64, armhf, arm64
 debian:~ # RELEASE=bulleye        # bookworm, bulleye, buster
@@ -89,7 +91,7 @@ ubuntu:~ # MIRROR=                # https://ftp.ubuntu-tw.org/mirror/ubuntu/
 
 ubuntu:~ # debootstrap \
   --arch $ARCH \
-  --variant $VARIANT \
+  [--variant $VARIANT \]
   $RELEASE \
   $ROOTFS \
   $MIRROR
@@ -97,27 +99,6 @@ ubuntu:~ # debootstrap \
 ubuntu:~ # cp /usr/bin/qemu-arm-static $ROOTFS/usr/bin/       # for armhf -> arm
 ubuntu:~ # cp /usr/bin/qemu-aarch64-static $ROOTFS/usr/bin/   # for arm64 -> aarch64
 ubuntu:~ # cp /usr/bin/qemu-x86_64-static $ROOTFS/usr/bin/    # for amd64 -> x86_64
-
-
-ubuntu:~ # echo -e "deb http://ports.ubuntu.com/ubuntu-ports/ focal main restricted\n
-deb http://ports.ubuntu.com/ubuntu-ports/ focal multiverse\n
-deb http://ports.ubuntu.com/ubuntu-ports/ focal universe\n
-deb http://ports.ubuntu.com/ubuntu-ports/ focal-backports main restricted universe multiverse\n
-deb http://ports.ubuntu.com/ubuntu-ports/ focal-security main restricted\n
-deb http://ports.ubuntu.com/ubuntu-ports/ focal-security multiverse\n
-deb http://ports.ubuntu.com/ubuntu-ports/ focal-security universe\n
-deb http://ports.ubuntu.com/ubuntu-ports/ focal-updates main restricted\n
-deb http://ports.ubuntu.com/ubuntu-ports/ focal-updates multiverse\n
-deb http://ports.ubuntu.com/ubuntu-ports/ focal-updates universe
-" >> $ROOTFS/etc/apt/sources.list
-
-
-release="jammy"
-
-echo -e "deb http://archive.ubuntu.com/ubuntu/ ${release} main restricted universe\n
-deb http://security.ubuntu.com/ubuntu/ ${release}-security main restricted universe\n
-deb http://archive.ubuntu.com/ubuntu/ ${release}-updates main restricted universe\n
-" > /mnt/etc/apt/sources.list
 
 # chroot
 ubuntu:~ # chroot $ROOTFS /bin/bash
@@ -135,9 +116,9 @@ target:~ # cat << EOF >> /etc/hosts
 127.0.1.1	myhostname.localdomain	myhostname
 EOF
 
+target:~ #  apt install kmod
 
-# chroot
-genfstab -U /mnt >> /mnt/etc/fstab
-arch-chroot $ROOTFS
-
+# if install on loop device
+target:~ # genfstab -U /mnt >> /mnt/etc/fstab
+target:~ # arch-chroot $ROOTFS
 ```
