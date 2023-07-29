@@ -5,11 +5,13 @@
 ## content
 
 - [environment](#environment)
+- [build user-mode linux from kernel](#build-user-mode-linux-from-kernel)
+  - [build kernel](#build-kernel)
+  - [build module](#build-module)
 - [build rootfs from debootstrap](#build-rootfs-from-debootstrap)
   - [manual run](#manual-run)
   - [setup network](#setup-network)
   - [boot script](#boot-script)
-- [build user-mode linux from kernel](#build-user-mode-linux-from-kernel)
 - [startup user-mode linux](#startup-user-mode-linux)
 - [develop kernel module](#develop-kernel-module)
   - [hello](#hello)
@@ -25,6 +27,61 @@ Host:
 
 Target:
   User-Mode Linux: Ubuntu 22
+```
+
+---
+
+## build user-mode linux from kernel
+
+### build kernel
+
+```bash
+# package
+host:~ # apt install build-essential flex bison bc dwarves
+host:~ # apt install libncurses-dev libssl-dev ca-certificates
+host:~ # apt install xz-utils wget curl fakeroot
+
+# download kernel
+host:~ # KERNEL_URL=https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.42.tar.xz
+host:~ # KERNEL_XZ=${KERNEL_URL##*/}
+host:~ # KERNEL_DIR=${KERNEL_XZ%.tar.xz}
+
+# un-compress tarball
+host:~ # uname -a
+host:~ # wget $KERNEL_URL
+host:~ # tar Jxf $KERNEL_XZ
+host:~ # cd $KERNEL_DIR
+host:~ # ln -s $KERNEL_DIR linux
+
+# compile user-mode linux
+host:~ # cd linux
+host:~/linux # make mrproper
+host:~/linux # make defconfig ARCH=um SUBARCH=x86_64
+host:~/linux # make menuconfig ARCH=um SUBARCH=x86_64
+
+# build user-mode linux
+host:~/linux # make linux ARCH=um SUBARCH=x86_64 -j `nproc`
+host:~/linux # file linux
+host:~/linux # ./linux --help
+```
+
+### build module
+
+after rootfs
+
+```bash
+# build module
+host:~/linux # make ARCH=um SUBARCH=x86_64 modules -j `nproc`
+host:~/linux # make ARCH=um MODLIB=$ROOTFS/lib/modules/VER modules_install
+
+# user-mode linux
+host:~ # ./run_uml.sh
+target:~ # mv /lib/modules/VER /lib/modules/`uname -r`
+target:~ # depmod -ae `uname -r`
+
+# test kernel module
+target:~ # modprobe isofs
+target:~ # lsmod
 ```
 
 ---
@@ -113,53 +170,6 @@ ROOTFS=/root/amd64-jammy
   eth0=tuntap,tap0
 EOF
 host:~ # chmod +x run_uml.sh
-```
-
----
-
-## build user-mode linux from kernel
-
-```bash
-# package
-host:~ # apt install build-essential flex bison bc dwarves
-host:~ # apt install libncurses-dev libssl-dev ca-certificates
-host:~ # apt install xz-utils wget curl fakeroot
-
-# download kernel
-host:~ # KERNEL_URL=https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.42.tar.xz
-host:~ # KERNEL_XZ=${KERNEL_URL##*/}
-host:~ # KERNEL_DIR=${KERNEL_XZ%.tar.xz}
-
-# un-compress tarball
-host:~ # uname -a
-host:~ # wget $KERNEL_URL
-host:~ # tar Jxf $KERNEL_XZ
-host:~ # cd $KERNEL_DIR
-host:~ # ln -s $KERNEL_DIR linux
-
-# compile user-mode linux
-host:~ # cd linux
-host:~/linux # make mrproper
-host:~/linux # make defconfig ARCH=um SUBARCH=x86_64
-host:~/linux # make menuconfig ARCH=um SUBARCH=x86_64
-
-# build user-mode linux
-host:~/linux # make linux ARCH=um SUBARCH=x86_64 -j `nproc`
-host:~/linux # file linux
-host:~/linux # ./linux --help
-
-# build module
-host:~/linux # make ARCH=um SUBARCH=x86_64 modules -j `nproc`
-host:~/linux # make ARCH=um MODLIB=$ROOTFS/lib/modules/VER modules_install
-
-# user-mode linux
-host:~ # ./run_uml.sh
-target:~ # mv /lib/modules/VER /lib/modules/`uname -r`
-target:~ # depmod -ae `uname -r`
-
-# test kernel module
-target:~ # modprobe isofs
-target:~ # lsmod
 ```
 
 ---
