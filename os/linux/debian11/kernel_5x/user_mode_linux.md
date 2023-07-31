@@ -340,7 +340,8 @@ $1 = (struct task_struct *) 0x60830040
 (gdb) break do_init_module
 (gdb) command 1
 > py if str(gdb.parse_and_eval("mod->name")).find("hello") != 1: gdb.execute("continue", False, False)
-end
+> end
+(gdb) continue
 uml # insmod /hello.ko
 (gdb) print $lx_module("hello") # must run "insmod /hello.ko" to show it
 (gdb) list

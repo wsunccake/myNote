@@ -142,6 +142,14 @@ target:~ # ip route add default via $IP dev eth0
 target:~ # ping -c 3 $IP
 ```
 
+### install tini
+
+```bash
+host:~ # curl -LO https://github.com/krallin/tini/releases/download/v0.19.0/tini-amd64
+host:~ # chmod +x tini-amd64
+host:~ # mv tini-amd64 $ROOTFS/sbin/tini
+```
+
 ### boot script
 
 ```bash
@@ -156,7 +164,8 @@ IP=192.168.100.101
 ip link set eth0 up
 ip address add $IP/24 dev eth0
 
-/bin/bash
+# /bin/bash                     # not tini
+exec /sbin/tini /bin/bash +m    # with tini
 EOF
 host:~ # chmod +x $ROOTFS/init.sh
 
@@ -166,10 +175,15 @@ ROOTFS=/root/amd64-jammy
 
 /root/linux/linux umid=uml0 \
   root=/dev/root rootfstype=hostfs hostfs=$ROOTFS \
-  rw mem=64M init=/bin/sh quiet ubd0=/dev/null hostname=uml \
+  rw mem=64M init=/init.sh quiet ubd0=/dev/null hostname=uml \
   eth0=tuntap,tap0
+
+stty; echo
 EOF
 host:~ # chmod +x run_uml.sh
+
+# lauch user-mode linux
+host:~ # ./run_uml.sh
 ```
 
 ---
@@ -231,3 +245,46 @@ target # lsmod
 ---
 
 ## debug / trace module
+
+```bash
+host:~/linux # echo "CONFIG_GDB_SCRIPTS=y" > .config-fragment
+host:~/linux # ARCH=um scripts/kconfig/merge_config.sh .config .config-fragment
+host:~/linux # make ARCH=um scripts_gdb
+
+host:~/linux # gdb -ex "add-auto-load-safe-path scripts/gdb/vmlinux-gdb.py" \
+  -ex "file vmlinux" \
+  -ex "lx-version" -q
+
+host:~/linux # cat << EOF > gdbinit
+python gdb.COMPLETE_EXPRESSION = gdb.COMPLETE_SYMBOL
+add-auto-load-safe-path scripts/gdb/vmlinux-gdb.py
+file vmlinux
+lx-version
+set args umid=uml0 root=/dev/root rootfstype=hostfs rootflags=$ROOTFS rw mem=64M init=/init.sh quiet
+handle SIGSEGV nostop noprint
+handle SIGUSR1 nopass stop print
+EOF
+
+host:~/linux # gdb -q -x gdbinit
+(gdb) run
+# startup user-mode linux, other terminal send send SIGUSR1 to debug, "pkill -SIGUSR1 -o vmlinux"
+(gdb) lx-mounts
+(gdb) lx-cmdline
+(gdb) lx-dmesg
+(gdb) lx-lsmod
+
+(gdb) p $container_of(init_task.tasks.next, "struct task_struct", "tasks")
+$1 = (struct task_struct *) 0x60830040
+(gdb) p *(struct task_struct *)0x60830040
+(gdb) lx-list-check init_task.tasks
+
+(gdb) break do_init_module
+(gdb) command 1
+> py if str(gdb.parse_and_eval("mod->name")).find("hello") != 1: gdb.execute("continue", False, False)
+> end
+(gdb) continue
+uml # insmod /hello.ko
+
+(gdb) print $lx_module("hello") # must run "insmod /hello.ko" to show it
+(gdb) list
+```
