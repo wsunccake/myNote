@@ -19,6 +19,7 @@
 debian:~ # apt install debootstrap
 debian:~ # apt install arch-install-scripts
 debian:~ # apt install qemu-user-static
+debian:~ # apt install libguestfs-tools
 ```
 
 ---
@@ -91,7 +92,9 @@ ubuntu:~ # MIRROR=                # https://ftp.ubuntu-tw.org/mirror/ubuntu/
 
 ubuntu:~ # debootstrap \
   --arch $ARCH \
+  [--foreign \]
   [--variant $VARIANT \]
+  [--verbose \]
   $RELEASE \
   $ROOTFS \
   $MIRROR
@@ -102,6 +105,12 @@ ubuntu:~ # cp /usr/bin/qemu-x86_64-static $ROOTFS/usr/bin/    # for amd64 -> x86
 
 # chroot
 ubuntu:~ # chroot $ROOTFS /bin/bash
+
+# with --foreign
+target:~ # /debootstrap/debootstrap --second-stage
+target:~ # password
+
+# without --foreign
 target:~ # password
 target:~ # apt install tzdata
 target:~ # dpkg-reconfigure tzdata
@@ -117,6 +126,11 @@ target:~ # cat << EOF >> /etc/hosts
 EOF
 
 target:~ #  apt install kmod
+
+# build image
+ubuntu:~ # ROOTSIZE=10G
+ubuntu:~ # ROOTIMG=img.ext4
+ubuntu:~ # virt-make-fs --partition=gpt --type=ext4 --size=$ROOTSIZE $ROOTFS $ROOTIMG
 
 # if install on loop device
 target:~ # genfstab -U /mnt >> /mnt/etc/fstab
