@@ -14,8 +14,8 @@ ubuntu:~ # apt install gdb
 // minimal.c
 int main()
 {
-   int i = 1337;
-   return 0;
+  int i = 1337;
+  return 0;
 }
 ```
 
