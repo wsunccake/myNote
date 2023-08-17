@@ -18,7 +18,9 @@
   - [divide by 2](#divide-by-2)
   - [divide by power of 2 n](#divide-by-power-of-2-n)
   - [modulo](#modulo)
+  - [swap](#swap)
   - [combine two number to one](#combine-two-number-to-one)
+- [n-byte align](#n-byte-align)
 
 ---
 
@@ -237,6 +239,15 @@ num % 2 == num & 1
 num % 4 == num & 3
 num % 8 == num & 7
 // num % 2^i = num & (2^i - 1) = num & (1 << i - 1)
+```
+
+### swap
+
+```c
+int a = 1, b = 3;
+a = a ^ b;
+b = a ^ b;
+a = a ^ b;
 ```
 
 ### combine two number to one
