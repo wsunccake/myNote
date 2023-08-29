@@ -1,5 +1,28 @@
 # systemd-service
 
+---
+
+## content
+
+- [analyze](#analyze)
+- [timer](#timer)
+- [rc-local](#rc-local)
+- [systemd-tmpfiles](#systemd-tmpfiles)
+- [systemd-resolved](#systemd-resolved)
+- [systemd-logind](#systemd-logind)
+
+---
+
+## analyze
+
+```bash
+sle:~ # systemd-analyze blame
+sle:~ # systemd-analyze critical-chain [docker.service]
+sle:~ # systemd-analyze plot > boot_analysis.svg
+```
+
+---
+
 ## timer
 
 ```bash
@@ -102,16 +125,6 @@ sle:~ # systemd-tmpfiles --create|--clean|--remove
 sle:~ # systemctl status systemd-tmpfiles-setup
 sle:~ # systemctl status systemd-tmpfiles-setup-dev
 sle:~ # systemctl status systemd-tmpfiles-clean
-```
-
----
-
-## analyze
-
-```bash
-sle:~ # systemd-analyze blame
-sle:~ # systemd-analyze critical-chain [docker.service]
-sle:~ # systemd-analyze plot > boot_analysis.svg
 ```
 
 ---
