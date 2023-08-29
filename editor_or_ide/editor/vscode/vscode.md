@@ -68,6 +68,7 @@ add cursor below: Shift + Alt + DownArrow
 
 ```json
 {
+  "version": "2.0.0",
   "tasks": [
     {
       "label": "Hello",
@@ -80,9 +81,14 @@ add cursor below: Shift + Alt + DownArrow
       "type": "shell",
       "command": "${file}",
       "problemMatcher": []
+    },
+    {
+      "label": "echo predefine variable",
+      "command": "echo",
+      "args": ["${env:USERNAME}", "workspaceFolder = ${workspaceFolder}"],
+      "type": "shell"
     }
-  ],
-  "version": "2.0.0"
+  ]
 }
 ```
 
