@@ -1,8 +1,28 @@
 # python environment in vscode
 
-## settings.json
+---
+
+## content
+
+- [basic](#basic)
+  - [基本設定](#基本設定)
+  - [執行參數](#執行參數)
+  - [環境變數](#環境變數)
+- [application](#application)
+  - [locust](#locust)
+  - [robotframework](#robotframework)
+  - [pytest](#pytest)
+
+---
+
+## basic
+
+先安裝 [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python) plugin, 在開始設定
+
+### 基本設定
 
 ```json
+// settings.json
 {
   "files.trimTrailingWhitespace": true,
   "python.linting.enabled": true,
@@ -24,48 +44,59 @@
 }
 ```
 
----
-
-## launch.json
+### 執行參數
 
 ```json
+// launch.json
 {
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "robotfraemwork",
+      "name": "Python: Current File",
       "type": "python",
       "request": "launch",
-      "module": "robot",
-      "args": ["${file}"],
+      "program": "${file}",
       "console": "integratedTerminal",
-      "justMyCode": true,
-      "environment": [
-        {
-          "PYTHONPATH": "${workspaceFolder}"
-        }
-      ],
-      "cwd": "${fileDirname}"
-    },
-    {
-      "name": "pytest",
-      "type": "python",
-      "request": "launch",
-      "module": "pytest",
-      "args": ["--alluredir", "tmp", "--clean-alluredir", "${file}"],
-      "environment": [
-        {
-          "PYTHONPATH": "${workspaceFolder}"
-        }
-      ],
       "justMyCode": true
-    },
+    }
+  ]
+}
+```
+
+### 環境變數
+
+在 settings.json 設定 "python.envFile": "${workspaceFolder}/.env", 在執行 vscode 的 run / debug, 會載入該環境變數
+
+```json
+// .env
+PYTHONPATH=${HOME}/${WORKSPACE}/lib:${PYTHONPATH}
+```
+
+---
+
+## application
+
+### locust
+
+```bash
+# .env
+PYTHONPATH=${workspaceFolder}/lib:${PYTHONPATH}
+GEVENT_SUPPORT=True
+```
+
+```json
+// launch.json
+{
+  "version": "0.2.0",
+  "configurations": [
     {
       "name": "locust",
       "type": "python",
       "request": "launch",
       "module": "locust",
+      //   "program": "${file}",
       "console": "integratedTerminal",
+      "justMyCode": true,
       "args": [
         "--loglevel",
         "DEBUG",
@@ -78,28 +109,57 @@
         "-t",
         "5m",
         "--host",
-        "https://api.server.com",
-        "--username",
-        "user@email.com",
-        "--password",
-        "abc123"
+        "https://api.server.com"
       ],
-      "justMyCode": true
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}:${env:PYTHONPATH}"
+      },
+      "cwd": "${fileDirname}"
     }
   ]
 }
 ```
 
----
-
-## .env
+### robotframework
 
 ```json
-PYTHONPATH=${HOME}/${WORKSPACE}/lib:${PYTHONPATH}
+// launch.json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "robotfraemwork",
+      "type": "python",
+      "request": "launch",
+      "module": "robot",
+      "args": ["${file}"],
+      "console": "integratedTerminal",
+      "justMyCode": true,
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}${pathSeparator}lib:${env:PYTHONPATH}"
+      },
+      "cwd": "${fileDirname}"
+    }
+  ]
+}
 ```
 
----
+### pytest
 
-## plugin
-
-(Python)[https://marketplace.visualstudio.com/items?itemName=ms-python.python]
+```json
+// launch.json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "pytest",
+      "type": "python",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["--alluredir", "tmp", "--clean-alluredir", "${file}"],
+      "env": { "PYTHONPATH": "${workspaceFolder}" },
+      "justMyCode": true
+    }
+  ]
+}
+```
