@@ -46,6 +46,8 @@ int main()
 
 ## inheritance
 
+inheritance, mixin, composition
+
 ```c
 #include <stdio.h>
 
