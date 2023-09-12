@@ -346,3 +346,9 @@ int main()
     return 0;
 }
 ```
+
+---
+
+## ref
+
+- [Bit Twiddling Hacks](https://graphics.stanford.edu/~seander/bithacks.html)
