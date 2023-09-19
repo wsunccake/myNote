@@ -7,6 +7,7 @@
 - [compute sign](#compute-sign)
 - [opposite sign](#opposite-sign)
 - [compute integer absolute value](#compute-integer-absolute-value)
+- [max and min](#max-and-min)
 
 ---
 
