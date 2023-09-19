@@ -30,6 +30,19 @@ little endian:      0x78    0x56    0x34    0x12
 big endian:         0x12    0x34    0x56    0x78
 ```
 
+```
+bit manipulation
+bit mask
+
+hex = bin
+5 = 101
+55 = 1010101
+33 = 110011
+333 = 1100110011
+aa =
+0f0f =
+```
+
 ---
 
 ## ref

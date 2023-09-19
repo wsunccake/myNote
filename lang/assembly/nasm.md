@@ -351,3 +351,9 @@ linux:~ $ gdb -tui example
 (gdb) print/x $eax
 (gdb) quit
 ```
+
+---
+
+## ref
+
+[NASM Tutorial](https://cs.lmu.edu/~ray/notes/nasmtutorial/)

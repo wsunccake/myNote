@@ -378,10 +378,9 @@ linux:~/pro $ make hi
 
 ## ref
 
-[Makefile 語法簡介](https://sites.google.com/site/mymakefile/makefile-yu-fa-jian-jie)
-
-[跟我一起写 Makefile](https://seisman.github.io/how-to-write-makefile/overview.html)
-
-[Learn Makefiles With the tastiest examples](https://makefiletutorial.com/)
-
-[GNU make](https://www.gnu.org/software/make/manual/make.html)
+- [Makefile 語法簡介](https://sites.google.com/site/mymakefile/makefile-yu-fa-jian-jie)
+- [跟我一起写 Makefile](https://seisman.github.io/how-to-write-makefile/overview.html)
+- [Makefile](http://tw.gitbook.net/makefile/index.html)
+- [Learn Makefiles With the tastiest examples](https://makefiletutorial.com/)
+- [GNU make](https://www.gnu.org/software/make/manual/make.html)
+- [Unix Makefile Tutorial](https://www.tutorialspoint.com/makefile/index.htm)

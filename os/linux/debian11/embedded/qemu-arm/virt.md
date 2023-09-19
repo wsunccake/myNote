@@ -3,9 +3,9 @@
 ## package
 
 ```bash
-debian:~ # apt intall libvirt-clients
-debian:~ # apt intall virt-manager virtinst
-debian:~ # apt intall libguestfs-tools
+debian:~ # apt install libvirt-clients
+debian:~ # apt install virt-manager virtinst
+debian:~ # apt install libguestfs-tools
 ```
 
 ---

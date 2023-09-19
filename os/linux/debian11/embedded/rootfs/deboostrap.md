@@ -17,7 +17,9 @@
 ```bash
 # install
 debian:~ # apt install debootstrap
+debian:~ # apt install arch-install-scripts
 debian:~ # apt install qemu-user-static
+debian:~ # apt install libguestfs-tools
 ```
 
 ---
@@ -51,6 +53,8 @@ debian:~ # debootstrap --arch <ARCH> <DISTRO> <DIRECTORY> <MIRROR>
 # <DIRECTORY>
 # <MIRROR>    : http://ftp.tw.debian.org/debian
 
+debian:~ # ls /usr/share/debootstrap/scripts
+
 debian:~ # ROOTFS=/home/rootfs
 debian:~ # ARCH=armhf             # amd64, armhf, arm64
 debian:~ # RELEASE=bulleye        # bookworm, bulleye, buster
@@ -79,17 +83,56 @@ debian:~ # chroot $ROOTFS /bin/bash
 
 ```bash
 ubuntu:~ # ROOTFS=/home/rootfs
+ubuntu:~ # ARCH=amd64             # amd64|armhf|arm64
+ubuntu:~ # RELEASE=jammy          # jammy|focal|bonic
+ubuntu:~ # VARIANT=minbase        # minbase|buildd|fakechroot
+ubuntu:~ # MIRROR=                # https://ftp.ubuntu-tw.org/mirror/ubuntu/
+                                  # http://ports.ubuntu.com/ubuntu-ports
+                                  # https://mirror.leaseweb.com/ubuntu/
 
 ubuntu:~ # debootstrap \
-  --arch arm64 \
-  focal \
+  --arch $ARCH \
+  [--foreign \]
+  [--variant $VARIANT \]
+  [--verbose \]
+  $RELEASE \
   $ROOTFS \
-  http://ports.ubuntu.com/ubuntu-ports
+  $MIRROR
 
-ubuntu:~ # cp /usr/bin/qemu-aarch64-static $ROOTFS/usr/bin/
-ubuntu:~ # echo -e "deb http://ports.ubuntu.com/ubuntu-ports/ focal main restricted\ndeb http://ports.ubuntu.com/ubuntu-ports/ focal multiverse\ndeb http://ports.ubuntu.com/ubuntu-ports/ focal universe\ndeb http://ports.ubuntu.com/ubuntu-ports/ focal-backports main restricted universe multiverse\ndeb http://ports.ubuntu.com/ubuntu-ports/ focal-security main restricted\ndeb http://ports.ubuntu.com/ubuntu-ports/ focal-security multiverse\ndeb http://ports.ubuntu.com/ubuntu-ports/ focal-security universe\ndeb http://ports.ubuntu.com/ubuntu-ports/ focal-updates main restricted\ndeb http://ports.ubuntu.com/ubuntu-ports/ focal-updates multiverse\ndeb http://ports.ubuntu.com/ubuntu-ports/ focal-updates universe" >> $ROOTFS/etc/apt/sources.list
+ubuntu:~ # cp /usr/bin/qemu-arm-static $ROOTFS/usr/bin/       # for armhf -> arm
+ubuntu:~ # cp /usr/bin/qemu-aarch64-static $ROOTFS/usr/bin/   # for arm64 -> aarch64
+ubuntu:~ # cp /usr/bin/qemu-x86_64-static $ROOTFS/usr/bin/    # for amd64 -> x86_64
 
 # chroot
 ubuntu:~ # chroot $ROOTFS /bin/bash
-~ # password
+
+# with --foreign
+target:~ # /debootstrap/debootstrap --second-stage
+target:~ # password
+
+# without --foreign
+target:~ # password
+target:~ # apt install tzdata
+target:~ # dpkg-reconfigure tzdata
+target:~ # apt install locales
+target:~ # dpkg-reconfigure locales
+target:~ # apt install keyboard-configuration
+target:~ # dpkg-reconfigure keyboard-configuration
+target:~ # echo 'myhostname' > /etc/hostname
+target:~ # cat << EOF >> /etc/hosts
+127.0.0.1	localhost
+::1		localhost
+127.0.1.1	myhostname.localdomain	myhostname
+EOF
+
+target:~ #  apt install kmod
+
+# build image
+ubuntu:~ # ROOTSIZE=10G
+ubuntu:~ # ROOTIMG=img.ext4
+ubuntu:~ # virt-make-fs --partition=gpt --type=ext4 --size=$ROOTSIZE $ROOTFS $ROOTIMG
+
+# if install on loop device
+target:~ # genfstab -U /mnt >> /mnt/etc/fstab
+target:~ # arch-chroot $ROOTFS
 ```
