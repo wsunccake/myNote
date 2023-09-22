@@ -1,9 +1,38 @@
 # ubuntu 22.04
 
+---
+
+## content
+
+- [basic](#basic)
+- [develop](#develop)
+- [cli](#cli)
+- [gui](#gui)
+- [service](#service)
+
+---
+
+## basic
+
 ```bash
 ubuntu:~ # apt update
 
 ubuntu:~ # apt install curl git vim-nox
+```
+
+---
+
+## develop
+
+```bash
+# gcc, g++
+ubuntu:~ # apt install build-essential
+
+# git
+ubuntu:~ # apt install git
+
+# cmake
+ubuntu:~ # apt install cmake
 ```
 
 ---
@@ -31,6 +60,18 @@ plugins=()                  -> plugins=(git tmux)
 ---
 
 ## gui
+
+```bash
+# can't open terminal in virtualbox
+linux:~ # grep LANG= /etc/default/locale
+LANG="en_US"
+>>
+linux:~ # sed s/LANG=.*/LANG=\"en_US.UTF-8\"/ /etc/default/locale
+LANG="en_US.UTF-8"
+
+linux:~ # locale-gen --purge
+linux:~ # reboot
+```
 
 ---
 

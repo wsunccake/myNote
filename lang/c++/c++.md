@@ -11,10 +11,21 @@
   - [arithmetic operator](#arithmetic-operator)
   - [relational operator](#relational-operator)
   - [logical operator](#logical-operator)
+  - [++]
 - [data type](#data-type)
   - [primitive built-in type](#primitive-built-in-type)
   - [typedef](#typedef)
   - [enum](#enum)
+- [decision](#decision)
+  - [if](#if)
+  - [switch](#switch)
+  - [goto](#goto)
+- [loop]($loop)
+  - [for](#for)
+  - [while](#while)
+  - [do while](#do-while)
+- [function](#function)
+  - [scope](#scope)
 
 ---
 
@@ -79,7 +90,8 @@ int main()
 {
     int number1;
     int number2;
-    int sum;
+    int sum = 0; // initialize
+    // int sum{0};
 
     std::cout << "first number: ";
     std::cin >> number1;
@@ -169,6 +181,56 @@ statement
 
 [C++ Operator Precedence](https://en.cppreference.com/w/cpp/language/operator_precedence)
 
+### ++
+
+```cpp
+#include <iostream>
+using namespace std;
+
+int main()
+{
+int c;
+
+    // c++
+    c = 0;
+    cout << "c: " << c << endl;
+    cout << "c++: " << c++ << endl;
+    cout << "c: " << c << endl;
+
+    // ++c
+    c = 0;
+    cout << "c: " << c << endl;
+    cout << "++c: " << ++c << endl;
+    cout << "c: " << c << endl;
+
+    // c+c++
+    c = 0;
+    cout << "c: " << c << endl;
+    cout << "c+c++: " << c + c++ << endl;
+    cout << "c: " << c << endl;
+
+    // c+++c
+    c = 0;
+    cout << "c: " << c << endl;
+    cout << "c+++c: " << c++ + c << endl;
+    cout << "c: " << c << endl;
+
+    // c+++c++
+    c = 0;
+    cout << "c: " << c << endl;
+    cout << "c+++c++: " << c++ + c++ << endl;
+    cout << "c: " << c << endl;
+
+    // c+++c+c+c++;
+    c = 0;
+    cout << "c: " << c << endl;
+    cout << "c+++c+c+c++: " << c++ + c + c + c++ << endl;
+    cout << "c: " << c << endl;
+
+    return 0;
+}
+```
+
 ---
 
 ## data type
@@ -241,4 +303,229 @@ int main()
    enum color { red=1, green, blue };
    color c = blue;
    cout << c << endl;
+```
+
+---
+
+## decision
+
+### if
+
+```cpp
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    char sex;
+    cout << "input m/f:";
+    cin >> sex;
+    cout << "your input: " << sex << endl;
+
+    if (sex == 'm')
+    {
+        cout << "male\n";
+    }
+    else if (sex == 'f')
+    {
+        cout << "female\n";
+    }
+    else
+    {
+        cout << "unknown\n";
+    }
+
+    // single statemnet without block
+    if (sex == 'm')
+        cout << "male\n";
+    else if (sex == 'f')
+        cout << "female\n";
+    else
+        cout << "unknown\n";
+
+    // ternary operator
+    int i = (sex == 'm' ? 1 : 0);
+    // int i;
+    // if (sex == 'm')
+    //     i = 1;
+    // else
+    //     i = 0;
+    cout << i << endl;
+
+    // default 0
+    if (!0)
+        printf("!0 is true\n");
+
+    // default NULL
+    if (!NULL)
+        printf("!NULL is true\n");
+
+    return 0;
+}
+```
+
+### switch
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    char sex;
+    cout << "input m/f:";
+    cin >> sex;
+    cout << "your input: "<< sex << endl;
+
+    switch (sex)
+    {
+    case 'm':
+    case 'M':
+        cout << "male\n";
+        break;
+    case 'f':
+    case 'F':
+        cout << "female\n";
+        break;
+    default:
+        cout << "unknown\n";
+        break;
+    }
+
+    return 0;
+}
+```
+
+### goto
+
+---
+
+## loop
+
+### for
+
+```cpp
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    const int MAX = 5;
+
+    for (int i = 0; i < MAX; i++)
+    {
+        cout << i << endl;
+    }
+
+    return 0;
+}
+```
+
+```cpp
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    const int MAX = 5;
+
+    int i = 0;
+    // infinite loop
+    for (;;)
+    {
+        if (i > MAX)
+        {
+            break;
+        }
+        i++;
+        cout << i << endl;
+    }
+
+    return 0;
+}
+```
+
+### while
+
+```cpp
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    const int MAX = 5;
+
+    int i = 0;
+    while (i < MAX)
+    {
+        i++;
+        cout << i << endl;
+    }
+
+    return 0;
+}
+```
+
+### do while
+
+```cpp
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    const int MAX = 5;
+
+    int i = 0;
+    do
+    {
+        i++;
+        cout << i << endl;
+    } while (i < MAX);
+
+    return 0;
+}
+```
+
+---
+
+## function
+
+### scope
+
+```cpp
+#include <iostream>
+using namespace std;
+
+// global variable declaration
+int g = 200;
+int G = 100;
+
+int main()
+{
+    // local variable declaration
+    int g = 10;
+    int l = 9;
+    int v = 9;
+    cout << "main g :" << g << endl;
+    cout << "main l :" << l << endl;
+    cout << "main v :" << v << endl;
+
+    // still global variable
+    cout << "main G: " << G << endl;
+
+    {
+        int v = -1;
+        cout << "{v} :" << v << endl;
+        cout << "{l} :" << l << endl;
+        cout << "{g} :" << g << endl;
+        l = 0;
+    }
+
+    cout << "main l :" << l << endl;
+    cout << "main v :" << v << endl;
+
+    return 0;
+}
 ```
