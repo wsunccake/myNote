@@ -464,6 +464,8 @@ linux:~ # sed -n '/Joe/p;/Cheng/p' data.csv
 linux:~ # sed '/Tim/q' data.csv
 ```
 
+[sed](./sed.md)
+
 ---
 
 ## awk
@@ -512,6 +514,8 @@ linux:~ # awk "\$1 == \"<pattern>\" {printf \"$HOME %s\", \$_}" <file>
 linux:~ # awk '{if (NF < 3) {printf line %s, %s\n", NR, $_}}' <file>
 ```
 
+[awk](./awk.md)
+
 ---
 
 ## find
@@ -532,7 +536,25 @@ linux:~ # find / -xdev -samefile <file>
 
 ## expect
 
----
+```bash
+#!/bin/bash
+hostname=127.0.0.1
+username=root
+password=root
+
+/usr/bin/expect << EOF
+
+set time 30
+spawn ssh $username@$hostname uptime
+expect {
+  "*yes/no" { send "yes\n"; exp_continue }
+  "*password:" { send "$password\n" }
+}
+expect eof
+EOF
+```
+
+[expect](./expect.md)
 
 ## xargs
 
