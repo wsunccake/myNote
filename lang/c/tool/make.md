@@ -114,6 +114,45 @@ linux:~/proj # ARCH=x86_64 make
 linux:~/proj # ./main.exe
 ```
 
+### macro without parameter
+
+```makefile
+define hello
+    @echo "Hello World"
+endef
+
+.PHONY: all hello
+
+all: hello
+
+hello:
+    $(hello)
+```
+
+### macro with parameter
+
+```makefile
+define assert
+    @if ! $(1); then \
+        printf "Failed: $(1)\n"; \
+        exit 1; \
+    fi
+endef
+
+.PHONY: all true false
+
+all: true
+
+true:
+    $(call assert,true)
+
+false:
+    $(call assert,false)
+
+notEqual:
+    $(call assert,[ "3" -eq "4" ])
+```
+
 ---
 
 ## depend
@@ -242,6 +281,19 @@ clean:
     -rm *.o *.exe
 ```
 
+### automatic variable
+
+```text
+$@
+
+$%
+
+$<
+    suffix
+
+$?
+```
+
 ---
 
 ## libaray
@@ -277,11 +329,18 @@ all: main.o libhi.a
 
 .c.o:
     ${CC} -c $<
+# $<:
+# =>
+# .c.o:
+#     $(CC) -c $*.c
+# $*: prefix by target and dependent
 
 # make static library
 libhi.a: hi.o
     ar rcv $@ $?
     ranlib $@
+# $@: target, -> libhi.a
+# $?: dependent, -> hi.o
 
 .PHONY: clean
 clean:

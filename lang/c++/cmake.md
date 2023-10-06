@@ -15,7 +15,8 @@
 - [build](#build)
   - [in-place build](#in-place-build)
   - [out-place build](#out-place-build)
-  - [sample](#sample)
+- [sample](#sample)
+  - [hello](#hello)
 
 ---
 
@@ -144,7 +145,11 @@ linux:~/project/build $ cmake ../
 linux:~/project/build $ make
 ```
 
-### sample
+---
+
+## sample
+
+### hello
 
 ```cpp
 // hello.cpp
@@ -163,11 +168,18 @@ int main()
 cmake_minimum_required(VERSION 3.12)
 project(project)
 
-add_executable(hello.exe hello.cpp)
+# add_executable(hello.exe hello.cpp)
+
+add_executable(hello.exe)
+target_sources(hello.exe PRIVATE hello.cpp)
 ```
 
 ```bash
-linux:~/project $ ls CMakeLists.txt
+linux:~/project $ tree
+.
+├── CMakeLists.txt
+└── hello.cpp
+
 linux:~/project $ cmake .
 linux:~/project $ make
 linux:~/project $ ./hello.exe
