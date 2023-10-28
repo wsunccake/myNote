@@ -49,6 +49,12 @@ debian:~ $ ~/.fzf/install
 
 # screen and tmux
 debian:~ # apt install screen tmux
+
+# unetbootin
+debian:~ # apt install mtools
+debian:~ # wget https://github.com/unetbootin/unetbootin/releases/download/702/unetbootin-linux64-702.bin
+debian:~ # chmod +x unetbootin-linux64-702.bin
+debian:~ # ./unetbootin-linux64-702.bin
 ```
 
 ---
