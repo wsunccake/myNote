@@ -6,6 +6,8 @@
 
 [Rust 程式設計語言](https://rust-lang.tw/book-tw/title-page.html)
 
+[Rust 程式語言](https://askeing.github.io/rust-book/)
+
 [Rust 中文文档](https://rustwiki.org/docs/)
 
 [Rust 入门秘籍](https://rust-book.junmajinlong.com/about.html)
