@@ -1,5 +1,30 @@
 # Docker
 
+---
+
+- [Install](#install)
+- [PWD](#pwd)
+- [Run](#run)
+- [Docker Image](#docker-image)
+- [Docker Volume](#docker-volume)
+- [Dokcer Network](#dokcer-network)
+  - [manual create veth](#manual-create-veth)
+- [Docker Hub / Registry](#docker-hub--registry)
+  - [Registry Server](#registry-server)
+  - [Registry Client](#registry-client)
+- [Docker File](#docker-file)
+- [Docker Registry](#docker-registry)
+- [Run GUI Apps on Docker](#run-gui-apps-on-docker)
+  - [UNIX X11 Socket](#unix-x11-socket)
+  - [VNC](#vnc)
+- [Docker IPv6](#docker-ipv6)
+  - [NAT](#nat)
+  - [Direct](#direct)
+- [GUI](#gui)
+  - [Portainer](#portainer)
+- [Ref](#ref)
+
+---
 
 ## Install
 
@@ -7,7 +32,7 @@
 rhel:~ # cat /etc/yum.repo.d/docker.repo
 [virt7-docker-common-testing]
 name=virt7-docker-common-testing
-baseurl=http://cbs.centos.org/repos/virt7-docker-common-testing/x86_64/os/ 
+baseurl=http://cbs.centos.org/repos/virt7-docker-common-testing/x86_64/os/
 enabled=1
 gpgcheck=0
 
@@ -24,13 +49,11 @@ rhel:~ # docker run hello-world                             # 測試
 rhel:~ # usermod -aG docker user                            # 將使用者加入 docker 群組, 確定 docker daemon -G docker
 ```
 
-
 ---
 
 ## PWD/
 
 [http://labs.play-with-docker.com/](http://labs.play-with-docker.com/)
-
 
 ---
 
@@ -77,7 +100,6 @@ rhel:~ # docker inspect --format '{{.State.Pid}}' <container_id>
 rhel:~ # docker inspect --format '{{.NetworkSettings.IPAddress}}' <container_id>
 ```
 
-
 ```bash
 rhel:~ # docker run/update
 --cpus 4.0
@@ -113,10 +135,9 @@ rhel:~ # ls /sys/fs/cgroup/memory/docker/<docker_id>
 rhel:~ # ls /sys/fs/cgroup/blkio/docker/<docker_id>
 ```
 
-
 ---
 
-## Docker Image 
+## Docker Image
 
 ```bash
 rhel:~ # docker search archlinux                            # 搜尋 Docker Hub 上的 image
@@ -200,16 +221,15 @@ rhel:~/test_img # docker images test_image
 
 ```bash
 rhel:~ # docker save <image_name[:tag]> > <image>.tar
-rhel:~ # docker load <image_name[:tag]> < <image>.tar
+rhel:~ # docker load < <image>.tar
 
 rhel:~ # docker export <container_id> > image.tar
 rhel:~ # docker import image.tar <image_name>
 ```
 
-
 ---
 
-## Docker Volume ##
+## Docker Volume
 
 `container`
 
@@ -264,7 +284,6 @@ rhel:~ # docker run -itd -v <vol>:<path> <image>
 
 default path: /var/lib/docker/volumes/<vol>
 
-
 ---
 
 ## Dokcer Network
@@ -288,7 +307,7 @@ rhel:~ # dock ps nc
 
 # 測試
 # container 端使用 nc 開啟 9000 port, 之後在 host 端使用 nc 任意打字, 都會在 container 出現
-container:~ # nc -l -p 9000 
+container:~ # nc -l -p 9000
 
 # host side
 rhel:~ # nc localhost 8000
@@ -305,7 +324,6 @@ rhel:~ # docker run -d --name db training/postgres
 rhel:~ # docker run -d -P --name web --link db:db training/webapp python app.py
 rhel:~ # docker inspect -f "{{ .HostConfig.Links }}" web
 ```
-
 
 `multi nic`
 
@@ -326,7 +344,6 @@ centos:~ # docker inspect <container> | jq '.[0].NetworkSettings.Networks'
 centos:~ # docker inspect -f '{{json .NetworkSettings.Networks}}' <container>
 centos:~ # docker exec -it <container> ip link show
 ```
-
 
 ### manual create veth
 
@@ -357,7 +374,6 @@ centos:~ # ip link set dev <br> up
 # add eth to bridge
 centos:~ # ip link set <eth> master <br>
 ```
-
 
 ---
 
@@ -426,6 +442,7 @@ client:~ # docker images
 client:~ # docker pull <registry_ip>:5000/busybox
 ```
 
+---
 
 ## Docker File
 
@@ -467,7 +484,6 @@ rhel:~ # docker run -itd -v /data:/robot_log --name robot robot
 rhel:~ # docker run -itd -p 80:80 --name nginx nginx
 ```
 
-
 ```bash
 # dockerfile
 rhel:~ # cat Dockerfile
@@ -502,7 +518,7 @@ EOF
 CMD ["/bin/bash"]
 ```
 
-
+---
 
 ## Docker Registry
 
@@ -512,14 +528,12 @@ rhel:~ # docker login -u user -p password private_registry:5000
 
 rhel:~ # docker logout
 
-rhel:~ # cat ~/.docker/config.json 
+rhel:~ # cat ~/.docker/config.json
 ```
-
 
 ---
 
 ## Run GUI Apps on Docker
-
 
 ### UNIX X11 Socket
 
@@ -551,11 +565,9 @@ rhel:~ # docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-uni
 
 check /tmp/.X11-unix permission (chmod 1777 /tmp/.X11-unix)
 
-
 ### VNC
 
-
-----
+---
 
 ## Docker IPv6
 
@@ -573,7 +585,6 @@ docker0:    fc00:db8::1/125
 eth0:       fc00:db8::2/125
 ```
 
-
 `Enable IPv6`
 
 ```bash
@@ -581,7 +592,7 @@ host_1:~ # sysctl net.ipv6.conf.default.forwarding=1
 host_1:~ # sysctl net.ipv6.conf.all.forwarding=1
 host_1:~ # sysctl net.ipv6.conf.all.proxy_ndp=1
 
-host_1:~ # cat /etc/docker/daemon.json 
+host_1:~ # cat /etc/docker/daemon.json
 {
   "ipv6": true,
   "fixed-cidr-v6": "fc00:db8::1/125"
@@ -589,7 +600,6 @@ host_1:~ # cat /etc/docker/daemon.json
 
 host_1:~ # systemctl restart docker
 ```
-
 
 `Internal Network`
 
@@ -604,7 +614,6 @@ host_1:~ # docker exec -it <container> ping -6 -c3 2001:db8:1::1:2
 host_1:~ # docker exec -it <container> ping -6 -c3 fc00:db8::1
 host_1:~ # docker exec -it <container> ping -6 -c3 fc00:db8::2
 ```
-
 
 `External Network`
 
@@ -621,7 +630,6 @@ host_1:~ # ping -6 -c3 2001:db8:1::1
 host_1:~ # docker exec -it <container> ping -6 -c3 2001:db8:1::1
 ```
 
-
 ### Direct
 
 `Network Topology`
@@ -636,7 +644,6 @@ docker0:    2001:db8:1::1:9/125
 eth0:       2001:db8:1::1:a/125
 ```
 
-
 `Enable IPv6`
 
 ```bash
@@ -644,7 +651,7 @@ host_1:~ # sysctl net.ipv6.conf.default.forwarding=1
 host_1:~ # sysctl net.ipv6.conf.all.forwarding=1
 host_1:~ # sysctl net.ipv6.conf.all.proxy_ndp=1
 
-host_1:~ # cat /etc/docker/daemon.json 
+host_1:~ # cat /etc/docker/daemon.json
 {
   "ipv6": true,
   "fixed-cidr-v6": "2001:db8:1::1:8/125"
@@ -652,7 +659,6 @@ host_1:~ # cat /etc/docker/daemon.json
 
 host_1:~ # systemctl restart docker
 ```
-
 
 `Internal Network`
 
@@ -674,7 +680,6 @@ host_1:~ # docker exec -it <container> ping -6 -c3 2001:db8:1::1:9
 host_1:~ # docker exec -it <container> ping -6 -c3 2001:db8:1::1:a
 ```
 
-
 `External Network`
 
 ```bash
@@ -691,7 +696,6 @@ host_1:~ # ping -6 -c3 2001:db8:1::1
 host_1:~ # docker exec -it <container> ping -6 -c3 2001:db8:1::1
 ```
 
-
 ---
 
 ## GUI
@@ -702,18 +706,16 @@ host_1:~ # docker exec -it <container> ping -6 -c3 2001:db8:1::1
 rhel: # docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock --name portainer portainer/portainer
 ```
 
-
 ---
 
 ## Ref
 
 [docker](https://docs.docker.com/)
 
-[Docker —— 從入門到實踐­](https://www.gitbook.com/book/philipzheng/docker_practice/details)
+[Docker —— 從入門到實踐 ­](https://www.gitbook.com/book/philipzheng/docker_practice/details)
 
 [docker-book](https://www.gitbook.com/book/smlsunxie/docker-book)
 
 [Using GUI's with Docker](http://wiki.ros.org/docker/Tutorials/GUI)
 
 [Running GUI apps with Docker](http://fabiorehm.com/blog/2014/09/11/running-gui-apps-with-docker/)
-
