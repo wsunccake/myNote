@@ -1,5 +1,24 @@
 # ssh
 
+---
+
+## content
+
+- [login with identity file / private key](#login-with-identity-file--private-key)
+- [local forwarding](#local-forwarding)
+- [local forwarding with bastion](#local-forwarding-with-bastion)
+- [remote port forwarding](#remote-port-forwarding)
+- [remote port forwarding from a private network](#remote-port-forwarding-from-a-private-network)
+- [dynamic forwarding](#dynamic-forwarding)
+- [keygen](#keygen)
+- [other](#other)
+  - [Too many authentication failures](#too-many-authentication-failures)
+  - [Specified Configuration File](#specified-configuration-file)
+  - [sign_and_send_pubkey: no mutual signature supported](#sign_and_send_pubkey-no-mutual-signature-supported)
+- [ref](#ref)
+
+---
+
 ## login with identity file / private key
 
 ```bash
@@ -188,10 +207,20 @@ Host host1
     User         user
 ```
 
+### sign_and_send_pubkey: no mutual signature supported
+
+```bash
+[client:~ ] $ cat ~/.ssh/config
+Host *
+    PubkeyAcceptedKeyTypes=+ssh-rsa
+    HostKeyAlgorithms=+ssh-rsa
+
+[client:~ ] $ ssh <server_ip>
+```
+
 ---
 
 ## ref
 
-[A Visual Guide to SSH Tunnels: Local and Remote Port Forwarding](https://iximiuz.com/en/posts/ssh-tunnels/?fbclid=IwAR1Cy0oJ09KopfTANtFbeoknuZ4fXRp-UeypuOewWRDU0ShYMf_bq6VeFq8)
-
-[SSH Tunneling (Port Forwarding) 詳解](https://johnliu55.tw/ssh-tunnel.html)
+- [A Visual Guide to SSH Tunnels: Local and Remote Port Forwarding](https://iximiuz.com/en/posts/ssh-tunnels/?fbclid=IwAR1Cy0oJ09KopfTANtFbeoknuZ4fXRp-UeypuOewWRDU0ShYMf_bq6VeFq8)
+- [SSH Tunneling (Port Forwarding) 詳解](https://johnliu55.tw/ssh-tunnel.html)
