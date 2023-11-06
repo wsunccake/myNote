@@ -1,5 +1,19 @@
 # object
 
+---
+
+## content
+
+- [attr](#attr)
+- [class](#class)
+- [inheritance](#inheritance)
+- [multi-inheritance](#multi-inheritance)
+- [abstract class](#abstract-class)
+- [staticmethod, classmethod](#staticmethod-classmethod)
+- [getattr / setattr](#getattr--setattr)
+
+---
+
 ## attr
 
 ```python
@@ -24,7 +38,6 @@ print([attr for attr in vars(obj)])
 print(vars(obj))
 print(obj.__dict__)
 ```
-
 
 ---
 
@@ -80,7 +93,6 @@ print(animal.age)
 print(animal.sex)
 ```
 
-
 ---
 
 ## inheritance
@@ -109,7 +121,6 @@ print(cat.get_name())
 print(cat.voice)
 print(cat)
 ```
-
 
 ---
 
@@ -140,7 +151,6 @@ griffin.walk()
 griffin.fly()
 griffin.eat()
 ```
-
 
 ---
 
@@ -196,7 +206,6 @@ car.run(10)
 print(car.gasoline)
 ```
 
-
 ---
 
 ## staticmethod, classmethod
@@ -224,7 +233,6 @@ print(date2.year, date2.day)
 
 print(Date.is_date_valid('11-09-2012'))
 ```
-
 
 ---
 

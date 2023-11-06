@@ -1,5 +1,14 @@
 # regex
 
+---
+
+## content
+
+- [match](#match)
+- [search](#search)
+
+---
+
 ## match
 
 ```python
@@ -34,7 +43,6 @@ restr = re.compile('(.*)/(.*)').match(str)
 print("%s <=> %s" %(restr.group(1), restr.group(2)))
 print(re.sub('(.*)/', '', str))
 ```
-
 
 ---
 

@@ -1,5 +1,22 @@
 # condition and loop
 
+---
+
+## content
+
+- [if else](#if-else)
+- [for](#for)
+- [list comprehension](#list-comprehension)
+- [dictionary comprehension](#dictionary-comprehension)
+- [while](#while)
+- [match case](#match-case)
+  - [class](#class)
+  - [if](#if)
+  - [list](#list)
+  - [dict](#dict)
+
+---
+
 ## if else
 
 python 只提供 if else 判斷, 使用方式如下, 但有些時候會想使用 switch case 方式作條件式的判斷, 但 python 本身無此功能, 只能使用 elif 方式
@@ -44,7 +61,6 @@ if os.path.exists(os.path.join(os.getenv('HOME'), '.profile') ) or os.path.exist
     print ".profile or .bashrc_profile exist"
 ```
 
-
 ---
 
 ## for
@@ -64,7 +80,6 @@ for D in dict1.keys():
 for i in range (5):
     print(i)
 ```
-
 
 ---
 
@@ -98,7 +113,6 @@ primes = [x for x in range(2, 50) if x not in noprimes]
 print(primes)
 ```
 
-
 ---
 
 ## dictionary comprehension
@@ -122,7 +136,6 @@ print(dict3)
 dict4 = {k: v * v for k, v in enumerate(l)}
 print(dict4)
 ```
-
 
 ---
 
@@ -149,7 +162,6 @@ while True:
     else:
         print(word)
 ```
-
 
 ---
 
@@ -183,8 +195,7 @@ match point:
         raise ValueError("not a point")
 ```
 
-
-class
+### class
 
 ```python
 from dataclasses import dataclass
@@ -228,8 +239,7 @@ match color:
         print("blues")
 ```
 
-
-if
+### if
 
 ```python
 score = 81
@@ -245,8 +255,7 @@ match score:
         print('so sad')
 ```
 
-
-list
+### list
 
 ```python
 for thing in [[1, 2, 3], ['a', 'b', 'c'], "this won't be matched", 1, 4]:
@@ -259,8 +268,7 @@ for thing in [[1, 2, 3], ['a', 'b', 'c'], "this won't be matched", 1, 4]:
             print("unknown")
 ```
 
-
-dict
+### dict
 
 ```python
 message = {'success': 'OK!'}

@@ -1,4 +1,4 @@
-＃ docstring & doctest
+# docstring & doctest
 
 ```python
 # ex.py

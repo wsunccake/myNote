@@ -1,5 +1,20 @@
 # data type
 
+---
+
+## content
+
+- [boolean](#boolean)
+- [string](#string)
+- [numeric](#numeric)
+- [list](#list)
+- [dictionary](#dictionary)
+- [tuple](#tuple)
+- [set](#set)
+- [data time](#data-time)
+
+---
+
 ## boolean
 
 ```bash
@@ -9,7 +24,6 @@ print(1 != 1)
 print(1 > 1)
 print(not True)
 ```
-
 
 ---
 
@@ -40,7 +54,6 @@ print(list(str3)) 									# string split to char
 
 print("{}, {}!".format('Hi', 'Python')) 			# format output
 ```
-
 
 ---
 
@@ -73,7 +86,6 @@ print("STR type: ",type(STR), ", VAR type: ", type(VAR))
 STR="456"
 print("STR: ", STR, ", VAR: ", VAR)
 ```
-
 
 ---
 
@@ -168,7 +180,6 @@ list3 = [[j + i * m for j in range(m)] for i in range(n)]
 print(list3)
 ```
 
-
 ---
 
 ## dictionary
@@ -211,7 +222,6 @@ print('sun' in hoilday.keys()) 	# check Key
 print('sun' in hoilday) 		# check Key
 ```
 
-
 ---
 
 ## tuple
@@ -232,7 +242,6 @@ for x, y in h2o:
     print (x, y)
 ```
 
-
 ---
 
 ## set
@@ -252,7 +261,6 @@ print(set3)
 
 print(set1 - set3)
 ```
-
 
 ---
 
