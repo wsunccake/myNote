@@ -1,6 +1,24 @@
-# rust
+# rust - ready
 
-## install
+---
+
+## content
+
+- [prepare](#prepare)
+  - [install](#install)
+  - [auto completion](#auto-completion)
+  - [uninstall](#uninstall)
+- [editor](#editor)
+  - [vim plugin](#vim-plugin)
+  - [vscode plugin](#vscode-plugin)
+- [run](#run)
+- [cargo](#cargo)
+
+---
+
+## prepare
+
+### install
 
 ```bash
 # prepare
@@ -19,9 +37,7 @@ linux:~ $ rustc -h
 linux:~ $ rustc -V
 ```
 
----
-
-## auto completion
+### auto completion
 
 ```bash
 # for bash
@@ -36,24 +52,32 @@ autoload -Uz compinit
 compinit
 ```
 
+### uninstall
+
+```bash
+# by rustup
+linux:~ $ rustup self uninstall
+```
+
 ---
 
-## editor - vim
+## editor
+
+### vim plugin
 
 ```bash
 # for vim 8
 linux:~ $ git clone https://github.com/rust-lang/rust.vim ~/.vim/pack/plugins/start/rust.vim
 ```
 
-## editor - vscode
+### vscode plugin
 
-(rust-analyzer)[https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer]
-
-(CodeLLDB)[https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb]
+- [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+- [CodeLLDB](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb)
 
 ---
 
-## test
+## run
 
 ```rust
 // main.rs
@@ -70,6 +94,27 @@ linux:~ $ ./main
 ---
 
 ## cargo
+
+### hello
+
+```bash
+linux:~ $ cargo -V
+
+# create project
+linux:~ $ cargo new hello
+linux:~ $ tree hello
+hello
+├── Cargo.toml
+└── src
+    └── main.rs
+
+# build binary
+linux:~ $ cargo build
+linux:~ $ ls target/debug/
+
+# run executable
+linux:~ $ cargo run
+```
 
 ```rust
 // hello/src/main.rs
@@ -88,32 +133,25 @@ edition = "2021"
 [dependencies]
 ```
 
+### command
+
 ```bash
-linux:~ $ cargo -V
+linux:~ $ cargo -V      # version
+linux:~ $ cargo --list  # list command
 
-linux:~ $ cargo new hello
-linux:~ $ tree hello
-hello
-├── Cargo.toml
-└── src
-    └── main.rs
+linux:~ $ cargo <command> [--help]
 
-1 directory, 2 files
-
-linux:~ $ cat hello/src/main.rs
-...
-
-linux:~ $ cat hello/Cargo.toml
-...
-
-linux:~ $ cargo build --manifest-path ./hello/Cargo.toml
-
-# usage
-linux:~/project $ cargo build [--release]
+linux:~/project $ cargo build [-r|--release]
 linux:~/project $ cargo run
 linux:~/project $ cargo clean
 linux:~/project $ cargo fmt
 linux:~/project $ cargo test
+```
+
+### build specfic Cargo.toml
+
+```bash
+linux:~ $ cargo build --manifest-path Cargo.toml
 ```
 
 ```toml
@@ -122,12 +160,4 @@ opt-level = 0
 
 [profile.release]
 opt-level = 3
-```
-
----
-
-## uninstall
-
-```bash
-linux:~ $ rustup self uninstall
 ```
