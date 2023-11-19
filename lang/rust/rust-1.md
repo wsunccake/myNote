@@ -28,6 +28,30 @@
   - [if](#if)
   - [match](#match)
 - [loop](#loop)
+  - [for](#for)
+  - [while](#while)
+  - [loop](#loop)
+- [function](#function)
+  - [function - define](#function---define)
+  - [function - return](#function---return)
+  - [function - call by value](#function---call-by-value)
+  - [function - call by reference](#function---call-by-reference)
+- [tuple](#tuple)
+- [array](#array)
+  - [array - function - pass by value](#array---function---pass-by-value)
+  - [array - function - pass by reference](#array---function---pass-by-reference)
+  - [array - declare with constant](#array---declare-with-constant)
+- [ownership](#ownership)
+  - [ownership - rule](#ownership---rule)
+  - [copy](#copy)
+  - [move](#move)
+  - [clone](#clone)
+  - [ownership - function](#ownership---function)
+- [borrowing](#borrowing)
+  - [reference](#reference)
+  - [mutable reference](#mutable-reference)
+  - [borrowing - rule](#borrowing---rule)
+- [slice](#slice)
 
 ---
 
@@ -569,7 +593,7 @@ fn function_name(param1, param2..paramN) -> return_type {
 }
 ```
 
-### define function
+### function - define
 
 ```rust
 fn main() {
@@ -583,7 +607,7 @@ fn say_hello() {
 }
 ```
 
-### return function
+### function - return
 
 ```rust
 fn main() {
