@@ -9,6 +9,20 @@
   - [hashmap](#hashmap)
   - [hashset](#hashset)
 - [error handle](#error-handle)
+  - [panic](#panic)
+  - [enum result - match](#enum-result---match)
+  - [unwrap](#unwrap)
+  - [expect](#expect)
+- [generic](#generic)
+  - [generic - struct](#generic---struct)
+  - [multi generic - struct](#multi-generic---struct)
+  - [generic - struct - method](#generic---struct---method)
+  - [generic - function](#generic---function)
+- [trait](#trait)
+  - [trait - struct](#trait---struct)
+  - [trait - function](#trait---function)
+  - [trait - where](#trait---where)
+  - [trait - default method](#trait---default-method)
 
 ---
 
@@ -18,12 +32,17 @@
 
 ```rust
 let mut instance_name = Vec::new();
+let instance_name = Vec::from([val1, val2]);
 let vector_name = vec![val1, val2, val3];
 ```
 
 ```rust
 fn main() {
-    let mut v = Vec::new();
+    // let mut v = Vec::new();
+    let mut v = Vec::from([1, 2, 3]);
+    println!("{:#?}", v[0]);
+    v[0] = 0;
+
     v.push(20);
     v.push(30);
     v.push(40);
@@ -49,6 +68,7 @@ fn main() {
 
 ```rust
 let mut instance_name = HashMap::new();
+let mut instance_name = HashMap::HashMap::from([(k1, v1), (k2, v2)]);
 ```
 
 ```rust

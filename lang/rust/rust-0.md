@@ -141,6 +141,7 @@ linux:~ $ cargo --list  # list command
 
 linux:~ $ cargo <command> [--help]
 
+linux:~/project $ cargo add <crate>[@<version>]
 linux:~/project $ cargo build [-r|--release]
 linux:~/project $ cargo run
 linux:~/project $ cargo clean
