@@ -1,5 +1,15 @@
 # exception
 
+---
+
+## content
+
+- [try, except, finally](#try-except-finally)
+- [raise](#raise)
+- [defined exception](#defined-exception)
+
+---
+
 ## try, except, finally
 
 ```python
@@ -18,7 +28,6 @@ finally:
     print("force action")
 ```
 
-
 ---
 
 ## raise
@@ -33,7 +42,6 @@ if anumber < 0:
 else:
     print(math.sqrt(anumber))
 ```
-
 
 ---
 

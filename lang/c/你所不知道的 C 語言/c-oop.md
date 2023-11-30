@@ -29,8 +29,16 @@ float CircleAreaImp(struct Circle *obj) { return 3.14 * obj->r * obj->r; }
 
 void CircleNewImp(struct Circle *obj, float r)
 {
+    obj->r = r;
+}
+
+void CircleNew(struct Circle *obj, float r)
+{
+    // method, function
     obj->new = CircleNewImp;
     obj->area = CircleAreaImp;
+
+    // member, variable
     obj->r = r;
 }
 

@@ -1,5 +1,18 @@
 # other
 
+---
+
+## content
+
+- [PYTHONAPTH](#PYTHONAPTH)
+- [globals](#globals)
+- [inspect](#inspect)
+- [timestamp](#timestamp)
+- [infinite](#infinite)
+- [class](#class)
+
+---
+
 ## PYTHONAPTH
 
 在 bash env 設定 PYTHONPATH
@@ -8,7 +21,6 @@
 linux:~ $ export PYTHONPATH=$(pwd):$PYTHONPATH
 linux:~ $ echo $PYTHONPATH
 ```
-
 
 在 python code 設定 PYTHONPATH
 
@@ -29,7 +41,6 @@ import xxx
 ...
 ```
 
-
 ---
 
 ## globals
@@ -45,14 +56,12 @@ for k, v in dict(globals()).items():
     print(f'{k} -> {v}, {type(v)}')
 ```
 
-
 動態宣告變數
 
 ```python
 globals()['var'] = 'var'
 print(var)
 ```
-
 
 ---
 
@@ -72,7 +81,6 @@ for k, v in dict(globals()).items():
         print(inspect.getsource(v))
 ```
 
-
 ---
 
 ## timestamp
@@ -85,7 +93,6 @@ now = datetime.datetime.now()
 now_timestamp = datetime.datetime.timestamp(now)
 print(now, now_timestamp)
 ```
-
 
 ---
 
@@ -116,7 +123,6 @@ import numpy as np
 positive_infinity = np.inf
 negative_infinity = -np.inf
 ```
-
 
 ---
 
@@ -161,14 +167,14 @@ if '__main__' == __name__:
     print(f's2: {dir(s2)} {s2.__dict__}')
 ```
 
-instance attribute 會存在 <instance>.__dict__['variable']
+instance attribute 會存在 <instance>.**dict**['variable']
 
-clas attribute 會存在 <class>.__dict__['variable']
+clas attribute 會存在 <class>.**dict**['variable']
 
 先找 instance attribute 沒有再找 class attribute
 
 example:
 
-s1.age -> s1.__dict__['age']
+s1.age -> s1.**dict**['age']
 
-s1.location -> s1.__dict__['location'] -> Shark.__dict__['location']
+s1.location -> s1.**dict**['location'] -> Shark.**dict**['location']

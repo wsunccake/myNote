@@ -1,5 +1,15 @@
 # format output
 
+---
+
+## content
+
+- [old format](#old-format)
+- [new format](#new-format)
+- [here document](#here-document)
+
+---
+
 ## old format
 
 ```python
@@ -9,7 +19,6 @@ print('%d%%' % 100)
 
 print('this %s a %s test' % ('is', 'simple'))
 ```
-
 
 ---
 
@@ -25,7 +34,6 @@ print('{0[a]} {0[b]} {0[c]}{1}'.format(example_dict, 'others'))
 
 print('{0: f}'.format(7.03))
 ```
-
 
 ---
 

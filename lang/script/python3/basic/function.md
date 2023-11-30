@@ -1,5 +1,23 @@
 # function
 
+---
+
+## content
+
+- [def](#def)
+- [nest def](#nest-def)
+- [\*args, \*\*kwargs](#args-kwargs)
+- [lambda](#lambda)
+- [decorator](#decorator)
+  - [simple decorator](#simple-decorator)
+  - [decorator without argument](#decorator-without-argument)
+  - [decorator with argument](#decorator-with-argument)
+  - [functool decorator without argument](#functool-decorator-without-argument)
+  - [functool decorator with argument](#functool-decorator-with-argument)
+- [comment](#comment)
+
+---
+
 ## def
 
 ```bash
@@ -27,7 +45,6 @@ if __name__ == "__main__":
     print "C: ", C, ", D: ", D
 ```
 
-
 ---
 
 ## nest def
@@ -53,10 +70,9 @@ gg.__name__ = "gg"
 gg('ccc')
 ```
 
-
 ---
 
-##  *args, **kwargs
+## \*args, \*\*kwargs
 
 ```python
 def person(name = "NoName", *desc , **data):    # name = "NoName" default value, *desc 是傳入 tuple, **data 則是傳入 dict
@@ -73,7 +89,6 @@ I live in Taiei.'''.split('\n')
 
     person("May", *myStory, **myData)           # 參數使用方式
 ```
-
 
 ---
 
@@ -109,12 +124,11 @@ a(10)
 b(10)
 ```
 
-
 ---
 
 ## decorator
 
-`simple decorator`
+### simple decorator
 
 ```python
 def greet(function):
@@ -135,7 +149,7 @@ greet_someone2('Mary')
 print(greet_someone2.__name__)
 ```
 
-`decorator without argument`
+### decorator without argument
 
 ```python
 def greet(function):
@@ -158,7 +172,7 @@ greet_someone2('Mary')
 print(greet_someone2.__name__)
 ```
 
-`decorator with argument`
+### decorator with argument
 
 ```python
 def greet(arg = 'Hello'):
@@ -179,7 +193,7 @@ greet_someone('Mary')
 print(greet_someone.__name__)
 ```
 
-`functool decorator without argument`
+### functool decorator without argument
 
 ```python
 import functools
@@ -199,7 +213,7 @@ greet_someone('John')
 print(greet_someone.__name__)
 ```
 
-`functool decorator with argument`
+### functool decorator with argument
 
 ```python
 import functools
@@ -220,7 +234,6 @@ def greet_someone(someone):
 greet_someone('John')
 print(greet_someone.__name__)
 ```
-
 
 ---
 
