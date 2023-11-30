@@ -75,6 +75,46 @@ linux:~ # reboot
 
 ---
 
+## network
+
+### disable ipv6
+
+```bash
+ubuntu:~ # ip a | grep inet6
+
+ubuntu:~ # cat << EOF >> /etc/sysctl.conf
+net.ipv6.conf.all.disable_ipv6=1
+net.ipv6.conf.default.disable_ipv6=1
+net.ipv6.conf.lo.disable_ipv6=1
+EOF
+
+ubuntu:~ # reboot
+
+ubuntu:~ # sysctl -w net.ipv6.conf.all.disable_ipv6=1
+ubuntu:~ # sysctl -w net.ipv6.conf.default.disable_ipv6=1
+ubuntu:~ # sysctl -w net.ipv6.conf.lo.disable_ipv6=1
+```
+
+### enable ipv6
+
+```bash
+ubuntu:~ # ip a | grep inet6
+
+ubuntu:~ # cat << EOF >> /etc/sysctl.conf
+net.ipv6.conf.all.disable_ipv6=0
+net.ipv6.conf.default.disable_ipv6=0
+net.ipv6.conf.lo.disable_ipv6=0
+EOF
+
+ubuntu:~ # reboot
+
+ubuntu:~ # sysctl -w net.ipv6.conf.all.disable_ipv6=0
+ubuntu:~ # sysctl -w net.ipv6.conf.default.disable_ipv6=0
+ubuntu:~ # sysctl -w net.ipv6.conf.lo.disable_ipv6=0
+```
+
+---
+
 ## service
 
 ```bash

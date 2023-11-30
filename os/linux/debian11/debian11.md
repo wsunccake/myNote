@@ -110,6 +110,27 @@ debian:~ # apt install rpm2cpio
 # freeradius-utils
 debian:~ # apt install freeradius-utils
 debian:~ $ radtest <radius server>:<port> <user> <pw> <nas number> <secret>
+
+# ulimit
+debian:~ # ulimit -a
+-t: cpu time (seconds)              unlimited
+-f: file size (blocks)              unlimited
+-d: data seg size (kbytes)          unlimited
+-s: stack size (kbytes)             8192
+-c: core file size (blocks)         0
+-m: resident set size (kbytes)      unlimited
+-u: processes                       255781
+-n: file descriptors                10000
+-l: locked-in-memory size (kbytes)  8191205
+-v: address space (kbytes)          unlimited
+-x: file locks                      unlimited
+-i: pending signals                 255781
+-q: bytes in POSIX msg queues       819200
+-e: max nice                        0
+-r: max rt priority                 0
+-N 15:                              unlimited
+# -c: when executable lauch fail, core dump size
+# -s: executable stack size
 ```
 
 ---
