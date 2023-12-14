@@ -1,6 +1,5 @@
 # ESXi
 
-
 ```bash
 ~ # vmware -vl
 ```
@@ -11,10 +10,9 @@ http://<esxi_ip>/ui
 
 ## tip
 
-
 ```bash
 # change prompt
-esxi: ~ # echo 'PS1="\w # "' >> /etc/profile.local 
+esxi: ~ # echo 'PS1="\w # "' >> /etc/profile.local
 
 # change password policy
 esxi: ~ # vi /etc/pam.d/passwd
@@ -32,7 +30,6 @@ esxi: ~ # esxcli network nic list
 esxi: ~ # esxcli network ip interface ipv4 get
 ```
 
-
 ---
 
 ## ovftool
@@ -45,7 +42,6 @@ linux:~ # ovftool --acceptAllEulas --noSSLVerify --diskMode=thin --name=<vm_name
 linux:~ # tar xf <xxx>.ova
 linux:~ # ovftool <xxx>.ovf <new_xxx>.ova
 ```
-
 
 ---
 
@@ -92,3 +88,23 @@ esxi:~ # ls /vmfs/volumes/<data_store>/<vm_name>
 esxi: ~ # vim-cmd hostsvc/net/info | grep "mac ="
 ```
 
+---
+
+## clone vm
+
+```bash
+esxi:~ # cd /vmfs/volumes/datastore1
+esxi:~/vmfs/volumes/datastore1 # mkdir new_vm
+esxi:~/vmfs/volumes/datastore1 # vmkfstools -i ./origin/origin.vmdk ./new_vm/new_vm.vmdk -d thin -a buslogic
+```
+
+```text
+Click "Create / Register VM" show "New virtual machine" on web ui
+
+1. Select create type => Create a new virtual machine
+
+...
+
+4 Customize settings  => Add hard disk => Existing hard disk
+(Select new_vm.vmdk)
+```
