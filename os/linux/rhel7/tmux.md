@@ -9,7 +9,6 @@ linux:~ # tmux info
 # ctrl ^ b + ?
 ```
 
-
 ---
 
 ## command
@@ -18,7 +17,6 @@ linux:~ # tmux info
 linux:~ # tmux list-commands
 linux:~ # tmux lscm
 ```
-
 
 ---
 
@@ -49,7 +47,6 @@ linux:~ # tmux det
 # ctrl ^ b + d
 ```
 
-
 ---
 
 ## window
@@ -71,7 +68,6 @@ linux:~ # tmux next-window
 linux:~ # tmux previous-window
 # ctrl ^ b + p
 ```
-
 
 ---
 
@@ -101,7 +97,6 @@ linux:~ # tmux movep [-p <percentage>|-l <size>] -t <pane_id>
 # ctrl ^ b + ctrl ^ up, down, right, left
 ```
 
-
 ---
 
 ## conf
@@ -111,7 +106,6 @@ linux:~ # vi ~/.tmux.conf
 setw -g mode-keys vi
 set -g mouse on
 ```
-
 
 ---
 
@@ -127,7 +121,6 @@ set -g mouse on
 # ctrl ^ b, [   ->  copy mode
 ```
 
-
 ---
 
 ## script
@@ -137,13 +130,19 @@ set -g mouse on
 
 SESSION=mySession
 
+WINDOW=0
 tmux new-session -d -s ${SESSION}
-tmux rename-window -t ${SESSION}:0 'WORKSPACE'
-tmux send-keys -t ${SESSION}:0 'bash' C-m 'clear' C-m
-tmux new-window -t ${SESSION}:1 -n 'GIT'
-tmux send-key -t ${SESSION}:1 'zsh' C-m 
-tmux new-window -t ${SESSION}:2 -n 'IDE'
-tmux split-window -t ${SEESION}:2.0
-tmux split-window -h -t ${SEESION}:2.0
-tmux resize-pane -t ${SEESION}:2.1 -x 100 -y 100
+tmux rename-window -t ${SESSION}:${WINDOW} 'WORKSPACE'
+tmux send-keys -t ${SESSION}:${WINDOW} 'bash' C-m 'clear' C-m
+
+WINDOW=1
+tmux new-window -t ${SESSION}:${WINDOW} -n 'GIT'
+tmux send-key -t ${SESSION}:${WINDOW} 'zsh' C-m
+
+WINDOW=2
+PANE=0
+tmux new-window -t ${SESSION}:${WINDOW} -n 'IDE'
+tmux split-window -t ${SEESION}:${WINDOW}.${SUB_WINDOW}
+tmux split-window -h -t ${SEESION}:${WINDOW}.${PANE}
+tmux resize-pane -t ${SEESION}:${WINDOW}.${PANE} -x 100 -y 100
 ```
