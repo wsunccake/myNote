@@ -64,6 +64,19 @@ default port: 6379
 127.0.0.1:6379> CONFIG GET databases
 127.0.0.1:6379> INFO Keyspace
 127.0.0.1:6379> SELECT <database>
+
+127.0.0.1:6379> CONFIG GET databases
+1) "databases"
+2) "16"
+
+127.0.0.1:6379> INFO Keyspace
+# Keyspace
+db0:keys=1,expires=0,avg_ttl=0
+...
+
+127.0.0.1:6379> SELECT 1
+OK
+10.0.2.15:6379[1]>
 ```
 
 ---
