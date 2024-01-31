@@ -1,12 +1,10 @@
-# iptables #
-
+# iptables
 
 ## package
 
 ```bash
 rhel:~ # yum install iptables
 ```
-
 
 ---
 
@@ -31,7 +29,6 @@ COMMIT
 COMMIT
 ```
 
-
 ---
 
 ## serivce
@@ -41,10 +38,9 @@ rhel:~ # systemctl start iptables.service
 rhel:~ # systemctl enable iptables.service
 rhel:~ # systemctl status iptables.service
 
-rhel:~ # iptables -S
-rhel:~ # iptables -L -nv
+rhel:~ # iptables -S        # print all rule
+rhel:~ # iptables -L -nv    # list all rule
 ```
-
 
 ---
 
@@ -58,4 +54,8 @@ rhel:~ # iptables -I INPUT -p tcp --dport 22 -m state --state NEW -m recent --up
 
 # drop
 rhel:~ # iptables -I OUTPUT -p udp --dport 53 -m string --string example.com -j DROP
+
+# limit
+rhel:~ # iptables -A INPUT -p icmp –icmp-type 8 -m limit --limit 6/m --limit-burst 10 -j ACCEPT
+rhel:~ # iptables -A INPUT -p icmp –icmp-type 8 -j DROP
 ```
