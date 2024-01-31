@@ -72,8 +72,29 @@ debian:~ # dpkg -i google-chrome-stable_current_amd64.deb
 debian:~ # apt install ibus
 ```
 
+### vnc server
+
+```bash
+debian:~ # apt install dbus-x11
+
+debian:~ # apt install tightvncserver
+debian:~ $ vncserver [-geometry 1920x1080] [:1]
+debian:~ $ vncserver -list
+debian:~ $ vncserver -kill :1
+```
+
 ---
 
 ## wm
 
 [i3](./i3.md)
+
+---
+
+## de
+
+### xfce4
+
+```bash
+debian:~ # apt install xfce4
+```
