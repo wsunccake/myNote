@@ -87,6 +87,16 @@ linux:~ # STM32_Programmer_CLI -c port=SWD -s                               # st
 
 ---
 
+## gdb
+
+```bash
+linux:~ # apt install gdb-multiarch
+
+linux:~ # ln -s /usr/bin/gdb-multiarch /usr/local/bin/arm-none-eabi-gdb
+```
+
+---
+
 ## OpenOCD
 
 [Open On-Chip Debugger](https://openocd.org/)
@@ -115,6 +125,35 @@ linux:~/openocd # ./bootstrap
 linux:~/openocd # ./configure
 linux:~/openocd # make
 linux:~/openocd # make install
+```
+
+```bash
+# step 1.
+# terminal 1 launch openocd
+# OCD_SCRIPT=/usr/share/openocd/scripts
+linux:~ # openocd -f $OCD_SCRIPT/interface/stlink-v2.cfg -f $OCD_SCRIPT/target/stm32l4x.cfg
+
+# step 2.
+# terminal 2
+linux:~ # arm-none-eabi-gdb build/<fw>.elf
+(gdb) target remote localhost:3333
+Remote debugging using localhost:3333
+(gdb) monitor reset
+Unable to match requested speed 500 kHz, using 480 kHz
+Unable to match requested speed 500 kHz, using 480 kHz
+(gdb) monitor halt
+[stm32l4x.cpu] halted due to debug-request, current mode: Thread
+xPSR: 0x21000000 pc: 0x080002ce msp: 0x20017ff8
+(gdb) load
+Loading section .isr_vector, size 0x188 lma 0x8000000
+Loading section .text, size 0xf70 lma 0x8000188
+Loading section .rodata, size 0x40 lma 0x80010f8
+Loading section .init_array, size 0x8 lma 0x8001138
+Loading section .fini_array, size 0x8 lma 0x8001140
+Loading section .data, size 0x10 lma 0x8001148
+Start address 0x08001034, load size 4440
+Transfer rate: 13 KB/sec, 740 bytes/write.
+(gdb) -
 ```
 
 ---

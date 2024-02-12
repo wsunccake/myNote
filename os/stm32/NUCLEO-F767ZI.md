@@ -19,6 +19,13 @@ linux:~ # ls /dev/ttyACM*
 
 ## led
 
+```text
+            pin     GPIO Mode
+Green LED : PA5  -> Output Push Pull
+Blue  LED : PB7  -> Output Push Pull
+Red   LED : PB14 -> Output Push Pull
+```
+
 ```bash
 linux:~/proj # vi Core/Src/main.c
 linux:~/proj # vi Core/Inc/main.h
