@@ -1,12 +1,10 @@
 # robotframework 5.x
 
-
 ## instsall
 
 ```bash
 linux:~ $ pip install robotframework
 ```
-
 
 ---
 
@@ -36,7 +34,6 @@ linux:~ $ robot hello.robot
 linux:~ $ robot -v MESSAGE:"Hi RF" hello.robot
 ```
 
-
 ---
 
 ## execution
@@ -47,7 +44,6 @@ linux:~ $ robot -v MESSAGE:"Hi RF" hello.robot
 linux:~ $ robot <file>.robot
 linux:~ $ python -m robot <file>.robot
 ```
-
 
 ### simple pattern
 
@@ -67,7 +63,6 @@ Unless noted otherwise, pattern matching is case, space, and underscore insensit
 --test Example[1-2]    # Matches tests 'Example1' and 'Example2'.
 --include f??          # Matches tests with a tag that starts with 'f' is three characters long.
 ```
-
 
 ### tag pattern
 
@@ -95,7 +90,6 @@ linux:~ $ export REBOT_OPTIONS="--reportbackground green:yellow:red"
 linux:~ $ rebot --name example output.xml
 ```
 
-
 ### argument file
 
 ### stop
@@ -105,6 +99,72 @@ linux:~ $ kill -9 <robot pid> # force terminal, no report
 linux:~ $ kill -2 <robot pid> # grace terminal, gen report
 ```
 
+### variable
+
+```robot
+*** Settings ***
+Variables         setup_var.py  foo_variables  bar_variables
+Library           OperatingSystem
+
+*** Variables ***
+${MESSAGE}        Hello, world!
+
+*** Test Cases ***
+My Test
+    [Documentation]    Example test.
+    Log Variables
+    My Keyword    ${MESSAGE}
+
+*** Keywords ***
+My Keyword
+    [Arguments]    ${msg}
+    Log    ${msg}
+    Should Be Equal    ${msg}    Hello, world!
+```
+
+```python
+# common_var.py
+common_variables = {
+    'version': '1.0.0',
+}
+
+foo_variables = common_variables | {
+    'foo': 'foo',
+}
+
+bar_variables = common_variables | {
+    'bar': 'bar',
+}
+```
+
+```python
+# setup_var.py
+import sys
+import common_var
+
+def get_variables(*args):
+    variables = {}
+
+    m = globals().get("common_var")
+    # v = m.__dict__.get("common_variables")
+    for arg in args:
+        v = m.__dict__.get(arg)
+        variables.update(v)
+
+    return variables
+
+###
+### main
+###
+
+if __name__ == "__main__":
+    print("args:", sys.argv[1:])
+    print(get_variables(*sys.argv[1:]))
+```
+
+```bash
+linux:~ $ robot [-V <var.py>] [-v var:val] hello.robot
+```
 
 ---
 
