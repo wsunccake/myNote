@@ -1,6 +1,5 @@
 # Jenkins
 
-
 ## Package
 
 ```
@@ -22,7 +21,6 @@ rhel:~ # /etc/init.d/jenkins stop
 rhel:~ # chkconfig jenkins off
 ```
 
-
 ### Install via Docker
 
 ```
@@ -32,11 +30,9 @@ rhel:~ # docker run -d -p 8080:8080 -p 50000:50000 -v /home/jenkins:/var/jenkins
 rhel:~ # docker cp ~/Downloads/p4 <container_id>:/usr/bin/p4
 ```
 
-----
-
+---
 
 ## CLI
-
 
 ### Jenkins 1.x
 
@@ -53,7 +49,6 @@ rhel:~ # cat <view>.xml | java -jar jenkins-cli.jar -s http://<jenkins>:8080 cre
 rhel:~ # java -jar jenkins-cli.jar -s http://<jenkins>:8080 delete-job <job> [--username <username> --password <password>]
 ```
 
-
 ### Jenkins 2.x
 
 ```bash
@@ -68,7 +63,6 @@ rhel:~ # export JENKINS_API_TOKEN=<password>
 rhel:~ # java -jar jenkins-cli.jar -s http://<jenkins>:8080 list-jobs
 ```
 
-
 ### 1.x different with 2.x
 
 ```
@@ -78,9 +72,7 @@ rhel:~ # java -jar jenkins-cli.jar -s http://<jenkins>:8080 list-jobs
 2.x  WORKSPACE=${JENKINS_HOME}/workspace/${JOB_BASE_NAME}@2
 ```
 
-
-----
-
+---
 
 ## Pipeline
 
@@ -135,7 +127,6 @@ rhel:~/example # git commit -m "Create Jenkinsfile"
 rhel:~/example # git push -u origin master
 ```
 
-
 ---
 
 ## CSRF
@@ -144,12 +135,12 @@ disable csrf after 2.222
 
 ```bash
 rhel:~ # mkdir -p $JENKINS_HOME/init.groovy.d
-rhel:~ # cat $JENKINS_HOME/init.groovy.d/csrf.groovy 
+rhel:~ # cat $JENKINS_HOME/init.groovy.d/csrf.groovy
 import hudson.security.csrf.DefaultCrumbIssuer
 import jenkins.model.Jenkins
 
 def jenkins = Jenkins.instance;
-jenkins.setCrumbIssuer(null); 
+jenkins.setCrumbIssuer(null);
 jenkins.save();
 ```
 
@@ -159,13 +150,16 @@ disable cstf before 2.222
 
 ---
 
-
 ## init hook
-
 
 ```bash
 rhel:~ # mkdir -p $JENKINS_HOME/init.groovy.d
 rhel:~ # cat $JENKINS_HOME/init.groovy.d/csp.groovy
+rhel:~ # cat $JENKINS_HOME/init.groovy.d/csrf.grooy
+```
+
+```groovy
+// csp.groovy
 import jenkins.model.Jenkins
 import java.util.logging.LogManager
 
@@ -177,10 +171,18 @@ System.setProperty("hudson.model.DirectoryBrowserSupport.CSP","sandbox allow-scr
 logger.info("Jenkins Startup Script: Successfully updated the system properties value for hudson.model.DirectoryBrowserSupport.CSP . Script location : ${jenkinsHome}/init.groovy.d")
 ```
 
-[Groovy Hook Scripts](https://www.jenkins.io/doc/book/managing/groovy-hook-scripts/)
+```groovy
+// csrf.groovy
+import hudson.security.csrf.DefaultCrumbIssuer
+import jenkins.model.Jenkins
 
-[Jenkins Use Case: Jenkins Startup Script to set the System Properties](https://medium.com/the-devops-ship/jenkins-use-case-jenkins-startup-script-to-set-the-system-properties-2de8cd1cbe4d)
+def jenkins = Jenkins.instance;
+jenkins.setCrumbIssuer(null);
+jenkins.save();
+```
 
+- [Groovy Hook Scripts](https://www.jenkins.io/doc/book/managing/groovy-hook-scripts/)
+- [Jenkins Use Case: Jenkins Startup Script to set the System Properties](https://medium.com/the-devops-ship/jenkins-use-case-jenkins-startup-script-to-set-the-system-properties-2de8cd1cbe4d)
 
 ---
 
@@ -188,30 +190,20 @@ logger.info("Jenkins Startup Script: Successfully updated the system properties 
 
 ### Common
 
-[Validating String Parameter Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Validating+String+Parameter+Plugin)
-
-[Slack Notification Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Slack+Plugin)
-
-[Environment Injector Plugin](https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin)
-
-[Rebuilder](https://wiki.jenkins-ci.org/display/JENKINS/Rebuild+Plugin)
-
-[Multijob plugin](https://wiki.jenkins-ci.org/display/JENKINS/Multijob+Plugin)
-
-[Run Condition Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Run+Condition+Plugin)
-
-[build-name-setter](https://wiki.jenkins-ci.org/display/JENKINS/Build+Name+Setter+Plugin)
-
-[Job Configuration History Plugin](https://wiki.jenkins-ci.org/display/JENKINS/JobConfigHistory+Plugin)
-
-[Naginator Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Naginator+Plugin)
-
-[Build Environment Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Build+Environment+Plugin)
+- [Validating String Parameter Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Validating+String+Parameter+Plugin)
+- [Slack Notification Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Slack+Plugin)
+- [Environment Injector Plugin](https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin)
+- [Rebuilder](https://wiki.jenkins-ci.org/display/JENKINS/Rebuild+Plugin)
+- [Multijob plugin](https://wiki.jenkins-ci.org/display/JENKINS/Multijob+Plugin)
+- [Run Condition Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Run+Condition+Plugin)
+- [build-name-setter](https://wiki.jenkins-ci.org/display/JENKINS/Build+Name+Setter+Plugin)
+- [Job Configuration History Plugin](https://wiki.jenkins-ci.org/display/JENKINS/JobConfigHistory+Plugin)
+- [Naginator Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Naginator+Plugin)
+- [Build Environment Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Build+Environment+Plugin)
 
 ### Other
 
-[Node and Label parameter plugin](https://wiki.jenkins-ci.org/display/JENKINS/NodeLabel+Parameter+Plugin)
-
-[Perforce Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Perforce+Plugin)
-
-[Robot Framework plugin](https://wiki.jenkins-ci.org/display/JENKINS/Robot+Framework+Plugin)
+- [Node and Label parameter plugin](https://wiki.jenkins-ci.org/display/JENKINS/NodeLabel+Parameter+Plugin)
+- [Perforce Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Perforce+Plugin)
+- [Robot Framework plugin](https://wiki.jenkins-ci.org/display/JENKINS/Robot+Framework+Plugin)
+- [Job Import](https://plugins.jenkins.io/job-import-plugin/)

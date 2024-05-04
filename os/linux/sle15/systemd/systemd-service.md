@@ -133,11 +133,25 @@ sle:~ # systemctl status systemd-tmpfiles-clean
 
 ```bash
 sle:~ # systemd-resolve --status
+sle:~ # systemd-resolve --flush-caches
+sle:~ # systemd-resolve --statistics
 sle:~ # systemd-resolve --interface <nic> --set-dns <dns_ip> --set-domain <domain name>
 
 # config
-sle:~ # ls -l /etc/resolv.conf # -> /run/systemd/resolve/stub-resolv.conf
+sle:~ # ls /run/systemd/resolve/
+# resolv.conf       不使用 DNS cache
+# stub-resolv.conf  使用 DNS cache
+
+sle:~ # cat /run/systemd/resolve/stub-resolv.conf
+nameserver 127.0.0.53
+options edns0
+
 sle:~ # cat /run/systemd/resolve/resolv.conf
+nameserver 168.95.1.1
+nameserver 8.8.8.8
+
+# change resolve file
+sle:~ # ls -l /etc/resolv.conf # -> /run/systemd/resolve/stub-resolv.conf
 
 sle:~ # cat /etc/systemd/resolved.conf
 [Resolve]
@@ -163,8 +177,8 @@ sle:~ # resolvectl flush-caches
 
 ```bash
 sle:~ # cat /usr/lib/systemd/system/systemd-logind.service
-sle:~ # systemd edit systemd-logind.service
-sle:~ # systemd edit --full systemd-logind.service  # /etc/systemd/system/systemd-logind.service
+sle:~ # systemctl edit systemd-logind.service
+sle:~ # systemctl edit --full systemd-logind.service  # /etc/systemd/system/systemd-logind.service
 ...
 [Service]
 Environment=SYSTEMD_LOG_LEVEL=debug
