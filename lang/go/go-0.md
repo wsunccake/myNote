@@ -18,6 +18,7 @@
   - [start](#start-2)
   - [create workspace](#create-workspace)
   - [download and modify external module](#download-and-modify-external-module)
+- [other command](#other-command)
 
 ---
 
@@ -313,3 +314,23 @@ linux:~/workspace $ vi hello/hello.go
 
 linux:~/workspace $ go run ./hello
 ```
+
+---
+
+## other command
+
+```bash
+linux:~/project $ go mod edit -go=1.17
+linux:~/project $ go mod edit -print
+linux:~/project $ go mod edit -require github.com/gorilla/context@v1.1.1
+linux:~/project $ go mod edit -replace example.com/student=../example.com/student
+
+linux:~/project $ go list
+linux:~/project $ go list all
+linux:~/project $ go list -m all
+linux:~/project $ go list -m -versions github.com/gorilla/mux
+
+linux:~/project $ go mod why golang.org/x/text/language golang.org/x/text/encoding
+```
+
+- [Go Modules Reference](https://go.dev/ref/mod)
