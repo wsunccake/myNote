@@ -21,7 +21,6 @@ osx:~ # networksetup -setdhcp en1
 osx:~ # networksetup -setdnsservers <networkservice> 8.8.8.8 9.9.9.9     # 設定 DNS
 ```
 
-
 ---
 
 ## ping
@@ -32,18 +31,16 @@ osx:~ # ping [-S <src_addr>] [-c <n>] <dest_addr>
 # 避免出現 ping: invalid multicast interface: 訊息
 ```
 
-
 ---
 
 ## netstat
 
 ```bash
-osx:~ # netstat -rn 
+osx:~ # netstat -rn
 osx:~ # netstat -an -f inet
 osx:~ # netstat -an -p tcp
 osx:~ # netstat -an -p udp
 ```
-
 
 ---
 
@@ -58,7 +55,6 @@ osx:~ # route -n add -inet default <gw_ip>          # 設定 default gateway
 osx:~ # route -n add <dest_ip>/<prefix> <src_ip>    # 增加特定 routing rule, from <src_ip> to <dest_ip>, 用於 multi nic
 osx:~ # route -n del <dest_ip>/<prefix> <src_ip>    # 刪除特定 routing rule
 ```
-
 
 ---
 
@@ -91,7 +87,6 @@ server:~ # nc -l <port> -e /bin/sh
 client:~ # nc <server_ip> <server_port>
 ```
 
-
 ---
 
 ## pfctl
@@ -120,7 +115,6 @@ osx:~ # pfctl -F all    # 清空所有的規則
 osx:~ # pfctl -F info   # 清空計數器
 osx:~ # pfctl -F Tables
 ```
-
 
 ---
 
