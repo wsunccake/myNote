@@ -8,5 +8,6 @@
 - [Rust 入门秘籍](https://rust-book.junmajinlong.com/about.html)
 - [Rust 语言圣经(Rust Course)](https://course.rs/about-book.html)
 - [Rust 教學](https://www.1ju.org/rust/index)
+- [通过例子学 Rust](https://rustwiki.org/zh-CN/rust-by-example/index.html)
 - [Rust 参考手册](https://rustwiki.org/zh-CN/reference/introduction.html)
 - [Rust 入門祕籍](https://shihyu.github.io/rust_hacks/about.html)

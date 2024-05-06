@@ -69,6 +69,18 @@ impl<T> SinglyLinkedList<T> {
         *curr = node.next;
         Some(node.elem)
     }
+
+    pub fn reverse(&mut self) {
+        let mut prev = None;
+        let mut curr = self.head.take();
+        while let Some(mut node) = curr {
+            let next = node.next;
+            node.next = prev.take();
+            prev = Some(node);
+            curr = next;
+        }
+        self.head = prev.take();
+    }
 }
 
 fn main() {
@@ -76,5 +88,5 @@ fn main() {
     l.push_front(1);
     l.push_front(2);
     l.push_front(4);
-    println!("{:#?}", l);
+    println!("{l:#?}");
 }

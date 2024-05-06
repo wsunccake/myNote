@@ -98,6 +98,8 @@ linux:~ $ ./main
 ### hello
 
 ```bash
+linux:~ $ cargo help
+linux:~ $ cargo help new
 linux:~ $ cargo -V
 
 # create project
