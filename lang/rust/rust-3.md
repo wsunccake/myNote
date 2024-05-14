@@ -41,6 +41,7 @@ fn main() {
     // let mut v = Vec::new();
     let mut v = Vec::from([1, 2, 3]);
     println!("{:#?}", v[0]);
+    println!("{:#?}", v.get(0));
     v[0] = 0;
 
     v.push(20);
@@ -63,6 +64,49 @@ fn main() {
     }
 }
 ```
+
+```rs
+fn main() {
+    let vec1 = vec![1, 2, 3, 4];
+    println!("vec1: {vec1:#?}");
+    // consumer
+    for v in vec1 {
+        println!("{v:#?}");
+    }
+    println!("vec1: {vec1:#?}"); // error: borrow of moved
+
+    let vec2 = vec![1, 2, 3, 4];
+    println!("vec2: {vec2:#?}");
+    // producer
+    for v in vec2.iter() {
+        println!("{v:#?}");
+    }
+    println!("vec2: {vec2:#?}");
+    vec2.iter().for_each(|x| println!("{x:?}"));
+
+    let mut vec3 = vec![1, 2, 3, 4];
+    println!("vec3: {vec3:#?}");
+    // producer
+    for mut v in vec3.iter_mut() {
+        *v += 1;
+        println!("{v:#?}");
+    }
+    println!("vec3: {vec3:#?}");
+
+    let vec4 = vec![1, 2, 3, 4];
+    println!("vec4: {vec4:#?}");
+    // consumer
+    for mut v in vec4.into_iter() {
+        v += 1;
+        println!("{v:#?}");
+    }
+    // println!("vec4: {vec4:#?}"); // error: borrow of moved
+}
+```
+
+producer: iter, iter_mut
+
+consumer: into_iter
 
 ### hashmap
 
@@ -160,6 +204,17 @@ fn main() {
 fn main() {
     panic!("hello");
     println!("end of main"); //unreachable statement
+}
+```
+
+```rs
+fn my_panic() {
+    println!("Error");
+    panic!();
+}
+
+fn main() {
+    my_panic();
 }
 ```
 
@@ -415,6 +470,46 @@ fn main() {
 
     area(a);
     area(b);
+}
+```
+
+```rs
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {
+    fn area(&self) -> u32 {
+        println!("run Rectangle Area");
+        self.width * self.height
+    }
+}
+
+trait HasArea {
+    fn area(&self) -> u32;
+}
+
+impl HasArea for Rectangle {
+    fn area(&self) -> u32 {
+        println!("run trait HasArea");
+        self.width * self.height
+    }
+}
+
+fn print_area<T: HasArea>(t: T) {
+    println!("print area");
+    t.area();
+}
+
+fn main() {
+    let r = Rectangle {
+        width: 1,
+        height: 2,
+    };
+    println!("area: {}", r.area());
+    println!("area: {}", HasArea::area(&r));
+    print_area(r);
 }
 ```
 

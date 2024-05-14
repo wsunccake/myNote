@@ -207,7 +207,7 @@ fn main() {
 ```rust
 fn main() {
     const USER_LIMIT: i32 = 100; // integer constant
-    const PI: f32 = 3.14; // float constant
+    const PI: f32 = 3.14;        // float constant
 
     println!("user limit is {}", USER_LIMIT);
     println!("pi value is {}", PI);
@@ -515,6 +515,40 @@ fn main() {
 }
 ```
 
+### let if match
+
+```rs
+// let - if
+fn main() {
+    let a = 1;
+    let b = 9;
+    let max_value = if a > b { a } else { b };
+
+    println!("max(a: {a:#?}, b: {b:#?}) = {max_value:#?}");
+}
+```
+
+```rs
+// match
+fn main() {
+    let config_max = Some(3u8);
+    let value = match config_max {
+        Some(max) => max,
+        _ => 0,
+    };
+    println!("value: {value:#?}");
+}
+```
+
+```rs
+// if let
+fn main() {
+    let config_max = Some(3u8);
+    let value = if let Some(max) = config_max { max } else { 0 };
+    println!("value: {value:#?}");
+}
+```
+
 ---
 
 ## loop
@@ -565,6 +599,47 @@ fn main(){
          break;
       }
    }
+}
+```
+
+### let while match
+
+```rs
+// match
+fn main() {
+    let mut optional = Some(0);
+    loop {
+        match optional {
+            Some(i) => {
+                if i > 9 {
+                    println!("Greater than 9, quit!");
+                    optional = None;
+                } else {
+                    println!("`i` is `{:?}`. Try again.", i);
+                    optional = Some(i + 1);
+                }
+            }
+            _ => {
+                break;
+            }
+        }
+    }
+}
+```
+
+```rs
+// while let
+fn main() {
+    let mut optional = Some(0);
+    while let Some(i) = optional {
+        if i > 9 {
+            println!("Greater than 9, quit!");
+            optional = None;
+        } else {
+            println!("`i` is `{:?}`. Try again.", i);
+            optional = Some(i + 1);
+        }
+    }
 }
 ```
 
@@ -800,16 +875,21 @@ fn main() {
 
 ### copy
 
+當 trait 實作 copy, = 則是 copy
+
+當 trait 實作 drop, = 則是 move
+
+copy 跟 drop 無法同時實作, 只能擇一
+
 ```rust
 fn main() {
     let s1: &str = "rust";
     println!("s1: {}", s1);
 
-    let s2 = s1;
+    let s2 = s1; // copy
     println!("s2: {}", s2);
     println!("s1: {}", s1);
 }
-
 ```
 
 ### move
@@ -819,7 +899,7 @@ fn main() {
     let s1: String = String::from("rust");
     println!("s1: {}", s1);
 
-    let s2 = s1;
+    let s2 = s1; // move
     println!("s2: {}", s2);
     println!("s1: {}", s1);
 }

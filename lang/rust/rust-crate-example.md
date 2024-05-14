@@ -302,6 +302,366 @@ fn main() {
 
 ### scope path and use module
 
+```bash
+# crate
+linux:~/worksapce $ cargo new --lib restaurant
+
+# code
+# edit lib.rs, main.rs
+
+# folder
+linux:~/worksapce $ tree restaurant
+restaurant
+├── Cargo.toml
+└── src
+    ├── lib.rs
+    └── main.rs
+
+# cargo
+linux:~/worksapce $ cargo build --manifest-path restaurant/Cargo.toml
+linux:~/worksapce $ cargo run   --manifest-path restaurant/Cargo.toml
+```
+
+```rs
+// lib.rs
+pub mod front_of_house {
+    pub mod hosting {
+        pub fn add_to_waitlist() {
+            // absolute path
+            crate::front_of_house::hosting::seat_at_table(); // same module private function
+            crate::front_of_house::serving::take_order(); // diff moudle public function
+                                                          // crate::front_of_house::serving::serve_order(); // private function
+
+            // relative path
+            seat_at_table(); // same module private function
+            self::seat_at_table(); // same module private function
+            super::serving::take_order(); // diff moudle public function
+            super::super::eat_at_restaurant();
+        }
+        fn seat_at_table() {
+            println!("front_of_house -> hosting -> seat_at_table");
+        }
+    }
+
+    mod serving {
+        pub fn take_order() {
+            println!("front_of_house -> serving -> take_order");
+        }
+        fn serve_order() {}
+        fn take_payment() {}
+    }
+}
+
+#[allow(dead_code)]
+mod back_of_house {
+    pub struct Breakfast {
+        pub toast: String,
+        seasonal_fruit: String,
+    }
+
+    impl Breakfast {
+        pub fn summer(toast: &str) -> Breakfast {
+            Breakfast {
+                toast: String::from(toast),
+                seasonal_fruit: String::from("peaches"),
+            }
+        }
+    }
+
+    #[derive(Debug)]
+    pub enum Appetizer {
+        Soup,
+        Salad,
+    }
+}
+
+#[allow(dead_code)]
+pub fn eat_at_restaurant() {
+    // import function
+    // crate::front_of_house::hosting::add_to_waitlist(); // absolute path
+    // front_of_house::hosting::add_to_waitlist(); // relative path
+
+    // import struct
+    let mut meal = back_of_house::Breakfast::summer("Rye");
+    meal.toast = String::from("Wheat");
+    println!("I'd like {} toast please", meal.toast);
+
+    // import enum
+    let order1 = back_of_house::Appetizer::Soup;
+    let order2 = back_of_house::Appetizer::Salad;
+    println!("order1: {:?}, order2: {:?}", order1, order2);
+}
+
+#[allow(dead_code)]
+mod customer {
+    // use path
+    use crate::front_of_house::hosting;
+    use std::fmt::Result;
+    use std::io::Result as IoResult; // as name
+
+    pub fn eat_at_restaurant() {
+        hosting::add_to_waitlist();
+    }
+}
+```
+
+```rs
+// main.rs
+use restaurant::eat_at_restaurant;
+
+fn main() {
+    restaurant::front_of_house::hosting::add_to_waitlist();
+    eat_at_restaurant();
+}
+```
+
 ### separate module to file
 
+from [scope path and use module](#scope-path-and-use-module)
+
+```bash
+# crate
+linux:~/worksapce $ cargo new --lib restaurant
+
+# code
+# edit front_of_house.rs, lib.rs, main.rs
+
+# folder
+linux:~/worksapce $ tree restaurant
+restaurant
+├── Cargo.toml
+└── src
+    ├── front_of_house.rs
+    ├── lib.rs
+    └── main.rs
+
+# cargo
+linux:~/worksapce $ cargo build --manifest-path restaurant/Cargo.toml
+linux:~/worksapce $ cargo run   --manifest-path restaurant/Cargo.toml
+```
+
+```rs
+// front_of_house.rs
+pub mod hosting {
+    pub fn add_to_waitlist() {
+        // absolute path
+        crate::front_of_house::hosting::seat_at_table(); // same module private function
+        crate::front_of_house::serving::take_order(); // diff moudle public function
+                                                      // crate::front_of_house::serving::serve_order(); // private function
+
+        // relative path
+        seat_at_table(); // same module private function
+        self::seat_at_table(); // same module private function
+        super::serving::take_order(); // diff moudle public function
+        super::super::eat_at_restaurant();
+    }
+    fn seat_at_table() {
+        println!("front_of_house -> hosting -> seat_at_table");
+    }
+}
+
+mod serving {
+    pub fn take_order() {
+        println!("front_of_house -> serving -> take_order");
+    }
+    fn serve_order() {}
+    fn take_payment() {}
+}
+```
+
+```rs
+// lib.rs
+pub mod front_of_house;     // front_of_house.rs
+
+#[allow(dead_code)]
+mod back_of_house {
+    pub struct Breakfast {
+        pub toast: String,
+        seasonal_fruit: String,
+    }
+
+    impl Breakfast {
+        pub fn summer(toast: &str) -> Breakfast {
+            Breakfast {
+                toast: String::from(toast),
+                seasonal_fruit: String::from("peaches"),
+            }
+        }
+    }
+
+    #[derive(Debug)]
+    pub enum Appetizer {
+        Soup,
+        Salad,
+    }
+}
+
+#[allow(dead_code)]
+pub fn eat_at_restaurant() {
+    // import function
+    // crate::front_of_house::hosting::add_to_waitlist(); // absolute path
+    // front_of_house::hosting::add_to_waitlist(); // relative path
+
+    // import struct
+    let mut meal = back_of_house::Breakfast::summer("Rye");
+    meal.toast = String::from("Wheat");
+    println!("I'd like {} toast please", meal.toast);
+
+    // import enum
+    let order1 = back_of_house::Appetizer::Soup;
+    let order2 = back_of_house::Appetizer::Salad;
+    println!("order1: {:?}, order2: {:?}", order1, order2);
+}
+
+#[allow(dead_code)]
+mod customer {
+    // use path
+    use crate::front_of_house::hosting;
+    use std::fmt::Result;
+    use std::io::Result as IoResult; // as name
+
+    pub fn eat_at_restaurant() {
+        hosting::add_to_waitlist();
+    }
+}
+```
+
+```rs
+// main.rs
+use restaurant::eat_at_restaurant;
+
+fn main() {
+    restaurant::front_of_house::hosting::add_to_waitlist();
+    eat_at_restaurant();
+}
+```
+
 ### separate module to folder
+
+from [scope path and use module](#scope-path-and-use-module)
+
+```bash
+# crate
+linux:~/worksapce $ cargo new --lib restaurant
+
+# code
+# edit front_of_house.rs, hosting.rs, serving.rs, lib.rs, main.rs
+
+# folder
+linux:~/worksapce $ tree restaurant
+ tree restaurant/
+restaurant/
+├── Cargo.toml
+└── src
+    ├── front_of_house
+    │   ├── hosting.rs
+    │   └── serving.rs
+    ├── front_of_house.rs
+    ├── lib.rs
+    └── main.rs
+
+# cargo
+linux:~/worksapce $ cargo build --manifest-path restaurant/Cargo.toml
+linux:~/worksapce $ cargo run   --manifest-path restaurant/Cargo.toml
+```
+
+```rs
+// front_of_house.rs
+pub mod hosting;
+pub mod serving;
+```
+
+```rs
+// hosting.rs
+pub fn add_to_waitlist() {
+    // absolute path
+    crate::front_of_house::hosting::seat_at_table(); // same module private function
+    crate::front_of_house::serving::take_order(); // diff moudle public function
+                                                  // crate::front_of_house::serving::serve_order(); // private function
+
+    // relative path
+    seat_at_table(); // same module private function
+    self::seat_at_table(); // same module private function
+    super::serving::take_order(); // diff moudle public function
+    super::super::eat_at_restaurant();
+}
+fn seat_at_table() {
+    println!("front_of_house -> hosting -> seat_at_table");
+}
+```
+
+```rs
+// serving.rs
+pub fn take_order() {
+    println!("front_of_house -> serving -> take_order");
+}
+fn serve_order() {}
+fn take_payment() {}
+```
+
+```rs
+// lib.rs
+pub mod front_of_house;
+
+#[allow(dead_code)]
+mod back_of_house {
+    pub struct Breakfast {
+        pub toast: String,
+        seasonal_fruit: String,
+    }
+
+    impl Breakfast {
+        pub fn summer(toast: &str) -> Breakfast {
+            Breakfast {
+                toast: String::from(toast),
+                seasonal_fruit: String::from("peaches"),
+            }
+        }
+    }
+
+    #[derive(Debug)]
+    pub enum Appetizer {
+        Soup,
+        Salad,
+    }
+}
+
+#[allow(dead_code)]
+pub fn eat_at_restaurant() {
+    // import function
+    // crate::front_of_house::hosting::add_to_waitlist(); // absolute path
+    // front_of_house::hosting::add_to_waitlist(); // relative path
+
+    // import struct
+    let mut meal = back_of_house::Breakfast::summer("Rye");
+    meal.toast = String::from("Wheat");
+    println!("I'd like {} toast please", meal.toast);
+
+    // import enum
+    let order1 = back_of_house::Appetizer::Soup;
+    let order2 = back_of_house::Appetizer::Salad;
+    println!("order1: {:?}, order2: {:?}", order1, order2);
+}
+
+#[allow(dead_code)]
+mod customer {
+    // use path
+    use crate::front_of_house::hosting;
+    use std::fmt::Result;
+    use std::io::Result as IoResult; // as name
+
+    // pub fn eat_at_restaurant() {
+    //     hosting::add_to_waitlist();
+    // }
+}
+```
+
+```rs
+// main.rs
+use restaurant::eat_at_restaurant;
+
+fn main() {
+    restaurant::front_of_house::hosting::add_to_waitlist();
+    eat_at_restaurant();
+}
+```
