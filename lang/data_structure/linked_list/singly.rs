@@ -1,92 +1,118 @@
-#![allow(unused)]
-
 #[derive(Debug)]
 struct Node<T> {
-    elem: T,
+    data: T,
     next: Option<Box<Node<T>>>,
 }
 
-#[derive(Debug)]
-pub struct SinglyLinkedList<T> {
+impl<T> Node<T> {
+    fn new(data: T) -> Self {
+        Node { data, next: None }
+    }
+}
+
+struct SinglyLinkedList<T> {
     head: Option<Box<Node<T>>>,
 }
 
 impl<T> SinglyLinkedList<T> {
-    pub fn new() -> Self {
-        Self { head: None }
+    fn new() -> Self {
+        SinglyLinkedList { head: None }
     }
 
-    pub fn push_front(&mut self, elem: T) {
-        let next: Option<Box<Node<T>>> = self.head.take();
-        self.head = Some(Box::new(Node { elem, next }));
+    fn insert_front(&mut self, data: T) {
+        let mut new_node = Box::new(Node::new(data));
+        new_node.next = self.head.take();
+        self.head = Some(new_node);
     }
 
-    pub fn pop_front(&mut self) -> Option<T> {
-        // let h: Option<Box<Node<T>>> = self.head;
-        // ? with Option => type
-        let head: Box<Node<T>> = self.head.take()?;
-        self.head = head.next;
-        Some(head.elem)
-    }
-
-    pub fn insert_after(&mut self, pos: usize, elem: T) -> Result<(), usize> {
-        let mut curr = &mut self.head;
-        let mut pos_ = pos;
-
-        while pos_ > 0 {
-            curr = match curr.as_mut() {
-                Some(node) => &mut node.next,
-                None => return Err(pos - pos_),
-            };
-            pos_ -= 1;
+    fn insert_end(&mut self, data: T) {
+        let mut new_node = Box::new(Node::new(data));
+        if self.head.is_none() {
+            self.head = Some(new_node);
+            return;
         }
 
-        match curr.take() {
-            Some(mut node) => {
-                let new_node = Box::new(Node {
-                    elem,
-                    next: node.next,
-                });
-                node.next = Some(new_node);
+        let mut current_node = self.head.as_mut().unwrap();
+        while let Some(ref mut next_node) = current_node.next {
+            current_node = next_node;
+        }
 
-                *curr = Some(node);
+        current_node.next = Some(new_node);
+    }
+
+    fn delete_node_by_position(&mut self, position: usize) {
+        let mut current = &mut self.head;
+        let mut count = 0;
+
+        // Traverse the linked list
+        while let Some(node) = current {
+            if position == 0 {
+                self.head = node.next.take();
+                return;
             }
-            None => return Err(pos - pos_),
+
+            if count == position - 1 {
+                node.next = node.next.take().unwrap().next;
+                return;
+            }
+
+            current = &mut node.next;
+            count += 1;
         }
-        Ok(())
     }
 
-    pub fn remove(&mut self, pos: usize) -> Option<T> {
-        let mut curr = &mut self.head;
-        let mut pos = pos;
-
-        while pos > 0 {
-            curr = &mut curr.as_mut()?.next;
-            pos -= 1;
-        }
-
-        let node = curr.take()?;
-        *curr = node.next;
-        Some(node.elem)
-    }
-
-    pub fn reverse(&mut self) {
+    fn reverse(&mut self) {
         let mut prev = None;
-        let mut curr = self.head.take();
-        while let Some(mut node) = curr {
-            let next = node.next;
+        let mut current = self.head.take();
+
+        // Traverse the linked list
+        while let Some(mut node) = current {
+            let next = node.next.take();
             node.next = prev.take();
             prev = Some(node);
-            curr = next;
+            current = next;
         }
-        self.head = prev.take();
+
+        self.head = prev;
     }
+
+    // fn remove(&mut self, v: T) -> Option<usize> {
+    //     let mut current = &mut self.head;
+    //     loop {
+    //         match current {
+    //             None => return None,
+    //             Some(node) if node.data == v => {
+    //                 *current = node.next.take();
+    //                 return Some(v);
+    //             }
+    //             Some(node) => {
+    //                 current = &mut node.next;
+    //             }
+    //         }
+    //     }
+    // }
 }
 
 fn main() {
-    let mut l = SinglyLinkedList::<i32>::new();
-    l.push_front(1);
-    l.push_front(2);
-    l.push_front(4);
-    println!("{l:#?}");
+    let mut list: SinglyLinkedList<i32> = SinglyLinkedList::new();
+
+    println!("Empty Linked List: {:?}", list.head);
+
+    list.insert_front(3);
+    list.insert_front(2);
+    list.insert_front(1);
+
+    list.insert_end(7);
+    list.insert_end(8);
+    list.insert_end(9);
+
+    println!("Linked List: {:#?}", list.head);
+
+    list.delete_node_by_position(2);
+
+    println!("Delete node: {:#?}", list.head);
+
+    list.reverse();
+
+    println!("Reversed: {:#?}", list.head);
 }

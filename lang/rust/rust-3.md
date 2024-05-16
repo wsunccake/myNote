@@ -62,6 +62,10 @@ fn main() {
     for i in &v {
         println!("{}", i);
     }
+
+    let mut v1 = vec![9, 8];
+    v.append(&mut v1);
+    println("v len: {}, v1 len: {}", v.len(), v1.len());
 }
 ```
 

@@ -289,6 +289,18 @@ fn is_even(no: i32) -> Option<bool> {
 }
 ```
 
+```rs
+// as_ref:
+Option<T>, &Option<T>, &mut Option<T> => Option<&T>
+
+// as_mut:
+Option<T>, &mut Option<T> => Option<&mut T>
+&Option<T> !=> Option<&mut T>
+
+// take: take out ownership
+let n = p.take(); // n get p ownership then p => None
+```
+
 ### enum - match
 
 ```rust

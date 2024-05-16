@@ -113,6 +113,34 @@ fedora:~ # nmtui
 
 ### systemd-networkd
 
+```bash
+# package
+fedora:~ # dnf install systemd-networkd
+
+# service
+fedora:~ # systemctl disable NetworkManager
+fedora:~ # systemctl disable network
+
+fedora:~ # systemctl enable systemd-networkd
+fedora:~ # systemctl start systemd-networkd
+fedora:~ # systemctl status systemd-networkd
+
+fedora:~ # systemctl enable systemd-resolved
+fedora:~ # systemctl start systemd-resolved
+fedora:~ # rm -f /etc/resolv.conf
+fedora:~ # ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
+
+# config
+fedora:~ # ls /etc/systemd/network
+fedora:~ # ls /etc/systemd/networkd.conf
+
+# usage
+fedora:~ # networkctl list
+fedora:~ # networkctl status
+fedora:~ # networkctl up <device>
+fedora:~ # networkctl down <device>
+```
+
 ---
 
 ## desktop
@@ -151,10 +179,31 @@ fedora:~ # systemctl isolate graphical.target
 
 ## cli
 
+```bash
+# zsh
+fedora:~ # dnf install zsh
+
+# oh my zsh
+fedora:~ $ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fedora:~ $ ls ~/.oh-my-zsh/themes/
+fedora:~ $ ls $ZSH/plugins
+
+## config
+fedora:~ $ vi ~/.zshrc
+...
+plugins=(git)
+ZSH_THEME="robbyrussell"
+```
+
+---
+
 ## gui
 
+---
+
+## dev
+
 ```bash
-fedora:~ # dnf group install basic-desktop-environment
-fedora:~ # dnf group info basic-desktop-environment
-fedora:~ # dnf group install GNOME
+# git
+fedora:~ # dnf install git-core
 ```
