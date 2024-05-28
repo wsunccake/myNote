@@ -2,6 +2,26 @@
 
 ## Create/Add
 
+### [insert](https://www.mongodb.com/docs/manual/reference/method/db.collection.insert/)
+
+```sql
+> db.collection.insert(
+   <document or array of documents>,
+   {
+      writeConcern: <document>,
+      ordered: <boolean>
+   }
+)
+```
+
+`example`
+
+```sql
+> db.fruit.insert({_id: new ObjectId(), qty: NumberInt(5), money: 10})
+-- qty: int32
+-- money: real32
+```
+
 ### [insertOne](https://docs.mongodb.com/manual/reference/method/db.collection.insertOne/)
 
 ```sql
@@ -301,7 +321,7 @@
       {
         item: 1,
         price: 1,
-        "inventory_docs.description": 1 
+        "inventory_docs.description": 1
       }
   }
 ])
@@ -331,12 +351,11 @@
         }
       );
     }
-  ) 
+  )
 }
 
 > ff(1)
 ```
-
 
 ---
 
@@ -353,7 +372,6 @@
 ```
 
 #### [field update operators](https://docs.mongodb.com/manual/reference/operator/update-field/)
-
 
 ```sql
 {
@@ -400,7 +418,6 @@
 [$pop](https://docs.mongodb.com/manual/reference/operator/update/pop/)
 
 [$pull](https://docs.mongodb.com/manual/reference/operator/update/pull/)
-
 
 ---
 

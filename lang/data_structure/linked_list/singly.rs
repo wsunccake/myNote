@@ -37,6 +37,15 @@ impl<T> SinglyLinkedList<T> {
             current_node = next_node;
         }
 
+        // other
+        // let mut current_node = self.head.as_mut().unwrap();
+        // loop {
+        //     match current_node.next {
+        //         None => break,
+        //         Some(ref mut next_node) => current_node = next_node,
+        //     }
+        // }
+
         current_node.next = Some(new_node);
     }
 
