@@ -3,6 +3,7 @@
 ## install
 
 ```bash
+# install
 linux:~ $ curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
 linux:~ $ ls $HOME/.poetry/bin
 linux:~ $ export PATH="$HOME/.poetry/bin:$PATH"
@@ -10,8 +11,11 @@ linux:~ $ export PATH="$HOME/.poetry/bin:$PATH"
 # update profile / shrc
 linux:~ $ vi $HOME/.profile
 linux:~ $ vi $HOME/.zshrc
-```
 
+# uninstall
+linux:~ $ python get-poetry.py --uninstall
+linux:~ $ POETRY_UNINSTALL=1 python get-poetry.py
+```
 
 ---
 
@@ -47,7 +51,6 @@ linux:~/<project> $ poetry show
 linux:~/<project> $ poetry add <pcakage>
 linux:~/<project> $ poetry remove <package>
 ```
-
 
 ---
 
@@ -88,8 +91,13 @@ linux:~/poetry-demo $ poetry shell
 (.venv) poetry-demo $ poetry add pendulum@^2.0.5
 (.venv) poetry-demo $ poetry add "pendulum>=2.0.5"
 (.venv) poetry-demo $ poetry show
-```
 
+# env
+(.venv) poetry-demo $ poetry env info
+(.venv) poetry-demo $ poetry env list
+
+(.venv) poetry-demo $ poetry config --list
+```
 
 ---
 
