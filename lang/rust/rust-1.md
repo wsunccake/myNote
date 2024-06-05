@@ -19,6 +19,7 @@
   - [string literal](#string-literal)
   - [string object](#string-object)
   - [string method](#string-method)
+  - [string char](#string-char)
 - [operator](#operator)
   - [arithmetic operator](#arithmetic-operator)
   - [relational operator](#relational-operator)
@@ -52,6 +53,11 @@
   - [mutable reference](#mutable-reference)
   - [borrowing - rule](#borrowing---rule)
 - [slice](#slice)
+  - [range](#range)
+  - [array and vector](#array-and-vector)
+  - [out of range](#out-of-range)
+  - [mutable slice](#mutable-slice)
+  - [open-ended range and slice](#open-ended-range-and-slice)
 
 ---
 
@@ -70,6 +76,26 @@ fn main() {
     println!("company rating on 5 is:{}", rating_float);
     println!("company is growing :{}", is_growing_boolean);
     println!("company icon is:{}", icon_char);
+}
+```
+
+```rust
+fn print_type_of<T>(_: &T) {
+    println!("{}", std::any::type_name::<T>())
+}
+
+fn main() {
+    let s = "Hello";
+    let i = 42_i8;
+    let u = 42_u8;
+
+    print_type_of(&s); // &str
+    print_type_of(&i); // i8
+    print_type_of(&u); // u8
+    print_type_of(&vec![1, 2, 4]); // ::print_type_of<i32>
+    print_type_of(&main); // ::main
+    print_type_of(&print_type_of::<i32>); // ::print_type_of<i32>
+    print_type_of(&{ || "Hi!" }); // ::main::{{closure}}
 }
 ```
 
@@ -106,6 +132,27 @@ fn main() {
     println!("weight is {}", weight);
     println!("height is {}", height);
     println!("score is {}", score);
+}
+```
+
+```rust
+fn main() {
+    println!("usize MAX: {}, MIN: {}", usize::MAX, usize::MIN);
+    println!("u8 MAX: {}, MIN: {}", u8::MAX, u8::MIN);
+    println!("u16 MAX: {}, MIN: {}", u16::MAX, u16::MIN);
+    println!("u32 MAX: {}, MIN: {}", u32::MAX, u32::MIN);
+    println!("u64 MAX: {}, MIN: {}", u64::MAX, u64::MIN);
+    println!("u128 MAX: {}, MIN: {}", u128::MAX, u128::MIN);
+
+    println!("isize MAX: {}, MIN: {}", isize::MAX, isize::MIN);
+    println!("i8 MAX: {}, MIN: {}", i8::MAX, i8::MIN);
+    println!("i16 MAX: {}, MIN: {}", i16::MAX, i16::MIN);
+    println!("i32 MAX: {}, MIN: {}", i32::MAX, i32::MIN);
+    println!("i64 MAX: {}, MIN: {}", i64::MAX, i64::MIN);
+    println!("i128 MAX: {}, MIN: {}", i128::MAX, i128::MIN);
+
+    println!("f32 MAX: {}, MIN: {}", f32::MAX, f32::MIN);
+    println!("f64 MAX: {}, MIN: {}", f64::MAX, f64::MIN);
 }
 ```
 
@@ -241,6 +288,9 @@ String Literal(&str)
 String Object(String)
 ```
 
+- string literal, static string
+- string object, dynamic string
+
 ### string literal
 
 ```rust
@@ -252,15 +302,154 @@ fn main() {
 }
 ```
 
+```rust
+use std::mem::*;
+
+fn main() {
+    let a: &str = "";
+    let b: &str = "0123456789";
+    let c: &str = "abcdè";
+    println!(
+        "{:10} size: {:2}, {:2}, {:2}",
+        a,
+        size_of_val(a),
+        size_of_val(&a),
+        size_of_val(&&a)
+    );
+    println!(
+        "{:10} size: {:2}, {:2}, {:2}",
+        b,
+        size_of_val(b),
+        size_of_val(&b),
+        size_of_val(&&b)
+    );
+    println!(
+        "{:10} size: {:2}, {:2}, {:2}",
+        c,
+        size_of_val(c),
+        size_of_val(&c),
+        size_of_val(&&c)
+    );
+}
+```
+
 ### string object
 
 ```rust
+use std::mem::*;
+
 fn main() {
+    // empty string
     let empty_string = String::new();
     println!("length is {}", empty_string.len());
 
+    // content string
     let content_string = String::from("rust");
     println!("length is {}", content_string.len());
+
+    // change string
+    let mut change_string: String = "Xy".to_string();
+    println!("change_string: {}", change_string);
+    change_string.remove(0);
+    println!("change_string: {}", change_string);
+    change_string.insert(0, 'H');
+    println!("change_string: {}", change_string);
+    change_string.pop();
+    println!("change_string: {}", change_string);
+    change_string.push('i');
+    println!("change_string: {}", change_string);
+
+    // string capacity, length, size
+    let mut s1 = "".to_string();
+    s1.push('e');
+    let mut s2 = "".to_string();
+    s2.push('è');
+    let mut s3 = "".to_string();
+    s3.push('€');
+    println!(
+        "{}: cap: {}, len: {}, size: {}",
+        s1,
+        s1.capacity(),
+        s1.len(),
+        size_of_val(&s1)
+    );
+    println!(
+        "{}: cap: {}, len: {}, size: {}",
+        s2,
+        s2.capacity(),
+        s2.len(),
+        size_of_val(&s2)
+    );
+    println!(
+        "{}: cap: {}, len: {}, size: {}",
+        s3,
+        s3.capacity(),
+        s3.len(),
+        size_of_val(&s3)
+    );
+}
+```
+
+```rust
+fn main() {
+    // empty string
+    let s1 = String::new();
+    let s2 = String::from("");
+    let s3 = "".to_string();
+    let s4 = "".to_owned();
+    let s5 = format!("");
+    print!("({}{}{}{}{})", s1, s2, s3, s4, s5);
+
+    // content string
+    let s = "a,";
+    let s1 = String::from(s);
+    let s2 = s.to_string();
+    let s3 = s.to_owned();
+    //let s4 = format!(s);
+    //let s5 = format!("a,{}");
+    let s6 = format!("{}", s);
+    print!("({}{}{}{})", s1, s2, s3, s6);
+
+    // concatenate string
+    let ss1 = "He";
+    let ss2 = "llo ";
+    let ds1 = ss1.to_string();
+    let ds2 = ss2.to_string();
+    let ds3 = format!("{}{}", ss1, ss2);
+    println!("{}", ds3);
+    let ds3 = format!("{}{}", ss1, ds2);
+    println!("{}", ds3);
+    let ds3 = format!("{}{}", ds1, ss2);
+    println!("{}", ds3);
+    let ds3 = format!("{}{}", ds1, ds2);
+    println!("{}", ds3);
+
+    let mut dyn_str = "Hello".to_string();
+    dyn_str = format!("{}{}", dyn_str, ", ");
+    dyn_str = format!("{}{}", dyn_str, "world");
+    dyn_str = format!("{}{}", dyn_str, "!");
+    println!("{}", dyn_str);
+
+    let mut dyn_str = "Hello".to_string();
+    dyn_str.push_str(", ");
+    dyn_str.push_str("world");
+    dyn_str.push_str("!");
+    println!("{}", dyn_str);
+
+    let mut dyn_str = "Hello".to_string();
+    dyn_str += ", ";
+    dyn_str += "world";
+    dyn_str += "!";
+    println!("{}", dyn_str);
+
+    let comma = ", ".to_string();
+    let world = "world".to_string();
+    let excl_point = '!';
+    let mut dyn_str = "Hello".to_string();
+    dyn_str += &comma;
+    dyn_str.push_str(&world);
+    dyn_str.push(excl_point);
+    println!("{}", dyn_str);
 }
 ```
 
@@ -349,6 +538,35 @@ fn main() {
     // literal - trim
     let s8 = " c c++ go rust \r\n";
     println!("s8:--{}--!", s8.trim());
+}
+```
+
+### string char
+
+```rust
+fn main() {
+    let s = "abc012è€";
+    println!("{}", s);
+    let r = std::str::from_utf8(&[0xe2, 0x82, 0xac]).unwrap();
+    println!("{}", r);
+
+    println!("*** len ***");
+    for i in 0..s.len() {
+        let u = s.as_bytes()[i];
+        let b = s.bytes().nth(i).unwrap_or_default();
+        let c = s.chars().nth(i).unwrap_or_default();
+        println!("{:2} -> {:4}, {:#02x} => {:4} => {:4}", i, u, u, b, c);
+    }
+
+    println!("*** byte ***");
+    for b in s.bytes() {
+        println!("{:<4} , {:<#8x} -> {:4}", b, b, b as char);
+    }
+
+    println!("*** char ***");
+    for c in s.chars() {
+        println!("{:4} -> {:>6}, {:<#8x}", c, c as u32, c as u32);
+    }
 }
 ```
 
@@ -811,6 +1029,21 @@ fn update(arr: &mut [i32; 3]) {
 }
 ```
 
+```rust
+fn main() {
+    let mut arr = [10, 20, 30];
+    update(&mut arr);
+    print!("Inside main {:?}", arr);
+}
+
+fn update(arr: &mut [i32]) {
+    for i in 0..arr.len() {
+        arr[i] = 0;
+    }
+    println!("Inside update {:?}", arr);
+}
+```
+
 ### array - declare with constant
 
 ```rust
@@ -1090,5 +1323,117 @@ fn main() {
     let s6 = &s[..];
     println!("s5: {}", s5);
     println!("s6: {}", s6);
+}
+```
+
+### range
+
+```rust
+use std::mem::*;
+
+fn main() {
+    let r1 = 3u8..12u8;
+    let r2 = 3u8..12;
+    let r3 = 3..12u8;
+    let r4 = 3..12;
+    let r5 = -3..12;
+    let r6 = 3..12 as i64;
+    println!("{:?} -> {}", r1, size_of_val(&r1),);
+    println!("{:?} -> {}", r2, size_of_val(&r2),);
+    println!("{:?} -> {}", r3, size_of_val(&r3),);
+    println!("{:?} -> {}", r4, size_of_val(&r4),);
+    println!("{:?} -> {}", r5, size_of_val(&r5),);
+    println!("{:?} -> {}", r6, size_of_val(&r6),);
+}
+```
+
+```rust
+fn min(arr: &[i32]) -> i32 {
+    // assume arr is not empty.
+    let mut minimum = arr[0];
+    for i in 1..arr.len() {
+        if arr[i] < minimum {
+            minimum = arr[i];
+        }
+    }
+    minimum
+}
+
+fn main() {
+    println!("{} ", min(&[23, 17, 12, 16, 15, 2][2..5]));
+
+    let arr = [23, 17, 12, 16, 15, 2];
+    let range = 2..5;
+    let slice_ref = &arr[range];
+    println!("{}", min(slice_ref));
+}
+```
+
+### array and vector
+
+```rust
+fn main() {
+    let arr = [55, 22, 33, 44, 66, 7, 8];
+    let v = vec![55, 22, 33, 44, 66, 7, 8];
+    let sr1 = &arr[2..5];
+    let sr2 = &v[2..5];
+    println!("{:?} {:?} {:?} {:?}", arr, sr1, &sr1[1..2], &sr1[1]);
+    println!("{:?} {:?} {:?} {:?}", v, sr2, &sr2[1..2], &sr2[1]);
+}
+```
+
+### out of range
+
+```rust
+fn main() {
+    let arr = [55, 22, 33, 44, 66];
+    let _r1 = 4..4;
+    let _a1 = &arr[_r1];
+    let _r2 = 4..3;
+    //let _a2 = &arr[_r2];
+    let _r3 = -3i32..2;
+    //let _a3 = &arr[_r3];
+    let _r4 = 3..8;
+    //let _a4 = &arr[_r4];
+}
+```
+
+### mutable slice
+
+```rust
+fn main() {
+    let mut arr = [11, 22, 33, 44];
+    println!("arr: {:?}", arr);
+    {
+        let sl_ref = &mut arr[1..3];
+        println!("sl_ref: {:?}", sl_ref);
+        sl_ref[1] = 0;
+        println!("sl_ref: {:?}", sl_ref);
+    }
+    println!("arr: {:?}", arr);
+}
+```
+
+### open-ended range and slice
+
+```rust
+fn main() {
+    let arr = [11, 22, 33, 44];
+    println!("arr: {:?}", arr);
+    let n = 2;
+
+    let sr1a = &arr[0..n];
+    let sr2a = &arr[n..arr.len()];
+    println!("sr1a: {:?}", sr1a,);
+    println!("sr2a: {:?}", sr2a,);
+
+    let sr1b = &arr[..n];
+    let sr2b = &arr[n..];
+    println!("sr1b: {:?}", sr1b,);
+    println!("sr2b: {:?}", sr2b,);
+
+    let range = ..;
+    let sr0 = &arr[range];
+    println!("sr0: {:?}", sr0,);
 }
 ```

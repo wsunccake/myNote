@@ -1,4 +1,4 @@
-# rust - oop
+# rust - oop / object-oriented programming
 
 ---
 
@@ -14,6 +14,14 @@
   - [enum - match](#enum---match)
   - [enum - match with option](#enum---match-with-option)
   - [enum - match with data type](#enum---match-with-data-type)
+- [allocate memory](#allocate-memory)
+  - [memory allocation](#memory-allocation)
+  - [static allocation](#static-allocation)
+  - [stack allocation](#stack-allocation)
+  - [heap allocation](#heap-allocation)
+  - [box](#box)
+  - [data representation](#data-representation)
+  - [data size](#data-size)
 - [module](#module)
   - [mod](#mod)
   - [use](#use)
@@ -379,6 +387,270 @@ fn main() {
             println!("{}", val);
         }
     }
+}
+```
+
+---
+
+## allocate memory
+
+### memory allocation
+
+- In processor register
+- Static
+- In the stack
+- In the heap
+
+### static allocation
+
+```rust
+fn main() {
+    static _V: i32 = 3;
+    let _v = 3;
+
+    // 1. static use static allocation
+    //    let use stack allocation
+    // 2. static requires the explicit specification of the type of the variable
+    //    optional using let
+    // 3. normal code cannot change the value of a static variable
+    //    even if it has the mut specification
+    //    for safety reason, in Rust static variables are normally immutable
+}
+```
+
+### stack allocation
+
+```rust
+const SIZE: usize = 100_000;
+const N_ARRAY: usize = 1_000_000;
+
+fn create_array() -> [u8; SIZE] {
+    [0u8; SIZE]
+}
+
+fn recursive_func(n: usize) {
+    let a = create_array();
+    println!("{} {}", N_ARRAY - n + 1, a[0]);
+    if n > 1 {
+        recursive_func(n - 1)
+    }
+}
+
+fn main() {
+    let v = N_ARRAY;
+    recursive_func(v);
+}
+```
+
+### heap allocation
+
+```rust
+const SIZE: usize = 100_000;
+const N_ARRAY: usize = 1_000_000;
+fn create_array() -> Box<[u8; SIZE]> {
+    Box::new([0u8; SIZE])
+}
+fn recursive_func(n: usize) {
+    let a = create_array();
+    println!("{} {}", N_ARRAY - n + 1, a[0]);
+    if n > 1 {
+        recursive_func(n - 1)
+    }
+}
+
+fn main() {
+    let v = N_ARRAY;
+    recursive_func(v);
+}
+```
+
+### box
+
+```rust
+fn f(p: &f64) {
+    let a = Box::new(*p);
+    {
+        let b = Box::new([1, 2, 3]);
+        println!("{} {:?}", *a, *b);
+    }
+    let c = Box::new(true);
+    println!("{} {}", a, c);
+}
+
+fn main() {
+    f(&3.14);
+}
+```
+
+```rust
+fn main() {
+    let a = 7;
+    let a_box: Box<i32>;
+    let mut a_ref: &i32 = &a;
+
+    println!(
+        "value   =>  a: {:16}, *a_ref: {:16}, a_ref: {:16}",
+        a, *a_ref, a_ref
+    );
+    println!(
+        "address => &a: {:16p}, &a_ref: {:16p}, a_ref: {:16p}",
+        &a, &a_ref, a_ref
+    );
+
+    a_box = Box::new(a + 2);
+    a_ref = &*a_box;
+    println!(
+        "address => &a: {:16p},  a_ref: {:16p}, a_box: {:16p}",
+        &a, a_ref, a_box
+    );
+}
+```
+
+```rust
+fn main() {
+    let a = 7;
+    let mut a_box: Box<i32>;
+    let a_ref: &i32 = &a;
+
+    println!("{} {}", a, a_ref);
+    a_box = Box::new(a + 2);
+    println!(
+        "value   =>  a: {:16}, a_ref: {:16}, a_box: {:16}",
+        a, a_ref, a_box
+    );
+    println!(
+        "address => &a: {:16p}, a_ref: {:16p}, a_box: {:16p}",
+        &a, a_ref, a_box
+    );
+
+    a_box = Box::new(*a_ref + 4);
+    println!(
+        "value   =>  a: {:16}, a_ref: {:16}, a_box: {:16}",
+        a, a_ref, a_box
+    );
+    println!(
+        "address => &a: {:16p}, a_ref: {:16p}, a_box: {:16p}",
+        &a, a_ref, a_box
+    );
+}
+```
+
+### data representation
+
+```rust
+use std::mem::size_of;
+use std::slice::from_raw_parts;
+
+fn as_bytes<T>(o: &T) -> &[u8] {
+    unsafe { from_raw_parts(o as *const _ as *const u8, size_of::<T>()) }
+}
+fn main() {
+    println!("{:?}", as_bytes(&1i8));
+    println!("{:?}", as_bytes(&2i16)); // little endian => [2, 0], big endian => [0, 2]
+    println!("{:?}", as_bytes(&3i32));
+    println!("{:?}", as_bytes(&(4i64 + 5 * 256 + 6 * 256 * 256)));
+    println!("{:?}", as_bytes(&'A'));
+    println!("{:?}", as_bytes(&true));
+    println!("{:?}", as_bytes(&&1i8));
+}
+```
+
+```rust
+fn main() {
+    let b1 = true;
+    let b2 = true;
+    let b3 = false;
+    println!("&b1 address: {}", &b1 as *const bool as usize);
+    println!("&b2 address: {}", &b2 as *const bool as usize);
+    println!("&b3 address: {}", &b3 as *const bool as usize);
+}
+```
+
+### data size
+
+```rust
+use std::mem::size_of;
+use std::mem::size_of_val;
+
+fn main() {
+    println!("bool: {} byte", size_of::<bool>());
+    println!("char: {} byte", size_of::<char>());
+
+    println!("u8  : {} byte", size_of::<u8>());
+    println!("u16 : {} byte", size_of::<u16>());
+    println!("u32 : {} byte", size_of::<u32>());
+    println!("u64 : {} byte", size_of::<u64>());
+    println!("u128: {} byte", size_of::<u128>());
+
+    println!("i8  : {} byte", size_of::<i8>());
+    println!("i16 : {} byte", size_of::<i16>());
+    println!("i32 : {} byte", size_of::<i32>());
+    println!("i64 : {} byte", size_of::<i64>());
+    println!("i128: {} byte", size_of::<i128>());
+
+    println!("f32 : {} byte", size_of::<f32>());
+    println!("f64 : {} byte", size_of::<f64>());
+
+    println!("&12 : {} byte", size_of_val(&12));
+    let v = 4_i32;
+    println!("let v = 4_i32;");
+    println!("&v  :  {} byte", size_of_val(&v));
+}
+```
+
+```rust
+use std::mem::*;
+
+enum E1 {
+    E1a,
+    E1b,
+}
+enum E2 {
+    E2a,
+    E2b(f64),
+}
+
+struct S1 {
+    a: i8,
+}
+
+struct S2 {
+    a: i8,
+    b: i32,
+}
+
+fn main() {
+    println!("&0i16                  : {} byte", size_of_val(&0i16));
+    println!("&0i64                  : {} byte", size_of_val(&0i64));
+
+    println!("&[0i16; 1]             : {} byte", size_of_val(&[0i16; 1]));
+    println!("&[0i16; 10]            : {} byte", size_of_val(&[0i16; 10]));
+
+    println!(
+        "&(0i16, 0i64)          : {} byte",
+        size_of_val(&(0i16, 0i64))
+    );
+    println!(
+        "&[(0i16, 0i64); 10]    : {} byte",
+        size_of_val(&[(0i16, 0i64); 10])
+    );
+
+    println!("&E1::E1a               : {} byte", size_of_val(&E1::E1a));
+    println!("&E2::E2a               : {} byte", size_of_val(&E2::E2a));
+
+    println!(
+        "&S1                    : {} byte",
+        size_of_val(&S1 { a: 1 })
+    );
+    println!(
+        "&S2                    : {} byte",
+        size_of_val(&S2 { a: 1, b: 2 })
+    );
+
+    println!(
+        "&vec![(0i16, 0i64); 10]: {} byte",
+        size_of_val(&vec![(0i16, 0i64); 10])
+    );
 }
 ```
 
