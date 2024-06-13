@@ -180,6 +180,9 @@ fedora:~ # systemctl isolate graphical.target
 ## cli
 
 ```bash
+# tmux
+fedora:~ # dnf install tmux
+
 # zsh
 fedora:~ # dnf install zsh
 
@@ -191,7 +194,7 @@ fedora:~ $ ls $ZSH/plugins
 ## config
 fedora:~ $ vi ~/.zshrc
 ...
-plugins=(git)
+plugins=(git tmux)
 ZSH_THEME="robbyrussell"
 ```
 

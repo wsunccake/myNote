@@ -19,10 +19,13 @@
   - [generic - struct - method](#generic---struct---method)
   - [generic - function](#generic---function)
 - [trait](#trait)
-  - [trait - struct](#trait---struct)
-  - [trait - function](#trait---function)
-  - [trait - where](#trait---where)
-  - [trait - default method](#trait---default-method)
+  - [evaluate](#evaluate)
+  - [method](#method)
+  - [self](#self)
+  - [standard trait](#standard-trait)
+  - [type](#type)
+  - [generic trait](#generic-trait)
+  - [iterator trait](#iterator-trait)
 
 ---
 
@@ -232,6 +235,180 @@ fn main() {
 
 ---
 
+## input and output
+
+### command-line argument
+
+```rust
+fn main() {
+    let command_line: std::env::Args = std::env::args();
+    for argument in command_line {
+        println!("[{}]", argument);
+    }
+}
+```
+
+```bash
+linux:~/proj $ cargo run abx XYZ
+```
+
+### process return code
+
+```rust
+fn main() {
+    std::process::exit(107);
+}
+```
+
+```bash
+linux:~ $ ./main
+linux:~ $ echo $?
+```
+
+### environment variable
+
+```rust
+fn main() {
+    for var in std::env::vars() {
+        println!("[{}]=[{}]", var.0, var.1);
+    }
+
+    println!(
+        "{}",
+        if std::env::var("HOME").is_ok() {
+            "Already defined"
+        } else {
+            "Undefined"
+        }
+    );
+
+    std::env::set_var("XYZ", "This is the value");
+    println!(
+        ", {}.",
+        match std::env::var("XYZ") {
+            Ok(value) => value,
+            Err(err) => format!("Still undefined: {}", err),
+        }
+    );
+}
+```
+
+### read from onsole
+
+```rust
+fn main() {
+    let mut line = String::new();
+    println!("{:?}", std::io::stdin().read_line(&mut line));
+    println!("[{}]", line);
+}
+```
+
+```rust
+fn main() {
+    let mut text = format!("First: ");
+    let inp = std::io::stdin();
+    inp.read_line(&mut text).unwrap();
+    text.push_str("Second: ");
+    inp.read_line(&mut text).unwrap();
+    println!("{}: {} bytes", text, text.len());
+}
+```
+
+### writing to console
+
+```rust
+use std::io::Write;
+
+fn main() {
+    //ILLEGAL: std::io::stdout().write("Hi").unwrap();
+    //ILLEGAL: std::io::stdout().write(String::from("Hi")).unwrap();
+    std::io::stdout().write("Hello ".as_bytes()).unwrap();
+    std::io::stdout()
+        .write(String::from("world").as_bytes())
+        .unwrap();
+}
+```
+
+### convert value to string
+
+```rust
+fn main() {
+    let int_str: String = 45.to_string();
+    let float_str: String = 4.5.to_string();
+    let bool_str: String = true.to_string();
+    println!("{} {} {}", int_str, float_str, bool_str);
+}
+```
+
+### file input / output
+
+```rust
+use std::io::Read;
+use std::io::Write;
+
+fn main() {
+    let mut file = std::fs::File::create("data.txt").unwrap();
+    file.write_all("eè€".as_bytes()).unwrap();
+
+    let mut file = std::fs::File::open("data.txt").unwrap();
+    let mut contents = String::new();
+    file.read_to_string(&mut contents).unwrap();
+    println!("{}", contents);
+}
+```
+
+```rust
+use std::io::Read;
+use std::io::Write;
+
+fn main() {
+    let mut command_line: std::env::Args = std::env::args();
+    command_line.next().unwrap();
+    let source = command_line.next().unwrap();
+    let destination = command_line.next().unwrap();
+    let mut file_in = std::fs::File::open(source).unwrap();
+    let mut file_out = std::fs::File::create(destination).unwrap();
+    let mut buffer = [0u8; 4096];
+    loop {
+        let nbytes = file_in.read(&mut buffer).unwrap();
+        file_out.write(&buffer[..nbytes]).unwrap();
+        if nbytes < buffer.len() {
+            break;
+        }
+    }
+}
+```
+
+### text file
+
+```rust
+fn main() {
+    let mut command_line = std::env::args();
+    command_line.next();
+    let pathname = command_line.next().unwrap();
+    let counts = count_lines(&pathname).unwrap();
+    println!("file: {}", pathname);
+    println!("n. of lines: {}", counts.0);
+    println!("n. of empty lines: {}", counts.1);
+    fn count_lines(pathname: &str) -> Result<(u32, u32), std::io::Error> {
+        use std::io::BufRead;
+        let f = std::fs::File::open(pathname)?;
+        let f = std::io::BufReader::new(f);
+        let mut n_lines = 0;
+        let mut n_empty_lines = 0;
+        for line in f.lines() {
+            n_lines += 1;
+            if line?.trim().len() == 0 {
+                n_empty_lines += 1;
+            }
+        }
+        Ok((n_lines, n_empty_lines))
+    }
+}
+```
+
+---
+
 ## error handle
 
 ### panic
@@ -243,7 +420,7 @@ fn main() {
 }
 ```
 
-```rs
+```rust
 fn my_panic() {
     println!("Error");
     panic!();
@@ -360,6 +537,126 @@ fn main() {
 }
 ```
 
+### run time
+
+```rust
+fn f1(x: i32) -> Result<i32, String> {
+    if x == 1 {
+        Err(format!("Err. 1"))
+    } else {
+        Ok(x)
+    }
+}
+
+fn f2(x: i32) -> Result<i32, String> {
+    if x == 2 {
+        Err(format!("Err. 2"))
+    } else {
+        Ok(x)
+    }
+}
+
+fn f3(x: i32) -> Result<i32, String> {
+    if x == 3 {
+        Err(format!("Err. 3"))
+    } else {
+        Ok(x)
+    }
+}
+
+fn f4(x: i32) -> Result<i32, String> {
+    if x == 4 {
+        Err(format!("Err. 4"))
+    } else {
+        Ok(x)
+    }
+}
+
+fn f(x: i32) -> Result<i32, String> {
+    match f1(x) {
+        Ok(result) => match f2(result) {
+            Ok(result) => match f3(result) {
+                Ok(result) => f4(result),
+                Err(err_msg) => Err(err_msg),
+            },
+            Err(err_msg) => Err(err_msg),
+        },
+        Err(err_msg) => Err(err_msg),
+    }
+}
+
+// refactor f()
+fn g(x: i32) -> Result<i32, String> {
+    let result1 = f1(x);
+    if result1.is_err() {
+        return result1;
+    }
+    let result2 = f2(result1.unwrap());
+    if result2.is_err() {
+        return result2;
+    }
+    let result3 = f3(result2.unwrap());
+    if result3.is_err() {
+        return result3;
+    }
+    f4(result3.unwrap())
+}
+
+// refactor f()
+fn h(x: i32) -> Result<i32, String> {
+    f4(f3(f2(f1(x)?)?)?)
+}
+// e? (e is generic type Result<T, E>)
+// => match e { Some(v) => v, _ => return e }
+
+fn main() {
+    match f(2) {
+        Ok(y) => println!("{}", y),
+        Err(e) => println!("Error: {}", e),
+    }
+
+    match f(4) {
+        Ok(y) => println!("{}", y),
+        Err(e) => println!("Error: {}", e),
+    }
+
+    match f(5) {
+        Ok(y) => println!("{}", y),
+        Err(e) => println!("Error: {}", e),
+    }
+
+    match g(2) {
+        Ok(y) => println!("{}", y),
+        Err(e) => println!("Error: {}", e),
+    }
+
+    match g(4) {
+        Ok(y) => println!("{}", y),
+        Err(e) => println!("Error: {}", e),
+    }
+
+    match g(5) {
+        Ok(y) => println!("{}", y),
+        Err(e) => println!("Error: {}", e),
+    }
+
+    match h(2) {
+        Ok(y) => println!("{}", y),
+        Err(e) => println!("Error: {}", e),
+    }
+
+    match h(4) {
+        Ok(y) => println!("{}", y),
+        Err(e) => println!("Error: {}", e),
+    }
+
+    match h(5) {
+        Ok(y) => println!("{}", y),
+        Err(e) => println!("Error: {}", e),
+    }
+}
+```
+
 ---
 
 ## generic
@@ -437,192 +734,623 @@ fn main() {
 
 ## trait
 
-### trait - struct
+### evaluate
 
 ```rust
-struct Triangle {
-    base: f64,
-    height: f64,
+fn quartic_root_f64(x: f64) -> f64 {
+    x.sqrt().sqrt()
 }
-trait HasArea {
-    fn area(&self) -> f64;
+fn quartic_root_f32(x: f32) -> f32 {
+    x.sqrt().sqrt()
 }
 
-impl HasArea for Triangle {
-    fn area(&self) -> f64 {
-        0.5 * (self.base * self.height)
-    }
-}
 fn main() {
-    let a = Triangle {
-        base: 10.5,
-        height: 17.4,
-    };
-    let triangle_area = a.area();
-    println!("area: {}", triangle_area);
+    println!("quartic_root_f64: {}", quartic_root_f64(100f64),);
+    println!("quartic_root_f32: {}", quartic_root_f32(100f32),);
 }
 ```
 
-### trait - function
+=>
 
 ```rust
-trait HasArea {
-    fn area(&self) -> f64;
-}
-struct Triangle {
-    base: f64,
-    height: f64,
+fn quartic_root<Number>(x: Number) -> Number {
+    x.sqrt().sqrt() // method not found in `Number`
 }
 
-impl HasArea for Triangle {
-    fn area(&self) -> f64 {
-        0.5 * (self.base * self.height)
+fn main() {
+    // fail to run
+    println!("quartic_root f64: {}", quartic_root(100f64),);
+    println!("quartic_root f32: {}", quartic_root(100f32));
+}
+```
+
+=>
+
+```rust
+trait HasSquareRoot {
+    fn sq_root(self) -> Self;
+}
+
+impl HasSquareRoot for f32 {
+    fn sq_root(self) -> Self {
+        f32::sqrt(self)
     }
 }
-struct Square {
-    side: f64,
+impl HasSquareRoot for f64 {
+    fn sq_root(self) -> Self {
+        f64::sqrt(self)
+    }
+}
+fn quartic_root<Number>(x: Number) -> Number
+where
+    Number: HasSquareRoot,
+{
+    x.sq_root().sq_root()
 }
 
-impl HasArea for Square {
-    fn area(&self) -> f64 {
-        self.side * self.side
+fn main() {
+    println!("quartic_root f64: {}", quartic_root(100f64),);
+    println!("quartic_root f32: {}", quartic_root(100f32));
+}
+```
+
+=>
+
+```rust
+fn sqrt() {}
+
+trait HasSquareRoot {
+    fn sqrt(self) -> Self;
+}
+
+impl HasSquareRoot for f32 {
+    fn sqrt(self) -> Self {
+        f32::sqrt(self)
     }
 }
 
-// fn area<T>(item: T) {
-//     println!("area: {}", item.area());
+impl HasSquareRoot for f64 {
+    fn sqrt(self) -> Self {
+        f64::sqrt(self)
+    }
+}
+fn quartic_root<Number>(x: Number) -> Number
+where
+    Number: HasSquareRoot,
+{
+    x.sqrt().sqrt()
+}
+
+fn main() {
+    sqrt();
+    println!("quartic_root f64: {}", quartic_root(100f64),);
+    println!("quartic_root f32: {}", quartic_root(100f32));
+}
+```
+
+=>
+
+```rust
+trait HasSqrtAndAbs {
+    fn sqrt(self) -> Self;
+    fn abs(self) -> Self;
+}
+
+impl HasSqrtAndAbs for f32 {
+    fn sqrt(self) -> Self {
+        f32::sqrt(self)
+    }
+    fn abs(self) -> Self {
+        f32::abs(self)
+    }
+}
+
+impl HasSqrtAndAbs for f64 {
+    fn sqrt(self) -> Self {
+        f64::sqrt(self)
+    }
+    fn abs(self) -> Self {
+        f64::abs(self)
+    }
+}
+fn abs_quartic_root<Number>(x: Number) -> Number
+where
+    Number: HasSqrtAndAbs,
+{
+    x.abs().sqrt().sqrt()
+}
+
+fn main() {
+    println!("abs_quartic_root f64: {}", abs_quartic_root(100f64),);
+    println!("abs_quartic_root f32: {}", abs_quartic_root(100f32));
+}
+```
+
+=>
+
+```rust
+trait HasSquareRoot {
+    fn sqrt(self) -> Self;
+}
+
+impl HasSquareRoot for f32 {
+    fn sqrt(self) -> Self {
+        f32::sqrt(self)
+    }
+}
+
+impl HasSquareRoot for f64 {
+    fn sqrt(self) -> Self {
+        f64::sqrt(self)
+    }
+}
+
+trait HasAbsoluteValue {
+    fn abs(self) -> Self;
+}
+
+impl HasAbsoluteValue for f32 {
+    fn abs(self) -> Self {
+        f32::abs(self)
+    }
+}
+
+impl HasAbsoluteValue for f64 {
+    fn abs(self) -> Self {
+        f64::abs(self)
+    }
+}
+
+fn abs_quartic_root<Number>(x: Number) -> Number
+where
+    Number: HasSquareRoot + HasAbsoluteValue,
+{
+    x.abs().sqrt().sqrt()
+}
+
+fn main() {
+    println!("abs_quartic_root f64: {}", abs_quartic_root(100f64),);
+    println!("abs_quartic_root f32: {}", abs_quartic_root(100f32));
+}
+```
+
+### method
+
+```rust
+fn main() {
+    println!("*** run with method ***");
+    println!("{},", "abcd".to_string());
+    println!("{},", [1, 2, 3].len());
+    let mut v1 = vec![0u8; 0];
+    v1.push(7u8);
+    println!("{:?}; ", v1);
+
+    println!("*** run with function ***");
+    println!("{},", std::string::ToString::to_string("abcd"));
+    println!("{:?},", <[i32]>::len(&[1, 2, 3]));
+    let mut v2 = vec![0u8; 0];
+    Vec::push(&mut v2, 7u8);
+    println!("{:?}", v2);
+}
+```
+
+```rust
+fn double(x: i32) -> i32 {
+    x * 2
+}
+
+trait CanBeDoubled {
+    fn double(self) -> Self;
+}
+
+impl CanBeDoubled for i32 {
+    fn double(self) -> Self {
+        self * 2
+    }
+}
+
+fn main() {
+    println!("doube(7i32): {}", double(7i32));
+
+    println!("7i32.doube(): {}", 7i32.double());
+}
+```
+
+### self
+
+```rust
+// same
+fn double(self) -> Self { }
+fn double(self: Self) -> Self { }
+fn double(self: i32) -> Self { }
+fn double(self) -> i32 { }
+fn double(self: Self) -> i32 { }
+fn double(self: i32) -> i32 { }
+```
+
+```rust
+trait LettersCount {
+    fn letters_count(&self, ch: char) -> usize;
+}
+impl LettersCount for str {
+    fn letters_count(&self, ch: char) -> usize {
+        let mut count = 0;
+        for c in self.chars() {
+            if c == ch {
+                count += 1;
+            }
+        }
+        count
+
+        // self.chars().filter(|c| *c == ch).count()
+    }
+}
+
+fn main() {
+    println!("{} ", "".letters_count('a'));
+    println!("{} ", "ddd".letters_count('a'));
+    println!("{} ", "ddd".letters_count('d'));
+    println!("{} ", "foobarbaz".letters_count('a'));
+}
+```
+
+### standard trait
+
+```rust
+struct Complex {
+    re: f64,
+    im: f64,
+}
+impl std::fmt::Display for Complex {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(
+            f,
+            "{} {} {}i",
+            self.re,
+            if self.im >= 0. { '+' } else { '-' },
+            self.im.abs()
+        )
+    }
+}
+
+fn main() {
+    let c1 = Complex { re: -2.3, im: 0. };
+    let c2 = Complex { re: -2.1, im: -5.2 };
+    let c3 = Complex { re: -2.2, im: 5.2 };
+    println!("{}", c1);
+    println!("{}", c2);
+    println!("{}", c3);
+}
+```
+
+### type
+
+```rust
+fn f1(x: f32) -> f32 {
+    x
+}
+fn f2(x: f32) -> f32 {
+    x
+}
+fn main() {
+    let a: f32 = 2.3;
+    let b: f32 = 3.4;
+    println!("{} {}", f1(a), f2(b));
+}
+```
+
+=>
+
+```rust
+type Number = f32;
+fn f1(x: Number) -> Number {
+    x
+}
+fn f2(x: Number) -> Number {
+    x
+}
+
+fn main() {
+    let a: f32 = 2.3;
+    let b: f32 = 3.4;
+    println!("{} {}", f1(a), f2(b));
+}
+```
+
+```rust
+fn main() {
+    type Number = f32;
+    let a: Number = 2.3;
+    let _b: f32 = a;
+}
+```
+
+### generic trait
+
+```rust
+trait Searchable<Key> {
+    fn contains(&self, key: Key) -> bool;
+}
+struct RecordWithId {
+    id: u32,
+    _descr: String,
+}
+struct NameSetWithId {
+    data: Vec<RecordWithId>,
+}
+
+impl Searchable<u32> for NameSetWithId {
+    fn contains(&self, key: u32) -> bool {
+        for record in self.data.iter() {
+            if record.id == key {
+                return true;
+            }
+        }
+        false
+    }
+}
+
+fn is_present<Collection>(coll: &Collection, id: u32) -> bool
+where
+    Collection: Searchable<u32>,
+{
+    coll.contains(id)
+}
+
+fn main() {
+    let names = NameSetWithId {
+        data: vec![
+            RecordWithId {
+                id: 34,
+                _descr: "John".to_string(),
+            },
+            RecordWithId {
+                id: 49,
+                _descr: "Jane".to_string(),
+            },
+        ],
+    };
+    println!("{}", is_present(&names, 48),);
+    println!("{}", is_present(&names, 49),);
+}
+```
+
+=>
+
+```rust
+trait Searchable<Key, Count> {
+    fn contains(&self, key: Key) -> bool;
+    fn count(&self, key: Key) -> Count;
+}
+struct RecordWithId {
+    id: u32,
+    _descr: String,
+}
+struct NameSetWithId {
+    data: Vec<RecordWithId>,
+}
+
+impl Searchable<u32, usize> for NameSetWithId {
+    fn contains(&self, key: u32) -> bool {
+        for record in self.data.iter() {
+            if record.id == key {
+                return true;
+            }
+        }
+        false
+    }
+    fn count(&self, key: u32) -> usize {
+        let mut c = 0;
+        for record in self.data.iter() {
+            if record.id == key {
+                c += 1;
+            }
+        }
+        c
+    }
+}
+
+fn is_present<Collection>(coll: &Collection, id: u32) -> bool
+where
+    Collection: Searchable<u32, usize>,
+{
+    coll.contains(id)
+}
+
+fn main() {
+    let names = NameSetWithId {
+        data: vec![
+            RecordWithId {
+                id: 34,
+                _descr: "John".to_string(),
+            },
+            RecordWithId {
+                id: 49,
+                _descr: "Jane".to_string(),
+            },
+        ],
+    };
+    println!("{}, {}", names.count(48), is_present(&names, 48),);
+    println!("{}, {}", names.count(49), is_present(&names, 49),);
+}
+```
+
+=>
+
+```rust
+trait Searchable {
+    type Key;
+    type Count;
+    fn contains(&self, key: Self::Key) -> bool;
+    fn count(&self, key: Self::Key) -> Self::Count;
+}
+struct RecordWithId {
+    id: u32,
+    _descr: String,
+}
+struct NameSetWithId {
+    data: Vec<RecordWithId>,
+}
+
+impl Searchable for NameSetWithId {
+    type Key = u32;
+    type Count = usize;
+
+    fn contains(&self, key: Self::Key) -> bool {
+        for record in self.data.iter() {
+            if record.id == key {
+                return true;
+            }
+        }
+        false
+    }
+
+    fn count(&self, key: Self::Key) -> usize {
+        let mut c = 0;
+        for record in self.data.iter() {
+            if record.id == key {
+                c += 1;
+            }
+        }
+        c
+    }
+}
+
+fn is_present<Collection>(coll: &Collection, id: <Collection as Searchable>::Key) -> bool
+where
+    Collection: Searchable,
+{
+    coll.contains(id)
+}
+
+fn main() {
+    let names = NameSetWithId {
+        data: vec![
+            RecordWithId {
+                id: 34,
+                _descr: "John".to_string(),
+            },
+            RecordWithId {
+                id: 49,
+                _descr: "Jane".to_string(),
+            },
+        ],
+    };
+
+    println!("{}, {}", names.count(48), is_present(&names, 48),);
+    println!("{}, {}", names.count(49), is_present(&names, 49),);
+}
+```
+
+### iterator trait
+
+```rust
+fn get_third_for_range() {
+    println!("*** for rnage ***");
+    fn get_third(r: std::ops::Range<u32>) -> Option<u32> {
+        if r.len() >= 3 {
+            Some(r.start + 2)
+        } else {
+            None
+        }
+    }
+    println!("{:?} {:?}", get_third(10..12), get_third(20..23));
+}
+
+fn get_third_for_slice() {
+    println!("*** for slice ***");
+
+    fn get_third(s: &[f64]) -> Option<f64> {
+        if s.len() >= 3 {
+            Some(s[2])
+        } else {
+            None
+        }
+    }
+
+    println!(
+        "{:?} {:?}",
+        get_third(&[1.0, 2.0]),
+        get_third(&[1.1, 2.1, 3.1])
+    );
+}
+
+fn get_third_for_iterator() {
+    println!("*** for iterator ***");
+
+    fn get_third<Iter, Item>(mut iterator: Iter) -> Option<Item>
+    where
+        Iter: std::iter::Iterator + Iterator<Item = Item>,
+    {
+        iterator.next();
+        iterator.next();
+        iterator.next()
+    }
+
+    println!("{:?} {:?}", get_third(10..12), get_third(20..23));
+    println!(
+        "{:?} {:?}",
+        get_third([1.0, 2.0].iter()),
+        get_third([1.1, 2.1, 3.1].iter())
+    );
+}
+
+fn main() {
+    get_third_for_range();
+    get_third_for_slice();
+    get_third_for_iterator();
+}
+```
+
+```rust
+// trait Iterator {
+//     type Item;
+//     fn next(&mut self) -> Option<Self::Item>;
 // }
 
-fn area<T: HasArea>(item: T) {
-    println!("area: {}", item.area());
+struct MyRangeIterator<T> {
+    current: T,
+    limit: T,
 }
 
-fn main() {
-    let a = Triangle {
-        base: 10.5,
-        height: 17.4,
+impl Iterator for MyRangeIterator<u32> {
+    type Item = u32;
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.current == self.limit {
+            None
+        } else {
+            self.current += 1;
+            Some(self.current - 1)
+        }
+    }
+}
+
+fn run_next() {
+    println!("*** iterator next ***");
+    let mut range_it = MyRangeIterator {
+        current: 10,
+        limit: 13,
     };
-    let b = Square { side: 4.5 };
-
-    area(a);
-    area(b);
-}
-```
-
-```rs
-struct Rectangle {
-    width: u32,
-    height: u32,
+    println!("{:?}, ", range_it.next());
+    println!("{:?}, ", range_it.next());
+    println!("{:?}, ", range_it.next());
+    println!("{:?}, ", range_it.next());
+    println!("{:?}, ", range_it.next());
 }
 
-impl Rectangle {
-    fn area(&self) -> u32 {
-        println!("run Rectangle Area");
-        self.width * self.height
-    }
-}
-
-trait HasArea {
-    fn area(&self) -> u32;
-}
-
-impl HasArea for Rectangle {
-    fn area(&self) -> u32 {
-        println!("run trait HasArea");
-        self.width * self.height
-    }
-}
-
-fn print_area<T: HasArea>(t: T) {
-    println!("print area");
-    t.area();
-}
-
-fn main() {
-    let r = Rectangle {
-        width: 1,
-        height: 2,
+fn run_range() {
+    println!("*** iterator range ***");
+    let range_it = MyRangeIterator {
+        current: 10,
+        limit: 13,
     };
-    println!("area: {}", r.area());
-    println!("area: {}", HasArea::area(&r));
-    print_area(r);
-}
-```
-
-### trait - where
-
-```rust
-trait Perimeter {
-    fn a(&self) -> f64;
-}
-struct Square {
-    side: f64,
-}
-impl Perimeter for Square {
-    fn a(&self) -> f64 {
-        4.0 * self.side
-    }
-}
-struct Rectangle {
-    length: f64,
-    breadth: f64,
-}
-impl Perimeter for Rectangle {
-    fn a(&self) -> f64 {
-        2.0 * (self.length + self.breadth)
-    }
-}
-
-// fn print_perimeter<Square: Perimeter, Rectangle: Perimeter>(s: Square, r: Rectangle)
-fn print_perimeter<Square, Rectangle>(s: Square, r: Rectangle)
-where
-    Square: Perimeter,
-    Rectangle: Perimeter,
-{
-    let r1 = s.a();
-    let r2 = r.a();
-    println!("Perimeter of a square is {}", r1);
-    println!("Perimeter of a rectangle is {}", r2);
-}
-
-fn main() {
-    let sq = Square { side: 6.2 };
-    let rect = Rectangle {
-        length: 3.2,
-        breadth: 5.6,
-    };
-    print_perimeter(sq, rect);
-}
-```
-
-### trait - default method
-
-```rust
-trait Sample {
-    fn a(&self);
-    fn b(&self) {
-        println!("Print b");
-    }
-}
-
-struct Example {
-    a: i32,
-    b: i32,
-}
-
-impl Sample for Example {
-    fn a(&self) {
-        println!("Value of a is {}", self.a);
-    }
-
-    fn b(&self) {
-        println!("Value of b is {}", self.b);
+    for i in range_it {
+        println!("{} ", i);
     }
 }
 
 fn main() {
-    let r = Example { a: 5, b: 7 };
-    r.a();
-    r.b();
+    run_next();
+    run_range();
 }
 ```
