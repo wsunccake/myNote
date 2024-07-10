@@ -51,17 +51,9 @@ ip link set dev eth0 mtu 1500
 ip link set dev eth0 address 00:70:b7:d6:cd:ef
 
 
-
-
-
-
-
-
-
-
 route
 route -A [family] [add] or route --[family] [add]
-route -e 
+route -e
 route -F
 route [add|del] dev [interface]						ip route [add|chg|repl|del] dev [interface]
 route [add|del] [default] gw [gw]					ip route add default via [gw]
@@ -69,7 +61,7 @@ route [add|del] -host							    ip route [add|chg|repl|del] [ip_addr] via [ip_ad
 route [add|del] -net
 
 
-route [add|del] metric [n]						ip route [add|chg|repl|del] metric [number] 
+route [add|del] metric [n]						ip route [add|chg|repl|del] metric [number]
 route [add|del] mss [bytes]						ip route [add|chg|repl|del] advmss [number]
 route [add||del] window [n]						ip route [add|chg|repl|del] window [W]
 route [adddel] reject							ip route add prohibit [network_addr]
