@@ -98,3 +98,23 @@ debian:~ $ vncserver -kill :1
 ```bash
 debian:~ # apt install xfce4
 ```
+
+---
+
+## other
+
+### mtp / android phone
+
+```bash
+debian:~ # apt install jmtpfs
+debian:~ # jmtpfs -l                                        # list device
+debian:~ # jmtpfs [-device=<busnum>,<devnum>] <mount-point> # mount device
+debian:~ # jmtpfs -u <mount-point>                          # umount device
+```
+
+```bash
+debian:~ # apt install android-file-transfer
+debian:~ # android-file-transfer            # gui
+debian:~ # aft-mtp-mount <mount-point>      # mount device
+debian:~ # fusermount -u <mount-point>      # umount device
+```
