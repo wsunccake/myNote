@@ -24,7 +24,6 @@ expect> send_user "hello expect\n"
 expect> exit
 ```
 
-
 ---
 
 ## var
@@ -34,16 +33,23 @@ set word1 "hello"
 set word2 world
 set words "$word1 ${word2}"
 
-send "$word1 ${word2}\n"
-send "$words\n"
-send "[lindex $words 0]\n"
-send "[lindex $words 1]\n"
+send_user "$word1 ${word2}\n"
+send_user "$words\n"
+send_user "[lindex $words 0]\n"
+send_user "[lindex $words 1]\n"
 
 # shell environment variable
-send "$env(HOME)\n"
-send "[lindex $env(HOME) 0]\n"
-```
+set h0 $env(HOME)
+send_user "$env(HOME)\n"
+send_user "[lindex $env(HOME) 0]\n"
 
+# argument
+set a0 [lindex $argv 0]
+if { [string compare $a0 ""] == 0 } {
+  set a0 192.168.0.1
+}
+send_user "argument: $a0\n"
+```
 
 ---
 
@@ -60,7 +66,6 @@ for {set i 0} {$i < 2} {incr i} {
   send "[lindex $words $i]\n"
 }
 ```
-
 
 ---
 
@@ -92,7 +97,6 @@ expect "sh-$ver"
 exit
 ```
 
-
 ```bash
 #!/usr/bin/expect -f
 
@@ -109,7 +113,6 @@ send_user "\n"
 exit
 ```
 
-
 ```bash
 #!/usr/bin/expect -f
 set user <username>
@@ -125,6 +128,71 @@ expect "password:" {
 
 expect -re "\\\$|#" {
     interact
+}
+
+exit
+```
+
+```bash
+#!/usr/bin/expect -f
+
+set USERNAME super
+set PASSWORDS "default !Admin"
+set AP_IP  [lindex $argv 0]
+if { [string compare $AP_IP ""] == 0 } {
+  set AP_IP 192.168.10.10
+}
+set WAIT_TIME 3
+
+spawn ssh $AP_IP
+
+set i 0
+
+# login
+expect {
+  "Please Login:" {
+    send "$USERNAME\n"
+    sleep $WAIT_TIME
+    exp_continue
+  }
+
+  "Password :" {
+    send "[lindex $PASSWORDS $i]\n"
+    sleep $WAIT_TIME
+    incr i
+    exp_continue
+  }
+
+  eof {
+    send_user "\n\n*** ERROR: server has closed the connection\n"
+    exit $ERR_UNEXPECTED_OUTPUT
+  }
+}
+
+# check login status
+expect {
+  "New Password:" {
+    send "\n"
+    exit
+  }
+
+  "apcli:" {
+    send "\n"
+    sleep $WAIT_TIME
+  }
+}
+
+# set factory
+set SET_FACTORY_CMD "set\\ factory reboot"
+for {set i 0} {$i < 2} {incr i} {
+  expect "rkscli:" {
+    send "[lindex $SET_FACTORY_CMD $i]\n"
+  }
+}
+
+expect "apcli:" {
+  send "\n"
+  sleep $WAIT_TIME
 }
 
 exit

@@ -2,8 +2,7 @@
 
 有分 Control Machine 和 Managed Node
 
-----
-
+---
 
 ## Install
 
@@ -16,7 +15,6 @@ control:~ # yum localinstall http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epe
 control:~ # yum update
 control:~ # yum install ansible
 ```
-
 
 method 2. apt
 
@@ -35,14 +33,12 @@ control:~ # apt-get update
 control:~ # apt-get install ansible
 ```
 
-
 method 3. pip
 
 ```bash
 control: ~ # pip install --upgrade pip
 control: ~ # pip install ansible
 ```
-
 
 ## Ad-Hoc
 
@@ -72,8 +68,7 @@ control:~ $ ansible all -i [<user>@]<ip>, -m shell -b -a "reboot"
 
 -s: become other user / sudo root
 
-----
-
+---
 
 ## Config
 
@@ -87,8 +82,11 @@ ansible 設定檔讀取順序
 
 4. /etc/ansible/ansible.cfg 系統預設檔案
 
-
 ```bash
+# generate ansible configuration
+control:~ $ ansible-config init --disabled > ansible.cfg
+control:~ $ ansible-config init --disabled -t all > ansible.cfg
+
 control:~ $ cat /etc/ansible/ansible.cfg
 [defaults]
 ansible_python_interpreter = /usr/bin/python2
@@ -99,7 +97,7 @@ control:~ $ ansible-config list
 control:~ $ ansible-config dump
 ```
 
-----
+---
 
 ## PlayBook
 
@@ -119,19 +117,19 @@ PlayBook 是 YAML 格式, yaml 其實可以轉成對應的 json, 範例如下
 ```json
 [
   {
-     host: "all"
+    "host": "all"
   },
   {
-     tasks: [
-              {
-                 name: "Hello World",
-                 shell: "echo \"hello world\""
-              },
-              {
-                 name: "Show Hostname",
-                 shell: "hostname"
-              }
-            ]
+    "tasks": [
+      {
+        "name": "Hello World",
+        "shell": "echo \"hello world\""
+      },
+      {
+        "name": "Show Hostname",
+        "shell": "hostname"
+      }
+    ]
   }
 ]
 ```
@@ -145,7 +143,6 @@ PlayBook 是 YAML 格式, yaml 其實可以轉成對應的 json, 範例如下
 \#, 表示註解
 
 \>, 換行
-
 
 簡單的 ansible-playbook 測試如下
 
@@ -306,7 +303,6 @@ control:~/project $ cat roles/docker/handlers/main.yml
     enabled: yes
 ```
 
-
 ### dump all variable
 
 ```bash
@@ -346,8 +342,7 @@ control:~ $ cat dump.yaml
 control:~ $ ansible-playbook -i hosts dump.yaml
 ```
 
-
-----
+---
 
 ## Inventory
 
@@ -381,7 +376,6 @@ northeast
 southwest
 northwest
 ```
-
 
 ---
 

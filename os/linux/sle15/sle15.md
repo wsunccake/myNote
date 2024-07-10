@@ -11,6 +11,8 @@ c4c9393c35feffd3ffaea4a8860ae7428fe7bf996d202c4582a3abc1c4228604  SLE-15-SP2-Ful
 
 sle:~ # sha256sum -c sle15sp2_sha256.txt
 sle:~ # sha256sum SLE-15-SP2-Full-x86_64-GM-Media1.iso
+
+sle:~ # sha256 SLE-15-SP2-Full-x86_64-GM-Media1.iso
 ```
 
 ---
