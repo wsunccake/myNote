@@ -2,9 +2,11 @@
 
 - [The Rust Programming Language](https://doc.rust-lang.org/book/)
 - [The Rust Programming Language](https://web.mit.edu/rust-lang_v1.25/arch/amd64_ubuntu1404/share/doc/rust/html/book/first-edition/index.html)
+- [Rust 程式設計語言](https://rust-lang.tw/book-tw/title-page.html)
 - [The Rust Reference](https://doc.rust-lang.org/reference/introduction.html)
 - [The Little Book of Rust Macros](https://veykril.github.io/tlborm/introduction.html)
-- [Rust 程式設計語言](https://rust-lang.tw/book-tw/title-page.html)
+- [Comprehensive Rust](https://google.github.io/comprehensive-rust/index.html)
+- [Comprehensive Rust](https://google.github.io/comprehensive-rust/zh-TW/)
 - [Rust 中文文档](https://rustwiki.org/docs/)
 - [Rust 入门秘籍](https://rust-book.junmajinlong.com/about.html)
 - [Rust 语言圣经(Rust Course)](https://course.rs/about-book.html)

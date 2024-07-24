@@ -76,6 +76,8 @@ linux:~/project $ git checkout <branch>     # 切換 branch
 # same checkout -b for previous version
 linux:~/project $ git branch <branch> origin/<branch>
 linux:~/project $ git checkout <branch>
+# => 如果 file / folder 名稱跟 branch 一樣
+linux:~/project $ git checkout -b <branch> origin/<branch>
 
 linux:~/project $ git fetch
 linux:~/project $ git fetch --all
