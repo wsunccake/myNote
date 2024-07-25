@@ -318,6 +318,9 @@ class BasePage():
     def capture_screen(self, pic):
         self.driver.save_screenshot(pic)
 
+    def quit(self):
+        self.driver.quit()
+
 class MainPage(BasePage):
     def __init__(self, driver):
         self.locator_dict = MainPageLocatorDict
@@ -339,6 +342,7 @@ driver.get(url)
 page = MainPage(driver)
 id = page.get_id_about()
 print(f"{id.text}, tag: {id.tag_name}")
+page.quit()
 ```
 
 ---

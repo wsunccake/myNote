@@ -1,5 +1,20 @@
 # robotframework 5.x
 
+## content
+
+- [instsall](#instsall)
+- [hello](#hello)
+- [execution](#execution)
+  - [basic](#basic)
+  - [simple pattern](#simple-pattern)
+  - [tag pattern](#tag-pattern)
+  - [argument file](#argument-file)
+  - [stop](#stop)
+  - [variable](#variable)
+- [ref](#ref)
+
+---
+
 ## instsall
 
 ```bash
@@ -49,7 +64,7 @@ linux:~ $ python -m robot <file>.robot
 
 glob-like patterns
 
-```
+```text
 * matches any string, even an empty string.
 ? matches any single character.
 [abc] matches one character in the bracket.
@@ -66,7 +81,7 @@ Unless noted otherwise, pattern matching is case, space, and underscore insensit
 
 ### tag pattern
 
-```
+```text
 AND / &
 --include fooANDbar     # Matches tests containing tags 'foo' and 'bar'.
 --exclude xx&yy&zz      # Matches tests containing tags 'xx', 'yy', and 'zz'.
@@ -164,6 +179,99 @@ if __name__ == "__main__":
 
 ```bash
 linux:~ $ robot [-V <var.py>] [-v var:val] hello.robot
+```
+
+---
+
+## library
+
+### python function
+
+```python
+# lib/userFn.py
+def add_two_number(a1, a2):
+    if type(a1) != type(a2):
+        raise TypeError('type different')
+    return a1 + a2
+```
+
+```python
+# lib/userFunc.py
+def add_two_number(a1, a2):
+    if type(a1) != type(a2):
+        raise TypeError('type different')
+    return a1 + a2
+```
+
+```
+# test.robot
+*** Settings ***
+Library     OperatingSystem
+Library     lib.userFn
+Library     lib.userFunc  WITH NAME  func
+
+*** Keywords ***
+Run Without Check
+    # convert robotframework keyword
+    Add Two Number  4  9
+
+    # call python function
+    lib.userFn.add_two_number  4  9
+
+    # call python function by alias
+    func  4  9
+
+Run With Check
+    ${result}=  Add Two Number  ${4}  ${9}
+    Should Be Equal As Integers  ${result}  ${13}
+
+Run With Different Type
+    Add Two Number  4  ${9}
+
+*** Test Cases ***
+Run Python Function Example
+    Run Without Check
+    Run With Check
+    Run With Different Type
+```
+
+### python class
+
+```python
+# lib/userCls.py
+class Calculator:
+    def add(self, a1, a2):
+        if type(a1) != type(a2):
+            raise TypeError('type different')
+        return a1 + a2
+
+
+class Computer:
+    def __init__(self, name) -> None:
+        self.name = name
+
+    def add(self, a1, a2):
+        if type(a1) != type(a2):
+            raise TypeError('type different')
+        return a1 + a2
+```
+
+```
+# test.robot
+*** Settings ***
+Library     OperatingSystem
+Library     lib.userCls.Calculator
+Library     lib.userCls.Computer   computer  WITH NAME  computer
+
+
+*** Keywords ***
+Run Without Check
+    ${variable}=    lib.userCls.Calculator.add_two_number  ${1}  ${1}
+    computer.add_two_number  ${1}  ${2}
+
+*** Test Cases ***
+Run Python Example
+    Run  Without Check
 ```
 
 ---

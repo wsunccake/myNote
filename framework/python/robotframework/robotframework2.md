@@ -1,8 +1,8 @@
-# Introduction #
+# Introduction
 
-RobotFramework (以下簡稱RF) 是通用自動化測試框架(generic test automation framework), 以 Python 寫得成, 主要用於 BDD(Behavior Driven Development), ATDD(Acceptance Test-Driven Development) 測試. 寫測試者主要是寫 Keyword (Keyword 相當是 RF 的 function), 然後將這些 Keyword 組成 Test Case.
+RobotFramework (以下簡稱 RF) 是通用自動化測試框架(generic test automation framework), 以 Python 寫得成, 主要用於 BDD(Behavior Driven Development), ATDD(Acceptance Test-Driven Development) 測試. 寫測試者主要是寫 Keyword (Keyword 相當是 RF 的 function), 然後將這些 Keyword 組成 Test Case.
 
-## 安裝 / Installtion ##
+## 安裝 / Installtion
 
 安裝前需先安裝 Python 及 pip
 
@@ -14,7 +14,7 @@ linux:~ # pip install robotframework
 osx:~ $ sudo pip install robotframework
 ```
 
-## Plugin or IDE ##
+## Plugin or IDE
 
 `vim`
 
@@ -24,16 +24,16 @@ osx:~ $ sudo pip install robotframework
 
 `PyCharm` / `IntelliJ IDEA`
 
------------------------------
+---
 
-## 檔案格式 / Support Format ##
+## 檔案格式 / Support Format
 
 [Robot Framework User Guide](http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html) 是一份簡易使用手冊, 有介紹如何使用 Robot Framework
 
-* HTML (hypertext markup language)
-* TSV (tab-separated values)
-* TXT/ROBOT (plain text)
-* reST (reStructuredText)
+- HTML (hypertext markup language)
+- TSV (tab-separated values)
+- TXT/ROBOT (plain text)
+- reST (reStructuredText)
 
 以下為 plain text 的範例
 
@@ -80,41 +80,37 @@ RF 檔案分四個部分 Settings, Variables, Keywords 和 Test Cases.
 
 要執行的測試
 
-
-## 執行 / Run ##
+## 執行 / Run
 
 `Python`
 
 | function | command | run as module           | run as script           |
-| -------  | ------- | ----------------------- | ----------------------- |
+| -------- | ------- | ----------------------- | ----------------------- |
 | test     | pybot   | python -m robot.run     | python robot/run.py     |
 | report   | rebot   | python -m robot.rebot   | python robot/rebot.py   |
 | libdoc   |         | python -m robot.libdoc  | python robot/libdoc.py  |
 | testdoc  |         | python -m robot.testdoc | python robot/testdoc.py |
 | tidy     |         | python -m robot.tidy    | python robot/tidy.py    |
 
-
 `Jython`
 
 | function | command | run as module           | run as script           |
-| -------  | ------- | ----------------------- | ----------------------- |
+| -------- | ------- | ----------------------- | ----------------------- |
 | test     | jybot   | jython -m robot.run     | jython robot/run.py     |
 | report   | jyrebot | jython -m robot.rebot   | jython robot/rebot.py   |
 | libdoc   |         | jython -m robot.libdoc  | jython robot/libdoc.py  |
 | testdoc  |         | jython -m robot.testdoc | jython robot/testdoc.py |
 | tidy     |         | jython -m robot.tidy    | jython robot/tidy.py    |
 
-
 `IronPython`
 
 | function | command | run as module        | run as script        |
-| -------  | ------- | -------------------- | -------------------- |
+| -------- | ------- | -------------------- | -------------------- |
 | test     | ipybot  |                      |                      |
 | report   | ipyebot |                      |                      |
 | libdoc   |         | ipy -m robot.libdoc  | ipy robot/libdoc.py  |
 | testdoc  |         | ipy -m robot.testdoc | ipy robot/testdoc.py |
 | tidy     |         | ipy -m robot.tidy    | ipy robot/tidy.py    |
-
 
 執行 RF, 執行完 RF 會產生 report, 分別為 log.html, output.xml 和 report.html. 一般可以瀏覽器看 log.html
 
@@ -141,15 +137,14 @@ linux:~ $ rebot --merge rerun_failed_case/output.xml test1/output.xml
 檔案格式轉換
 
 ```
-linux:~ $ python -m robot.tidy -f html test.robot test.html 
+linux:~ $ python -m robot.tidy -f html test.robot test.html
 ```
 
------------------------------
+---
 
-# Syntax #
+# Syntax
 
-
-## 變數 / Variable ##
+## 變數 / Variable
 
 RF 變數命名是不區分大小寫, 一個空格 兩個空格
 
@@ -178,7 +173,7 @@ Remove From Dictionary  ${dic1}  Jun       # 移除 key / value
 Log  ${dic1}
 ```
 
-## 判斷 / Condition ##
+## 判斷 / Condition
 
 RF 判斷
 
@@ -193,7 +188,7 @@ Run Keyword If  ${i < 2}
 Run Keyword If  ${has_android} or ${has_ios}  Log  Wireless Device
 ```
 
-## 迴圈 / Loop ##
+## 迴圈 / Loop
 
 RF 迴圈使用 :FOR 開頭作為迴圈迭代變數設定, 下一行以 \ 開頭作為重複執行內容 (相當是 block)
 
@@ -210,10 +205,9 @@ ${items}=  Get Dictionary Items  ${dic}
 \  Log  ${key}->${value}
 ```
 
-## 函數 / Function ##
+## 函數 / Function
 
 RF 基本上沒有函數只有關鍵字(Keyword), 所有 Keyword 都定義在 Keyword section
-
 
 ```
 *** Keywords ***
@@ -237,7 +231,6 @@ Keyword 帶參數 (argument) 有兩種方式, 一種是在 keyword 內使用 [Ar
 Keyword 回傳值 (return) 只需要在結尾處使用 [Return] 即可 (範例 My keyword4).
 
 `Loop and keyword example`
-
 
 ```
 *** Settings ***
@@ -277,8 +270,7 @@ Test1
 
 \ \ 表示 white space (空白字元), ... 表示連接前面 statement 的換行
 
-
-## 範例 / Example ##
+## 範例 / Example
 
 以下為一個簡單的執行範例, 主要的測試檔案為 test.robot, 但是會另外載入 RF 格式的使用者定義 Keywords `UserDefineRF.robot`, Python 格式的使用者定義 module `UserDefinePython.py` 和 RF 格式的變數檔案 Variables `RFVar.txt`. 在執行是會讀取以 Python 格式訂的變數檔案.
 
@@ -331,21 +323,19 @@ Say Somethings
 
 run RF
 
-	linux:~ $ pybot -V var.py test.robot
+    linux:~ $ pybot -V var.py test.robot
 
+---
 
------------------------------
+# Library
 
-# Library #
-
-
-## Run Command ##
+## Run Command
 
 因為 RF 並不會確認執行指令的正確於否, 所以當指令有可能執行失敗, 最好使用 Return Code 去判斷. (在 Shell 中, RC=0 為執行成功, RC!=0 為執行失敗); 同理, 在判斷 Python 程式執行時, 除了 Exception 之外, 其餘都視為正常結果.
 
 [`UserDefined.py`](./example/rf2/UserDefined.py)
 
-```
+```python
 def intAdd(a1, a2):
     if type(a1) != type(a2):
         raise TypeError('type different')
@@ -394,8 +384,7 @@ Run Python Example
     Run Python With Different Type
 ```
 
-
-## SSHLibrary ##
+## SSHLibrary
 
 RF 本身也提供 SSHLibary (底層使用 paramiko module), 方便開發使用 SSH 的 test case.
 使用會載入 SSHLibrary, 需要先安裝 robotframework-sshlibrary (使用 pip 安裝即可). 注意不要安裝 2.0 之前的版本, 因為 keyword 差異.
@@ -406,7 +395,6 @@ RF 本身也提供 SSHLibary (底層使用 paramiko module), 方便開發使用 
 ```
 linux:~ # pip install robotframework-sshlibrary
 ```
-
 
 ### Example
 
@@ -445,7 +433,7 @@ Run ${cmd} Command With RC
 
 Run ${cmd} Command Until Prompt
     Write  ${cmd}
-    Set Client Configuration  prompt=#  
+    Set Client Configuration  prompt=#
     Set Client Configuration  timeout=60s
     ${output}=  Read Until Prompt
     Log  ${output}
@@ -462,11 +450,10 @@ Show Hostname
     SSH Logout
 ```
 
-## Selenium ##
+## Selenium
 
 使用會載入 Selenium2Library, 需要先安裝 robotframework-selenium2library (使用 pip 安裝即可). 注意不要安裝 robotframework-seleniumlibrary, 因為 locator 語法有差異.
 [Selenium2Library](http://rtomac.github.io/robotframework-selenium2library/doc/Selenium2Library.html) 有簡易的說明文件可以參考, 主要是說明 Keywords 和 Locators 使用, 而 Locators 可以參考 [Locators_table_1_0_2.pdf](http://www.cheat-sheets.org/saved-copy/Locators_groups_1_0_2.pdf) [Locators_table_1_0_2.pdf](http://www.cheat-sheets.org/saved-copy/Locators_table_1_0_2.pdf)
-
 
 ### Install
 
@@ -481,7 +468,6 @@ linux:~ # firefox -v
 linux:~ # wget https://github.com/mozilla/geckodriver/releases/download/v0.17.0/geckodriver-v0.17.0-linux64.tar.gz
 linux:~ # tar zxf geckodriver-v0.17.0-linux64.tar.gz -C /usr/local/bin
 ```
-
 
 ### Example
 
@@ -517,7 +503,6 @@ Test Google
     Close Browser
 ```
 
-
 ### Selenium RC
 
 有時需要使用 Selenium RC (Remote Control) 的方式
@@ -551,7 +536,6 @@ Test Google
     Close Browser
 ```
 
-
 ## Sikuli
 
 ### Install
@@ -560,10 +544,9 @@ Test Google
 linux:~ # pip install robotframework-SikuliLibrary
 ```
 
+---
 
------------------------------
-
-# Reference #
+# Reference
 
 [ROBOT FRAMEWORK](http://robotframework.org/)
 

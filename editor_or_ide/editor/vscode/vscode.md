@@ -29,6 +29,8 @@ add cursor below: Shift + Alt + DownArrow
 
 ## settings.json
 
+`settings.json` store setting value in Visual Studio Code
+
 ```
     "editor.fontSize": 14,
     "editor.fontFamily": "Fira Code",
@@ -61,6 +63,8 @@ add cursor below: Shift + Alt + DownArrow
 ---
 
 ## launch.json
+
+`launch.json` file is used to configure the debugger in Visual Studio Code
 
 ---
 

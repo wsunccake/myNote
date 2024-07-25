@@ -70,6 +70,8 @@
 ```json
 // .env
 PYTHONPATH=${HOME}/${WORKSPACE}/lib:${PYTHONPATH}
+
+// ${workspaceFolder}: 這是 vscode 預設變數, 在 .env 不會有作用
 ```
 
 ---
@@ -121,6 +123,17 @@ GEVENT_SUPPORT=True
 ```
 
 ### robotframework
+
+```json
+// settings.json
+  "robot.pythonpath": [
+    ".",
+    "${workspaceFolder}",
+    "${workspaceFolder}${pathSeparator}lib",
+    "${env:PYTHONPATH}"
+  ],
+
+```
 
 ```json
 // launch.json
