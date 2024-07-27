@@ -1,5 +1,27 @@
 # selenium 4
 
+---
+
+## content
+
+- [prerequisite](#prerequisite)
+  - [chrome](#chrome)
+  - [web driver](#web-driver)
+  - [selenium server](#selenium-server)
+  - [package](#package)
+  - [test](#test)
+- [locating element](#locating-element)
+- [wait](#wait)
+  - [explicit wait](#explicit-wait)
+  - [implict wait](#implict-wait)
+- [page object model](#page-object-model)
+- [code generator](#code-generator)
+  - [selenium ide](#selenium-ide)
+  - [katalon recorder](#katalon-recorder)
+- [ref](#ref)
+
+---
+
 ## prerequisite
 
 ### chrome
@@ -344,6 +366,23 @@ id = page.get_id_about()
 print(f"{id.text}, tag: {id.tag_name}")
 page.quit()
 ```
+
+---
+
+## code generator
+
+### selenium ide
+
+[Selenium IDE for chrome](https://chromewebstore.google.com/detail/selenium-ide/mooikfkahbdckldjjndioackbalphokd)
+[Selenium IDE for firefox](https://addons.mozilla.org/en-US/firefox/addon/selenium-ide/)
+[Selenium IDE for edge](https://microsoftedge.microsoft.com/addons/detail/selenium-ide/ajdpfmkffanmkhejnopjppegokpogffp)
+[Selenium IDE](https://github.com/SeleniumHQ/selenium-ide/releases)
+
+### katalon recorder
+
+[Katalon Recorder for chome](https://chrome.google.com/webstore/detail/katalon-recorder-selenium/ljdobmomdgdljniojadhoplhkpialdid)
+[Katalon Recorder for firefox](https://addons.mozilla.org/en-US/firefox/addon/katalon-automation-record/)
+[Katalon Recorder for edge](https://microsoftedge.microsoft.com/addons/detail/katalon-recorder-seleniu/hdodkejagjkdomgbiioijegfmiiknoam)
 
 ---
 

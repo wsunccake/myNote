@@ -11,6 +11,9 @@
   - [argument file](#argument-file)
   - [stop](#stop)
   - [variable](#variable)
+- [library](#library)
+  - [python function](#python-function)
+  - [python class](#python-class)
 - [ref](#ref)
 
 ---
@@ -262,7 +265,6 @@ class Computer:
 Library     OperatingSystem
 Library     lib.userCls.Calculator
 Library     lib.userCls.Computer   computer  WITH NAME  computer
-
 
 *** Keywords ***
 Run Without Check
