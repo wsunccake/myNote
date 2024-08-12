@@ -178,3 +178,77 @@ example:
 s1.age -> s1.**dict**['age']
 
 s1.location -> s1.**dict**['location'] -> Shark.**dict**['location']
+
+```python
+import inspect
+
+class MyClass:
+    cls_attr = ''
+
+    def __init__(self) -> None:
+        self.inst_attr = ''
+
+    def instance_method(self):
+        return "instance method"
+
+    @classmethod
+    def class_method(cls):
+        return "class method"
+
+    @staticmethod
+    def static_method():
+        return "static method"
+
+def print_inst():
+    inst = MyClass()
+    print('*** instance attribute ***')
+    inst_attrs = inst.__dict__.items()
+    for k, v in inst_attrs:
+        print(f'{k} -> {v}')
+    print('*** ***')
+
+def print_cls_all():
+    print('*** class attribute (member and method) ***')
+    cls_attrs = MyClass.__dict__.items()
+    for k, v in cls_attrs:
+        print(f'{k} -> {v}')
+    print('*** ***')
+
+def print_cls():
+    print('*** class attribute ***')
+    cls_attrs = {k: v for k, v in MyClass.__dict__.items(
+    ) if not callable(v) and not k.startswith('__')}.items()
+    for k, v in cls_attrs:
+        print(f'{k} -> {v}')
+    print('*** ***')
+
+def print_method1():
+    methods = inspect.getmembers(MyClass, predicate=inspect.isfunction)
+    print("*** all method ***")
+    for name, method in methods:
+        print(f"{name} -> {method}")
+    print('*** ***')
+
+def print_method2():
+    print("*** all method ***")
+    for name in dir(MyClass):
+        attribute = getattr(MyClass, name)
+        if callable(attribute) and not name.startswith("__"):
+            print(f'{name} -> {attribute}')
+    print('*** ***')
+
+def print_method3():
+    print("*** all method ***")
+    for name, method in MyClass.__dict__.items():
+        if callable(method):
+            print(f'{name} -> {method}')
+    print('*** ***')
+
+if __name__ == "__main__":
+    print_inst()
+    print_cls()
+    print_cls_all()
+    print_method1()
+    print_method2()
+    print_method3()
+```
