@@ -6,6 +6,7 @@
 
 - [closure](#closure)
   - [function argurment](#function-argurment)
+  - [move closure](#move-closure)
 - [iterator](#iterator)
   - [scanning string](#scanning-string)
   - [range to iterator](#range-to-iterator)
@@ -28,7 +29,7 @@
 
 ## closure
 
-```rs
+```rust
 fn main() {
     fn add_one_v1(x: u32) -> u32 { x + 1 }
     let add_one_v2 = |x: u32| -> u32 { x + 1 };
@@ -44,7 +45,7 @@ fn main() {
 
 ### function argurment
 
-```rs
+```rust
 fn max_num(v: &Vec<u8>) -> u8 {
     let mut m: u8 = v[0];
     for &val in v.iter() {
@@ -86,6 +87,48 @@ fn main() {
     let v4 = vec![1, 2, 3, 4, 5];
     let m4 = cmp_num(&v4, |x, y| x < y);
     println!("{:#?} min: {m4}", v4);
+}
+```
+
+### move closure
+
+```rust
+fn closure() {
+    println!("closure");
+    let mut num = 5;
+
+    println!("outer begin num: {}", num);
+    {
+        println!("inner begin num: {}", num);
+        let mut add_num = |x: i32| num += x;
+        add_num(5);
+        // println!("inner begin num: {}", num);
+        // immutable borrow
+        add_num(5);
+        println!("inner begin num: {}", num);
+    }
+    println!("outer finish num: {}", num);
+}
+
+fn move_closure() {
+    println!("move closure");
+    let mut num = 5;
+
+    println!("outer begin num: {}", num);
+    {
+        println!("inner begin num: {}", num);
+        let mut add_num = move |x: i32| num += x;
+        add_num(5);
+        println!("inner begin num: {}", num);
+        add_num(5);
+        println!("inner begin num: {}", num);
+    }
+    println!("outer finish num: {}", num);
+}
+
+fn main() {
+    closure();
+    move_closure();
 }
 ```
 

@@ -10,6 +10,7 @@
 - [diff](#diff)
 - [mark](#mark)
 - [recording](#recording)
+- [other](#other)
 
 ---
 
@@ -249,4 +250,47 @@ q{a-zA-Z} ...  ESC q    : record typed characters into register
     "c"     for |characterwise| text
     "l"     for |linewise| text
     "b"     for |blockwise-visual| text
+```
+
+---
+
+## wrap
+
+```vim
+:set [no]wrap           : 自動換行
+:set sidescroll=0       : 水平滾動
+:set sidescroll=1
+:set linebreak          : 折行處
+:set nolinebreak
+:set breakat-=_
+:set showbreak=->       : 折行連結符號
+```
+
+---
+
+## line feed
+
+Unix: <Line Feed> / LF
+Mac: <Return> / CR
+Windows: <Return><Line Feed> / CRLF
+
+```vim
+:set fileformat?
+:set fileformat=unix
+:set [no]endofline
+
+:set [no]list           : list mode(\t 顯示為 ^I, \n 顯示為 $)
+
+:%s/\n//g               : 刪除換行
+:%s/\r//g               : 刪除 windows \r
+:%s/ˆM//g               : 刪除 windows ^Ｍ
+```
+
+---
+
+## other
+
+```vim
+:set [no]number         : 行數
+:set [no]hlsearch       : 搜尋
 ```

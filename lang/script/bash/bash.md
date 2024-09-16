@@ -390,7 +390,18 @@ show_associative_array MAP
 
 ---
 
-## arg
+## dollar sign
+
+```bash
+echo "script name: $0"
+echo "first argument: $1"
+echo "number of arguments: $#"
+echo "all arguments (\$*): $*"
+echo "all arguments (\$@): $@"
+echo "process id: $$"
+echo "last command status: $?"
+echo "previous background pid: $!"
+```
 
 ```bash
 echo "#: $#, @: $@, *: $*, 1: $1"

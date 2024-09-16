@@ -1,14 +1,12 @@
-# Firewalld #
+# Firewalld
 
-
-## Package ##
+## Package
 
 ```bash
 rhel~: # yum install firewalld
 ```
 
-
-## Serivce ##
+## Serivce
 
 RHEL 7 的防火牆有兩種可以選擇, 一個是 iptables (相容之前 RHEL 6), 另一個是 firewalld (RHEL 7 才提供), 只能使用一種
 
@@ -18,15 +16,13 @@ rhel:~ # systemctl enable firewalld.service
 rhel:~ # systemctl status firewalld.service
 ```
 
-
-## Command ##
+## Command
 
 ```bash
 rhel:~ # firewall-cmd --permanent --zone=public --add-rich-rule="rule family=ipv4 accept source address=192.168.68.0/24"
 ```
 
-
-### Zone ###
+### Zone
 
 firewalld 使用 zone 去管理 rule
 
@@ -54,15 +50,14 @@ rhel:~ # firewall-cmd --reload                           # 重載設定
 rhel:~ # ls /etc/firewalld/zones/*.xml                   # 設定檔
 ```
 
-
-### Interface ###
+### Interface
 
 ```bash
 rhel:~ # firewall-cmd [--permanent] [--zone=internal] --change-interface=eth0
+rhel:~ # firewall-cmd --permanent --zone=trusted --change-interface=eth0
 ```
 
-
-### Service ###
+### Service
 
 ```bash
 rhel:~ # firewall-cmd --list-services
@@ -73,8 +68,7 @@ rhel:~ # firewall-cmd --remove-service=ssh                 # 移除 service
 rhel:~ # firewall-cmd --add-service={http,https,dns}       # 一次設定多個 service
 ```
 
-
-### Source ###
+### Source
 
 ```bash
 rhel:~ # firewall-cmd --zone=trusted --list-sources
@@ -83,8 +77,7 @@ rhel:~ # firewall-cmd --add-source=192.168.2.0/24          # 新增 source
 rhel:~ # firewall-cmd --delete-source=192.168.2.0/24       # 移除 source
 ```
 
-
-### Port ###
+### Port
 
 ```bash
 rhel:~ # firewall-cmd --zone=internal --list-ports
@@ -96,8 +89,7 @@ rhel:~ # firewall-cmd --delete-port=443/tcp                # 移除 port
 rhel:~ # firewall-cmd --add-forward-port=port=22:proto=tcp:toport=3753
 ```
 
-
-### Masquerade ###
+### Masquerade
 
 ```bash
 rhel:~ # firewall-cmd --add-masquerade
@@ -105,14 +97,13 @@ rhel:~ # firewall-cmd –-remove-masquerade
 rhel:~ # firewall-cmd -–query-masquerade
 ```
 
-
-### Direct ###
+### Direct
 
 ```bash
 rhel:~ # firewall-cmd --direct --get-all-rules
 
 rhel:~ # firewall-cmd --direct --add-rule ipv4 filter INPUT 0 -p tcp --dport 9000 -j ACCEPT
-rhel:~ # firewall-cmd --permanent --direct --add-rule ipv4 filter INPUT 0 -p tcp --dport 9000 -j ACCEPT 
+rhel:~ # firewall-cmd --permanent --direct --add-rule ipv4 filter INPUT 0 -p tcp --dport 9000 -j ACCEPT
 
 rhel:~ # firewall-cmd --direct --add-rule ipv6 nat POSTROUTING 1 -s fc00:db8::1/112 -j MASQUERADE
 rhel:~ # firewall-cmd --permanent --direct --add-rule ipv6 nat POSTROUTING 1 -s fc00:db8::1/112 -j MASQUERADE
@@ -120,8 +111,7 @@ rhel:~ # firewall-cmd --permanent --direct --add-rule ipv6 nat POSTROUTING 1 -s 
 rhel:~ # firewall-cmd --reload
 ```
 
-
-## Configuration ##
+## Configuration
 
 ```bash
 rhel:~ # echo "net.ipv4.ip_forward=1" > /etc/sysctl.conf
@@ -130,27 +120,24 @@ rhel:~ # sysctl -p
 rhel:~ # firewall-cmd --state
 ```
 
-
-### File ###
+### File
 
 /usr/lib/firewalld/services
 
 /etc/firewalld/services
 
-
-### Offline ###
+### Offline
 
 ```bash
 rhel:~ # firewall-offline-cmd --direct --add-rule ipv4 filter INPUT 0 -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
 ```
 
-### Backupt ###
+### Backupt
 
 ```bash
 rhel:~ # iptables -S > firewalld_rules_ipv4
 rhel:~ # ip6tables -S > firewalld_rules_ipv6
 ```
-
 
 ---
 

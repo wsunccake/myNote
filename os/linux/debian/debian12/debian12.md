@@ -103,6 +103,33 @@ debian:~ # apt install xfce4
 
 ## other
 
+###
+
+```bash
+debian:~ # apt install smartmontools
+debian:~ # smartctl -a /dev/sd<X>
+
+# Reallocated_Sector_Ct: 硬碟檢測到某個扇區出現物理損壞且無法正常讀寫時, 該扇區會被標記為 "壞扇區"
+# 硬碟會將這個壞扇區的數據重新分配到一個保留的, 良好的備用扇區.
+# Reallocated_Sector_Ct 就是已經發生這種重新分配的扇區數量
+# 低值或0: 表示硬碟狀況良好, 沒有或僅有少量壞扇區
+# 高值: 表示硬碟已有許多壞扇區
+# Current_Pending_Sector: 硬碟上當前處於 "待處理" 狀態的扇區數量,
+# 低值或0: 通常表示硬碟健康狀況良好
+# 高值: 可能意味著硬碟正在失效
+```
+
+### ntfs
+
+```bash
+debian:~ # apt install ntfs-3g
+debian:~ # mount -t ntfs-3g /dev/sd<X><n> /mnt
+
+debian:~ # umount /mnt
+
+debian:~ # ntfsfix /dev/sd<X><n>
+```
+
 ### mtp / android phone
 
 ```bash

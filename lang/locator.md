@@ -72,6 +72,12 @@ $("[title*='hello']")
 ```js
 $()     document.querySelector()
 $$()    document.querySelectorAll()
+
+// action
+$('#id').click()
+$('#id').val('ABC123')  // input field
+$('#id').text('ABC123') // not input
+$('#id').html('XYZ123') // html content
 ```
 
 ---
@@ -124,6 +130,10 @@ $x("//p[text()='word']")
 
 $x("./*")
 $x(".//*")
+
+// action
+$x('//*[@id="xxx"]')[0].click()
+$x('//*[@id="xxx"]')[0].value = 'ABC123'
 ```
 
 ### basic XPath Syntax

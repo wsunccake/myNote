@@ -73,7 +73,7 @@ sles:~ # reboot
 ```bash
 recuse:~ # fdisk -l /dev/sd[X]
 recuse:~ # parted -l /dev/sd[X]
-recuse:~ # lsblk -f
+recuse:~ # lsblk [-f|-l|-p]
 recuse:~ # df -T
 recuse:~ # bikid
 ```
@@ -183,7 +183,7 @@ recuse:~ # [ -d /sys/firmware/efi ] && echo UEFI || echo BIOS
 
 # mount
 recuse:~ # mount /dev/sd[X][n] /<mnt>
-recuse:~ # umount /<mnt>
+recuse:~ # umount [-lf] /<mnt>
 
 # change root
 recuse:~ # chroot <mnt> <cmd>

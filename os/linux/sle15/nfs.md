@@ -1,15 +1,29 @@
 # NFS
 
-## Server
+## content
 
-`package`
+- [server](#server)
+  - [server - package](#server---package)
+  - [server - config](#server---config)
+  - [server - daemon](#server---daemon)
+  - [server - other](#server---other)
+- [client](#client)
+  - [client - package](#client---package)
+  - [client - config](#client---config)
+  - [client - other](#client---other)
+
+---
+
+## server
+
+### server - package
 
 ```bash
 nfs:~ # zypper in nfs-kernel-server
 nfs:~ # zypper in yast2-nfs-server
 ```
 
-`config`
+### server - config
 
 ```bash
 # config by yast
@@ -23,7 +37,7 @@ nfs:~ # vi /etc/export
 
 ro/rw, sync/async, root_squash/no_root_squash, all_squash
 
-`daemon`
+### server - daemon
 
 ```bash
 nfs:~ # systemctl start nfs-server
@@ -33,18 +47,25 @@ nfs:~ # systemctl enable nfs-server
 nfs:~ # showmount -e <nfs_ip>
 ```
 
+### server - other
+
+```bash
+nfs:~ # cat /proc/fs/nfs/exports
+nfs:~ # cat /var/lib/nfs/rmtab
+```
+
 ---
 
-## Client
+## client
 
-`package`
+### client - package
 
 ```bash
 fs:~ # zypper in nfs-client
 fs:~ # zypper in yast2-nfs-client
 ```
 
-`config`
+### client - config
 
 ```bash
 # config by yast
@@ -58,4 +79,10 @@ fs:~ # vi /etc/fstab
 # mount nfs
 fs:~ # mount -a
 fs:~ # mount -t nfs -o proto=tcp,port=2049 <nfs_ip>:/fs /fs
+```
+
+### client - other
+
+```bash
+fs:~ # cat /proc/mounts
 ```

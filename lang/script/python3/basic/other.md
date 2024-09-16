@@ -182,11 +182,14 @@ s1.location -> s1.**dict**['location'] -> Shark.**dict**['location']
 ```python
 import inspect
 
+
 class MyClass:
     cls_attr = ''
+    over_attr = 'cls'
 
     def __init__(self) -> None:
         self.inst_attr = ''
+        self.over_attr = 'inst'
 
     def instance_method(self):
         return "instance method"
@@ -199,6 +202,7 @@ class MyClass:
     def static_method():
         return "static method"
 
+
 def print_inst():
     inst = MyClass()
     print('*** instance attribute ***')
@@ -207,12 +211,14 @@ def print_inst():
         print(f'{k} -> {v}')
     print('*** ***')
 
+
 def print_cls_all():
     print('*** class attribute (member and method) ***')
     cls_attrs = MyClass.__dict__.items()
     for k, v in cls_attrs:
         print(f'{k} -> {v}')
     print('*** ***')
+
 
 def print_cls():
     print('*** class attribute ***')
@@ -222,12 +228,14 @@ def print_cls():
         print(f'{k} -> {v}')
     print('*** ***')
 
+
 def print_method1():
     methods = inspect.getmembers(MyClass, predicate=inspect.isfunction)
     print("*** all method ***")
     for name, method in methods:
         print(f"{name} -> {method}")
     print('*** ***')
+
 
 def print_method2():
     print("*** all method ***")
@@ -237,12 +245,47 @@ def print_method2():
             print(f'{name} -> {attribute}')
     print('*** ***')
 
+
 def print_method3():
     print("*** all method ***")
     for name, method in MyClass.__dict__.items():
         if callable(method):
             print(f'{name} -> {method}')
     print('*** ***')
+
+
+def print_vars():
+    print("*** class vars ***")
+    for name in vars(MyClass):
+        print(f'{name}')
+
+    print("*** instance vars ***")
+    for name in vars(MyClass()):
+        print(f'{name}')
+    print('*** ***')
+
+
+def print_getmembers():
+    print("*** class inspect.getmembers ***")
+    for k, v in inspect.getmembers(MyClass):
+        print(f'{k} -> {v}')
+
+    print("*** instance inspect.getmembers ***")
+    for k, v in inspect.getmembers(MyClass()):
+        print(f'{k} -> {v}')
+    print('*** ***')
+
+
+def print_dict():
+    print("*** class __dict__ ***")
+    for n in MyClass.__dict__:
+        print(f'{n}')
+
+    print("*** instance __dict__ ***")
+    for n in MyClass().__dict__:
+        print(f'{n}')
+    print('*** ***')
+
 
 if __name__ == "__main__":
     print_inst()
@@ -251,4 +294,8 @@ if __name__ == "__main__":
     print_method1()
     print_method2()
     print_method3()
+
+    print_vars()
+    print_getmembers()
+    print_dict()
 ```

@@ -169,6 +169,10 @@ sle:~ # resolvectl status
 sle:~ # resolvectl query <host>|<ip>
 sle:~ # resolvectl statistics
 sle:~ # resolvectl flush-caches
+
+sle:~ # resolvectl status <interface>
+sle:~ # resolvectl revert <interface>
+sle:~ # resolvectl dns <interface> <dns1> <dns2>
 ```
 
 ---
