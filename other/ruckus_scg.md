@@ -199,10 +199,10 @@ SCG Enable Console CLI Debug
 
 ```bash
 SCG# debug
-SCG(debug)#  all-log-level
+SCG(debug)# all-log-level
 
 SCG# config
-SCG(config)#  logging console cli debug
+SCG(config)# logging console cli debug
 ```
 
 vDP
@@ -213,6 +213,21 @@ vDP# show running-confing dhcp all
 vDP# debug
 vDP(debug)# diag dp_comm zone wlan show
 vDP(debug)# diag tbldump -rn 27
+```
+
+---
+
+## debug-tool
+
+SCG/vSZ
+
+SCG Enable collectd
+
+```bash
+SCG(debug)# debug-tools
+(debug tool-set) system $ collectd-start
+(debug tool-set) system $ collectd-status
+(debug tool-set) system $ collectd-stop
 ```
 
 ---

@@ -35,10 +35,14 @@ C:\Users\user> shutdown /r /t 0
 C:\Users\user> shutdown /s /t 0
 ```
 
-
 ---
 
 ## variable
+
+```batch
+C:\Users\user> sysdm.cpl
+:: 設定環境變數
+```
 
 ### environment
 
@@ -50,7 +54,6 @@ C:\Users\user> set VAR=<val>
 C:\Users\user> echo %VAR%
 C:\Users\user> set VAR=
 ```
-
 
 ### value
 
@@ -75,7 +78,6 @@ echo %var%
 echo %globalvar%
 ENDLOCAL
 ```
-
 
 ---
 
@@ -115,7 +117,6 @@ C:\Users\user> cmd1 && cmd2  (%errorlevel% == 0)
 C:\Users\user> cmd1 || cmd2  (%errorlevel% != 0)
 ```
 
-
 ---
 
 ## if
@@ -144,7 +145,6 @@ GTR – 大於
 GEQ – 大於或等於
 ```
 
-
 ---
 
 ## for
@@ -158,7 +158,6 @@ for /l %%x in (0, 1, 10) do (
 )
 ```
 
-
 ---
 
 ## network
@@ -171,7 +170,6 @@ C:\Users\user> ipconfig /all
 C:\Users\user> ipconfig /renew
 ```
 
-
 ---
 
 ## other
@@ -179,7 +177,7 @@ C:\Users\user> ipconfig /renew
 ```bat
 C:\Users\user> whoami           # -> <DOMAIN>/<USER>
 
-C:\Users\user> runas /user:Administrator cmd 
+C:\Users\user> runas /user:Administrator cmd
 C:\Users\user> runas /noprofile /user:Administrator cmd
 
 C:\Users\user> net user
@@ -209,7 +207,6 @@ net use
 net user
 net view
 ```
-
 
 ---
 

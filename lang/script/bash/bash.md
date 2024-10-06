@@ -567,6 +567,8 @@ EOF
 
 [expect](./expect.md)
 
+---
+
 ## xargs
 
 ```bash
