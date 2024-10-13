@@ -52,15 +52,24 @@ rhel:~ # timedatectl help
 
 rhel:~ # systemctl enable systemd-timedated
 rhel:~ # systemctl enable chronyd
+/usr/lib/systemd/system/systemd-timedated.service
 
+# time
 rhel:~ # timedatectl set-time HH:MM:SS # 24 小時制
 rhel:~ # timedatectl list-timezones
 rhel:~ # timedatectl set-timezone Asia/Taipei
 rhel:~ # timedatectl set-ntp yes # 會使用 NTP server 更新
 
+# timezone
 rhel:~ # ls /usr/share/zoneinfo
 rhel:~ # ln -sf /usr/share/zoneinfo/Asia/Taipei /etc/localtime
 rhel:~ # export TZ=Asia/Taipei
+
+# ntp
+rhel:~ # vi /etc/systemd/timedated.conf
+[Time]
+NTP=chronyd.service systemd-timesyncd.service
+# 表示使用 先使用 chronyd 再使用 systemd-timesyncd 去做 ntp
 ```
 
 ## date

@@ -3,20 +3,17 @@
 ## setup command
 
 ```bash
+# for build
+linux:~/proj $ python setup.py build
+
 # for install
 linux:~/proj $ python setup.py install
-=>
-linux:~/proj $ python setup.py build
-linux:~/proj $ python setup.py install
-
 
 linux:~/proj $ pip install -e .
-=>
 linux:~/proj $ python setup.py develop
 
-# build
-linux:~/proj $ python setup.py sdist --formats=gztar
-
+# dist
+linux:~/proj $ python setup.py sdist --formats=gztar    # <pkg>.tar.gz
 linux:~/proj $ python setup.py bdist --formats=rpm
 =>
 linux:~/proj $ python setup.py build_rpm

@@ -1,7 +1,6 @@
-# pip #
+# pip
 
 ## Install
-
 
 `mac os`
 
@@ -18,7 +17,6 @@ linux:~ $ sudo apt-get install python-pip
 linux:~ $ sudo zypper install python-pip
 ```
 
-
 ---
 
 ## Usage
@@ -29,20 +27,21 @@ linux:~ $ pip help
 linux:~ $ pip help install
 
 # install module
-linux:~ $ sudo pip install pkg.zip # 安裝下載的 module
-linux:~ $ sudo pip install [--install-option="--prefix=/path"] pkg[==ver]* [--user] # 線上安裝 module, 可指定版本
+linux:~ $ pip install <pkg>.zip # 安裝下載的 module
+linux:~ $ pip install <pkg>.tar.gz # 安裝下載的 module
+linux:~ $ pip install [--install-option="--prefix=/path"] <pkg>[==ver]* [--user] [--no-cache-dir] # 線上安裝 module, 可指定版本
 
 linux:~ $ cat requirement.txt # 將欲安裝 module 寫在檔案裡
 Django==1.6
 selenium==2.39
-linux:~ $ sudo pip install -r requirement.txt # 安裝檔案內的 module
+linux:~ $ pip install -r requirement.txt # 安裝檔案內的 module
 
 # uninstall module
-linux:~ $ pip uninstall pkg # 移除 module
+linux:~ $ pip uninstall <pkg> # 移除 module
 
-#upgrade module
-linux:~ $ pip install -U pkg # 升級 module
-windows:~ $ pip -m pip install -U pkg
+# upgrade module
+linux:~ $ pip install -U <pkg> # 升級 module
+windows:~ $ pip -m pip install -U <pkg>
 
 # list & show
 linux:~ $ pip list # 列出現在已安裝的 module
@@ -53,8 +52,14 @@ linux:~ $ pip show -f module # 顯示 module 安裝檔案
 
 # search
 linux:~ $ pip search pkg # 搜尋線上有的 module
-```
 
+# cache
+linux:~ $ pip cache info
+linux:~ $ pip cache list
+linux:~ $ pip cache dir
+linux:~ $ pip cache remove <pkg>
+linux:~ $ pip cache purge
+```
 
 ---
 
@@ -74,14 +79,11 @@ trusted-host = 192.168.0.1
 linux:~ # pip install -r /root/requirements.txt
 ```
 
-
 ---
 
 ## PyPI
 
-
-
-```
+```bash
 linux:~ # cat $HOME/.pypirc
 [distutils]
 index-servers =
