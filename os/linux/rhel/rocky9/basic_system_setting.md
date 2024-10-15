@@ -117,14 +117,14 @@ ssh-client:~ $ ssh <example.user>@<ssh-server@example.com>
 ## user and group
 
 ```bash
-cat /usr/share/doc/setup*/uidgid
+rocky:~ # cat /usr/share/doc/setup*/uidgid
 grep UID_MIN /etc/login.defs
 grep GID_MIN /etc/login.defs
 
 # user private group (UPG) system
-cat /etc/group
+rocky:~ # cat /etc/group
 
-# manage account and group
+# account and group
 rocky:~ # id <example.user>
 
 rocky:~ # groupadd [-g <gid>] <example.group>
@@ -177,6 +177,129 @@ user1 host1.example.com = /bin/dnf, /sbin/reboot
 rocky:~ $ sudo -i
 rocky:~ $ sudo su -
 rocky:~ $ sudo <command>
+```
+
+---
+
+## file system permission
+
+```bash
+# file permission
+rocky:~ $ ls -l <file>
+rocky:~ $ ls -ld <directory>
+
+rocky:~ $ chmod <level><operation><permission> file-name
+
+# default umask
+rocky:~ $ grep "UMASK" /etc/login.defs
+rocky:~ $ umask
+rocky:~ $ umask -S <level><operation><permission>
+rocky:~ $ umask -S a=rwx
+rocky:~ $ umask 022
+
+# access control list
+rocky:~ # getfacl <file>
+rocky:~ # setfacl -m u:<username>:<symbolic_value> <file>
+
+rocky:~ # setfacl -m u:andrew:rw- project
+rocky:~ # setfacl -m u:susan:--- project
+rocky:~ # getfacl group
+```
+
+---
+
+## systemd
+
+```bash
+# systemd unit file
+rocky:~ # ls /usr/lib/systemd/system/
+rocky:~ # ls /run/systemd/system/
+rocky:~ # ls /etc/systemd/system/
+
+rocky:~ # systemctl -t help
+rocky:~ # systemctl list-units --type service [--all]
+
+# system service
+rocky:~ # systemctl status|start|stop|restart <name>.service
+rocky:~ # systemctl mask|umask <name>.service
+rocky:~ # systemctl enable|disable <name>.service
+rocky:~ # systemctl is-enabled|is-active <name>.service
+rocky:~ # systemctl list-dependencies --after|--before <name>.service
+
+# default target
+rocky:~ # systemctl get-default
+rocky:~ # systemctl list-units --type target
+rocky:~ # systemctl set-default <name>.target
+rocky:~ # systemctl isolate <name>.target
+
+# rescue mode
+rocky:~ # systemctl [--no-wall] rescue
+
+# when boot 'Press the E', then Move to the 'linux' and append the systemd.unit= parameter
+linux ... systemd.unit=emergency.target
+# 'Press Ctrl+X' to boot
+
+# shutdown
+rocky:~ # shutdown --poweroff hh:mm
+rocky:~ # shutdown --halt +m
+rocky:~ # shutdown -c
+rocky:~ # systemctl poweroff
+rocky:~ # systemctl halt
+rocky:~ # systemctl reboot
+rocky:~ # systemctl suspend
+rocky:~ # systemctl hibernate
+rocky:~ # systemctl hybrid-sleep
+rocky:~ # systemctl suspend-then-hibernate
+```
+
+---
+
+## time synchronization
+
+```bash
+rocky:~ # dnf install chrony
+rocky:~ # systemctl status chronyd
+rocky:~ # systemctl start|stop chronyd
+rocky:~ # systemctl enable|disable chronyd
+
+rocky:~ # chronyc tracking
+rocky:~ # chronyc sources
+rocky:~ # chronyc sourcestats
+rocky:~ # chronyc makestep
+
+rocky:~ # cat /etc/chrony.conf
+pool 2.rocky.pool.ntp.org iburst
+sourcedir /run/chrony-dhcp
+driftfile /var/lib/chrony/drift
+makestep 1.0 3
+rtcsync
+keyfile /etc/chrony.keys
+ntsdumpdir /var/lib/chrony
+leapsectz right/UTC
+logdir /var/log/chrony
+allow 192.0.2.0/24 # allowed to connect network or subnet
+allow 192.0.3.123  # allowed to connect address
+
+rocky:~ # firewall-cmd --zone=public --add-port=323/udp
+rocky:~ # firewall-cmd --permanent --zone=public --add-port=323/udp
+rocky:~ # firewall-cmd --reload
+```
+
+---
+
+## recover and restore system
+
+```bash
+rocky:~ # dnf install rear
+rocky:~ # vi /etc/rear/local.conf
+OUTPUT=ISO
+BACKUP=NETFS
+BACKUP_URL=file:///mnt/backup
+
+rocky:~ # rear -v mkbackup
+
+rocky:~ # rear -v recover
+
 ```
 
 ---

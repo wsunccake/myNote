@@ -27,6 +27,17 @@ linux:~ $ echo '{"user": "jq", "scripts": ["bash", "perl", "python"]}' | jq '.sc
 "perl"
 "python"
 
+# format
+linux:~ $ echo '{"user": "jq", "scripts": ["bash", "perl", "python"]}' | jq -r '.scripts[]| "script: \(.)"'
+script: bash
+script: perl
+script: python
+
+linux:~ $ echo '{"user": "jq", "scripts": ["bash", "perl", "python"]}' | jq -r ".scripts[]| \"script: \(.)\""
+script: bash
+script: perl
+script: python
+
 linux:~ $ echo '[{"user": "js", "lang": "javascript"}, {"user": "py", "lang": "python3"}]' | jq -r '.[].user, .[].lang' | paste -d, - -
 js,py
 javascript,python3
