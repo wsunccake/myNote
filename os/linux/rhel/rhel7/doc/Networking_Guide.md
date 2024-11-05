@@ -1,20 +1,18 @@
-# Hostname #
+# Hostname
 
-
-## config file ##
+## config file
 
 /etc/hostname
 
+## daemon
 
-## daemon ##
-
-```
+```bash
 rhel:~ # systemctl restart systemd-hostnamed
 ```
 
-## command ##
+## command
 
-```
+```bash
 # method 1: using hostnamectl setup hostname
 rhel:~ # hostnamectl status
 rhel:~ # hostnamectl set-hostname name # setup hostname
@@ -26,25 +24,22 @@ rhel:~ # nmcli general hostname
 rhel:~ # nmcli general hostname my-server
 ```
 
+# RedHat Networking
 
-# RedHat Networking  #
+## nm vs networking
 
-
-## nm vs networking ##
-
-| NetworkManager		| The default networking daemon		|
-| --------------------- | --------------------------------- |
-| nmtui					| tui for NetworkManager			|
-| nmcli					| cli with NetworkManager			|
-| control-center		| gui by the GNOME Shell			|
-| nm-connection-editor	| gui by A GTK+ 3 application		|
+| NetworkManager       | The default networking daemon |
+| -------------------- | ----------------------------- |
+| nmtui                | tui for NetworkManager        |
+| nmcli                | cli with NetworkManager       |
+| control-center       | gui by the GNOME Shell        |
+| nm-connection-editor | gui by A GTK+ 3 application   |
 
 /etc/sysconfig/network-scripts/ifcfg-ifname
 
 /etc/NetworkManager
 
-
-```
+```bash
 rhel:~ # yum install NetworkManager
 rhel:~ # systemctl status NetworkManager.service
 rhel:~ # systemctl start NetworkManager.service
@@ -53,31 +48,28 @@ rhel:~ # systemctl enable NetworkManager.service
 rhel:~ # systemctl restart network.service
 ```
 
-
-## ifcfg vs nmcli ##
+## ifcfg vs nmcli
 
 /usr/share/doc/initscripts-version/sysconfig.txt
 
-| ifcfg command 				 | nmcli command 				 |
-| ------------------------------ | ----------------------------- |
-| /etc/init.d/network restart 	 | 	nmcli connection reload 	 |
-| ifup eth0 					 | 	nmcli connection up eth0 	 |
-| ifdown eth0 					 | 	nmcli connection down eth0 	 |
+| ifcfg command               | nmcli command              |
+| --------------------------- | -------------------------- |
+| /etc/init.d/network restart | nmcli connection reload    |
+| ifup eth0                   | nmcli connection up eth0   |
+| ifdown eth0                 | nmcli connection down eth0 |
 
+## nmtui
 
-## nmtui ##
-
-```
+```bash
 rhel:~ # yum install NetworkManager-tui
 rhel:~ # nmtui
 rhel:~ # nmtui edit con-name
 rhel:~ # nmtui connect con-name
 ```
 
+## nmcli
 
-## nmcli ##
-
-```
+```bash
 rhel:~ # ip -V
 rhel:~ # nmcli help
 rhel:~ # nmcli general help
@@ -113,16 +105,13 @@ nmcli> quit
 rhel:~ # nmcli general status
 ```
 
+# Networking IP
 
-# Networking IP #
+## static ip
 
+### setting
 
-## static ip ##
-
-
-### setting ###
-
-```
+```bash
 # method 1:
 rhel:~ # nmtui
 
@@ -173,10 +162,9 @@ rhel:~ # route del -net 192.168.0.0 netmask 255.255.255.0 dev eth0 # 刪除靜�
 
 IPv6 方式跟 IPv4 一樣, 將 ipv4 改成 ipv6 即可
 
+### config file
 
-### config file ###
-
-```
+```bash
 # 設定 IP
 rhel:~ # cat /etc/sysconfig/network-script/ifcfg-ifname
 DEVICE=eth0
@@ -190,12 +178,11 @@ rhel:~ # cat /etc/sysconfig/network-script/route-ifname
 192.168.1.0/24 via 10.0.3.1
 ```
 
-## dhcp ##
+## dhcp
 
+### setting
 
-### setting ###
-
-```
+```bash
 # method 1:
 rhel:~ # nmtui
 
@@ -211,10 +198,9 @@ rhel:~ # dhclient eth0
 rhel:~ # dhclient -x
 ```
 
+### config file
 
-### config file ##
-
-```
+```bash
 rhel:~ # cat /etc/sysconfig/network-script/ifcfg-ifname
 DEVICE=em1
 BOOTPROTO=dhcp
@@ -226,10 +212,9 @@ DNS1=ip-address # 當 PEERDNS=no, 才能另外指定 DNS1
 DNS2=ip-address
 ```
 
+## wifi
 
-## wifi ##
-
-```
+```bash
 rhel:~ # nmcli dev wifi list
 rhel:~ # nmcli connection type wifi add con-name MyCafe ifname wlan0 ssid MyCafe ip4 192.168.100.101/24 gw4 192.168.100.1
 rhel:~ # nmcli connection modify MyCafe wifi-sec.key-mgmt wpa-psk # 設定連線加密方式
@@ -238,10 +223,9 @@ rhel:~ # nmcli radio wifi on
 rhel:~ # nmcli radio wifi off
 ```
 
+## multiple nic config file
 
-## multiple nic config file ##
-
-```
+```bash
 rhel:~ # cat /etc/sysconfig/network-script/ifcfg-ifname
 HWADDR=11:22:33:44:55:66
 TYPE=Ethernet
@@ -261,20 +245,17 @@ ONBOOT=yes # 開機使否開啟
 NM_CONTROLLED=yes # 可否由 Network Manager
 ```
 
+## GUI
 
-## GUI ##
-
-```
+```bash
 rhel:~ # gnome-control-center network
 ```
 
+# Networking Bond
 
-# Networking Bond #
+## setting
 
-
-## setting ##
-
-```
+```bash
 # method 1:
 rhel:~ # nmtui
 
@@ -310,10 +291,9 @@ rhel:~ # echo balance-alb > /sys/class/net/bond0/bonding/mode
 rhel:~ # ethtool interface_name | grep "Link detected:"
 ```
 
+## config file
 
-## config file ##
-
-```
+```bash
 rhel~: # cat /etc/syscofnig/network-script/ifcfg-bond0
 DEVICE=bond0
 TYPE=Bond
@@ -342,29 +322,25 @@ MASTER=bond0
 SLAVE=yes
 ```
 
+## GUI
 
-## GUI ##
-
-```
+```bash
 rhel:~ # gnome-control-center network
 ```
 
+# Networking Team
 
-# Networking Team #
-
-
-## package ##
+## package
 
 teamd, ethtool, arp_ping, nsna_ping, lacp
 
-```
+```bash
 rhel:~ # yum install teamd
 ```
 
+## bond to team
 
-## bond to team ##
-
-```
+```bash
 rhel:~ # bond2team --master bond0
 rhel:~ # bond2team --master bond0 --rename team0
 rhel:~ # bond2team --master bond0 --configdir /path/to/ifcfg-file
@@ -372,10 +348,9 @@ rhel:~ # bond2team --bonding_opts "mode=1 miimon=500"
 rhel:~ # bond2team --bonding_opts "mode=1 miimon=500 primary=eth1 primary_reselect-0" --port eth1 --port eth2 --port eth3 --port eth4
 ```
 
+## setting
 
-## setting ##
-
-```
+```bash
 # method 1:
 rhel:~ # nmtui
 
@@ -425,10 +400,9 @@ rhel:~ # teamdctl team0 port config update eth2 eth2-cfg.json
 rhel:~ # teamd -t team0 -k
 ```
 
+## config file
 
-## config file ##
-
-```
+```bash
 rhel:~ # cat /etc/syscofnig/network-script/ifcfg-team0
 DEVICE=team0
 DEVICETYPE=Team
@@ -453,26 +427,23 @@ TEAM_MASTER=c9b24f8d-69e8-4b0f-9656-c7ed8e7c0b2e
 DEVICETYPE=TeamPort
 ```
 
-
-## GUI ##
+## GUI
 
 ```
 rhel:~ # gnome-control-center network
 ```
 
+# Networking Bridge
 
-# Networking Bridge #
+## package
 
-
-## package ##
-
-```
+```bash
 rhel:~ # yum install bridge-utils
 ```
 
-## bridge ##
+## bridge
 
-```
+```bash
 # method 1:
 rhel:~ # nmtui
 
@@ -494,8 +465,8 @@ rhel:~ # ip link set eth0 master br0
 rhel:~ # ip link set br0 up
 rhel:~ # ip link set eth0 up
 
-rhel:~ # ip -d link show dev br0
-rhel:~ # bridge link
+rhel:~ # ip [-d] link show [type bridge|dev br0]
+rhel:~ # bridge link show [dev br0]
 
 # remove bridge
 rhel:~ # ip link set eth0 nomaster
@@ -515,10 +486,9 @@ rhel:~ # brctl delif br0 eth0
 rhel:~ # brctl delbr br0
 ```
 
+## config file
 
-## config file ##
-
-```
+```bash
 rhel:~ # cat /etc/syscofnig/network-script/ifcfg-br0
 DEVICE=br0
 STP=yes
@@ -536,27 +506,23 @@ ONBOOT=yes
 BRIDGE=br0
 ```
 
+## GUI
 
-## GUI ##
-
-```
+```bash
 rhel:~ # gnome-control-center network
 ```
 
+# Networking 802.1q VLAN
 
-# Networking 802.1q VLAN #
+## package
 
-
-## package ##
-
-```
+```bash
 rhel:~ # yum install vconfig
 ```
 
+## settting
 
-## settting ##
-
-```
+```bash
 # method 1:
 rhel:~ # nmtui
 
@@ -582,11 +548,10 @@ rhel:~ # vconfig add eth0 10
 rhel:~ # vconfig rem eth0.10
 ```
 
+## config file
 
-## config file ##
-
-```
-rhel:~ # cat ifcfg-eth0.10 
+```bash
+rhel:~ # cat ifcfg-eth0.10
 VLAN=yes
 TYPE=Vlan
 DEVICE=eth0.10
@@ -596,19 +561,17 @@ BOOTPROTO=dhcp
 ONBOOT=yes
 ```
 
-## GUI ##
+## GUI
 
-```
+```bash
 rhel:~ # gnome-control-center network
 ```
 
+# Networking VPN
 
-# Networking VPN #
+## pptp
 
-
-## pptp ##
-
-```
+```bash
 rhel:~ # yum install NetworkManager-pptp NetworkManager-pptp-gnome
 
 # method 1:
@@ -628,21 +591,19 @@ rhel:~ # firewall-cmd --reload
 rhel:~ # gnome-control-center network
 ```
 
-## l2tp ##
+## l2tp
 
-```
+```bash
 rhel:~ # yum install NetworkManager-l2tp NetworkManager-l2tp-gnome
 ```
 
+## ipsec
 
-## ipsec ##
-
-```
+```bash
 rhel:~ # yum install NetworkManager-libreswan NetworkManager-libreswan-gnome
 ```
 
-
-# Networking Device Naming #
+# Networking Device Naming
 
 biosdevname
 
@@ -654,27 +615,25 @@ Scheme 3: Names incorporating physical location of the connector of the hardware
 Scheme 4: Names incorporating interface's MAC address (example: enx78e7d1ea46da), is not used by default, but is available if the user chooses.
 Scheme 5: The traditional unpredictable kernel naming scheme, is used if all other methods fail (example: eth0).
 
-
-## device name procedure ##
+## device name procedure
 
 1. /usr/lib/udev/rules.d/60-net.rules
 
-	/lib/udev/rename_device look into all /etc/sysconfig/network-scripts/ifcfg-ifname
+   /lib/udev/rename_device look into all /etc/sysconfig/network-scripts/ifcfg-ifname
 
 2. /usr/lib/udev/rules.d/71-biosdevname.rules
 
-	biosdevname rename the interface, (biosdevname=0)
+   biosdevname rename the interface, (biosdevname=0)
 
 3. /lib/udev/rules.d/75-net-description.rules
 
-	udev fill in the internal udev device, ID_NET_NAME_ONBOARD, ID_NET_NAME_SLOT, ID_NET_NAME_PATH, ID_NET_NAME_MAC
+   udev fill in the internal udev device, ID_NET_NAME_ONBOARD, ID_NET_NAME_SLOT, ID_NET_NAME_PATH, ID_NET_NAME_MAC
 
 4. /usr/lib/udev/rules.d/80-net-name-slot.rules
 
-	udev rename the interface, ID_NET_NAME_ONBOARD, ID_NET_NAME_SLOT, ID_NET_NAME_PATH (net.ifnames=0)
+   udev rename the interface, ID_NET_NAME_ONBOARD, ID_NET_NAME_SLOT, ID_NET_NAME_PATH (net.ifnames=0)
 
-
-## nic device name ##
+## nic device name
 
 1. en for Ethernet
 
@@ -682,25 +641,22 @@ Scheme 5: The traditional unpredictable kernel naming scheme, is used if all oth
 
 3. ww for wireless wide area network (WWAN)
 
+## disable biosdevname
 
-## disable biosdevname ##
+    rhel:~ # cat /etc/default/grub
+    GRUB_CMDLINE_LINUX="... net.ifnames=0 biosdevname=0" # 多加 net.ifnames, biosdevname 設定
+    rhel:~ # grub2-mkconfig > /boot/grub2/grub.cfg
 
-	rhel:~ # cat /etc/default/grub
-	GRUB_CMDLINE_LINUX="... net.ifnames=0 biosdevname=0" # 多加 net.ifnames, biosdevname 設定
-	rhel:~ # grub2-mkconfig > /boot/grub2/grub.cfg
+## Trouble shooting
 
-
-## Trouble shooting ##
-
-```
+```bash
 rhel:~ # udevadm info /sys/class/net/ifname | grep ID_NET_NAME
 rhel:~ # ls /sys/class/net/
 ```
 
+# Network Namespace
 
-# Network Namespace #
-
-```
+```bash
 rhel:~ # ip netns list
 rhel:~ # ip netns add qdhcp
 rhel:~ # ip netns exec qdhcp ip addr show
@@ -712,10 +668,9 @@ rhel:~ # ip -all netns delete
 rhel:~ # uuidgen ifcfg-eth0
 ```
 
+# Netowkr Veth Pair
 
-# Netowkr Veth Pair #
-
-```
+```bash
 rhel:~ # ip link add veth0 type veth peer name veth1
 rhel:~ # ip -d link show
 5: veth1@veth0: ...
@@ -736,9 +691,9 @@ NIC statistics:
 # 搜尋 peer if index 5 就是 對應的 veth
 ```
 
-# InfiniBand & Remote Direct Memory Access #
+# InfiniBand & Remote Direct Memory Access
 
-## HW ##
+## HW
 
 IB (InfiniBand), RDMA (Remote Direct Memory Access)
 
@@ -746,8 +701,7 @@ iWARP: Chelsio hardware — libcxgb3 or libcxgb4
 
 RoCE/IBoE: Mellanox hardware — libmlx4 or libmlx5
 
-
-## package ##
+## package
 
 `Required`
 
@@ -769,11 +723,11 @@ RoCE/IBoE: Mellanox hardware — libmlx4 or libmlx5
 
 - openmpi, mvapich2, mvapich2-psm
 
-## RDMA ##
+## RDMA
 
-	rhel:~ # yum install rdma
-	rhel:~ # dracut -f # rebuild initrd
-	rhel:~ # systemctl enable rdma
+    rhel:~ # yum install rdma
+    rhel:~ # dracut -f # rebuild initrd
+    rhel:~ # systemctl enable rdma
 
 - /etc/rdma/rdma.conf
 
@@ -781,25 +735,23 @@ RoCE/IBoE: Mellanox hardware — libmlx4 or libmlx5
 
 - /etc/security/limits.d/rdma.conf
 
-- /etc/rdma/mlx4.conf or  /etc/rdma/mlx5.conf
+- /etc/rdma/mlx4.conf or /etc/rdma/mlx5.conf
 
-
-## opensm ##
+## opensm
 
 opensm is IB subnet manager. all InfiniBand networks must have a subnet manager running for the network to function.
 
-	/etc/sysconfig/opensm
+    /etc/sysconfig/opensm
 
-	/etc/rdma/opensm.conf
+    /etc/rdma/opensm.conf
 
-	/etc/rdma/partitions.conf
+    /etc/rdma/partitions.conf
 
-	systemctl enable opensm
+    systemctl enable opensm
 
+## testing
 
-## testing ##
-
-```
+```bash
 rhel:~ # yum install libibverbs-utils
 rhel:~ # ibv_devices
 rhel:~ # ibv_devinfo
@@ -812,10 +764,9 @@ rhel:~ # ibping -c 10000 -f -C mlx4_0 -P 1 -L 2
 rhel:~ # ibping -c 10000 -f -C mlx4_0 -P 1 -G 0xf4521403007bcba1
 ```
 
+## IPoIB
 
-## IPoIB ##
-
-```
+```bash
 # method 1:
 rhel:~ # nmtui
 
@@ -838,10 +789,9 @@ nmcli> quit
 rhel:~ # nmcli con add type infiniband con-name mlx4_ib0.8002 ifname mlx4_ib0.8002 parent mlx4_ib0 p-key 0x8002 # create with P key
 ```
 
+## config file
 
-## config file ##
-
-```
+```bash
 rhel:~ # cat /etc/sysconfig/network-script/ifcfg-ib0
 DEVICE=mlx4_ib0
 TYPE=InfiniBand
@@ -874,23 +824,19 @@ CONNECTED_MODE=yes
 NAME=mlx4_ib0.8002
 ```
 
+## GUI
 
-## GUI ##
-
-```
+```bash
 rhel:~ # gnome-control-center network
 ```
 
+# DHCP
 
-# DHCP #
+## dhcp
 
+### package
 
-## dhcp ##
-
-
-### package ###
-
-```
+```bash
 rhel:~ # yum install dhcp
 
 rhel:~ # systecmctl enable dhcpd.service # or copy /usr/lib/systemd/system/dhcpd.service to /etc/systemd/system/
@@ -905,10 +851,9 @@ rhel:~ # systemctl start dhcpd.service
 rhel:~ # systemctl stop dhcpd.service
 ```
 
+### config file
 
-### config file ###
-
-```
+```bash
 rhel:~ # cp /usr/share/doc/dhcp-version_number/dhcpd.conf.example /etc/dhcp/dhcpd.conf # example
 
 rhel:~ # cat /etc/dhcp/dhcpd.conf
@@ -931,14 +876,13 @@ subnet 192.168.1.0 netmask 255.255.255.0 {
 rhel:~ # ls /var/lib/dhcpd/dhcpd.leases
 ```
 
-
-## dhcrelay ##
+## dhcrelay
 
 DHCP Relay Agent (dhcrelay) enables the relay of DHCP and BOOTP requests from a subnet with no DHCP server on it to one or more DHCP servers on other subnets.
 
 `IPv4`
 
-```
+```bash
 rhel:~ # systecmctl enable dhcpd.service # or copy /lib/systemd/system/dhcrelay.service to /etc/systemd/system/
 rhel:~ # vi /etc/systemd/system/dhcrelay.service
 ...
@@ -948,10 +892,9 @@ rhel:~ # systemctl --system daemon-reload
 rhel:~ # systemctl restart dhcrelay
 ```
 
-
 `IPv6`
 
-```
+```bash
 rhel:~ # cp /lib/systemd/system/dhcrelay.service /etc/systemd/system/dhcrelay6.service
 rhel:~ # vi /etc/systemd/system/dhcrelay6.service
 ...
@@ -961,26 +904,23 @@ rhel:~ # systemctl --system daemon-reload
 rhel:~ # systemctl restart dhcrelay6
 ```
 
-
-# DNS #
+# DNS
 
 `authoritative`
 Authoritative nameservers answer to resource records that are part of their zones only. This category includes both primary (master) and secondary (slave) nameservers.
 `recursive`
 Recursive nameservers offer resolution services, but they are not authoritative for any zone. Answers for all resolutions are cached in a memory for a fixed period of time, which is specified by the retrieved resource record.
 
-
 /etc/named.conf
 /etc/named.d
-
 
 bind-chroot
 /var/named/chroot/
 vim -c "set backupcopy=yes" /etc/named.conf
 
-## bind-chroot ##
+## bind-chroot
 
-```
+```bash
 rhel:~ # yum install bind-chroot
 rhel:~ # systemctl status named
 rhel:~ # systemctl stop named
@@ -990,10 +930,9 @@ rhel:~ # systemctl start named-chroot
 rhel:~ # systemctl status named-chroot
 ```
 
+### config file
 
-### config file ###
-
-```
+```bash
 rhel:~ # vi /etc/named.conf
 acl black-hats {
   10.0.2.0/24;
@@ -1031,7 +970,7 @@ logging {
   };
 };
 
-zone "example.com" IN { // file in /var/named dir, primary 
+zone "example.com" IN { // file in /var/named dir, primary
   type master;
   file "example.com.zone";
   allow-transfer { 192.168.0.2; };
@@ -1053,10 +992,9 @@ include "/etc/named.rfc1912.zones";
 include "/etc/named.root.key";
 ```
 
+### zone file
 
-### zone file ###
-
-```
+```bash
 rhel:~ # vi /var/named/example.com.zone
 $ORIGIN example.com.
 $TTL 86400
@@ -1119,23 +1057,20 @@ $TTL 86400
 4  IN  PTR  ftp.example.com.
 ```
 
-
-## rndc ##
+## rndc
 
 /etc/rndc.conf
 
 /etc/rndc.key
 
-
-```
+```bash
 rhel:~ # chmod o-rwx /etc/rndc.key
 rhel:~ # rndc status
 ```
 
+### reload configuration and zone
 
-### reload configuration and zone ###
-
-```
+```bash
 rhel:~ # rndc reload # reload configuration and zones
 rhel:~ # rndc reload localhost # reload single zone (zone name: localhost)
 rhel:~ # rndc reconfig # reload configuration and newly added zones
@@ -1144,10 +1079,9 @@ rhel:~ # rndc freeze localhost
 rhel:~ # rndc thaw localhost
 ```
 
+### update zone key
 
-### update zone key ###
-
-```
+```bash
 rhel:~ # vi /etc/named.conf
 ...
 zone "localhost" IN {
@@ -1165,10 +1099,9 @@ rhel:~ # rndc validation off
 rhel:~ # rndc querylog
 ```
 
+## dig
 
-## dig ##
-
-```
+```bash
 rhel:~ # dig example.com NS
 rhel:~ # dig example.com A
 rhel:~ # dig -x 192.0.32.10

@@ -1,19 +1,19 @@
-# YUM #
+# yum
 
-
-## Package ##
+## package
 
 YUM 在系統安裝時就已安裝, yum-utils 可協助設定 package 和 repository, createrepo 可建立 repositiry 需要的 db
 
-```
+```bash
 rhel:~ # yum install yum-utils
 rhel:~ # yum install createrepo
 ```
 
+---
 
-## Configuration ##
+## configuration
 
-```
+```bash
 # setup iso to repo
 rhel:~ # mount -oloop,ro rhel-server-7.2-x86_64-dvd.iso /mnt/rhel-server-7.2
 rhel:~ # yum-config-manager --add-repo file:///mnt/rhel-server-7.2
@@ -21,15 +21,13 @@ rhel:~ # yum clean
 rhel:~ # yum makecache
 ```
 
+## command
 
-## Command ##
-
-
-### Repository ###
+### repository
 
 repositoory 以下簡稱 repo
 
-```
+```bash
 # list repo
 rhel:~ # yum repolist                        # 顯示可用的 repo, 僅 enable
 rhel:~ # yum repolist all                    # 顯示所有 repo, 包括 disable
@@ -43,10 +41,9 @@ rhel:~ # yum-config-manager --add-repo https://www.softwarecollections.org/repos
 
 新增的 repo config 會在 /etc/yum.repo.d 目錄下
 
+### package
 
-### Package ###
-
-```
+```bash
 # search package
 rhel:~ # yum serach <pkg>       # 搜尋 pkg, 包括 package name 及 summary
 rhel:~ # yum list *<pkg>*       # 搜尋 pkg, 只搜 package name, 可使用 regex
@@ -77,11 +74,10 @@ rhel:~ # yum --downloadonly <pkg>
 
 下載的 package 放在 /var/cache/yum/$basearch/$releasever/packages 目錄下
 
+### package group
 
-### Package Group ###
-
-```
-# list 
+```bash
+# list
 rhel:~ # yum groups list
 rhel:~ # yum groups info <pkg_grp>    # 顯示安裝 package
 
@@ -94,10 +90,9 @@ rhel:~ # yum groups remove <pkg_grp>
 rhel:~ # yum remove @<pkg_grp>
 ```
 
+### history
 
-### History ###
-
-```
+```bash
 # list
 rhel:~ # yum history [list]     # 顯示安裝紀錄, list 可省略
 rhel:~ # yum history list all
@@ -116,10 +111,32 @@ rhel:~ # yum history new        # 將之前安裝紀錄刪除, 小心使用
 
 YUM 使用 SQLite 存放在 /var/lib/yum/history/ 目錄下
 
+---
 
-## Repository ##
+## repository
 
-```
+```bash
 # create
 rhel:~ # createrepo --database /mnt/local_repo
+```
+
+```bash
+rhel:~ # yum install httpd
+rhel:~ # yum install createrepo
+rhel:~ # yum install yum-utils
+rhel:~ # yum repolist
+rhel:~ # mkdir –p /var/www/html/repos/{base,centosplus,extras,updates}
+
+rhel:~ # reposync -g -l -d -m --repoid=base --newest-only --download-metadata --download_path=/var/www/html/repos/
+rhel:~ # reposync -g -l -d -m --repoid=centosplus --newest-only --download-metadata --download_path=/var/www/html/repos/
+rhel:~ # reposync -g -l -d -m --repoid=extras --newest-only --download-metadata --download_path=/var/www/html/repos/
+rhel:~ # reposync -g -l -d -m --repoid=updates --newest-only --download-metadata --download_path=/var/www/html/repos/
+rhel:~ # createrepo /var/www/html
+
+rhel:~ # vi /etc/yum.repos.d/remote.repo
+[remote]
+name=RHEL Apache
+baseurl=http://<ip>
+enabled=1
+gpgcheck=0
 ```

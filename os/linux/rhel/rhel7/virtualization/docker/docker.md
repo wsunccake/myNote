@@ -518,6 +518,21 @@ EOF
 CMD ["/bin/bash"]
 ```
 
+```bash
+rhel:~ # cat Dockerfile
+FROM centos
+
+ARG base_repo
+
+# ENV BASE_REPO=${base_repo:-http://centos/7/centos-base.repo}
+
+VOLUME $dataDir
+
+RUN echo "BASE_REPO: ${base_repo:-http://mirror/centos/7/CentOS-Base.repo}"
+
+rhel:~ # docker [--build-arg base_repo=http://centos7/base.repo] -t mycentos .
+```
+
 ---
 
 ## Docker Registry
@@ -603,7 +618,7 @@ host_1:~ # systemctl restart docker
 
 `Internal Network`
 
-```
+```bash
 # host ping internel
 host_1:~ # ping -6 -c3 2001:db8:1::1:2
 host_1:~ # ping -6 -c3 fc00:db8::1
@@ -617,7 +632,7 @@ host_1:~ # docker exec -it <container> ping -6 -c3 fc00:db8::2
 
 `External Network`
 
-```
+```bash
 # setup iptable
 host_1:~ # ip6tables -t nat -I POSTROUTING -s fc00:db8::1/125 -j MASQUERADE
 host_1:~ # ip6tables -I FORWARD ! -i docker0 -o docker0 -m state --state RELATED,ESTABLISHED -j ACCEPT
