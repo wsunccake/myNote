@@ -1,10 +1,10 @@
-# CISCO Switch
+# cisco switch
 
-## Basic
+## basic
 
 baud rate: 9600
 
-### Enable Privilege
+### enable privilege
 
 ```bash
 # privilege mode
@@ -16,7 +16,7 @@ SWITCH# configure terminal
 SWITCH(config)#
 ```
 
-### Common
+### common
 
 ```bash
 # 設定 hostname
@@ -30,7 +30,7 @@ SWITCH(config-line) # logging synchronous
 SWITCH(config)# no ip domain-lookup
 ```
 
-### NVRAM & Flash
+### nvram & flash
 
 ```bash
 SWITCH# dir nvram:   # startup-config 存放位置
@@ -43,7 +43,7 @@ SWITCH# more flash:config.text                           # 讀取檔案
 SWTICH# copy running-config startup-config               # 複製當前設定到啟動設定
 ```
 
-### Set Factory
+### set factory
 
 1. 拔掉電源線，並長按 "mode" button, 然後開機
 
@@ -66,7 +66,7 @@ switch: delete flash:config.text                       # 移除設定檔, 系統
 switch: boot                                           # 重開機
 ```
 
-### Setup Login
+### setup login
 
 ```bash
 # 設定 console login 帳號密碼
