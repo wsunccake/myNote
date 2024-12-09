@@ -4,6 +4,22 @@
 
 ```bash
 ~ # setup-alpine
+# keyboard layout
+# ostname
+# Network configuration
+# Timezone and system clock
+# Root password
+# Disk partitioning
+
+~ # setup-hostname <host>
+~ # setup-keymap <layout>
+~ # setup-timezone <timezone>
+~ # setup-interfaces
+~ # setup-dns
+~ # setup-apkrepos
+~ # setup-ntp
+~ # setup-disk /dev/sdX
+~ # setup-ssh
 ```
 
 ---

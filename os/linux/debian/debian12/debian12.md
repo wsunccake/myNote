@@ -50,6 +50,13 @@ debian:~ $ ~/.fzf/install
 # screen and tmux
 debian:~ # apt install screen tmux
 
+# jq
+debian:~ # apt install jq
+
+# yq
+debian:~ # curl -OL "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64" -o /usr/local/bin/yq
+debian:~ # chmod +x /usr/local/bin/yq
+
 # unetbootin
 debian:~ # apt install mtools
 debian:~ # wget https://github.com/unetbootin/unetbootin/releases/download/702/unetbootin-linux64-702.bin

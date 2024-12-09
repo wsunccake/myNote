@@ -12,6 +12,13 @@
 
 ---
 
+## install
+
+How would you like to set up the device -> Set up for work or school
+Let's add your Microsoft account -> sign-option
+
+---
+
 ## VM
 
 ### virtualbox

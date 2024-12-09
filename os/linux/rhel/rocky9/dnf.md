@@ -4,6 +4,20 @@ BaseOS
 
 AppStream
 
+## alias
+
+| command   | alias |
+| --------- | ----- |
+| list      | ls    |
+| info      | if    |
+| search    | se    |
+| install   | in    |
+| remove    | rm    |
+| makecache | mc    |
+| repoquery | rq    |
+| group     | grp   |
+| history   | hist  |
+
 ## module
 
 ```bash
@@ -38,7 +52,7 @@ rocky:~ # dnf provides <file>
 rocky:~ # dnf info <package>
 rocky:~ # dnf repoquery --info <package>
 
-rocky:~ # dnf group list
+rocky:~ # dnf group list -v
 rocky:~ # dnf group info "<group>"
 rocky:~ # dnf group summary
 ```
@@ -99,4 +113,30 @@ rocky:~ # dnf config-manager --add-repo <repository_URL>
 rocky:~ # cat /etc/yum.repos.d/<repository_URL>.repo
 rocky:~ # dnf config-manager --enable <repository_id>
 rocky:~ # dnf config-manager --disable <repository_id>
+
+rocky:~ # dnf repolist -v
+```
+
+### add dvd media
+
+```bash
+rocky:~ # cat /etc/yum.repo.d/media.repo
+[Media-BaseOS]
+name=media-baseos
+baseurl=file:///media/rocky9/BaseOS
+enabled=1
+gpgcheck=0
+priority=1
+# gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+[Media-AppStream]
+name=meedia-appstream
+baseurl=file:///media/rocky9/AppStream
+enabled=1
+gpgcheck=0
+priority=2
+
+rocky:~ # dnf clean all
+rocky:~ # dnf repolist -v
+rocky:~ # dnf makecache
 ```

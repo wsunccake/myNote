@@ -4,7 +4,6 @@
 
 ECMAScript (European Computer Manufacturers Association)
 
-
 ---
 
 ## Template Literal
@@ -14,12 +13,11 @@ var name = "JavaScript";
 var text = `Hello ${name}`;
 console.log(text);
 
-`Now: ${new Date(),toLocaleString()}`;
+`Now: ${(new Date(), toLocaleString())}`;
 `2+3: ${2 + 3}`;
 
-console.log(String.raw `"\n"Hello ${name}`);
+console.log(String.raw`"\n"Hello ${name}`);
 ```
-
 
 ---
 
@@ -31,9 +29,9 @@ console.log(String.raw `"\n"Hello ${name}`);
 // ES 5
 var listeners = [];
 function listen() {}
-var events =  {
-    listeners: listeners,
-    listen: listen
+var events = {
+  listeners: listeners,
+  listen: listen,
 };
 
 console.log(events.listeners);
@@ -42,9 +40,9 @@ console.log(events.listen);
 // ES 6
 var listeners = [];
 function listen() {}
-var events =  {
-    listeners,
-    listen
+var events = {
+  listeners,
+  listen,
 };
 
 console.log(events.listeners);
@@ -57,21 +55,21 @@ console.log(events.listen);
 // ES 5
 function getEnvelope(type, description) {
   var envelope = {
-      data: {}
+    data: {},
   };
   envelope[type] = description;
   return envelope;
 }
-console.log(getEnvelope('a', 'aAa'));
+console.log(getEnvelope("a", "aAa"));
 
 // ES 6
 function getEnvelope(type, description) {
-    return {
-        data: {},
-        [type]: description
-    };
+  return {
+    data: {},
+    [type]: description,
+  };
 }
-console.log(getEnvelope('a', 'aAa'));
+console.log(getEnvelope("a", "aAa"));
 ```
 
 `function of object`
@@ -82,52 +80,51 @@ var emiter = {
   events: {},
   on: function (type, fn) {
     if (this.events[type] === undefined) {
-        this.events[type] = [];
+      this.events[type] = [];
     }
     this.events[type].push(fn);
   },
   emit: function (type, event) {
     if (this.events[type] === undefined) {
-        return ;
+      return;
     }
     this.events[type].forEach(function (fn) {
-        fn(event);
-    })
-  }
+      fn(event);
+    });
+  },
 };
 
-emiter.on('sayHi', function (event) {
- console.log("Hi " + event);
+emiter.on("sayHi", function (event) {
+  console.log("Hi " + event);
 });
 
-emiter.emit('sayHi', 'JS');
+emiter.emit("sayHi", "JS");
 
 // ES 6
 var emiter = {
   events: {},
   on(type, fn) {
     if (this.events[type] === undefined) {
-        this.events[type] = [];
+      this.events[type] = [];
     }
     this.events[type].push(fn);
   },
   emit(type, event) {
     if (this.events[type] === undefined) {
-        return ;
+      return;
     }
     this.events[type].forEach(function (fn) {
-        fn(event);
-    })
-  }
+      fn(event);
+    });
+  },
 };
 
-emiter.on('sayHi', function (event) {
+emiter.on("sayHi", function (event) {
   console.log("Hi " + event);
 });
 
-emiter.emit('sayHi', 'JS');
+emiter.emit("sayHi", "JS");
 ```
-
 
 ---
 
@@ -154,19 +151,18 @@ var arrow = (param) => {
 
 ```javascript
 var timer = {
-    second: 0,
-    start() {
-        setInterval(() => {
-            this.second++
-        }, 1000)
-    }
+  second: 0,
+  start() {
+    setInterval(() => {
+      this.second++;
+    }, 1000);
+  },
 };
 
 timer.start();
 setTimeout(function () {
-    console.log(timer.second);
+  console.log(timer.second);
 }, 3000);
-
 ```
 
 ---
@@ -175,18 +171,17 @@ setTimeout(function () {
 
 ```javascript
 // ES 5
-var link = function (height, color) {  
-  var height = height || 50;  
+var link = function (height, color) {
+  var height = height || 50;
   var color = color || 'red';
   ...
 }
 
 // ES 6
-var link = function (height = 50, color = 'red') {  
+var link = function (height = 50, color = 'red') {
    ...
 }
 ```
-
 
 ---
 
@@ -202,13 +197,12 @@ console.log([1, ...[2, 3], 4]);
 
 ```javascript
 function cast() {
-  return [...arguments]
+  return [...arguments];
 }
 
-console.log(cast(1,2,3));
-console.log(cast([1,2,3]));
+console.log(cast(1, 2, 3));
+console.log(cast([1, 2, 3]));
 ```
-
 
 ---
 
@@ -224,14 +218,11 @@ var left = 2;
 [right, left] = [left, right];
 
 [a, b, ...other] = [1, 2, 3, 4, 5];
-
 ```
-
 
 ---
 
 ## Class
-
 
 ---
 
@@ -240,33 +231,33 @@ var left = 2;
 ### common js
 
 ```javascript
-// m.js 
+// m.js
 exports.PI = 3.14;
 
 // main.js
-const m = require('./m.js');
+const m = require("./m.js");
 console.log(m.PI);
 
 // main.js
-const m = require('./m.js');
-const {PI: pi} = m;
+const m = require("./m.js");
+const { PI: pi } = m;
 console.log(pi);
 
 // main.js
-const { PI } = require('./m.js');
+const { PI } = require("./m.js");
 console.log(PI);
 
 // main.js
-const m = require('./m.js');
+const m = require("./m.js");
 const { PI } = m;
 console.log(PI);
 ```
-
 
 ### es module
 
 ```javascript
 // m.js
+// w/ export default
 export default {
   PI: 3.14
 };
@@ -288,13 +279,17 @@ console.log(PI: pi);
 
 ```javascript
 // m.js
+// w/o export default
 export const PI = 3.14;
 
 // main.js
-import { PI } from './m.js';
+import { PI } from "./m.js";
 console.log(PI);
-```
 
+// main.js
+import * as M from "./m.js";
+console.log(M.PI);
+```
 
 ---
 

@@ -120,18 +120,27 @@ YUM 使用 SQLite 存放在 /var/lib/yum/history/ 目錄下
 rhel:~ # createrepo --database /mnt/local_repo
 ```
 
-```bash
-rhel:~ # yum install httpd
-rhel:~ # yum install createrepo
-rhel:~ # yum install yum-utils
-rhel:~ # yum repolist
-rhel:~ # mkdir –p /var/www/html/repos/{base,centosplus,extras,updates}
+---
 
-rhel:~ # reposync -g -l -d -m --repoid=base --newest-only --download-metadata --download_path=/var/www/html/repos/
-rhel:~ # reposync -g -l -d -m --repoid=centosplus --newest-only --download-metadata --download_path=/var/www/html/repos/
-rhel:~ # reposync -g -l -d -m --repoid=extras --newest-only --download-metadata --download_path=/var/www/html/repos/
-rhel:~ # reposync -g -l -d -m --repoid=updates --newest-only --download-metadata --download_path=/var/www/html/repos/
-rhel:~ # createrepo /var/www/html
+## private repo web service
+
+### sync repo / download package
+
+```bash
+rhel:~ # yum install yum-utils
+
+# download package
+rhel:~ # yum repolist
+rhel:~ # mkdir –p /var/www/html/repo/{base,centosplus,extras,updates}
+rhel:~ # reposync -g -l -d -m --repoid=base --newest-only --download-metadata --download_path=/var/www/html/repo/
+rhel:~ # reposync -g -l -d -m --repoid=centosplus --newest-only --download-metadata --download_path=/var/www/html/repo/
+rhel:~ # reposync -g -l -d -m --repoid=extras --newest-only --download-metadata --download_path=/var/www/html/repo/
+rhel:~ # reposync -g -l -d -m --repoid=updates --newest-only --download-metadata --download_path=/var/www/html/repo/
+
+# download package
+rhel:~ # for r in $(yum repolist | sed 1,3d | sed '$ d' | awk '{print $1}'); do
+  reposync -g -l -d -m --repoid=$r --newest-only --download-metadata --download_path=/var/www/html/repo/
+done
 
 rhel:~ # vi /etc/yum.repos.d/remote.repo
 [remote]
@@ -139,4 +148,55 @@ name=RHEL Apache
 baseurl=http://<ip>
 enabled=1
 gpgcheck=0
+```
+
+### create repo metadb
+
+```bash
+rhel:~ # yum install createrepo
+
+rhel:~ # createrepo /var/www/html
+rhel:~ # ls /var/www/html/repo/base/Package/*.rpm
+rhel:~ # cd /var/www/html/repo/base
+rhel:~ # createrepo .
+```
+
+### firewall
+
+```bash
+rhel:~ # firewall-cmd --add-service=http
+rhel:~ # firewall-cmd --add-service=https
+rhel:~ # firewall-cmd --add-service=http --permanent
+rhel:~ # firewall-cmd --add-service=https --permanent
+```
+
+### http
+
+```bash
+## install
+rhel:~ # yum install httpd
+
+## service
+rhel:~ # systemctl status httpd
+rhel:~ # systemctl start httpd
+rhel:~ # systemctl enable httpd
+
+## module
+rhel:~ # httpd -M | grep autoindex_module
+rhel:~ # grep -r autoindex_module /etc/httpd/
+
+## config
+rhel:~ # vi /etc/httpd/conf/httpd.conf
+...
+<Directory "/var/www/html">
+    Options +Indexes
+    AllowOverride None
+    Require all granted
+</Directory>
+
+rhel:~ # chmod -R 755 /var/www/html/repo
+rhel:~ # chown -R apache:apache /var/www/html/repo
+
+rhel:~ # systemctl reload httpd
+rhel:~ # curl http://127.0.0.1/repo/
 ```

@@ -3,6 +3,27 @@
 ## system
 
 ```bash
+# media / local image
+alma:~ # cat /etc/yum.repo.d/media.repo
+[Media-BaseOS]
+name=media-baseos
+baseurl=file:///media/alma9/BaseOS
+enabled=1
+gpgcheck=0
+priority=1
+# gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+[Media-AppStream]
+name=meedia-appstream
+baseurl=file:///media/alma9/AppStream
+enabled=1
+gpgcheck=0
+priority=2
+
+alma:~ # dnf clean all
+alma:~ # dnf repolist -v
+alma:~ # dnf makecache
+
 # epel
 alma:~ # dnf clean all
 alma:~ # dnf install epel-release -y
@@ -31,8 +52,8 @@ alma:~ # dnf -y install java-17-openjdk-devel
 # sdk
 alma:~ # curl -s "https://get.sdkman.io" | bash
 
-sdk install groovy 4.0.6
-sdk install gradle 7.6
+alma:~ # sdk install groovy 4.0.6
+alma:~ # sdk install gradle 7.6
 ```
 
 ---

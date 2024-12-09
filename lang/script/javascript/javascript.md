@@ -1,26 +1,99 @@
 # Javascript
 
+---
 
-## Run
+## content
 
-`browser`
+- [run](#run)
+  - [browser](#browser)
+  - [node.js](#nodejs)
+  - [rhino](#rhino)
+- [comment](#comment)
+- [variable](#variable)
+  - [var](#var)
+  - [let](#let)
+  - [const](#const)
+- [data type](#data-type)
+  - [string](#string)
+  - [number](#number)
+  - [boolean](#boolean)
+  - [array](#array)
+  - [object](#object)
+  - [null](#null)
+  - [undefined](#undefined)
+  - [symbol](#symbol)
+  - [set](#set)
+  - [map](#map)
+  - [type conversion](#type-conversion)
+- [operator](#operator)
+  - [typeof](#typeof)
+  - [compare](#compare)
+  - [destructuring assignment](#destructuring-assignment)
+    - [array destructure](#array-destructure)
+    - [object destructure](#object-destructure)
+- [condition](#condition)
+  - [if/else](#ifelse)
+  - [switch](#switch)
+  - [for](#for)
+  - [while](#while)
+  - [do](#do)
+  - [forEach](#foreach)
+- [function](#function)
+  - [parameter](#parameter)
+  - [this](#this)
+  - [apply, call, bind](#apply-call-bind)
+- [class](#class)
+  - [function](#function-1)
+  - [class](#class-1)
+  - [extends](#extends)
+  - [mixin](#mixin)
+  - [function map to class](#function-map-to-class)
+  - [function map to extends](#function-map-to-extends)
+- [exception](#exception)
+  - [try / catch / finally](#try--catch--finally)
+  - [throw](#throw)
+- [iterator](#iterator)
+  - [iterable protocol](#iterable-protocol)
+  - [get, set](#get-set)
+- [generator](#generator)
+  - [yield](#yield)
+  - [return](#return)
+  - [next](#next)
+- [async](#async)
+  - [call back](#call-back)
+    - [IIFE](#iife--immediately-invoked-function-expression)
+    - [scope](#scope)
+    - [call back hell](#call-back-hell)
+  - [promise](#promise)
+  - [co -> sequence run](#co---sequence-run)
+  - [async / await](#async--await)
+- [regex](#regex)
+  - [capturing](#capturing)
+  - [non capturing](#non-capturing)
+  - [lookahead](#lookahead)
+- [DOM event](#dom-event)
+- [reference](#reference)
+
+---
+
+## run
+
+### browser
 
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-</head>
+  <head> </head>
 
-<body>
-<script>
-    console.log('Hello JavaScript');
-</script>
-</body>
+  <body>
+    <script>
+      console.log("Hello JavaScript");
+    </script>
+  </body>
 </html>
 ```
 
-
-`node.js`
+### node.js
 
 ```bash
 # REPL
@@ -39,8 +112,7 @@ console.log('Hello JavaScript');
 linux:~ # node hello.js
 ```
 
-
-`rhino`
+### rhino
 
 ```bash
 # REPL
@@ -54,23 +126,20 @@ console.log('Hello JavaScript');
 linux:~ # java -jar js.jar hello.js
 ```
 
-
 ---
 
-## Comment
+## comment
 
 ```javascript
-// 這是單行註解 
-/* 這是跨行註解 */ 
+// 這是單行註解
+/* 這是跨行註解 */
 ```
-
 
 ---
 
-## Variable
+## variable
 
 var 會有 hosting, let 和 const 只會存在 block scope
-
 
 ### var
 
@@ -85,15 +154,14 @@ console.log(v1);
 console.log(v2);
 var v2 = 2;
 
-// console.log(v3); 
+// console.log(v3);
 ```
-
 
 ### let
 
 ```javascript
 for (let i in [1, 2, 3]) {
-    console.log(i);
+  console.log(i);
 }
 
 let l1 = 1;
@@ -104,7 +172,6 @@ console.log(l1);
 let l2 = 2;
 ```
 
-
 ### const
 
 ```javascript
@@ -113,25 +180,23 @@ const pi = 3.14;
 const peopel = ["Mary", "Joe"];
 people.push("Telsa");
 
-var humans = people
+var humans = people;
 humans = "evil";
 
 const frozen = Object.freeze(["Ice", "Ice cube"]);
 frozen.push("Water");
 ```
 
-
 ---
 
-## Data Type
+## data type
 
-JavaScript 中的變數分為 numerical, string, boolean 和 object type 有 array, object, resource, NULL. 變數宣告要使用 var (沒宣告 var 也可以, 但變數會成為全域變數), 變數名稱的開頭必須是底線（_）或英文字母, 英文字母的大小寫都可以, 而且大小寫有別, 要注意數字不可以作為變數的開頭.
+JavaScript 中的變數分為 numerical, string, boolean 和 object type 有 array, object, resource, NULL. 變數宣告要使用 var (沒宣告 var 也可以, 但變數會成為全域變數), 變數名稱的開頭必須是底線（\_）或英文字母, 英文字母的大小寫都可以, 而且大小寫有別, 要注意數字不可以作為變數的開頭.
 
-
-### String
+### string
 
 ```javascript
-let single = 'single-quoted';
+let single = "single-quoted";
 let double = "double-quoted";
 let backticks = `backticks`;
 let multiline = `John
@@ -139,7 +204,7 @@ Pete
 Mary
 `;
 
-console.log('single ${single}');
+console.log("single ${single}");
 console.log("double ${double}");
 console.log(`backticks ${backticks}`);
 
@@ -150,9 +215,9 @@ function sum(a, b) {
 console.log(`1 + 2 = ${sum(1, 2)}.`);
 
 // common method
-'Interface'.length;
-'Interface'.toUpperCase();
-'Interface'.toLowerCase();
+"Interface".length;
+"Interface".toUpperCase();
+"Interface".toLowerCase();
 
 // search string
 "JavaScript,PHP,Python,Ruby".indexOf("JavaScript");
@@ -165,9 +230,13 @@ console.log(`1 + 2 = ${sum(1, 2)}.`);
 "JavaScript".slice(0, 4);
 
 // loop
-for (let char of "Hello") {console.log(char);}                 // H e l l o
-for (let char in "Hello") {console.log(char, "Hello"[char]);}  // 0 1 2 3 4
-[..."Hello"].forEach(c => console.log(c));                     // H e l l o
+for (let char of "Hello") {
+  console.log(char);
+} // H e l l o
+for (let char in "Hello") {
+  console.log(char, "Hello"[char]);
+} // 0 1 2 3 4
+[..."Hello"].forEach((c) => console.log(c)); // H e l l o
 
 // split to list
 "JavaScript,PHP,Python,Ruby".split(" ");
@@ -181,16 +250,15 @@ parseFloat("123.0");
 "abc" + "xyz";
 ```
 
-
-### Number
+### number
 
 ```javascript
-let num1 = 1;          // 十進位
-let num2 = 0xff;       // 十六進位
-let num3 = 033;        // 八進位
-let num4 = 1234.5678;  // 浮點數
-let num5 = 6.02e23;    // 使用科學記號 6.02 x 10 23
-	
+let num1 = 1; // 十進位
+let num2 = 0xff; // 十六進位
+let num3 = 033; // 八進位
+let num4 = 1234.5678; // 浮點數
+let num5 = 6.02e23; // 使用科學記號 6.02 x 10 23
+
 num4.toFixed(0);
 num4.toExponential(1);
 num4.toPrecision(3);
@@ -202,46 +270,55 @@ Math.round(num4);
 Math.trunc(num4);
 
 Math.random();
-Math.max(1, 2)
+Math.max(1, 2);
 Math.min(1, 2);
-	
+
 // number to string
-let str0 = num1 + "";       // 第一種方法
-let str0 = String(num1);    // 第二種方法
-let str0 = num1.toString;   // 第三種方法
+let str0 = num1 + ""; // 第一種方法
+let str0 = String(num1); // 第二種方法
+let str0 = num1.toString; // 第三種方法
 
 // NaN
 isNaN(NaN);
-NaN == NaN;                 // false
+NaN == NaN; // false
 
 // Infinity
-isFinite(Infinity)
-Infinity == Infinity;       // true
+isFinite(Infinity);
+Infinity == Infinity; // true
 ```
 
-
-### Boolean
+### boolean
 
 ```javascript
 // 0 or Nan is false, 1 is true
 var bool1 = true;
 var bool2 = false;
 
-// 轉Boolean 
-Boolean("true"); 
+// 轉Boolean
+Boolean("true");
 !!1;
 
 // Opera 8.0+
-var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+var isOpera =
+  (!!window.opr && !!opr.addons) ||
+  !!window.opera ||
+  navigator.userAgent.indexOf(" OPR/") >= 0;
 
 // Firefox 1.0+
-var isFirefox = typeof InstallTrigger !== 'undefined';
+var isFirefox = typeof InstallTrigger !== "undefined";
 
-// Safari 3.0+ "[object HTMLElementConstructor]" 
-var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
+// Safari 3.0+ "[object HTMLElementConstructor]"
+var isSafari =
+  /constructor/i.test(window.HTMLElement) ||
+  (function (p) {
+    return p.toString() === "[object SafariRemoteNotification]";
+  })(
+    !window["safari"] ||
+      (typeof safari !== "undefined" && safari.pushNotification)
+  );
 
 // Internet Explorer 6-11
-var isIE = /*@cc_on!@*/false || !!document.documentMode;
+var isIE = /*@cc_on!@*/ false || !!document.documentMode;
 
 // Edge 20+
 var isEdge = !isIE && !!window.StyleMedia;
@@ -253,8 +330,7 @@ var isChrome = !!window.chrome && !!window.chrome.webstore;
 var isBlink = (isChrome || isOpera) && !!window.CSS;
 ```
 
-
-### Array
+### array
 
 ```javascript
 var arr1 = [1, 2, 3];
@@ -336,38 +412,36 @@ users.filter(item => item.id < 3);
 [1, 2, 3, 4, 5].reduce((sum, current) => sum + current, 0);
 ```
 
-
-### Object
+### object
 
 ```javascript
 // object literal 方式宣告
 var user = {
   name: "John",
-  age: 30
+  age: 30,
 };
 user["money"] = 500;
-var emptyObject1 = {};              // empty object
-var emptyObject2 = new Object();    // empty object
+var emptyObject1 = {}; // empty object
+var emptyObject2 = new Object(); // empty object
 
 // exist
 user.noSuchProperty === undefined;
 "key" in object;
 
 // loop
-for(let key in user) {
-    console.log(key + " => " + user[key]);
+for (let key in user) {
+  console.log(key + " => " + user[key]);
 }
 
-Object.keys(user).forEach(p => console.log(`${p}: ${user[p]}`));
+Object.keys(user).forEach((p) => console.log(`${p}: ${user[p]}`));
 ```
 
 ```javascript
-// 定義全域變數 
+// 定義全域變數
 var MYGLOBAL = {} || MYGLOBAL;
 MYGLOBAL.var1 = "xyz";
 MYGLOBAL.var2 = 123;
 ```
-
 
 ### null
 
@@ -381,7 +455,6 @@ console.log(n === null);
 console.log(n !== null);
 ```
 
-
 ### undefined
 
 ```javascript
@@ -394,12 +467,11 @@ console.log(d === undefined);
 console.log(d !== undefined);
 ```
 
-
-### Symbol
+### symbol
 
 ```javascript
-let s1 = Symbol('js');
-let s2 = Symbol('js');
+let s1 = Symbol("js");
+let s2 = Symbol("js");
 
 console.log("s1: ", s1, "s2 :", s2);
 console.log(s1 == s2);
@@ -408,29 +480,83 @@ console.log(s1 === s2);
 console.log(s1 !== s2);
 ```
 
+### set
 
-### Set
+```javascript
+// set.add(value)
+// set.delete(value)
+// set.has(value)
+// set.size
+// set.entries()
 
+// Set
+const set1 = new Set();
+set1.add(42);
+set1.add("forty two");
 
-### Map
+const iterator1 = set1.entries();
 
+for (const entry of iterator1) {
+  console.log(entry);
+}
+
+// WeakSet
+const wSet = new WeakSet();
+const a = [1, 2, 3];
+const b = { name: "explainthis" };
+
+wSet.add(a);
+wSet.add(b);
+wSet.add(1);
+```
+
+### map
+
+```javascript
+// map.set(key, value)
+// map.get(key)
+// map.has(key)
+// map.delete(key)
+// map.size
+// map.values()
+// map.keys()
+// map.entries()
+
+// Map
+let food = new Map();
+let fruit = { name: "apple" };
+
+food.set(fruit, "good");
+console.log(food); // Map(1)
+
+fruit = null;
+console.log(food);
+
+// WeakMap
+let food = new WeakMap();
+let fruit = { name: "apple" };
+
+food.set(fruit, "good");
+fruit = null;
+console.log(food);
+```
 
 ### type conversion
 
 ```javascript
-console.log(8 * null);             // 0
-console.log("5" * 2);              // 10
-console.log("five" * 2);           // Nan
-console.log(false == 0);           // true
-console.log(null == undefined);    // true
-console.log(null == 0);            // false
+console.log(8 * null); // 0
+console.log("5" * 2); // 10
+console.log("five" * 2); // Nan
+console.log(false == 0); // true
+console.log(null == undefined); // true
+console.log(null == 0); // false
 
-console.log(false === 0);          // false
+console.log(false === 0); // false
 ```
 
 ---
 
-## Operator
+## operator
 
 ```javascript
 let x, y;
@@ -445,7 +571,6 @@ console.log("doing: ", ++y);
 console.log("done: ", y);
 ```
 
-
 ### typeof
 
 ```javascript
@@ -456,9 +581,8 @@ console.log("number: ", typeof 1);
 console.log("string: ", typeof "abc");
 console.log("true: ", typeof true);
 console.log("symbol: ", typeof Symbol());
-console.log("function", typeof function() {});
+console.log("function", typeof function () {});
 ```
-
 
 ### compare
 
@@ -472,13 +596,12 @@ console.log("!=: ", x != y);
 console.log("!==: ", x !== y);
 ```
 
-
 ### destructuring assignment
 
-`array destructure`
+#### array destructure
 
 ```javascript
-let [firstname = "John", , ,lastname = "Doe"] = ["James", "L.", "Howlett"];
+let [firstname = "John", , , lastname = "Doe"] = ["James", "L.", "Howlett"];
 console.log(firstname, lastname);
 
 let right = 1;
@@ -491,25 +614,23 @@ console.log(right, left);
 console.log(a, b, other);
 ```
 
-
-`object destructure`
+#### object destructure
 
 ```javascript
-let {name: n, age: a=10} = {name: 'Jane'};
+let { name: n, age: a = 10 } = { name: "Jane" };
 console.log(n, a);
 
-let {name, age} = {name: 'Jane'};
+let { name, age } = { name: "Jane" };
 console.log(name, age);
 ```
 
 ---
 
-## Condition
-
+## condition
 
 ### if/else
 
-```
+```javascript
 window.location
 <protocol>//<hostname>:<port>/<pathname><search><hash>
 
@@ -525,20 +646,20 @@ hash - the anchor portion of the URL
 
 ```html
 <html>
-<body>
-<script>
-    var parameter = window.location.search;
-    parameter = parameter.slice(1, parameter.length);
-    var sex = parameter.split("=")[1];
-    if (sex == "m") {
+  <body>
+    <script>
+      var parameter = window.location.search;
+      parameter = parameter.slice(1, parameter.length);
+      var sex = parameter.split("=")[1];
+      if (sex == "m") {
         console.log("Male");
-    } else if (sex == "f") {
+      } else if (sex == "f") {
         console.log("Female");
-    } else {
+      } else {
         console.log("Unknown");
-    }
-</script>
-</body>
+      }
+    </script>
+  </body>
 </html>
 ```
 
@@ -550,26 +671,25 @@ linux:~ # curl http://127.0.0.1/ex.html?sex=m
 ```javascript
 var browser;
 if (!!window.chrome) {
-    browser = "Chrome";
+  browser = "Chrome";
 } else {
-    browser = "Unknown";
+  browser = "Unknown";
 }
 console.log(browser);
 
 //  使用 ?: ternary operator
-browser = (!!window.chrome) ? "Chrome" : "Unknown";
+browser = !!window.chrome ? "Chrome" : "Unknown";
 console.log(browser);
 ```
 
 ```javascript
 if (!options) {
-    options = {}
+  options = {};
 }
 
 //  使用 || 簡化空值判斷
 options = options || {};
 ```
-
 
 ### switch
 
@@ -579,95 +699,131 @@ var parameter = window.location.search;
 parameter = parameter.slice(1, parameter.length);
 var sex = parameter.split("=")[1];
 switch (sex) {
-    case "m":
-        console.log("Male");
-        break;
-    case "f":
-        console.log("Female");
-        break;
-    default:
-        console.log("Unknown");
+  case "m":
+    console.log("Male");
+    break;
+  case "f":
+    console.log("Female");
+    break;
+  default:
+    console.log("Unknown");
 }
 ```
 
-
-### for	
+### for
 
 ```javascript
-let weeks = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+let weeks = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 
 for (let i = 0; i < weeks.length; i++) {
-    console.log(weeks[i]);
+  console.log(weeks[i]);
 }
 
 for (let day in weeks) {
-    console.log(day);
+  console.log(day);
 }
 
 for (let day of weeks) {
-    console.log(day);
+  console.log(day);
 }
 ```
-
 
 ### while
 
 ```javascript
-let weeks = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+let weeks = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 let i = 0;
 
 while (i < weeks.length) {
-    console.log(weeks[i++]);
+  console.log(weeks[i++]);
 }
 ```
-
 
 ### do
 
 ```javascript
-let weeks = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+let weeks = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 let i = 0;
 
 do {
-    console.log(weeks[i++]);
+  console.log(weeks[i++]);
 } while (i < weeks.length);
 ```
 
-
-### forEach 
+### forEach
 
 ```javascript
-let weeks = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+let weeks = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 
 weeks.forEach(function (element, index) {
-   console.log(element, index);
+  console.log(element, index);
 });
 
 weeks.forEach((element, index) => {
-    console.log(element, index);
+  console.log(element, index);
 });
 ```
 
-
 ---
 
-## Function
-
+## function
 
 ```javascript
 // function declaration or named function or defined function
-function sayHi(arg) { return "Hi " + arg; }
+function sayHi(arg) {
+  return "Hi " + arg;
+}
 console.log(sayHi("JS"));
 
 // function expression or anonymous function
-let sayGood = function(arg) { return "Good " + arg; };
+let sayGood = function (arg) {
+  return "Good " + arg;
+};
 console.log(sayGood("JS"));
 
 // arrow function
 // arrow function 沒有 prototype, 所以無法使用 new, 也無法變更 this 的內容
-const sayNice = (arg) => { return "Nice " + arg; };
-const sayNice2 = arg => { return "Nice " + arg; };
-const sayNice3 = () => { return "Nice JS"; };
+const sayNice = (arg) => {
+  return "Nice " + arg;
+};
+const sayNice2 = (arg) => {
+  return "Nice " + arg;
+};
+const sayNice3 = () => {
+  return "Nice JS";
+};
 const sayNice4 = () => "Nice JS";
 console.log(sayNice("JS"));
 console.log(sayNice2("JS"));
@@ -675,43 +831,42 @@ console.log(sayNice3());
 console.log(sayNice4());
 
 // function constructor
-let sayHello = new Function("arg", "return \"Hello \"+ arg;");
+let sayHello = new Function("arg", 'return "Hello "+ arg;');
 console.log(sayHello("JS"));
 
 // closure function
 let countNumber = function () {
-    let count = 0; // count在countNumber裡的區域變數
-    return function () {
-        return count += 1;
-    }
+  let count = 0; // count在countNumber裡的區域變數
+  return function () {
+    return (count += 1);
+  };
 };
-console.log(countNumber());    // Function
-console.log(countNumber()());  // 1
-console.log(countNumber()());  // 1
+console.log(countNumber()); // Function
+console.log(countNumber()()); // 1
+console.log(countNumber()()); // 1
 
 const c = countNumber();
-console.log(c());              // 1
-console.log(c());              // 2
+console.log(c()); // 1
+console.log(c()); // 2
 
 // partial function, currying function
 function multiplier(factor) {
-    return number => number * factor;
+  return (number) => number * factor;
 }
 const twice = multiplier(2);
 console.log(twice(10));
 ```
-
 
 ### parameter
 
 ```javascript
 // default parameter
 var f0 = function (arg = "JavaScript") {
-    return `Hello ${arg}`;
+  return `Hello ${arg}`;
 };
 
-var f1 = f0;    // function reference
-var f2 = f0();  // function call/invoke
+var f1 = f0; // function reference
+var f2 = f0(); // function call/invoke
 
 console.log(f0);
 console.log(f1);
@@ -723,220 +878,221 @@ console.log(f1());
 
 // rest parameter
 function cast(a, b, ...others) {
-    console.log(`a: ${a}`);
-    console.log(`b: ${b}`);
-    console.log(`others: ${others}`);
+  console.log(`a: ${a}`);
+  console.log(`b: ${b}`);
+  console.log(`others: ${others}`);
 }
 
-cast(1,2,3);
-cast(1,2,3,4,5);
-cast(1,2);
+cast(1, 2, 3);
+cast(1, 2, 3, 4, 5);
+cast(1, 2);
 
 // parameter with object destructure
-function m1({x = 0, y = 0} = {}) {
-    return [x, y];
+function m1({ x = 0, y = 0 } = {}) {
+  return [x, y];
 }
 
-function m2({x, y} = { x: 0, y: 0 }) {
-    return [x, y];
+function m2({ x, y } = { x: 0, y: 0 }) {
+  return [x, y];
 }
 
 m1();
 m2();
 
-m1({x: 3, y: 8});
-m2({x: 3, y: 8});
+m1({ x: 3, y: 8 });
+m2({ x: 3, y: 8 });
 
-m1({x: 3});
-m2({x: 3});
+m1({ x: 3 });
+m2({ x: 3 });
 
 m1({});
 m2({});
 
-m1({z: 3});
-m2({z: 3});
+m1({ z: 3 });
+m2({ z: 3 });
 
 // arguments
 function noArg(arg0) {
-    console.log(`arguments.length: ${arguments.length}`);
-    console.log(`args0: ${arg0}, arguments[0]: ${arguments[0]}`);
-    console.log(`arguments[1]: ${arguments[1]}`);
+  console.log(`arguments.length: ${arguments.length}`);
+  console.log(`args0: ${arg0}, arguments[0]: ${arguments[0]}`);
+  console.log(`arguments[1]: ${arguments[1]}`);
 }
 
-noArg('a', 'b');
+noArg("a", "b");
 ```
-
 
 ### this
 
 ```javascript
 const o = {
-    name: "property",
-    showMessage: function () {
-        console.log(`Hi ${this.name}`);
-    },
-    showThis: function () {
-        let that = this.name;
-        let anonymous = function () {
-            console.log(`anonymous this: ${this.name}`);
-            console.log(`anonymous that: ${that}`);
-        };
-        let arrow = () => {
-            console.log(`arrow this: ${this.name}`);
-            console.log(`arrow that: ${that}`);
-        };
+  name: "property",
+  showMessage: function () {
+    console.log(`Hi ${this.name}`);
+  },
+  showThis: function () {
+    let that = this.name;
+    let anonymous = function () {
+      console.log(`anonymous this: ${this.name}`);
+      console.log(`anonymous that: ${that}`);
+    };
+    let arrow = () => {
+      console.log(`arrow this: ${this.name}`);
+      console.log(`arrow that: ${that}`);
+    };
 
-        anonymous();
-        arrow();
-    }
+    anonymous();
+    arrow();
+  },
 };
 
-console.log(o.name);                  // property
-console.log(o.showMessage());         // Hi property
-                                      // undefined
-console.log(o.showThis());            // anonymous this: undefined
-                                      // anonymous that: property
-                                      // arrow this: property
-                                      // arrow that: property
-                                      // undefined
+console.log(o.name); // property
+console.log(o.showMessage()); // Hi property
+// undefined
+console.log(o.showThis()); // anonymous this: undefined
+// anonymous that: property
+// arrow this: property
+// arrow that: property
+// undefined
 
 name = "global";
 let msg = o.showMessage;
-msg();                                // Hi global
+msg(); // Hi global
 ```
 
 ```javascript
 // this for function
 function ninja() {
-    return this;
+  return this;
 }
 
 function samurai() {
-    "use strict";
-    return this;
+  "use strict";
+  return this;
 }
 
-let fExpress = function() {return this};
+let fExpress = function () {
+  return this;
+};
 
-let fArrow = () => {return this};
+let fArrow = () => {
+  return this;
+};
 
 // console.log(ninja() === window);  // run on browser
-console.log(ninja() === global);     // run on nodejs, but es6 module false, common js ture
+console.log(ninja() === global); // run on nodejs, but es6 module false, common js ture
 console.log(samurai() === undefined);
-console.log(fExpress() === global);  // run on nodejs, but es6 module false, common js ture
+console.log(fExpress() === global); // run on nodejs, but es6 module false, common js ture
 console.log(fArrow() === undefined);
 
 // this for object
 const objThis = {
-    ninja: ninja,
-    samurai: samurai
+  ninja: ninja,
+  samurai: samurai,
 };
 console.log(objThis.ninja() === objThis);
 console.log(objThis.samurai() === objThis);
 
 // this for constructor function
 function FnThis() {
-    this.ninja = ninja;
-    this.samurai = samurai;
+  this.ninja = ninja;
+  this.samurai = samurai;
 }
 let fnThis = new FnThis();
 console.log(fnThis.ninja() === fnThis);
 console.log(fnThis.samurai() === fnThis);
 ```
 
-
 ### apply, call, bind
 
 ```javascript
 function addOne(a) {
-    return a + 1;
+  return a + 1;
 }
 console.log(addOne(1));
 
 function add(a, b) {
-    return a + b;
+  return a + b;
 }
-let add1 = add.bind(null, 1);  // partial function
+let add1 = add.bind(null, 1); // partial function
 console.log(add1(1));
 ```
 
 ```javascript
 // apply, call ,bind for function without this
 function sum1() {
-    let total = 0;
-    for (let i = 0; i < arguments.length; i++) {
-        total += arguments[i];
-    }
-    return total;
+  let total = 0;
+  for (let i = 0; i < arguments.length; i++) {
+    total += arguments[i];
+  }
+  return total;
 }
 
-console.log(`fn:       ${sum1(1, 2, 3)}`);                // invoke
-console.log(`fn.apply: ${sum1.apply(null, [1, 2, 3])}`);  // apply
-console.log(`fn.call:  ${sum1.call(null, 1, 2, 3)}`);     // call
-console.log(`fn.bind:  ${sum1.bind(null, 1, 2, 3)()}`);   // bind
+console.log(`fn:       ${sum1(1, 2, 3)}`); // invoke
+console.log(`fn.apply: ${sum1.apply(null, [1, 2, 3])}`); // apply
+console.log(`fn.call:  ${sum1.call(null, 1, 2, 3)}`); // call
+console.log(`fn.bind:  ${sum1.bind(null, 1, 2, 3)()}`); // bind
 
 // apply, call ,bind for function with this
 function sum2() {
-    let total = 0;
-    for (let i = 0; i < arguments.length; i++) {
-        total += arguments[i];
-    }
-    this.result = total;
-    return total;
+  let total = 0;
+  for (let i = 0; i < arguments.length; i++) {
+    total += arguments[i];
+  }
+  this.result = total;
+  return total;
 }
 
 let sFn = new sum2(1, 2, 3);
 let oApply = {};
 let oCall = {};
 let oBind = {};
-console.log(`fn:       ${sFn}, ${sFn.result}`);                               // function construtor
-console.log(`fn.apply: ${sum2.apply(oApply, [1, 2, 3])}, ${oApply.result}`);  // apply
-console.log(`fn.call:  ${sum2.call(oCall, 1, 2, 3)}, ${oCall.result}`);       // call
-console.log(`fn.bind:  ${sum2.bind(oBind, 1, 2, 3)()}, ${oBind.result}`);     // bind
+console.log(`fn:       ${sFn}, ${sFn.result}`); // function construtor
+console.log(`fn.apply: ${sum2.apply(oApply, [1, 2, 3])}, ${oApply.result}`); // apply
+console.log(`fn.call:  ${sum2.call(oCall, 1, 2, 3)}, ${oCall.result}`); // call
+console.log(`fn.bind:  ${sum2.bind(oBind, 1, 2, 3)()}, ${oBind.result}`); // bind
 ```
 
 ---
 
-## Class
-
+## class
 
 ### function
 
 ```javascript
 // function before ES5
 function Car0(make, model) {
-    // member
-    this.make = make;
-    this.model = model;
-    this._userGears = ['P', 'N', 'R', 'D'];
-    this._userGear = this._userGears[0];
+  // member
+  this.make = make;
+  this.model = model;
+  this._userGears = ["P", "N", "R", "D"];
+  this._userGear = this._userGears[0];
 
-    // method
-    this.userGear = function () {
-        return this._userGear;
-    };
+  // method
+  this.userGear = function () {
+    return this._userGear;
+  };
 
-    // initialize
-    if ( typeof Car0.number == 'undefined' ) {
-        // static member
-        Car0.number = 0;
-    }
-    Car0.count = function (){
-        Car0.number++;
-    };
-    // static method
-    Car0.count();
+  // initialize
+  if (typeof Car0.number == "undefined") {
+    // static member
+    Car0.number = 0;
+  }
+  Car0.count = function () {
+    Car0.number++;
+  };
+  // static method
+  Car0.count();
 }
 // dynamic bind method
 // anti pattern
 Car0.prototype.shift = function (gear) {
-        this._userGear = gear;
+  this._userGear = gear;
 };
 
 let car0 = new Car0("Tesla", "Model S");
 console.log(car0._userGear);
 console.log(car0.userGear());
-car0.shift('D');
+car0.shift("D");
 console.log(car0.userGear());
 
 console.log(Car0.number);
@@ -944,48 +1100,47 @@ Car0.count();
 console.log(Car0.number);
 ```
 
-
 ### class
 
 ```javascript
 class Car1 {
-    constructor(make, model) {
-        this.make = make;
-        this.model = model;
-        this._userGears = ['P', 'N', 'R', 'D'];
-        this._userGear = this._userGears[0];
-        Car1.count();
-    }
+  constructor(make, model) {
+    this.make = make;
+    this.model = model;
+    this._userGears = ["P", "N", "R", "D"];
+    this._userGear = this._userGears[0];
+    Car1.count();
+  }
 
-    get userGear() {
-        return this._userGear;
-    }
+  get userGear() {
+    return this._userGear;
+  }
 
-    set userGear(value) {
-        if (this._userGears.indexOf(value) < 0) {
-            throw new Error(`Invalid gear: ${value}`);
-        }
-        this._userGear = value;
+  set userGear(value) {
+    if (this._userGears.indexOf(value) < 0) {
+      throw new Error(`Invalid gear: ${value}`);
     }
+    this._userGear = value;
+  }
 
-    shift(gear) {
-        this.userGear = gear;
-    }
+  shift(gear) {
+    this.userGear = gear;
+  }
 
-    static count() {
-        Car1.number ++;
-    }
+  static count() {
+    Car1.number++;
+  }
 }
 Car1.number = 0;
 
 let car1 = new Car1("Tesla", "Model S");
 console.log(car1._userGear);
 console.log(car1.userGear);
-car1.shift('D');
+car1.shift("D");
 console.log(car1.userGear);
-car1.userGear = 'R';
+car1.userGear = "R";
 console.log(car1.userGear);
-car1._userGear = 'P';
+car1._userGear = "P";
 console.log(car1.userGear);
 
 console.log(Car1.number);
@@ -993,28 +1148,27 @@ Car1.count();
 console.log(Car1.number);
 ```
 
-
 ### extends
 
 ```javascript
 class Vehicle {
-    constructor() {
-        this.passengers = [];
-        console.log("create vehicle");
-    }
-    addPasseneger(p) {
-        this.passengers.push(p)
-    }
+  constructor() {
+    this.passengers = [];
+    console.log("create vehicle");
+  }
+  addPasseneger(p) {
+    this.passengers.push(p);
+  }
 }
 
 class Car extends Vehicle {
-    constructor() {
-        super();
-        console.log("create car");
-    }
-    deployAirBag() {
-        console.log("air bag");
-    }
+  constructor() {
+    super();
+    console.log("create car");
+  }
+  deployAirBag() {
+    console.log("air bag");
+  }
 }
 
 const v = new Vehicle();
@@ -1034,15 +1188,20 @@ console.log(`m instanceof Car: ${m instanceof Car}`);
 console.log(`m instanceof Moto: ${m instanceof Moto}`);
 ```
 
-
 ### mixin
 
 ```javascript
 class InsurancePolicy {}
 function makeInsurable(o) {
-    o.addInsurancePolicy = function (p) { this.insurancePolicy = p; };
-    o.getInsurancePolicy = function () { return this.insurancePolicy; };
-    o.isInsured = function () { return !!this.insurancePolicy; };
+  o.addInsurancePolicy = function (p) {
+    this.insurancePolicy = p;
+  };
+  o.getInsurancePolicy = function () {
+    return this.insurancePolicy;
+  };
+  o.isInsured = function () {
+    return !!this.insurancePolicy;
+  };
 }
 
 let insurance = new InsurancePolicy();
@@ -1054,7 +1213,6 @@ makeInsurable(car1);
 car1.addInsurancePolicy(insurance);
 console.log(car1.getInsurancePolicy());
 
-
 // method 2
 makeInsurable(Car.prototype);
 const car1 = new Car();
@@ -1062,239 +1220,260 @@ car1.addInsurancePolicy(insurance);
 console.log(car1.getInsurancePolicy());
 ```
 
-
 ### function map to class
 
 ```javascript
 function NinjaFn(name, level) {
-    this.name = name;                            // public field
-    let _level = level;                          // private field
+  this.name = name; // public field
+  let _level = level; // private field
 
-    this.getLevel = function () {
-        return _level;
-    }
-    this.setLevel = function(level) {
-        _level = level;
-    }
+  this.getLevel = function () {
+    return _level;
+  };
+  this.setLevel = function (level) {
+    _level = level;
+  };
 }
 // NinjaFn.prototype.swingSword = function() {      // public method
 //     return true;
 // }
 NinjaFn.prototype = {
-    swingSword: function() {                     // public method
-        return true;
-    }
-}
-NinjaFn.compare = function(ninja1, ninja2) {     // static method
-    return ninja1.getLevel() - ninja2.getLevel();
-}
+  swingSword: function () {
+    // public method
+    return true;
+  },
+};
+NinjaFn.compare = function (ninja1, ninja2) {
+  // static method
+  return ninja1.getLevel() - ninja2.getLevel();
+};
 
-let ninjaFn1 = new NinjaFn('ninjaFn1', 5);
-let ninjaFn2 = new NinjaFn('ninjaFn2', 1);
+let ninjaFn1 = new NinjaFn("ninjaFn1", 5);
+let ninjaFn2 = new NinjaFn("ninjaFn2", 1);
 console.log(`${ninjaFn1.name}, ${ninjaFn1._level}, ${ninjaFn1.getLevel()}`);
 console.log(`${ninjaFn2.name}, ${ninjaFn2.swingSword()}`);
-console.log(`NinjaFn.compare:  ninjaFn  - ninjaFn  = ${NinjaFn.compare(ninjaFn1, ninjaFn2)}`);
-
+console.log(
+  `NinjaFn.compare:  ninjaFn  - ninjaFn  = ${NinjaFn.compare(
+    ninjaFn1,
+    ninjaFn2
+  )}`
+);
 
 class NinjaCls {
-    constructor(name, level) {
-        this.name = name;                        // public field
-        let _level;                              // private field
+  constructor(name, level) {
+    this.name = name; // public field
+    let _level; // private field
 
-        this.getLevel = function () {
-            return _level;
-        }
-        this.setLevel = function(level) {
-            _level = level;
-        }
+    this.getLevel = function () {
+      return _level;
+    };
+    this.setLevel = function (level) {
+      _level = level;
+    };
 
-        this.setLevel(level);
-    }
+    this.setLevel(level);
+  }
 
-    swingSword() {                               // public method
-        return true;
-    }
+  swingSword() {
+    // public method
+    return true;
+  }
 
-    static compare(ninja1, ninja2) {             // static method
-        return ninja1.getLevel() - ninja2.getLevel();
-    }
+  static compare(ninja1, ninja2) {
+    // static method
+    return ninja1.getLevel() - ninja2.getLevel();
+  }
 }
 
-let ninjaCls1 = new NinjaCls('ninjaCls1', 5);
-let ninjaCls2 = new NinjaCls('ninjaCls2', 1);
+let ninjaCls1 = new NinjaCls("ninjaCls1", 5);
+let ninjaCls2 = new NinjaCls("ninjaCls2", 1);
 console.log(`${ninjaCls1.name}, ${ninjaCls1._level}, ${ninjaCls1.getLevel()}`);
 console.log(`${ninjaCls2.name}, ${ninjaCls2.swingSword()}`);
-console.log(`NinjaCls.compare: ninjaCls - ninjaCls = ${NinjaCls.compare(ninjaCls1, ninjaCls2)}`);
+console.log(
+  `NinjaCls.compare: ninjaCls - ninjaCls = ${NinjaCls.compare(
+    ninjaCls1,
+    ninjaCls2
+  )}`
+);
 
-
-console.log(`NinjaFn.compare:  ninjaCls - ninjaCls = ${NinjaFn.compare(ninjaCls1, ninjaCls2)}`);
-console.log(`NinjaCls.compare: ninjaFn  - ninjaFn  = ${NinjaCls.compare(ninjaFn1, ninjaFn2)}`);
+console.log(
+  `NinjaFn.compare:  ninjaCls - ninjaCls = ${NinjaFn.compare(
+    ninjaCls1,
+    ninjaCls2
+  )}`
+);
+console.log(
+  `NinjaCls.compare: ninjaFn  - ninjaFn  = ${NinjaCls.compare(
+    ninjaFn1,
+    ninjaFn2
+  )}`
+);
 ```
 
 ### function map to extends
 
 ```javascript
 function extend(base, sub) {
-    var origProto = sub.prototype;
-    sub.prototype = Object.create(base.prototype);
-    for (var key in origProto)  {
-        sub.prototype[key] = origProto[key];
-    }
+  var origProto = sub.prototype;
+  sub.prototype = Object.create(base.prototype);
+  for (var key in origProto) {
+    sub.prototype[key] = origProto[key];
+  }
 
-    Object.defineProperty(sub.prototype, 'constructor', { 
-        enumerable: false,
-        value: sub
-    });
+  Object.defineProperty(sub.prototype, "constructor", {
+    enumerable: false,
+    value: sub,
+  });
 }
 
 function PersonFn(name) {
-    this.name = name;
+  this.name = name;
 }
-PersonFn.prototype.dance = function() {
-    return true;
-}
+PersonFn.prototype.dance = function () {
+  return true;
+};
 
 function NinjaFn(name, weapon) {
-    PersonFn.call(this, name);
-    this.weapon = weapon;
+  PersonFn.call(this, name);
+  this.weapon = weapon;
 }
 NinjaFn.prototype = {
-    wieldWeapon: function() {
-        return this.weapon;
-    }
-}
+  wieldWeapon: function () {
+    return this.weapon;
+  },
+};
 
 extend(PersonFn, NinjaFn);
 
-
-const personFn = new PersonFn('PersonFn');
-const ninjaFn = new NinjaFn('NinjaFn', 'wakizashi');
+const personFn = new PersonFn("PersonFn");
+const ninjaFn = new NinjaFn("NinjaFn", "wakizashi");
 
 console.log(`personFn instanceof PersonFn: ${personFn instanceof PersonFn}`);
 console.log(`personFn instanceof NinjaFn:  ${personFn instanceof NinjaFn}`);
 console.log(`ninjaFn  instanceof NinjaFn:  ${ninjaFn instanceof NinjaFn}`);
 console.log(`ninjaFn  instanceof PersonFn: ${ninjaFn instanceof PersonFn}`);
 console.log(ninjaFn.name);
-console.log(ninjaFn.dance())
-
+console.log(ninjaFn.dance());
 
 class PersonCls {
-    constructor(name) {
-        this.name = name;
-    }
+  constructor(name) {
+    this.name = name;
+  }
 
-    dance() {
-        return true;
-    }
+  dance() {
+    return true;
+  }
 }
 
 class NinjaCls extends PersonCls {
-    constructor(name, weapon) {
-        super(name);
-        this.weapon = weapon;
-    }
+  constructor(name, weapon) {
+    super(name);
+    this.weapon = weapon;
+  }
 
-    wieldWeapon() {
-        return this.weapon;
-    }
+  wieldWeapon() {
+    return this.weapon;
+  }
 }
 
-const personCls = new PersonCls('personCls');
-const ninjaCls = new NinjaCls('ninjaCls', 'wakizashi');
+const personCls = new PersonCls("personCls");
+const ninjaCls = new NinjaCls("ninjaCls", "wakizashi");
 
-console.log(`personCls instanceof PersonCls: ${personCls instanceof PersonCls}`)
-console.log(`personCls instanceof NinjaCls:  ${personCls instanceof NinjaCls}`)
-console.log(`ninjaCls  instanceof NinjaCls:  ${ninjaCls instanceof NinjaCls}`)
-console.log(`ninjaCls  instanceof PersonCls: ${ninjaCls instanceof PersonCls}`)
+console.log(
+  `personCls instanceof PersonCls: ${personCls instanceof PersonCls}`
+);
+console.log(`personCls instanceof NinjaCls:  ${personCls instanceof NinjaCls}`);
+console.log(`ninjaCls  instanceof NinjaCls:  ${ninjaCls instanceof NinjaCls}`);
+console.log(`ninjaCls  instanceof PersonCls: ${ninjaCls instanceof PersonCls}`);
 console.log(ninjaCls.name);
-console.log(ninjaCls.dance())
+console.log(ninjaCls.dance());
 ```
-
 
 ---
 
-## Exception
-
+## exception
 
 ### try / catch / finally
 
 ```javascript
-var validateEmail = function(email) {
+var validateEmail = function (email) {
   return email.match(/@/) ? email : new Error(`invalid email ${email}`);
 };
 
 // const email = "abc@dot.net";
 // const email = "dot.net";
-const  email = null;
+const email = null;
 
 try {
-    const res = validateEmail(email);
-    if (res instanceof Error) {
-        console.error(`Error ${res}`);
-    } else {
-        console.log(`Validate email ${email}`);
-    }
+  const res = validateEmail(email);
+  if (res instanceof Error) {
+    console.error(`Error ${res}`);
+  } else {
+    console.log(`Validate email ${email}`);
+  }
 } catch (e) {
-    console.error(`Error ${e.message}`);
+  console.error(`Error ${e.message}`);
 } finally {
-    console.log(`Always do it`);
+  console.log(`Always do it`);
 }
 ```
-
 
 ### throw
 
 ```javascript
 let div = function (a, b) {
-    if (b === 0) {
-        throw new Error(`b isn't 0`);
-    }
-    return a / b
+  if (b === 0) {
+    throw new Error(`b isn't 0`);
+  }
+  return a / b;
 };
 
 try {
-    console.log(div(1, 1));
-    // console.log(div(1, 0));
+  console.log(div(1, 1));
+  // console.log(div(1, 0));
 } catch (e) {
-    console.error(e.message);
+  console.error(e.message);
 }
 
 console.log(div(1, 0));
 ```
 
-
 ---
 
-## Iterator
-
-
-### iterator
+## iterator
 
 ```javascript
-const weeks = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const it = weeks.values();   // array -> iterator
-let current = it.next();     // get iterator value
+const weeks = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+const it = weeks.values(); // array -> iterator
+let current = it.next(); // get iterator value
 
 while (!current.done) {
-    console.log(current);
-    current = it.next();
+  console.log(current);
+  current = it.next();
 }
 ```
-
 
 ### iterable protocol
 
 ```javascript
 class Log {
-    constructor() {
-        this.messages= [];
-    }
-    add(message) {
-        this.messages.push({message, timestamp: Date.now()});
-    }
-    [Symbol.iterator]() {
-        return this.messages.values()
-    }
+  constructor() {
+    this.messages = [];
+  }
+  add(message) {
+    this.messages.push({ message, timestamp: Date.now() });
+  }
+  [Symbol.iterator]() {
+    return this.messages.values();
+  }
 }
 
 const log = new Log();
@@ -1303,43 +1482,7 @@ log.add("update api");
 log.add("update api");
 
 for (let entry of log) {
-    console.log(`${entry.message} @ ${entry.timestamp}`);
-}
-```
-
-
-### iterator protocol
-
-```javascript
-class Log {
-    constructor() {
-        this.messages= [];
-    }
-    add(message) {
-        this.messages.push({message, timestamp: Date.now()});
-    }
-    [Symbol.iterator]() {
-        let i = 0;
-        const messages = this.messages;
-        return {
-            next() {
-                if(i >= messages.length) {
-                    return { value: undefined, done: true}
-                } else {
-                    return { value: messages[i++], done: false}
-                }
-            }
-        }
-    }
-}
-
-const log = new Log();
-log.add("create api");
-log.add("update api");
-log.add("update api");
-
-for (let entry of log) {
-    console.log(`${entry.message} @ ${entry.timestamp}`);
+  console.log(`${entry.message} @ ${entry.timestamp}`);
 }
 ```
 
@@ -1347,39 +1490,38 @@ for (let entry of log) {
 
 ```javascript
 class NinjaClsCollection {
-    constructor() {
-        this.ninjas = ["Yoshi", "Kuma", "Hattori"];
-    }
+  constructor() {
+    this.ninjas = ["Yoshi", "Kuma", "Hattori"];
+  }
 
-    get first() {
-        return this.ninjas[0];
-    }
+  get first() {
+    return this.ninjas[0];
+  }
 
-    set first(ninja) {
-        this.ninjas[0] = ninja
-    }
+  set first(ninja) {
+    this.ninjas[0] = ninja;
+  }
 }
 
-let ninjaClsCollection = new NinjaClsCollection()
+let ninjaClsCollection = new NinjaClsCollection();
 console.log(`cls get: ${ninjaClsCollection.first}`);
 ninjaClsCollection.first = "Hachi";
 console.log(`cls set: ${ninjaClsCollection.first}`);
 
-
 function NinjaFnCollection() {
-    this.ninjas = ["Yoshi", "Kuma", "Hattori"];
+  this.ninjas = ["Yoshi", "Kuma", "Hattori"];
 
-    Object.defineProperty(this, "first", {
-        get: () => {
-            return this.ninjas[0];
-        },
-        set: (ninja) => {
-            this.ninjas[0] = ninja;
-        }
-    });
+  Object.defineProperty(this, "first", {
+    get: () => {
+      return this.ninjas[0];
+    },
+    set: (ninja) => {
+      this.ninjas[0] = ninja;
+    },
+  });
 }
 
-let ninjaFnCollection = new NinjaFnCollection()
+let ninjaFnCollection = new NinjaFnCollection();
 console.log(`fn get: ${ninjaFnCollection.first}`);
 ninjaFnCollection.first = "Hachi";
 console.log(`fn set: ${ninjaFnCollection.first}`);
@@ -1387,24 +1529,23 @@ console.log(`fn set: ${ninjaFnCollection.first}`);
 
 ---
 
-## Generator
-
+## generator
 
 ### yield
 
 ```javascript
 const rainbow = function* () {
-    yield "red";
-    yield "orange";
-    yield "yellow";
-    yield "green";
-    yield "blue";
-    yield "indigo";
-    yield "violet";
+  yield "red";
+  yield "orange";
+  yield "yellow";
+  yield "green";
+  yield "blue";
+  yield "indigo";
+  yield "violet";
 };
 
 for (let color of rainbow()) {
-    console.log(color);
+  console.log(color);
 }
 ```
 
@@ -1412,13 +1553,13 @@ for (let color of rainbow()) {
 
 ```javascript
 const abc = function* () {
-    yield "a";
-    yield "b";
-    return "c";
+  yield "a";
+  yield "b";
+  return "c";
 };
 
 for (let c of abc()) {
-    console.log(c);
+  console.log(c);
 }
 
 const it = abc();
@@ -1427,14 +1568,13 @@ console.log(it.next());
 console.log(it.next());
 ```
 
-
 ### next
 
 ```javascript
 const interrogate = function* () {
-    const name = yield "who's your name?";
-    const color = yield "what's your favorite color?";
-    return `${name}'s favorite color is ${color}`;
+  const name = yield "who's your name?";
+  const color = yield "what's your favorite color?";
+  return `${name}'s favorite color is ${color}`;
 };
 
 const it = interrogate();
@@ -1443,84 +1583,80 @@ console.log(it.next("Joe"));
 console.log(it.next("red"));
 ```
 
-
 ---
 
-## Async
+## async
 
 ### call back
 
 ```javascript
 function countdown(s) {
-    var i;
-    for (i = s; i >= 0; i--) {
-        setTimeout(function () {
-            console.log(i === 0 ? "go!" : i);
-        }, ((s - i) * 1000));
-    }
+  var i;
+  for (i = s; i >= 0; i--) {
+    setTimeout(function () {
+      console.log(i === 0 ? "go!" : i);
+    }, (s - i) * 1000);
+  }
 }
 
 countdown(5);
 ```
 
-`IIFE`
-
-Immediately Invoked Function Expression
+#### IIFE / Immediately Invoked Function Expression
 
 ```javascript
 function countdown(s) {
-    var i;
-    for (i=s; i>=0; i--) {
-        (function(i) {
-            setTimeout(function () {
-                console.log(i === 0 ? "go!" : i);
-            }, ((s - i) * 1000));
-        })(i);
-    }
+  var i;
+  for (i = s; i >= 0; i--) {
+    (function (i) {
+      setTimeout(function () {
+        console.log(i === 0 ? "go!" : i);
+      }, (s - i) * 1000);
+    })(i);
+  }
 }
 
 countdown(5);
 ```
 
-`scope`
+#### scope
 
 ```javascript
 function countdown(s) {
-    for (let i=s; i>=0; i--) {
-        setTimeout(function () {
-            console.log(i === 0 ? "go!" : i);
-            }, ((s - i) * 1000));
-        }
+  for (let i = s; i >= 0; i--) {
+    setTimeout(function () {
+      console.log(i === 0 ? "go!" : i);
+    }, (s - i) * 1000);
+  }
 }
 
 countdown(5);
 ```
 
-`call back hell`
-
+#### call back hell
 
 ### promise
 
 ```javascript
 function countdown(s) {
-    return new Promise(function (resolve, reject) {
-        for (let i = s; i >= 0; i--) {
-            setTimeout(function () {
-                i === 0 ? resolve(console.log("go!")) : console.log(i)
-            }, (s - i) * 1000);
-        }
-    });
+  return new Promise(function (resolve, reject) {
+    for (let i = s; i >= 0; i--) {
+      setTimeout(function () {
+        i === 0 ? resolve(console.log("go!")) : console.log(i);
+      }, (s - i) * 1000);
+    }
+  });
 }
 
 countdown(5).then();
 
 countdown(5).then(
-    function () {
-        console.log("countdown successful");
-    },
-    function (err) {
-        console.log("countdown fail" + err.message);
-    }
+  function () {
+    console.log("countdown successful");
+  },
+  function (err) {
+    console.log("countdown fail" + err.message);
+  }
 );
 ```
 
@@ -1543,57 +1679,54 @@ promise.then(function(result) {
 });
 ```
 
-
 ### co -> sequence run
 
 ```javascript
 function* seqRun() {
-    try {
-        yield countdown(5);
-        console.log("countdown successful");
-    } catch (err) {
-        console.log("countdown fail" + err.message);
-    }
+  try {
+    yield countdown(5);
+    console.log("countdown successful");
+  } catch (err) {
+    console.log("countdown fail" + err.message);
+  }
 }
 
 for (let f of seqRun()) {
-    f;
+  f;
 }
 ```
 
 ```javascript
-let co = require('co');
+let co = require("co");
 
-co(function *() {
-    try {
-        yield countdown(5);
-        console.log("countdown successful");
-    } catch (err) {
-        console.log("countdown fail" + err.message);
-    }
+co(function* () {
+  try {
+    yield countdown(5);
+    console.log("countdown successful");
+  } catch (err) {
+    console.log("countdown fail" + err.message);
+  }
 });
 ```
-
 
 ### async / await
 
 ```javascript
 async function aRun() {
-    try {
-        await countdown(5);
-        console.log("countdown successful");
-    } catch (err) {
-        console.log("countdown fail" + err.message);
-    }
+  try {
+    await countdown(5);
+    console.log("countdown successful");
+  } catch (err) {
+    console.log("countdown fail" + err.message);
+  }
 }
 
 aRun();
 ```
 
-
 ---
 
-## Regex
+## regex
 
 ```javascript
 const re1 = /going/;
@@ -1611,45 +1744,43 @@ console.log(re1.exec(sta));
 ```
 
 ```javascript
-var str = '/usr/lib/python2.6/site-packages/gtk-2.0/gconf.so'; 
-console.log(str); 
+var str = "/usr/lib/python2.6/site-packages/gtk-2.0/gconf.so";
+console.log(str);
 
-// match進行比對，回傳匹配字串array 
-// search進行比對，回傳匹配字串position；indexOF不能用於RE 
-// replace進行比對，將匹配字串修改且回傳 
-// 將要匹配字串放入/pattern/之中 
+// match進行比對，回傳匹配字串array
+// search進行比對，回傳匹配字串position；indexOF不能用於RE
+// replace進行比對，將匹配字串修改且回傳
+// 將要匹配字串放入/pattern/之中
 
-var re = /(.*)\.(.*?)$/; // RE宣告，將pattern夾在//之中但不適用於變數 
-var restr = str.match(re); 
-console.log(restr[1] + "<=>" + restr[2]); 
-console.log(str.search(re)); 
-console.log(str.replace(/.[^.]*$/, '')); // 不修改str內容，但修改回傳值 
+var re = /(.*)\.(.*?)$/; // RE宣告，將pattern夾在//之中但不適用於變數
+var restr = str.match(re);
+console.log(restr[1] + "<=>" + restr[2]);
+console.log(str.search(re));
+console.log(str.replace(/.[^.]*$/, "")); // 不修改str內容，但修改回傳值
 
-var re = new RegExp(/(.*?)\.(.*)$/); // 另一種RE宣告，適用於變數 
-var restr = str.match(re); 
-console.log(restr[1] + "<=>" + restr[2]); 
-console.log(str.search(re)); 
-console.log(str.replace(/\.(.*)$/, '')); 
+var re = new RegExp(/(.*?)\.(.*)$/); // 另一種RE宣告，適用於變數
+var restr = str.match(re);
+console.log(restr[1] + "<=>" + restr[2]);
+console.log(str.search(re));
+console.log(str.replace(/\.(.*)$/, ""));
 
-var re = /(.*?)\/(.*)$/; 
-var restr = str.match(re); 
-console.log(restr[1] + "<=>" + restr[2]); 
-console.log(str.search(re)); 
-console.log(str.replace(/(.*?)\//, '')); 
+var re = /(.*?)\/(.*)$/;
+var restr = str.match(re);
+console.log(restr[1] + "<=>" + restr[2]);
+console.log(str.search(re));
+console.log(str.replace(/(.*?)\//, ""));
 
-var re = /(.*)\/(.*)$/; 
-var restr = str.match(re); 
-console.log(restr[1] + "<=>" + restr[2]); 
-console.log(str.search(re)); 
-console.log(str.replace(/(.*)\//, '')); 
+var re = /(.*)\/(.*)$/;
+var restr = str.match(re);
+console.log(restr[1] + "<=>" + restr[2]);
+console.log(str.search(re));
+console.log(str.replace(/(.*)\//, ""));
 ```
-
 
 ### capturing
 
-`syntax`
-
 ```
+// syntax
 (subexpression)
 ```
 
@@ -1658,7 +1789,9 @@ const text = "Visit oreilly.com today";
 const re = /[a-z]+(\.com|\.org|\.edu)/;
 
 console.log(text.match(re));
-console.log(text.replace(re, "\n$$&: ($&)\n$$1: ($1)\n$$`: ($`)\n$$: ($$)\n$$':($')\n"));
+console.log(
+  text.replace(re, "\n$$&: ($&)\n$$1: ($1)\n$$`: ($`)\n$$: ($$)\n$$':($')\n")
+);
 ```
 
 ```javascript
@@ -1675,12 +1808,10 @@ console.log(t.match(r3));
 console.log(t.match(r4));
 ```
 
-
 ### non capturing
 
-`syntax`
-
 ```
+// syntax
 (?:subexpression)
 ```
 
@@ -1689,7 +1820,9 @@ const text = "Visit oreilly.com today";
 const re = /[a-z]+(:?\.com|\.org|\.edu)/;
 
 console.log(text.match(re));
-console.log(text.replace(re, "\n$$&: ($&)\n$$1: ($1)\n$$`: ($`)\n$$: ($$)\n$$':($')\n"));
+console.log(
+  text.replace(re, "\n$$&: ($&)\n$$1: ($1)\n$$`: ($`)\n$$: ($$)\n$$':($')\n")
+);
 ```
 
 ```javascript
@@ -1706,35 +1839,35 @@ console.log(t.match(r3));
 console.log(t.match(r4));
 ```
 
-
 ### lookahead
 
-`syntax`
-
 ```
+// syntax
 (?=subexpression)
 (?!subexpression)
 ```
 
 ```javascript
 function validPassword1(p) {
-    return /[A-Z]/.test(p) &&
-        /[0-9]/.test(p) &&
-        /[a-z]/.test(p) &&
-        !/[^a-zA-Z0-9]/.test(p);
+  return (
+    /[A-Z]/.test(p) &&
+    /[0-9]/.test(p) &&
+    /[a-z]/.test(p) &&
+    !/[^a-zA-Z0-9]/.test(p)
+  );
 }
 
 function validPassword2(p) {
-    return /[A-Z].*[0-9][a-z]/.test(p);
+  return /[A-Z].*[0-9][a-z]/.test(p);
 }
 
 function validPassword3(p) {
-    return /(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])(?!.*[^a-zA-Z0-9])/.test(p);
+  return /(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])(?!.*[^a-zA-Z0-9])/.test(p);
 }
 
-const p1 = 'xyzABC123';
-const p2 = 'ABCxyz123';
-const p3 = 'ABC123xyz';
+const p1 = "xyzABC123";
+const p2 = "ABCxyz123";
+const p3 = "ABC123xyz";
 
 console.log(validPassword1(p1));
 console.log(validPassword2(p1));
@@ -1749,7 +1882,6 @@ console.log(validPassword2(p3));
 console.log(validPassword3(p3));
 ```
 
-
 ---
 
 ## DOM event
@@ -1757,41 +1889,41 @@ console.log(validPassword3(p3));
 ```html
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>DOM Event</title>
-</head>
-<body>
+  </head>
+  <body>
+    <!-- inline model -->
+    <button id="button1" onclick="console.log('Hello Button1!');">
+      Button1</button
+    ><br />
+    <button id="button2" onclick>Button2</button><br />
+    <button id="button3" onclick>Button3</button><br />
 
-<!-- inline model -->
-<button id="button1" onclick="console.log('Hello Button1!');">Button1</button><br />
-<button id="button2" onclick>Button2</button><br />
-<button id="button3" onclick>Button3</button><br />
+    <script type="text/javascript">
+      // traditional model
+      document.getElementById("button2").onclick = function () {
+        console.log("Hello Button2!");
+      };
 
-
-<script type="text/javascript">
-// traditional model
-document.getElementById('button2').onclick = function(){
-    console.log('Hello Button2!')
-}
-
-// even listener
-const el = document.getElementById('button3')
-el.addEventListener( 'click', function(){
-     console.log('Helloo Button3!')
-}, false)
-</script>
-
-</body>
+      // even listener
+      const el = document.getElementById("button3");
+      el.addEventListener(
+        "click",
+        function () {
+          console.log("Helloo Button3!");
+        },
+        false
+      );
+    </script>
+  </body>
 </html>
 ```
 
-
 ---
 
-## Reference
+## reference
 
-[JAVASCRIPT.INFO](https://javascript.info/)
-
-[Javascript Tutorial](https://www.tutorialspoint.com/javascript/index.htm)
-
-[JavaScript Tutorial](https://www.w3schools.com/js/)
+- [JAVASCRIPT.INFO](https://javascript.info/)
+- [Javascript Tutorial](https://www.tutorialspoint.com/javascript/index.htm)
+- [JavaScript Tutorial](https://www.w3schools.com/js/)

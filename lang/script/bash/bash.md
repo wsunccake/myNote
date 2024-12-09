@@ -56,6 +56,11 @@ linux:~ # curl http://download/file.tar.gz | tar zx
 
 linux:~ # false | tee /dev/null; echo $?
 linux:~ # false | tee /dev/null; echo ${PIPESTATUS[0]}
+
+linux:~ # cp file.log file.$(date +%D).log && : > file.log && gzip file.$(date +%D).log
+
+linux:~ # curl -o- https://github/install.sh | bash
+linux:~ # wget -qO- https://github/install.sh | bash
 ```
 
 ---
