@@ -494,4 +494,155 @@ Switch# clear port-security all
 
 ---
 
+## acl
+
+- Stateless ACL
+- Stateful ACL
+
+| \\         | Standard ACL       | Extended ACL                            | Named ACL |
+| ---------- | ------------------ | --------------------------------------- | --------- |
+| port       | 1 - 99, 1300- 1999 | 100 - 199, 2000 - 2699                  | -         |
+| limitation | source ip          | source ip & port, destination ip & port | -         |
+
+acl 要綁在離 target 越近越好
+
+### standard acl
+
+```bash
+Srv0 - S0 - R0  --- R1 - S1 -- Srv1
+
+192.168.10.0/24: Srv0, R0
+192.168.30.0/24: Srv1, R1  |  Srv1 -> 192.168.10.0/24
+10.0.0.1/30:     R0, R1
+
+# routing
+R0(config) ip routing
+R0(config) route ospf 1
+R0(config-router)# network 192.168.10.0 0.0.0.255 area 0
+R0(config-router)# network 10.0.0.1 0.0.0.3 area 0
+
+R1(config) ip routing
+R1(config) route ospf 1
+R1(config-router)# network 192.168.30.0 0.0.0.255 area 0
+R1(config-router)# network 10.0.0.1 0.0.0.3 area 0
+
+# acl
+R0(config)# access-list 10 permit 192.168.30.10 0.0.0.0
+R0(config)# interface GigabitEthernet 0/0/0
+R0(config-if)# ip access-group 10 out
+# out: 離開 router
+# in:  進入 router
+
+R0# show access-lists
+R0# show ip access-lists
+
+R0(config)# interface GigabitEthernet0/0/0
+R0(config-if)# no ip access-group 10 out
+R0(config)# no access-list 10 permit host 192.168.30.10
+```
+
+```bash
+
+PC0      S1  - PC1
+|        |
+S0   -   R0     ---    R1   - S3  - Srv
+|        |
+PC3      S2  - PC2
+
+172.16.1.0/24:  S0, PC0     | PC0 -> Srv, PC3 x> Srv
+172.16.2.0/24:  S1, PC1     | -> Srv
+172.16.3.0/24:  S2, PC2     | x> Srv
+172.16.4.0/24:  R0, R1      |
+172.16.5.0/24:  S3, Srv     |
+
+# routing
+R0(config)# router ospf 1
+R0(config)# ip routing
+R0(config-router)# network 172.16.1.0 0.0.0.255 area 0
+R0(config-router)# network 172.16.2.0 0.0.0.255 area 0
+R0(config-router)# network 172.16.3.0 0.0.0.255 area 0
+R0(config-router)# network 172.16.4.0 0.0.0.3 area 0
+
+# routing
+R1(config)# router ospf 1
+R1(config)# ip routing
+R1(config-router)# network 172.16.4.0 0.0.0.3 area 0
+R1(config-router)# network 172.16.5.0 0.0.0.255 area 0
+
+# acl
+R1(config)# access-list 10 permit 172.16.1.11 0.0.0.0
+# 功能同上
+# R1(config)# access-list 10 permit host 172.16.1.11
+R1(config)# access-list 10 deny 172.16.1.0 0.0.0.255
+R1(config)# access-list 10 permit 172.16.2.0 0.0.0.255
+# 有建立 acl, 會在最後一行自動加入以下
+# R1(config)# access-list 10 deny any
+# 功能同上
+# R1(config)# access-list 10 deny 0.0.0.0 255.255.255.255
+
+R1(config)# interface GigabitEthernet 0/0
+R1(config-if)# ip access-group 10 out
+
+R1# show access-lists
+R1# show ip access-lists
+```
+
+### extended acl
+
+```bash
+Srv0 - S0 - R0  --- R1 - S1 -- Srv1
+
+192.168.10.0/24: Srv0, R0  |  x> 192.168.20.2/24 (ping & web)
+192.168.30.0/24: Srv1, R1
+10.0.0.1/30:     R0, R1
+
+# routing, 同上
+
+# acl
+R0(config)# access-list 110 deny tcp 192.168.10.10 0.0.0.255 192.168.30.10 0.0.0.0 eq 80  # http
+R0(config)# access-list 110 deny tcp 192.168.10.10 0.0.0.255 192.168.30.10 0.0.0.0 eq 443 # https
+R0(config)# access-list 110 deny icmp 192.168.10.10 0.0.0.255 192.168.30.10 0.0.0.0 8 # icmp
+R0(config)# access-list 110 permit ip any any
+R0(config)# interface GigabitEthernet 0/0/0
+R0(config-if)# ip access-group 10 in
+
+R0# show access-lists
+R0# show ip access-lists
+```
+
+### named acl
+
+```bash
+Srv0 - S0 - R0  --- R1 - S1 -- Srv1
+
+192.168.10.0/24: Srv0, R0  |  x> 192.168.20.2/24 (ping & web)
+192.168.30.0/24: Srv1, R1
+10.0.0.1/30:     R0, R1
+
+# routing, 同上
+
+# acl
+R0(config)# ip access-list extended b30
+R0(config-ext-nacl)# deny tcp 192.168.10.10 0.0.0.255 192.168.30.10 0.0.0.0 eq 80  # http
+R0(config-ext-nacl)# deny tcp 192.168.10.10 0.0.0.255 192.168.30.10 0.0.0.0 eq 443 # https
+R0(config-ext-nacl)# deny icmp 192.168.10.10 0.0.0.255 192.168.30.10 0.0.0.0 8 # icmp
+R0(config-ext-nacl)# permit ip any any
+R0(config)# interface GigabitEthernet 0/0/0
+R0(config-if)# ip access-group b30 in
+
+R0# show access-lists
+R0# show ip access-lists
+```
+
+---
+
+## nat
+
+inside local
+outside local
+inside global
+outsode glbal
+
+---
+
 ## ipv6

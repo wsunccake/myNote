@@ -207,3 +207,4 @@ captureReport();
 ## ref
 
 - [lighthouse](https://github.com/GoogleChrome/lighthouse/)
+- [Web Vitals](https://web.dev/articles/vitals)
