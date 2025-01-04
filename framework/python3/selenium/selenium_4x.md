@@ -18,6 +18,9 @@
 - [code generator](#code-generator)
   - [selenium ide](#selenium-ide)
   - [katalon recorder](#katalon-recorder)
+- [HAR](#HAR)
+  - [mitmproxy](#mitmproxy)
+  - [cdp](#cdp)
 - [ref](#ref)
 
 ---
@@ -60,7 +63,7 @@ linux:~ # java -jar ./selenium-server-4.22.0.jar --help
 linux:~ # java -jar ./selenium-server-4.22.0.jar standalone --help
 linux:~ # java -jar ./selenium-server-4.22.0.jar standalone [--host 0.0.0.0] [--port 4444]
 
-crash-dumps-dir
+# crash-dumps-dir
 linux:~ # curl http://127.0.0.1:4444/ui/
 ```
 
@@ -386,7 +389,208 @@ page.quit()
 
 ---
 
+## HAR
+
+HAR / HTTP Archive
+
+### mitmproxy
+
+BrowserMob Proxy (java8 or java 11) -> browserup-proxy -> mitmproxy
+
+```bash
+linux:~ $ pip install mitmproxy     # mitmproxy=11.0.2
+linux:~ $ mitmproxy --version
+
+# test
+linux:~ $ mitmweb
+linux:~ $ curl http://127.0.0.1:8081
+```
+
+step 1.
+
+```python
+# http_export.py
+import json
+from mitmproxy import http
+
+class HTTPExport:
+    def __init__(self):
+        self.data = []
+
+    def request(self, flow: http.HTTPFlow) -> None:
+        print(f"Captured request: {flow.request.url}")
+        self.data.append({
+            "method": flow.request.method,
+            "url": flow.request.url,
+            "headers": dict(flow.request.headers),
+            "request_body": flow.request.text,
+        })
+
+    def response(self, flow: http.HTTPFlow) -> None:
+        print(f"Captured response: {flow.request.url}")
+        if self.data:
+            self.data[-1].update({
+                "status_code": flow.response.status_code,
+                "response_headers": dict(flow.response.headers),
+                "response_body": flow.response.text,
+            })
+
+    def done(self):
+        print("Saving HTTP data...")
+        with open("http_data.json", "w") as f:
+            json.dump(self.data, f, indent=4)
+        print("HTTP data saved to http_data.json")
+
+addons = [HTTPExport()]
+```
+
+```bash
+linux:~ $ mitmdump -s http_export.py
+```
+
+step 2.
+
+```bash
+# demo.py
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+
+proxy_address = "127.0.0.1:8080"  # mitmproxy address
+
+# ChromeOptions with proxy
+chrome_options = Options()
+chrome_options.add_argument(f'--proxy-server={proxy_address}')
+chrome_options.add_argument('--ignore-certificate-errors')
+
+# WebDriver
+webdriver_path = '/usr/local/bin/chromedriver'
+service = Service(webdriver_path)
+driver = webdriver.Chrome(service=service, options=chrome_options)
+
+url = "https://www.example.com"
+driver.get(url)
+
+print(driver.title)
+driver.quit()
+```
+
+```bash
+linux:~ $ python3 demo.py
+```
+
+### cdp
+
+CDP / Chrome DevTools Protocol
+
+```python
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+import time
+import json
+
+chrome_options = Options()
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--disable-gpu")
+chrome_options.add_argument("--no-sandbox")
+
+webdriver_path = '/usr/local/bin/chromedriver'
+service = Service(executable_path=webdriver_path)
+driver = webdriver.Chrome(service=service, options=chrome_options)
+
+try:
+    devtools = driver.execute_cdp_cmd
+    devtools("Performance.enable", {})
+
+    url = "https://www.example.com"
+    driver.get(url)
+    time.sleep(5)
+
+    metrics = devtools("Performance.getMetrics", {})
+    print("Performance Metrics:")
+    print(json.dumps(metrics, indent=2))
+
+    file_path = "performance_metrics.json"
+    with open(file_path, "w", encoding="utf-8") as file:
+        json.dump(metrics, file, indent=2)
+    print(f"Performance metrics saved to {file_path}")
+
+    devtools("Performance.disable", {})
+
+finally:
+    driver.quit()
+```
+
+---
+
+## grid
+
+### hub
+
+```bash
+hub:~ # java -jar ./selenium-server-4.22.0.jar hub [--port 4444]
+
+# check defult port 4444
+hub:~ # curl -L http://localhost:4444
+hub:~ # ss -lutnp | grep 4444
+```
+
+### node
+
+```bash
+node:~ # java -jar ./selenium-server-4.22.0.jar node [--hub http://<hub>:4444]
+```
+
+### client
+
+```python
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
+def run_test_on_grid():
+    grid_url = "http://localhost:4444/wd/hub"
+
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--start-maximized")
+    chrome_options.add_argument("--disable-gpu")
+
+    driver = webdriver.Remote(
+        command_executor=grid_url,
+        options=chrome_options
+    )
+
+    try:
+        driver.get("https://example.com")
+        print("Page title is:", driver.title)
+
+        driver.find_element(
+            "xpath", "//a[text()='More information...']").click()
+        print("Current URL after click:", driver.current_url)
+    finally:
+        driver.quit()
+
+if __name__ == "__main__":
+    # single browser
+    run_test_on_grid()
+
+    # multiple browser
+    processes = [multiprocessing.Process(
+        target=run_test_on_grid) for _ in range(2)]
+
+    for process in processes:
+        process.start()
+
+    for process in processes:
+        process.join()
+```
+
+---
+
 ## ref
 
 [The Selenium Browser Automation Project](https://www.selenium.dev/documentation/)
 [Selenium with Python](https://selenium-python.readthedocs.io/index.html)
+[mitmproxy](https://mitmproxy.org/)
+[mitmproxy - github](https://github.com/mitmproxy/mitmproxy)

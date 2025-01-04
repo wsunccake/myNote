@@ -93,7 +93,7 @@ rhel:~ # nmcli connection delete eth0 # remove ifcfg-ifname
 
 rhel:~ # nmcli connection edit
 rhel:~ # nmcli connection edit [con-name]
-nmcli> print
+nmcli> print [ipv4|all]
 nmcli> describe ipv4.method
 nmcli> set ipv4.method auto
 nmcli> set connection.id eth0 # con-name
@@ -121,6 +121,15 @@ rhel:~ # nmcli connection add type ethernet ifname eth0 con-name eth0 ip4 10.0.0
 rhel:~ # nmcli connection modify eth0 ipv4.dns 8.8.8.8
 rhel:~ # nmcli connection modify eth0 "8.8.8.8 8.8.4.4" # 可同時設定多組 DNS
 rhel:~ # nmcli connection modify eth0 +ipv4.dns "8.8.8.8 8.8.4.4"
+
+rhel:~ # nmcli connection edit eth0
+nmcli> print [ipv4]root
+nmcli> set ipv4.method manual
+nmcli> set ipv4.address 10.0.0.11/24
+nmcli> set ipv4.gateway 10.0.0.1
+nmcli> set ipv4.dns 8.8.8.8
+nmcli> save
+nmcli> quit
 
 # method 3:
 rhel:~ # ip link show  # 顯示網卡狀態

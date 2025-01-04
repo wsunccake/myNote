@@ -105,6 +105,6 @@ Click "Create / Register VM" show "New virtual machine" on web ui
 
 ...
 
-4 Customize settings  => Add hard disk => Existing hard disk
+6 Customize settings  => Add hard disk => Existing hard disk
 (Select new_vm.vmdk)
 ```

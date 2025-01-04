@@ -127,3 +127,18 @@ ubuntu:~ # systemctl status         sshd
 ```
 
 [ufw](../ubuntu20/ufw.md)
+
+```bash
+# disable upgrade
+ubuntu:~ #  systemctl stop unattended-upgrades
+ubuntu:~ #  systemctl disable unattended-upgrades
+ubuntu:~ #  systemctl mask unattended-upgrades
+
+ubuntu:~ #  systemctl stop apt-daily.timer
+ubuntu:~ #  systemctl disable apt-daily.timer
+ubuntu:~ #  systemctl mask apt-daily.timer
+
+ubuntu:~ #  systemctl stop apt-daily-upgrade.timer
+ubuntu:~ #  systemctl disable apt-daily-upgrade.timer
+ubuntu:~ #  systemctl mask apt-daily-upgrade.timer
+```

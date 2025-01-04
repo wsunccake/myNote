@@ -342,6 +342,54 @@ control:~ $ cat dump.yaml
 control:~ $ ansible-playbook -i hosts dump.yaml
 ```
 
+```yaml
+---
+- hosts: all
+  gather_facts: true
+  become: true
+  # become_method: sudo
+  # become_user: root
+  tags: demo
+  vars:
+    test_web: https://example.com
+  tasks:
+    - ansible.builtin.command: curl "{{ test_web }}"
+
+    - name: print local host env var
+      ansible.builtin.shell: |
+        echo "local env var: {{ lookup('env', 'HOME') }}"
+      args:
+        executable: /bin/bash
+    - name: set ansible gather fact
+      ansible.builtin.set_fact:
+        my_env_vars:
+          MY_HOSTNAME: "{{ ansible_hostname }}"
+          MY_IP: "{{ ansible_default_ipv4.address }}"
+          MY_HOME: "{{ ansible_env.HOME }}"
+        become: false
+    - name: print ansible gather fact
+      ansible.builtin.shell: |
+        echo "remote env var: $MY_HOME"
+        echo "Hostname: $MY_HOSTNAME"
+        echo "IP Address: $MY_IP"
+      environment: "{{ my_env_vars }}"
+
+    - name: set user before become
+      ansible.builtin.command: whoami
+      register: before_user
+      become: false
+    - name: print user before become
+      ansible.builtin.shell: |
+        echo "before become: {{ before_user.stdout }}"
+    - name: set user after become
+      ansible.builtin.command: whoami
+      register: after_user
+      become: true
+    - name: set after become env var
+      ansible.builtin.shell: |
+        echo "after become: {{ after_user.stdout }}"
+```
+
 ---
 
 ## Inventory
