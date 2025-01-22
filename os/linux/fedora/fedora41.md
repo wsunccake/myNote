@@ -36,7 +36,7 @@ fedora:~ $ echo "export PATH=$JAVA_HOME/bin:$PATH" >> ~/.bashrc
 fedora:~ $ source ~/.bashrc
 
 # git
-dnf install git
+fedora:~ $ dnf install git
 
 # vscode
 fedora:~ # rpm --import https://packages.microsoft.com/keys/microsoft.asc
@@ -58,6 +58,17 @@ fedora:~ # dnf in screen
 
 # tmux
 fedora:~ # dnf in tmux
+
+# zsh
+fedora:~ # dnf in zsh
+fedora:~ $ chsh -s $(which zsh)
+
+# oh-my-zsh
+fedora:~ $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+# fzf
+fedora:~ $ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+fedora:~ $ ~/.fzf/install
 ```
 
 ---
