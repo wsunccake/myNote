@@ -165,3 +165,24 @@ linux:~ $ awk 'BEGIN { CONVFMT="%.2f"; num=3.14159; print num }'
 linux:~ $ awk 'BEGIN { OFMT="%.2f"; print 123.456789 }'
 123.46
 ```
+
+---
+
+## common
+
+```bash
+awk -v inp="$HOME/my.inp" '{print $1 > (f_inp "_" $2)}' <file>
+# 變數與其他文字組合，應該將它們放在括號中 ( ... )，以確保正確解析。
+# => (f_inp "_" $2) 會生成期望的文件名。
+
+awk -v inp="$HOME/my.inp" 'BEGIN {ORS=" "} {print $1 > (f_inp "_" $2)}  END {print ""}' <file>
+# ORS=" "           :將輸出的行分隔符（Output Record Separator）設置為空格。
+# {print $0}        :輸出每一行。
+# END {print ""}    :在最後加上換行符。
+
+
+awk '{$1=""; print $0}' <file>
+# 第一列清空（設為空字串），但行的其他部分仍然存在
+awk '{$1=""; sub(/^ /, ""); print}' <file>
+# 第一列清空包括後留空格（設為空字串），但行的其他部分仍然存在
+```

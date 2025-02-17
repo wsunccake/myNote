@@ -157,6 +157,11 @@ else
 fi
 
 [ "x$SEX" == "xmale" ] && echo "Hi male" || echo "Hi Female"
+
+dividend=10
+divisor=3
+result=$((dividend % divisor == 0 ? divisor : dividend % divisor))
+
 ```
 
 ---

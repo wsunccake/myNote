@@ -407,7 +407,7 @@ Get-Content <path> | Measure-Object -character -line -word
 
 | Bash              | PowerShell                        | Cmd      |
 | ----------------- | --------------------------------- | -------- |
-| ls                | Get-Item                          | dir      |
+| ls                | Get-ChildItem                     | dir      |
 | cd                |                                   | cd       |
 | pwd               | Get-Location                      |          |
 | clear             | Clear-Host                        | cls      |

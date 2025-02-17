@@ -43,7 +43,6 @@ Joe Hwang, M16-1226, 20
 Tim Cheng, YKC-7725, 10
 ```
 
-
 ---
 
 ## script
@@ -75,7 +74,6 @@ EOF
 linux:~ $ sed -n -f s5.sed data.csv
 ```
 
-
 ---
 
 ## remove character
@@ -90,7 +88,6 @@ BASH script
 linux:~ $ echo "Hello BASH script" | sed 's/.\{6\}//;s/.//5g'
 BASH
 ```
-
 
 ---
 
@@ -113,7 +110,6 @@ usr/lib/python/site-package/xxx-1.0/yyy.zz
 linux:~ $ echo /usr/lib/python/site-package/xxx-1.0/yyy.zz | sed 's/.*\///'
 yyy.zz
 ```
-
 
 ---
 
@@ -138,11 +134,9 @@ LeeLongDa, 3C-123, 500
 linux:~ $ sed "s/\r//g" <file>
 ```
 
-
 ---
 
 ## substitute
-
 
 ---
 
@@ -153,4 +147,10 @@ sed 's/\x1b\[[0-9;]*m//g' <file>    # remove color code
 
 sed $'s/\r$//' <file>               # dos to unix
 sed $'s/$/\r/' <file>               # unix to dos
+
+sed ':a;N;$!ba;s/\n/ /g' <file>     # tr '\n' ' '
+# :a          : 設置了一個標籤，類似於循環的開始點。
+# N           : 將下一行追加到當前模式空間，從而處理多行文本。
+# $!ba        : 如果還沒有到文件的末尾 ($! 表示“不是最後一行”)，則跳轉回標籤 :a，繼續追加。
+# s/\n/ /g    : 將模式空間中的所有換行符 (\n) 替換為空格 ( )。
 ```

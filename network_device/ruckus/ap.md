@@ -119,3 +119,9 @@ rkscli: ruckus
 ```bash
 linux:~ # screen /dev/usb-serial 115200
 ```
+
+---
+
+## unleahed
+
+unleashed.ruckuswireless.com
