@@ -77,7 +77,8 @@ fedora:~ $ ~/.fzf/install
 
 ```bash
 # gnome
-fedora:~ # dnf4 group install gnome-desktop
+fedora:~ # dnf group list --hidden
+fedora:~ # dnf install @gnome-desktop
 
 # chrome
 fedora:~ # curl -OL https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
