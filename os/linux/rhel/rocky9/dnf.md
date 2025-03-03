@@ -52,7 +52,7 @@ rocky:~ # dnf provides <file>
 rocky:~ # dnf info <package>
 rocky:~ # dnf repoquery --info <package>
 
-rocky:~ # dnf group list -v
+rocky:~ # dnf group list [--hidden|--available|--installed]
 rocky:~ # dnf group info "<group>"
 rocky:~ # dnf group summary
 ```

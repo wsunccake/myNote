@@ -84,3 +84,17 @@ fedora:~ # dnf install @gnome-desktop
 fedora:~ # curl -OL https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
 fedora:~ # dnf in google-chrome-stable_current_x86_64.rpm
 ```
+
+## system
+
+```bash
+# disable selinux
+fedora:~ # sed s/^SELINUX=.*/SELINUX=disabled/ /etc/selinux/config
+fedora:~ # grubby --update-kernel ALL --args selinux=0
+fedora:~ # reboot
+
+# extend lv
+fedora:~ # lvresize -l +100%FREE /dev/fedora/root
+fedora:~ # xfs_growfs /dev/fedora/root      # for xfs
+fedora:~ # resize2fs /dev/vg_name/lv_name   # for ext4
+```

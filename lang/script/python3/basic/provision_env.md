@@ -10,12 +10,10 @@ linux:~ $ wget https://bootstrap.pypa.io/get-pip.py     # for user
 linux:~ $ python3 get-pip.py --user
 ```
 
-
 ```batch
 C:\Users\user> curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py   # windows 10
 C:\Users\user> python get-pip.py
 ```
-
 
 ```bash
 # install python 3.x
@@ -35,6 +33,43 @@ osx:~ # rm pkgutil --forget org.python.Python.PythonApplications-3.x
 osx:~ # rm pkgutil --forget org.python.Python.PythonUnixTools-3.x
 ```
 
+## pyenv
+
+```bash
+linux:~ $ curl -fsSL https://pyenv.run | bash     # $HOME/.pyenv
+
+# for bash
+linux:~ $ echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+linux:~ $ echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+linux:~ $ echo 'eval "$(pyenv init - bash)"' >> ~/.bashrc
+
+# for zsh
+linux:~ $ echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
+linux:~ $ echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
+linux:~ $ echo 'eval "$(pyenv init - zsh)"' >> ~/.zshrc
+
+# require for build python
+linux:~ # dnf install openssl-devel sqlite-devel
+linux:~ # dnf install bzip2-devel xz-devel
+linux:~ # dnf install libffi-devel
+linux:~ # dnf install ncurses-devel readline-devel
+
+```
+
+```bash
+# show all version
+linux:~ $ pyenv versions
+
+# install / uninstall
+linux:~ $ pyenv install -l          # list all avaible version
+linux:~ $ pyenv install [-v] <ver>  # install
+linux:~ $ pyevn uninstall           # uninstall
+
+# change python version
+linux:~ $ pyenv global <ver>
+linux:~ $ pyenv local <ver>
+linux:~ $ pyenv shell <ver>
+```
 
 ---
 
@@ -69,7 +104,6 @@ linux:~ # pip install pylibmc==                                       # pip >= 9
 linux:~ # pip install pylibmc==blork                                  # pip < 9.0
 ```
 
-
 ---
 
 # virtual environment
@@ -82,7 +116,6 @@ linux:~/myproject3 # source bin/activate
 linux:~/myproject3 # VIRTUAL_ENV_DISABLE_PROMPT=1 source bin/activate
 linux:~/myproject3 # deactivate
 ```
-
 
 ## venv
 
@@ -100,7 +133,6 @@ C:\Users\user> py -m venv venv
 C:\Users\user> .\venv\Scripts\activate
 (venv) C:\Users\user> deactivate
 ```
-
 
 ## pipenv
 
@@ -133,7 +165,6 @@ linux:~ # source `pipenv --venv`/bin/activate
 linux:~ # pipenv --rm
 ```
 
-
 ---
 
 # read-eval-print loop / repl
@@ -145,14 +176,12 @@ linux:~ # pip install ipython
 linux:~ # ipython
 ```
 
-
 ## jupyter
 
 ```bash
 linux:~ # pip install jupyter
 linux:~ # jupyter notebook
 ```
-
 
 ---
 
@@ -168,7 +197,6 @@ linux:~/myproject3/demo # pyb -h
 linux:~/myproject3/demo # pyb --start-project
 ```
 
-
 ### pycharm/intellij ide plugin
 
 ```bash
@@ -178,7 +206,6 @@ use_plugin('python.pycharm')
 
 linux:~/project $ pyb pycharm_generate
 ```
-
 
 ### source code
 
@@ -249,7 +276,6 @@ def initialize(project):
 linux:~/myproject3/demo # pyb install_dependencies
 linux:~/myproject3/demo # pyb
 ```
-
 
 ---
 

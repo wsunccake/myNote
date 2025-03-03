@@ -45,6 +45,7 @@ void loop() {
 ```cpp
 const byte led_pin = 2;
 const byte btn_pin = 4;
+bool btn_state;
 
 void setup() {
     pinMode(led_pin, OUTPUT);
@@ -104,3 +105,24 @@ void loop()
 ```
 
 ![variable_resistor](./variable_resistor.png)
+
+---
+
+## button bounce
+
+Hardware Debounce
+
+Software Debounce
+
+---
+
+## RC Filter
+
+Low-Pass Filter / 低通濾波器（LPF）
+High-Pass Filter / 高通濾波器（HPF）
+帶通濾波器（BPF）
+帶阻濾波器（BRF）
+
+1. 不動產營業員
+2. 不動產經濟人
+3. 地政士

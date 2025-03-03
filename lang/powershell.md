@@ -455,6 +455,22 @@ PS C:\Users\user> Invoke-CimMethod -ClassName Win32_OperatingSystem -MethodName 
 PS C:\Users\user> Invoke-CimMethod -ClassName Win32_OperatingSystem -MethodName Reboot
 ```
 
+```powershell
+# processor
+Get-WmiObject -Class Win32_Processor | Select-Object Name, Manufacturer, MaxClockSpeed
+Get-CimInstance -ClassName Win32_Processor | Select-Object Name, Manufacturer, MaxClockSpeed, NumberOfCores, NumberOfLogicalProcessors
+Get-CimInstance -ClassName Win32_Processor | Select-Object Name, LoadPercentage
+
+# memory
+Get-WmiObject -Class Win32_OperatingSystem | Select-Object TotalVisibleMemorySize, FreePhysicalMemory
+Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object TotalVisibleMemorySize, FreePhysicalMemory
+Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object TotalVisibleMemorySize, FreePhysicalMemory, TotalVirtualMemorySize, FreeVirtualMemory
+# hard disk
+Get-WmiObject -Class Win32_DiskDrive | Select-Object Model, Size
+Get-CimInstance -ClassName Win32_DiskDrive | Select-Object Model, Size
+Get-CimInstance -ClassName Win32_LogicalDisk | Select-Object DeviceID, Size, FreeSpace
+```
+
 ---
 
 ## ref
