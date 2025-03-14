@@ -140,3 +140,13 @@ rocky:~ # dnf clean all
 rocky:~ # dnf repolist -v
 rocky:~ # dnf makecache
 ```
+
+## other
+
+```bash
+# curl error (60) - SSL certificate problem: self-signed certificate in certificate chain
+# method 1. stop ssl certificate
+rocky:~ # dnf --setopt=sslverify=false makecache
+
+# method 2. update ssl certificate
+```

@@ -5,8 +5,7 @@
 預設的 dnf 是 dnf5, 目前還有的沒整理到 dnf5 group
 
 ```bash
-fedora:~ # dnf5 group list -v
-fedora:~ # dnf4 group list -v
+fedora:~ # dnf group list --hidden
 ```
 
 ---
@@ -88,6 +87,30 @@ fedora:~ # dnf in google-chrome-stable_current_x86_64.rpm
 ## system
 
 ```bash
+# network - dhcp
+## methode 1
+fedora:~ # nmcli connection add con-name enp0s1 ipv4.method auto type ethernet ifname enp0s1
+## methode 2
+fedora:~ # nmcli connection edit enp0s1 \
+  ipv4.method auto
+
+# network - ipv4
+## methode 1
+fedora:~ # nmcli connection add con-name enp0s1 \
+  type ethernet ifname enp0s1 \
+  ipv4.method manual \
+  ipv4.addresses 192.0.2.10/24 \
+  ipv4.gateway 192.0.2.254 \
+  ipv4.dns 192.0.2.200
+## methode 2
+fedora:~ # nmcli connection edit enp0s1
+nmcli> set ipv4.method manual
+nmcli> set ipv4.addresses 192.0.2.10/24
+nmcli> set ipv4.gateway 192.0.2.254
+nmcli> set ipv4.dns 192.0.2.200
+nmcli> save
+nmcli> quit
+
 # disable selinux
 fedora:~ # sed s/^SELINUX=.*/SELINUX=disabled/ /etc/selinux/config
 fedora:~ # grubby --update-kernel ALL --args selinux=0

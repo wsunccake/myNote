@@ -49,3 +49,12 @@ fedora:~ # usermod -aG docker <user>
 ```bash
 fedora:~ $ docker run hello-world
 ```
+
+## ssl/tls
+
+```bash
+fedora:~ $ cat /etc/docker/daemon.json
+{
+    "insecure-registries": ["<registry_host>"]
+}
+```

@@ -219,6 +219,16 @@ Linux:~/pkg # make
 Linux:~/pkg # make install DESTDIR=/install_dir
 ```
 
+```bash
+# LIBRARY_PATH   : 編譯階段（Compile-time），指定 gcc 或 g++ 在 連結（Linking） 階段搜尋靜態庫（.a）或共享庫（.so）的位置
+# LD_LIBRARY_PATH: 執行階段（Runtime），指定 動態連結器（dynamic linker）搜尋共享庫 (.so) 的位置
+linux:~ $ echo $LIBRARY_PATH
+linux:~ $ echo $LD_LIBRARY_PATH
+
+# c++ default standard
+linux:~ $ g++ -dM -E -x c++  /dev/null | grep -F __cplusplus
+```
+
 ---
 
 ## Ineternet

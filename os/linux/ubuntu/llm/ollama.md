@@ -6,10 +6,24 @@
 linux:~ # curl -fsSL https://ollama.com/install.sh | sh
 ```
 
+## uninstall
+
+```bash
+linux:~ # systemctl stop ollama
+linux:~ # systemctl disable ollama
+linux:~ # rm /etc/systemd/system/ollama.service
+linux:~ # rm -f $(which ollama)
+linux:~ # rm -rf /usr/share/ollama
+linux:~ # userdel ollama
+linux:~ # groupdel ollama
+linux:~ # rm -rf /usr/local/lib/ollama
+```
+
 ## run
 
 ```bash
 linux:~ # ollama --version
+linux:~ # journalctl -e -u ollama
 
 linux:~ # ollama pull llama3:8b
 linux:~ # ollama run llama3:8b
