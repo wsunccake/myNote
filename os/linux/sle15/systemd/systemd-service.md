@@ -13,6 +13,13 @@
 
 ---
 
+```bash
+sle:~ # systemctl --version
+sle:~ # systemctl list-unit-files [--type=service] [--state=active]
+sle:~ # systemctl --fail
+sle:~ # systemctl --failed
+```
+
 ## analyze
 
 ```bash

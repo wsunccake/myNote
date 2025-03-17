@@ -66,10 +66,63 @@ linux:~ # docker export busybox | tar -C rootfs -xvf -
 linux:~ # bash main.sh run /bin/sh
 ```
 
+---
+
 ## nsenter
 
 ```bash
 linux:~ # lsns
 
 linux:~ # nsenter --target <pid> --mount --pid --net --uts --ipc <cmd>
+```
+
+---
+
+## ip
+
+### network namespace
+
+```bash
+linux:~ # ip netns list                                     # list namespace
+linux:~ # ip netns add <net_ns>                             # create namespace
+linux:~ # ip netns delete <net_ns>                          # delete namespace
+
+linux:~ # ip link set <veth> netns <net_ns>                 # veth to namespace
+linux:~ # ip netns exec <net_ns> <ip_cmd>                   # exec veth in namespace
+```
+
+### bridge
+
+```bash
+linux:~ # ip [-d] link show [type bridge|dev <br>]          # list bridge
+linux:~ # ip link add <br> type bridge                      # create bridge
+linux:~ # ip link delete <br>                               # delete bridge
+
+linux:~ # ip link set <br> up                               # up bridge
+linux:~ # ip link set <veth> master <br>                    # attach veth to bridge
+linux:~ # ip link set <veth> nomaster                       # detach veth to bridge
+```
+
+### veth pair
+
+```bash
+linux:~ # ip link add veth0 type veth peer name veth1       # create veth pair
+linux:~ # ip link delete veth0                              # delete veth pair
+linux:~ # ip [-d] link show
+...
+4: veth1@veth0:
+5: veth0@veth1:
+# 在相同 namespace 裡, veth1@veth0 表示 veth0 <-> veth1
+
+5: veth0@if11:
+# 在不相同 namespace 裡, veth0@if12 表示 veth0 <-> if12
+
+linux:~ # ip link set veth0 up
+linux:~ # ip link set veth0 master br0                  # attach veth to bridge
+linux:~ # ip link set veth0 nomaster                    # detach veth to bridge
+
+linux:~ # ip link set veth1 up
+linux:~ # ip link set veth1 netns ns                    # attach to namespace
+linux:~ # ip netns exec ns ip link show                 # list in namespace
+linux:~ # ip netns exec ns ip link set veth1 netns 1    # attch veth to default namespace
 ```

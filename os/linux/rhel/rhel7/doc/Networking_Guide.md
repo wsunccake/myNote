@@ -677,7 +677,7 @@ rhel:~ # ip -all netns delete
 rhel:~ # uuidgen ifcfg-eth0
 ```
 
-# Netowkr Veth Pair
+# Netowrk Veth Pair
 
 ```bash
 rhel:~ # ip link add veth0 type veth peer name veth1
