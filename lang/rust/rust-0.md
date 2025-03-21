@@ -29,6 +29,9 @@ linux:~ # apt install build-essential               # for debian / ubuntu
 # by apt
 linux:~ # apt install rust-all                      # for ubuntu
 
+# by dnf
+linux:~ # dnf install rust cargo                    # for fedora
+
 # by rustup
 linux:~ $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash
 
@@ -163,4 +166,18 @@ opt-level = 0
 
 [profile.release]
 opt-level = 3
+```
+
+## rustup
+
+```bash
+linux:~ $ rustup help
+linux:~ $ rustup help show
+
+linux:~ $ rustup show
+linux:~ $ rustup update
+linux:~ $ rustup default <version>
+linux:~ $ rustup override set <version>
+
+linux:~ $ rustup self uninstall
 ```

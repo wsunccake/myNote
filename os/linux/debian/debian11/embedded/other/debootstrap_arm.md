@@ -61,8 +61,8 @@ debian:~ # fdisk -l $SD_IMG
 # attach
 debian:~ # losetup /dev/$LOOP $SD_IMG
 debian:~ # losetup
-debian:~ # kpart -av /dev/$LOOP
-debian:~ # kpart -lv /dev/$LOOP
+debian:~ # kpartx -av /dev/$LOOP
+debian:~ # kpartx -lv /dev/$LOOP
 
 # format
 debian:~ # mkfs -t msdos /dev/mapper/${LOOP}p1
@@ -80,7 +80,7 @@ debian:~ # umount $SD1
 debian:~ # umount $SD2
 
 # detach
-debian:~ # kpart -dv /dev/$LOOP
+debian:~ # kpartx -dv /dev/$LOOP
 debian:~ # losetup -d /dev/$LOOP
 ```
 
