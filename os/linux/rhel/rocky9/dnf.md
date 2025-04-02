@@ -109,11 +109,17 @@ rocky:~ # dnf history rollback <transaction_id>
 ## repository
 
 ```bash
+# for dnf4
 rocky:~ # dnf config-manager --add-repo <repository_URL>
-rocky:~ # cat /etc/yum.repos.d/<repository_URL>.repo
 rocky:~ # dnf config-manager --enable <repository_id>
 rocky:~ # dnf config-manager --disable <repository_id>
 
+# for dnf5
+rocky:~ # dnf config-manager addrepo --from-repofile=<repository_URL>
+rocky:~ # dnf config-manager setopt <repository_id>.enabled=1
+rocky:~ # dnf config-manager setopt <repository_id>.enabled=0
+
+rocky:~ # cat /etc/yum.repos.d/<repository_URL>.repo
 rocky:~ # dnf repolist -v
 ```
 
