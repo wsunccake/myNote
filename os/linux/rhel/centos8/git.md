@@ -80,3 +80,16 @@ git version 2.18.4
 
 [linux:~/repo ] $ git config --unset credential.https://example.com.username
 ```
+
+## github
+
+```bash
+[linux:~/repo ] $ git push
+remote: error: GH007: Your push would publish a private email address.
+remote: You can make your email public or disable this protection by visiting:
+remote: https://github.com/settings/emails
+
+[linux:~/repo ] $ git config --global user.email 1234567+user@users.noreply.github.com
+[linux:~/repo ] $ git commit --amend --author="user <1234567+user@users.noreply.github.com>"
+[linux:~/repo ] $ git push
+```
