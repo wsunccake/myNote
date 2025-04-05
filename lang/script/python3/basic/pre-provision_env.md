@@ -1,4 +1,6 @@
-# install
+# pre-provision env
+
+## install
 
 ```bash
 centos:~ # yum install python34 python34-pip            # for centos 7
@@ -33,76 +35,15 @@ osx:~ # rm pkgutil --forget org.python.Python.PythonApplications-3.x
 osx:~ # rm pkgutil --forget org.python.Python.PythonUnixTools-3.x
 ```
 
-## pyenv
-
-```bash
-linux:~ $ curl -fsSL https://pyenv.run | bash     # $HOME/.pyenv
-
-# for bash
-linux:~ $ echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
-linux:~ $ echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
-linux:~ $ echo 'eval "$(pyenv init - bash)"' >> ~/.bashrc
-
-# for zsh
-linux:~ $ echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
-linux:~ $ echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
-linux:~ $ echo 'eval "$(pyenv init - zsh)"' >> ~/.zshrc
-
-# require for build python
-linux:~ # dnf install openssl-devel sqlite-devel
-linux:~ # dnf install bzip2-devel xz-devel
-linux:~ # dnf install libffi-devel
-linux:~ # dnf install ncurses-devel readline-devel
-
-```
-
-```bash
-# show all version
-linux:~ $ pyenv versions
-
-# install / uninstall
-linux:~ $ pyenv install -l          # list all avaible version
-linux:~ $ pyenv install [-v] <ver>  # install
-linux:~ $ pyevn uninstall           # uninstall
-
-# change python version
-linux:~ $ pyenv global <ver>
-linux:~ $ pyenv local <ver>
-linux:~ $ pyenv shell <ver>
-```
+- [pyenv](./pre-provision/pyenv.md)
 
 ---
 
-# package management
+## package management
 
-## pip
-
-安裝 virtualenv, pybuilder 為例子
-
-```bash
-linux:~ # pip -V
-linux:~ # pip list
-linux:~ # pip help
-
-# package
-linux:~ # pip search virtualenv             # search package
-
-linux:~ # pip install virtualenv            # install package
-linux:~ # cat requirements.txt
-pybuilder
-linux:~ # pip install -r requirements.txt   # install package from requirements file
-linux:~ # python -m pip install requests    # install package by module
-
-linux:~ # pip install --upgrade pip         # upgrade package
-linux:~ # pip uninstall requests            # remove package
-
-# show package avaible version
-linux:~ # pip index versions pylibmc                                  # pip >= 21.2
-linux:~ # pip install pylibmc==                                       # pip >= 21.1
-linux:~ # pip install --use-deprecated=legacy-resolver pylibmc==      # pip >= 20.3
-linux:~ # pip install pylibmc==                                       # pip >= 9.0
-linux:~ # pip install pylibmc==blork                                  # pip < 9.0
-```
+- [pip](./pre-provision/pip.md)
+- [poetry](./pre-provision/poetry.md)
+- [uv](./pre-provision/uv.md)
 
 ---
 
