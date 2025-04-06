@@ -56,3 +56,16 @@ linux:~ $ uv init <project>     # create project
 linux:~ $ uv add <package>
 linux:~ $ uv remove <package>
 ```
+
+---
+
+## tool
+
+```bash
+linux:~ $ uv tool dir
+linux:~ $ uv tool list
+linux:~ $ uv tool install <package>
+linux:~ $ uv tool uninstall <package>
+
+linux:~ $ uv tool run <script>      # uvx <script>
+```
