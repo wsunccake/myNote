@@ -59,10 +59,7 @@ linux:~ $ source .venv/bin/activate
   "mcpServers": {
     "time": {
       "command": "uvx",
-      "args": [
-        "mcp-server-time",
-        "--local-timezone=America/New_York"
-      ]
+      "args": ["mcp-server-time", "--local-timezone=America/New_York"]
     }
   }
 }
@@ -88,9 +85,7 @@ fedora:~/fetch-mcp $ npm start
   "mcpServers": {
     "fetch": {
       "command": "node",
-      "args": [
-        "~/fetch-mcp/dist/index.js"
-      ]
+      "args": ["~/fetch-mcp/dist/index.js"]
     }
   }
 }
@@ -146,12 +141,7 @@ linux:~/demo $ source .venv/bin/activate
       "disabled": false,
       "timeout": 60,
       "command": "uv",
-      "args": [
-        "--directory",
-        "~/demo",
-        "run",
-        "server.py"
-      ],
+      "args": ["--directory", "~/demo", "run", "server.py"],
       "transportType": "stdio"
     }
   }
@@ -202,12 +192,31 @@ linux:~/demo $ source .venv/bin/activate
     "remote-sse-demo": {
       "url": "http://127.0.0.1:8000/sse",
       "disabled": false,
-      "autoApprove": [
-        "add"
-      ]
+      "autoApprove": ["add"]
     }
   }
 }
 ```
 
 ---
+
+## vscode + cline
+
+```json
+// .vscode\mcp.json
+{
+  "servers": {
+    "my-mcp-server": {
+      "type": "stdio",
+      "command": "uv",
+      "args": ["--directory", "~/demo", "run", "server.py"]
+    }
+  }
+}
+```
+
+---
+
+## ref
+
+- [model context protocol](https://modelcontextprotocol.io/introduction)

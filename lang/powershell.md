@@ -86,6 +86,7 @@ echo "Hello PowerShell"
 ### profile
 
 ```powershell
+PS C:\Users\user> $PROFILE
 PS C:\Users\user> $HOME\Documents\PowerShell\profile.ps1
 
 PS C:\Users\user> $PROFILE.AllUsersAllHosts

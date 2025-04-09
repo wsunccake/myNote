@@ -16,6 +16,15 @@ linux:~ $ uv help
 linux:~ $ uv help <command>
 ```
 
+```powershell
+PS C:\Users\user> powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+# Installing C:\Users\user\.local\bin  uv.exe, uvx.exe
+# set Path=C:\Users\hwang1\.local\bin;%Path%                (cmd)
+# $env:Path = "$env:USERPROFILE\.local\bin;$env:Path"'      (powershell)
+
+PS C:\Users\user> echo '$env:Path = "$env:USERPROFILE\.local\bin;$env:Path"' >> $PROFILE
+```
+
 ---
 
 ## python
@@ -43,8 +52,16 @@ linux:~ $ uv pip tree
 ```bash
 linux:~ $ uv venv
 linux:~ $ source .venv/bin/active
+(.venv):~ $ which python
+
 (.venv):~ $ uv pip install cowsay
 (.venv):~ $ python3 -c "from cowsay import cow;cow('hello, world')"
+```
+
+```powershell
+PS C:\Users\user> uv venv
+PS C:\Users\user> .\.venv\Scripts\activate.ps1
+(.venv) PS C:\Users\user> Get-Command python
 ```
 
 ---
