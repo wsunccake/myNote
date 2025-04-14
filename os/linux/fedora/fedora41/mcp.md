@@ -1,4 +1,4 @@
-# MCP / model context protocol
+# mcp / model context protocol
 
 ## architecture
 
@@ -42,7 +42,9 @@ linux:~ $ source .venv/bin/activate
 
 ---
 
-## vscode + cline
+## mcp client
+
+### vscode + cline
 
 ### [Time MCP Server](https://github.com/modelcontextprotocol/servers/tree/main/src/time)
 
@@ -68,15 +70,15 @@ linux:~ $ source .venv/bin/activate
 ### [fetch-mcp](https://github.com/zcaceres/fetch-mcp)
 
 ```bash
-fedora:~ $ npm -g in tsc
-fedora:~ $ npm -g in shx
+linux:~ $ npm -g in tsc
+linux:~ $ npm -g in shx
 
-fedora:~ $ git clone https://github.com/zcaceres/fetch-mcp
-fedora:~ $ cd fetch-mcp
+linux:~ $ git clone https://github.com/zcaceres/fetch-mcp
+linux:~ $ cd fetch-mcp
 
-fedora:~/fetch-mcp $ npm install
-fedora:~/fetch-mcp $ npm run build
-fedora:~/fetch-mcp $ npm start
+linux:~/fetch-mcp $ npm install
+linux:~/fetch-mcp $ npm run build
+linux:~/fetch-mcp $ npm start
 ```
 
 ```json
@@ -91,11 +93,28 @@ fedora:~/fetch-mcp $ npm start
 }
 ```
 
+### vscode + cline
+
+```json
+// .vscode/mcp.json
+{
+  "servers": {
+    "my-mcp-server": {
+      "type": "stdio",
+      "command": "uv",
+      "args": ["--directory", "~/demo", "run", "server.py"]
+    }
+  }
+}
+```
+
 ---
 
-## demo
+## mcp server
 
-### local - stdio
+### fastmcp
+
+#### local - stdio
 
 ```python
 # server.py
@@ -148,7 +167,9 @@ linux:~/demo $ source .venv/bin/activate
 }
 ```
 
-### remote - sse
+#### remote - sse
+
+FastMCP 只能使用 host: 0.0.0.0, port: 8000, /sse
 
 ```python
 # server.py
@@ -198,21 +219,37 @@ linux:~/demo $ source .venv/bin/activate
 }
 ```
 
----
+### fastmcp with starlette
 
-## vscode + cline
+```python
+# server.py
+from starlette.applications import Starlette
+from starlette.routing import Mount
+from mcp.server.fastmcp import FastMCP
 
-```json
-// .vscode\mcp.json
-{
-  "servers": {
-    "my-mcp-server": {
-      "type": "stdio",
-      "command": "uv",
-      "args": ["--directory", "~/demo", "run", "server.py"]
-    }
-  }
-}
+mcp = FastMCP("Demo", log_level="ERROR")
+
+@mcp.tool()
+def add(a: int, b: int) -> int:
+    """Add two numbers"""
+    return a + b
+
+@mcp.tool()
+def calculate_bmi(weight_kg: float, height_m: float) -> float:
+    """Calculate BMI given weight in kg and height in meters"""
+    return weight_kg / (height_m**2)
+
+app = Starlette(
+    routes=[
+        Mount('/', app=mcp.sse_app()),
+    ]
+)
+```
+
+```bash
+(.venv):~ $ uvicorn server:app --host 0.0.0.0 --port 8080
+
+curl http://127.0.0.1:8080/sse
 ```
 
 ---
