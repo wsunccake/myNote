@@ -2,6 +2,17 @@
 
 ## basic
 
+```csv
+Andy Jiang, ACA-4566, 10
+Joe Hwang, M16-1226, 20
+Tim Cheng, YKC-7725, 10
+John Cheng, YKC-7722, 10
+Kevin Lin, NI2-039, 100
+David Lee, 2C-323, 200
+Herry McGray Jr., 3C-123, 500
+LeeLongDa, 3C-123, 500
+```
+
 ```bash
 linux:~ $ cat << EOF > data.csv
 Andy Jiang, ACA-4566, 10
@@ -45,33 +56,62 @@ Tim Cheng, YKC-7725, 10
 
 ---
 
+## append / insert
+
+```bash
+# by line
+linux:~ $ sed '1aAnn Su, XYZ-1122, 10' data.csv           # insert at 1 line
+linux:~ $ sed '1aAnn Su, XYZ-1122, 10' data.csv           # append at 1 line
+linux:~ $ sed '1,3aAnn Su, XYZ-1122, 10' data.csv         # append between 1 ~ 3 line
+linux:~ $ sed '$aAnn Su, XYZ-1122, 10' data.csv           # append at last line
+linux:~ $ sed '1a\Ann Su, XYZ-1122, 10' data.csv
+linux:~ $ sed '1a\Ann Su, XYZ-1122, 10' data.csv
+
+# by pattern
+linux:~ $ sed '/Tim/a\Ann Su, XYZ-1122, 10' data.csv      # append at Tim line
+linux:~ $ sed '/Tim/i\Ann Su, XYZ-1122, 10' data.csv      # insert at Tim line
+```
+
+---
+
+## remove / delete
+
+```bash
+# by line
+linux:~ $ sed '1d' data.csv                 # remove at 1 line
+linux:~ $ sed '1,3d' data.csv               # remove between 1 ~ 3 line
+linux:~ $ sed '$d' data.csv                 # remove at last line
+
+# by pattern
+linux:~ $ sed '/Tim/d' data.csv             # remove at Tim line
+linux:~ $ sed '/Tim/,/Herry/d' data.csv     # remove between Tim and Herry line
+```
+
+---
+
 ## script
 
 ```bash
-linux:~ $ cat << EOF > s1.sed
+# script file
+linux:~ $ cat << EOF > test.sed
 2,4p
 EOF
-linux:~ $ sed -n -f s1.sed data.csv
+linux:~ $ sed -n -f test.sed data.csv
 
-linux:~ $ cat << EOF > s2.sed
+linux:~ $ sed -n [-f <sed_script1> [-f <sed_script2>]] <file>
+
+# script
+linux:~ $ sed -n -e '2,4p' data.csv
+
+linux:~ $ sed -n [-e <sed1> [-e <sed2>]] <file>
+```
+
+```bash
+2,4p
 2p;4p
-EOF
-linux:~ $ sed -n -f s2.sed data.csv
-
-linux:~ $ cat << EOF > s3.sed
 /Joe/,/Cheng/p
-EOF
-linux:~ $ sed -n -f s3.sed data.csv
-
-linux:~ $ cat << EOF > s4.sed
 /Joe/p;/Cheng/p
-EOF
-linux:~ $ sed -n -f s4.sed data.csv
-
-linux:~ $ cat << EOF > s5.sed
 /Tim/q
-EOF
-linux:~ $ sed -n -f s5.sed data.csv
 ```
 
 ---
@@ -113,29 +153,6 @@ yyy.zz
 
 ---
 
-## remove
-
-```bash
-linux:~ $ sed /Tim/d data.csv
-Andy Jiang, ACA-4566, 10
-Joe Hwang, M16-1226, 20
-John Cheng, YKC-7722, 10
-Kevin Lin, NI2-039, 100
-David Lee, 2C-323, 200
-Herry McGray Jr., 3C-123, 500
-LeeLongDa, 3C-123, 500
-
-linux:~ $ sed /Tim/,/Herry/d data.csv
-Andy Jiang, ACA-4566, 10
-Joe Hwang, M16-1226, 20
-LeeLongDa, 3C-123, 500
-
-# remove ^M (windows carry return)
-linux:~ $ sed "s/\r//g" <file>
-```
-
----
-
 ## substitute
 
 ---
@@ -145,6 +162,7 @@ linux:~ $ sed "s/\r//g" <file>
 ```bash
 sed 's/\x1b\[[0-9;]*m//g' <file>    # remove color code
 
+sed "s/\r//g" <file>                # remove ^M (windows carry return)
 sed $'s/\r$//' <file>               # dos to unix
 sed $'s/$/\r/' <file>               # unix to dos
 
@@ -153,4 +171,36 @@ sed ':a;N;$!ba;s/\n/ /g' <file>     # tr '\n' ' '
 # N           : 將下一行追加到當前模式空間，從而處理多行文本。
 # $!ba        : 如果還沒有到文件的末尾 ($! 表示“不是最後一行”)，則跳轉回標籤 :a，繼續追加。
 # s/\n/ /g    : 將模式空間中的所有換行符 (\n) 替換為空格 ( )。
+```
+
+---
+
+## buffer
+
+pattern space: 預設每次讀入一行進來處理的內容
+hold space: 額外的暫存空間（你可以放東西進去再拿出來）
+
+| 指令    | 功能                                                                  |
+| ------- | --------------------------------------------------------------------- |
+| h       | 把 pattern space 複製到 hold buffer                                   |
+| H       | 把 pattern space 加到 hold buffer（append）                           |
+| g       | 把 hold buffer 複製回 pattern space                                   |
+| G       | 把 hold buffer 加到 pattern space                                     |
+| x       | 交換 pattern space 和 hold buffer                                     |
+| n       | 讀下一行進入 pattern space（會自動印出原來的 pattern space，除非 -n） |
+| N, P, D | 進階多行處理                                                          |
+
+```txt
+apple
+banana
+cherry
+```
+
+```bash
+/banana/{
+  h             # 複製原始行到 hold buffer
+  s/.*/\u&!!/   # 修改成 Banana!!
+  p             # 額外印出修改後的行
+  g             # 從 hold buffer 取回原始行
+}
 ```

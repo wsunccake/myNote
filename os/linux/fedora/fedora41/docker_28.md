@@ -1,4 +1,4 @@
-# docker
+# docker 28
 
 ## install
 
@@ -57,4 +57,22 @@ fedora:~ $ cat /etc/docker/daemon.json
 {
     "insecure-registries": ["<registry_host>"]
 }
+```
+
+---
+
+## compose
+
+```bash
+fedora:~ $ docker compose up -d    # create / start container
+# default env file:
+#       .env
+# --env-file <env_file>
+# default config file:
+#       docker-compose.yml (required)
+#       docker-compose.override.yml (optional)
+# -f <compose_file>
+
+fedora:~ $ docker compose down     # remove / stop container
+fedora:~ $ docker compose config   # parse / resolve config
 ```

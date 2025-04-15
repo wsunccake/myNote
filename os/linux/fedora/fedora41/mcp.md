@@ -247,9 +247,10 @@ app = Starlette(
 ```
 
 ```bash
+linux:~ $ uv --directory `pwd` run uvicorn server:app --host 0.0.0.0 --port 8080
 (.venv):~ $ uvicorn server:app --host 0.0.0.0 --port 8080
 
-curl http://127.0.0.1:8080/sse
+linux:~ $ curl http://127.0.0.1:8080/sse
 ```
 
 ---
