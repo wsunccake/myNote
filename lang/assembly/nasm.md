@@ -1,359 +1,127 @@
 # nasm
 
-## print string from char
+組合語言通常長這樣
 
 ```asm
-; test.asm
-section .text
-    global _start
+[label:] mnemonic [operand1, operand2] [; comment]
 
-    _start:
-        mov  rax, 0x0A41424344; '\nABCDE'
-        push rax
-        mov  rdx, 0x5     ; length of string is 5 bytes
-        mov  rsi, rsp     ; Address of string is RSP because string is on the stack
-        mov  rax, 0x1     ; syscall 1 is write
-        mov  rdi, 0x1     ; stdout has a file descriptor of 1
-        syscall           ; make the system call
-
-        mov  rax, 0x3c    ; syscall 3c is exit
-        xor  rdi, rdi     ; exit code 0
-        syscall           ; make the system call
+start:   mov ax, 0x1234   ; 把 0x1234 存進 AX register
 ```
 
-```makefile
-# Makefile
-ASM_FLAG = -f elf64
-LD_FLAG = -m elf_x86_64 -s
+## mnemonic / 指令
 
-.PHONY: run
-run: test
-	./test
-
-.PHONY: clean
-clean:
-	-@rm *.o
-	-@rm test
-	@echo "clean workspace"
-
-%.o : %.asm
-	nasm ${ASM_FLAG} -o $@ $<
-
-test: test.o
-	ld ${LD_FLAG} -o test test.o
+```
+mnemonic | function                 | example
+mov      | 資料傳送                 | mov ax, bx
+add      | 加法                     | add ax, 1
+sub      | 減法                     | sub bx, ax
+inc      | +1                       | inc cx
+dec      | -1                       | dec cx
+cmp      | 比較（會設旗標）         | cmp ax, bx
+jmp      | 無條件跳躍               | jmp start
+je       | 相等則跳（zero flag）    | je label
+jne      | 不等則跳                 | jne label
+call     | 呼叫副程式               | call print_hello
+ret      | 回傳（從 call 回來）     | ret
+push     | 壓入堆疊                 | push ax
+pop      | 彈出堆疊                 | pop bx
+int      | 軟體中斷（呼叫 BIOS/OS） | int 0x10（顯示字元）
 ```
 
 ---
 
-## hello world
+## register / 暫存器
 
-### system call - 64 bit
+```
+type       | name（16-bit） | 說明
+通用       | AX, BX, CX, DX | 可拿來存數值、做運算等
+指標類     | SI, DI         | 來源與目的索引
+位址類     | BP, SP         | Base Pointer、Stack Pointer
+控制類     | IP             | Instruction Pointer（程式計數器）
+段暫存器   | CS, DS, SS, ES | code/data/stack 段選擇子
+標誌暫存器 | FLAGS          | 儲存邏輯比較的結果等旗標狀態
+```
+
+### General Purpose Register / 通用暫存器
+
+```
+Register | 功能與說明            | 可細分為（8-bit）
+AX       | 累加器（Accumulator） | AH（高）、AL（低）
+BX       | 基底暫存器（Base）    | BH、BL
+CX       | 計數器（Counter）     | CH、CL
+DX       | 資料暫存器（Data）    | DH、DL
+```
+
+這些暫存器可拿來存變數、做算術、指向位址、控制迴圈等等都可以，超靈活。
 
 ```asm
-; test.asm
-
-section .data
-    msg db  "Hello World!", 10      ; '10' at end is line feed
-    len equ $-msg
-
-section .text
-    global _start
-
-    _start:
-        mov  rdx, len               ; length of string is 13 bytes
-        mov  rsi, dword msg         ; set rsi to pointer to string
-        mov  rax, 0x1               ; syscall 1 is write
-        mov  rdi, 0x1               ; stdout has a file descriptor of 1
-        syscall                     ; make the system cal
-
-        mov  rax, 0x3c    ; syscall 3c is exit
-        xor  rdi, rdi     ; exit code 0
-        syscall           ; make the system call
+; AL 和 AH 是 AX 的低/高 8-bit
+; AX = 0x1234，那 AH = 0x12, AL = 0x34
+mov ax, 0x1234   ; AX = 1234h
+mov al, 0x56     ; AL = 56h → AX = 1256h
 ```
 
-```makefile
-# Makefile
-ASM_FLAG = -f elf64
-LD_FLAG = -m elf_x86_64 -s
+### Segment Register / 段暫存器
 
-.PHONY: run
-run: test
-	./test
-
-.PHONY: clean
-clean:
-	-@rm *.o
-	-@rm test
-	@echo "clean workspace"
-
-%.o : %.asm
-	nasm ${ASM_FLAG} -o $@ $<
-
-test: test.o
-	ld ${LD_FLAG} -o test test.o
+```
+Register | Name          | 用途
+CS       | Code Segment  | 儲存程式碼所在段的 segment base（不能用 mov 設定）
+DS       | Data Segment  | 預設存取資料的段，例如變數、常數等
+SS       | Stack Segment | 堆疊區的段 base（和 SP 結合使用）
+ES       | Extra Segment | 額外資料段，常在某些字串指令中用到（如 movs, stos）
 ```
 
-### c library
+這些暫存器用來定義 segment base，Real Mode 下的實體位址 = segment × 16 + offset
 
-```asm
-; test.asm
-section .text
-    default rel
-    extern printf
-    global main
-
-    main:
-        push rbp
-        mov	rdi, fmt
-        mov	rsi, message
-        mov	rax, 0
-
-        call printf wrt ..plt	; Call printf
-        pop	rbp			        ; Pop stack
-
-        mov	rax, 0	            ; Exit code 0
-        ret		                ; Return
-
-section .data
-
-    message:  db "Hello, World", 10, 0
-    fmt: db "%s", 10, 0
 ```
-
-```makefile
-# Makefile
-CFLAG =
-
-run: test
-	./test
-
-%.o : %.asm
-	nasm ${ASM_FLAG} -o $@ $<
-
-test: test.o
-	gcc ${CFLAG} -o test test.o
-
-clean:
-	-@rm *.o
-	-@rm test
-	@echo "clean workspace"
-```
-
-### system call - 32 bit
-
-```asm
-; test.asm
-section .data
-    msg: db  "Hello World!", 10 ; '10' at end is line feed
-    len: equ $-msg
-
-section .text
-    global _start
-
-    _start:
-        mov edx, len            ; length of string is 13 bytes
-        mov ecx, dword msg      ; set rsi to pointer to string
-        mov ebx, 0x1            ; file descriptor of 1
-        mov eax, 0x4            ; sys_writer = 4
-        int 0x80                ; make the system call
-
-        mov eax, 1              ; sys_exit = 1
-        xor ebx, ebx
-        int 0x80
-```
-
-```makefile
-# Makefile
-ASM_FLAG = -f elf32
-LD_FLAG = -m elf_i386 -s
-
-.PHONY: run
-run: test
-	./test
-
-.PHONY: clean
-clean:
-	-@rm *.o
-	-@rm test
-	@echo "clean workspace"
-
-%.o : %.asm
-	nasm ${ASM_FLAG} -o $@ $<
-
-test: test.o
-	ld ${LD_FLAG} -o test test.o
+類別               | 名稱範例        | 位數        | 功能與用途                                | 能否直接運算 | 主要用在哪裡
+段暫存器 (Segment) | CS, DS, SS, ES… | 16         | 指定記憶體「段基底位址」，用來計算實體地址 | ❌ 不行      | 存取程式、資料、堆疊記憶體
+通用暫存器 (GPR)   | AX, BX, CX, DX… | 8/16/32/64 | 做計算、搬資料、暫存值                     | ✅ 可以      | 數學、迴圈、資料處理等
 ```
 
 ---
 
-## jump
+## 語法
+
+1. 資料宣告
 
 ```asm
-; if (rax == 0) {
-;     printf("rax == 0");
-; } else {
-;     printf("rax != 0");
-; }
-
-section .data
-    msg1 db "rax == 0", 10
-    len1 equ $-msg1
-
-    msg2 db "rax != 0", 10
-    len2 equ $-msg2
-
-section .text
-    global _start
-
-    _start:
-        cmp rax, 1
-
-        jz thenblock            ; ZF=0
-        mov rdx, len2
-        mov rsi, dword msg2
-
-        jmp endif
-
-    thenblock:
-        mov rdx, len1
-        mov rsi, dword msg1
-
-    endif:
-        mov rax, 0x1
-        mov rdi, 0x1
-        syscall
-
-        mov rax, 0x3c
-        xor rdi, rdi
-        syscall
+msg db 'Hello, world!', 0
+num dw 1234
 ```
+
+db（Define Byte）：定義一個 byte（8-bit）資料
+dw（Define Word）：定義一個 word（16-bit）資料
+
+2. 標籤 / Label
 
 ```asm
-; if (rax >= 0) {
-;     printf("rax >= 0");
-; } else {
-;     printf("rax < 0");
-; }
-
-section .data
-    msg1 db "rax >= 0", 10
-    len1 equ $-msg1
-
-    msg2 db "rax < 0", 10
-    len2 equ $-msg2
-
-section .text
-    global _start
-
-    _start:
-        cmp rax, 0
-
-        js singon       ; SF=1
-        jo elseblock    ; SF=0, OF=1 => RAX<5
-        jmp thenblock   ; SF=0, OF=0 => RAX>= 5
-
-
-    singon:
-        jo thenblock    ; SF=0, OF=0 => RAX>=0
-
-    elseblock:
-        mov rdx, len2
-        mov rsi, dword msg2
-        jmp endif
-
-    thenblock:
-        mov rdx, len1
-        mov rsi, dword msg1
-
-    endif:
-        mov rax, 0x1
-        mov rdi, 0x1
-        syscall
-
-        mov rax, 0x3c
-        xor rdi, rdi
-        syscall
+start:
 ```
+
+代表這裡是個程式的跳躍點，可搭配 jmp、call 使用。
+
+3. 跳躍與比較
 
 ```asm
-; if / else
-; if( condition )
-;    then_block;
-; else
-;    else_block;
-
-        cmp  xx, xx
-        jxx     else_block  ; false condition
-        ;; true condition statement
-        jmp     end_if
-
-    else_block:
-        ;; true condition statement
-
-    end_if:
+cmp ax, bx     ; 比較 ax 和 bx
+je equal       ; 如果相等，跳到 equal:
+jne not_equal  ; 如果不相等，跳到 not_equal:
 ```
+
+4. 呼叫副程式與回傳
 
 ```asm
-; while loops
-; while( condition ) {
-;    statement;
-; }
-
-    while:
-        cmp  xx, xx
-        jxx end_while   ; false condition
-        ...             ; loop statement
-        jmp while
-    end_while:
+call print_hello
+...
+print_hello:
+    ; 印字程式
+    ret
 ```
+
+5. 堆疊操作
 
 ```asm
-; do while loops
-; do {
-;   statement
-; } while( condition );
-
-    do:
-        cmp xx, xx
-        jxx do ; true condition
+push ax      ; 將 ax 壓入堆疊
+pop bx       ; 從堆疊彈出，存進 bx
 ```
-
----
-
-## gdb
-
-```asm
-; example.asm
-section .text
-  global _start
-_start:
-  mov rax, 60
-  mov rdi, 0
-  syscall
-```
-
-```bash
-linux:~ $ nasm -f elf64 -y
-linux:~ $ nasm -f elf64 -g -F dwarf -o example.o example.asm
-linux:~ $ ld -o example example.o
-linux:~ $ gdb -tui example
-```
-
-```bash
-(gdb) set disassembly-flavor intel
-(gdb) layout split
-(gdb) break _start
-(gdb) run
-(gdb) backtrace
-(gdb) step
-(gdb) info all-registers
-(gdb) info registers eax
-(gdb) print/x $eax
-(gdb) quit
-```
-
----
-
-## ref
-
-[NASM Tutorial](https://cs.lmu.edu/~ray/notes/nasmtutorial/)
