@@ -127,6 +127,9 @@ PS C:\Users\user> Get-Service |
 PS C:\Users\user> Get-Service |
     Where-Object CanPauseAndContinue |
     Select-Object -Property DisplayName, Status
+
+PS C:\Users\user> Get-Process | Where-Object Name -like <name>
+PS C:\Users\user> Stop-Process <pid>
 ```
 
 ### format
