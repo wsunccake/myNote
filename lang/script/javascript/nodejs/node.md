@@ -51,31 +51,3 @@ liunx:~/demo $ sed -i '6a"start": "node index.js",' package.json
 liunx:~/demo $ echo 'console.log("hello js");' > index.js
 liunx:~/demo $ npm start
 ```
-
----
-
-## nvm
-
-```bash
-# install
-linux:~ $ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-linux:~ $ vi ~/.bashrc
-...
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-# uninstall
-linux:~ $ nvm unload
-
-# usage
-linux:~ $ nvm --version
-linux:~ $ nvm ls
-linux:~ $ nvm ls-remote
-linux:~ $ nvm install [--lts] [<version>]
-linux:~ $ nvm use <version>
-
-# example
-linux:~ $ nvm install --lts [v18.12.0]
-linux:~ $ nvm install v18.12.0
-```
