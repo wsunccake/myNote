@@ -20,6 +20,13 @@ C:\Users\user> winget install --id Git.Git
 
 :: neovim
 C:\Users\user> winget install--id Neovim.Neovim
+
+:: weztermial
+C:\Users\user> winget install wez.wezterm
+C:\Users\user> nvim $env:USERPROFILE\.wezterm.lua
+return {
+  default_prog = { "pwsh.exe", "-NoLogo", "-NoExit" },
+}
 ```
 
 ```powershell

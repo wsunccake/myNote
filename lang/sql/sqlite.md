@@ -6,7 +6,6 @@
 linux:~ # dnf install sqlite
 ```
 
-
 ---
 
 ## basic
@@ -30,11 +29,9 @@ sqlite> .quit
 sqlite> .exit
 ```
 
-
 ---
 
 ## table
-
 
 ### create table
 
@@ -78,7 +75,7 @@ sqlite> ALTER TABLE COMPANY_RENAME ADD COLUMN SEX CHAR(1);
 
 -- rename column
 sqlite> ALTER TABLE COMPANY_RENAME RENAME COLUMN SEX TO SEX_RENAME;
-sqlite> .schema COMPANY_RENAME 
+sqlite> .schema COMPANY_RENAME
 
 -- drop column
 PRAGMA foreign_keys=off;
@@ -97,14 +94,12 @@ COMMIT;
 PRAGMA foreign_keys=on;
 ```
 
-
 ### drop table
 
 ```sql
 sqlite> DROP TABLE COMPANY;
 sqlite> .tables
 ```
-
 
 ---
 
@@ -133,7 +128,6 @@ sqlite> INSERT INTO DEPARTMENT (ID, DEPT, EMP_ID)
    (3, 'Finance', 7 );
 ```
 
-
 ### select
 
 ```sql
@@ -152,7 +146,6 @@ sqlite> SELECT * FROM COMPANY;
 sqlite> SELECT tbl_name FROM sqlite_master WHERE type = 'table';
 sqlite> SELECT sql FROM sqlite_master WHERE type = 'table' AND tbl_name = 'COMPANY';
 ```
-
 
 ### operator
 
@@ -192,12 +185,11 @@ sqlite> SELECT * FROM COMPANY WHERE NAME GLOB 'Ki*';  -- case sensitive
 sqlite> SELECT * FROM COMPANY WHERE AGE IN ( 25, 27 );
 sqlite> SELECT * FROM COMPANY WHERE AGE NOT IN ( 25, 27 );
 sqlite> SELECT * FROM COMPANY WHERE AGE BETWEEN 25 AND 27;
-sqlite> SELECT AGE FROM COMPANY 
+sqlite> SELECT AGE FROM COMPANY
    WHERE EXISTS (SELECT AGE FROM COMPANY WHERE SALARY > 65000);
-sqlite> SELECT * FROM COMPANY 
+sqlite> SELECT * FROM COMPANY
    WHERE AGE > (SELECT AGE FROM COMPANY WHERE SALARY > 65000);
 ```
-
 
 ### expression
 
@@ -211,7 +203,6 @@ sqlite> SELECT COUNT(*) AS "RECORDS" FROM COMPANY;
 sqlite> SELECT CURRENT_TIMESTAMP;
 sqlite> SELECT DATETIME('now','localtime');
 ```
-
 
 ### where
 
@@ -266,13 +257,12 @@ sqlite> SELECT name FROM COMPANY;
 sqlite> SELECT DISTINCT name FROM COMPANY;
 
 -- sub-where
-sqlite> SELECT AGE FROM COMPANY 
+sqlite> SELECT AGE FROM COMPANY
    WHERE EXISTS (SELECT AGE FROM COMPANY WHERE SALARY > 65000);
-sqlite> SELECT * FROM COMPANY 
+sqlite> SELECT * FROM COMPANY
    WHERE AGE > (SELECT AGE FROM COMPANY WHERE SALARY > 65000);
 
 ```
-
 
 ### update
 
@@ -281,7 +271,6 @@ sqlite> UPDATE COMPANY SET ADDRESS = 'Texas' WHERE ID = 6;
 sqlite> UPDATE COMPANY SET ADDRESS = 'Texas', SALARY = 20000.00;
 ```
 
-
 ### delete
 
 ```sql
@@ -289,11 +278,9 @@ sqlite> DELETE FROM COMPANY WHERE ID = 7;
 sqlite> DELETE FROM COMPANY;
 ```
 
-
 ---
 
 ## advanced
-
 
 ### constraint
 
@@ -306,7 +293,6 @@ sqlite> CREATE TABLE CONSTRAINT_COMPANY(
    SALARY         REAL     CHECK(SALARY > 0)   -- check
 );
 ```
-
 
 ### join
 
@@ -322,7 +308,6 @@ sqlite> SELECT EMP_ID, NAME, DEPT FROM COMPANY INNER JOIN DEPARTMENT
 sqlite> SELECT EMP_ID, NAME, DEPT FROM COMPANY LEFT OUTER JOIN DEPARTMENT
    ON COMPANY.ID = DEPARTMENT.EMP_ID;
 ```
-
 
 ### union
 
@@ -347,7 +332,6 @@ sqlite> SELECT EMP_ID, NAME, DEPT FROM COMPANY INNER JOIN DEPARTMENT
      ON COMPANY.ID = DEPARTMENT.EMP_ID;
 ```
 
-
 ### as
 
 ```sql
@@ -362,7 +346,6 @@ sqlite> SELECT C.ID AS COMPANY_ID, C.NAME AS COMPANY_NAME, C.AGE, D.DEPT
    WHERE C.ID = D.EMP_ID;
 ```
 
-
 ### trigger
 
 ```sql
@@ -372,7 +355,7 @@ sqlite> CREATE TABLE AUDIT(
 );
 
 -- create trigger
-sqlite> CREATE TRIGGER AUDIT_TRIGGER AFTER INSERT 
+sqlite> CREATE TRIGGER AUDIT_TRIGGER AFTER INSERT
 ON COMPANY
 BEGIN
    INSERT INTO AUDIT(EMP_ID, ENTRY_DATE) VALUES (NEW.ID, datetime('now'));  -- new, old
@@ -389,7 +372,6 @@ sqlite> SELECT name FROM sqlite_master WHERE type = 'trigger' AND tbl_name = 'CO
 sqlite> DROP TRIGGER AUDIT_TRIGGER;
 ```
 
-
 ### index
 
 ```sql
@@ -405,7 +387,6 @@ sqlite> SELECT * FROM sqlite_master WHERE type = 'index';
 -- drop index
 sqlite> DROP INDEX SALARY_INDEX;
 ```
-
 
 ### view
 
@@ -424,7 +405,6 @@ sqlite> SELECT * FROM sqlite_master WHERE type = 'view';
 sqlite> DROP VIEW COMPANY_VIEW;
 ```
 
-
 ### transaction
 
 ```sql
@@ -438,7 +418,6 @@ sqlite> BEGIN;
 sqlite> DELETE FROM COMPANY WHERE AGE = 25;
 sqlite> COMMIT;
 ```
-
 
 ### subquery
 
@@ -461,7 +440,6 @@ sqlite> UPDATE COMPANY_BKP SET SALARY = SALARY * 0.50 WHERE AGE
    IN (SELECT AGE FROM COMPANY WHERE AGE >= 27);
 ```
 
-
 ### autoincrememt
 
 ```sql
@@ -483,7 +461,6 @@ sqlite> INSERT INTO COMPANY_NEW (NAME, AGE, ADDRESS, SALARY)
    ('James', 24, 'Houston', 10000.00);
 ```
 
-
 ### explain
 
 ```sql
@@ -496,7 +473,6 @@ sqlite> EXPLAIN SELECT * FROM COMPANY WHERE SALARY >= 20000;
 sqlite> EXPLAIN QUERY PLAN SELECT * FROM COMPANY WHERE Salary >= 20000;
 ```
 
-
 ---
 
 ## database
@@ -508,7 +484,6 @@ linux:~ # sqlite3 db.sqlite3 .dump > db.sql    # backup
 linux:~ # sqlite3 db.sqlite3 < db.sql          # restore
 ```
 
-
 ### attach
 
 ```sql
@@ -517,14 +492,12 @@ sqlite> .databases
 sqlite> .tables
 ```
 
-
 ### detach
 
 ```sql
 sqlite> DETACH DATABASE new_db
 sqlite> .databases
 ```
-
 
 ### vacuum
 
@@ -540,4 +513,20 @@ sqlite> PRAGMA auto_vacuum = NONE;          -- disable
 
 ```bash
 linux:~ # sqlite3 db.sqlite3 "VACUUM;"
+```
+
+### export / import
+
+```bash
+# export
+linux:~ $ sqlite3 old.db .dump > all_dump.sql            # all table and data
+linux:~ $ sqlite3 old.db ".dump tasks"> tasks_only.sql     # only task table and data
+linux:~ $ sqlite3 old.db -header -csv "SELECT * FROM tasks;" > tasks.csv
+
+# import
+linux:~ $ sqlite3 new.db < all_dump.sql
+
+linux:~ $ sqlite3 new.db
+.mode csv
+.import tasks.csv tasks
 ```
