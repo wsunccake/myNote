@@ -2,6 +2,17 @@
 
 ## basic
 
+```bash
+linux:~ $ screen [-S session_name]     # 啟動 screen 並命名
+linux:~ $ screen -ls                   # 列出所有 screen
+linux:~ $ screen -dr [pid.tty.host]    # 分離並重新連接 screen
+linux:~ $ screen -x [pid.tty.host]     # 多點連接到 screen
+
+C-a '    # 切換 window
+C-a "    # 切換 window
+C-a :    # 進入命令列模式
+```
+
 ### window
 
 | 快捷鍵          | 指令名稱      | 說明                                            |
@@ -20,17 +31,9 @@
 | C-a :           | colon         | 進入命令列模式，可用 `select 1`、`title xxx` 等 |
 | C-a \           | quit          | 結束所有視窗並退出 screen                       |
 
-### command
-
-```bash
-linux:~ $ screen  # 啟動 screen
-c-a :
-```
-
 ### split
 
 ```bash
-linux:~ $ screen  # 啟動 screen
 C-a S   # 建立新區域 (水平分割)
 C-a |   # 建立新區域 (垂直分割)
 C-a tab # 切換焦點
@@ -244,9 +247,18 @@ defutf8 on
 # Set visual bell
 vbell on
 
+# Set key binding
+bindkey ^[l next       # next window
+bindkey ^[h prev       # previous window
+bindkey ^[k focus      # next region
+bindkey ^[j focus prev # previous region
+
 # Set default screen
 chdir $HOME
 screen -t my      0 /bin/zsh
 chdir $HOME/workspace
 screen -t work    1 /bin/bash
+
+caption splitonly "%{= bK} %{= bG} [%n] %t @ %H"
+hardstatus alwayslastline "%{= GK} %-Lw%{= KY}%n%f %t%{-}%+Lw %{= BW} %=| %0c:%s  %Y-%m-%d"
 ```
