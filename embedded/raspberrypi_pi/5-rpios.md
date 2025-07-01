@@ -45,6 +45,33 @@ network={
 
 ```bash
 rpios:~ # raspi-config
+# 於 Interface Options 中可以設定 ssh, rpi-connect, vnc
+```
+
+```bash
+rpios:~ # iwconfig wlan0
+wlan0     IEEE 802.11  ESSID:"8DA0"
+          Mode:Managed  Frequency:5.54 GHz  Access Point: 11:22:33:44:55:66
+          Bit Rate=292.5 Mb/s   Tx-Power=31 dBm
+          Retry short limit:7   RTS thr:off   Fragment thr:off
+          Power Management:on # 省電模式, 一段時間沒使用會自動停
+          Link Quality=52/70  Signal level=-58 dBm
+          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0
+          Tx excessive retries:0  Invalid misc:0   Missed beacon:0
+
+rpios:~ # iw dev wlan0 set power_save off
+
+rpios:~ # nmcli device
+rpios:~ # nmcli connect
+rpios:~ # nmcli connection edit <connect_name>
+nmcli> print
+nmcli> set 802-11-wireless.powersave 2
+# 0: default
+# 1: ignore
+# 2: disable
+# 3: enable
+nmcli> save
+nmcli> quit
 ```
 
 ### service
@@ -88,4 +115,12 @@ rpios:~ # apt clean
 
 ```bash
 rpios:~ # apt install neovim
+```
+
+## python
+
+```bash
+rpios:~ # apt install python3-venv
+rpios:~ # apt install python3-virtualenv
+rpios:~ # apt install python3-virtualenvwrapper
 ```

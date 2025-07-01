@@ -49,31 +49,7 @@ osx:~ # rm pkgutil --forget org.python.Python.PythonUnixTools-3.x
 
 # virtual environment
 
-## virtualenv
-
-```bash
-linux:~ # virtualenv --python=python3 myproject3
-linux:~/myproject3 # source bin/activate
-linux:~/myproject3 # VIRTUAL_ENV_DISABLE_PROMPT=1 source bin/activate
-linux:~/myproject3 # deactivate
-```
-
-## venv
-
-```bash
-linux:~ # python3 -m venv venv
-linux:~ # source venv/bin/activate
-(venv) linux:~ # deactivate
-
-linux:~ # cat venv/pyvenv.cfg
-prompt =
-```
-
-```batch
-C:\Users\user> py -m venv venv
-C:\Users\user> .\venv\Scripts\activate
-(venv) C:\Users\user> deactivate
-```
+- [venv](./pre-provision/venv.md)
 
 ## pipenv
 
