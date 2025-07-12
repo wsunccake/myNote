@@ -231,6 +231,18 @@ configure_network "eth0" "192.168.1.100" "192.168.1.1"
 
 ---
 
+## exec
+
+```bash
+linux:~ $ bash -c "exec -a my_sleep sleep 300" &
+linux:~ $ ps aux | grep my_sleep
+linux:~ $ pgrep -f my_sleep
+linux:~ $ cat /proc/`pgrep -f my_sleep`/comm
+linux:~ $ cat /proc/$(pgrep -f my_sleep)/cmdline
+```
+
+---
+
 ## ref
 
 - [Advanced Shell Scripting Techniques: Automating Complex Tasks with Bash](https://omid.dev/2024/06/19/advanced-shell-scripting-techniques-automating-complex-tasks-with-bash/#enable-noclobber)
