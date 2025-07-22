@@ -1,6 +1,6 @@
-# Munge
+# munge
 
-## Server
+## server
 
 `package`
 
@@ -11,10 +11,14 @@ server:~ # zypper in munge
 `secret key`
 
 ```bash
+# create key
 server:~ # echo "foo" > /etc/munge/munge.key
 server:~ # echo -n "foo" | sha512sum | cut -d' ' -f1 >/etc/munge/munge.key
 server:~ # dd if=/dev/random bs=1 count=1024 >/etc/munge/munge.key
 server:~ # dd if=/dev/urandom bs=1 count=1024 >/etc/munge/munge.key
+server:~ # mungekey -c -k /etc/munge/munge.key
+
+server:~ # chown munge:munge munge.key
 ```
 
 `daemon`
@@ -34,7 +38,7 @@ server:~ # munge -n | ssh <remote_ip> unmunge
 
 ---
 
-## Client
+## client
 
 `package`
 

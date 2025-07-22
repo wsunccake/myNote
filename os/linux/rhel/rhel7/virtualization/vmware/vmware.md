@@ -1,6 +1,5 @@
 # VMware
 
-
 ## Shared folder
 
 Guest 需安裝 VMware Tools, 在 Virtual Machaine \ Install VMware Tools 選項點選
@@ -20,3 +19,13 @@ guest:~ # vmware-hgfsclient                              # 顯示 Host 分享的
 guest:~ # ls /mnt/hgfs                                   # 分享目錄位於 /mnt/hgfs 底下
 ```
 
+## vmx
+
+```ini
+# .vmx
+# 下次啟動時自動進入 BIOS
+bios.forceSetupOnce = "TRUE"
+
+# 延長開機提示時間延遲 5000 毫秒
+bios.bootDelay = "5000"
+```

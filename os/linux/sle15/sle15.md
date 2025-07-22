@@ -102,6 +102,7 @@ sle:~ # yast firewall
 ```bash
 sle:~ # zypper in vim mlocate
 sle:~ # zypper in iputils psmisc
+sle:~ # zypper in bash-completion
 sle:~ # zypper in -t pattern yast2_basis
 
 sle:~ # yast sw_single
