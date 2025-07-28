@@ -1,8 +1,22 @@
 # mrsh
 
+## port
+
+- mrshd: 21212/tcp
+- mrlogind: 541/tcp
+
+```bash
+# firewall
+sle:~ # firewall-cmd --add-port=21212/tcp --add-port=541/tcp --permanent
+sle:~ # firewall-cmd --reload
+```
+
+---
+
 ## require
 
-安裝並設定 [munge](./munge.md), [chrony](./chrony.md)
+- setup [munge](./munge.md)
+- setup [chrony](./chrony.md)
 
 ---
 

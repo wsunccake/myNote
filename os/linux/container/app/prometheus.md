@@ -15,7 +15,7 @@ prometheus + node_export + grafana
 # setup config
 [linux:~ ] # export PROMETHEUS_CONF=<path>
 [linux:~ ] # mkdir -p $PROMETHEUS_CONF
-[linux:~ ] # vi $PROMETHEUS_HOME/prometheus.yml
+[linux:~ ] # vi $PROMETHEUS_CONF/prometheus.yml
 global:
   scrape_interval:     15s
   evaluation_interval: 15s

@@ -207,6 +207,12 @@ sle:~ # mkfs.xfs /dev/sda1
 sle:~ # mkswap  /dev/sda2
 ```
 
+`serial`
+
+```bash
+sle:~ # systemctl enable serial-getty@ttyS0.service --now
+```
+
 ---
 
 ## security
@@ -287,7 +293,8 @@ sle:~ # lsmod | grep -E 'rapl|powerclamp|cpufreq'
 ## enable pstate when boot (grub2)
 sle:~ # vi /etc/default/grub
 GRUB_CMDLINE_LINUX="intel_idle.max_cstate=1 intel_pstate=enable processor.max_cstate=1"
-sle:~ # grub2-mkconfig -o > /boot/grub2/grub.cfg
+GRUB_CMDLINE_LINUX_DEFAULT="fbcon=scrollback:1024k"
+sle:~ # grub2-mkconfig -o /boot/grub2/grub.cfg
 sle:~ # reboot
 
 ## intel p_state - performance
@@ -307,6 +314,51 @@ EOF
 
 sle:~ # chmod +x /etc/init.d/boot.local
 sle:~ # reboot
+```
+
+```conf
+# /boot/grub2/grub.cfg.
+
+# Uncomment to set your own custom distributor. If you leave it unset or empty, the default
+# policy is to determine the value from /etc/os-release
+GRUB_DISTRIBUTOR=
+GRUB_DEFAULT=saved
+GRUB_HIDDEN_TIMEOUT=0
+GRUB_HIDDEN_TIMEOUT_QUIET=true
+GRUB_TIMEOUT=8
+GRUB_CMDLINE_LINUX_DEFAULT="splash=silent resume=/dev/disk/by-uuid/12345678-1234-1234-1234-123456789abc mitigations=auto quiet security=apparmor crashkernel=334M,high crashkernel=72M,low"
+GRUB_CMDLINE_LINUX=""
+
+# Uncomment to automatically save last booted menu entry in GRUB2 environment
+
+# variable `saved_entry'
+# GRUB_SAVEDEFAULT="true"
+
+# This works with Linux (no patch required) and with any kernel that obtains
+# the memory map information from GRUB (GNU Mach, kernel of FreeBSD ...)
+# GRUB_BADRAM="0x01234567,0xfefefefe,0x89abcdef,0xefefefef"
+#Uncomment to disable graphical terminal (grub-pc only)
+
+GRUB_TERMINAL="gfxterm"
+# The resolution used on graphical terminal
+#note that you can use only modes which your graphic card supports via VBE
+
+# you can see them in real GRUB with the command `vbeinfo'
+GRUB_GFXMODE="auto"
+# Uncomment if you don't want GRUB to pass "root=UUID=xxx" parameter to Linux
+# GRUB_DISABLE_LINUX_UUID=true
+#Uncomment to disable generation of recovery mode menu entries
+
+# GRUB_DISABLE_RECOVERY="true"
+#Uncomment to get a beep at grub start
+
+# GRUB_INIT_TUNE="480 440 1"
+GRUB_BACKGROUND=/boot/grub2/themes/SLE/background.png
+GRUB_THEME=/boot/grub2/themes/SLE/theme.txt
+SUSE_BTRFS_SNAPSHOT_BOOTING="true"
+GRUB_DISABLE_OS_PROBER="true"
+GRUB_ENABLE_CRYPTODISK="n"
+GRUB_CMDLINE_XEN_DEFAULT="vga=gfx-1024x768x16 crashkernel=406M\<4G"
 ```
 
 ---

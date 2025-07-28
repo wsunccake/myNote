@@ -1,6 +1,6 @@
-# SLURM
+# slurm
 
-## Status
+## status
 
 ```
          +-------------------+
@@ -13,23 +13,21 @@ service: munge          munge
 
 ---
 
-## Port
+## port
 
-slurmctld: 6817/tcp
-
-slurmd: 6818/tcp
-
-slurmdbd: 6819/tcp
+- slurmctld: 6817/tcp
+- slurmd: 6818/tcp
+- slurmdbd: 6819/tcp
 
 ```bash
-# firewall config
+# firewall
 sle:~ # firewall-cmd --add-port=6819/tcp --add-port=6818/tcp --add-port=6817/tcp --permanent
 sle:~ # firewall-cmd --reload
 ```
 
 ---
 
-## Preparation
+## prepare
 
 setup /etc/hosts or dns
 
@@ -42,15 +40,13 @@ sle:~ # vi /etc/hosts
 sle:~ # hostname -s controller
 ```
 
-setup [nis](./nis.md) and [nfs](./nfs.md)
-
-setup [ntp](./ntp.md) or [chrony](./chrony.md)
-
-setup [munge](./munge.md)
+- setup [nis](./nis.md) and [nfs](./nfs.md)
+- setup [ntp](./ntp.md) or [chrony](./chrony.md)
+- setup [munge](./munge.md)
 
 ---
 
-## Controller
+## controller
 
 ### package
 
@@ -107,6 +103,36 @@ PartitionName=normal Nodes=node[0-10,25-30] Default=YES MaxTime=24:00:00 State=U
 PartitionName=vip Nodes=node[40-50] State=UP AllowAccounts=VIP
 ```
 
+```
+lscpu
+Architecture:             x86_64
+  CPU op-mode(s):         32-bit, 64-bit
+  Address sizes:          45 bits physical, 48 bits virtual
+  Byte Order:             Little Endian
+CPU(s):                   2             <-- CPUs
+  On-line CPU(s) list:    0,1
+Vendor ID:                GenuineIntel
+  Model name:             12th Gen Intel(R) Core(TM) i5-1245U
+    CPU family:           6
+    Model:                154
+    Thread(s) per core:   1             <-- ThreadsPerCore
+    Core(s) per socket:   1             <-- CoresPerSocket
+    Socket(s):            2             <-- Sockets
+```
+
+- Socket(s):
+  主機上有多少個物理 CPU 插槽。
+  Slurm 配置中的 Sockets。
+- Core(s) per socket:
+  每個物理 CPU 插槽上有多少個物理核心。
+  Slurm 配置中的 CoresPerSocket 數量。
+- Thread(s) per core:
+  Slurm 配置中的 ThreadsPerCore 數量。
+  每個物理核心有多少個執行緒（Thread）。
+  如果支援超執行緒（Hyper-threading），通常會大於 1（例如 2）；如果沒有，則為 1。
+- CPU(s):
+  所有邏輯 CPU 總數，等於 Sockets x CoresPerSocket x ThreadsPerCore。
+
 [Slurm Version 17.11 Configuration Tool](https://slurm.schedmd.com/configurator.html)
 
 ### daemon
@@ -139,7 +165,7 @@ controller:~ # systemd-tmpfiles --create
 
 ---
 
-## Compute Node
+## compute node
 
 ### package
 
@@ -183,7 +209,7 @@ node:~ # systemd-tmpfiles --create
 
 ---
 
-## Job
+## job
 
 ### list
 
@@ -305,7 +331,7 @@ scontrol takeover: Admin
 
 ---
 
-## Admin
+## admin
 
 ### partition
 
@@ -334,17 +360,12 @@ controller:~ # scontrol reconfigure
 
 ---
 
-## MariaDB
+## mariadb
 
 ### package
 
 ```bash
 controller:~ # zypper in mariadb
-
-# setup mariadb root
-controller:~ # /usr/bin/mysqladmin -u root password <new-password>
-controller:~ # /usr/bin/mysqladmin -u root -h <hostname> password <new-password>
-controller:~ # /usr/bin/mysql_secure_installation
 ```
 
 ### config
@@ -360,12 +381,19 @@ innodb_buffer_pool_size = 128M
 ```bash
 controller:~ # systemctl start mariadb.service
 controller:~ # systemctl enable mariadb.service
+
+# setup mariadb root
+controller:~ # mariadb-admin -u root password <new-password>
+controller:~ # mariadb-admin -u root -h <hostname> password <new-password>
+controller:~ # mariadb_secure_installation
 ```
+
+mysqladmin 可用 mariadb-admin 替代, 而 mysql_secure_installation 則用 mariadb_secure_installation
 
 ### check
 
 ```bash
-controller:~ # mysql -u root
+controller:~ # mariadb -u root
 -- check pool size
 MariaDB> show variables like 'innodb_buffer_pool_size';
 
@@ -374,6 +402,8 @@ MariaDB> show engines;
 
 MariaDB> quit;
 ```
+
+mysql 可用 mariadb 替代
 
 ### db
 
@@ -402,19 +432,21 @@ MariaDB> set PASSWORD FOR 'slurm'@'controller' = PASSWORD('<password>');
 -- setup grant privilege
 MariaDB> grant all on slurm_acct_db.* TO 'slurm'@'localhost';
 MariaDB> grant all on slurm_acct_db.* TO 'slurm'@'controller';
+
+-- show grant
 MariaDB> show grants for slurm@localhost;
 ```
 
 ### test
 
 ```bash
-controller:~ # mysql -u slurm
+controller:~ # mariadb -u slurm -p
 MariaDB> use slurm_acct_db;
 ```
 
 ---
 
-## SlurmDB Daemon
+## slurmdb daemon
 
 ```
          +-------------------+
@@ -463,7 +495,7 @@ controller:~ # vi /etc/slurm/slurmdbd.conf
 StorageType=accounting_storage/mysql
 
 StorageUser=slurm
-StoragePass=<password>
+StoragePass=<password>      # 設定密碼
 StorageLoc=slurm_acct_db
 ```
 
@@ -481,7 +513,7 @@ controller:~ # systemctl enable slurmdbd.service
 ### check db
 
 ```bash
-controller:~ # mysql -u root
+controller:~ # mariadb -u root
 MariaDB> show databases;
 MariaDB> use slurm_acct_db;
 MariaDB> show tables;
@@ -493,7 +525,7 @@ controller: # sacct
 
 ---
 
-## Accouting
+## accouting
 
 ### sacct
 
@@ -504,6 +536,7 @@ controller:~ # sacct
 ### sacctmgr
 
 ```bash
+controller:~ # sacctmgr help
 controller:~ # sacctmgr show configuration
 
 controller:~ # sacctmgr list <ENTITY> [<SPECS>]
@@ -532,7 +565,7 @@ controller:~ # sacctmgr modify user set default=none where Account=<account>
 
 ---
 
-## QoS
+## qos
 
 ### scontrol
 
@@ -634,7 +667,7 @@ controller:~ # sreport user TopUsage
 
 ---
 
-## HA
+## ha
 
 ```bash
 controller:~ # vi /etc/slurm/slurm.conf
@@ -650,7 +683,7 @@ controller:~ # scontrol ping
 
 ---
 
-## Question
+## question
 
 1. change cluster name
 
