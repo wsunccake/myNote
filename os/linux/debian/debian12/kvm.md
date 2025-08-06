@@ -27,6 +27,9 @@ debian:~ # virt-manager     # gui
 ```bash
 debian:~ # virsh help
 debian:~ # virsh list --all
+debian:~ # virsh [-c qemu:///system] uri
+debian:~ # virsh [-c qemu+ssh://<user>@<ip>/system] uri
+
 debian:~ # virsh dumpxml <domain name>
 debian:~ # virsh console <domain name>
 
@@ -40,6 +43,9 @@ debian:~ # virsh create <xml>
 # start / stop vm
 debian:~ # virsh start <domain name>
 debian:~ # virsh destroy <domain name>
+
+debian:~ # virsh vol-create-as --pool default <vdisk> 120M --format qcow2
+debian:~ # virsh vol-upload --pool default <vdisk> <img>
 ```
 
 ### virt-

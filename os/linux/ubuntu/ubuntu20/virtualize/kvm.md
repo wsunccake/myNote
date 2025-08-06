@@ -114,6 +114,9 @@ Linux 虛擬化技術的發展, 是為了更有效地利用硬體資源、提高
     <graphics type='vnc' port='-1' autoport='yes' listen='0.0.0.0'>
       <listen type='address' address='0.0.0.0'/>
     </graphics>
+
+[host:~ ] # virsh vncdisplay <vm_id>|<vm_name>
+[host:~ ] # virsh domdisplay <vm_id>|<vm_name>
 ```
 
 ---

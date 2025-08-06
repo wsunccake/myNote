@@ -1,5 +1,7 @@
 # selinux
 
+SELinux / Security-Enhanced Linux
+
 ## usage
 
 ```bash
@@ -10,6 +12,11 @@ alma:~ # sestatus
 # switch Enforcing / Permissive
 alma:~ # setenforce Enforcing
 alma:~ # setenforce Permissive
+
+alma:~ $ ls -Z test.txt
+-rw-r--r-- user1 user1 unconfined_u:object_r:user_home_t:s0 test.txt
+
+alma:~ $ ls -l /etc/selinux/
 ```
 
 ---

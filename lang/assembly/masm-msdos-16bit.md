@@ -367,3 +367,133 @@ target:
     int 21h         ; 呼叫 DOS
 END start
 ```
+
+ex:
+
+將 ffff:0 ~ 12 複製到 0020:0 ~ 12
+
+```asm
+; move_seg1.asm
+.MODEL  TINY
+
+.CODE
+ORG     100H
+
+start:
+        mov bx, 0
+        mov cx, 12
+
+s:
+        mov ax, 0ffffh
+        mov ds, ax
+        mov dl, [bx]
+
+        mov ax, 0020h
+        mov ds, ax
+        mov [bx], dl
+
+        inc bx
+        loop s
+
+        mov ax, 4c00h
+        int 21h
+
+END start
+```
+
+```bat
+C:\> ml move_seg1.asm
+C:\> debug move_seg1.com
+-d ffff:0 l12
+-d 0020:0 l12
+-g
+-d ffff:0 l12
+-d 0020:0 l12
+-q
+```
+
+```asm
+; move_seg2.asm
+.MODEL  TINY
+
+.CODE
+ORG     100H
+
+start:
+        mov ax, 0ffffh
+        mov ds, ax
+        mov ax, 0020h
+        mov es, ax
+                      ; ds:bx -> ffff:0
+                      ; es:bx -> 0020:0
+        mov bx, 0
+        mov cx, 12
+s:
+        mov dl, [bx]
+        mov es:[bx], dl
+
+        inc bx
+        loop s
+
+        mov ax, 4c00h
+        int 21h
+
+END start
+```
+
+```asm
+; move_seg3.asm
+.MODEL  TINY
+
+.CODE
+ORG     100H
+
+start:
+        mov ax, 0ffffh
+        mov ds, ax
+        mov ax, 0020h
+        mov es, ax
+
+        mov si, 0   ; si (來源位移)
+        mov di, 0   ; di (目的位移)
+        mov cx, 12  ; cx (計數器)
+
+        cld         ; 清除方向旗標，讓字串操作從低位址往高位址移動
+        rep movsb   ; 重複執行 movsb 指令，直到 cx 變為 0
+
+        mov ax, 4c00h
+        int 21h
+
+END start
+```
+
+ex:
+
+0123h, 0456h, 0789h, 0abch, 0defh, 0fedh, 0cbah, 0987h
+
+```asm
+.MODEL  TINY
+
+.DATA
+        DW 0123h, 0456h, 0789h, 0abch, 0defh, 0fedh, 0cbah, 0987h
+        ; 儲存在 cs:0 ~ F
+
+.CODE
+ORG     100H
+
+
+start:
+        mov bx, 0
+        mov ax, 0
+        mov cx, 8
+
+s:
+        add ax, cs:[bx]
+        add bx, 2
+        loop s
+
+        mov ax, 4c00h
+        int 21h
+
+END start
+```
