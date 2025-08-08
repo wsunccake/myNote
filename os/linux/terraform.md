@@ -116,7 +116,9 @@ resource "aws_instance" "app" {
 
 ---
 
-## docker
+## provider
+
+### docker
 
 ```bash
 linux:~ # dnf install docker-ce   # rhel / fedora
@@ -154,7 +156,7 @@ resource "docker_container" "nginx" {
 
 ---
 
-## kvm
+### kvm
 
 ```bash
 linux:~ # dnf install qemu-kvm libvirt
@@ -199,8 +201,8 @@ resource "libvirt_domain" "cirros_vm" {
   }
 
   network_interface {
-#    network_name = "default"
-    bridge = "br172"
+    network_name = "default"
+#    bridge = "mybrdige"
   }
 
   console {
@@ -225,9 +227,7 @@ output "vm_ip_address" {
 }
 ```
 
----
-
-## esxi
+### esxi
 
 download [Open Virtualization Format (OVF) Tool](https://developer.broadcom.com/tools/open-virtualization-format-ovf-tool/latest)
 
@@ -268,10 +268,122 @@ resource "esxi_guest" "test_vm" {
 }
 ```
 
+### vsphere
+
+### openstack
+
 ---
 
-## vsphere
+## variable
+
+```bash
+linux:~/docker_hello $ tree
+.
+├── main.tf
+├── outputs.tf
+└── variables.tf
+
+linux:~/docker_hello $ terraform apply -auto-approve -var 'container_name=web' -var 'host_port=8888'
+```
+
+```conf
+# variables.tf
+variable "container_name" {
+  description = "Name of the container"
+  type        = string
+}
+
+variable "host_port" {
+  description = "Port to expose container"
+  type        = number
+}
+
+variable "image_name" {
+  description = "Docker image to use"
+  type        = string
+  default     = "nginx:alpine"
+}
+```
+
+```conf
+# main.tf
+terraform {
+  required_providers {
+    docker = {
+      source  = "kreuzwerker/docker"
+      version = "3.6.2"
+    }
+  }
+}
+
+resource "docker_image" "nginx" {
+  name         = var.image_name
+  keep_locally = false
+}
+
+resource "docker_container" "web" {
+  name  = var.container_name
+  image = docker_image.nginx.name
+  ports {
+    internal = 80
+    external = var.host_port
+  }
+
+  provisioner "local-exec" {
+    command = <<EOT
+echo '<h1>Hello from ${var.container_name}</h1>' > ./index.html
+docker cp ./index.html ${self.name}:/usr/share/nginx/html/index.html
+rm ./index.html
+EOT
+  }
+}
+```
+
+```conf
+# outputs.tf
+output "web_container_name" {
+  value = docker_container.web.name
+}
+```
 
 ---
 
-## openstack
+## module
+
+```bash
+linux:~/ex_mod $ cp -r ~/docker_hello modules/.
+
+linux:~/ex_mod $ tree
+.
+├── main.tf
+└── modules
+    └── docker_hello
+        ├── main.tf
+        ├── outputs.tf
+        └── variables.tf
+
+linux:~/ex_mod $ terraform apply -auto-approve
+```
+
+```conf
+# main.tf
+module "hello_web_1" {
+  source         = "./modules/docker_hello"
+  container_name = "hello-1"
+  host_port      = 8080
+}
+
+module "hello_web_2" {
+  source         = "./modules/docker_hello"
+  container_name = "hello-2"
+  host_port      = 8081
+}
+
+output "web1_container_name" {
+  value = module.hello_web_1.web_container_name
+}
+
+output "web2_container_name" {
+  value = module.hello_web_2.web_container_name
+}
+```
