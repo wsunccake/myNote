@@ -4,29 +4,29 @@
 
 SUSE (Software und System-Entwicklung) 是最早的商業 Linux 發行版之一，起源於德國，在歐洲和企業級市場擁有深厚的影響力。
 
-1. 早期成立與德語市場的開拓 (1992 - 1990 年代末)
+1.  早期成立與德語市場的開拓 (1992 - 1990 年代末)
 
-- 1992 年： SUSE 由 Roland Dyroff、Thomas Fehr、Burchard Steinbild 和 Hubert Mantel 在德國紐倫堡成立。最初，SUSE 是一家 UNIX 顧問公司，提供軟體服務並為德語市場銷售 UNIX 工具和發行版 (如 Slackware 和 S.u.S.E. Linux 0.98，一個修改過的 SLS 版本)。
-- 1994 年： 發布了第一個完整的 SUSE Linux 發行版 (S.u.S.E. Linux 1.0)，這是一個基於 Slackware 且德語化的版本。這標誌著 SUSE 從販賣其他發行版轉向開發自己的發行版。
-- 1996 年： 發布了第一個完全獨立開發的 SUSE Linux 發行版 (S.u.S.E. Linux 4.2)。這個版本引入了著名的 YaST (Yet another Setup Tool)，這是一個強大且易於使用的系統管理工具，成為 SUSE 的標誌性特色。YaST 讓複雜的 Linux 系統設定變得更加簡單直觀。
+        - 1992 年： SUSE 由 Roland Dyroff、Thomas Fehr、Burchard Steinbild 和 Hubert Mantel 在德國紐倫堡成立。最初，SUSE 是一家 UNIX 顧問公司，提供軟體服務並為德語市場銷售 UNIX 工具和發行版 (如 Slackware 和 S.u.S.E. Linux 0.98，一個修改過的 SLS 版本)。
+        - 1994 年： 發布了第一個完整的 SUSE Linux 發行版 (S.u.S.E. Linux 1.0)，這是一個基於 Slackware 且德語化的版本。這標誌著 SUSE 從販賣其他發行版轉向開發自己的發行版。
+        - 1996 年： 發布了第一個完全獨立開發的 SUSE Linux 發行版 (S.u.S.E. Linux 4.2)。這個版本引入了著名的 YaST (Yet another Setup Tool)，這是一個強大且易於使用的系統管理工具，成為 SUSE 的標誌性特色。YaST 讓複雜的 Linux 系統設定變得更加簡單直觀。
 
-2. 商業化與企業級市場的擴張 (2000 年代初期)
+2.  商業化與企業級市場的擴張 (2000 年代初期)
 
-進入 2000 年代，SUSE 開始更加注重企業級市場，提供商業支援和企業級解決方案。
+        進入 2000 年代，SUSE 開始更加注重企業級市場，提供商業支援和企業級解決方案。
 
-- 2000 年： SUSE 成為第一家在 IBM 大型主機上提供 Linux 支援的企業，顯示其在企業級市場的雄心。
-- 2001 年： 將其企業產品線重新命名為 SUSE Linux Enterprise Server (SLES)，明確區分其針對伺服器和企業客戶的版本。SLES 以其穩定性、可靠性、長期支援和對各種硬體架構的良好兼容性而聞名。
+        - 2000 年： SUSE 成為第一家在 IBM 大型主機上提供 Linux 支援的企業，顯示其在企業級市場的雄心。
+        - 2001 年： 將其企業產品線重新命名為 SUSE Linux Enterprise Server (SLES)，明確區分其針對伺服器和企業客戶的版本。SLES 以其穩定性、可靠性、長期支援和對各種硬體架構的良好兼容性而聞名。
 
-3. 所有權的變遷與持續發展 (2000 年代中期 - 至今)
+3.  所有權的變遷與持續發展 (2000 年代中期 - 至今)
 
-SUSE 的歷史充滿了所有權的變動，但其對 Linux 和開源的承諾始終未變。
+        SUSE 的歷史充滿了所有權的變動，但其對 Linux 和開源的承諾始終未變。
 
-- 2003 年： 被美國軟體巨頭 Novell 收購。這次收購為 SUSE 帶來了更多資源和市場機會，但也引起了開源社群的一些關注。
-- 2005 年： Novell 為了促進社群參與，推出了 openSUSE 計畫，將 SUSE Linux 的開發過程透明化並向社群開放，類似於 Red Hat 與 Fedora 的關係。openSUSE Leap 是一個基於 SLES 程式碼的穩定發行版，而 openSUSE Tumbleweed 則是一個滾動發行版，提供最新的軟體。
-- 2011 年： Novell 及其資產（包括 SUSE）被 Attachmate Group 收購。在此期間，SUSE 作為一個獨立的業務部門繼續運營。
-- 2014 年： Attachmate Group 被英國軟體公司 Micro Focus 收購。SUSE 再次成為 Micro Focus 旗下的一個業務部門。
-- 2018 年： SUSE 被投資公司 EQT Partners 收購，成為一家完全獨立的軟體公司。這為 SUSE 帶來了更大的自主權，使其能夠更專注於其核心業務和開源創新。
-- 2021 年： SUSE 成功在法蘭克福證券交易所上市，證明了其作為獨立開源公司在市場上的地位和價值。
+        - 2003 年： 被美國軟體巨頭 Novell 收購。這次收購為 SUSE 帶來了更多資源和市場機會，但也引起了開源社群的一些關注。
+        - 2005 年： Novell 為了促進社群參與，推出了 openSUSE 計畫，將 SUSE Linux 的開發過程透明化並向社群開放，類似於 Red Hat 與 Fedora 的關係。openSUSE Leap 是一個基於 SLES 程式碼的穩定發行版，而 openSUSE Tumbleweed 則是一個滾動發行版，提供最新的軟體。
+        - 2011 年： Novell 及其資產（包括 SUSE）被 Attachmate Group 收購。在此期間，SUSE 作為一個獨立的業務部門繼續運營。
+        - 2014 年： Attachmate Group 被英國軟體公司 Micro Focus 收購。SUSE 再次成為 Micro Focus 旗下的一個業務部門。
+        - 2018 年： SUSE 被投資公司 EQT Partners 收購，成為一家完全獨立的軟體公司。這為 SUSE 帶來了更大的自主權，使其能夠更專注於其核心業務和開源創新。
+        - 2021 年： SUSE 成功在法蘭克福證券交易所上市，證明了其作為獨立開源公司在市場上的地位和價值。
 
 ---
 
