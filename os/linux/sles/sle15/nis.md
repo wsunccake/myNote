@@ -102,8 +102,8 @@ ypserv:~ # vi /etc/ypserv.conf
 
 ypserv:~ # vi /etc/sysconfig/ypserv
 ...
-YPSERV_ARGS="-p 839"        # fix ypserv port for firewall
-YPPASSWDD_ARGS="-p 854"     # fix yppasswdd port for firewall
+YPSERV_ARGS="--port 839"        # fix ypserv port for firewall
+YPPASSWDD_ARGS="--port 854"     # fix yppasswdd port for firewall
 
 ypserv:~ # vi /var/yp/securenets
 255.0.0.0       127.0.0.0
@@ -180,6 +180,16 @@ ypserv:~ # systemctl start ypserv
 ypserv:~ # systemctl enable ypserv
 ```
 
+`firewall`
+
+```bash
+ypserv:~ # firewall-cmd --permanent --add-port=839/tcp
+ypserv:~ # firewall-cmd --permanent --add-port=839/udp
+ypserv:~ # firewall-cmd --permanent --add-port=854/udp
+ypserv:~ # firewall-cmd --permanent --add-port=854/tcp
+ypserv:~ # firewall-cmd --reload
+```
+
 ---
 
 ## client
@@ -232,6 +242,8 @@ auth    required        pam_unix.so     try_first_pass
 yp:~ # vi common-password
 password        requisite       pam_cracklib.so
 password        required        pam_unix.so     use_authtok nullok shadow try_first_pass
+# password        optional        pam_exec.so     seteuid /usr/bin/make -C /var/yp
+
 
 yp:~ # vi common-session
 session optional        pam_systemd.so
