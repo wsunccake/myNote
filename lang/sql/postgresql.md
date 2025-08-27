@@ -1,17 +1,14 @@
 # Postge SQL
 
-
 ## package
 
 ```bash
 linux:~ # yum install postgresql
 ```
 
-
 --
 
 ## service
-
 
 ```bash
 linux:~ # yum install postgresql-server
@@ -40,7 +37,6 @@ linux:~ # ls /var/lib/pgsql/data                    # psql config & db folder
 linux:~ # cat /var/lib/pgsql/data/postgresql.conf   # default config
 linux:~ # psql -c "SHOW ALL;"
 ```
-
 
 ---
 
@@ -146,7 +142,6 @@ postgres=# \du
 postgres=# \password <db_user>
 ```
 
-
 ---
 
 ## databse
@@ -154,6 +149,8 @@ postgres=# \password <db_user>
 DDL
 
 ```sql
+postgres=# SHOW config_file                  -- show config file
+
 postgres=# CREATE DATABASE <database_name>;  -- create database
 postgres=# DROP DATABASE <database_name>;    -- delete database
 postgres=# \l                                -- list database
@@ -168,7 +165,6 @@ testdb=#
 postgres=# DROP DATABASE testdb;
 ```
 
-
 ### dump
 
 ```bash
@@ -182,13 +178,11 @@ linux:~ # gunzip -c <database_name>.gz | psql -U postgres --set ON_ERROR_STOP=on
 linux:~ # cat <database_name>.gz | gunzip | psql -U postgres --set ON_ERROR_STOP=on <database_name>
 ```
 
-
 ---
 
 ## table
 
 DDL
-
 
 ### create table
 
@@ -212,7 +206,6 @@ postgres=# CREATE TABLE DEPARTMENT(
 );
 ```
 
-
 ### drop table
 
 ```sql
@@ -234,7 +227,6 @@ postgres=# ALTER TABLE COMPANY ALTER COLUMN TMP_COL TYPE char(3);
 postgres=# ALTER TABLE COMPANY DROP TMP_COL ;
 ```
 
-
 ### list table
 
 ```sql
@@ -243,11 +235,9 @@ postgres=# \d           -- list table
 postgres=# \d COMPANY   -- show table schema
 ```
 
-
 ---
 
 ## row
-
 
 ### create / add
 
@@ -279,7 +269,6 @@ postgres=# INSERT INTO DEPARTMENT (ID, DEPT, EMP_ID)
 
 DQL
 
-
 #### selet
 
 ```sql
@@ -293,7 +282,6 @@ postgres=# SELECT * FROM COMPANY;
 postgres=# SELECT name, AGE FROM COMPANY;
 ```
 
-
 #### express
 
 ```sql
@@ -303,7 +291,6 @@ postgres=# SELECT COUNT(*) AS "RECORDS" FROM COMPANY;
 postgres=# SELECT CURRENT_TIMESTAMP;
 postgres=# SELECT DATETIME('now','localtime');
 ```
-
 
 #### operator
 
@@ -342,7 +329,6 @@ postgres=# SELECT AGE FROM COMPANY
 postgres=#  SELECT * FROM COMPANY
    WHERE AGE > (SELECT AGE FROM COMPANY WHERE SALARY > 65000);
 ```
-
 
 #### where
 
@@ -405,7 +391,6 @@ postgres=# SELECT * FROM COMPANY
    WHERE AGE > (SELECT AGE FROM COMPANY WHERE SALARY > 65000);
 ```
 
-
 ### update / modify
 
 DDL
@@ -416,7 +401,6 @@ postgres=# postgres=# UPDATE <table_name> SET <column> = <value>, ... [WHERE <cl
 -- example
 postgres=# UPDATE COMPANY SET SALARY = 15000 WHERE ID = 1;
 ```
-
 
 ### delete / remove
 
@@ -429,7 +413,6 @@ postgres=# DELETE FROM <table_name> [WHERE <clause>];   -- delete row
 postgres=# DELETE FROM COMPANY WHERE ID = 3;
 ```
 
-
 ### truncate
 
 ```sql
@@ -439,11 +422,9 @@ postgres=# TRUNCATE TABLE COMPANY;
 postgres=# SELECT * FROM COMPANY;
 ```
 
-
 ---
 
 ## advanced
-
 
 ### constraint
 
@@ -464,7 +445,6 @@ postgres=# CREATE TABLE DEPARTMENT_CONSTRAINT(
    EMP_ID    INT      REFERENCES COMPANY_CONSTRAINT(ID)  -- foreign key ... references
 );
 ```
-
 
 `method2`
 
@@ -487,7 +467,6 @@ postgres=# CREATE TABLE DEPARTMENT_CONSTRAINT(
    CONSTRAINT REFERENCES_CONSTRAINT FOREIGN KEY (EMP_ID) REFERENCES COMPANY_CONSTRAINT(ID)
 );
 ```
-
 
 `method3`
 
@@ -533,7 +512,6 @@ postgres=# ALTER TABLE DEPARTMENT_CONSTRAINT ADD CONSTRAINT REFERENCES_CONSTRAIN
 postgres=# ALTER TABLE DEPARTMENT_CONSTRAINT DROP CONSTRAINT REFERENCES_CONSTRAINT;
 ```
 
-
 ### join
 
 ```sql
@@ -557,9 +535,7 @@ postgres=# SELECT EMP_ID, NAME, DEPT FROM COMPANY FULL OUTER JOIN DEPARTMENT
         ON COMPANY.ID = DEPARTMENT.EMP_ID;
 ```
 
-
 ### union
-
 
 ```sql
 postgres=# SELECT EMP_ID, NAME, DEPT FROM COMPANY INNER JOIN DEPARTMENT
@@ -582,7 +558,6 @@ postgres=# SELECT EMP_ID, NAME, DEPT FROM COMPANY INNER JOIN DEPARTMENT
      ON COMPANY.ID = DEPARTMENT.EMP_ID;
 ```
 
-
 ### as
 
 ```sql
@@ -596,7 +571,6 @@ postgres=# SELECT C.ID AS COMPANY_ID, C.NAME AS COMPANY_NAME, C.AGE, D.DEPT
    FROM COMPANY AS C, DEPARTMENT AS D
    WHERE C.ID = D.EMP_ID;
 ```
-
 
 ### trigger
 
@@ -629,7 +603,6 @@ postgres=# SELECT tgname FROM pg_trigger, pg_class WHERE tgrelid=pg_class.oid AN
 postgres=# DROP TRIGGER trigger_name;
 ```
 
-
 ### index
 
 ```sql
@@ -643,7 +616,6 @@ postgres=# \d COMPANY
 -- drop index
 postgres=# DROP INDEX SALARY_INDEX
 ```
-
 
 ### view
 
@@ -664,7 +636,6 @@ postgres=# select viewname from pg_catalog.pg_views;
 postgres=# DROP VIEW COMPANY_VIEW;
 ```
 
-
 ### transaction
 
 ```sql
@@ -678,7 +649,6 @@ postgres=# BEGIN;
 postgres=# DELETE FROM COMPANY WHERE AGE = 25;
 postgres=# COMMIT;
 ```
-
 
 ### subquery
 
@@ -699,7 +669,6 @@ postgres=# INSERT INTO COMPANY_BKP SELECT * FROM COMPANY WHERE ID
 postgres=# UPDATE COMPANY_BKP SET SALARY = SALARY * 0.50 WHERE AGE
    IN (SELECT AGE FROM COMPANY WHERE AGE >= 27);
 ```
-
 
 ### autoincrememt
 
@@ -722,7 +691,6 @@ postgres=# INSERT INTO COMPANY_NEW (NAME,AGE,ADDRESS,SALARY)
    ('James', 24, 'Houston', 10000.00);
 ```
 
-
 ### explain
 
 ```sql
@@ -730,7 +698,6 @@ postgres=# EXPLAIN SELECT * FROM COMPANY WHERE Salary >= 20000;
 postgres=# EXPLAIN ANALYZE SELECT * FROM COMPANY WHERE Salary >= 20000;
 postgres=# EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM COMPANY WHERE Salary >= 20000;
 ```
-
 
 ---
 

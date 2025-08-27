@@ -55,8 +55,8 @@ server:~ # scp /etc/munge/munge.key root@<client>:/etc/munge/.
 `daemon`
 
 ```bash
-server:~ # systemctl start munge.service
-server:~ # systemctl enable munge.service
+client:~ # systemctl start munge.service
+client:~ # systemctl enable munge.service
 ```
 
 ---
