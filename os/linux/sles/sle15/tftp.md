@@ -70,10 +70,17 @@ server:~ # hostname > /srv/tftpboot/hostname
 client:~ # zypper in tftp
 ```
 
+`firewall`
+
+```bash
+client:~ # firewall-cmd --permanent --add-service=tftp
+client:~ # firewall-cmd --reload
+```
+
 `usage`
 
 ```bash
-server:~ # tftp <server>
+client:~ # tftp <server>
 
 tftp> get hostname
 ```
