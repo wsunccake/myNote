@@ -40,7 +40,7 @@ sle:~ $ icpx -o hello hello.cpp
 # fortran compiler
 sle:~ $ which ifx
 sle:~ $ ifx -o hello -fixed hello.f     # fortran 77
-sle:~ $ ifx -o hello hello.f90          # fortran 90
+sle:~ $ ifx -o hello -free hello.f90    # fortran 90
 ```
 
 ```c
@@ -48,7 +48,7 @@ sle:~ $ ifx -o hello hello.f90          # fortran 90
 #include <stdio.h>
 
 int main() {
-    printf("Hello, World!\n");
+    printf("Hello, C Compiler!\n");
     return 0;
 }
 ```
@@ -58,7 +58,7 @@ int main() {
 #include <iostream>
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    std::cout << "Hello, C++ Compiler!" << std::endl;
     return 0;
 }
 ```
@@ -66,7 +66,7 @@ int main() {
 ```fortran
 C hello.f
       PROGRAM HELLOW
-      WRITE(UNIT=*, FMT=*) 'Hello, World!'
+      WRITE(UNIT=*, FMT=*) 'Hello, Fortran Compiler!'
       END
 ```
 
@@ -74,7 +74,7 @@ C hello.f
 ! hello.f90
 program hello
     implicit none
-    print *, "Hello, World!"
+    print *, "Hello, Fortran Compiler!"
 end program hello
 ```
 
@@ -204,7 +204,9 @@ PROGRAM dgemm_example
 END PROGRAM dgemm_example
 ```
 
-### mpi
+---
+
+## mpi
 
 ```bash
 sle:~ $ echo $I_MPI_ROOT

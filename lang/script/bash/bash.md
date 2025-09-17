@@ -121,6 +121,76 @@ Unix Shell 的發展主要分為兩大陣營：Bourne Shell 家族和 C Shell �
 
 ---
 
+## bashrc, profile
+
+| 檔案            | 主要用途                                                   | 何時讀取                                                                   |
+| --------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------- |
+| **\~/.profile** | 設定環境變數 (PATH、LANG、EDITOR...)，影響整個登入 session | **登入 shell** 時（login shell，例如 ssh、登入 TTY、顯示管理員登入）       |
+| **\~/.bashrc**  | 設定互動 shell 的行為 (alias、prompt、function...)         | **互動式非登入 shell**（例如你在 GNOME Terminal、xterm 裡再開一個新 bash） |
+
+當執行 bash 時，會依「登入 / 非登入」、「互動 / 非互動」決定讀哪些檔案。
+
+1. 登入 shell (login shell)
+
+- /etc/profile → 系統設定
+- ~/.profile → 使用者設定
+- （部分發行版會改用 ~/.bash_profile 或 ~/.bash_login，優先順序是：~/.bash_profile > ~/.bash_login > ~/.profile）
+
+2. 非登入 shell (non-login shell, 例如開新終端分頁)
+
+- /etc/bash.bashrc → 系統設定
+- ~/.bashrc → 使用者設定
+
+3. 互動 + 登入 shell（常見情況：ssh）
+
+- 同時會讀取 profile 與 bashrc（但要注意：~/.profile 內通常會手動呼叫 ~/.bashrc，確保登入時也能套用 alias/function）
+
+許多系統的 ~/.profile 會看到
+
+```bash
+if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+fi
+```
+
+這樣一來，不管是登入 shell 還是非登入 shell，~/.bashrc 都會被執行，確保 alias / prompt 一致。
+
+```text
+                 ┌──────────────┐
+                 │  啟動 Bash   │
+                 └──────┬───────┘
+                        │
+          ┌─────────────┴─────────────┐
+          │                           │
+    [登入 shell]                 [非登入 shell]
+ (Login shell, ssh, tty)       (Non-login shell, 開新終端機)
+
+          │                           │
+   ┌──────┴───────┐             ┌─────┴─────┐
+   │              │             │           │
+ [互動式]     [非互動式]     [互動式]    [非互動式]
+(Interactive) (Non-interactive) (Interactive) (Non-interactive)
+
+   │              │             │           │
+   │              │             │           │
+1. 讀取:         不會讀取互動設定    讀取:       不會讀取互動設定
+   - /etc/profile                - /etc/bash.bashrc
+   - ~/.bash_profile             - ~/.bashrc
+     或 ~/.bash_login
+     或 ~/.profile
+
+   │
+   │ (通常在 ~/.profile 裡面再加:)
+   │   if [ -f ~/.bashrc ]; then
+   │       . ~/.bashrc
+   │   fi
+   │
+   ▼
+完成初始化
+```
+
+---
+
 ## run
 
 ```bash
@@ -264,6 +334,72 @@ echo "undefine VAR: ${VAR}"
 #echo "VAR:?value ${VAR:?value}"  # show err
 echo "VAR: ${VAR}"
 echo
+```
+
+1. 基本取值與預設值
+
+```
+語法                     說明
+──────────────────────────────────────────────
+${var}                  取變數值
+${var:-word}            若 var 未設定或為空，取 word
+${var:=word}            若 var 未設定或為空，設定為 word 並取值
+${var:?msg}             若 var 未設定或為空，顯示錯誤 msg 並退出
+${var:+word}            若 var 已設定且非空，取 word，否則空字串
+```
+
+2. 字串長度與子字串
+
+```
+語法                     說明
+──────────────────────────────────────────────
+${#var}                 變數字串長度
+${var:offset}           從 offset 開始 (0-based) 的子字串
+${var:offset:length}    從 offset 開始，長度 length 的子字串
+```
+
+3. 前後綴刪除
+
+```
+語法                     說明
+──────────────────────────────────────────────
+${var#pattern}          從頭刪掉最短符合 pattern 的部分
+${var##pattern}         從頭刪掉最長符合 pattern 的部分
+${var%pattern}          從尾刪掉最短符合 pattern 的部分
+${var%%pattern}         從尾刪掉最長符合 pattern 的部分
+```
+
+4. 字串取代
+
+```
+語法                     說明
+──────────────────────────────────────────────
+${var/pat/repl}          取代第一個符合 pat 的部分為 repl
+${var//pat/repl}         全部取代
+${var/#pat/repl}         若開頭符合 pat，則取代
+${var/%pat/repl}         若結尾符合 pat，則取代
+```
+
+5. 大小寫轉換
+
+```
+語法                     說明
+──────────────────────────────────────────────
+${var^}                 把第一個字元轉大寫
+${var^^}                全部字元轉大寫
+${var,}                 把第一個字元轉小寫
+${var,,}                全部字元轉小寫
+```
+
+6. 預設值
+
+```
+name=""
+echo ${name:-Guest}   # name 為空，輸出 Guest
+echo ${name:=Guest}   # name 為空，設定 name=Guest 並輸出
+echo ${name:?Empty}   # name 為空，錯誤訊息 "Empty"
+unset name
+echo ${name:+Set}     # name 未設定，輸出空
 ```
 
 ---
