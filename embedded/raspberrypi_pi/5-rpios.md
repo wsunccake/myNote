@@ -2,12 +2,15 @@
 
 ## content
 
-- [install](#install)
-- [system](#system)
-  - [config](#config)
-  - [service](#service)
-  - [apt](#apt)
-- [cli](#cli)
+- [5 - Raspberry Pi OS os 2025 03 15](#5---raspberry-pi-os-os-2025-03-15)
+  - [content](#content)
+  - [install](#install)
+  - [system](#system)
+    - [config](#config)
+    - [service](#service)
+    - [apt](#apt)
+  - [cli](#cli)
+  - [python](#python)
 
 ---
 
@@ -37,6 +40,20 @@ network={
 }
 ```
 
+```bash
+# add hdmi sound card
+rpios:~ # echo "hdmi_drive=2" >> /boot/firmware/config.txt
+rpios:~ # reboot
+
+rpios:~ # pactl list sinks
+rpios:~ # alsamixer
+```
+
+```bash
+rpios:~ # apt-get install scim-chewing  # 酷音輸入法
+rpios:~ # apt-get install ttf-wqy-microhei ttf-wqy-zenhei xfonts-wqy  # 中文字型
+```
+
 ---
 
 ## system
@@ -46,6 +63,7 @@ network={
 ```bash
 rpios:~ # raspi-config
 # 於 Interface Options 中可以設定 ssh, rpi-connect, vnc
+# 於 Advanced Options
 ```
 
 ```bash
