@@ -41,6 +41,11 @@ network={
 ```
 
 ```bash
+rpios:~ # loginctl
+rpios:~ # loginctl show-session <session_id> | grep -i type
+# check x11 or wayland
+rpios:~ # echo $XDG_SESSION_TYPE
+
 # add hdmi sound card
 rpios:~ # echo "hdmi_drive=2" >> /boot/firmware/config.txt
 rpios:~ # reboot
@@ -50,8 +55,10 @@ rpios:~ # alsamixer
 ```
 
 ```bash
-rpios:~ # apt-get install scim-chewing  # 酷音輸入法
+rpios:~ # apt-get install fcitx5 fcitx5-configtool
+rpios:~ # apt-get install fcitx5-chewing                              # 酷音輸入法
 rpios:~ # apt-get install ttf-wqy-microhei ttf-wqy-zenhei xfonts-wqy  # 中文字型
+rpios:~ # im-config
 ```
 
 ---
