@@ -1,5 +1,15 @@
 # dnsmasq
 
+## port
+
+dns:
+
+- dns: 53/udp, 53/tcp
+- dhcp: 67/udp
+- tftp: 69/udp
+
+---
+
 ## install
 
 ```bash
