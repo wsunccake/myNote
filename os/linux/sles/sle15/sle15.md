@@ -58,6 +58,9 @@ sle:~ # sha256 SLE-15-SP2-Full-x86_64-GM-Media1.iso
 `repository`
 
 ```bash
+# yast module folder
+sle:~ # ls /usr/share/YaST2/clients
+
 # on local
 sle:~ # mount /dev/sr0 /mnt
 sle:~ # zypper rr -a
