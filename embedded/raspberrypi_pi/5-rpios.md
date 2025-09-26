@@ -25,10 +25,15 @@ host:~ # xzcat raspios-arm64-full.img.xz | dd of=/dev/sdX bs=4M status=progress 
 host:~ # sync
 ```
 
+### init
+
 ```bash
 rpios:~ # mount /dev/sdX1 /mnt
+
+# enable ssh
 rpios:~ # touch /mnt/ssh
 
+# enable wifi
 rpios:~ # vi /mnt/wpa_supplicant.conf
 country=TW
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
@@ -38,27 +43,6 @@ network={
     ssid="ssid"
     psk="password"
 }
-```
-
-```bash
-rpios:~ # loginctl
-rpios:~ # loginctl show-session <session_id> | grep -i type
-# check x11 or wayland
-rpios:~ # echo $XDG_SESSION_TYPE
-
-# add hdmi sound card
-rpios:~ # echo "hdmi_drive=2" >> /boot/firmware/config.txt
-rpios:~ # reboot
-
-rpios:~ # pactl list sinks
-rpios:~ # alsamixer
-```
-
-```bash
-rpios:~ # apt-get install fcitx5 fcitx5-configtool
-rpios:~ # apt-get install fcitx5-chewing                              # 酷音輸入法
-rpios:~ # apt-get install ttf-wqy-microhei ttf-wqy-zenhei xfonts-wqy  # 中文字型
-rpios:~ # im-config
 ```
 
 ---
@@ -72,6 +56,8 @@ rpios:~ # raspi-config
 # 於 Interface Options 中可以設定 ssh, rpi-connect, vnc
 # 於 Advanced Options
 ```
+
+### wifi
 
 ```bash
 rpios:~ # iwconfig wlan0
@@ -97,6 +83,58 @@ nmcli> set 802-11-wireless.powersave 2
 # 3: enable
 nmcli> save
 nmcli> quit
+```
+
+### display
+
+```bash
+rpios:~ # loginctl
+rpios:~ # loginctl show-session <session_id> | grep -i type
+# check x11 or wayland
+rpios:~ # echo $XDG_SESSION_TYPE
+```
+
+### sound
+
+```bash
+# add hdmi sound card
+rpios:~ # echo "hdmi_drive=2" >> /boot/firmware/config.txt
+rpios:~ # reboot
+
+# disble pulseaudio
+rpios:~ $ systemctl --user status pulseaudio
+rpios:~ $ systemctl --user disable pulseaudio
+rpios:~ $ systemctl --user stop puls
+
+# enable pipewire
+rpios:~ $ systemctl --user status pipewire
+rpios:~ $ systemctl --user start pipewire
+rpios:~ $ systemctl --user enable pipewire
+
+# wpctl
+rpios:~ $ wpctl status
+rpios:~ $ wpctl set-default <sink id>
+
+# enable pipewire-pulse
+rpios:~ $ systemctl --user status pipewire-pulse
+rpios:~ $ systemctl --user start pipewire-pulse
+rpios:~ $ systemctl --user enable pipewire-pulse
+
+# pactl
+rpios:~ $ pactl info
+rpios:~ $ pactl list
+rpios:~ $ pactl list sinks
+
+rpios:~ # alsamixer
+```
+
+### input
+
+```bash
+rpios:~ # apt-get install fcitx5 fcitx5-configtool
+rpios:~ # apt-get install fcitx5-chewing                              # 酷音輸入法
+rpios:~ # apt-get install ttf-wqy-microhei ttf-wqy-zenhei xfonts-wqy  # 中文字型
+rpios:~ # im-config
 ```
 
 ### service
