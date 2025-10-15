@@ -179,3 +179,7 @@ Environment="Variable2=Value2"
 EnvironmentFile=-file
 # 如果 file 不存在也不會報錯誤
 ```
+
+```bash
+linux:~ # systemctl edit [--full] <unit>
+```

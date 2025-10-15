@@ -186,7 +186,7 @@ ypserver <ypserv_ip>
 domain <nisdomainname> [broadcast]
 
 yp:~ # tail -1 /etc/passwd
-+:::::::
++::::::
 
 yp:~ # tail -1 /etc/group
 +:::
@@ -204,7 +204,7 @@ shadow: compat
 yp:~ # vi /etc/pam.d/common-account
 account required        pam_unix.so     try_first_pass
 
-yp:~ # vi /etc/pam.d/common-account
+yp:~ # vi /etc/pam.d/common-auth
 auth    required        pam_env.so
 auth    required        pam_unix.so     try_first_pass
 
@@ -212,7 +212,6 @@ yp:~ # vi common-password
 password        requisite       pam_cracklib.so
 password        required        pam_unix.so     use_authtok nullok shadow try_first_pass
 # password        optional        pam_exec.so     seteuid /usr/bin/make -C /var/yp
-
 
 yp:~ # vi common-session
 session optional        pam_systemd.so

@@ -119,6 +119,20 @@ linux:~ # setsebool -P httpd_can_network_connect on
 linux:~ # cat /var/log/audit/audit.log
 ```
 
+### module
+
+```bash
+linux:~ # semodule -l           # list
+linux:~ # semodule -i <module>  # install
+linux:~ # semodule -r <module>  # remove
+
+# generate SELinux policy
+linux:~ # ausearch -c '(su)' --raw | audit2allow -M my-su
+
+# add SELinux policy
+linux:~ # semodule -X 300 -i my-su.pp
+```
+
 ---
 
 ## config

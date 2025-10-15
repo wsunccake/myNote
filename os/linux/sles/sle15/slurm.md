@@ -103,8 +103,8 @@ PartitionName=normal Nodes=node[0-10,25-30] Default=YES MaxTime=24:00:00 State=U
 PartitionName=vip Nodes=node[40-50] State=UP AllowAccounts=VIP
 ```
 
-```
-lscpu
+```bash
+sle:~ # lscpu
 Architecture:             x86_64
   CPU op-mode(s):         32-bit, 64-bit
   Address sizes:          45 bits physical, 48 bits virtual
@@ -132,6 +132,12 @@ Vendor ID:                GenuineIntel
   如果支援超執行緒（Hyper-threading），通常會大於 1（例如 2）；如果沒有，則為 1。
 - CPU(s):
   所有邏輯 CPU 總數，等於 Sockets x CoresPerSocket x ThreadsPerCore。
+
+```bash
+sle:~ # zypper in hwloc
+sle:~ # hwloc-ls
+sle:~ # lstopo
+```
 
 [Slurm Version 17.11 Configuration Tool](https://slurm.schedmd.com/configurator.html)
 
