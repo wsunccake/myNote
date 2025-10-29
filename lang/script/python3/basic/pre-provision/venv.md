@@ -16,7 +16,7 @@ In[1]:
 (venv)linux:~ $ jupyter notebook --ip 0.0.0.0 --port 8888
 
 (venv)linux:~ $ pip install autopep8
-(venv)linux:~ $ autopep8  <python_file>
+(venv)linux:~ $ autopep8 [-i] <python_file>
 
 (venv)linux:~ $ deactivate
 ```

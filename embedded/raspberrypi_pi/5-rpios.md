@@ -128,6 +128,23 @@ rpios:~ $ pactl list sinks
 rpios:~ # alsamixer
 ```
 
+### onscreen keyboard
+
+```bash
+rpios:~ $ sudo apt install squeekboard 
+```
+
+```
+Menu:
+Preferences > Raspberry Pi Configuration
+
+Tab:
+Diaplys
+
+On-Screen Keboard: Enabled always
+```
+
+
 ### input
 
 ```bash

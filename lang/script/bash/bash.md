@@ -84,7 +84,7 @@ linux:~ # sh script.sh
 linux:~ # export VAR=value
 linux:~ # ./script.sh
 
-# method 4s
+# method 4
 linux:~ # env VAR=value ./script.sh
 
 # run with debug

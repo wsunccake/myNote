@@ -45,7 +45,51 @@ linux:~ # setenforce 1    # Enforcing
 
 linux:~ # vi /etc/selinux/config
 SELINUX=
+linux:~ # reboot
 ```
+
+### user
+
+unconfined_u: unconfined SELinux user
+
+```bash
+# selinux user map
+semanage login -l
+
+# selinux user
+seinfo -u
+seinfo -r
+seinfo -t
+
+id -Z
+```
+
+user_u: Is the SELinux user.
+user_r: Is the SELinux role.
+user_t: Is the SELinux type.
+
+### semanage
+
+```bash
+semanage <argument>
+```
+
+**argument**
+
+- `import`: 匯入 (Import) 本地化客製設定。 使用 semanage export 匯出的本地策略自訂設定檔案，匯入到系統中，通常用於還原或跨系統遷移設定。
+- `export`: 匯出 (Output) 本地化客製設定。 輸出目前 SELinux 策略中所有本地化（非預設）的變更（例如 fcontext、port、login 等設定）到一個檔案，便於備份或遷移。
+- `login`: 管理登入映射 (Login Mapping)。 管理 Linux 使用者名稱與 SELinux 使用者身份之間的映射關係。這是控制使用者登入後獲得初始安全上下文的關鍵。
+- `user`: 管理 SELinux 使用者 (SELinux User)。 管理 SELinux 策略中定義的 SELinux 身份（例如 user_u、sysadm_u），以及這些身份可以擁有的角色 (Roles) 和 MLS/MCS 範圍 (Range)。
+- `port`: 管理網路埠 (Network Port) 類型定義。 定義網路埠（如 TCP 或 UDP 埠）的安全上下文（type 欄位），允許特定的服務（如 httpd_t）綁定到非標準埠。
+- `interface`: 管理網路介面 (Network Interface) 類型定義。 管理網路介面的 SELinux 上下文，通常用於網絡過濾和 MLS/MCS 系統。
+- `module`: 管理 SELinux 策略模組 (Policy Module)。 載入、移除或啟用/禁用 SELinux 策略模組，用於動態地增加或移除特定的應用程式安全規則集。
+- `node`: 管理網路節點 (Network Node) 類型定義。 管理網路主機或節點的 SELinux 上下文，通常用於 MLS/MCS 環境中為遠端連線設定標籤。
+- `fcontext`: 管理檔案上下文 (File Context) 映射定義。 定義檔案路徑 (File Path) 與其應有的 SELinux 檔案類型 (File Type) 之間的映射規則，供 restorecon 命令使用以永久性地設定檔案標籤。
+- `boolean`: 管理 SELinux 布林值 (Booleans)。 調整 SELinux 策略中的開關，這些布林值允許管理員在不修改核心策略的情況下，選擇性地啟用或禁用某些行為（例如 httpd_can_network_connect）。
+- `permissive`: 管理寬容模式 (Permissive) 的領域。 將特定的程序領域 (Domain) 設置為寬容模式，意味著該程序發生的任何拒絕操作只會被記錄 (log) 而不會被強制執行 (enforce)。常用於除錯。
+- `dontaudit`: 管理 dontaudit 規則。 禁用或啟用策略中的 dontaudit 規則。這些規則通常用於抑制大量不影響執行的存取拒絕訊息，但禁用它可以幫助更全面地查看所有拒絕事件。
+- `ibpkey`: 管理 InfiniBand P_Key 類型定義。 專用於 InfiniBand 網路的策略管理，定義 P_Key 的 SELinux 上下文。
+- `ibendport`: 管理 InfiniBand 終端埠類型定義。 專用於 InfiniBand 網路的策略管理，定義 InfiniBand 終端埠的 SELinux 上下文。
 
 ### file context
 
@@ -55,6 +99,26 @@ SELINUX=
 - 作用： 將 Linux 登入使用者映射到一個 SELinux 使用者身份。這通常用於限制登入使用者可以扮演的角色 (Role) 和可以執行的程序類型 (Type)。
 - 常見情況： 對於大多數服務和檔案，您通常會看到 system_u 或 unconfined_u。一般使用者帳號登入後，其程序多半運行在 unconfined_u 下 (除非特別配置)。
 
+```bash
+# selinux user
+linux:~ # seinfo -u [<user>] [-x]
+
+linux:~ # semanage user -l
+linux:~ # semanage user -a -R <ROLE> [-L <LEVEL>] [-r <RANGER>]  <USER>
+linux:~ # semanage user -d <USER>
+```
+
+```bash
+# linux user map selinux user
+linux:~ # useradd -Z <USER> <user>
+linux:~ # usermod -Z <USER> <user>
+
+linux:~ # id -Z
+
+linux:~ # semanage login -l
+linux:~ # ps auxZ
+```
+
 2. Role (角色)
 
 - 格式範例： object_r (客體/檔案角色)、system_r (系統角色)。
@@ -62,6 +126,19 @@ SELINUX=
 - 常見情況：
   - 檔案/客體 (Objects)： 都是 object_r。
   - 程序 (Processes)： 大多是 system_r。
+
+`user_r`, `staff_r`, `sysadm_r`, 和 `unconfined_r` 是 SELinux 策略中定義的四個主要角色 (Roles)。目標是實現 RBAC (Role-Based Access Control)，即根據使用者當前的職責或任務來限制其權限。
+
+| Role Name      | Privilege Level         | Intended Use                                                    | Key Restrictions                                                                                                                                                                                 |
+| -------------- | ----------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `user_r`       | Confined / 基本使用者   | 標準的日常使用者、Web 瀏覽、文件編輯等非管理任務。              | 高度受限。 無法使用 su 或 sudo 切換使用者或提升權限。無法直接執行大多數系統管理任務。                                                                                                            |
+| `staff_r`      | Confined / 具備管理潛力 | 具備系統管理能力，但預設在受限模式下運行的使用者。              | 受限，但允許使用 sudo。 登入後預設受限（類似 user_r），但策略允許其透過 sudo 過渡到更寬鬆的角色（如 sysadm_r 或 unconfined_r）來執行管理命令。                                                   |
+| `sysadm_r`     | Confined / 系統管理員   | 專門用於執行全面系統配置、服務管理和根級別任務的管理員。        | 受限的管理員。 雖然權限很高，但其程序網域 (sysadm_t) 仍然受到 SELinux 策略的約束，這比 unconfined_r 更安全。例如，它可以管理系統文件，但可能被限制運行某些未被策略明確允許的應用程序。           |
+| `unconfined_r` | Unconfined / 最寬鬆     | 幾乎不受 SELinux 限制的程序。通常用於相容性或特殊的高權限服務。 | 最小限制。 該角色允許程序運行在 unconfined_t 網域中，使其幾乎可以做任何事，等同於傳統 Linux 的 DAC 權限（User/Group/Other）。任何拒絕通常是由 Linux 自己的 DAC 或其他安全模組而非 SELinux 造成。 |
+
+```bash
+linux:~ # seinfo -r [<ROLE>] [-x]
+```
 
 3. Type (類型) / Domain (領域) (最重要的部分)
 
@@ -72,6 +149,10 @@ SELINUX=
 - 核心運作： SELinux 策略主要就是基於 Type 之間的規則運作。例如：
   - 策略會規定：httpd_t 領域的程序被允許 (allow) 讀取 (read) 標籤為 httpd_sys_content_t 類型的檔案。
   - 策略會規定：httpd_t 領域的程序被拒絕 (deny) 寫入 (write) 標籤為 etc_t 類型的檔案。
+
+```bash
+linux:~ # seinfo -t
+```
 
 4. Level (等級) / MLS/MCS (多層次/多類別安全)
 
@@ -104,13 +185,23 @@ linux:~ # restorecon -v /srv/www
 
 ```bash
 linux:~ # getsebool -a
-linux:~ # getsebool httpd_can_network_connect
+linux:~ # getsebool ssh_sysadm_login
 
 # temporary change
-linux:~ # setsebool httpd_can_network_connect on
+linux:~ # setsebool ssh_sysadm_login on
 
 # permanent change
-linux:~ # setsebool -P httpd_can_network_connect on
+linux:~ # setsebool -P ssh_sysadm_login on
+
+#               State   Default
+# setsebool     V       X
+# setsebool -N  V       X
+# setsebool -P  V       V
+# State: current
+# Default: persistently, after reboot
+
+linux:~ # semanage boolean -l | grep ssh_sysadm_login
+linux:~ # semanage boolean -m --on|--off ssh_sysadm_login
 ```
 
 ### log
@@ -125,6 +216,8 @@ linux:~ # cat /var/log/audit/audit.log
 linux:~ # semodule -l           # list
 linux:~ # semodule -i <module>  # install
 linux:~ # semodule -r <module>  # remove
+
+linux:~ # sealert -l "*"
 
 # generate SELinux policy
 linux:~ # ausearch -c '(su)' --raw | audit2allow -M my-su

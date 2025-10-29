@@ -30,10 +30,32 @@
 進入 visual mode, 此時才能反白選取文字, 按 v, V, Ctrl v, 會從 norml mode 進入 visual mode
 ```
 
+```bash
+linux:~ $ ls /usr/share/vim/vim*/tutor/
+linux:~ $ ls vimtutor zh_tw
+
+linux:~ $ vim -c help -c on
+```
+
 - cmdline mode
 
 ```text
 :help <cmd>
+
+CTRL-]  : Jump to Subject
+CTRL-O  : Jump back
+
+Normal mode command                  :help x
+Visual mode command         v_       :help v_u
+Insert mode command         i_       :help i_<Esc>
+Command-line command        :        :help :quit
+Command-line editing        c_       :help c_<Del>
+Vim command argument        -        :help -r
+Option                      '        :help 'textwidth'
+Regular expression          /        :help /[
+```
+
+```
 :set
 :set all
 :let

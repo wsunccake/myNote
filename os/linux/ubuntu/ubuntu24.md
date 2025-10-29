@@ -186,3 +186,22 @@ Enable
 Desktop Share
 Remote Control
 ```
+
+---
+
+## develop
+
+### node
+
+```bash
+ubuntu:~ $ curl -fsSL https://deb.nodesource.com/setup_22.x | sudo bash
+ubuntu:~ $ sudo apt-get install -y nodejs
+```
+
+### gemini cli
+
+```bash
+ubuntu:~ $ sudo npm install -g @google/gemini-cli
+
+ubuntu:~ $ gemini
+```

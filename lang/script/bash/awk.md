@@ -171,15 +171,21 @@ linux:~ $ awk 'BEGIN { OFMT="%.2f"; print 123.456789 }'
 ## common
 
 ```bash
+awk -v col1=<n> -v col2=<m> -v var2=<pattern> '($col2 == var2){print $col1}' <file>
+# 定義 awk 內部變數 col1, 值來自 Shell 變數 n
+# 定義 awk 內部變數 col2, 值來自 Shell 變數 n
+# 定義 awk 內部變數 var2, 值來自 Shell 變數 pattern
+# 檢查 col2 變數所指定的欄位 ($col2) 內容是否等於 (==) var2 變數所指定的值
+# 如果該行匹配, 則印出指定的欄位 ($col1) 的內容
+
 awk -v inp="$HOME/my.inp" '{print $1 > (f_inp "_" $2)}' <file>
 # 變數與其他文字組合，應該將它們放在括號中 ( ... )，以確保正確解析。
-# => (f_inp "_" $2) 會生成期望的文件名。
+# > (f_inp "_" $2) 會生成期望的文件名。
 
 awk -v inp="$HOME/my.inp" 'BEGIN {ORS=" "} {print $1 > (f_inp "_" $2)}  END {print ""}' <file>
 # ORS=" "           :將輸出的行分隔符（Output Record Separator）設置為空格。
 # {print $0}        :輸出每一行。
 # END {print ""}    :在最後加上換行符。
-
 
 awk '{$1=""; print $0}' <file>
 # 第一列清空（設為空字串），但行的其他部分仍然存在
