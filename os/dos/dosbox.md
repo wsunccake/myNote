@@ -6,12 +6,28 @@
 
 current last: 0.74-3
 
+```bash
+# for debian / ubuntu
+ubuntu:~ # apt install dosbox
+```
+
+```bash
+linux:~ $ dosbox -version
+linux:~ $ dosbox -printconf
+```
+
 ---
 
 ## conf
 
 ```powershell
+PS C:\Users\user> dosbox -printconf
 PS C:\Users\user> vi ${env:LOCALAPPDATA}\DOSBox\dosbox-0.74-3.conf
+```
+
+```bash
+linux:~ $ dosbox -printconf
+linux:~ $ vi ~/.dosbox/dosbox-0.74-3.conf
 ```
 
 ```ini
@@ -109,12 +125,37 @@ ipx=false
 [autoexec]
 ```
 
-MOUNT C
+## mount
+
+使用指令掛載，每次開機完都要執行
+
+```bash
+# mount local folder to dosbox
+Z:\> mount c /home/dosbox   # for linux
+Z:\> mount c d:\dosbox      # for windows
+
+# umount
+Z:\> mount -u c
+
+# path
+Z:\> path                   # show path
+Z:\> path %PATH%;c:\bin     # append path
+```
+
+寫在設定檔，開機完都會自動執行
 
 ```ini
+[autoexe]
 MOUNT C D:\data             # mount local folder
 # PATH=Z:\;C:\BIN           # set PATH
 # MOUNT D G:\ -t cdrom      # mount CD-ROM
+PATH %PATH%;c:\bin
+
+[sdl]
+# windowresolution=original
+windowresolution=1280x960
+# output=surface
+output=opengl
 ```
 
 ---
@@ -147,4 +188,16 @@ REN OLDNAME.DOC NEWNAME.DOC
 TYPE README.TXT
 
 GAME.EXE
+```
+
+---
+
+## MASM
+
+- [masm-dos](https://github.com/shiburaj/masm-dos)
+
+```bash
+Z:\> masm test.asm
+Z:\> link test.obj
+Z:\> test.exe
 ```
