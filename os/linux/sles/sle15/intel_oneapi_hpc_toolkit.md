@@ -402,3 +402,7 @@ C     PROGRAM TO COMPUTE PI IN PARALLEL WITH FORTRAN 77
       CALL MPI_FINALIZE(ierr)
       END PROGRAM pi_f90
 ```
+
+## ref
+
+- [Intel® oneAPI Math Kernel Library Link Line Advisor](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl-link-line-advisor.html)
