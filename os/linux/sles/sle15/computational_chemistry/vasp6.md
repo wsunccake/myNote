@@ -8,7 +8,13 @@
   - Fortran
   - MKL
   - MPI
-- VASP: 6.4.1
+- VASP: 6.3.2
+
+## website
+
+- [VASP](https://www.vasp.at/)
+- [VASPsol](https://github.com/henniggroup/VASPsol)
+- [VTST](https://theory.cm.utexas.edu/vtsttools/index.html)
 
 ---
 
@@ -19,19 +25,19 @@ sle15sp7:~ # icx
 sle15sp7:~ # icpx
 sle15sp7:~ # mpiifx
 
-sle15sp7:~ # tar zxf vasp.6.4.1.tgz -C /usr/local
-sle15sp7:~ # cd /usr/local/vasp.6.4.1
+sle15sp7:~ # tar zxf vasp.6.3.2.tgz -C /usr/local
+sle15sp7:~ # cd /usr/local/vasp.6.3.2
 
 # config makefile
-sle15sp7:/usr/local/vasp.6.4.1 # cp arch/makefile.include.intel ./makefile.include
-sle15sp7:/usr/local/vasp.6.4.1 # vi makefile.include
-sle15sp7:/usr/local/vasp.6.4.1 # vi parse/makefile
+sle15sp7:/usr/local/vasp.6.3.2 # cp arch/makefile.include.intel ./makefile.include
+sle15sp7:/usr/local/vasp.6.3.2 # vi makefile.include
+sle15sp7:/usr/local/vasp.6.3.2 # vi parse/makefile
 
 # build
-sle15sp7:/usr/local/vasp.6.4.1 # make <target>
+sle15sp7:/usr/local/vasp.6.3.2 # make <target>
 # target: std|gam|ncl|gpu|
-sle15sp7:/usr/local/vasp.6.4.1 # make std
-sle15sp7:/usr/local/vasp.6.4.1 # ls bin
+sle15sp7:/usr/local/vasp.6.3.2 # make std
+sle15sp7:/usr/local/vasp.6.3.2 # ls bin
 ```
 
 ```makefile
@@ -42,7 +48,7 @@ CC_LIB     = icc
 CXX_PARS   = icpc
 ->
 FC         = mpiifx [-static-intel|-Bstatic]
-FCL        = mpiifx -qmkl=sequential [-static-intel|-Bstatic]
+FCL        = mpiifx [-qmkl=sequential] [-static-intel|-Bstatic]
 CC_LIB     = icx
 CXX_PARS   = icpx
 ```
@@ -73,9 +79,98 @@ locproj_test:   call_from_fortran.o $(CPPOBJ_PARS) $(COBJ_PARS) locproj.tab.h
 ## run
 
 ```bash
-sle15sp7:~ $ cp -r /usr/local/vasp.6.4.1/testsuite/tests/NaCl .
-sle15sp7:~ $ cp /usr/local/vasp.6.4.1/testsuite/POTCARS/POTCAR.NaCl NaCl/POTCARS
-sle15sp7:~ $ cp /usr/local/vasp.6.4.1/bin/vasp_std NaCl
+sle15sp7:~ $ cp -r /usr/local/vasp.6.3.2/testsuite/tests/NaCl .
+sle15sp7:~ $ cp /usr/local/vasp.6.3.2/testsuite/POTCARS/POTCAR.NaCl NaCl/POTCARS
+sle15sp7:~ $ cp /usr/local/vasp.6.3.2/bin/vasp_std NaCl
 sle15sp7:~ $ cd NaCl
 sle15sp7:~/NaCl $ mpirun -np 2 ./vasp_std
+```
+
+---
+
+## VASPsol
+
+```bash
+sle15sp7:~ $ git clone https://github.com/henniggroup/VASPsol.git
+sle15sp7:~ $ tar zxf V1.0.1.tar.gz
+sle15sp7:~ $ cd /usr/local/vasp.6.3.2/src/
+
+sle15sp7:/usr/local/vasp.6.3.2/src $ mv solvation.F solvation.F.org
+sle15sp7:/usr/local/vasp.6.3.2/src $ cp VASPsol-1.0.1/src/solvation.F .
+sle15sp7:/usr/local/vasp.6.3.2/src $ patch -Np0 < ~/VASPsol/patches/pbz_patch_610
+
+sle15sp7:/usr/local/vasp.6.3.2/src $ cd ..
+sle15sp7:/usr/local/vasp.6.3.2 $ cp makefile.include makefile.include.org
+sle15sp7:/usr/local/vasp.6.3.2 $ vi makefile.include
+sle15sp7:/usr/local/vasp.6.3.2 $ make
+```
+
+```makefile
+# makefile.include
+              -Dfock_dblbuf
+->
+              -Dfock_dblbuf \
+              -Dsol_compat
+```
+
+---
+
+## VTST
+
+```bash
+sle15sp7:~ $ tar zxf vtstcode-213.tgz
+sle15sp7:~ $ cd /usr/local/vasp.6.3.2/src/
+
+sle15sp7:/usr/local/vasp.6.3.2/src $ cp -r ~/vtstcode-213/vtstcode6.3/*.F .
+sle15sp7:/usr/local/vasp.6.3.2/src $ cp main.F main.F.org
+sle15sp7:/usr/local/vasp.6.3.2/src $ cp .objects .objects.org
+sle15sp7:/usr/local/vasp.6.3.2/src $ cp makefile makefile.org
+
+sle15sp7:/usr/local/vasp.6.3.2/src $ vi main.F
+sle15sp7:/usr/local/vasp.6.3.2/src $ vi .objects
+sle15sp7:/usr/local/vasp.6.3.2/src $ vi makefile
+
+sle15sp7:/usr/local/vasp.6.3.2/src $ cd ..
+sle15sp7:/usr/local/vasp.6.3.2 $ make std
+```
+
+```F
+! src/main.F
+      CALL CHAIN_FORCE(T_INFO%NIONS,DYN%POSION,TOTEN,TIFOR, &
+           LATT_CUR%A,LATT_CUR%B,IO%IU6)
+...
+      IF (LCHAIN) CALL chain_init( T_INFO, IO)
+->
+      CALL CHAIN_FORCE(T_INFO%NIONS,DYN%POSION,TOTEN,TIFOR, &
+           LATT_CUR%A,LATT_CUR%B,IO%IU6)
+...
+      CALL chain_init( T_INFO, IO)
+```
+
+```makefile
+# src/.objects
+        elf.o \
+        hamil_rot.o \
+        chain.o \
+        dyna.o \
+...
+        elf.o \
+        hamil_rot.o \
+        bfgs.o dynmat.o instanton.o lbfgs.o sd.o cg.o dimer.o bbm.o \
+        fire.o lanczos.o neb.o qm.o \
+        pyamff_fortran/*.o ml_pyamff.o \
+        opt.o \
+        chain.o \
+        dyna.o \
+```
+
+```makefile
+# src/makefile
+LIB=lib parser
+...
+dependencies: sources
+->
+LIB=lib parser pyamff_fortran
+...
+dependencies: sources libs
 ```
