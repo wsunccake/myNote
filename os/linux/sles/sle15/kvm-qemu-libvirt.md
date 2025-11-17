@@ -68,6 +68,7 @@ sle:~ # virsh console <domain name>
 # register / un-register vm
 sle:~ # virsh define <xml>
 sle:~ # virsh undefine <domain name> [--nvram]
+sle:~ # virsh undefine <domain name> --storage /path/vdisk.qcow2 --wipe-storage|
 
 # register and start vm
 sle:~ # virsh create <xml>

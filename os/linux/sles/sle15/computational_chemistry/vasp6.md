@@ -21,6 +21,7 @@
 ## compile - Intel oneAPI HPC Toolkit
 
 ```bash
+sle15sp7:~ # zypper in -t pattern devel_basis
 sle15sp7:~ # icx
 sle15sp7:~ # icpx
 sle15sp7:~ # mpiifx
@@ -31,6 +32,7 @@ sle15sp7:~ # cd /usr/local/vasp.6.3.2
 # config makefile
 sle15sp7:/usr/local/vasp.6.3.2 # cp arch/makefile.include.intel ./makefile.include
 sle15sp7:/usr/local/vasp.6.3.2 # vi makefile.include
+sle15sp7:/usr/local/vasp.6.3.2 # cp parse/makefile parse/makefile.org
 sle15sp7:/usr/local/vasp.6.3.2 # vi parse/makefile
 
 # build
@@ -38,18 +40,25 @@ sle15sp7:/usr/local/vasp.6.3.2 # make <target>
 # target: std|gam|ncl|gpu|
 sle15sp7:/usr/local/vasp.6.3.2 # make std
 sle15sp7:/usr/local/vasp.6.3.2 # ls bin
+
+# clean
+sle15sp7:/usr/local/vasp.6.3.2 # make veryclean
 ```
 
 ```makefile
 # arch/makefile.include.intel
 FC         = mpiifort
 FCL        = mpiifort
+...
 CC_LIB     = icc
+...
 CXX_PARS   = icpc
 ->
 FC         = mpiifx [-static-intel|-Bstatic]
 FCL        = mpiifx [-qmkl=sequential] [-static-intel|-Bstatic]
+...
 CC_LIB     = icx
+...
 CXX_PARS   = icpx
 ```
 
@@ -92,17 +101,16 @@ sle15sp7:~/NaCl $ mpirun -np 2 ./vasp_std
 
 ```bash
 sle15sp7:~ $ git clone https://github.com/henniggroup/VASPsol.git
-sle15sp7:~ $ tar zxf V1.0.1.tar.gz
 sle15sp7:~ $ cd /usr/local/vasp.6.3.2/src/
 
 sle15sp7:/usr/local/vasp.6.3.2/src $ mv solvation.F solvation.F.org
-sle15sp7:/usr/local/vasp.6.3.2/src $ cp VASPsol-1.0.1/src/solvation.F .
+sle15sp7:/usr/local/vasp.6.3.2/src $ cp ~/VASPsol/src/solvation.F .
 sle15sp7:/usr/local/vasp.6.3.2/src $ patch -Np0 < ~/VASPsol/patches/pbz_patch_610
 
 sle15sp7:/usr/local/vasp.6.3.2/src $ cd ..
 sle15sp7:/usr/local/vasp.6.3.2 $ cp makefile.include makefile.include.org
 sle15sp7:/usr/local/vasp.6.3.2 $ vi makefile.include
-sle15sp7:/usr/local/vasp.6.3.2 $ make
+sle15sp7:/usr/local/vasp.6.3.2 $ make std
 ```
 
 ```makefile
@@ -121,7 +129,7 @@ sle15sp7:/usr/local/vasp.6.3.2 $ make
 sle15sp7:~ $ tar zxf vtstcode-213.tgz
 sle15sp7:~ $ cd /usr/local/vasp.6.3.2/src/
 
-sle15sp7:/usr/local/vasp.6.3.2/src $ cp -r ~/vtstcode-213/vtstcode6.3/*.F .
+sle15sp7:/usr/local/vasp.6.3.2/src $ cp -r ~/vtstcode-213/vtstcode6.3/* .
 sle15sp7:/usr/local/vasp.6.3.2/src $ cp main.F main.F.org
 sle15sp7:/usr/local/vasp.6.3.2/src $ cp .objects .objects.org
 sle15sp7:/usr/local/vasp.6.3.2/src $ cp makefile makefile.org
@@ -142,7 +150,7 @@ sle15sp7:/usr/local/vasp.6.3.2 $ make std
       IF (LCHAIN) CALL chain_init( T_INFO, IO)
 ->
       CALL CHAIN_FORCE(T_INFO%NIONS,DYN%POSION,TOTEN,TIFOR, &
-           LATT_CUR%A,LATT_CUR%B,IO%IU6)
+           TSIF,LATT_CUR%A,LATT_CUR%B,IO%IU6)
 ...
       CALL chain_init( T_INFO, IO)
 ```
