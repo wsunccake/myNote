@@ -126,6 +126,65 @@ linux:~/tf $ terraform validate
 
 ---
 
+## step
+
+1. Initialization: `terraform init`
+
+1.1 下載 Provider:
+
+Terraform 讀取配置檔案 (.tf)，確定所需 Provider (例如 aws, azurerm, google) 及其版本限制。從 Terraform Registry 下載這些 Provider 的二進制執行檔。快取檢查： 如果設定了快取目錄 (透過 `TF_PLUGIN_CACHE_DIR` 或 `plugin_cache_dir`)，Terraform 會先檢查本地快取。如果存在且版本匹配，則直接從快取中複製；否則才從網路下載。
+
+`TF_PLUGIN_CACHE_DIR`
+
+```bash
+linux:~ $ export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
+```
+
+```bash
+linux:~ $ vi .terraformrc
+plugin_cache_dir="$HOME/.terraform.d/plugin-cache"
+```
+
+1.2 安裝 Provider
+
+下載的 Provider 執行檔會被放置在當前工作目錄的 .terraform/providers 子目錄中。 Terraform 執行時會尋找 Provider 的位置。
+
+1.3 後端 Backend
+
+如果定義了後端 (例如 S3, Azure Blob)，Terraform 會初始化後端並檢查 State 檔案。
+
+2. Configuration: `Provider {} Block`
+
+2.1 讀取配置
+
+Terraform 讀取 provider "name" { ... } 區塊中的參數 (例如 AWS 的 region, access_key 或 Google 的 project 等)。
+
+2.2 Provider 啟動
+
+Terraform 執行安裝的 Provider 二進制檔案，並將這些配置參數傳遞給 Provider。
+
+2.3 建立連線
+
+Provider 使用這些參數建立與目標雲端平台 (例如 AWS API) 的連線、驗證身分並準備好接收後續的操作指令。
+
+3. Execution: `terraform plan/apply`
+
+3.1 資源發現 (Plan)
+
+Terraform 讀取配置檔案中的資源定義 (resource "type" "name" { ... })。對於每個資源，Terraform 會呼叫對應的 Provider 的方法 (例如 Read, Create)
+Plan： 呼叫 Read 方法獲取目標平台目前狀態，並與 State 檔案進行比較，以決定要執行哪些操作。
+Apply： 呼叫 Create, Update, 或 Delete 方法。
+
+3.2 API 互動
+
+Provider 接收到 Terraform 的指令後，將其轉換為對應雲端平台的 API 呼叫，執行實際的資源操作。
+
+3.3 狀態管理 (State Update)
+
+資源操作完成後，Provider 將資源的最新狀態資訊 (如 ID, 屬性值) 傳回給 Terraform。Terraform 將這些最新資訊寫入 State 檔案 (terraform.tfstate)，完成一個閉環操作。
+
+---
+
 ## content
 
 - provider
@@ -640,6 +699,10 @@ output "vm_names_and_ids" {
   value = { for i in range(var.vm_count) : "vm_${i}" => "id_${i}" }
 }
 ```
+
+- 字串內插 (docker.${each.key})
+- 函數計算 (docker[element(keys(...))])
+- 條件表達式 (count.index == 0 ? docker.host_0 : docker.host_1)
 
 ---
 

@@ -131,6 +131,13 @@ linux:~ # cp file.log file.$(date +%D).log && : > file.log && gzip file.$(date +
 
 linux:~ # curl -o- https://github/install.sh | bash
 linux:~ # wget -qO- https://github/install.sh | bash
+
+# define file descriptor
+linux:~ # exec 5>>config.log                        # open file descriptor
+linux:~ # echo "This is the first message." >&5     # append to file descriptor
+linux:~ # echo "This is the second message." >&5
+linux:~ # cat config.log
+linux:~ # exec 5>&-                                 # close file descriptor
 ```
 
 ---

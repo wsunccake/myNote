@@ -76,3 +76,17 @@ PS C:\Users\user> wsl --unregister <distro>
 # launch
 PS C:\Users\user> wsl [--distribution <distro>] [--user <user>]
 ```
+
+---
+
+## Docker Desktop
+
+```powershell
+# 確認安裝 wsl 2 也是 version: 2
+PS C:\Users\user> wsl.exe -l -v
+```
+
+下載 [Docker Desktop](https://www.docker.com/products/docker-desktop/) 且安裝
+
+- "Settings" \ "General" tab \ select "Use the WSL 2 based engine"
+- "Settings" \ "Resources" tab \ select "WSL integrations"
