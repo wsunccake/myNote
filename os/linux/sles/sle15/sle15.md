@@ -204,6 +204,24 @@ sle:~ # journalctl -n 100 -f
 # log level: "emerg" (0), "alert" (1), "crit" (2), "err" (3), "warning" (4), "notice" (5), "info" (6), "debug" (7)
 sle:~ # journalctl -p err
 sle:~ # journalctl -p 3
+
+# show 
+sle:~ # journalctl --disk-usage
+
+# clean log
+sle:~ # journalctl --vacuum-time=2d             # by time
+sle:~ # journalctl --vacuum-size=500M           # by size
+sle:~ # journalctl --vacuum-files=5             # by file
+
+# config
+sle:~ # vi /etc/systemd/journald.conf
+...
+SystemMaxUse=500M
+SystemMaxFileSize=100M
+MaxRetentionSec=1month
+
+# service
+sle:~ # systemctl restart systemd-journald
 ```
 
 `fs`

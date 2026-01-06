@@ -86,3 +86,11 @@ linux:~ $ uv tool uninstall <package>
 
 linux:~ $ uv tool run <script>      # uvx <script>
 ```
+
+---
+
+## run
+
+```bash
+linux:~ $ uv run python -m http.server
+```
