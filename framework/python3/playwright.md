@@ -4,7 +4,19 @@
 
 ```bash
 linux:~ $ pip install playwright    # 1.49
-linux:~ $ playwright install
+
+# for user
+linux:~ $ playwright install                            # all browser
+linux:~ $ playwright install  [--with-deps] [chromium]  # chromium
+# chromium, chromium-headless-shell, chromium-tip-of-tree-headless-shell,
+# chrome, chrome-beta, msedge, msedge-beta, msedge-dev
+# _bidiChromium, firefox, webkit
+linux:~ $ playwright install  --list
+
+# for system
+linux:~ $ export PLAYWRIGHT_BROWSERS_PATH=/opt/playwright-browsers 
+linux:~ $ sudo playwright install
+linux:~ $ chmod -R 755 $PLAYWRIGHT_BROWSERS_PATH
 ```
 
 ## trace viewer

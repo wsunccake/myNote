@@ -262,10 +262,10 @@ sle:~ # mkswap  /dev/sda2
 
 ```bash
 sle:~ # rpm -ql systemd
+sle:~ # systemctl enable serial-getty@ttyS0.service --now
+
 sle:~ # ls -l /etc/systemd/system/getty.target.wants/serial-getty@ttyS0.service
 # -> /usr/lib/systemd/system/serial-getty@.service
-
-sle:~ # systemctl enable serial-getty@ttyS0.service --now
 ```
 
 ---

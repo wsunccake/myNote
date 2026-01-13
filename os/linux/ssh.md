@@ -85,6 +85,13 @@ ChallengeResponseAuthentication no
 [server:~ ] # systemctl restart sshd
 ```
 
+| File                | Purpose                                                  | Permissions |
+| ------------------- | -------------------------------------------------------- | ----------- |
+| authorized_keys     | Contains the Public Keys of people allowed to log in.    | 600         |
+| id_rsa (or similar) | The user's Private Key (for logging into other servers). | 600         |
+| id_rsa.pub          | The user's Public Key (to be shared with others).        | 644         |
+| known_hosts         | A list of servers the user has logged into before.       | 644         |
+
 ---
 
 ## local forwarding

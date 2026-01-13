@@ -225,6 +225,13 @@ rhel:~ # docker load < <image>.tar
 
 rhel:~ # docker export <container_id> > image.tar
 rhel:~ # docker import image.tar <image_name>
+
+rhel:~ # docker system prune -f
+rhel:~ # docker volume prune -f
+rhel:~ # docker network prune -f
+rhel:~ # docker container prune -f
+rhel:~ # docker image prune -f
+rhel:~ # docker builder prune -f
 ```
 
 ---
