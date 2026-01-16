@@ -15,6 +15,10 @@
 ## cli
 
 ```bash
+# add cdrom to repo
+ubuntu:~ # apt-cdrom add
+
+ubuntu:~ # apt install vim vim-common
 ubuntu:~ # apt install git
 ubuntu:~ # apt install neovim
 ```
@@ -144,23 +148,38 @@ netplan.io
 ubuntu:~ # dpkg -l netplan.io
 
 ubuntu:~ # vi /etc/netplan/50-cloud-init.yaml
-network:
-    ethernets:
-      ens192:
-        dhcp4: no
-        addresses:
-          - 192.168.10.10/24
-        nameservers:
-          addresses:
-            - 8.8.8.8
-        routes:
-          - to: 0.0.0.0/0
-            via: 192.168.10.254
-    version: 2
+...
 
 ubuntu:~ # netplan try
 ubuntu:~ # netplan apply
 ubuntu:~ # netplan ip leases ens192
+```
+
+```yaml
+# dhcp.yaml
+network:
+    version: 2
+    renderer: networkd
+    ethernets:
+        enp3s0:
+            dhcp4: true
+```
+
+```yaml
+# static.yaml
+network:
+    version: 2
+    renderer: networkd
+    ethernets:
+        enp3s0:
+            addresses:
+                - 10.10.10.2/24
+            nameservers:
+                search: [mydomain, otherdomain]
+                addresses: [10.10.10.1, 1.1.1.1]
+            routes:
+                - to: default
+                  via: 10.10.10.1
 ```
 
 ---

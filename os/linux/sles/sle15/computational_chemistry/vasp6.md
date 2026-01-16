@@ -14,6 +14,7 @@
 
 - [VASP](https://www.vasp.at/)
 - [VASPsol](https://github.com/henniggroup/VASPsol)
+- [CP-VASP](https://github.com/yuanyue-liu-group/CP-VASP)
 - [VTST](https://theory.cm.utexas.edu/vtsttools/index.html)
 
 ---
@@ -119,6 +120,14 @@ sle15sp7:/usr/local/vasp.6.3.2 $ make std
 ->
               -Dfock_dblbuf \
               -Dsol_compat
+```
+
+---
+
+## CP-VASP
+
+```bash
+sle15sp7:/usr/local/vasp.6.3.2/src $ patch -Np0 < ~/CP-VASP/version1/vasp6.4_6.3_cpm.patch
 ```
 
 ---
