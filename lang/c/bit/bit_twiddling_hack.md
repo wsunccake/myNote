@@ -218,7 +218,12 @@ int main()
 }
 ```
 
-$\begin{aligned}& \text{abs}(x) = \begin{cases} x, & x \ge 0 \\ -x, & x < 0 \end{cases} \implies \text{abs}(x) = \begin{cases} x, & x \ge 0 \\ \sim x + 1, & x < 0 \end{cases} \end{aligned}$
+```math
+\begin{aligned}
+\text{abs}(x) = \begin{cases} x, & x \ge 0 \\ -x, & x < 0 \end{cases}
+\implies
+\text{abs}(x) = \begin{cases} x, & x \ge 0 \\ \sim x + 1, & x < 0 \end{cases} \end{aligned}
+```
 
 ---
 
