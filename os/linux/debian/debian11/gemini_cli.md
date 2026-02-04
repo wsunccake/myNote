@@ -7,6 +7,7 @@ prerequisites: node.js 18+
 ```bash
 # for debian
 debian:~ $ npm install -g @google/gemini-cli
+debian:~ $ npm update -g @google/gemini-cli
 
 # for windows
 PS C:\Users\user> npm install -g @google/gemini-cli
