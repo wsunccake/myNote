@@ -165,12 +165,14 @@ sed 's/\x1b\[[0-9;]*m//g' <file>    # remove color code
 sed "s/\r//g" <file>                # remove ^M (windows carry return)
 sed $'s/\r$//' <file>               # dos to unix
 sed $'s/$/\r/' <file>               # unix to dos
+sed '1s/^\xef\xbb\xbf//' <csv_file> # remove csv header
 
 sed ':a;N;$!ba;s/\n/ /g' <file>     # tr '\n' ' '
 # :a          : 設置了一個標籤，類似於循環的開始點。
 # N           : 將下一行追加到當前模式空間，從而處理多行文本。
 # $!ba        : 如果還沒有到文件的末尾 ($! 表示“不是最後一行”)，則跳轉回標籤 :a，繼續追加。
 # s/\n/ /g    : 將模式空間中的所有換行符 (\n) 替換為空格 ( )。
+# M-oM-;M-? 是 UTF-8 BOM (Byte Order Mark), 當 Excel 轉 csv 時會在儲存 UTF-8 檔案
 ```
 
 ---

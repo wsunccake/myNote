@@ -28,6 +28,23 @@ finally:
     print("force action")
 ```
 
+```python
+try:
+    a = int(input('input an integer number '))
+    b = int(input('input an integer number '))
+    if a > b:
+        print(n)
+except ValueError as e:
+    print(f"Value Error, you don't input any character. {e}")
+except Exception as e:
+    print(f"Other Error. {e}")
+else:
+    print("Normal finish")
+finally:
+    print("force action")
+```
+
+
 ---
 
 ## raise
@@ -38,7 +55,8 @@ import math
 anumber = int(input('input an integer number '))
 
 if anumber < 0:
-    raise RuntimeError("You can't use a negative number")
+    # raise RuntimeError("You can't use a negative number")
+    raise RuntimeError("You can't use a negative number") from None # no trace code
 else:
     print(math.sqrt(anumber))
 ```

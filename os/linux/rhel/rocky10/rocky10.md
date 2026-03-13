@@ -86,6 +86,7 @@ rocky:~ # dnf config-manager --set-enabled crb
 ```bash
 rocky:~ # dnf install bash-completion bash-color-prompt
 rocky:~ # dnf install vim-common vim-enhanced
+rocky:~ # dnf install git
 ```
 
 ---

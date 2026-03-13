@@ -113,6 +113,16 @@ primes = [x for x in range(2, 50) if x not in noprimes]
 print(primes)
 ```
 
+## 2 list comprehesion
+
+```python
+data = []
+for o in outers:
+    for i in inners:
+        data.append([o, i])
+data = [[o, i] for i in inners for o in outers]
+```
+
 ---
 
 ## dictionary comprehension
