@@ -2,7 +2,6 @@
 
 host discovery -> port scanning -> version detection -> os detection
 
-
 ## ip
 
 ```bash
@@ -18,7 +17,6 @@ kali:~ # nmap 192.168.0.10-20
 # ip mask
 kali:~ # nmap 192.168.0.0/24
 ```
-
 
 ---
 
@@ -39,7 +37,6 @@ kali:~ # nmap -p 20-23 192.168.0.1
 kali:~ # nmap -p- 192.168.0.1
 ```
 
-
 ---
 
 ## host discovery
@@ -57,8 +54,9 @@ kali:~ # nmap -PM <ip>      # ICMP netmask
 kali:~ # nmap -PS <ip>      # TCP SYN ping
 kali:~ # nmap -PA <ip>      # TCP ACK ping
 kali:~ # nmap -PU <ip>      # UDP ping
-```
 
+kali:~ # nmap -Pn <ip>      # skip ping, assume target
+```
 
 ---
 
@@ -79,6 +77,14 @@ kali:~ # nmap -sM <ip>       # TCP Maimon scan
 kali:~ # nmap -sU <ip>       # UDP scan
 ```
 
+| 參數 | 說明                | 特點                                                    |
+| ---- | ------------------- | ------------------------------------------------------- |
+| -sS  | TCP SYN 掃描 (預設) | 半開放掃描，速度快且相對隱蔽，不完成三次握手。          |
+| -sT  | TCP 連線掃描        | 完成三次握手，易被日誌紀錄，但不需要 root 權限。        |
+| -sU  | UDP 掃描            | 針對 DNS、DHCP、SNMP 等 UDP 服務，速度較慢。            |
+| -sV  | 版本偵測            | 探測埠口上運行的軟體名稱與版本號。                      |
+| -O   | 作業系統偵測        | 透過 TCP/IP 指紋辨識目標運行的 OS (Windows/Linux/iOS)。 |
+| -A   | 進階綜合掃描        | 同時開啟 OS 偵測、版本偵測、腳本掃描與路徑追蹤。        |
 
 ---
 
@@ -88,7 +94,6 @@ kali:~ # nmap -sU <ip>       # UDP scan
 kali:~ # nmap -sV <ip>       # app/service version
 ```
 
-
 ---
 
 ## os detection
@@ -96,7 +101,6 @@ kali:~ # nmap -sV <ip>       # app/service version
 ```bash
 kali:~ # nmap -O <ip>        # app/service version
 ```
-
 
 ---
 
@@ -108,7 +112,7 @@ kali:~ # grep categories /usr/share/nmap/scripts/*
 
 kali:~ # nmap --script-help default
 kali:~ # nmap --script-help ssh-run
-kali:~ # nmap -sC <ip>                                      # -sC = --script="default"
+kali:~ # nmap -sV -sC <ip>                                  # -sC = --script="default"
 
 # script-file
 kali:~ # nmap --script="http-title" <ip>                    # single
@@ -119,12 +123,21 @@ kali:~ # nmap --script="default" <ip>                       # single
 kali:~ # nmap --script="default,safe,brute,exploit" <ip>    # multi
 
 # other
-kali:~ # namp "http-*" <ip>
-kali:~ # namp "not intrusive" <ip>
-kali:~ # namp "default or safe" <ip>
-kali:~ # namp "default and safe" <ip>
+kali:~ # namp -Pn -p 80 --script="http-*" <ip>
+kali:~ # namp -Pn -p 445 --script="smb-*" <ip>
+kali:~ # namp --script="not intrusive" <ip>
+kali:~ # namp --script="default or safe" <ip>
+kali:~ # namp --script="default and safe" <ip>
 ```
 
+| 類別 (Category) | 說明                                                          |
+| --------------- | ------------------------------------------------------------- |
+| default         | 即 -sC，預設執行，安全且實用。                                |
+| auth            | 測試身份驗證，檢查是否有弱登入資訊或略過認證。                |
+| vuln            | 最受歡迎！ 專門檢測目標是否有已知的 CVE 漏洞（如 MS17-010）。 |
+| discovery       | 主動探測網域資訊、公開目錄、SNMP 資訊等。                     |
+| brute           | "對各類協議（SSH, MySQL, Telnet）進行暴力破解。"              |
+| intrusive       | 侵入性腳本，可能會導致目標服務不穩定或留下明顯日誌。          |
 
 ---
 
@@ -137,7 +150,6 @@ kali:~ # namp -oS <file>        # script kiddle
 kali:~ # namp -oG <file>        # grepable
 kali:~ # namp -oA <file>        # all
 ```
-
 
 ---
 
