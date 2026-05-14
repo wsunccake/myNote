@@ -2,6 +2,21 @@
 
 ## terminal
 
+### starship
+
+- [starship](https://starship.rs/)
+- [starship git](https://github.com/starship/starship)
+
+```bash
+linux:~ $ curl -sS https://starship.rs/install.sh | sh
+
+linux:~ $ echo 'eval "$(starship init bash)"' >> ~/.bashrc  # for bash
+linux:~ $ echo 'eval "$(starship init zsh)"' >> ~/.zshrc    # for zsh
+
+linux:~ $ starship preset --list
+linux:~ $ starship preset gruvbox-rainbow -o ~/.config/starship.toml
+```
+
 ### nerd fonts
 
 - [nerd fonts](https://www.nerdfonts.com/)
