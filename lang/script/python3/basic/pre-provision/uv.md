@@ -42,8 +42,8 @@ linux:~ $ uv python pip <version>
 ## virtual environment
 
 ```bash
-linux:~ $ uv venv [<.venv>]             # <.venv> 底下不會有 <.venv>/bin/pip
-linux:~ $ uv pip install <package>      # <.venv> 要使用 uv pip 管理
+linux:~ $ uv venv [--python <version>] [<.venv>]    # <.venv> 底下不會有 <.venv>/bin/pip
+linux:~ $ uv pip install <package>                  # <.venv> 要使用 uv pip 管理
 linux:~ $ uv pip list
 linux:~ $ uv pip uninstall <package>
 linux:~ $ uv pip tree
@@ -69,9 +69,15 @@ PS C:\Users\user> .\.venv\Scripts\activate.ps1
 ## project
 
 ```bash
+# new project
 linux:~ $ uv init <project>     # create project
 linux:~ $ uv add <package>
 linux:~ $ uv remove <package>
+
+# old project
+linux:~/project $ uv init
+linux:~/project $ uv venv
+linux:~/project $ uv pip install
 ```
 
 ---

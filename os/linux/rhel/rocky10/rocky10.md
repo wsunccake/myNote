@@ -173,7 +173,7 @@ rocky:~ # sysctl -p
 
 ```bash
 rocky:~ # vi /etc/default/grub
-GRUB_CMDLINE_LINUX='... intel_idle.max_cstate=1 processor.max_cstate=1 pcie_aspm=off'
+GRUB_CMDLINE_LINUX='... intel_idle.max_cstate=1 processor.max_cstate=1 pcie_aspm=off nmi_watchdog=1'
 
 rocky:~ # grub2-mkconfig -o /boot/grub2/grub.cfg
 ```
