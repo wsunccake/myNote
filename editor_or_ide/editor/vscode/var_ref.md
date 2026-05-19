@@ -22,3 +22,61 @@ ${execPath} - the path to the running VS Code executable
 ${defaultBuildTask} - the name of the default build task
 ${pathSeparator} - the character used by the operating system to separate components in file paths
 ```
+
+---
+
+## terminal environment variable
+
+`settings.json`
+
+```json
+{
+  // For Windows
+  "terminal.integrated.env.windows": {
+    "MY_TERM_VAR": "TerminalValueWin"
+  },
+  // For macOS
+  "terminal.integrated.env.osx": {
+    "MY_TERM_VAR": "TerminalValueMac"
+  },
+  // For Linux
+  "terminal.integrated.env.linux": {
+    "MY_TERM_VAR": "TerminalValueLinux"
+  }
+}
+```
+
+```bash
+# in vscode terminal
+echo $MY_TERM_VAR       # linux / macos shell
+
+$env:MY_TERM_VAR        # windows powershell
+echo %MY_TERM_VAR%      # windows cmd
+```
+
+---
+
+## python environment variable
+
+`.env`
+
+```ini
+MY_ENV_VAR = MY_ENV
+```
+
+`settings.json`
+
+```json
+{
+  "python.envFile": "${workspaceFolder}/.env"
+}
+```
+
+`show_var.py`
+
+```python
+import os
+import json
+
+print(json.dumps(dict(os.environ), indent=4))
+```
