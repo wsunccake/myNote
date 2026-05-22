@@ -135,7 +135,6 @@ PS C:\> Get-Help Get-Process
 ```
 
 ```pwsh
-
 PS C:\> Get-Variable
 PS C:\> echo "Hello"
 
@@ -147,4 +146,20 @@ PS C:\> hello.ps1
 # hello.ps1
 echo "Hello PowerShell!"
 echo "Hi $env:USERNAME"
+```
+
+---
+
+## Hardware
+
+```ps1
+Get-CimInstance Win32_Processor | Select-Object Name, NumberOfCores, NumberOfLogicalProcessors
+
+$totalRam = (Get-CimInstance Win32_PhysicalMemory | Measure-Object Capacity -Sum).Sum / 1GB
+[Math]::Round($totalRam, 2)
+
+Get-CimInstance Win32_LogicalDisk -Filter "DriveType=3" | Select-Object DeviceID,
+    @{n="TotalSize(GB)";e={[Math]::Round($_.Size / 1GB, 2)}},
+    @{n="FreeSpace(GB)";e={[Math]::Round($_.FreeSpace / 1GB, 2)}},
+    @{n="PercentUsed";e={[Math]::Round((($_.Size - $_.FreeSpace) / $_.Size) * 100, 1)}} | Format-Table -AutoSize
 ```
