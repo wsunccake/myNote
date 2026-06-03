@@ -58,11 +58,23 @@ linux:~ $ shfmt -ci -i 4 -s -bn -sr -w <sh_file>
 ```bash
 linux:~ $ robocop --version
 linux:~ $ robocop --help
+linux:~ $ robocop --install-completion
 
 linux:~ $ robocop list --help
 linux:~ $ robocop list formatters
 linux:~ $ robocop list rules
 
 linux:~ $ robocop format --select OrderSettingsSection
-linux:~ $ robocop format --configure MergeAndOrderSections.enabled=False"
+linux:~ $ robocop format --configure "MergeAndOrderSections.enabled=False"
+linux:~ $ robocop check --ignore NAME18 --ignore DOC01
+```
+
+---
+
+## rust
+
+```bash
+linux:~ $ rustfmt <file>.rs
+
+linux:~/project $ cargo fmt
 ```
