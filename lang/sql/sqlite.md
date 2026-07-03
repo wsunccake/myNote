@@ -44,6 +44,12 @@ sqlite> CREATE TABLE COMPANY(
    SALARY         REAL
 );
 
+-- if not table to create
+sqlite> CREATE TABLE IF NOT EXISTS COMPANY(
+   ID INT PRIMARY KEY     NOT NULL,
+   ...
+);
+
 sqlite> DROP TABLE IF EXISTS DEPARTMENT;
 sqlite> CREATE TABLE DEPARTMENT(
    ID INT PRIMARY KEY      NOT NULL,
@@ -126,6 +132,12 @@ sqlite> INSERT INTO DEPARTMENT (ID, DEPT, EMP_ID)
    VALUES (1, 'IT Billing', 1 ),
    (2, 'Engineering', 2 ),
    (3, 'Finance', 7 );
+
+--- if exist to pass
+sqlite> INSERT OR IGNORE INTO DEPARTMENT (ID, DEPT, EMP_ID) VALUES (1, 'IT Billing', 1 );
+
+--- if exist to overwrite
+sqlite> INSERT OR REPLACE INTO DEPARTMENT (ID, DEPT, EMP_ID) VALUES (1, 'IT Billing', 1 );
 ```
 
 ### select
