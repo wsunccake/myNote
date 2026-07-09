@@ -531,7 +531,7 @@ linux:~ # sqlite3 db.sqlite3 "VACUUM;"
 
 ```bash
 # export
-linux:~ $ sqlite3 old.db .dump > all_dump.sql            # all table and data
+linux:~ $ sqlite3 old.db .dump > all_dump.sql              # all table and data
 linux:~ $ sqlite3 old.db ".dump tasks"> tasks_only.sql     # only task table and data
 linux:~ $ sqlite3 old.db -header -csv "SELECT * FROM tasks;" > tasks.csv
 
@@ -541,4 +541,43 @@ linux:~ $ sqlite3 new.db < all_dump.sql
 linux:~ $ sqlite3 new.db
 .mode csv
 .import tasks.csv tasks
+```
+
+## backup / restore
+
+1. `Cold Backup`
+
+因為 SQLite 的所有資料（資料表、標籤、租約紀錄）都存在同一個 .db 檔案中，最簡單的備份方式就是直接複製這個檔案。
+
+```bash
+# backup
+cp data.db backup_$(date +%Y%m%d).db
+
+# restore
+mv data.db data.db.broken
+cp backup_<YYYYMMDD>.db data.db
+```
+
+2. `Hot Backup`
+
+環境是 24 小時運作，隨時可能有讀寫資料，此時就必須使用 SQLite 內建的 .backup 機制。
+
+```bash
+# backup
+sqlite3 data.db ".backup 'backup_<YYYYMMDD>.db'"
+
+# restore
+sqlite3 data.db ".restore 'backup_<YYYYMMDD>.db'"
+```
+
+3. `Dump`
+
+希望備份出來的不是二進位檔案，而是人類看得懂的 SQL 語法（方便未來進版、比對差異、或移植到 MySQL），可以使用 .dump。
+
+```bash
+# backup
+sqlite3 data.db .dump > backup_<YYYYMMDD>.sql
+
+# restore
+sqlite3 new_automation_test.db < backup_<YYYYMMDD>.sql
 ```

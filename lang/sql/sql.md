@@ -13,7 +13,6 @@ linux:~ # mysql -u root [-h localhost] [-P 3306] [-p]
 linux:~ # sqlite3 db.sqlite3
 ```
 
-
 ## Help
 
 ```sql
@@ -30,14 +29,12 @@ help;
 .help
 ```
 
-
 ## Script
 
 ```sql
 -- for PostgreSQL
 \i xxx.psql
 ```
-
 
 ## Shell
 
@@ -46,7 +43,6 @@ help;
 \! ls
 ```
 
-
 ## Expression
 
 ```sql
@@ -54,17 +50,14 @@ SELECT (15 + 6) AS ADDITION;
 SELECT CURRENT_TIMESTAMP;
 ```
 
-
 ## concept
 
-* DQL: Data Query Language
-
-* DML: Data Manipulation Language
-
-* DDL: Data Definition Language
+- DQL: Data Query Language
+- DML: Data Manipulation Language
+- DDL: Data Definition Language
 
 SQL command (一般習慣使用大寫表示), table name 不分大小寫. Column 有分大小寫, char 搜尋比對用 ' / quote / 單引號 不是 " / double quote / 雙引號
-
+`雙引號`(`"`) 與 `單引號`(`'`) 有著本質上的巨大差異。簡單一句話：「單引號用來包住『資料內容』，雙引號用來包住『欄位或資料表名稱』」
 
 ---
 
@@ -72,9 +65,7 @@ SQL command (一般習慣使用大寫表示), table name 不分大小寫. Column
 
 CREATE, ALTER, DROP
 
-
 ## Database
-
 
 ### Create Database
 
@@ -83,14 +74,12 @@ CREATE, ALTER, DROP
 CREATE DATABASE testdb;
 ```
 
-
 ### Delete Database
 
 ```sql
 -- for PostgreSQL
 DROP DATABASE testdb;
 ```
-
 
 ### Show All Database
 
@@ -103,14 +92,12 @@ SELECT datname FROM pg_database;
 show databases;
 ```
 
-
 ### Show Current Database
 
 ```sql
 -- for PostgreSQL
 \c
 ```
-
 
 ### Use Database
 
@@ -119,9 +106,7 @@ show databases;
 \c testdb
 ```
 
-
 ## Table
-
 
 ### Create Table
 
@@ -162,7 +147,6 @@ DROP TABLE company;
 .schema company
 ```
 
-
 ---
 
 # DML – Data Manipulation Language
@@ -170,7 +154,6 @@ DROP TABLE company;
 INSERT, UPDATE, DELETE
 
 ## Row
-
 
 ### Create Row
 
@@ -204,7 +187,6 @@ DELETE FROM company WHERE id = 6;
 UPDATE company SET address = 'Pune' WHERE id = 6;
 ```
 
-
 ### Selete Row
 
 ```sql
@@ -223,9 +205,7 @@ SELECT * FROM company LIMIT 3;
 SELECT * FROM company ORDER BY age DESC, salary ASC;
 ```
 
-
 ## Function
-
 
 ### Aggregate
 
@@ -260,13 +240,11 @@ SELECT upper(name), lower(name) FROM customers;
 
 ### Mathematical
 
-
 ---
 
 # DCL – Data Control Language
 
 GRANT, REVOKE
-
 
 ---
 
@@ -274,5 +252,4 @@ GRANT, REVOKE
 
 COMMIT, SAVEPOINT, ROLLBACK
 
-
-----
+---
