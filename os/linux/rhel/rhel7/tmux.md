@@ -9,6 +9,8 @@ linux:~ # tmux info
 # ctrl ^ b + ?
 ```
 
+`prefix`: 預設是 `ctrl` ^ `b`
+
 ---
 
 ## command
@@ -103,8 +105,12 @@ linux:~ # tmux movep [-p <percentage>|-l <size>] -t <pane_id>
 
 ```bash
 linux:~ # vi ~/.tmux.conf
-setw -g mode-keys vi
+setw -g mode-keys emacs
 set -g mouse on
+
+# new-window -n bash /bin/bash
+# new-window -n tcsh /bin/tcsh
+# new-window -n zsh /bin/zsh
 ```
 
 ---
@@ -115,7 +121,7 @@ set -g mouse on
 # ctrl ^ b, s   ->  choose session
 # ctrl ^ b, w   ->  choose window
 # ctrl ^ b, q   ->  show pane number
-# ctrl ^ b, :   ->  command
+# ctrl ^ b, :   ->  command mode
 
 # ctrl ^ b, f
 # ctrl ^ b, [   ->  copy mode
@@ -181,3 +187,50 @@ tmux capture-pane -pt my_job
 tmux pipe-pane -t my_job
 tmux kill-session -t my_job
 ```
+
+```bash
+tmux new-session -d -s shell -n "bash" "/bin/bash"
+tmux new-window -t shell -n tcsh "/bin/tcsh"
+tmux new-window -t shell -n tcsh "/bin/zsh"
+
+tmux capture-pane -S - -pt pcap:0
+tmux capture-pane -S - -pt pcap:1
+tmux capture-pane -S - -pt pcap:2
+```
+
+---
+
+## copy mode
+
+```bash
+tmux show-options -gw mode-keys
+tmux setw -g mode-keys emacs
+tmux setw -g mode-keys vi
+```
+
+### emacs
+
+- Copy
+  1. 按 prefix + [ 進入複製模式。
+  2. 用方向鍵移動到你想複製的起點。
+  3. 按 Ctrl + Space (空白鍵) 開始選取。
+  4. 移動方向鍵到終點（文字會反白）。
+  5. 按 Alt + W 複製文字（這時會自動退出複製模式）。
+
+- Paste
+  - 在任何想貼上的地方，按下 prefix + ] 即可。
+
+- Page Up / Page Down
+  - Page Up：按 Alt + V（或直接按鍵盤上的 PageUp）
+  - Page Down：按 Ctrl + V（或直接按鍵盤上的 PageDown）
+  - 向上滾動半頁：Ctrl + Up
+  - 向下滾動半頁：Ctrl + Down
+
+- Search
+  - 向後搜尋（由新到舊，往上找）：
+    1. 按 Ctrl + S，最下方會出現 Search Down:（這裡的 Down 指的是在 buffer 記憶體裡往舊資料找，也就是畫面上往上翻）。
+    2. 輸入要找的字，按 Enter。
+    3. 重複按 Ctrl + S 可以跳到下一個相符的關鍵字。
+  - 向前搜尋（由舊到新，往下找）：
+    1. 按 Ctrl + R，最下方會出現 Search Up:（往新資料/畫面下方找）。
+    2. 重複按 Ctrl + R 跳到下一個。
