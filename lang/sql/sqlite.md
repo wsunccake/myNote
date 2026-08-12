@@ -543,6 +543,8 @@ linux:~ $ sqlite3 new.db
 .import tasks.csv tasks
 ```
 
+---
+
 ## backup / restore
 
 1. `Cold Backup`
@@ -581,3 +583,68 @@ sqlite3 data.db .dump > backup_<YYYYMMDD>.sql
 # restore
 sqlite3 new_automation_test.db < backup_<YYYYMMDD>.sql
 ```
+
+---
+
+## TRIGGER & VIRTIAL
+
+### TRIGGER 觸發器
+
+```sql
+-- 1. 正常建立 schema，hostname 為一般欄位
+CREATE TABLE IF NOT EXISTS vm_pool (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ip TEXT NOT NULL UNIQUE,
+    hostname TEXT, -- 這裡不要設定 GENERATED，允許手動寫入
+    username TEXT NOT NULL,
+    password TEXT NOT NULL
+);
+
+-- 2. 建立觸發器：只有在使用者「沒有手動給 hostname」時，才自動幫他生成
+CREATE TRIGGER IF NOT EXISTS set_default_hostname
+AFTER INSERT ON vm_pool
+FOR EACH ROW
+WHEN NEW.hostname IS NULL OR NEW.hostname = ''
+BEGIN
+    UPDATE vm_pool
+    SET hostname = 'VM-' || REPLACE(NEW.ip, '.', '-')
+    WHERE id = NEW.id;
+END;
+```
+
+支援後續修改：隨時可以執行 UPDATE vm_pool SET hostname = 'new-name' WHERE id = 1;。
+
+### VIRTUAL / GENERATED ALWAYS AS 虛擬欄位
+
+```sql
+CREATE TABLE IF NOT EXISTS ap_sn_block_pool (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    block_name TEXT NOT NULL UNIQUE,
+    begin_sn INT NOT NULL UNIQUE,
+    end_sn INT NOT NULL UNIQUE,
+
+    -- 用這個方式：自動計算，不佔用實際儲存空間
+    total_count INT GENERATED ALWAYS AS (end_sn - begin_sn + 1) VIRTUAL,
+);
+```
+
+既然 total_count 的值完全是由 end_sn 和 begin_sn 決定，最完美的作法是把它宣告成「自動計算欄位」（Generated Column）。這樣完全不用手動寫入這個欄位，SQLite 會在每次查詢時自動幫你算好，而且永遠不會發生資料不一致的問題。
+
+### summary
+
+1. Trigger（觸發器）的運作方式
+   - 觸發時機：當你執行 INSERT 寫入新資料的瞬間，SQLite 會自動拉起這個 Trigger，在背景執行一個 UPDATE 動作把 hostname 補上去。
+   - 是否寫入硬碟：是。計算出來的 'VM-192-168-1-50' 會直接存入資料庫檔案中（.db 檔）。
+   - 對 SELECT 的影響：當你執行 SELECT 時，SQLite 只是單純從硬碟把存好的字串讀出來而已，完全不需要重新計算，所以 SELECT 的速度非常快。
+
+2. Generated Column (VIRTUAL) 的運作方式
+   - 觸發時機：INSERT 時資料庫根本不理它，也沒做任何計算。直到你執行 SELECT 的那一刻，它才在記憶體中即時進行 REPLACE(ip, '.', '-') 的運算。
+   - 是否寫入硬碟：否。硬碟裡完全沒有存 hostname 的資料。
+   - 對 SELECT 的影響：每次 SELECT，它就要在 CPU 裡面重新計算一次。
+
+| 特性              | Trigger                              | VIRTUAL / Generated Column              |
+| ----------------- | ------------------------------------ | --------------------------------------- |
+| 資料寫入硬碟      | 有（實際存檔，佔用硬碟空間）         | 無（不佔用任何硬碟空間）                |
+| 計算發生時間      | 寫入資料時（INSERT 時算一次）        | 讀取資料時（每次 SELECT 都算）          |
+| 手動修改 (UPDATE) | 可以隨時手動修改成別的名字           | 不行，修改會報錯                        |
+| 效能特性          | 寫入時稍慢（多做一次寫入），讀取極快 | 寫入極快，讀取稍慢（需要 CPU 即時計算） |

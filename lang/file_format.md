@@ -71,6 +71,28 @@ linux:~ $ robocop check --ignore NAME18 --ignore DOC01
 
 ---
 
+## python
+
+### autopep8
+
+```bash
+linux:~ $ autopep8 <file>.py
+linux:~ $ autopep8 --diff|--in-place <file>.py
+linux:~ $ autopep8 --max-line-length 120 <file>.py
+```
+
+### ruff
+
+```bash
+linux:~ $ ruff check <file>.py
+linux:~ $ ruff check --fix <file>.py
+
+linux:~ $ ruff format --diff <file>.py
+linux:~ $ ruff format <file>.py
+```
+
+---
+
 ## rust
 
 ```bash
