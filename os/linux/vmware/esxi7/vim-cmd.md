@@ -40,6 +40,14 @@ grep ethernet0 $VMX_FILE
 用來管理這台 ESXi 實體主機本身的資源。
 
 ```bash
+# SSH
+vim-cmd hostsvc/enable_ssh
+vim-cmd hostsvc/start_ssh
+
+# ESXi Shell
+vim-cmd hostsvc/enable_esx_shell
+vim-cmd hostsvc/start_esx_shell
+
 vim-cmd hostsvc/datastore/listsummary   # all datastore
 vim-cmd hostsvc/datastore/info <datastore>
 
@@ -64,3 +72,4 @@ hostsvc/runtimeinfo：查看 CPU/Memory 使用率。
 ## `hbrsvc/` (Host Based Replication)
 
 處理虛擬機的複寫與災難恢復（Replication）。
+
