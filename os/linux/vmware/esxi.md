@@ -91,8 +91,10 @@ esxi: ~ # esxcli network ip interface ipv4 get
 ## ovftool
 
 ```bash
+linux:~ # ovftool vi://<username>:<password>@<esxi_ip>
+
 # update ova
-linux:~ # ovftool --acceptAllEulas --noSSLVerify --diskMode=thin --name=<vm_name> --datastore=<data_store> --network=<vm_network> <vm>.ova vi://root:<password>@<esxi_ip>
+linux:~ # ovftool --acceptAllEulas --noSSLVerify --diskMode=thin --name=<vm_name> --datastore=<data_store> --network=<vm_network> <vm>.ova vi://<username>:<password>@<esxi_ip>
 
 # the provided manifest file is invalid
 linux:~ # tar xf <xxx>.ova

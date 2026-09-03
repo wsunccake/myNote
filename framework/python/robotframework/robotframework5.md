@@ -186,6 +186,83 @@ linux:~ $ robot [-V <var.py>] [-v var:val] hello.robot
 
 ---
 
+## Condition Syntax
+
+1. Variable Expression
+
+```robot
+IF    $score >= 80
+    Log    Pass
+ELSE
+    Log    Fail
+END
+```
+
+- 運算機制：Python 物件直傳。變數直接以原生的 Python 物件型態傳入條件式中，不經過純文字替換。
+- 安全性：🟢 高。保留變數原本型態（如 int、float），即便變數為 None 或空值也不會發生語法崩潰。
+- 支援版本：Robot Framework 4.0+
+- 綜合評估：🌟 最佳解（現代 RF 官方標準）。最精簡、最安全，徹底解決型態轉換與文字替換的潛在問題。
+
+2. Inline Evaluation
+
+```robot
+IF    ${{ $score >= 80 }}
+    Log    Pass
+ELSE
+    Log    Fail
+END
+```
+
+- 運算機制：重複 Python 解析。在本身就具備 Python 評估能力的 IF 內，又多套了一層 ${{ ... }}。
+- 安全性：🟡 中。運算邏輯雖然安全，但底層執行了不必要的二次解析。
+- 支援版本：Robot Framework 4.0+
+- 綜合評估：⚠️ 不推薦（語法冗餘）。屬於畫蛇添足的寫法，外層的 ${{ ... }} 完全可以省略。
+
+3. Evaluate Keyword
+
+```robot
+${status}=    Evaluate    $score >= 80
+IF    ${status}
+    Log    Pass
+ELSE
+    Log    Fail
+END
+```
+
+- 運算機制：兩階段處理。先透過 Evaluate 關鍵字將計算結果（True/False）存入臨時變數，再由 IF 進行讀取。
+- 安全性：🟡 中。邏輯正確但流程繁瑣；若在 Evaluate 內使用 ${score} 仍會有純文字替換的風險。
+- 支援版本：Robot Framework 2.9+
+- 綜合評估：⚠️ 過時寫法。這是 RF 3.2 以前沒有原生 IF 時的過渡期寫法，增加了不必要的變數定義與代碼行數。
+
+4. Normal IF
+
+```robot
+IF    ${score} >= 80
+    Log    Pass
+ELSE
+    Log    Fail
+END
+```
+
+- 運算機制：純文字巨集替換。在交給 Python 解析前，會先將 ${score} 的值直接以純文字方式填入條件式。
+- 安全性：🔴 低（易崩潰）。若變數為空字串會引發 SyntaxError；若變數為字串型態會引發 TypeError。
+- 支援版本：Robot Framework 4.0+
+- 綜合評估：❌ 不建議使用。極易因變數型態不符合或變數為空值而導致測試腳本在中途直接崩潰。
+
+5. Traditional
+
+```robot
+Run Keyword If    ${score} >= ${80}    Log    Pass
+...    ELSE    Log    Fail
+```
+
+- 運算機制：關鍵字參數解析。透過 BuiltIn 關鍵字傳遞參數，使用 ... 進行換行與分支控制，並依賴 ${80} 強制做型態轉換。
+- 安全性：🔴 低（已被棄用）。可讀性差、維護成本高，且非常依賴文字替換。
+- 支援版本：Robot Framework 1.0 ~ 3.2（RF 4.0+ 已宣告棄用）
+- 綜合評估：🛑 舊專案維護專用（已廢棄）。新專案切勿使用此寫法。
+
+---
+
 ## library
 
 ### python function

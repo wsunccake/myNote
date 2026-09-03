@@ -234,6 +234,19 @@ ${var:?msg}             若 var 未設定或為空，顯示錯誤 msg 並退出
 ${var:+word}            若 var 已設定且非空，取 word，否則空字串
 ```
 
+```bash
+#!/bin/bash
+
+set -euo pipefail
+
+${1:-help}
+```
+
+```bash
+export HOST_IP=${HOST_IP:=127.0.0.1}
+export PYTHONPATH=".:${WORK_DIR}${PYTHONPATH:+:$PYTHONPATH}"
+```
+
 2. 字串長度與子字串
 
 ```
@@ -564,13 +577,141 @@ echo "#: $#, @: $@, *: $*, 1: $1"
 
 ---
 
+## declare
+
+在 BASH 中， `declare` 和 `typeset` 實際上是同一個指令。`typeset` 是為了相容舊的 KornShell (ksh) 而存在的，在 BASH 中，官方更推薦使用 `declare`。
+這指令的作用是：聲明變數的屬性（如唯讀、整數、陣列等）或修改變數的定義。
+
+**屬性設定選項 (Attributes)**
+
+| Option | Attribute   | Explain                                                              |
+| ------ | ----------- | -------------------------------------------------------------------- |
+| -i     | Integer     | 將變數設為「整數」。進行賦值時會自動進行算術運算。                   |
+| -a     | Array       | 宣告為「索引陣列」(Indexed Array)，下標為數字。                      |
+| -A     | Associative | 宣告為「關聯陣列」(Associative Array)，下標為字串（類似 Hash/Map）。 |
+| -r     | Read-only   | 設為「唯讀」。設定後無法修改值，也無法用 unset 刪除。                |
+| -x     | Export      | 將變數標記為「環境變數」，效果等同於 export。                        |
+| -l     | Lower       | 賦值時，自動將所有大寫字母轉換為小寫。                               |
+| -u     | Upper       | 賦值時，自動將所有小寫字母轉換為大寫。                               |
+| -n     | Nameref     | 建立「變數引用」（指標）。修改此變數會實際改動它所指向的變數。       |
+| -t     | Trace       | 替變數加上追蹤屬性（較少用，通常用於函數）。                         |
+
+**顯示與查詢選項 (Display)**
+
+| Option | Attribute | Explain                                                                       |
+| ------ | --------- | ----------------------------------------------------------------------------- |
+| -p     | Print     | 顯示指定變數的屬性與值。如果不加名稱，則列出所有變數。                        |
+| -f     | Function  | 列出所有已定義的函數內容。                                                    |
+| -F     | Function  | name。僅列出函數名稱，不顯示原始碼。                                          |
+| -g     | Global    | 在函數內部使用時，強制變數具備全域作用域（預設 declare 在函數內是區域變數）。 |
+
+**大小寫轉換 (-l, -u)**
+
+```bash
+declare -u upper_str="hello"
+echo $upper_str   # HELLO
+
+declare -l lower_str="WORLD"
+echo $lower_str   # world
+```
+
+**強制整數運算 (-i)**
+
+```bash
+declare -i num
+num=10+5
+echo $num           # 15
+
+# 如果不使用 -i，BASH 會把數字當成字串拼接。
+text=10+5
+echo $text          # 10+5
+```
+
+**唯讀變數 (-r)**
+
+```bash
+declare -r API_KEY="secret_123"
+API_KEY="hacked"    # readonly variable
+```
+
+**關聯陣列 (-A)**
+
+```bash
+declare -A user_shells
+user_shells=( ["amy"]="/bin/zsh" ["bob"]="/bin/bash" )
+
+echo ${user_shells["amy"]}    # /bin/zsh
+```
+
+**檢查變數狀態 (-p)**
+
+```bash
+declare -p user_shells        # declare -A user_shells=( [bob]="/bin/bash" [amy]="/bin/zsh" )
+```
+
+**引用變數 (-n)**
+
+```bash
+target="real_value"
+declare -n ref=target     # ref 指向 target
+ref="new_value"           # 修改 ref 等於修改 target
+
+echo $target              # new_value
+```
+
+**區域變數 (Local Variables)**
+
+```bash
+my_func() {
+    declare local_var="I am hidden"   # local_var="I am hidden"
+    echo $local_var
+}
+
+my_func
+echo $local_var
+```
+
+---
+
 ## set
+
+在 BASH 中，`set` 是一個極其強大的內建指令。它的核心功能有二：
+
+1. 設定 Shell 的執行選項（Flags）
+2. 管理位置參數（Positional Parameters）。
+
+與 `declare` 不同，`set` 通常是用來改變 「Shell 運作的行為模式」。
+
+**`set -o`**: 以「可讀列表」顯示所有選項及其開關狀態 (on 或 off)。用於快速檢查目前 errexit 或 xtrace 是否啟動。
+**`set +o`**: 以「指令格式」輸出。印出一系列 set -o 或 set +o 的指令。用於環境備份。可將輸出存入變數，稍後執行還原 Shell 狀態。
+**`set -o` <opt>**: 開啟特定功能，`-` 號是用來觸發（Enable）一個選項。
+**`set +o` <opt>**: 關閉特定功能，`+` 號是用來停用（Disable）一個選項。
+
+| Option | Option Name (-o) | Explain                                               | 常用場景                   |
+| ------ | ---------------- | ----------------------------------------------------- | -------------------------- |
+| -e     | errexit          | 出錯即停止。指令回傳非 0 時腳本立刻退出。             | 必用。防止錯誤擴大。       |
+| -u     | nounset          | 未定義報錯。存取未聲明的變數時視為錯誤。              | 必用。防止拼錯變數名。     |
+| -x     | xtrace           | 指令追蹤。執行前先印出該行指令（含變數展開）。        | 除錯 (Debug) 專用。        |
+| -n     | noexec           | 語法檢查。讀取指令但不執行。                          | 測試腳本語法是否正確。     |
+| -f     | noglob           | 停用通配符。禁止 \*、?、[] 的路徑展開。               | 處理包含特殊符號的檔名。   |
+| -v     | verbose          | 詳細模式。在執行前印出讀取到的輸入列。                | 觀察腳本如何讀取源碼。     |
+| -a     | allexport        | 自動導出。隨後定義的所有變數都會被 export。           | 快速將本地變數轉環境變數。 |
+| -C     | noclobber        | 禁止覆蓋。使用 > 重導向時，若檔案已存在則報錯。       | 防止意外覆蓋重要檔案。     |
+| -m     | monitor          | 作業控制。開啟後台作業報告與控制。                    | 交互式 Shell 預設開啟。    |
+| -P     | physical         | 實體路徑。執行 cd 等指令時不跟隨符號連結 (symlinks)。 | 需要獲取真實硬碟路徑時。   |
 
 ```bash
 linux:~ # set
 linux:~ # set -o
-linux:~ # set -e
-linux:~ # set +e
+linux:~ # set +o
+
+linux:~ # set -e    # enable errexit
+linux:~ # set -o
+linux:~ # set +o
+
+linux:~ # set +e    # disable errexit
+linux:~ # set -o
+linux:~ # set +o
 ```
 
 ```bash
@@ -587,6 +728,18 @@ echo "bar"
 set -u
 echo $a
 echo "bar"
+```
+
+```bash
+#!/bin/bash
+set -euo pipefail   # Strict Mode
+# set -e            => errexit
+# set -u            => nounset
+# set -o pipefail   => pipefail
+
+set -x  # enable Debug mode
+...
+set +x  # disable Debug mode
 ```
 
 ---
@@ -741,6 +894,16 @@ linux:~ # hi() {
 linux:~ # export -f hi
 linux:~ # awk -F: '{print $1}' /etc/passwd | xargs -i sh -c 'hi {}'
 ```
+
+**深入理解 BASH `export -f`**
+
+通常情況下，變量（variable）可通過 export 傳遞給子進程（sub-shell），但函數（function）不行。`-f` 選項打破了這個限制。
+
+使用時機與場合：
+
+- 平行運算： 使用 xargs 或 GNU Parallel 調用多個子進程來處理數據，且處理邏輯寫在一個函數裡時。
+- 腳本拆分： main script 定義了通用工具函數，並希望被它調用的 sub script 直接使用。
+- 自動化環境： 在複雜的 CI/CD 流程中，將一段邏輯「導出」到後續執行的 Shell 環境中。
 
 ---
 

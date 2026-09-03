@@ -133,6 +133,17 @@ debian:~ # ulimit -a
 # -s: executable stack size
 ```
 
+```bash
+# starship
+debian:~ $ curl -sS https://starship.rs/install.sh | sh
+
+debian:~ $ echo 'eval "$(starship init bash)"' >> ~/.bashrc
+debian:~ $ echo 'eval "$(starship init zsh)"' >> ~/.zshrc
+
+debian:~ $ starship preset --list
+debian:~ $ starship preset gruvbox-rainbow --output ~/.config/starship.toml
+```
+
 ---
 
 ## gui

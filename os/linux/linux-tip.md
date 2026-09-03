@@ -56,10 +56,14 @@ linux:~ # megacli -pdlist -aALL | grep state
 linux:~ # megacli -AdpEventLog -GetLatest 100 -f events.log -aALL
 ```
 
-#### 清除 MBR
+#### DD
 
 ```bash
+# 清除 MBR
 linux:~ # dd if=/dev/zero of=/dev/sda bs=512 count=1
+
+# 製作 USB Storage 開機
+linux:~ # dd if=<iso file> of=/dev/sdc bs=4M status=progress oflag=direct
 ```
 
 ### CD/DVD

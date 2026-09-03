@@ -452,11 +452,22 @@ debian:~ # locate <pattern>
 ### fix bug
 
 ```bash
+diff -uNr 原本的目錄/ 修改後的目錄/ > project.patch
 debian:~ # diff -u file.old file.new > file.patch       # generat patch
-debian:~ # patch -p0 file.old < file.patch              # patch file
+# -u: 統一格式（Unified format)
+# -N: 處理新增加的檔案
+# -r: 遞迴處理所有子目錄
 
+debian:~ # patch -p0 file.old < file.patch              # patch file
 debian:~ # patch -Np0 file.old < file.patch             # forward patch file
 debian:~ # patch -Rp0 file.old < file.patch             # reverse patch file
+# -p<n>: Patch, 要忽略補丁檔案中路徑的前幾層目錄 
+### 假設補丁檔裡的路徑是：/u/howard/src/scripts/utils.c
+### -p0： 不移除任何層級。系統會直接去尋找 /u/howard/src/scripts/utils.c。
+### -p1： 移除第一層斜線前的內容。路徑變成 u/howard/src/scripts/utils.c。
+# -N: Forward, 確保它是往「新版本」的方向走。如果檔案已經被修改過（已經是新版），它會跳過，不會重複套用。
+# -R: Reverse, 把補丁檔案內容「反過來」讀。原本要「加」的變成「刪」，原本要「刪」的變成「加」。
+# --dry-run: 模擬套用補丁的過程，但不會真的修改檔案，用來確認
 ```
 
 ---

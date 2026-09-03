@@ -218,23 +218,12 @@ int main()
 }
 ```
 
-$$
+```math
 \begin{aligned}
-abs(x)=\left\{
-                \begin{array}{ll}
-                  x, & \text{if $x >= 0$} \\
-                  -x, & \text{if $x < 0$} \\
-                \end{array}
-              \right.
-=>
-abs(x)=\left\{
-                \begin{array}{ll}
-                  x, & \text{if $x >= 0$} \\
-                  \char`\~x+1, & \text{if $x < 0$} \\
-                \end{array}
-              \right.
-\end{aligned}
-$$
+\text{abs}(x) = \begin{cases} x, & x \ge 0 \\ -x, & x < 0 \end{cases}
+\implies
+\text{abs}(x) = \begin{cases} x, & x \ge 0 \\ \sim x + 1, & x < 0 \end{cases} \end{aligned}
+```
 
 ---
 

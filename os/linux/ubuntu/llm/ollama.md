@@ -1,10 +1,27 @@
 # ollama
 
+## require
+
+```bash
+# Debian/Ubuntu
+linux:~ # apt-get install zstd
+
+# RHEL/CentOS/Fedora
+linux:~ # dnf install zstd
+
+# Arch
+linux:~ # pacman -S zstd
+```
+
+---
+
 ## install
 
 ```bash
 linux:~ # curl -fsSL https://ollama.com/install.sh | sh
 ```
+
+---
 
 ## uninstall
 
@@ -18,6 +35,8 @@ linux:~ # userdel ollama
 linux:~ # groupdel ollama
 linux:~ # rm -rf /usr/local/lib/ollama
 ```
+
+---
 
 ## run
 
@@ -34,16 +53,19 @@ linux:~ # ~/.ollama/models                # for user
 linux:~ # export OLLAMA_HOME=             # for env var
 ```
 
+---
+
 ## model
 
 ```bash
 linux:~ $ ollama list
 linux:~ $ ollama show <model>
+linux:~ $ ollama pull <model>
 linux:~ $ ollama rm <model>
 linux:~ $ ollama cp <old model> <new model>
 ```
 
-## run
+## launch
 
 ```bash
 # in-active mode
@@ -52,6 +74,8 @@ linux:~ $ ollama run <model>
 # active mode
 linux:~ $ ollama run <model> "<question>"
 ```
+
+---
 
 ## service
 
@@ -77,6 +101,8 @@ linux:~ # systemctl restart ollama
 | ----------------- | ------------------------------------------ | --------------- |
 | OLLAMA_HOST       | IP Address for the ollama server           | 127.0.0.1:11434 |
 | OLLAMA_KEEP_ALIVE | duration that models stay loaded in memory | 5m              |
+
+---
 
 ## test
 
