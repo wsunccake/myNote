@@ -2,6 +2,13 @@
 
 ## terminal
 
+```bash
+linux:~ # dnf install tmux
+linux:~ # apt install tmux
+
+macos:~ # brew install tmux
+```
+
 ### starship
 
 - [starship](https://starship.rs/)
