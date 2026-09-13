@@ -139,13 +139,14 @@ ubuntu:~ # cat /etc/resolv.conf
 # setup cache
 ubuntu:~ # cat /etc/systemd/resolved.conf
 [Resolve]
-Cache=yes                 # 開啟快取功能（預設即為開啟，上限固定為 4096 筆）
-DNSCacheSize=8192         # 自訂快取數量上限（預設為 4096，最高可至 16777216）
-                          # 舊版 systemd 的快取數量固定為 4096 且無法調整。
-                          # systemd 261+，即可使用 DNSCacheSize= 自訂數量。
-StaleResponsesSec=3600    # 當 DNS 伺服器壞掉時，允許使用過期 1 小時(3600秒)內的舊快取
-MulticastDNS=no           # 對外若已經找不到，就不要找對內
-LLMNR=no                  # 對外若已經找不到，就不要找對內
+Cache=yes                         # 開啟快取功能（預設即為開啟，上限固定為 4096 筆）
+DNSCacheSize=8192                 # 自訂快取數量上限（預設為 4096，最高可至 16777216）
+                                  # 舊版 systemd 的快取數量固定為 4096 且無法調整。
+                                  # systemd 261+，即可使用 DNSCacheSize= 自訂數量。
+StaleResponsesSec=3600            # 當 DNS 伺服器壞掉時，允許使用過期 1 小時(3600秒)內的舊快取
+MulticastDNS=no                   # 對外若已經找不到，就不要找對內
+LLMNR=no                          # 對外若已經找不到，就不要找對內
+DNSStubListenerExtra=172.17.0.1   # 讓 Docker 容器（透過 Gateway IP 172.17.0.1）可以使用 Host 的 DNS 快取
 
 ubuntu:~ # resolvectl status
 ubuntu:~ # resolvectl flush-caches
