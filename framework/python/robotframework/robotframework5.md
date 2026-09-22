@@ -108,6 +108,93 @@ linux:~ $ export REBOT_OPTIONS="--reportbackground green:yellow:red"
 linux:~ $ rebot --name example output.xml
 ```
 
+**robot**
+
+實際執行測試腳本。
+
+```bash
+       robot
+.robot ─────> output.xml  ───> log.html
+                          └──> report.html
+```
+
+- 測試檔案: .robot
+- 執行過程中，所有測試細節與結果即時寫入, outpu.xml
+- 測試結束後，根據 output.xml 自動生成 log.html 與 report.html
+
+```bash
+# 刪除已通過（PASS）測試案例內的所有步驟細節，僅保留失敗案例的完整排錯資訊。
+robot --removekeywords PASS testcase.robot
+
+# 刪除 FOR 迴圈與重試機制（Wait Until...）中成功步驟的細節，大幅清理重複性雜訊。
+robot --removekeywords FOR --removekeywords WUKS testcase.robot
+```
+
+**rebot**
+
+不執行測試，僅對已存在的 output.xml 進行後處理或二次加工。
+
+```bash
+            rebot
+output.xml ───────────> log.html
+                  └───> report.html
+```
+
+```bash
+# 讀取既有的 output.xml，生成 log.html 與 report.html 測試報告。
+rebot output.xml
+
+# 展平 FOR 迴圈的樹狀階層結構，不刪除任何資料，只優化網頁載入速度。
+rebot --flattenkeywords FOR output.xml
+
+# 刪除已通過（PASS）測試案例內的所有步驟細節，僅保留失敗案例的完整排錯資訊。
+rebot --removekeywords PASS output.xml
+
+# 刪除 FOR 迴圈與重試機制（Wait Until...）中成功步驟的細節，大幅清理重複性雜訊。
+rebot --removekeywords FOR --removekeywords WUKS output.xml
+
+# 刪除 FOR 迴圈與重試機制（Wait Until...）中成功步驟的細節後，將裁減過的結果另存為新的 XML 檔（output_clean.xml）並更新報告。
+rebot --removekeywords FOR -o output_clean.xml output.xml
+```
+
+- **ALL**
+  All: 移除所有 Keyword。不論 Test Case 是 PASS 或 FAIL，所有 Kw 內部的細節步驟通通清掉，只保留最頂層的結果統計。適合用在只需要高階報表、想把 log.html 檔案縮到極小的場景。
+
+- **PASSED**
+  Passed: 移除 PASS 測試裡面的 Keyword。若整個 Test Case 的結果是 PASS，則清空其內部 Kw；若 Test Case 是 FAIL，則完整保留內部所有 Kw 步驟。
+
+- **FOR**
+  For Loops: 只移除 FOR 迴圈中已通過的 Iteration。如果 FOR 迴圈跑了 1000 次，只有第 999 次失敗，它會清掉前 998 次 PASS 的迴圈步驟，僅保留 FAIL 的那一次以及最後一次。對付大數據量的迴圈非常有用。
+
+- **WUKS**
+  Wait Until Keyword Succeeds: 只移除重試機制中 PASS 的中間嘗試。當使用 Wait Until Keyword Succeeds 重試了 10 次才成功時，它會將前 9 次失敗/等待的過渡紀錄清掉，只保留最後一次成功的結果。避免 Log 被重試紀錄洗版。
+
+- **NAME:<pattern>**
+  Name Pattern: 依照 Keyword 名稱過濾。移除符合指定名稱（支援通配符 \*）的 Kw 內容。例如 --removekeywords NAME:BuiltIn.Log 會把所有 Log 關鍵字的內容清掉，減少印出過多重複 log。
+
+- **TAG:<pattern>**
+  Tag Pattern: 依照 Keyword 的 Tag 過濾。移除帶有指定 Tag 的 Kw 內容。常用於隱藏含有敏感資訊（如密碼）或步驟極度冗長的 Kw，例如 --removekeywords TAG:sensitive。
+
+```bash
+--removekeywords 的過濾機制
+ ├── 1. 結果導向 (會保護 FAILED / 自動留底)
+ │    ├── PASSED  ➔ 測試 PASS 才清；測試 FAIL 則「全留」
+ │    ├── FOR     ➔ 迴圈 PASS 才清；迴圈 FAIL 則「保留該次」
+ │    └── WUKS    ➔ 重試過渡期才清；最終結果「永遠保留」
+ │
+ └── 2. 標籤與名稱導向 (不管 FAILED / 一律照砍)
+      ├── NAME    ➔ 名字中了就清 (無論 PASS/FAIL)
+      └── TAG     ➔ 標籤中了就清 (無論 PASS/FAIL)
+```
+
+| 模式           | 觸發過濾的條件                     | 遇到 FAILED 時的行為                                | 核心設計目的 / 最佳實務場景                                                    |
+| -------------- | ---------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------ |
+| PASSED         | 整條 Test Case 結果為 PASS         | 🛡️ 完全保護(FAIL 的測試內部細節 100% 保留)          | 最常用。產出一份乾淨報告，成功的不佔空間，失敗的保留完整排錯 context。         |
+| FOR            | FOR 迴圈中的單次 Iteration 為 PASS | 🛡️ 精準保護(只保留 FAIL 的那幾次，PASS 的迭代砍掉)  | 大數據迴圈。例如跑 1000 次測試資料，只留下出錯的那第 500 次細節。              |
+| WUKS           | Wait Until... 重試過程中的過渡紀錄 | 🛡️ 結果保護(只刪除中間等待/失敗嘗試，留最終狀態)    | 消除重試噪音。重試 10 次才成功的 Keyword，只留最後一次成功，避免 Log 洗版。    |
+| NAME:<pattern> | Keyword 名稱符合指定字樣           | 💥 照樣移除(即使該 Keyword 執行 FAIL，細節一樣被清) | 清理無害雜訊。如 NAME:BuiltIn.Log\*，專門清掉印出大篇幅無用純文字的 Kw。       |
+| TAG:<pattern>  | Keyword Tag 符合指定標籤           | 💥 照樣移除(即使該 Keyword 執行 FAIL，細節一樣被清) | 資安防護與遮蔽。如 TAG:sensitive，無論成功失敗都不能把密碼/Token 留在 Log 裡。 |
+
 ### argument file
 
 ### stop
