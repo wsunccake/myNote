@@ -19,14 +19,91 @@ Swap:          8.0Gi          0B       8.0Gi
 - **free**：
   - 完全未被使用的空閒記憶體。
   - ⚠️ 注意：Linux 的記憶體管理策略是「不用白不用」，會把空閒記憶體盡可能拿來當快取。
-  - 因此這個數值通常很低，但並不代表記憶體不夠用！shared：多個行程共享的記憶體空間（主要是 tmpfs 虛擬檔案系統）。
+  - 因此這個數值通常很低，但並不代表記憶體不夠用！
+- **shared**：
+  - 多個行程共享的記憶體空間（主要是 tmpfs 虛擬檔案系統）。
+  - 對應 `/proc/meminfo` 的 **Shmem**。
 - **buff/cache**：
   - 磁碟暫存與快取（Buffers/Cache）。
   - 核心用來加速硬碟讀寫的快取空間。
   - 當應用程式需要記憶體時，這部分空間會立刻被釋放出來。
+  - 大致對應 **Buffers** + **Cached**（另見 meminfo 對 SReclaimable 的說明）。
 - **available**：
   - 💡 最重要的指標！系統真正「可用」的剩餘記憶體。
   - 估算在不使用 Swap（交換空間）的前提下，還能啟動多少新程式。
+  - 對應 `/proc/meminfo` 的 **MemAvailable**。
+
+---
+
+## /proc/meminfo
+
+`/proc/meminfo` 是 `free`、`vmstat` 記憶體欄、`sar -r` 的共同資料來源。欄位單位是 kB；數字是當下快照，不是歷史。
+
+```bash
+linux:~$ grep -E '^(MemTotal|MemFree|MemAvailable|Buffers|Cached|SReclaimable|Shmem|CommitLimit|Committed_AS|Active:|Inactive:|Dirty|AnonPages|SwapTotal|SwapFree)' /proc/meminfo
+MemTotal:       48234496 kB
+MemFree:        23068672 kB
+MemAvailable:   46137344 kB
+Buffers:            4096 kB
+Cached:         23105536 kB
+SwapTotal:       8388608 kB
+SwapFree:        8388608 kB
+Dirty:               592 kB
+AnonPages:       1785856 kB
+Active:           502400 kB
+Inactive:       9338880 kB
+Shmem:              1440 kB
+CommitLimit:    32505856 kB
+Committed_AS:    2163712 kB
+SReclaimable:     512000 kB
+```
+
+1. 容量與真正可用（對應 free）
+
+- **MemTotal**：
+  - 實體記憶體總量。對應 `free` 的 **total**。
+- **MemFree**：
+  - 完全空閒的實體記憶體。對應 `free` 的 **free**、vmstat 的 **free**、sar 的 **kbmemfree**。
+  - ⚠️ 長期偏低是常態，不代表不夠用。
+- **MemAvailable**：
+  - 💡 最重要。核心估算「不需動用 Swap 還能給新程式用」的量。
+  - 對應 `free` 的 **available**、sar 的 **kbavail**。看這個最準。
+
+2. 快取與共享（對應 buff/cache、shared）
+
+- **Buffers**：
+  - 區塊裝置相關暫存。對應 sar **kbbuffers**、vmstat **buff**、併入 `free` 的 **buff/cache**。
+- **Cached**：
+  - 頁面快取等。對應 sar **kbcached**、vmstat **cache** 的主要部分、併入 `free` 的 **buff/cache**。
+  - ⚠️ `free` 的 buff/cache 在較新 util-linux 還會把可回收的 slab（**SReclaimable**）算進去；只把 Buffers+Cached 相加會略小於畫面上的 buff/cache。
+- **SReclaimable**：
+  - 可回收的 slab（如目錄項、inode 快取）。記憶體吃緊時核心可以釋放。
+- **Shmem**：
+  - 共享記憶體與 tmpfs 等。對應 `free` 的 **shared**。
+  - 已計入 **Cached** 的統計方式裡，不要再和 Cached 加總一次來估「快取有多大」。
+
+3. 承諾與 Swap（對應 sar %commit、free Swap）
+
+- **CommitLimit**：
+  - 系統依 RAM、Swap 與 overcommit 設定算出的承諾上限。
+- **Committed_AS**：
+  - 所有行程已承諾（allocated/committed）的位址空間總量。
+  - 對應 sar 的 **kbcommit**。
+  - **%commit** ≈ `Committed_AS / (MemTotal + SwapTotal)`，分母是 RAM+Swap，不是 CommitLimit。
+  - 💡 超過 **CommitLimit** 是另一件事：預設 overcommit 比例下，這個上限通常小於 RAM+Swap。`vm.overcommit_memory=2` 時，新的承諾會在這裡被拒絕。
+- **SwapTotal / SwapFree**：
+  - Swap 總量與剩餘。對應 `free` 的 Swap **total** / **free**；已用 ≈ Total − Free。
+
+4. 活躍度、髒頁、匿名頁（對應 sar active/inact/dirty）
+
+- **Active / Inactive**：
+  - 最近有在用／較久未用的頁面。對應 sar **kbactive** / **kbinact**。Inactive 是回收首選。
+- **Dirty**：
+  - 已修改、尚未寫回磁碟的頁。對應 sar **kbdirty**。持續居高不下常是寫入 I/O 跟不上。
+- **AnonPages**：
+  - 匿名頁（堆積、堆疊等，不是檔案快取）。偏高代表程式本身佔用多，而不只是 Cached。
+
+💡 與工具欄位對照：先看 **MemAvailable**（= available / kbavail）；吃緊再看 **Committed_AS** 相對 RAM+Swap（%commit），以及 SwapFree 是否持續下降。細節判斷見下方「判斷記憶體是否真的不足」。
 
 ---
 
@@ -152,6 +229,12 @@ Average:     35530626  46669130    753370      1.56      4784  11294211   214747
 1. 記憶體充足 available 還有很多空間。系統運行順暢，有足夠的快取加速讀寫。
 2. 記憶體吃緊 available 接近 0，且 Swap -> used（已用交換空間）開始不斷飆高。
 
+**/proc/meminfo**
+
+1. 直接核對來源：MemAvailable 充裕 = 夠用；MemFree 低但 MemAvailable 高 = 只是快取吃掉空閒，正常。
+2. Committed_AS 逼近或超過 CommitLimit，且 MemAvailable 也低：超額承諾風險上升，開始查哪個行程的匿名頁（AnonPages）在脹。
+3. Dirty 持續數分鐘降不下來：優先懷疑寫入 I/O，不是單純「RAM 條數不夠」。
+
 **vmstat**
 
 1. 健康狀態：si 和 so 長期為 0。這代表即便 free 欄位很小，但實體記憶體完全夠用，不需要跟硬碟頻繁交換資料。
@@ -159,7 +242,7 @@ Average:     35530626  46669130    753370      1.56      4784  11294211   214747
 
 **sar**
 
-1. 觀察 kbmemfree + kbbuffers + kbcached： 這是系統真正「可用」的記憶體空間。如果三者加起來非常低，且 kbcommit 居高不下，才代表記憶體吃緊。
+1. 觀察 kbmemfree + kbbuffers + kbcached： 這是系統真正「可用」的記憶體空間。如果三者加起來非常低，且 kbcommit 居高不下，才代表記憶體吃緊。（有 kbavail 時優先看 kbavail，與 MemAvailable 同源。）
 2. 交叉檢查 Swap 狀態（sar -S）： 如果發現 kbswpused（已用 Swap）持續增加，且 sar -W 顯示有頻繁的 pswpin/s 和 pswpout/s（換入/換出），代表實體記憶體真的不夠，系統被迫不斷讀寫硬碟，這會導致伺服器 I/O 嚴重卡頓。
 
 ---
@@ -169,8 +252,15 @@ Average:     35530626  46669130    753370      1.56      4784  11294211   214747
 - **free**
   - 定位: 即時狀態快照
   - 時間軸: 僅看當下（或簡短的連續即時更新）
+  - 資料來源: `/proc/meminfo`
   - 優點: 語法最簡單，欄位最直覺，能一眼看出核心指標 available（可用記憶體）。
   - 缺點: 無法查看過去歷史紀錄，看不到記憶體交換（Swap）的進出速度。
+
+- **/proc/meminfo**
+  - 定位: 記憶體各池的核心原始快照
+  - 時間軸: 僅看當下
+  - 優點: 可拆開 MemAvailable、AnonPages、Shmem、Committed_AS、Dirty 等 free 沒單獨列出的量；是 free / vmstat / sar -r 的共同來源。
+  - 缺點: 欄位多、單位固定 kB；沒有 Swap 進出速率（仍要 vmstat / sar -W）。
 
 - **vmstat**
   - 定位: 動態趨勢與系統壓力分析
@@ -185,10 +275,11 @@ Average:     35530626  46669130    753370      1.56      4784  11294211   214747
   - 缺點: 需要系統預先安裝並啟動 sysstat 服務來背景收集資料，預設單位（KB）較難閱讀。
 
 - 記憶體判斷
-  - free 最棒：直接提供 available 欄位，這是一個由 Linux 核心估算、扣除不可釋放快取後的「真正可用空間」。
-  - sar 與 vmstat：只提供 free（完全空閒）、buff、cache。你必須自己把這三個欄位加總，才能估算出大概的可用量。
+  - free 最棒：直接提供 available 欄位，這是一個由 Linux 核心估算、扣除不可釋放快取後的「真正可用空間」（= MemAvailable）。
+  - /proc/meminfo：把 available、commit、快取、匿名頁拆開核對；腳本與深查用這個。
+  - sar 與 vmstat：只提供 free（完全空閒）、buff、cache。你必須自己把這三個欄位加總，才能估算出大概的可用量（有 kbavail 時不必再加）。
 
 - Swap（交換空間）深度
-  - free 只能看容量： Swap 總共用掉多少、剩多少。
+  - free / meminfo 只能看容量： Swap 總共用掉多少、剩多少（SwapTotal − SwapFree）。
   - sar -W 可以看速度：顯示每秒換入/換出的頁數（pswpin/s）。
   - vmstat 最直覺：直接在主畫面顯示 si (Swap-in) 與 so (Swap-out) 的資料量速度（如每秒多少 MB），能立刻判斷系統是否因記憶體不足而卡死在硬碟 I/O。
