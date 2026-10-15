@@ -38,6 +38,15 @@ linux:~ $ ghostty +list-fonts
 linux:~ $ vi ~/.config/ghostty/config
 font-family = "FiraCode Nerd Font"
 font-size = 16
+term = xterm-256color
+```
+
+```text
+若有出現 'xterm-ghostty': unknown terminal type. 找不到 Ghostty 終端機特有的 xterm-ghostty 軟體包定義（terminfo）
+
+解決方法有 2
+1. ~/.config/ghostty/config 設定 term = xterm-256color
+2. export TERM=xterm-256color
 ```
 
 ---
