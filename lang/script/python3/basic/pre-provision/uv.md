@@ -49,6 +49,21 @@ linux:~ $ uv pip uninstall <package>
 linux:~ $ uv pip tree
 ```
 
+```
+--system => UV_SYSTEM_PYTHON=1
+讓 uv 預設直接操作系統全域 Python，避免產生 .venv。
+
+--link-mode=copy => UV_LINK_MODE=copy
+確保套件安裝時的檔案複製行為
+
+-e, --editable
+系統運作機制如下：
+1. setuptools 掃描 pyproject.toml 並在 src/ 底下產生 app.egg-info 中介資料。
+2. uv 在 /usr/local/lib/python3.x/site-packages/ 建立 .dist-info 記錄檔與一個 xx Bytes 的 __editable__.app-0.1.0.pth 指針檔案。
+3. 指針檔案內容指向 app/src，因此後續修改 .py 原始碼時無須重新安裝即可即時連動。
+    src/app.egg-info -->  /usr/local/lib/python3.x/site-packages/
+```
+
 ```bash
 linux:~ $ uv venv
 linux:~ $ source .venv/bin/active
@@ -127,7 +142,7 @@ dependencies = [
     "requests>=2.32.5",
 ]
 
-# run script 
+# run script
 linux:~/zen $ vi hello.py
 linux:~/zen $ uv run hello.py
 
@@ -138,13 +153,13 @@ zen = "hello:main"
  ^       ^     ^
 command  |     function or file
      file or dir
-              
+
 linux:~/zen $ uv build                                  # build package
 linux:~/zen $ ls dist
 linux:~/zen $ uv tool install .                         # install package from local
 linux:~/zen $ uv tool install dist/zen-0.1.0.tar.gz     # install package from dist
 
-linux:~/zen $ uv tool run zen                           # run         
+linux:~/zen $ uv tool run zen                           # run
 ```
 
 ```python
