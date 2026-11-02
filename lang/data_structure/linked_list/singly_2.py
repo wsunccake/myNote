@@ -43,13 +43,14 @@ class Linked_List:
         c.next = None
 
 
-linked_list1 = Linked_List()
-linked_list1.append(Node(1))
-linked_list1.append(Node(2))
-linked_list1.append(Node(3))
-linked_list1.traverse()
+if __name__ == "__main__":
+    linked_list1 = Linked_List()
+    linked_list1.append(Node(1))
+    linked_list1.append(Node(2))
+    linked_list1.append(Node(3))
+    linked_list1.traverse()
 
-linked_list1.pop()
-linked_list1.pop()
-linked_list1.pop()  # head be None
-linked_list1.traverse()
+    linked_list1.pop()
+    linked_list1.pop()
+    linked_list1.pop()  # head be None
+    linked_list1.traverse()

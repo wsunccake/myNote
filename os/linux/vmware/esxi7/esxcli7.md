@@ -1,12 +1,18 @@
 # esxcli 7
 
 ```bash
+vmware -vl
+```
+
+```bash
 # syntax
 esxcli [options] {namespace}+ {cmd} [cmd options]
 
 esxcli --help
 esxcli --help network
 esxcli --version
+
+esxcli esxcli command list
 ```
 
 | Namespace | Explain                                           | 常用場景範例                                   |
@@ -45,7 +51,6 @@ esxcli network vm list
 
 ## storage
 
-
 ```bash
 esxcli storage filesystem list
 ```
@@ -63,5 +68,20 @@ esxcli vm process list
 ## system
 
 ```bash
+chkconfig --list
+/etc/init.d/<SERV> start|stop|status|restart
+vim-cmd hostsvc/
+```
+
+```bash
 esxcli system version get
+```
+
+---
+
+## cpu
+
+```bash
+esxcli hardware cpu global get
+esxcli hardware cpu list
 ```
