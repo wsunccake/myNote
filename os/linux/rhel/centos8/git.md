@@ -93,3 +93,35 @@ remote: https://github.com/settings/emails
 [linux:~/repo ] $ git commit --amend --author="user <1234567+user@users.noreply.github.com>"
 [linux:~/repo ] $ git push
 ```
+
+## commit message
+
+[Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
+
+```text
+<type>(<scope>): <subject>
+
+[optional body]
+```
+
+```text
+type	        用途
+feat            新行為
+fix             修 bug
+docs            只改文件
+refactor        行為不變的整理
+test            測例
+chore           雜務（版本號、lockfile）
+```
+
+
+**再配 git 的長度習慣**
+
+- 第一行 ≤ 50 字左右，當標題
+- 空一行後才寫為什麼
+- body 每行 ≤ 72 字（可有可無）
+
+```bash
+[linux:~/repo ] $ git commit -m "<type>(<scope>): <subject>" -m "optional body"
+# 太長, 可省略 optional body
+```

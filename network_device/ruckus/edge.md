@@ -12,11 +12,17 @@ Edge#
 # 查看設備序號 (Serial Number)
 Edge# show serial
 
+Edge# show manager status
+
 # 啟動 SSH 服務
 Edge# set ssh start
 
 # 特殊維護模式 (Internal Shell)
 Edge# !v54!
+
+# reset to 
+Edge# system
+(System)# reset
 ```
 
 ---
@@ -31,7 +37,7 @@ Edge# network
 Network# show interface address
 
 # 設定介面 IP 位址
-Network# set interface ip address
+Network# set interface ip address <inferface> <ip>/<mask> <gw>
 ```
 
 ---
