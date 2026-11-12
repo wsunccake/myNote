@@ -56,3 +56,71 @@ A 01 B
 ---
 
 ## wc
+
+```bash
+linux:~ $ wc /etc/services
+  365  1795 12990 /etc/services
+#  |     |           |
+#  |     |         總位元組數（Bytes）
+#  |    總單字數（Words，以空白或換行符號隔開的詞彙數）
+# 總行數（Lines）
+
+# 只看行數 (-l, lines)
+# 只看字數 / 單字數 (-w, words)
+# 只看位元組數 (-c, bytes)
+# 只看字元數 (-m, characters)
+```
+
+---
+
+## paste
+
+`name.txt`
+
+```text
+Alice
+Bob
+Charlie
+```
+
+`score.txt`
+
+```text
+90
+85
+95
+```
+
+1. 將兩個檔案「左右並排」貼在一起
+
+```bash
+linux:~ $ paste name.txt score.txt
+Alice    90
+Bob      85
+Charlie  95
+
+linux:~ $ paste -d, name.txt score.txt
+Alice,90
+Bob,85
+Charlie,95
+```
+
+2. 多行文字串接成同一行
+
+```bash
+linux:~ $ paste -sd, name.txt
+Alice,Bob,Charlie
+```
+
+3. 將一大段橫向資料拆成固定欄數（多行並排）
+
+```bash
+linux:~ $ seq 8 | paste - - -
+1       2       3
+4       5       6
+7       8
+
+linux:~ $ cat name.txt score.txt | paste - - -
+Alice   Bob     Charlie
+90      85      95
+```
